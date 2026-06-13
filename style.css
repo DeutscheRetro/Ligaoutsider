@@ -232,7 +232,22 @@ ul { list-style: none; }
 .search-input::placeholder { color: var(--text4); }
 
 /* ─── Header-Right ─── */
-.header-right { display: flex; align-items: center; gap: 12px; }
+.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* ─── Auth ─── */
+.auth-buttons { display: flex; align-items: center; gap: 8px; }
+.auth-btn {
+  font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 5px; border: 1px solid var(--border2);
+  color: var(--text3); background: var(--bg4);
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.auth-btn:hover { border-color: var(--accent); color: var(--accent); }
+.auth-btn--primary { background: var(--accent); color: #000 !important; border-color: var(--accent); }
+.auth-btn--primary:hover { opacity: 0.85; }
+.auth-username { font-size: 12px; color: var(--accent); font-weight: 600; }
+#user-info { display: flex; align-items: center; gap: 8px; }
 
 /* ─── Mehr-Button ─── */
 .mehr-button {

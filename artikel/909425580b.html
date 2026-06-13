@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matthäus zerlegt Klopp und Müller. Musiala gehört in die Startelf! – Ligaoutsider.de</title>
+  <title>Matthäus vs. Klopp und Müller. Wer hat Recht bei Musiala? – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#2e7d32;color:#fff">Aufstellung</span>
-          <h1 class="artikel-titel">Matthäus zerlegt Klopp und Müller. Musiala gehört in die Startelf!</h1>
-          <p class="artikel-meta">13.06.2026 20:50 &nbsp;·&nbsp; Quelle: <a href="https://sportbild.bild.de/fussball/fussball-wm/wm-2026-matthaeus-kontert-klopp-und-mueller-startelf-ohne-musiala-6a2d2b196bb5c7fe2e1c4aae" target="_blank" rel="noopener">SportBILD - Home - alle Artikel</a></p>
+          <h1 class="artikel-titel">Matthäus vs. Klopp und Müller. Wer hat Recht bei Musiala?</h1>
+          <p class="artikel-meta">13.06.2026 22:09 &nbsp;·&nbsp; Quelle: <a href="https://sportbild.bild.de/fussball/fussball-wm/wm-2026-matthaeus-kontert-klopp-und-mueller-startelf-ohne-musiala-6a2d2b196bb5c7fe2e1c4aae" target="_blank" rel="noopener">SportBILD - Home - alle Artikel</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Lothar Matthäus platzt der Kragen. Der Weltmeister von 1990 kritisiert Jürgen Klopp und Thomas Müller scharf. Ihr Vorschlag: Jamal Musiala aus der Startelf zu nehmen. Für Matthäus absolut unverständlich. Der Bayern-Star ist für ihn die Nummer eins im deutschen Mittelfeld. Punkt.</p><p>Du fragst dich zu Recht: Was sollen Klopp und Müller denn anders machen? Die beiden wollen Deutschlands Nationalteam für die WM 2026 fit machen. Aber Musiala rausnehmen? Das ist für Matthäus der falsche Weg. Der Spieler liefert konstant ab. Er ist jung, hungrig, technisch überragend. Warum sollte man ihn auf die Bank setzen?</p><p>Matthäus kennt sich aus. Er war selbst einer der besten Mittelfeldspieler aller Zeiten. Seine Botschaft ist klar: Musiala muss spielen. Immer. Die Konkurrenz schläft nicht. Andere Länder hätten gerne so ein Talent in ihrem Team. Deutschland sollte es nutzen, solange es kann.</p>
+        <p>Jetzt platzt Lothar Matthäus der Kragen! Der Weltmeister von 1990 kritisiert harsch, dass Jamal Musiala aus der Startelf gestrichen wird. Klopp und Müller hätten das zu verantworten. Das kann nicht sein, findet Matthäus.</p><p>Musiala ist die größte deutsche Offensiv-Hoffnung. Der Bayern-Star glänzt Woche für Woche. Seine Dribblings, seine Tore, seine Spielweise. Das ist pure Klasse. Ihn auf die Bank zu setzen ist ein Fehler. Punkt. Matthäus sieht das wie viele Fans.</p><p>Aber Vorsicht: Auch Klopp und Müller haben ihre Gründe. Die WM-Vorbereitung ist komplex. Form, Fitness, Taktik spielen eine Rolle. Trotzdem. Musiala muss spielen. Er ist zu wertvoll zum Zuschauen. Die Konkurrenz schläft nicht. Deutschland braucht seine beste Offensive. Sonst wird es eng bei der WM 2026.</p><p>Was sagst du? Gehört Musiala in die Startelf oder nicht? Die Debatte ist berechtigt. Und Matthäus hat einen guten Punkt.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "909425580b";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '909425580b';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

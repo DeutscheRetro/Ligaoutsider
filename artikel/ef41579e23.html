@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mainz schnappt sich Nürnbergs Abwehrchef Gruber – Ligaoutsider.de</title>
+  <title>Gruber weg! Mainz schnappt sich Nürnbergs Abwehr-Boss – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">Mainz schnappt sich Nürnbergs Abwehrchef Gruber</h1>
-          <p class="artikel-meta">13.06.2026 20:48 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/mainz-freut-sich-auf-fuehrungsqualitaet-gruber-verlaesst-nuernberg-1227239/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Gruber weg! Mainz schnappt sich Nürnbergs Abwehr-Boss</h1>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/mainz-freut-sich-auf-fuehrungsqualitaet-gruber-verlaesst-nuernberg-1227239/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Fabio Gruber geht. Der Innenverteidiger verlässt den 1. FC Nürnberg nach dieser Saison. Mainz 05 schnappt sich den 27 Jahre alten Abwehrmann. Ein großer Gewinn für die Rheinhessen, die auf der Suche nach stabilem Personal sind.</p><p>Gruber soll der Mainzer Abwehr neue Ordnung bringen. Die Verantwortlichen loben seine Spielstärke und vor allem eines: seine Führungsqualität. Das ist das Stichwort für dich als Fan. Mainz braucht jemanden, der vorangeht. Jemanden, der die anderen mitreißt. Das soll Gruber sein.</p><p>Für Nürnberg ist das ein Schlag. Der Klub verliert einen wichtigen Spieler in der Defensive. Gruber war lange Zeit Stammspieler und Leistungsträger bei den Clubbern. Mit dem Wechsel nach Mainz macht der Verteidiger einen großen Schritt nach vorne. Die Bundesliga wartet auf ihn.</p><p>Mainz hofft, dass Gruber die Stabilität bringt, die der Klub dringend braucht. Die neue Saison beginnt bald. Die Zeit zum Handeln ist jetzt.</p>
+        <p>Fabio Gruber verlässt den 1. FC Nürnberg. Der Innenverteidiger wechselt zum 1. FSV Mainz 05. Für die Rheinhessen ein echter Coup in der Defensive. Gruber bringt genau das mit, was Trainer Bo Henriksen braucht: spielstarke Fußballer mit Führungscharakter.</p><p>Der Abwehrmann war bei den Nürnbergern eine Bank. Zuverlässig. Konstant. Einer, auf den die Mannschaft gehört hat. So einen sucht sich Mainz jetzt. Die Verantwortlichen freuen sich auf einen Spieler, der nicht nur defensiv funktioniert, sondern auch von hinten heraus Spiele gestalten kann. Das ist die moderne Spielweise.</p><p>Für dich als Fan bedeutet das: Mainz wird in dieser Saison defensiv stabiler. Gruber kennt die Liga, weiß, worauf es ankommt. Nürnberg verliert dagegen einen wichtigen Eckpfeiler. Das tut im Abstiegskampf weh. Ein echter Verlust für die Franken.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "ef41579e23";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'ef41579e23';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

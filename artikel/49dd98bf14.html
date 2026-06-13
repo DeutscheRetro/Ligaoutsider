@@ -28,16 +28,16 @@
     <article class="artikel">
 
       <div class="artikel-header">
-        <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png" class="artikel-wappen" alt="Wappen" />
+        <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
           <h1 class="artikel-titel">Goretzka weg von Bayern? USA lockt mit Millionen!</h1>
-          <p class="artikel-meta">13.06.2026 20:50 &nbsp;·&nbsp; Quelle: <a href="https://sportbild.bild.de/fussball/fussball-wm/dfb-ueberraschende-goretzka-wende-neue-spur-fuehrt-in-die-usa-6a2d1c457e682fc37fbf845e" target="_blank" rel="noopener">SportBILD - Home - alle Artikel</a></p>
+          <p class="artikel-meta">13.06.2026 22:09 &nbsp;·&nbsp; Quelle: <a href="https://sportbild.bild.de/fussball/fussball-wm/dfb-ueberraschende-goretzka-wende-neue-spur-fuehrt-in-die-usa-6a2d1c457e682fc37fbf845e" target="_blank" rel="noopener">SportBILD - Home - alle Artikel</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Sensation in der Transferwelt! Leon Goretzka steht plötzlich auf der Wunschliste eines amerikanischen Top-Klubs. Das berichtet die SportBILD. Der Bayern-Star könnte München verlassen. Unglaublich, oder?</p><p>Die USA haben große Pläne. Ein Klub aus MLS wirbt aktiv um den deutschen Nationalspieler. Goretzka könnte sich dort ein neues Abenteuer vorstellen. Das Geld stimmt. Die Perspektive reizt. Für den 28-Jährigen könnte es die perfekte Zeit sein.</p><p>Auch Robert Lewandowski wird mit einem Wechsel in die USA verbunden. Das ist kein Zufall. Die amerikanischen Klubs greifen nach den großen Namen. Sie investieren wie nie zuvor. Goretzka und Lewandowski könnten gemeinsam einen neuen Liga-Trend setzen.</p><p>Bayern muss jetzt handeln. Will der Klub seine Stars halten? Dann wird es teuer. Ein Abschied würde große Lücken reißen. Die nächsten Wochen werden spannend für alle Fans. Bleibt der Goretzka oder nicht? Die Antwort kommt bald.</p>
+        <p>Leon Goretzka steht vor einem Mega-Wechsel! Ein US-Klub wirbt jetzt heftig um den Bayern-Star. Die Ablöse könnte zweistellig werden. Für Goretzka wäre es eine neue Herausforderung nach Jahren in München.</p><p>Doch das ist nicht alles. Auch Robert Lewandowski wird mit einem Wechsel in die USA verbunden. Der Superstar könnte seinem Ex-Kollegen folgen. Die MLS wirft plötzlich viel Geld auf den Tisch. Das sollte auch Karl-Heinz Rummenigge aufhorchen lassen.</p><p>Für die Bayern wird es eng. Zwei ihrer Top-Spieler könnten den Verein verlassen. Goretzka wäre ein großer Verlust für das Mittelfeld. Bayern müsste schnell reagieren und Ersatz finden. Die Saison könnte sonst richtig unbequem werden.</p><p>Du fragst dich, ob das ernst gemeint ist? Ja! Die USA investieren in den europäischen Fußball wie noch nie. Goretzka und Lewandowski wären absolute Blockbuster für die MLS. Ein Umbruch bei Bayern könnte bevorstehen.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "49dd98bf14";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '49dd98bf14';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ligaoutsider.de – Bundesliga News</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
@@ -21,6 +22,14 @@
           <span class="icon" id="theme-icon">☀️</span>
           <span id="theme-label">Hell</span>
         </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
       </div>
     </div>
   </header>
@@ -28,11 +37,11 @@
   <nav class="team-nav">
     <div class="nav-inner">
       <ul class="team-list" id="team-list">
-        <li><button class="team-chip" data-filter="Bayern" title="FC Bayern München"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png" alt="Bayern" /></button></li>
+        <li><button class="team-chip" data-filter="Bayern" title="FC Bayern München"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png" alt="Bayern" /></button></li>
         <li><button class="team-chip" data-filter="Dortmund" title="Borussia Dortmund"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png" alt="BVB" /></button></li>
-        <li><button class="team-chip" data-filter="Leipzig" title="RB Leipzig"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/RB_Leipzig_2014_logo.svg/60px-RB_Leipzig_2014_logo.svg.png" alt="Leipzig" /></button></li>
-        <li><button class="team-chip" data-filter="Leverkusen" title="Bayer 04 Leverkusen"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Bayer_04_Leverkusen_logo.svg/60px-Bayer_04_Leverkusen_logo.svg.png" alt="Leverkusen" /></button></li>
-        <li><button class="team-chip" data-filter="Frankfurt" title="Eintracht Frankfurt"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png" alt="Frankfurt" /></button></li>
+        <li><button class="team-chip" data-filter="Leipzig" title="RB Leipzig"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/VEREINFACHTES_LOGO_-_RB_Leipzig.svg/60px-VEREINFACHTES_LOGO_-_RB_Leipzig.svg.png" alt="Leipzig" /></button></li>
+        <li><button class="team-chip" data-filter="Leverkusen" title="Bayer 04 Leverkusen"><img src="https://upload.wikimedia.org/wikipedia/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/60px-Bayer_Leverkusen_Logo.svg.png" alt="Leverkusen" /></button></li>
+        <li><button class="team-chip" data-filter="Frankfurt" title="Eintracht Frankfurt"><img src="https://upload.wikimedia.org/wikipedia/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png" alt="Frankfurt" /></button></li>
         <li><button class="team-chip" data-filter="Stuttgart" title="VfB Stuttgart"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png" alt="Stuttgart" /></button></li>
         <li><button class="team-chip" data-filter="Hoffenheim" title="TSG 1899 Hoffenheim"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png" alt="Hoffenheim" /></button></li>
         <li><button class="team-chip" data-filter="Freiburg" title="SC Freiburg"><img src="https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png" alt="Freiburg" /></button></li>
@@ -119,6 +128,43 @@
   </footer>
 
   <script>
+    // ─── Netlify Identity ─────────────────────────────────────────────────────
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init', user => {
+        if (user) showUser(user);
+      });
+      netlifyIdentity.on('login', user => {
+        showUser(user);
+        netlifyIdentity.close();
+      });
+      netlifyIdentity.on('logout', () => {
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('login-btn').style.display = '';
+        document.getElementById('signup-btn').style.display = '';
+      });
+    }
+
+    function showUser(user) {
+      const name = user.user_metadata?.full_name || user.email;
+      document.getElementById('user-name').textContent = name;
+      document.getElementById('user-info').style.display = 'flex';
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('signup-btn').style.display = 'none';
+    }
+
+    document.getElementById('login-btn').addEventListener('click', e => {
+      e.preventDefault();
+      netlifyIdentity.open('login');
+    });
+    document.getElementById('signup-btn').addEventListener('click', e => {
+      e.preventDefault();
+      netlifyIdentity.open('signup');
+    });
+    document.getElementById('logout-btn').addEventListener('click', e => {
+      e.preventDefault();
+      netlifyIdentity.logout();
+    });
+
     // ─── Hell/Dunkel Toggle ───────────────────────────────────────────────────
     const btn   = document.getElementById('theme-toggle');
     const icon  = document.getElementById('theme-icon');

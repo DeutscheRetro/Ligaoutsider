@@ -32,12 +32,12 @@
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
           <h1 class="artikel-titel">BVB räumt auf! Couto weg, Duranville auch</h1>
-          <p class="artikel-meta">13.06.2026 20:48 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/yan-couto-vor-leihe-nach-como-duranville-mit-lyon-einig-1227284/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/yan-couto-vor-leihe-nach-como-duranville-mit-lyon-einig-1227284/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Borussia Dortmund packt den Kasten aus. Der BVB trennt sich von zwei Spielern. Yan Couto soll verliehen werden. Das französische Como interessiert sich für den Außenverteidiger. Eine Leihe ist fix. Für Dortmund eine Chance, Platz im Kader zu schaffen.</p><p>Julien Duranville verlässt den Verein sogar endgültig. Lyon hat den belgischen Youngster ins Visier genommen. Einigung mit dem französischen Club. Das ist ein Abverkauf. Duranville muss raus aus Dortmund. Das Signal ist klar.</p><p>Was bedeutet das für euch Fans? Der BVB wird dünner. Aber auch billiger. Couto und Duranville brauchten Spielzeit. Bei Como und Lyon bekommen sie die jetzt. Für alle Seiten ein gutes Geschäft. So funktioniert moderner Fußball.</p>
+        <p>Borussia Dortmund zieht die Notbremse. Der Kader wird ausgemistet. Yan Couto soll zu Como verliehen werden. Der Rechtsverteidiger passt nicht ins Konzept von Trainer Nuri Sahin. Jetzt sucht der BVB eine neue Herausforderung für den 22-Jährigen.</p><p>Auch Julien Duranville verschwindet aus Dortmund. Der belgische Offensivmann wird an Olympique Lyon verkauft. Das ist kein Leihgeschäft mehr. Der Junge soll komplett weg. Duranville brauchte Zeit, um in der Bundesliga anzukommen. Jetzt versucht er es woanders.</p><p>Für den BVB ist das ein klares Signal. Sahin sortiert aus, was nicht funktioniert. Platz im Kader kostet Geld und Spielzeit. Spieler, die das nicht nutzen, fliegen raus. Brutal, aber effektiv. Das ist Dortmunds Philosophie unter dem neuen Coach.</p><p>Du wirst merken: Der BVB wird eine völlig andere Mannschaft sein. Schlanker, hungriger, gefährlicher. Sahin baut sein Team. Und wer nicht mitziehen kann, der geht.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "619613fcb2";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '619613fcb2';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Milan wirbt um Frankfurts Sportboss Krösche! – Ligaoutsider.de</title>
+  <title>Milan angelt sich Frankfurts Krösche? – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -28,16 +28,16 @@
     <article class="artikel">
 
       <div class="artikel-header">
-        <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png" class="artikel-wappen" alt="Wappen" />
+        <img src="../https://upload.wikimedia.org/wikipedia/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">Milan wirbt um Frankfurts Sportboss Krösche!</h1>
-          <p class="artikel-meta">13.06.2026 20:48 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/von-frankfurt-zu-milan-kroesche-will-geruecht-nicht-kommentieren-1227421/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Milan angelt sich Frankfurts Krösche?</h1>
+          <p class="artikel-meta">13.06.2026 22:07 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/von-frankfurt-zu-milan-kroesche-will-geruecht-nicht-kommentieren-1227421/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Große Bewegung auf dem Transfermarkt. Die AC Milan sucht einen neuen Sportvorstand und hat offenbar ein heißes Auge auf Markus Krösche geworfen. Der Boss der Eintracht steht auf der Kandidatenliste der italienischen Topklubs. Das ist kein Zufall. Krösche hat Frankfurt zurück in die Erfolgsspur gebracht.</p><p>Wie ernst es Milan meint, ist noch unklar. Krösche selbst hält sich bedeckt. Fragen zum Gerücht will er nicht beantworten. Klug gespielt. Der Frankfurter sitzt in einer starken Position. Milan braucht ihn vermutlich stärker als er Milan braucht.</p><p>Für die Eintracht wäre ein Abgang bitter. Krösche hat die Struktur aufgebaut. Er holte die richtigen Spieler. Unter seiner Führung wurde Frankfurt wieder relevant. Jetzt könnte es ihn nach Italien ziehen. Die nächsten Wochen werden spannend. Du solltest diese Geschichte verfolgen.</p>
+        <p>Großes Pokerspiel um Markus Krösche! Die AC Milan interessiert sich offenbar ernsthaft für den Sportvorstand von Eintracht Frankfurt. Die italienischen Rossoneri haben ihn auf ihre Kandidatenliste gesetzt. Das bestätigt der Kicker.</p><p>Krösche selbst will sich nicht äußern. Der 41 Jahre alte Manager hält sich bedeckt. Das ist typisch für einen erfahrenen Profi. Spekulationen helfen niemandem weiter. Weder Frankfurt noch Milan.</p><p>Für die Eintracht wäre es ein herber Verlust. Krösche hat die SGE nach dem Abstieg wieder aufgebaut. Er holte sich Top Talente wie Lindström, Gotze und Akanji. Milan bietet aber natürlich andere Perspektiven. Größeres Budget. Größere Geschichte. Ein Klub wie Milan lockt jeden Manager.</p><p>Jetzt heißt es: abwarten und Kaffee trinken. Milan wird handeln müssen. Frankfurt wird kämpfen müssen. Und wir? Wir schauen, was passiert. Spannend bleibt es allemal!</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "bd8edb8615";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'bd8edb8615';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

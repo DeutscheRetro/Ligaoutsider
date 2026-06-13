@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Undav verlängert! Jetzt kommt das große Dominoeffekt-Spiel beim VfB – Ligaoutsider.de</title>
+  <title>Undav macht's vor. Wer folgt dem VfB Star in die Vertragsverlängerung? – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">News</span>
-          <h1 class="artikel-titel">Undav verlängert! Jetzt kommt das große Dominoeffekt-Spiel beim VfB</h1>
-          <p class="artikel-meta">13.06.2026 20:49 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/undav-nur-der-anfang-wer-verlaengert-als-naechstes-beim-vfb-1226537/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Undav macht's vor. Wer folgt dem VfB Star in die Vertragsverlängerung?</h1>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/undav-nur-der-anfang-wer-verlaengert-als-naechstes-beim-vfb-1226537/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Deniz Undav macht Ernst. Der Angreifer verlängert seinen Vertrag vorzeitig bis 2029. Das ist kein Zufall. Das ist eine Kampfansage. Stuttgart zeigt: Wir halten zusammen. Wir bauen auf dieser Mannschaft auf.</p><p>Und jetzt wird es spannend für dich als Fan. Denn Undav ist nur der Anfang. Der Knoten platzt. Das Signal ist raus. Weitere Top-Spieler sollen folgen. Wer ist der Nächste? Waldemar Anton? Chris Führich? Silas Katompa Mvumpa? Die Spekulationen laufen bereits heiß.</p><p>VfB-Boss Claus Voigt weiß genau, was er tut. Mit jeder Verlängerung wächst die Stabilität. Mit jeder Verlängerung wird die Mannschaft stärker. Das ist das perfekte Gegenprogramm zum ganzen Transfer-Chaos ringsum.</p><p>Stuttgart hat verstanden. Wer oben mitspielen will, braucht Kontinuität. Braucht Spieler, die wissen, wofür sie kämpfen. Und Spieler, die das auch wollen. Undav hat gerade bewiesen: Er gehört dazu.</p>
+        <p>Deniz Undav hat es getan. Der Torjäger des VfB Stuttgart verlängert bis 2029. Das ist nicht einfach eine Vertragsverlängerung. Das ist ein Signal. Ein klares Bekenntnis zum Verein. Ein Zeichen, dass es beim VfB vorwärts geht.</p><p>Und jetzt sind die anderen dran. Die Leistungsträger sollen folgen. Das hat der Verein längst klargemacht. Weitere Spieler werden ihre Unterschriften unter neue Verträge setzen. Die Frage ist nur: Wer ist der Nächste? Serhou Guirassy? Athanasios Rantos? Waldemar Anton? Die Liste der Kandidaten ist lang.</p><p>Stuttgart baut sein Team um. Das ist die Botschaft dahinter. Nicht verkaufen, sondern halten. Nicht zaudern, sondern zugreifen. Das gefällt den Fans. Das gibt Sicherheit. Der VfB zeigt hier Führungsstärke. Und genau das braucht man, wenn man oben angreifen will.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "b14899b139";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'b14899b139';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

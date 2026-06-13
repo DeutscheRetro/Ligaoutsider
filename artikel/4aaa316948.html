@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ManUnited schlägt Newcastle! Rote Teufel wollen Hoffenheim Star – Ligaoutsider.de</title>
+  <title>United schlägt Newcastle. Hoffenheim verliert Top Talent – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">ManUnited schlägt Newcastle! Rote Teufel wollen Hoffenheim Star</h1>
-          <p class="artikel-meta">13.06.2026 20:51 &nbsp;·&nbsp; Quelle: <a href="https://www.eyefootball.com/news/62807/Man-Utd-beat-Newcastle-Hoffenheim-winger.html" target="_blank" rel="noopener">Eyefootball: Football News</a></p>
+          <h1 class="artikel-titel">United schlägt Newcastle. Hoffenheim verliert Top Talent</h1>
+          <p class="artikel-meta">13.06.2026 22:10 &nbsp;·&nbsp; Quelle: <a href="https://www.eyefootball.com/news/62807/Man-Utd-beat-Newcastle-Hoffenheim-winger.html" target="_blank" rel="noopener">Eyefootball: Football News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Manchester United macht ernst. Die Roten Teufel wollen Hoffenheims Flügelflitzer Bazoumana Toure unbedingt haben. Das berichtet die BILD. United bereitet sich darauf vor, Newcastle im Rennen um den jungen Ivorer zu schlagen. Ein großer Transfer für den Sommer zeichnet sich ab.</p><p>Toure ist das, was Manchester braucht. Jung, talentiert, hungrig. Der 21-Jährige hat sich bei der TSG längst bewiesen. Seine Geschwindigkeit ist brutal. Seine Technik eine Klasse für sich. Zehn Tore in dieser Saison sprechen eine klare Sprache. United sieht in ihm einen Gewinn für die Offensive.</p><p>Aber die Red Devils sind nicht allein hinter dem Westafrikaner her. Newcastle United pusht ebenfalls gewaltig. Die Magpies haben Geld und Ambitionen. Aber United hat was Newcastle nicht hat: Geschichte. Prestige. Die Anziehungskraft des Old Trafford. Das könnte der entscheidende Vorteil sein.</p><p>Die Hoffenheimer sind realistisch. Sie wissen, dass sie einen Top-Spieler nicht halten können, wenn die großen Clubs anklopfen. Eine große Ablösesumme winkt. Der Klub freut sich schon auf die millionenschwere Auktion. Für Toure ist es die Chance seines Lebens.</p>
+        <p>Manchester United greift zu! Die Red Devils wollen Hoffenheims Wunderflügel Bazoumana Toure schnappen. Newcastle kann einpacken. Laut BILD haben die Engländer im Poker um den Ivorer die besseren Karten.</p><p>Toure ist ein Traum für jeden großen Club. Der Hoffenheim-Flügel ist schnell, dribbelig, gefährlich vor dem Tor. Im Sommer wollen ihn gleich mehrere Top Clubs. Newcastle wirbt intensiv um den 24 Jahre alten Linksfuß. Doch United ist bereit, mehr zu zahlen.</p><p>Für Ten Hags Team ist das ein Statement. Manchester braucht genau so einen Spieler. Schnell. Frech. Hungrig. Toure passt perfekt in das neue United. Die Frage ist jetzt: Wie viel kostet das Vergnügen? Hoffenheim wird hart verhandeln. Aber Manchester hat tiefe Taschen.</p><p>Wie geht die Geschichte weiter? Folgt United seinem Transfer Instinkt oder zieht Newcastle doch noch den Kürzeren? Die nächsten Wochen werden spannend.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "4aaa316948";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '4aaa316948';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

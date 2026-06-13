@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Köln schnappt sich City-Talent Simpson-Pusey – Ligaoutsider.de</title>
+  <title>Köln schnappt sich City-Talent! Simpson-Pusey bleibt – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">Köln schnappt sich City-Talent Simpson-Pusey</h1>
-          <p class="artikel-meta">13.06.2026 20:49 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/guenstiger-als-die-kaufoption-koeln-verpflichtet-city-talent-simpson-pusey-fest-1224373/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Köln schnappt sich City-Talent! Simpson-Pusey bleibt</h1>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/guenstiger-als-die-kaufoption-koeln-verpflichtet-city-talent-simpson-pusey-fest-1224373/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Gute Nachrichten für den 1. FC Köln! Der englische Innenverteidiger Jahmai Simpson-Pusey bleibt dem Verein erhalten. Der 20 Jahre alte Abwehrmann wechselt fest vom Manchester City ans Geißbockheim. Im Januar kam er zunächst nur leihweise. Jetzt wird aus der Leihe ein echter Deal.</p><p>Und das Beste für Köln: Die Ablösesumme liegt unter der ursprünglichen Kaufoption! Das bedeutet gutes Verhandeln der Verantwortlichen. Simpson-Pusey hat die Kölner in diesen Monaten überzeugt. Er passt perfekt in die defensive Philosophie der Rheinländer.</p><p>Für den jungen Engländer ist es der nächste Karriereschritt. Bei City war er nur eine Option unter vielen. In Köln bekommt er Spielpraxis auf höchstem Niveau. Die Bundesliga wird für ihn zum Sprungbrett. Simpson-Pusey hat das Zeug dazu. Du wirst diesen Namen noch öfter hören!</p>
+        <p>Überraschung beim 1. FC Köln! Der Klub verpflichtet Jahmai Simpson-Pusey fest. Der 20 Jahre alte Engländer kommt von Manchester City und wird nicht mehr verliehen. Das ist ein echtes Statement der Kölner.</p><p>Im Januar kam Simpson-Pusey noch leihweise ans Geißbockheim. Jetzt zahlt Köln weniger als ursprünglich in der Kaufoption vereinbart. Ein super Deal für die Rheinländer! Der Youngster überzeugte in kurzer Zeit. Das hat Köln jetzt belohnt.</p><p>Für Simpson-Pusey ist es die Chance seines Lebens. Weg vom großen Manchester City, rein in die Bundesliga. Mit regelmäßigen Spielen kann er sich entwickeln. Köln traut ihm zu, ein wichtiger Spieler zu werden. Der Innenverteidiger bekommt sein Vertrauen. Jetzt muss er es nur auf dem Platz zeigen.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "c3a6c63719";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'c3a6c63719';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

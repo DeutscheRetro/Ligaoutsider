@@ -86,3 +86,44 @@
   color: #e8c000;
   margin-bottom: 20px;
 }
+
+/* Kommentar-Liste */
+.kommentar-laden, .kommentar-leer {
+  color: #555; font-size: 13px; text-align: center; padding: 16px 0;
+}
+.kommentar-item {
+  border-bottom: 1px solid #1e1e1e;
+  padding: 14px 0;
+}
+.kommentar-item:last-child { border-bottom: none; }
+.kommentar-kopf {
+  display: flex; justify-content: space-between;
+  align-items: baseline; margin-bottom: 6px;
+}
+.kommentar-name  { font-weight: 700; font-size: 13px; color: #e8c000; }
+.kommentar-datum { font-size: 11px; color: #555; }
+.kommentar-text  { font-size: 14px; color: #ccc; line-height: 1.6; }
+
+/* Kommentar-Formular */
+#kommentar-form  { margin-top: 24px; border-top: 1px solid #1e1e1e; padding-top: 20px; }
+.kommentar-felder { display: flex; gap: 10px; margin-bottom: 10px; }
+.kommentar-felder input {
+  flex: 1; background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 5px; color: #ddd; padding: 9px 12px; font-size: 13px;
+}
+.kommentar-felder input:focus { outline: none; border-color: #e8c000; }
+#kommentar-form textarea {
+  width: 100%; background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 5px; color: #ddd; padding: 9px 12px; font-size: 13px;
+  min-height: 100px; resize: vertical; font-family: inherit; box-sizing: border-box;
+}
+#kommentar-form textarea:focus { outline: none; border-color: #e8c000; }
+.kommentar-btn {
+  margin-top: 10px; padding: 9px 20px;
+  background: #e8c000; color: #000;
+  border: none; border-radius: 5px;
+  font-weight: 700; font-size: 13px; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.kommentar-btn:hover { opacity: 0.85; }
+#kommentar-status { font-size: 12px; color: #4caf50; margin-top: 8px; min-height: 18px; }

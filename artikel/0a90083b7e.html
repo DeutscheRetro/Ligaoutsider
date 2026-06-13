@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vier Seiten Chaos! Köln-Boss Türoff total fassungslos – Ligaoutsider.de</title>
+  <title>Vier Seiten bremsen Köln! Türoff fassungslos über Gerichtstermin-Absage – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">News</span>
-          <h1 class="artikel-titel">Vier Seiten Chaos! Köln-Boss Türoff total fassungslos</h1>
-          <p class="artikel-meta">13.06.2026 20:49 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/vier-seiten-text-bremsen-den-1-fc-koeln-und-machen-tueroff-fassungslos-1226958/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Vier Seiten bremsen Köln! Türoff fassungslos über Gerichtstermin-Absage</h1>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/vier-seiten-text-bremsen-den-1-fc-koeln-und-machen-tueroff-fassungslos-1226958/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Schlag ins Gesicht für den 1. FC Köln! Der Termin vor dem Oberverwaltungsgericht fällt aus. Es geht um den Bebauungsplan für das neue Geißbockheim. Geschäftsführer Philipp Türoff traf die Nachricht völlig kalt.</p><p>Einfach vier Seiten Text. Mehr braucht es, um die ganze Planung ins Wanken zu bringen. Der FC wollte sein Leistungszentrum ausbauen. Jetzt bleibt alles erstmal stehen. Türoff ist zu Recht fassungslos über diese Verzögerung.</p><p>Aber der Klub gibt nicht auf. Die Kölner halten stur am Zeitplan fest. Sie wollen das Projekt vorantreiben. Ob das klappt? Fraglich. Die nächsten Wochen werden zeigen, wie ernst es den Verantwortlichen damit ist.</p><p>Für dich als Fan ist das ärgerlich. Schon wieder Umbaustress. Schon wieder Verzögerungen. Der 1. FC Köln braucht endlich Klarheit. Die Zeit drängt.</p>
+        <p>Schock für den 1. FC Köln! Der angesetzte Termin vor dem Oberverwaltungsgericht fällt aus. Es geht um den Bebauungsplan für das neue Geißbockheim. Geschäftsführer Philipp Türoff hat das nicht kommen sehen. Vier Seiten Text machen den ehrgeizigen Plänen einen Strich durch die Rechnung. Völlig unerwartet trifft diese Nachricht den FC.</p><p>Türoff wirkt ratlos. Der Gerichtstermin sollte Klarheit bringen. Nun bleibt alles offen. Das ist bitter für die Kölner. Der Ausbau des Leistungszentrums rückt in weitere Ferne. Die Ungeduld wächst. Fans und Verantwortliche fiebern dem Projekt entgegen.</p><p>Aber Kopf hoch in Köln! Am Zeitplan für den Bau wird festgehalten. Das ist die klare Ansage. Die Verantwortlichen geben nicht auf. Sie sehen das Projekt nicht in Gefahr. Die nächsten Wochen werden entscheidend. Dann muss Bewegung in die Sache kommen. Der FC braucht das neue Trainingszentrum. Bald!</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "0a90083b7e";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '0a90083b7e';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

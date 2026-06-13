@@ -82,26 +82,26 @@ BL_LOGO = "https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_
 W = "https://upload.wikimedia.org/wikipedia"  # Abkürzung
 
 VEREIN_WAPPEN = {
-    # Bayern
-    "fc bayern münchen": f"{W}/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png",
-    "fc bayern":        f"{W}/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png",
-    "bayern":           f"{W}/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png",
-    "fcb":              f"{W}/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png",
-    # Dortmund
+    # Bayern (verifiziert ✓)
+    "fc bayern münchen": f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+    "fc bayern":        f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+    "bayern":           f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+    "fcb":              f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+    # Dortmund (verifiziert ✓)
     "borussia dortmund":f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
     "dortmund":         f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
     "bvb":              f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
-    # Leipzig
-    "rb leipzig":       f"{W}/commons/thumb/0/04/RB_Leipzig_2014_logo.svg/60px-RB_Leipzig_2014_logo.svg.png",
-    "leipzig":          f"{W}/commons/thumb/0/04/RB_Leipzig_2014_logo.svg/60px-RB_Leipzig_2014_logo.svg.png",
-    # Leverkusen
-    "bayer 04":         f"{W}/commons/thumb/5/59/Bayer_04_Leverkusen_logo.svg/60px-Bayer_04_Leverkusen_logo.svg.png",
-    "leverkusen":       f"{W}/commons/thumb/5/59/Bayer_04_Leverkusen_logo.svg/60px-Bayer_04_Leverkusen_logo.svg.png",
-    # Frankfurt
-    "eintracht frankfurt": f"{W}/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png",
-    "eintracht":        f"{W}/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png",
-    "frankfurt":        f"{W}/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png",
-    "sge":              f"{W}/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png",
+    # Leipzig (verifiziert ✓)
+    "rb leipzig":       f"{W}/commons/thumb/d/d6/VEREINFACHTES_LOGO_-_RB_Leipzig.svg/60px-VEREINFACHTES_LOGO_-_RB_Leipzig.svg.png",
+    "leipzig":          f"{W}/commons/thumb/d/d6/VEREINFACHTES_LOGO_-_RB_Leipzig.svg/60px-VEREINFACHTES_LOGO_-_RB_Leipzig.svg.png",
+    # Leverkusen (verifiziert ✓)
+    "bayer 04":         f"{W}/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/60px-Bayer_Leverkusen_Logo.svg.png",
+    "leverkusen":       f"{W}/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/60px-Bayer_Leverkusen_Logo.svg.png",
+    # Frankfurt (verifiziert ✓)
+    "eintracht frankfurt": f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
+    "eintracht":        f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
+    "frankfurt":        f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
+    "sge":              f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
     # Stuttgart
     "vfb stuttgart":    f"{W}/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png",
     "stuttgart":        f"{W}/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png",
@@ -109,7 +109,7 @@ VEREIN_WAPPEN = {
     "mönchengladbach":  f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
     "gladbach":         f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
     "borussia m":       f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
-    # Freiburg
+    # Freiburg (verifiziert ✓)
     "sc freiburg":      f"{W}/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png",
     "freiburg":         f"{W}/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png",
     # Union Berlin
@@ -312,7 +312,7 @@ def artikel_html(
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
     wappen_html = (
-        f'<img src="../{wappen_url}" class="artikel-wappen" alt="Wappen" />'
+        f'<img src="{wappen_url}" class="artikel-wappen" alt="Wappen" />'
         if wappen_url else
         '<div class="artikel-wappen-placeholder">BL</div>'
     )
@@ -368,18 +368,81 @@ def artikel_html(
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {{
-          this.page.url  = window.location.href;
-          this.page.identifier = "{datei_id}";
-        }};
-        (function() {{
-          var d = document, s = d.createElement('script');
-          s.src = 'https://{DISQUS_SHORTNAME}.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        }})();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = '{datei_id}';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {{
+          const liste = document.getElementById('kommentar-liste');
+          const {{ data, error }} = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', {{ ascending: true }});
+
+          if (error || !data?.length) {{
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }}
+
+          liste.innerHTML = data.map(k => {{
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {{
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            }});
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${{k.name}}</span>
+                <span class="kommentar-datum">${{datum}}</span>
+              </div>
+              <p class="kommentar-text">${{k.inhalt.replace(/</g,'&lt;')}}</p>
+            </div>`;
+          }}).join('');
+        }}
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {{
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const {{ error }} = await sb.from('kommentare').insert({{
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          }});
+
+          if (error) {{
+            status.textContent = 'Fehler: ' + error.message;
+          }} else {{
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => {{ status.textContent = ''; }}, 3000);
+            ladeKommentare();
+          }}
+        }});
+
+        ladeKommentare();
       </script>
     </section>
 
@@ -424,6 +487,21 @@ def main():
             url   = eintrag.get("link", "")
             titel = eintrag.get("title", "")
             beschr = eintrag.get("summary", eintrag.get("description", ""))
+
+            # Bei Reddit: echte Quell-URL aus dem Post holen
+            ist_reddit = "reddit.com" in feed_url
+            if ist_reddit:
+                echte_url = eintrag.get("url", "") or eintrag.get("source", {}).get("href", "")
+                # Reddit-Posts haben die verlinkte URL oft im "url"-Feld
+                if not echte_url:
+                    # Aus der Beschreibung extrahieren
+                    import re as _re
+                    m = _re.search(r'href="(https?://(?!www\.reddit)[^"]+)"', beschr)
+                    echte_url = m.group(1) if m else ""
+                if echte_url and "reddit.com" not in echte_url:
+                    from urllib.parse import urlparse as _up
+                    quelle_name = _up(echte_url).netloc.replace("www.", "")
+                    url = echte_url
 
             if not url or not titel:
                 continue

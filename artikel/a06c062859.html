@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bayern verschenkt Talent! Krattenmacher zu Elversberg – Ligaoutsider.de</title>
+  <title>Bayern verkauft Krattenmacher fest an Elversberg – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">Bayern verschenkt Talent! Krattenmacher zu Elversberg</h1>
-          <p class="artikel-meta">13.06.2026 20:49 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/nicht-nur-per-leihe-fc-bayern-gibt-krattenmacher-an-elversberg-ab-1226936/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Bayern verkauft Krattenmacher fest an Elversberg</h1>
+          <p class="artikel-meta">13.06.2026 22:08 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/nicht-nur-per-leihe-fc-bayern-gibt-krattenmacher-an-elversberg-ab-1226936/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Maurice Krattenmacher verlässt den FC Bayern. Nicht per Leihe wie bei Hertha BSC. Diesmal ist es ein echter Deal. Der 20-Jährige wechselt fest zur SV Elversberg in die Bundesliga. Bayern hat ihn ziehen lassen. Für dich als Bayern-Fan ist das ein Zeichen. Der Klub setzt auf andere Spieler.</p><p>Krattenmacher bekommt in Elversberg einen dicken Vertrag. Bis Sommer 2030 bindet ihn der Zweitligist an sich. Das ist kein kurzzeitiges Abenteuer. Das ist eine echte Investition in den jungen Stürmer. Der Junge soll Zeit bekommen. Er soll sich entwickeln. Bei Bayern war das nicht möglich.</p><p>Die SV Elversberg zeigt damit echten Ehrgeiz. Der Aufsteiger holt sich Bayern-Talent für die Bundesliga. Das ist mutig. Das ist auch smart. Junge Spieler mit Potential von großen Clubs zu bekommen, das ist für kleinere Clubs wie Elversberg ein Coup. Krattenmacher bekommt seine Chance. Das ist die Geschichte hier.</p>
+        <p>Maurice Krattenmacher geht nicht nur auf Leihbasis zur SV Elversberg. Der FC Bayern verkauft seinen 20-Jährigen Stürmer fest an den Aufsteiger. Ein langfristiger Deal mit Sicherheitsgarantie für beide Seiten.</p><p>Krattenmacher unterschreibt bis Sommer 2030. Das ist ein Statement von Elversberg. Der Klub zeigt: Wir bauen langfristig auf diese Spieler. Nicht nur schnelle Schnäppchen auf Leihbasis. Echt ambitioniert für einen Newcomer in der Bundesliga.</p><p>Für Bayern ist es eine saubere Lösung. Krattenmacher brauchte Spielzeit, die Münchner konnten ihn nicht garantieren. Jetzt bekommt der Typ beim Underdog seine Chance. Hertha BSC darf sich ärgern. Der Junge entwickelt sich bei der SV weiter. Das haben die Berliner verpasst.</p><p>Elversberg macht mit diesem Transfer ernst. Krattenmacher ist das Versprechen: Wir bleiben nicht einfach nur oben. Wir bauen etwas auf.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "a06c062859";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'a06c062859';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 

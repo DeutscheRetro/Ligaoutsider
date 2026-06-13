@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Freiburg holt Goto! Zehn Millionen für japanischen Stürmer – Ligaoutsider.de</title>
+  <title>Freiburg knackt wieder die Japaner-Börse! Goto für 10 Millionen – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
 </head>
@@ -31,13 +31,13 @@
         <img src="../https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png" class="artikel-wappen" alt="Wappen" />
         <div>
           <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
-          <h1 class="artikel-titel">Freiburg holt Goto! Zehn Millionen für japanischen Stürmer</h1>
-          <p class="artikel-meta">13.06.2026 20:49 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/zehn-millionen-euro-abloese-freiburg-legt-mit-japaner-goto-nach-1226174/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
+          <h1 class="artikel-titel">Freiburg knackt wieder die Japaner-Börse! Goto für 10 Millionen</h1>
+          <p class="artikel-meta">13.06.2026 22:09 &nbsp;·&nbsp; Quelle: <a href="https://www.kicker.de/zehn-millionen-euro-abloese-freiburg-legt-mit-japaner-goto-nach-1226174/artikel#omrss" target="_blank" rel="noopener">kicker Bundesliga News</a></p>
         </div>
       </div>
 
       <div class="artikel-text">
-        <p>Der SC Freiburg schlägt wieder zu. Diesmal landen die Breisgauer einen japanischen Knaller aus Belgien. Keisuke Goto kommt vom RSC Anderlecht nach Freiburg. Die Ablöse beträgt zehn Millionen Euro. Ein Statement für die Offensive!</p><p>Goto soll die Lücke in der Spitze füllen. Zusammen mit Igor Matanovic bildet der 24-Jährige das neue Stürmer-Duo. Freiburg vertraut auf Qualität statt schnelle deutsche Lösungen. Das ist mutig. Das ist Freiburg eben.</p><p>Du kennst das Muster längst. Die Breisgauer schnappen sich Talente, wo andere nicht hinschauen. Japan. Belgien. Egal. Wenn die Qualität stimmt, zugreifen. Goto kommt mit Bundesliga-Ambitionen in den Schwarzwald. Die nächsten Wochen werden zeigen, ob die zehn Millionen gut angelegt sind.</p>
+        <p>Der SC Freiburg macht es wieder. Zehn Millionen Euro für Keisuke Goto. Der Japaner kommt vom belgischen RSC Anderlecht und soll sofort angreifen.</p><p>Goto ist erst 24 Jahre alt. In Belgien hat er sich bewährt. Jetzt soll er in der Bundesliga zeigen, was er kann. Zusammen mit Igor Matanovic bildet er das neue Sturmduo der Breisgauer. Die alte Spitze ist weg. Platz muss her für frische Kraft.</p><p>Freiburg vertraut auf sein Gespür für internationale Talente. Die Japaner haben ihnen zuletzt gute Dienste geleistet. Goto soll der nächste Star aus dem Fernen Osten werden. Der Preis ist fair für einen so jungen Spieler.</p><p>Du willst wissen, ob das gutgeht? Dann schau dir die kommenden Wochen an. Der Test läuft jetzt. Entweder wird Goto zum nächsten Freiburg-Schatz. Oder er wird eine teure Lektion. Mehr bleibt nicht zu sagen.</p>
       </div>
 
       <div class="artikel-quelle">
@@ -49,18 +49,81 @@
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-      <div id="disqus_thread"></div>
+
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+
+      <form id="kommentar-form">
+        <div class="kommentar-felder">
+          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
+          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
+        </div>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
-        var disqus_config = function() {
-          this.page.url  = window.location.href;
-          this.page.identifier = "ff9356b1f9";
-        };
-        (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://ligaoutsider.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-        })();
+        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+        const ARTIKEL_ID    = 'ff9356b1f9';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function ladeKommentare() {
+          const liste = document.getElementById('kommentar-liste');
+          const { data, error } = await sb
+            .from('kommentare')
+            .select('name, inhalt, erstellt_am')
+            .eq('artikel_id', ARTIKEL_ID)
+            .order('erstellt_am', { ascending: true });
+
+          if (error || !data?.length) {
+            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
+            return;
+          }
+
+          liste.innerHTML = data.map(k => {
+            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            return `<div class="kommentar-item">
+              <div class="kommentar-kopf">
+                <span class="kommentar-name">${k.name}</span>
+                <span class="kommentar-datum">${datum}</span>
+              </div>
+              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
+            </div>`;
+          }).join('');
+        }
+
+        document.getElementById('kommentar-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const status = document.getElementById('kommentar-status');
+          const name   = document.getElementById('k-name').value.trim();
+          const email  = document.getElementById('k-email').value.trim();
+          const inhalt = document.getElementById('k-text').value.trim();
+
+          if (!name || !inhalt) return;
+
+          status.textContent = 'Wird gesendet…';
+          const { error } = await sb.from('kommentare').insert({
+            artikel_id: ARTIKEL_ID, name, email, inhalt
+          });
+
+          if (error) {
+            status.textContent = 'Fehler: ' + error.message;
+          } else {
+            status.textContent = '✓ Kommentar wurde gespeichert!';
+            document.getElementById('k-name').value  = '';
+            document.getElementById('k-email').value = '';
+            document.getElementById('k-text').value  = '';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+            ladeKommentare();
+          }
+        });
+
+        ladeKommentare();
       </script>
     </section>
 
