@@ -2,7 +2,7 @@ name: Neue Artikel generieren
 
 on:
   schedule:
-    - cron: '0 6,12,18 * * *'   # täglich um 6, 12 und 18 Uhr
+    - cron: '*/45 * * * *'        # alle 45 Minuten
   workflow_dispatch:              # auch manuell per Knopfdruck auslösbar
 
 jobs:
