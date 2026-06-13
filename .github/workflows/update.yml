@@ -1,0 +1,36 @@
+name: Neue Artikel generieren
+
+on:
+  schedule:
+    - cron: '0 6,12,18 * * *'   # täglich um 6, 12 und 18 Uhr
+  workflow_dispatch:              # auch manuell per Knopfdruck auslösbar
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code holen
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Pakete installieren
+        run: pip install -r requirements.txt
+
+      - name: Artikel generieren
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python generate.py
+
+      - name: Änderungen committen & pushen
+        run: |
+          git config user.name  "Ligaoutsider Bot"
+          git config user.email "bot@ligaoutsider.de"
+          git add feed.json artikel/
+          git diff --staged --quiet || git commit -m "🤖 Neue Artikel $(date +'%d.%m.%Y %H:%M')"
+          git push

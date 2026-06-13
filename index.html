@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ligaoutsider.de – Bundesliga News</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <form class="search-form" onsubmit="return false;">
+          <input type="search" id="search-input" class="search-input" placeholder="Suche…" autocomplete="off" />
+        </form>
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span class="icon" id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="team-nav">
+    <div class="nav-inner">
+      <ul class="team-list" id="team-list">
+        <li><button class="team-chip" data-filter="Bayern" title="FC Bayern München"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png" alt="Bayern" /></button></li>
+        <li><button class="team-chip" data-filter="Dortmund" title="Borussia Dortmund"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png" alt="BVB" /></button></li>
+        <li><button class="team-chip" data-filter="Leipzig" title="RB Leipzig"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/RB_Leipzig_2014_logo.svg/60px-RB_Leipzig_2014_logo.svg.png" alt="Leipzig" /></button></li>
+        <li><button class="team-chip" data-filter="Leverkusen" title="Bayer 04 Leverkusen"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Bayer_04_Leverkusen_logo.svg/60px-Bayer_04_Leverkusen_logo.svg.png" alt="Leverkusen" /></button></li>
+        <li><button class="team-chip" data-filter="Frankfurt" title="Eintracht Frankfurt"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/60px-Eintracht_Frankfurt_Logo.svg.png" alt="Frankfurt" /></button></li>
+        <li><button class="team-chip" data-filter="Stuttgart" title="VfB Stuttgart"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png" alt="Stuttgart" /></button></li>
+        <li><button class="team-chip" data-filter="Hoffenheim" title="TSG 1899 Hoffenheim"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png" alt="Hoffenheim" /></button></li>
+        <li><button class="team-chip" data-filter="Freiburg" title="SC Freiburg"><img src="https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png" alt="Freiburg" /></button></li>
+        <li><button class="team-chip" data-filter="Augsburg" title="FC Augsburg"><img src="https://upload.wikimedia.org/wikipedia/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png" alt="Augsburg" /></button></li>
+        <li><button class="team-chip" data-filter="Mainz" title="1. FSV Mainz 05"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png" alt="Mainz" /></button></li>
+        <li><button class="team-chip" data-filter="Union" title="1. FC Union Berlin"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png" alt="Union Berlin" /></button></li>
+        <li><button class="team-chip" data-filter="Gladbach" title="Borussia Mönchengladbach"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png" alt="Gladbach" /></button></li>
+        <li><button class="team-chip" data-filter="Hamburger" title="Hamburger SV"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png" alt="HSV" /></button></li>
+        <li><button class="team-chip" data-filter="Köln" title="1. FC Köln"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png" alt="Köln" /></button></li>
+        <li><button class="team-chip" data-filter="Werder" title="SV Werder Bremen"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png" alt="Werder" /></button></li>
+        <li><button class="team-chip" data-filter="Schalke" title="FC Schalke 04"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png" alt="Schalke" /></button></li>
+        <li><button class="team-chip" data-filter="Paderborn" title="SC Paderborn 07"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png" alt="Paderborn" /></button></li>
+        <li><button class="team-chip" data-filter="Elversberg" title="SV Elversberg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png" alt="Elversberg" /></button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="site-content">
+    <main class="content-main">
+
+      <div class="feed-header">
+        <h2 id="feed-titel">Aktuell</h2>
+      </div>
+
+      <ul class="feed" id="feed">
+        <li class="feed-loading">Lade Artikel …</li>
+      </ul>
+      <a href="archiv.html" class="mehr-button" id="mehr-btn" style="display:none">Mehr News anzeigen</a>
+
+    </main>
+
+    <aside class="sidebar">
+
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Tabelle</h3>
+        <table class="standings-table">
+          <thead><tr><th>#</th><th>Team</th><th>Sp</th><th>Pkt</th></tr></thead>
+          <tbody id="tabelle-body">
+            <tr class="qualify-cl"><td>1</td><td>FC Bayern</td><td>34</td><td>–</td></tr>
+            <tr class="qualify-cl"><td>2</td><td>Dortmund</td><td>34</td><td>–</td></tr>
+            <tr class="qualify-cl"><td>3</td><td>Leipzig</td><td>34</td><td>–</td></tr>
+            <tr class="qualify-cl"><td>4</td><td>Leverkusen</td><td>34</td><td>–</td></tr>
+            <tr class="qualify-el"><td>5</td><td>Stuttgart</td><td>34</td><td>–</td></tr>
+            <tr class="qualify-el"><td>6</td><td>Frankfurt</td><td>34</td><td>–</td></tr>
+            <tr><td>7</td><td>Hoffenheim</td><td>34</td><td>–</td></tr>
+            <tr><td>8</td><td>Freiburg</td><td>34</td><td>–</td></tr>
+            <tr><td>9</td><td>Augsburg</td><td>34</td><td>–</td></tr>
+            <tr><td>10</td><td>Mainz 05</td><td>34</td><td>–</td></tr>
+            <tr><td>11</td><td>Union Berlin</td><td>34</td><td>–</td></tr>
+            <tr><td>12</td><td>Gladbach</td><td>34</td><td>–</td></tr>
+            <tr><td>13</td><td>Hamburger SV</td><td>34</td><td>–</td></tr>
+            <tr><td>14</td><td>1. FC Köln</td><td>34</td><td>–</td></tr>
+            <tr><td>15</td><td>Werder Bremen</td><td>34</td><td>–</td></tr>
+            <tr class="relegate"><td>16</td><td>Schalke 04</td><td>34</td><td>–</td></tr>
+            <tr class="relegate"><td>17</td><td>Paderborn</td><td>34</td><td>–</td></tr>
+            <tr class="relegate"><td>18</td><td>Elversberg</td><td>34</td><td>–</td></tr>
+          </tbody>
+        </table>
+        <div class="standings-legend">
+          <span class="leg-cl">Champions League</span>
+          <span class="leg-el">Europa League</span>
+          <span class="leg-rel">Abstieg</span>
+        </div>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Nächste Spiele</h3>
+        <ul class="fixture-list" id="spiele-list">
+          <li style="padding:12px;color:#555">Lädt…</li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Hell/Dunkel Toggle ───────────────────────────────────────────────────
+    const btn   = document.getElementById('theme-toggle');
+    const icon  = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+
+    function setTheme(light) {
+      document.body.classList.toggle('light', light);
+      icon.textContent  = light ? '🌙' : '☀️';
+      label.textContent = light ? 'Dunkel' : 'Hell';
+      localStorage.setItem('theme', light ? 'light' : 'dark');
+    }
+
+    // Gespeicherte Präferenz laden
+    setTheme(localStorage.getItem('theme') === 'light');
+    btn.addEventListener('click', () => setTheme(!document.body.classList.contains('light')));
+  </script>
+
+  <script>
+    // ─── Tabelle (Saison 2025/26, Stand Saisonende) ───────────────────────────
+    // OpenLigaDB liefert noch 2024/25-Daten → manuell gepflegt
+    const TABELLE_2526 = [
+      { pos:1,  name:'FC Bayern München',        sp:34, pkt:82, zone:'qualify-cl' },
+      { pos:2,  name:'Borussia Dortmund',        sp:34, pkt:71, zone:'qualify-cl' },
+      { pos:3,  name:'RB Leipzig',               sp:34, pkt:64, zone:'qualify-cl' },
+      { pos:4,  name:'Bayer 04 Leverkusen',      sp:34, pkt:62, zone:'qualify-cl' },
+      { pos:5,  name:'Eintracht Frankfurt',       sp:34, pkt:58, zone:'qualify-el' },
+      { pos:6,  name:'VfB Stuttgart',             sp:34, pkt:55, zone:'qualify-el' },
+      { pos:7,  name:'TSG 1899 Hoffenheim',       sp:34, pkt:48, zone:'' },
+      { pos:8,  name:'Sport-Club Freiburg',       sp:34, pkt:47, zone:'' },
+      { pos:9,  name:'FC Augsburg',               sp:34, pkt:44, zone:'' },
+      { pos:10, name:'1. FSV Mainz 05',           sp:34, pkt:41, zone:'' },
+      { pos:11, name:'1. FC Union Berlin',        sp:34, pkt:40, zone:'' },
+      { pos:12, name:'Borussia Mönchengladbach',  sp:34, pkt:38, zone:'' },
+      { pos:13, name:'Hamburger SV',              sp:34, pkt:36, zone:'' },
+      { pos:14, name:'1. FC Köln',                sp:34, pkt:33, zone:'' },
+      { pos:15, name:'SV Werder Bremen',          sp:34, pkt:31, zone:'' },
+      { pos:16, name:'FC Schalke 04',             sp:34, pkt:29, zone:'relegate' },
+      { pos:17, name:'SC Paderborn 07',           sp:34, pkt:24, zone:'relegate' },
+      { pos:18, name:'SV Elversberg',             sp:34, pkt:21, zone:'relegate' },
+    ];
+    document.getElementById('tabelle-body').innerHTML = TABELLE_2526.map(t =>
+      `<tr class="${t.zone}"><td>${t.pos}</td><td>${t.name}</td><td>${t.sp}</td><td>${t.pkt}</td></tr>`
+    ).join('');
+
+    // ─── Nächste Spiele ───────────────────────────────────────────────────────
+    fetch('https://api.openligadb.de/getnextmatchesbyleagueid/4821/6')
+      .then(r => r.json())
+      .then(matches => {
+        const tage = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+        document.getElementById('spiele-list').innerHTML = matches.slice(0,5).map(m => {
+          const dt  = new Date(m.matchDateTime);
+          const tag = tage[dt.getDay()];
+          const dat = dt.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit'});
+          const zeit= dt.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+          const h1  = m.team1.teamName.split(' ').pop();
+          const h2  = m.team2.teamName.split(' ').pop();
+          return `<li><div class="fixture-info" style="flex:1">
+            <span class="fixture-match">${h1} – ${h2}</span>
+            <span class="fixture-time">${tag} ${dat} · ${zeit}</span>
+          </div></li>`;
+        }).join('');
+      })
+      .catch(() => {
+        document.getElementById('spiele-list').innerHTML = '<li style="padding:12px;color:#555">Nicht verfügbar</li>';
+      });
+
+    // ─── Feed & Filter ────────────────────────────────────────────────────────
+    let alleArtikel   = [];
+    let aktiverFilter = null; // null = alle
+
+    function feedItem(a) {
+      return `<li class="feed-item">
+        <a href="${a.pfad}" class="feed-wappen-link">
+          <img src="${a.wappen_url || 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png'}" class="feed-wappen" alt="Wappen" />
+        </a>
+        <div class="feed-body">
+          <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
+          <a href="${a.pfad}" class="feed-title">${a.titel}</a>
+          <div class="feed-meta"><span class="feed-time">${a.datum}</span></div>
+        </div>
+      </li>`;
+    }
+
+    function gefiltert() {
+      const q = (document.getElementById('search-input').value || '').trim().toLowerCase();
+      return alleArtikel.filter(a => {
+        const matchSearch = !q || a.titel.toLowerCase().includes(q);
+        const matchFilter = !aktiverFilter || a.titel.toLowerCase().includes(aktiverFilter.toLowerCase());
+        return matchSearch && matchFilter;
+      });
+    }
+
+    function renderFeed() {
+      const liste = gefiltert();
+      const feed  = document.getElementById('feed');
+      const btn   = document.getElementById('mehr-btn');
+      const titel = document.getElementById('feed-titel');
+
+      titel.textContent = aktiverFilter || 'Aktuell';
+      feed.innerHTML = liste.length
+        ? liste.slice(0, 50).map(feedItem).join('')
+        : '<li class="feed-loading">Keine Artikel gefunden.</li>';
+      btn.style.display = liste.length > 50 ? 'block' : 'none';
+    }
+
+    // Team-Chip Filter
+    document.querySelectorAll('.team-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        if (aktiverFilter === filter) {
+          aktiverFilter = null;
+          btn.classList.remove('active');
+        } else {
+          document.querySelectorAll('.team-chip').forEach(b => b.classList.remove('active'));
+          aktiverFilter = filter;
+          btn.classList.add('active');
+        }
+        renderFeed();
+      });
+    });
+
+    // Suche
+    document.getElementById('search-input').addEventListener('input', () => {
+      aktiverFilter = null;
+      document.querySelectorAll('.team-chip').forEach(b => b.classList.remove('active'));
+      renderFeed();
+    });
+
+    // Feed laden
+    fetch('feed.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(artikel => {
+        alleArtikel = artikel;
+        renderFeed();
+      })
+      .catch(() => {
+        document.getElementById('feed').innerHTML =
+          '<li class="feed-loading">feed.json nicht gefunden – starte generate.py.</li>';
+      });
+  </script>
+
+</body>
+</html>
