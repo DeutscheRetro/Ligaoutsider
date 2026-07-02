@@ -277,7 +277,12 @@
       .neq('geloescht', true)
       .order('erstellt_am', { ascending: true });
 
-    if (error || !data?.length) {
+    if (error) {
+      console.error('[Kommentare] Supabase Fehler:', error);
+      liste.innerHTML = '<p class="kommentar-leer">Fehler beim Laden.</p>';
+      return;
+    }
+    if (!data?.length) {
       liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
       return;
     }
