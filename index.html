@@ -213,10 +213,10 @@
       { pos:18, name:'SV Elversberg',             sp:0, pkt:0, zone:'' },
     ];
     function posColor(pos) {
-      if (pos <= 4)  return '#1565c0';
-      if (pos <= 6)  return '#e65100';
-      if (pos === 16) return '#f57c00';
-      if (pos >= 17) return '#c62828';
+      if (pos <= 4)  return '#1565c0';  // Champions League
+      if (pos <= 6)  return '#2e7d32';  // Europa League
+      if (pos === 16) return '#f57c00'; // Relegations-Playoff
+      if (pos >= 17) return '#c62828';  // Abstieg
       return null;
     }
     const LOGO_MAP = {
@@ -271,6 +271,15 @@
       { datum:'Di-Do 8.-10.09.',  wbw:'UCL', heim:'–',                     gast:'–',                  info:'Champions League Spieltag 1' },
     ];
 
+    const KÜRZEL = {
+      'FC Bayern München':'Bayern','Borussia Dortmund':'BVB','RB Leipzig':'Leipzig',
+      'Bayer 04 Leverkusen':'Leverkusen','Eintracht Frankfurt':'Frankfurt','VfB Stuttgart':'Stuttgart',
+      'Borussia Mönchengladbach':'Gladbach','Sport-Club Freiburg':'Freiburg','1. FC Union Berlin':'Union',
+      '1. FSV Mainz 05':'Mainz','FC Augsburg':'Augsburg','SV Werder Bremen':'Bremen',
+      'TSG Hoffenheim':'Hoffenheim','Hamburger SV':'HSV','1. FC Köln':'Köln',
+      'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','–':'–'
+    };
+
     // Nach Datum gruppieren
     const gruppen = {};
     SPIELE.forEach(s => {
@@ -281,14 +290,25 @@
     document.getElementById('spiele-list').innerHTML = Object.entries(gruppen).map(([datum, spiele]) => {
       const spieleHtml = spiele.map(s => {
         const wb = WETTBEWERB[s.wbw];
-        const badge = `<span style="display:inline-block;background:${wb.farbe};color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;letter-spacing:.3px;flex-shrink:0">${wb.kürzel}</span>`;
-        return `<div style="display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #1a1a1a">
-          ${badge}
-          <span style="font-size:12px;color:#ccc">${s.heim === '–' ? s.info : s.heim + ' – ' + s.gast}</span>
+        const badge = `<span style="background:${wb.farbe};color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px">${wb.kürzel}</span>`;
+        const heim = KÜRZEL[s.heim] || s.heim;
+        const gast = KÜRZEL[s.gast] || s.gast;
+        const hLogo = LOGO_MAP[s.heim] ? `<img src="logos/${LOGO_MAP[s.heim]}.png" onerror="this.style.display='none'" style="width:16px;height:16px;object-fit:contain;flex-shrink:0">` : '';
+        const score = s.ergebnis
+          ? `<span style="font-weight:800;color:#e8c000">${s.ergebnis}</span>`
+          : `<span style="color:var(--text4)">vs.</span>`;
+        if (s.heim === '–') {
+          return `<div style="padding:4px 12px;font-size:11px;color:var(--text4);border-bottom:1px solid var(--item-border)">${badge} ${s.info}</div>`;
+        }
+        return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
+          ${hLogo}
+          <span style="font-size:12px;font-weight:600;color:var(--text2)">${heim}</span>
+          <span style="font-size:11px;flex-shrink:0">${score}</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text2)">${gast}</span>
         </div>`;
       }).join('');
-      return `<li style="padding:8px 12px">
-        <div style="font-size:10px;font-weight:800;color:#e8c000;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">${datum}</div>
+      return `<li>
+        <div style="padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)">${datum}</div>
         ${spieleHtml}
       </li>`;
     }).join('');
