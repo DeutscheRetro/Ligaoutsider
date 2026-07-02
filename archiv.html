@@ -75,7 +75,7 @@
       document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
       document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
     }
-    applyTheme(localStorage.getItem('theme') || 'dark');
+    applyTheme(localStorage.getItem('theme') || (document.body.classList.contains('light') ? 'light' : 'dark'));
     btn.addEventListener('click', () => {
       const t = document.body.classList.contains('light') ? 'dark' : 'light';
       localStorage.setItem('theme', t); applyTheme(t);
