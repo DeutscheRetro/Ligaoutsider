@@ -35,6 +35,7 @@ jobs:
         run: |
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
-          git add feed.json artikel/ kickbase.json
+          git add feed.json artikel/
+          [ -f kickbase.json ] && git add kickbase.json || true
           git diff --staged --quiet || git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
           git push

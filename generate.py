@@ -653,5 +653,8 @@ def kickbase_fetch():
 
 
 if __name__ == "__main__":
-    kickbase_fetch()
+    try:
+        kickbase_fetch()
+    except Exception as e:
+        print(f"❌ kickbase_fetch Fehler: {e}")
     main()
