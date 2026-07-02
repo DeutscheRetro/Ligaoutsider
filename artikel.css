@@ -5,6 +5,18 @@
   padding: 0 16px;
 }
 
+.artikel-back {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.artikel-back:hover { opacity: 1; }
+
 .artikel {
   background: #131313;
   border: 1px solid #1e1e1e;

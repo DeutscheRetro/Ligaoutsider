@@ -364,6 +364,7 @@ def artikel_html(
   </nav>
 
   <div class="artikel-wrap">
+    <a href="javascript:history.back()" class="artikel-back">← Zurück</a>
     <article class="artikel">
 
       <div class="artikel-header">
