@@ -339,6 +339,10 @@ def artikel_html(
         <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
       </a>
       <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
         <div class="auth-buttons">
           <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
           <span id="user-info" style="display:none">
@@ -358,7 +362,7 @@ def artikel_html(
         <div>
           <span class="feed-badge" style="background:{badge_bg};color:{badge_fg}">{badge_label}</span>
           <h1 class="artikel-titel">{titel}</h1>
-          <p class="artikel-meta">{datum} &nbsp;·&nbsp; Quelle: <a href="{quelle_url}" target="_blank" rel="noopener">{quelle_name}</a></p>
+          <p class="artikel-meta">{datum}</p>
         </div>
       </div>
 
@@ -426,6 +430,18 @@ def artikel_html(
         document.getElementById('login-btn').addEventListener('click', e => {{ e.preventDefault(); netlifyIdentity.open('login'); }});
         document.getElementById('logout-btn').addEventListener('click', e => {{ e.preventDefault(); netlifyIdentity.logout(); }});
 
+        // ─── Theme ────────────────────────────────────────────────────────────
+        function applyTheme(t) {{
+          document.body.classList.toggle('light', t === 'light');
+          document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
+          document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+        }}
+        applyTheme(localStorage.getItem('theme') || (document.body.classList.contains('light') ? 'light' : 'dark'));
+        document.getElementById('theme-toggle').addEventListener('click', () => {{
+          const t = document.body.classList.contains('light') ? 'dark' : 'light';
+          localStorage.setItem('theme', t); applyTheme(t);
+        }});
+
         async function kommentarLoeschen(id) {{
           if (!confirm('Kommentar wirklich löschen?')) return;
           const {{ error }} = await sb.from('kommentare').delete().eq('id', id);
@@ -466,8 +482,6 @@ def artikel_html(
         document.getElementById('kommentar-form').addEventListener('submit', async e => {{
           e.preventDefault();
           const status = document.getElementById('kommentar-status');
-          const name   = document.getElementById('k-name').value.trim();
-          const email  = document.getElementById('k-email').value.trim();
           const inhalt = document.getElementById('k-text').value.trim();
 
           if (!aktuellerUser || !inhalt) return;
