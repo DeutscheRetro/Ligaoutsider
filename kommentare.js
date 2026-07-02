@@ -160,9 +160,8 @@
 
   // ─── Profil-Modal ────────────────────────────────────────────────────────────
   window._zeigeProfil = async function(name, email) {
-    const [{ data: komms }, { data: empfangeneVotes }, { data: banInfo }] = await Promise.all([
+    const [{ data: komms }, { data: banInfo }] = await Promise.all([
       sb.from('kommentare').select('id, erstellt_am').eq('email', email).neq('geloescht', true),
-      sb.from('kommentare').select('kommentar_votes(vote)').eq('email', email).neq('geloescht', true),
       sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle()
     ]);
 
@@ -170,7 +169,11 @@
     const dates  = komms?.map(k => new Date(k.erstellt_am)) || [];
     const dabei  = dates.length ? new Date(Math.min(...dates)).toLocaleDateString('de-DE') : '–';
     let ups = 0, downs = 0;
-    empfangeneVotes?.forEach(k => k.kommentar_votes?.forEach(v => v.vote === 1 ? ups++ : downs++));
+    if (komms?.length) {
+      const ids = komms.map(k => k.id);
+      const { data: voten } = await sb.from('kommentar_votes').select('vote').in('kommentar_id', ids);
+      voten?.forEach(v => v.vote === 1 ? ups++ : downs++);
+    }
 
     const istEigen   = aktuellerUser?.email === email;
     const istIgn     = ignorierteListe.includes(email);
