@@ -7,8 +7,38 @@
   status = 200
 
 [[redirects]]
+  from = "/forum.html"
+  to = "/forum.html"
+  status = 200
+
+[[redirects]]
+  from = "/archiv.html"
+  to = "/archiv.html"
+  status = 200
+
+[[redirects]]
+  from = "/kickbase.html"
+  to = "/kickbase.html"
+  status = 200
+
+[[redirects]]
+  from = "/datenschutz.html"
+  to = "/datenschutz.html"
+  status = 200
+
+[[redirects]]
+  from = "/impressum.html"
+  to = "/impressum.html"
+  status = 200
+
+[[redirects]]
   from = "/artikel/*"
   to = "/artikel/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/logos/*"
+  to = "/logos/:splat"
   status = 200
 
 [[redirects]]
