@@ -157,8 +157,8 @@
   // ─── Profil-Modal ────────────────────────────────────────────────────────────
   window._zeigeProfil = async function(name, email) {
     const [{ data: komms }, { data: empfangeneVotes }, { data: banInfo }] = await Promise.all([
-      sb.from('kommentare').select('id, erstellt_am').eq('email', email).eq('geloescht', false),
-      sb.from('kommentare').select('kommentar_votes(vote)').eq('email', email).eq('geloescht', false),
+      sb.from('kommentare').select('id, erstellt_am').eq('email', email).neq('geloescht', true),
+      sb.from('kommentare').select('kommentar_votes(vote)').eq('email', email).neq('geloescht', true),
       sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle()
     ]);
 
@@ -264,6 +264,7 @@
     const { data, error } = await sb.from('kommentare')
       .select('id, name, email, inhalt, erstellt_am, geaendert_am, geloescht')
       .eq('artikel_id', ARTIKEL_ID)
+      .neq('geloescht', true)
       .order('erstellt_am', { ascending: true });
 
     if (error || !data?.length) {
