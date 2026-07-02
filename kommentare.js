@@ -231,19 +231,35 @@
     if (!textEl || textEl.dataset.editing) return;
     textEl.dataset.editing = '1';
     const original = textEl.textContent.trim();
-    textEl.innerHTML = `
-      <textarea id="edit-ta-${id}" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:8px;font-size:14px;min-height:80px;resize:vertical;font-family:inherit;box-sizing:border-box">${original}</textarea>
-      <div style="display:flex;gap:8px;margin-top:6px">
-        <button onclick="window._saveEdit('${id}')" style="background:var(--accent);color:#000;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Speichern</button>
-        <button onclick="window._cancelEdit('${id}','${original.replace(/'/g,"&#39;")}')" style="background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer">Abbrechen</button>
-      </div>`;
+    textEl.dataset.original = original;
+    const ta = document.createElement('textarea');
+    ta.id = 'edit-ta-' + id;
+    ta.value = original;
+    ta.style.cssText = 'width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:8px;font-size:14px;min-height:80px;resize:vertical;font-family:inherit;box-sizing:border-box';
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px';
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Speichern';
+    saveBtn.style.cssText = 'background:var(--accent);color:#000;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer';
+    saveBtn.addEventListener('click', () => window._saveEdit(id));
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Abbrechen';
+    cancelBtn.style.cssText = 'background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer';
+    cancelBtn.addEventListener('click', () => window._cancelEdit(id));
+    btnRow.appendChild(saveBtn);
+    btnRow.appendChild(cancelBtn);
+    textEl.textContent = '';
+    textEl.appendChild(ta);
+    textEl.appendChild(btnRow);
   };
 
-  window._cancelEdit = function(id, original) {
+  window._cancelEdit = function(id) {
     const textEl = document.getElementById('kt-' + id);
     if (!textEl) return;
+    const original = textEl.dataset.original || '';
     delete textEl.dataset.editing;
-    textEl.innerHTML = original;
+    delete textEl.dataset.original;
+    textEl.textContent = original;
   };
 
   window._saveEdit = async function(id) {
