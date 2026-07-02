@@ -314,7 +314,7 @@ def artikel_html(
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
     wappen_html = (
-        f'<img src="{wappen_url}" class="artikel-wappen" alt="Wappen" />'
+        f'<img src="{wappen_url}" class="artikel-wappen" alt="Wappen" onerror="this.style.display=\'none\'"/>'
         if wappen_url else
         '<div class="artikel-wappen-placeholder">BL</div>'
     )
@@ -353,6 +353,15 @@ def artikel_html(
       </div>
     </div>
   </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="../index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="../archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="../kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="../forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
 
   <div class="artikel-wrap">
     <article class="artikel">
@@ -513,8 +522,6 @@ def artikel_html(
             status.textContent = 'Fehler: ' + error.message;
           }} else {{
             status.textContent = '✓ Kommentar wurde gespeichert!';
-            document.getElementById('k-name').value  = '';
-            document.getElementById('k-email').value = '';
             document.getElementById('k-text').value  = '';
             setTimeout(() => {{ status.textContent = ''; }}, 3000);
             ladeKommentare();
