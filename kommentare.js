@@ -160,6 +160,8 @@
 
   // ─── Profil-Modal ────────────────────────────────────────────────────────────
   window._zeigeProfil = async function(name, email) {
+    console.log('[Profil] öffne für', name, email);
+    try {
     const [{ data: komms }, { data: banInfo }] = await Promise.all([
       sb.from('kommentare').select('id, erstellt_am').eq('email', email).neq('geloescht', true),
       sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle()
@@ -220,6 +222,7 @@
           </div>` : ''}
       </div>`;
     m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+    } catch(err) { console.error('[Profil] Fehler:', err); }
   };
 
   // ─── Edit ────────────────────────────────────────────────────────────────────
