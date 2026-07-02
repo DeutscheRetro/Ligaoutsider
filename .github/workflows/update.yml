@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Code holen
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Python einrichten
         uses: actions/setup-python@v5
