@@ -64,144 +64,26 @@
 
     </article>
 
+    
     <!-- Kommentare -->
     <section class="kommentare">
       <h2>Kommentare</h2>
-
       <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
-
-      <p id="k-gasthinweis" style="font-size:13px;color:#888;margin-top:16px">Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:#e8c000">registrieren</a>, um Kommentare zu schreiben.</p>
+      <p id="k-gasthinweis" style="font-size:13px;color:var(--text4);margin-top:16px">
+        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent)">anmelden</a>, um Kommentare zu schreiben.
+      </p>
       <form id="kommentar-form" style="display:none">
-        <p id="k-eingeloggt" style="font-size:12px;color:#888;margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:#e8c000"></strong></p>
+        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent)"></strong></p>
         <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
         <button type="submit" class="kommentar-btn">Kommentar absenden</button>
         <p id="kommentar-status"></p>
       </form>
-
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-      <script>
-        const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
-        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
-        const ARTIKEL_ID    = '909425580b';
-        const ADMIN_EMAIL   = 'twitchpre@gmail.com';
-
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-        let isAdmin = false;
-        let aktuellerUser = null;
-
-        if (window.netlifyIdentity) {
-          netlifyIdentity.on('init', user => { if (user) setUser(user); });
-          netlifyIdentity.on('login', user => { setUser(user); netlifyIdentity.close(); ladeKommentare(); });
-          netlifyIdentity.on('logout', () => {
-            isAdmin = false; aktuellerUser = null;
-            document.getElementById('user-info').style.display = 'none';
-            document.getElementById('login-btn').style.display = '';
-            document.getElementById('kommentar-form').style.display = 'none';
-            document.getElementById('k-gasthinweis').style.display = 'block';
-            ladeKommentare();
-          });
-        }
-        function setUser(user) {
-          aktuellerUser = user;
-          isAdmin = user.email === ADMIN_EMAIL;
-          const name = user.user_metadata?.full_name || user.email;
-          document.getElementById('user-name').textContent = name;
-          document.getElementById('user-info').style.display = 'flex';
-          document.getElementById('login-btn').style.display = 'none';
-          document.getElementById('k-gasthinweis').style.display = 'none';
-          document.getElementById('kommentar-form').style.display = 'block';
-          document.getElementById('k-username').textContent = name;
-        }
-        document.getElementById('login-btn').addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
-        document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
-
-        function applyTheme(t) {
-          document.body.classList.toggle('light', t === 'light');
-          document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
-          document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
-        }
-        applyTheme(localStorage.getItem('theme') || (document.body.classList.contains('light') ? 'light' : 'dark'));
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-          const t = document.body.classList.contains('light') ? 'dark' : 'light';
-          localStorage.setItem('theme', t); applyTheme(t);
-        });
-
-        async function kommentarLoeschen(id) {
-          if (!confirm('Kommentar wirklich löschen?')) return;
-          const { error } = await sb.from('kommentare').delete().eq('id', id);
-          if (!error) ladeKommentare();
-        }
-
-        async function ladeKommentare() {
-          const liste = document.getElementById('kommentar-liste');
-          const { data, error } = await sb
-            .from('kommentare')
-            .select('id, name, inhalt, erstellt_am')
-            .eq('artikel_id', ARTIKEL_ID)
-            .order('erstellt_am', { ascending: true });
-
-          if (error || !data?.length) {
-            liste.innerHTML = '<p class="kommentar-leer">Noch keine Kommentare. Sei der Erste!</p>';
-            return;
-          }
-
-          liste.innerHTML = data.map(k => {
-            const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {
-              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-            });
-            const deleteBtn = isAdmin
-              ? `<button class="admin-delete-btn" onclick="kommentarLoeschen('${k.id}')">🗑 Löschen</button>`
-              : '';
-            return `<div class="kommentar-item">
-              <div class="kommentar-kopf">
-                <span class="kommentar-name">${k.name}</span>
-                <span class="kommentar-datum">${datum}</span>
-              </div>
-              <p class="kommentar-text">${k.inhalt.replace(/</g,'&lt;')}</p>
-              ${deleteBtn}
-            </div>`;
-          }).join('');
-        }
-
-        document.getElementById('kommentar-form').addEventListener('submit', async e => {
-          e.preventDefault();
-          const status = document.getElementById('kommentar-status');
-          const inhalt = document.getElementById('k-text').value.trim();
-          if (!aktuellerUser || !inhalt) return;
-          const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
-          const email = aktuellerUser.email;
-
-          function bereinigen(text) {
-            return text
-              .replace(/<[^>]*>/g, '')
-              .replace(/https?:\/\/\S+/gi, '')
-              .replace(/www\.\S+/gi, '')
-              .replace(/[^\w\sÀ-ɏḀ-ỿ!?.,;:()\'"-]/g, '')
-              .trim();
-          }
-          const sauberName   = bereinigen(name).slice(0, 60);
-          const sauberInhalt = bereinigen(inhalt).slice(0, 1000);
-          if (!sauberName || !sauberInhalt) { status.textContent = 'Kein HTML oder Links erlaubt.'; return; }
-
-          status.textContent = 'Wird gesendet…';
-          const { error } = await sb.from('kommentare').insert({
-            artikel_id: ARTIKEL_ID, name: sauberName, email, inhalt: sauberInhalt
-          });
-
-          if (error) {
-            status.textContent = 'Fehler: ' + error.message;
-          } else {
-            status.textContent = '✓ Kommentar wurde gespeichert!';
-            document.getElementById('k-text').value = '';
-            setTimeout(() => { status.textContent = ''; }, 3000);
-            ladeKommentare();
-          }
-        });
-
-        ladeKommentare();
-      </script>
     </section>
+
   </div>
+  </div>
+
+  <footer
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -212,6 +94,16 @@
       </nav>
     </div>
   </footer>
+
+
+  <script>
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+    const ARTIKEL_ID    = '909425580b';
+    const ADMIN_EMAIL   = 'twitchpre@gmail.com';
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../kommentare.js"></script>
 
 </body>
 </html>
