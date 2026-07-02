@@ -237,7 +237,7 @@ ul { list-style: none; }
 .search-input::placeholder { color: var(--text4); }
 
 /* ─── Header-Right ─── */
-.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
 
 /* ─── Auth ─── */
 .auth-buttons { display: flex; align-items: center; gap: 8px; }
