@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forum – Ligaoutsider.de</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    .forum-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; display: flex; gap: 20px; }
+    .forum-sidebar { width: 200px; flex-shrink: 0; }
+    .forum-main { flex: 1; min-width: 0; }
+
+    .forum-kat-titel { font-size: 10px; font-weight: 800; color: var(--text4); text-transform: uppercase; letter-spacing: .8px; padding: 12px 10px 4px; }
+    .forum-kat-btn {
+      display: block; width: 100%; text-align: left; background: none; border: none;
+      padding: 7px 10px; font-size: 13px; color: var(--text3); cursor: pointer;
+      border-radius: 4px; transition: background .15s, color .15s;
+    }
+    .forum-kat-btn:hover { background: var(--bg2); color: var(--text); }
+    .forum-kat-btn.active { background: var(--bg2); color: var(--accent); font-weight: 700; border-left: 3px solid var(--accent); }
+
+    .forum-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .forum-header h2 { font-size: 18px; font-weight: 800; color: var(--text); }
+    .forum-neu-btn {
+      background: var(--accent); color: #000; border: none; border-radius: 5px;
+      padding: 7px 14px; font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .forum-neu-btn:hover { opacity: .85; }
+    .forum-neu-btn:disabled { opacity: .4; cursor: default; }
+
+    .thread-liste { display: flex; flex-direction: column; gap: 1px; }
+    .thread-item {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; transition: background .15s;
+    }
+    .thread-item:hover { background: var(--item-hover); }
+    .thread-titel { font-size: 14px; font-weight: 700; color: var(--text); }
+    .thread-meta  { font-size: 11px; color: var(--text4); margin-top: 3px; }
+    .thread-antworten { font-size: 12px; color: var(--text4); text-align: right; flex-shrink: 0; margin-left: 16px; }
+    .thread-antworten strong { display: block; font-size: 16px; color: var(--text); }
+
+    .thread-leer { padding: 32px; text-align: center; color: var(--text4); font-size: 13px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; }
+
+    /* Thread-Ansicht */
+    .thread-back { background: none; border: none; color: var(--accent); font-size: 13px; cursor: pointer; padding: 0 0 16px; display: flex; align-items: center; gap: 4px; }
+    .post-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 8px; }
+    .post-kopf { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .post-autor { font-weight: 700; font-size: 13px; color: var(--accent); }
+    .post-datum { font-size: 11px; color: var(--text4); }
+    .post-text  { font-size: 14px; color: var(--text2); line-height: 1.65; white-space: pre-wrap; }
+    .post-delete-btn { background: none; border: none; color: #c62828; font-size: 11px; cursor: pointer; padding: 0; margin-left: 8px; }
+
+    .antwort-form { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 12px; }
+    .antwort-form textarea { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: 5px; color: var(--text); padding: 9px 12px; font-size: 13px; min-height: 80px; resize: vertical; font-family: inherit; box-sizing: border-box; }
+    .antwort-form textarea:focus { outline: none; border-color: var(--accent); }
+    .antwort-hint { font-size: 12px; color: var(--text4); padding: 12px 0; }
+    .antwort-hint a { color: var(--accent); cursor: pointer; }
+
+    /* Neuer Thread Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; display: flex; align-items: center; justify-content: center; }
+    .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 24px; width: 100%; max-width: 500px; margin: 16px; }
+    .modal h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+    .modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: 5px; color: var(--text); padding: 9px 12px; font-size: 13px; font-family: inherit; box-sizing: border-box; margin-bottom: 10px; }
+    .modal textarea { min-height: 100px; resize: vertical; }
+    .modal input:focus, .modal textarea:focus { outline: none; border-color: var(--accent); }
+    .modal-buttons { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-abbruch { background: var(--bg4); color: var(--text3); border: none; border-radius: 5px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+
+    @media(max-width: 640px) {
+      .forum-wrap { flex-direction: column; }
+      .forum-sidebar { width: 100%; display: flex; flex-wrap: wrap; gap: 4px; }
+      .forum-kat-titel { display: none; }
+      .forum-kat-btn { width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="forum-wrap">
+
+    <nav class="forum-sidebar">
+      <div class="forum-kat-titel">Allgemein</div>
+      <button class="forum-kat-btn active" data-kat="Allgemein">💬 Allgemein</button>
+      <button class="forum-kat-btn" data-kat="Fußballmanager">🏆 Fußballmanager</button>
+
+      <div class="forum-kat-titel" style="margin-top:8px">Clubs</div>
+      <button class="forum-kat-btn" data-kat="FC Bayern München">FC Bayern</button>
+      <button class="forum-kat-btn" data-kat="Borussia Dortmund">BVB</button>
+      <button class="forum-kat-btn" data-kat="RB Leipzig">RB Leipzig</button>
+      <button class="forum-kat-btn" data-kat="Bayer 04 Leverkusen">Leverkusen</button>
+      <button class="forum-kat-btn" data-kat="Eintracht Frankfurt">Frankfurt</button>
+      <button class="forum-kat-btn" data-kat="VfB Stuttgart">Stuttgart</button>
+      <button class="forum-kat-btn" data-kat="Borussia Mönchengladbach">Gladbach</button>
+      <button class="forum-kat-btn" data-kat="Sport-Club Freiburg">Freiburg</button>
+      <button class="forum-kat-btn" data-kat="1. FC Union Berlin">Union Berlin</button>
+      <button class="forum-kat-btn" data-kat="1. FSV Mainz 05">Mainz 05</button>
+      <button class="forum-kat-btn" data-kat="FC Augsburg">Augsburg</button>
+      <button class="forum-kat-btn" data-kat="SV Werder Bremen">Werder</button>
+      <button class="forum-kat-btn" data-kat="TSG Hoffenheim">Hoffenheim</button>
+      <button class="forum-kat-btn" data-kat="Hamburger SV">Hamburger SV</button>
+      <button class="forum-kat-btn" data-kat="1. FC Köln">1. FC Köln</button>
+      <button class="forum-kat-btn" data-kat="FC Schalke 04">Schalke 04</button>
+      <button class="forum-kat-btn" data-kat="SC Paderborn 07">Paderborn</button>
+      <button class="forum-kat-btn" data-kat="SV Elversberg">Elversberg</button>
+    </nav>
+
+    <div class="forum-main" id="forum-main">
+      <!-- Wird per JS befüllt -->
+    </div>
+
+  </div>
+
+  <!-- Modal: Neuer Thread -->
+  <div class="modal-overlay" id="modal" style="display:none">
+    <div class="modal">
+      <h3>Neues Thema</h3>
+      <input type="text" id="neu-titel" placeholder="Titel" maxlength="120" />
+      <textarea id="neu-text" placeholder="Dein Beitrag…" maxlength="5000"></textarea>
+      <div class="modal-buttons">
+        <button class="btn-abbruch" onclick="schliesseModal()">Abbrechen</button>
+        <button class="forum-neu-btn" onclick="erstelleThread()">Erstellen</button>
+      </div>
+      <p id="modal-status" style="font-size:12px;color:#e53935;margin-top:8px"></p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+    const ADMIN_EMAIL   = 'twitchpre@gmail.com';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    let aktuellerUser = null;
+    let aktiveKat     = 'Allgemein';
+    let aktiverThread = null;
+
+    // ─── Auth ─────────────────────────────────────────────────────────────────
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init',   user => { if (user) setUser(user); });
+      netlifyIdentity.on('login',  user => { setUser(user); netlifyIdentity.close(); });
+      netlifyIdentity.on('logout', () => {
+        aktuellerUser = null;
+        document.getElementById('user-info').style.display  = 'none';
+        document.getElementById('login-btn').style.display  = '';
+        document.getElementById('signup-btn').style.display = '';
+        renderMain();
+      });
+    }
+    function setUser(user) {
+      aktuellerUser = user;
+      const name = user.user_metadata?.full_name || user.email;
+      document.getElementById('user-name').textContent      = name;
+      document.getElementById('user-info').style.display    = 'flex';
+      document.getElementById('login-btn').style.display    = 'none';
+      document.getElementById('signup-btn').style.display   = 'none';
+      renderMain();
+    }
+    document.getElementById('login-btn').addEventListener('click',  e => { e.preventDefault(); netlifyIdentity.open('login'); });
+    document.getElementById('signup-btn').addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+    document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+    // ─── Kategorie-Navigation ─────────────────────────────────────────────────
+    document.querySelectorAll('.forum-kat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.forum-kat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        aktiveKat = btn.dataset.kat;
+        aktiverThread = null;
+        renderMain();
+      });
+    });
+
+    // ─── Render ───────────────────────────────────────────────────────────────
+    async function renderMain() {
+      if (aktiverThread) {
+        await renderThread(aktiverThread);
+      } else {
+        await renderThreadListe();
+      }
+    }
+
+    async function renderThreadListe() {
+      const main = document.getElementById('forum-main');
+      main.innerHTML = `<div class="forum-header">
+        <h2>${aktiveKat}</h2>
+        <button class="forum-neu-btn" onclick="oeffneModal()" ${!aktuellerUser ? 'disabled title="Bitte anmelden"' : ''}>+ Neues Thema</button>
+      </div><div class="thread-liste" id="thread-liste"><p style="color:var(--text4);font-size:13px">Lädt…</p></div>`;
+
+      const { data, error } = await sb
+        .from('forum_threads')
+        .select('*')
+        .eq('kategorie', aktiveKat)
+        .order('letzter_beitrag', { ascending: false });
+
+      const liste = document.getElementById('thread-liste');
+      if (error || !data?.length) {
+        liste.innerHTML = `<div class="thread-leer">Noch keine Themen in dieser Kategorie.<br>${aktuellerUser ? 'Starte das erste Gespräch!' : 'Melde dich an, um ein Thema zu starten.'}</div>`;
+        return;
+      }
+
+      liste.innerHTML = data.map(t => `
+        <div class="thread-item" onclick="oeffneThread('${t.id}', ${JSON.stringify(t.titel).replace(/'/g, "\\'")})">
+          <div>
+            <div class="thread-titel">${escHtml(t.titel)}</div>
+            <div class="thread-meta">von ${escHtml(t.autor_name)} · ${formatDatum(t.erstellt_am)}</div>
+          </div>
+          <div class="thread-antworten"><strong>${t.antworten}</strong>Antworten</div>
+        </div>`).join('');
+    }
+
+    async function renderThread(thread) {
+      const main = document.getElementById('forum-main');
+      main.innerHTML = `
+        <button class="thread-back" onclick="aktiverThread=null;renderMain()">← Zurück zu ${aktiveKat}</button>
+        <div class="forum-header"><h2>${escHtml(thread.titel)}</h2></div>
+        <div id="post-liste"><p style="color:var(--text4);font-size:13px">Lädt…</p></div>
+        <div id="antwort-bereich"></div>`;
+
+      const { data, error } = await sb
+        .from('forum_posts')
+        .select('*')
+        .eq('thread_id', thread.id)
+        .order('erstellt_am', { ascending: true });
+
+      const isAdmin = aktuellerUser?.email === ADMIN_EMAIL;
+      document.getElementById('post-liste').innerHTML = (!error && data?.length)
+        ? data.map(p => `
+          <div class="post-item">
+            <div class="post-kopf">
+              <div>
+                <span class="post-autor">${escHtml(p.autor_name)}</span>
+                <span class="post-datum" style="margin-left:8px">${formatDatum(p.erstellt_am)}</span>
+              </div>
+              ${isAdmin ? `<button class="post-delete-btn" onclick="loeschePost('${p.id}')">🗑 Löschen</button>` : ''}
+            </div>
+            <div class="post-text">${escHtml(p.inhalt)}</div>
+          </div>`).join('')
+        : '<p style="color:var(--text4);font-size:13px;padding:8px 0">Noch keine Beiträge.</p>';
+
+      document.getElementById('antwort-bereich').innerHTML = aktuellerUser
+        ? `<div class="antwort-form">
+            <textarea id="antwort-text" placeholder="Deine Antwort…" maxlength="5000"></textarea>
+            <button class="forum-neu-btn" style="margin-top:8px" onclick="sendeAntwort()">Antworten</button>
+            <p id="antwort-status" style="font-size:12px;color:#4caf50;margin-top:6px"></p>
+           </div>`
+        : `<p class="antwort-hint">Bitte <a onclick="netlifyIdentity.open('login')">anmelden</a>, um zu antworten.</p>`;
+    }
+
+    // ─── Aktionen ─────────────────────────────────────────────────────────────
+    function oeffneModal() {
+      if (!aktuellerUser) return;
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('neu-titel').focus();
+    }
+    function schliesseModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('neu-titel').value = '';
+      document.getElementById('neu-text').value  = '';
+      document.getElementById('modal-status').textContent = '';
+    }
+
+    async function erstelleThread() {
+      if (!aktuellerUser) return;
+      const titel  = document.getElementById('neu-titel').value.trim();
+      const inhalt = document.getElementById('neu-text').value.trim();
+      const status = document.getElementById('modal-status');
+      if (!titel || !inhalt) { status.textContent = 'Titel und Beitrag ausfüllen.'; return; }
+
+      const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
+      const email = aktuellerUser.email;
+
+      const { data: thread, error: e1 } = await sb.from('forum_threads').insert({
+        kategorie: aktiveKat, titel, autor_name: name, autor_email: email
+      }).select().single();
+      if (e1) { status.textContent = 'Fehler: ' + e1.message; return; }
+
+      await sb.from('forum_posts').insert({
+        thread_id: thread.id, inhalt, autor_name: name, autor_email: email
+      });
+
+      schliesseModal();
+      aktiverThread = thread;
+      renderMain();
+    }
+
+    async function sendeAntwort() {
+      if (!aktuellerUser || !aktiverThread) return;
+      const inhalt = document.getElementById('antwort-text').value.trim();
+      const status = document.getElementById('antwort-status');
+      if (!inhalt) return;
+
+      const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
+      const email = aktuellerUser.email;
+
+      const { error } = await sb.from('forum_posts').insert({
+        thread_id: aktiverThread.id, inhalt, autor_name: name, autor_email: email
+      });
+      if (error) { status.textContent = 'Fehler: ' + error.message; return; }
+
+      await sb.from('forum_threads').update({
+        letzter_beitrag: new Date().toISOString(),
+        antworten: (aktiverThread.antworten || 0) + 1
+      }).eq('id', aktiverThread.id);
+
+      aktiverThread.antworten = (aktiverThread.antworten || 0) + 1;
+      status.textContent = '✓ Gesendet!';
+      setTimeout(() => renderMain(), 500);
+    }
+
+    async function loeschePost(id) {
+      if (!confirm('Beitrag löschen?')) return;
+      await sb.from('forum_posts').delete().eq('id', id);
+      renderMain();
+    }
+
+    function oeffneThread(id, titel) {
+      aktiverThread = { id, titel, antworten: 0 };
+      renderMain();
+    }
+
+    // ─── Hilfsfunktionen ──────────────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function formatDatum(iso) {
+      return new Date(iso).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+
+    renderMain();
+  </script>
+
+</body>
+</html>

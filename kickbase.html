@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kickbase-Stats – Ligaoutsider.de</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link active">Kickbase-Stats</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <div class="kb-wrap">
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:16px">
+      <h2 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Kickbase-Stats</h2>
+      <span id="kb-updated" style="font-size:11px;color:var(--text4)"></span>
+    </div>
+
+    <div class="kb-grid">
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">💰 Teuerste Spieler</div>
+        <ul class="kb-list" id="kb-teuerste">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">⭐ Meiste Punkte (Saison)</div>
+        <ul class="kb-list" id="kb-punkte">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🔥 Beste Effizienz (Pkt/Mio)</div>
+        <ul class="kb-list" id="kb-effizienz">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📈 MW-Raketen (7 Tage)</div>
+        <ul class="kb-list" id="kb-raketen">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📉 MW-Crash (7 Tage)</div>
+        <ul class="kb-list" id="kb-crash">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">💎 Hidden Gems</div>
+        <ul class="kb-list" id="kb-gems">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🏆 Bester Spieltag</div>
+        <ul class="kb-list" id="kb-spieltag">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📊 Beliebteste Spieler</div>
+        <ul class="kb-list" id="kb-beliebt">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">⚡ Formstärkste (Ø 3 Spieltage)</div>
+        <ul class="kb-list" id="kb-form">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Theme
+    function applyTheme(t) {
+      document.body.classList.toggle('light', t === 'light');
+      document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+    }
+    applyTheme(localStorage.getItem('theme') || 'dark');
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const t = document.body.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('theme', t); applyTheme(t);
+    });
+
+    // Auth
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init', u => { if (u) showUser(u); });
+      netlifyIdentity.on('login', u => { showUser(u); netlifyIdentity.close(); });
+      netlifyIdentity.on('logout', () => {
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('login-btn').style.display = '';
+        document.getElementById('signup-btn').style.display = '';
+      });
+    }
+    function showUser(u) {
+      document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+      document.getElementById('user-info').style.display = 'flex';
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('signup-btn').style.display = 'none';
+    }
+    document.getElementById('login-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
+    document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+    document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+    // Kickbase-Daten aus kickbase.json laden (wird von generate.py befüllt)
+    function fmtMW(v) {
+      if (v >= 1e6) return (v/1e6).toFixed(1) + ' Mio';
+      if (v >= 1e3) return (v/1e3).toFixed(0) + ' Tsd';
+      return v;
+    }
+    function fmtDiff(v) {
+      const s = v >= 0 ? '+' : '';
+      if (Math.abs(v) >= 1e6) return s + (v/1e6).toFixed(1) + ' Mio';
+      if (Math.abs(v) >= 1e3) return s + (v/1e3).toFixed(0) + ' Tsd';
+      return s + v;
+    }
+    function renderList(id, items) {
+      document.getElementById(id).innerHTML = items.length
+        ? items.map((p, i) => `<li class="kb-item">
+            <span class="kb-rank">${i+1}.</span>
+            <img src="logos/${p.logo||''}.png" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">
+            <span class="kb-name" title="${p.name}">${p.name}</span>
+            <span class="kb-val ${p.cls||''}">${p.val}</span>
+          </li>`).join('')
+        : '<li class="kb-loading">Keine Daten</li>';
+    }
+
+    fetch('kickbase.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => {
+        if (d.updated) {
+          const dt = new Date(d.updated);
+          document.getElementById('kb-updated').textContent =
+            'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+        }
+        renderList('kb-teuerste',   (d.teuerste   ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
+        renderList('kb-punkte',     (d.punkte      ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
+        renderList('kb-effizienz',  (d.effizienz   ||[]).map(p => ({ ...p, val: p.eff.toFixed(1) })));
+        renderList('kb-raketen',    (d.raketen     ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls:'up' })));
+        renderList('kb-crash',      (d.crash       ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls:'down' })));
+        renderList('kb-gems',       (d.gems        ||[]).map(p => ({ ...p, val: p.eff.toFixed(1) })));
+        renderList('kb-spieltag',   (d.spieltag    ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
+        renderList('kb-beliebt',    (d.beliebt     ||[]).map(p => ({ ...p, val: p.ownership.toFixed(1) + '%' })));
+        renderList('kb-form',       (d.form        ||[]).map(p => ({ ...p, val: 'Ø ' + p.avg.toFixed(1) })));
+      })
+      .catch(() => {
+        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-gems'].forEach(id => {
+          document.getElementById(id).innerHTML =
+            '<li class="kb-loading">Daten werden bald verfügbar</li>';
+        });
+      });
+  </script>
+
+</body>
+</html>

@@ -1,127 +1,167 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Newsarchiv – Ligaoutsider.de</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
+  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-
-  <div class="topbar">
-    <div class="topbar-inner">
-      <span>Saison 2025/26</span>
-      <div class="topbar-right">
-        <a href="#">Anmelden</a>
-        <a href="#">Registrieren</a>
-      </div>
-    </div>
-  </div>
 
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
         <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
       </a>
-      <form class="search-form" onsubmit="return false;">
-        <input type="search" id="search-input" class="search-input" placeholder="Suche…" autocomplete="off" />
-      </form>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <div class="archiv-wrap">
-    <div class="feed-header">
-      <h2>Newsarchiv</h2>
-      <span class="feed-count" id="feed-count"></span>
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link active">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
     </div>
+  </nav>
 
-    <ul class="feed" id="feed">
-      <li class="feed-loading">Lade Artikel …</li>
+  <div style="max-width:860px;margin:24px auto;padding:0 16px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <h2 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Newsarchiv</h2>
+      <span id="archiv-count" style="font-size:12px;color:var(--text4);flex:1"></span>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text4)">
+        Pro Seite:
+        <button class="per-page-btn active" data-n="25">25</button>
+        <button class="per-page-btn" data-n="50">50</button>
+        <button class="per-page-btn" data-n="100">100</button>
+      </div>
+    </div>
+    <ul class="archiv-list" id="archiv-list">
+      <li class="archiv-item"><span style="color:var(--text4);font-size:12px">Lade Archiv…</span></li>
     </ul>
-
-    <div id="load-more-wrap" style="display:none;text-align:center;margin:24px 0">
-      <button class="mehr-button" id="load-more-btn">Weitere laden</button>
-    </div>
+    <div id="pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;flex-wrap:wrap"></div>
   </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <p class="footer-copy">© Ligaoutsider.de, 2026</p>
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
       <nav class="footer-nav">
-        <a href="#">Impressum</a>
-        <a href="#">Datenschutzerklärung</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
       </nav>
     </div>
   </footer>
 
   <script>
+    const btn = document.getElementById('theme-toggle');
+    function applyTheme(t) {
+      document.body.classList.toggle('light', t === 'light');
+      document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+    }
+    applyTheme(localStorage.getItem('theme') || 'dark');
+    btn.addEventListener('click', () => {
+      const t = document.body.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('theme', t); applyTheme(t);
+    });
+
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init', u => { if (u) showUser(u); });
+      netlifyIdentity.on('login', u => { showUser(u); netlifyIdentity.close(); });
+      netlifyIdentity.on('logout', () => {
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('login-btn').style.display = '';
+        document.getElementById('signup-btn').style.display = '';
+      });
+    }
+    function showUser(u) {
+      document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+      document.getElementById('user-info').style.display = 'flex';
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('signup-btn').style.display = 'none';
+    }
+    document.getElementById('login-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
+    document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+    document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+    function formatDate(raw) {
+      // Bereits im Format "13.06.2026 22:10" → direkt zurückgeben
+      if (/^\d{2}\.\d{2}\.\d{4}/.test(raw)) return raw;
+      const d = new Date(raw);
+      if (isNaN(d)) return raw;
+      return d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' +
+             d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+    }
+
     let alleArtikel = [];
-    let angezeigt  = 0;
-    const PRO_SEITE = 20;
+    let aktSeite = 1;
+    let proSeite = 25;
 
-    function feedItem(a) {
-      return `<li class="feed-item">
-        <a href="${a.pfad}" class="feed-wappen-link">
-          ${a.wappen_url
-            ? `<img src="${a.wappen_url}" class="feed-wappen" alt="Wappen" />`
-            : `<div class="club-logo" style="--c:#333;--tc:#aaa">BL</div>`
-          }
-        </a>
-        <div class="feed-body">
-          <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
-          <a href="${a.pfad}" class="feed-title">${a.titel}</a>
-          <div class="feed-meta"><span class="feed-time">${a.datum}</span></div>
-        </div>
-      </li>`;
+    function renderArchiv() {
+      const total = alleArtikel.length;
+      const pages = Math.ceil(total / proSeite);
+      aktSeite = Math.min(aktSeite, pages || 1);
+      const slice = alleArtikel.slice((aktSeite-1)*proSeite, aktSeite*proSeite);
+
+      document.getElementById('archiv-count').textContent = total + ' Artikel';
+      document.getElementById('archiv-list').innerHTML = slice.map(a => `
+        <li class="archiv-item">
+          <img src="${a.wappen_url || ''}" alt="" onerror="this.style.display='none'">
+          <a href="${a.pfad || a.url || '#'}" class="archiv-title">${a.titel}</a>
+          <span class="archiv-date">${formatDate(a.datum)}</span>
+        </li>
+      `).join('');
+
+      // Pagination
+      const pg = document.getElementById('pagination');
+      if (pages <= 1) { pg.innerHTML = ''; return; }
+      const btnStyle = (active) =>
+        `style="font-size:12px;font-weight:700;padding:5px 10px;border-radius:4px;border:1px solid var(--border2);background:${active?'var(--accent)':'var(--bg4)'};color:${active?'#000':'var(--text3)'};cursor:pointer"`;
+      let html = '';
+      if (aktSeite > 1) html += `<button onclick="goPage(${aktSeite-1})" ${btnStyle(false)}>‹</button>`;
+      // Zeige max 7 Seiten-Buttons
+      let start = Math.max(1, aktSeite-3), end = Math.min(pages, aktSeite+3);
+      if (start > 1) html += `<button onclick="goPage(1)" ${btnStyle(false)}>1</button>${start>2?'<span style="color:var(--text4);font-size:12px">…</span>':''}`;
+      for (let i=start; i<=end; i++) html += `<button onclick="goPage(${i})" ${btnStyle(i===aktSeite)}>${i}</button>`;
+      if (end < pages) html += `${end<pages-1?'<span style="color:var(--text4);font-size:12px">…</span>':''}<button onclick="goPage(${pages})" ${btnStyle(false)}>${pages}</button>`;
+      if (aktSeite < pages) html += `<button onclick="goPage(${aktSeite+1})" ${btnStyle(false)}>›</button>`;
+      pg.innerHTML = html;
     }
 
-    function render(liste, reset) {
-      const feed = document.getElementById('feed');
-      const wrap = document.getElementById('load-more-wrap');
-      if (reset) { feed.innerHTML = ''; angezeigt = 0; }
-      const naechste = liste.slice(angezeigt, angezeigt + PRO_SEITE);
-      if (naechste.length === 0 && angezeigt === 0) {
-        feed.innerHTML = '<li class="feed-loading">Keine Artikel gefunden.</li>';
-      } else {
-        feed.insertAdjacentHTML('beforeend', naechste.map(feedItem).join(''));
-        angezeigt += naechste.length;
-      }
-      wrap.style.display = angezeigt < liste.length ? 'block' : 'none';
-    }
+    function goPage(n) { aktSeite = n; renderArchiv(); window.scrollTo(0,0); }
 
-    let gefilterteListe = [];
+    document.querySelectorAll('.per-page-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        proSeite = +b.dataset.n;
+        aktSeite = 1;
+        document.querySelectorAll('.per-page-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        renderArchiv();
+      });
+    });
 
     fetch('feed.json')
       .then(r => r.ok ? r.json() : Promise.reject())
-      .then(artikel => {
-        alleArtikel    = artikel;
-        gefilterteListe = artikel;
-        document.getElementById('feed-count').textContent = artikel.length + ' Artikel';
-
-        if (artikel.length === 0) {
-          document.getElementById('feed').innerHTML =
-            '<li class="feed-loading">Noch keine Artikel. Starte generate.py!</li>';
-          return;
-        }
-
-        render(gefilterteListe, true);
-
-        document.getElementById('search-input').addEventListener('input', e => {
-          const q = e.target.value.trim().toLowerCase();
-          gefilterteListe = q
-            ? alleArtikel.filter(a => a.titel.toLowerCase().includes(q))
-            : alleArtikel;
-          document.getElementById('feed-count').textContent = gefilterteListe.length + ' Artikel';
-          render(gefilterteListe, true);
-        });
-
-        document.getElementById('load-more-btn').addEventListener('click', () => {
-          render(gefilterteListe, false);
-        });
-      })
+      .then(artikel => { alleArtikel = artikel; renderArchiv(); })
       .catch(() => {
-        document.getElementById('feed').innerHTML =
-          '<li class="feed-loading">feed.json nicht gefunden.</li>';
+        document.getElementById('archiv-list').innerHTML =
+          '<li class="archiv-item"><span style="color:var(--text4);font-size:12px">Keine Artikel gefunden.</span></li>';
       });
   </script>
 

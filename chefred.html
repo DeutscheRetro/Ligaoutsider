@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chefred – Ligaoutsider</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,sans-serif;background:#0d0d0d;color:#e0e0e0;font-size:14px}
+    a{color:#e8c000;text-decoration:none}
+    .wrap{max-width:900px;margin:0 auto;padding:24px 16px}
+    h1{color:#e8c000;font-size:22px;margin-bottom:4px}
+    .sub{color:#555;font-size:12px;margin-bottom:24px}
+
+    /* Login */
+    .login{max-width:400px;margin:80px auto;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:32px}
+    .login h2{color:#e8c000;margin-bottom:20px}
+    .field{margin-bottom:14px}
+    label{display:block;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+    input[type=text],input[type=password],textarea,select{width:100%;background:#111;border:1px solid #2a2a2a;border-radius:5px;color:#ddd;padding:8px 12px;font-size:13px}
+    input:focus,textarea:focus{outline:none;border-color:#e8c000}
+    .btn{padding:8px 18px;border:none;border-radius:5px;cursor:pointer;font-weight:700;font-size:13px}
+    .btn-gold{background:#e8c000;color:#000}
+    .btn-red{background:#c62828;color:#fff}
+    .btn-green{background:#2e7d32;color:#fff}
+    .btn-gray{background:#333;color:#ccc}
+    .btn:hover{opacity:.85}
+    .err{background:#b71c1c;color:#fff;padding:8px 12px;border-radius:5px;font-size:13px;margin-bottom:12px}
+    .ok{background:#1b5e20;color:#fff;padding:8px 12px;border-radius:5px;font-size:13px;margin-bottom:12px}
+
+    /* Artikel-Liste */
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .artikel-card{background:#161616;border:1px solid #222;border-radius:6px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center}
+    .artikel-card img{width:36px;height:36px;object-fit:contain;flex-shrink:0}
+    .artikel-card-body{flex:1;min-width:0}
+    .artikel-card-titel{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .artikel-card-meta{font-size:11px;color:#555;margin-top:3px}
+    .artikel-card-actions{display:flex;gap:8px;flex-shrink:0}
+
+    /* Editor */
+    .editor{background:#161616;border:1px solid #222;border-radius:8px;padding:24px}
+    .editor h2{color:#e8c000;margin-bottom:20px;font-size:16px}
+    textarea{min-height:180px;resize:vertical;font-family:inherit;line-height:1.6;margin-top:0}
+    .logo-preview{width:48px;height:48px;object-fit:contain;margin-top:8px}
+    .actions-row{display:flex;gap:10px;margin-top:20px}
+    .badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:#e8c000;color:#000}
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid #333;border-top-color:#e8c000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="page-login" class="login">
+  <h2>⚽ Chefred</h2>
+  <div id="login-err" style="display:none" class="err"></div>
+  <div class="field"><label>Passwort</label><input type="password" id="pw" placeholder="Chefred-Passwort"/></div>
+  <div class="field"><label>GitHub Token (einmalig)</label><input type="text" id="gh-token" placeholder="ghp_..."/><p style="font-size:11px;color:#555;margin-top:4px">Wird nur in diesem Browser gespeichert</p></div>
+  <button class="btn btn-gold" onclick="login()">Einloggen</button>
+</div>
+
+<!-- HAUPTSEITE -->
+<div id="page-main" style="display:none" class="wrap">
+  <h1>⚽ Chefred</h1>
+  <p class="sub">Ligaoutsider Redaktions-Panel · <a href="#" onclick="logout()">Abmelden</a></p>
+
+  <div id="msg" style="display:none;margin-bottom:16px"></div>
+
+  <div id="view-list">
+    <div class="toolbar">
+      <strong id="artikel-count"></strong>
+      <button class="btn btn-gray" onclick="ladeArtikel()">↻ Aktualisieren</button>
+    </div>
+    <div id="artikel-liste"><p style="color:#555">Lade…</p></div>
+  </div>
+
+  <div id="view-editor" style="display:none">
+    <button class="btn btn-gray" onclick="zeigeListe()" style="margin-bottom:16px">← Zurück</button>
+    <div class="editor">
+      <h2 id="editor-titel-h">Artikel bearbeiten</h2>
+      <input type="hidden" id="edit-id"/>
+      <input type="hidden" id="edit-pfad"/>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>Titel</label>
+        <input type="text" id="edit-titel"/>
+      </div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>Vereinslogo</label>
+        <select id="edit-logo" onchange="updateLogoPreview()">
+          <option value="logos/bayern.png">FC Bayern München</option>
+          <option value="logos/leipzig.png">RB Leipzig</option>
+          <option value="logos/leverkusen.png">Bayer 04 Leverkusen</option>
+          <option value="logos/frankfurt.png">Eintracht Frankfurt</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png">Borussia Dortmund</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png">VfB Stuttgart</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png">TSG Hoffenheim</option>
+          <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png">SC Freiburg</option>
+          <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png">FC Augsburg</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png">1. FSV Mainz 05</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png">1. FC Union Berlin</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png">Borussia Mönchengladbach</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png">Hamburger SV</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png">1. FC Köln</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png">SV Werder Bremen</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png">FC Schalke 04</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png">SC Paderborn 07</option>
+          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png">SV Elversberg</option>
+          <option value="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png">Bundesliga (allgemein)</option>
+        </select>
+        <img id="logo-preview" class="logo-preview" src="" alt=""/>
+      </div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>Text (Absätze mit Leerzeile trennen)</label>
+        <textarea id="edit-text" rows="10"></textarea>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-green" onclick="speichern()">💾 Speichern &amp; deployen</button>
+        <button class="btn btn-red" onclick="loeschen()">🗑 Artikel löschen</button>
+        <button class="btn btn-gray" onclick="zeigeListe()">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const REPO    = 'DeutscheRetro/Ligaoutsider';
+const PASSWORT = 'chefred2026';
+let ghToken   = '';
+let feedDaten = [];
+let feedSha   = '';
+
+// ─── Auth ────────────────────────────────────────────────────────────────────
+function login() {
+  const pw = document.getElementById('pw').value;
+  const tok = document.getElementById('gh-token').value.trim();
+  if (pw !== PASSWORT) {
+    zeigeFehler('login-err', 'Falsches Passwort');
+    return;
+  }
+  if (tok) localStorage.setItem('gh_token', tok);
+  ghToken = localStorage.getItem('gh_token') || '';
+  if (!ghToken) { zeigeFehler('login-err', 'GitHub Token fehlt'); return; }
+  sessionStorage.setItem('auth', '1');
+  document.getElementById('page-login').style.display = 'none';
+  document.getElementById('page-main').style.display = 'block';
+  ladeArtikel();
+}
+
+function logout() {
+  sessionStorage.removeItem('auth');
+  location.reload();
+}
+
+function zeigeFehler(id, txt) {
+  const el = document.getElementById(id);
+  el.textContent = txt; el.style.display = 'block';
+}
+
+// ─── GitHub API ───────────────────────────────────────────────────────────────
+async function ghGet(path) {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json' }
+  });
+  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+async function ghPut(path, content, sha, message) {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, content: btoa(unescape(encodeURIComponent(content))), sha })
+  });
+  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+async function ghDelete(path, sha, message) {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    method: 'DELETE',
+    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, sha })
+  });
+  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+}
+
+// ─── Artikel laden ────────────────────────────────────────────────────────────
+async function ladeArtikel() {
+  const liste = document.getElementById('artikel-liste');
+  liste.innerHTML = '<p style="color:#555"><span class="spinner"></span>Lade feed.json…</p>';
+  try {
+    const data = await ghGet('feed.json');
+    feedSha   = data.sha;
+    feedDaten = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    document.getElementById('artikel-count').textContent = feedDaten.length + ' Artikel';
+    renderListe();
+  } catch(e) {
+    liste.innerHTML = `<div class="err">${e.message}</div>`;
+  }
+}
+
+function renderListe() {
+  const liste = document.getElementById('artikel-liste');
+  if (!feedDaten.length) { liste.innerHTML = '<p style="color:#555">Keine Artikel</p>'; return; }
+  liste.innerHTML = feedDaten.map((a, i) => `
+    <div class="artikel-card">
+      <img src="${a.wappen_url || ''}" onerror="this.style.display='none'" />
+      <div class="artikel-card-body">
+        <div class="artikel-card-titel">${a.titel}</div>
+        <div class="artikel-card-meta">${a.datum} · <span class="badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span></div>
+      </div>
+      <div class="artikel-card-actions">
+        <button class="btn btn-gold" onclick="bearbeiten(${i})">Bearbeiten</button>
+        <button class="btn btn-red" onclick="schnellLoeschen(${i})">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Editor ───────────────────────────────────────────────────────────────────
+async function bearbeiten(idx) {
+  const a = feedDaten[idx];
+  document.getElementById('edit-id').value   = a.id;
+  document.getElementById('edit-pfad').value = idx;
+  document.getElementById('edit-titel').value = a.titel;
+  document.getElementById('editor-titel-h').textContent = 'Bearbeiten: ' + a.titel.substring(0,50);
+
+  // Logo Dropdown
+  const sel = document.getElementById('edit-logo');
+  let gefunden = false;
+  for (let opt of sel.options) {
+    if (opt.value === a.wappen_url) { opt.selected = true; gefunden = true; break; }
+  }
+  if (!gefunden && a.wappen_url) {
+    const opt = new Option(a.wappen_url, a.wappen_url, true, true);
+    sel.add(opt);
+  }
+  updateLogoPreview();
+
+  // Artikel-Text aus HTML laden
+  document.getElementById('edit-text').value = 'Lade…';
+  try {
+    const htmlData = await ghGet(a.pfad);
+    const html = decodeURIComponent(escape(atob(htmlData.content)));
+    const match = html.match(/<div class="artikel-text">([\s\S]*?)<\/div>/);
+    if (match) {
+      const text = match[1].replace(/<p>([\s\S]*?)<\/p>/g, '$1\n\n').replace(/<[^>]+>/g,'').trim();
+      document.getElementById('edit-text').value = text;
+    }
+  } catch(e) {
+    document.getElementById('edit-text').value = '(Text konnte nicht geladen werden)';
+  }
+
+  zeigeEditor();
+}
+
+function updateLogoPreview() {
+  const url = document.getElementById('edit-logo').value;
+  document.getElementById('logo-preview').src = url;
+}
+
+function zeigeEditor() {
+  document.getElementById('view-list').style.display   = 'none';
+  document.getElementById('view-editor').style.display = 'block';
+}
+
+function zeigeListe() {
+  document.getElementById('view-list').style.display   = 'block';
+  document.getElementById('view-editor').style.display = 'none';
+}
+
+// ─── Speichern ────────────────────────────────────────────────────────────────
+async function speichern() {
+  const idx       = parseInt(document.getElementById('edit-pfad').value);
+  const neuerTitel = document.getElementById('edit-titel').value.trim();
+  const neuesLogo  = document.getElementById('edit-logo').value;
+  const neuerText  = document.getElementById('edit-text').value.trim();
+
+  zeigeMsg('<span class="spinner"></span>Speichere…', false);
+
+  try {
+    const a = feedDaten[idx];
+
+    // Artikel-HTML aktualisieren
+    const htmlData = await ghGet(a.pfad);
+    let html = decodeURIComponent(escape(atob(htmlData.content)));
+    html = html.replace(/<h1 class="artikel-titel">.*?<\/h1>/, `<h1 class="artikel-titel">${neuerTitel}</h1>`);
+    const absaetze = neuerText.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
+    html = html.replace(/<div class="artikel-text">[\s\S]*?<\/div>/, `<div class="artikel-text">${absaetze}</div>`);
+    if (neuesLogo) html = html.replace(/src="[^"]*" class="artikel-wappen"/, `src="${neuesLogo}" class="artikel-wappen"`);
+    await ghPut(a.pfad, html, htmlData.sha, `✏️ Artikel bearbeitet: ${neuerTitel.substring(0,50)}`);
+
+    // feed.json aktualisieren
+    feedDaten[idx].titel     = neuerTitel;
+    feedDaten[idx].wappen_url = neuesLogo;
+    const neuesFeed = JSON.stringify(feedDaten, null, 2);
+    const feedData  = await ghGet('feed.json');
+    await ghPut('feed.json', neuesFeed, feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
+
+    zeigeMsg('✓ Gespeichert! Netlify deployed in ~1 Minute.', true);
+    renderListe();
+    setTimeout(zeigeliste, 2000);
+  } catch(e) {
+    zeigeMsg('Fehler: ' + e.message, false);
+  }
+}
+
+// ─── Löschen ──────────────────────────────────────────────────────────────────
+async function loeschen() {
+  if (!confirm('Artikel wirklich löschen?')) return;
+  const idx = parseInt(document.getElementById('edit-pfad').value);
+  await doLoeschen(idx);
+  zeigeListe();
+}
+
+async function schnellLoeschen(idx) {
+  if (!confirm('Artikel wirklich löschen?')) return;
+  await doLoeschen(idx);
+}
+
+async function doLoeschen(idx) {
+  const a = feedDaten[idx];
+  zeigeMsg('<span class="spinner"></span>Lösche…', false);
+  try {
+    const htmlData = await ghGet(a.pfad);
+    await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
+    feedDaten.splice(idx, 1);
+    const feedData = await ghGet('feed.json');
+    await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, '🗑 feed.json aktualisiert');
+    zeigeMsg('✓ Gelöscht!', true);
+    renderListe();
+  } catch(e) {
+    zeigeMsg('Fehler: ' + e.message, false);
+  }
+}
+
+function zeigeMsg(txt, ok) {
+  const el = document.getElementById('msg');
+  el.className = ok ? 'ok' : 'err';
+  el.innerHTML = txt;
+  el.style.display = 'block';
+  if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+function zeigeliste() { zeigeMsg('', false); zeigeMsg.style && (zeigeMsg.style.display='none'); }
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+if (sessionStorage.getItem('auth') === '1') {
+  ghToken = localStorage.getItem('gh_token') || '';
+  document.getElementById('page-login').style.display = 'none';
+  document.getElementById('page-main').style.display = 'block';
+  ladeArtikel();
+}
+document.getElementById('pw').addEventListener('keydown', e => e.key === 'Enter' && login());
+</script>
+</body>
+</html>

@@ -27,6 +27,7 @@ RSS_FEEDS = [
     "https://www.sportschau.de/fussball/bundesliga/index~rss2.xml",
     "https://sportbild.bild.de/feed/sportbild-home.xml",
     "https://www.transfermarkt.de/rss/news",
+    "https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1",
     "https://rss.dw.com/xml/sport-de",
 
     # Englische Quellen
@@ -82,69 +83,69 @@ BL_LOGO = "https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_
 W = "https://upload.wikimedia.org/wikipedia"  # Abkürzung
 
 VEREIN_WAPPEN = {
-    # Bayern (verifiziert ✓)
-    "fc bayern münchen": f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
-    "fc bayern":        f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
-    "bayern":           f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
-    "fcb":              f"{W}/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/60px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
-    # Dortmund (verifiziert ✓)
-    "borussia dortmund":f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
-    "dortmund":         f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
-    "bvb":              f"{W}/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png",
-    # Leipzig (verifiziert ✓)
-    "rb leipzig":       f"{W}/commons/thumb/d/d6/VEREINFACHTES_LOGO_-_RB_Leipzig.svg/60px-VEREINFACHTES_LOGO_-_RB_Leipzig.svg.png",
-    "leipzig":          f"{W}/commons/thumb/d/d6/VEREINFACHTES_LOGO_-_RB_Leipzig.svg/60px-VEREINFACHTES_LOGO_-_RB_Leipzig.svg.png",
-    # Leverkusen (verifiziert ✓)
-    "bayer 04":         f"{W}/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/60px-Bayer_Leverkusen_Logo.svg.png",
-    "leverkusen":       f"{W}/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/60px-Bayer_Leverkusen_Logo.svg.png",
-    # Frankfurt (verifiziert ✓)
-    "eintracht frankfurt": f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
-    "eintracht":        f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
-    "frankfurt":        f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
-    "sge":              f"{W}/de/thumb/3/32/Logo_Eintracht_Frankfurt_1998.svg/60px-Logo_Eintracht_Frankfurt_1998.svg.png",
+    # Bayern
+    "fc bayern münchen": "logos/bayern.png",
+    "fc bayern":         "logos/bayern.png",
+    "bayern":            "logos/bayern.png",
+    "fcb":               "logos/bayern.png",
+    # Dortmund
+    "borussia dortmund": "logos/dortmund.png",
+    "dortmund":          "logos/dortmund.png",
+    "bvb":               "logos/dortmund.png",
+    # Leipzig
+    "rb leipzig":          "logos/leipzig.png",
+    "leipzig":             "logos/leipzig.png",
+    # Leverkusen
+    "bayer 04":            "logos/leverkusen.png",
+    "leverkusen":          "logos/leverkusen.png",
+    # Frankfurt
+    "eintracht frankfurt": "logos/frankfurt.png",
+    "eintracht":           "logos/frankfurt.png",
+    "frankfurt":           "logos/frankfurt.png",
+    "sge":                 "logos/frankfurt.png",
     # Stuttgart
-    "vfb stuttgart":    f"{W}/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png",
-    "stuttgart":        f"{W}/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png",
+    "vfb stuttgart":    "logos/stuttgart.png",
+    "stuttgart":        "logos/stuttgart.png",
     # Gladbach
-    "mönchengladbach":  f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
-    "gladbach":         f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
-    "borussia m":       f"{W}/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
-    # Freiburg (verifiziert ✓)
-    "sc freiburg":      f"{W}/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png",
-    "freiburg":         f"{W}/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png",
+    "mönchengladbach":  "logos/gladbach.png",
+    "gladbach":         "logos/gladbach.png",
+    "borussia m":       "logos/gladbach.png",
+    # Freiburg
+    "sc freiburg":      "logos/freiburg.png",
+    "freiburg":         "logos/freiburg.png",
     # Union Berlin
-    "union berlin":     f"{W}/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png",
-    "1. fc union":      f"{W}/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png",
+    "union berlin":     "logos/union.png",
+    "1. fc union":      "logos/union.png",
     # Mainz
-    "fsv mainz":        f"{W}/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png",
-    "mainz":            f"{W}/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png",
+    "fsv mainz":        "logos/mainz.png",
+    "mainz":            "logos/mainz.png",
     # Augsburg
-    "fc augsburg":      f"{W}/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png",
-    "augsburg":         f"{W}/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png",
+    "fc augsburg":      "logos/augsburg.png",
+    "augsburg":         "logos/augsburg.png",
     # Werder
-    "sv werder":        f"{W}/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png",
-    "werder":           f"{W}/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png",
+    "sv werder":        "logos/werder.png",
+    "werder":           "logos/werder.png",
     # Hoffenheim
-    "tsg hoffenheim":   f"{W}/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png",
-    "hoffenheim":       f"{W}/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png",
-    "tsg 1899":         f"{W}/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png",
+    "tsg hoffenheim":   "logos/hoffenheim.png",
+    "hoffenheim":       "logos/hoffenheim.png",
+    "tsg 1899":         "logos/hoffenheim.png",
     # HSV
-    "hamburger sv":     f"{W}/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png",
-    "hamburger":        f"{W}/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png",
-    "hsv":              f"{W}/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png",
+    "hamburger sv":     "logos/hsv.png",
+    "hamburger":        "logos/hsv.png",
+    "hsv":              "logos/hsv.png",
     # Köln
-    "1. fc köln":       f"{W}/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png",
-    "köln":             f"{W}/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png",
-    "effzeh":           f"{W}/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png",
+    "1. fc köln":       "logos/koeln.png",
+    "köln":             "logos/koeln.png",
+    "effzeh":           "logos/koeln.png",
     # Schalke
-    "fc schalke":       f"{W}/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png",
-    "schalke":          f"{W}/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png",
+    "fc schalke":       "logos/schalke.png",
+    "schalke":          "logos/schalke.png",
     # Paderborn
-    "sc paderborn":     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png",
-    "paderborn":        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png",
+    "sc paderborn":     "logos/paderborn.png",
+    "paderborn":        "logos/paderborn.png",
     # Elversberg
-    "sv elversberg":    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png",
-    "elversberg":       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png",
+    "sv elversberg":    "logos/elversberg.png",
+    "elversberg":       "logos/elversberg.png",
 }
 
 BADGE_KATEGORIEN = {
@@ -239,7 +240,7 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
         messages=[{
             "role": "user",
             "content": (
-                f"Ist das eine relevante News über die 1. Bundesliga (Saison 2025/26)?\n"
+                f"Ist das eine relevante News über die 1. Bundesliga (Saison 2026/27)?\n"
                 f"Die 18 Klubs der 1. Bundesliga sind: {klubs}.\n"
                 f"Antworte NUR mit JA wenn:\n"
                 f"- Es um mindestens einen dieser Klubs geht\n"
@@ -256,15 +257,16 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
 
 def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_url: str) -> dict:
     """Lässt Claude einen eigenen Artikel schreiben und eine Kategorie wählen."""
-    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Dein Stil orientiert sich an Bild.de: kurze Sätze, direkte Sprache, emotional, nah am Leser. Keine Füllwörter, keine gestelzte KI-Sprache.
+    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Dein Stil orientiert sich an kicker.de: sachlich, präzise, informativ. Fachkundige Sprache ohne Reißerisches. Keine KI-Floskeln, kein aufgeblasener Stil.
 
 Strikte Regeln:
-- KEINE Gedankenstriche oder Bindestriche als Satzzeichen (kein " – ", kein " - " mitten im Satz)
-- Stattdessen: Punkte, Ausrufezeichen, neue Sätze
-- Kurze knackige Sätze. Maximal 20 Wörter pro Satz.
-- Schreib wie ein Mensch, nicht wie eine KI
+- Seriöser Sportzeitungsstil wie kicker.de oder Sportschau
+- KEINE Gedankenstriche oder Bindestriche als Satzzeichen mitten im Satz
+- Klare, vollständige Sätze. Maximal 25 Wörter pro Satz.
+- Fakten zuerst. Hintergründe und Einordnung danach.
+- Keine Ausrufezeichen, keine Reißer-Formulierungen
 - Keine Aufzählungen, keine Bullet Points
-- Sprich den Leser gelegentlich direkt an
+- Schreib wie ein erfahrener Fußballjournalist
 
 Basierend auf dieser Meldung:
 TITEL: {titel}
@@ -272,7 +274,7 @@ BESCHREIBUNG: {beschreibung}
 QUELLE: {quelle_name} ({quelle_url})
 
 Erstelle:
-1. Einen packenden Titel im Bild-Stil (max. 80 Zeichen, kein Bindestrich als Satzzeichen)
+1. Einen präzisen, informativen Titel im Kicker-Stil (max. 80 Zeichen, keine Bindestriche als Satzzeichen)
 2. Drei bis vier Absätze eigener Text auf Deutsch
 3. Eine Kategorie aus: transfer, verletzung, aufstellung, interview, analyse, news
 
@@ -325,21 +327,26 @@ def artikel_html(
   <title>{titel} – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
+  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="topbar-inner">
-      <span>Saison 2025/26</span>
-      <div class="topbar-right"><a href="#">Anmelden</a><a href="#">Registrieren</a></div>
-    </div>
-  </div>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <header class="site-header">
     <div class="header-inner">
       <a href="../index.html" class="logo">
         <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
       </a>
+      <div class="header-right">
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -371,29 +378,65 @@ def artikel_html(
 
       <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
 
-      <form id="kommentar-form">
-        <div class="kommentar-felder">
-          <input type="text" id="k-name" placeholder="Dein Name" maxlength="60" required />
-          <input type="email" id="k-email" placeholder="E-Mail (optional, nicht sichtbar)" maxlength="120" />
-        </div>
+      <p id="k-gasthinweis" style="font-size:13px;color:#888;margin-top:16px">Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:#e8c000">registrieren</a>, um Kommentare zu schreiben.</p>
+      <form id="kommentar-form" style="display:none">
+        <p id="k-eingeloggt" style="font-size:12px;color:#888;margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:#e8c000"></strong></p>
         <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
         <button type="submit" class="kommentar-btn">Kommentar absenden</button>
         <p id="kommentar-status"></p>
       </form>
 
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
       <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
       <script>
         const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
         const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
         const ARTIKEL_ID    = '{datei_id}';
+        const ADMIN_EMAIL   = 'twitchpre@gmail.com';
 
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+        let isAdmin = false;
+        let aktuellerUser = null;
+
+        // ─── Netlify Identity ──────────────────────────────────────────────────
+        if (window.netlifyIdentity) {{
+          netlifyIdentity.on('init', user => {{ if (user) setUser(user); }});
+          netlifyIdentity.on('login', user => {{ setUser(user); netlifyIdentity.close(); ladeKommentare(); }});
+          netlifyIdentity.on('logout', () => {{
+            isAdmin = false;
+            aktuellerUser = null;
+            document.getElementById('user-info').style.display = 'none';
+            document.getElementById('login-btn').style.display = '';
+            document.getElementById('kommentar-form').style.display = 'none';
+            document.getElementById('k-gasthinweis').style.display = 'block';
+            ladeKommentare();
+          }});
+        }}
+        function setUser(user) {{
+          aktuellerUser = user;
+          isAdmin = user.email === ADMIN_EMAIL;
+          const anzeigeName = user.user_metadata?.full_name || user.email;
+          document.getElementById('user-name').textContent = anzeigeName;
+          document.getElementById('user-info').style.display = 'flex';
+          document.getElementById('login-btn').style.display = 'none';
+          document.getElementById('k-gasthinweis').style.display = 'none';
+          document.getElementById('kommentar-form').style.display = 'block';
+          document.getElementById('k-username').textContent = anzeigeName;
+        }}
+        document.getElementById('login-btn').addEventListener('click', e => {{ e.preventDefault(); netlifyIdentity.open('login'); }});
+        document.getElementById('logout-btn').addEventListener('click', e => {{ e.preventDefault(); netlifyIdentity.logout(); }});
+
+        async function kommentarLoeschen(id) {{
+          if (!confirm('Kommentar wirklich löschen?')) return;
+          const {{ error }} = await sb.from('kommentare').delete().eq('id', id);
+          if (!error) ladeKommentare();
+        }}
 
         async function ladeKommentare() {{
           const liste = document.getElementById('kommentar-liste');
           const {{ data, error }} = await sb
             .from('kommentare')
-            .select('name, inhalt, erstellt_am')
+            .select('id, name, inhalt, erstellt_am')
             .eq('artikel_id', ARTIKEL_ID)
             .order('erstellt_am', {{ ascending: true }});
 
@@ -406,12 +449,16 @@ def artikel_html(
             const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', {{
               day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
             }});
+            const deleteBtn = isAdmin
+              ? `<button class="admin-delete-btn" onclick="kommentarLoeschen('${{k.id}}')">🗑 Löschen</button>`
+              : '';
             return `<div class="kommentar-item">
               <div class="kommentar-kopf">
                 <span class="kommentar-name">${{k.name}}</span>
                 <span class="kommentar-datum">${{datum}}</span>
               </div>
               <p class="kommentar-text">${{k.inhalt.replace(/</g,'&lt;')}}</p>
+              ${{deleteBtn}}
             </div>`;
           }}).join('');
         }}
@@ -423,11 +470,29 @@ def artikel_html(
           const email  = document.getElementById('k-email').value.trim();
           const inhalt = document.getElementById('k-text').value.trim();
 
-          if (!name || !inhalt) return;
+          if (!aktuellerUser || !inhalt) return;
+          const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
+          const email = aktuellerUser.email;
+
+          // HTML, URLs und Links entfernen
+          function bereinigen(text) {{
+            return text
+              .replace(/<[^>]*>/g, '')
+              .replace(/https?:\/\/\S+/gi, '')
+              .replace(/www\.\S+/gi, '')
+              .replace(/[^\w\sÀ-ɏḀ-ỿ!?.,;:()\-'"]/g, '')
+              .trim();
+          }}
+          const sauberName   = bereinigen(name).slice(0, 60);
+          const sauberInhalt = bereinigen(inhalt).slice(0, 1000);
+          if (!sauberName || !sauberInhalt) {{
+            status.textContent = 'Kein HTML oder Links erlaubt.';
+            return;
+          }}
 
           status.textContent = 'Wird gesendet…';
           const {{ error }} = await sb.from('kommentare').insert({{
-            artikel_id: ARTIKEL_ID, name, email, inhalt
+            artikel_id: ARTIKEL_ID, name: sauberName, email, inhalt: sauberInhalt
           }});
 
           if (error) {{
@@ -452,8 +517,8 @@ def artikel_html(
     <div class="footer-inner">
       <p class="footer-copy">© Ligaoutsider.de, 2026</p>
       <nav class="footer-nav">
-        <a href="#">Impressum</a>
-        <a href="#">Datenschutzerklärung</a>
+        <a href="../impressum.html">Impressum</a>
+        <a href="../datenschutz.html">Datenschutzerklärung</a>
       </nav>
     </div>
   </footer>
@@ -581,5 +646,113 @@ def main():
     print(f"feed.json enthält jetzt {len(bestehende)} Artikel.")
 
 
+def kickbase_fetch():
+    """Kickbase-Daten holen und kickbase.json schreiben."""
+    import requests
+
+    email    = os.environ.get("KICKBASE_EMAIL", "")
+    password = os.environ.get("KICKBASE_PASSWORD", "")
+    if not email or not password:
+        print("⚠️  KICKBASE_EMAIL/PASSWORD nicht gesetzt – überspringe Kickbase.")
+        return
+
+    session = requests.Session()
+    session.headers.update({"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"})
+
+    # Login
+    try:
+        r = session.post("https://api.kickbase.com/user/login",
+                         json={"email": email, "password": password, "ext": True}, timeout=15)
+        r.raise_for_status()
+        token = r.json()["token"]
+        session.headers["Authorization"] = f"Bearer {token}"
+        print("✅ Kickbase Login erfolgreich")
+    except Exception as e:
+        print(f"❌ Kickbase Login fehlgeschlagen: {e}")
+        return
+
+    # Bundesliga = competition 1
+    COMP = "1"
+    LOGO_MAP = {
+        "FC Bayern München": "bayern", "Borussia Dortmund": "dortmund", "RB Leipzig": "leipzig",
+        "Bayer 04 Leverkusen": "leverkusen", "Eintracht Frankfurt": "frankfurt", "VfB Stuttgart": "stuttgart",
+        "Borussia Mönchengladbach": "gladbach", "Sport-Club Freiburg": "freiburg", "1. FC Union Berlin": "union",
+        "1. FSV Mainz 05": "mainz", "FC Augsburg": "augsburg", "SV Werder Bremen": "werder",
+        "TSG Hoffenheim": "hoffenheim", "Hamburger SV": "hsv", "1. FC Köln": "koeln",
+        "FC Schalke 04": "schalke", "SC Paderborn 07": "paderborn", "SV Elversberg": "elversberg",
+    }
+
+    try:
+        r = session.get(f"https://api.kickbase.com/competition/{COMP}/players", timeout=20)
+        r.raise_for_status()
+        raw = r.json().get("players", r.json() if isinstance(r.json(), list) else [])
+    except Exception as e:
+        print(f"❌ Kickbase Spieler-Fetch fehlgeschlagen: {e}")
+        return
+
+    players = []
+    for p in raw:
+        mw   = p.get("marketValue", 0) or 0
+        pts  = p.get("totalPoints", 0) or 0
+        ap   = p.get("averagePoints", 0) or 0
+        own  = p.get("teamData", {}).get("teamId") or p.get("teamId") or ""
+        team = p.get("teamName", "")
+        name = (p.get("firstName", "") + " " + p.get("lastName", "")).strip() or p.get("name", "")
+        logo = LOGO_MAP.get(team, "")
+        mw7  = p.get("marketValueTrend", 0) or 0  # einige APIs liefern absoluten 7-Tage-Diff
+        own_pct = p.get("ownerPercentage", 0) or p.get("ownPercentage", 0) or 0
+        # Letzte-Spieltag-Punkte
+        sp_pts = p.get("lastMatchPoints", 0) or p.get("currentSeasonMatchDayPoints", 0) or 0
+        players.append({
+            "name": name, "logo": logo, "mw": mw, "pts": pts, "ap": ap,
+            "mw7": mw7, "own": own_pct, "sp_pts": sp_pts,
+        })
+
+    # Effizienz: Punkte pro Million MW
+    for p in players:
+        p["eff"] = round(p["pts"] / (p["mw"] / 1e6), 2) if p["mw"] > 500000 else 0
+
+    def top(lst, key, n=10, reverse=True):
+        return sorted([x for x in lst if x[key]], key=lambda x: x[key], reverse=reverse)[:n]
+
+    def fmt(lst, val_key, extra_key=None):
+        out = []
+        for p in lst:
+            d = {"name": p["name"], "logo": p["logo"]}
+            d[val_key] = p[val_key]
+            if extra_key:
+                d[extra_key] = p[extra_key]
+            out.append(d)
+        return out
+
+    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}    for p in top(players,"mw")]
+    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}   for p in top(players,"pts")]
+    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}   for p in top(players,"eff")]
+    raketen   = [{"name":p["name"],"logo":p["logo"],"diff":p["mw7"]}  for p in top(players,"mw7")]
+    crash     = [{"name":p["name"],"logo":p["logo"],"diff":p["mw7"]}  for p in top(players,"mw7",reverse=False)]
+    beliebt   = [{"name":p["name"],"logo":p["logo"],"ownership":p["own"]} for p in top(players,"own")]
+    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]} for p in top(players,"sp_pts")]
+    form_top  = [{"name":p["name"],"logo":p["logo"],"avg":p["ap"]}    for p in top(players,"ap")]
+    # Hidden Gems: hohe Effizienz aber geringe Ownership (unter 30%)
+    gems_raw  = [p for p in players if p["own"] < 30 and p["eff"] > 0]
+    gems      = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}   for p in top(gems_raw,"eff")]
+
+    result = {
+        "updated":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "teuerste":  teuerste,
+        "punkte":    punkte,
+        "effizienz": effizienz,
+        "raketen":   raketen,
+        "crash":     crash,
+        "beliebt":   beliebt,
+        "spieltag":  spieltag,
+        "form":      form_top,
+        "gems":      gems,
+    }
+    Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"✅ kickbase.json geschrieben ({len(players)} Spieler verarbeitet)")
+
+
 if __name__ == "__main__":
+    kickbase_fetch()
     main()
