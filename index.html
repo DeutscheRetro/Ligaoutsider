@@ -293,7 +293,6 @@
         const badge = `<span style="background:${wb.farbe};color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px">${wb.kürzel}</span>`;
         const heim = KÜRZEL[s.heim] || s.heim;
         const gast = KÜRZEL[s.gast] || s.gast;
-        const hLogo = LOGO_MAP[s.heim] ? `<img src="logos/${LOGO_MAP[s.heim]}.png" onerror="this.style.display='none'" style="width:16px;height:16px;object-fit:contain;flex-shrink:0">` : '';
         const score = s.ergebnis
           ? `<span style="font-weight:800;color:#e8c000">${s.ergebnis}</span>`
           : `<span style="color:var(--text4)">vs.</span>`;
@@ -301,7 +300,7 @@
           return `<div style="padding:4px 12px;font-size:11px;color:var(--text4);border-bottom:1px solid var(--item-border)">${badge} ${s.info}</div>`;
         }
         return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
-          ${hLogo}
+          ${badge}
           <span style="font-size:12px;font-weight:600;color:var(--text2)">${heim}</span>
           <span style="font-size:11px;flex-shrink:0">${score}</span>
           <span style="font-size:12px;font-weight:600;color:var(--text2)">${gast}</span>
