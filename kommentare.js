@@ -30,7 +30,11 @@
     isAdmin = user.email === ADMIN_EMAIL;
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
-    if (el) el.textContent = name;
+    if (el) {
+      el.textContent = name;
+      el.style.cursor = 'pointer';
+      el.onclick = () => window._zeigeProfil(name, user.email);
+    }
     document.getElementById('user-info')?.style && (document.getElementById('user-info').style.display = 'flex');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = 'none');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = 'none');
