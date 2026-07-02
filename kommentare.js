@@ -297,14 +297,19 @@
     let banStatus = null;
     if (aktuellerUser) banStatus = await pruefeBan(aktuellerUser.email);
 
+    // Lookup map für Event Delegation
+    const kommentarMeta = {};
+
     liste.innerHTML = data.map(k => {
       if (k.geloescht) return `<div class="kommentar-item"><span style="font-size:13px;color:var(--text4);font-style:italic">— Kommentar gelöscht —</span></div>`;
 
       const ignoriert = ignorierteListe.includes(k.email);
-      if (ignoriert) return `<div class="kommentar-item">
+      if (ignoriert) return `<div class="kommentar-item" data-ignoriert-email="${k.email}">
         <span style="font-size:12px;color:var(--text4);font-style:italic">Kommentar von ignoriertem Nutzer.
-          <button onclick="window._entIgnoriereUser('${k.email}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;padding:0">Anzeigen</button>
+          <button data-action="entignoriere" data-email="${k.email}" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;padding:0">Anzeigen</button>
         </span></div>`;
+
+      kommentarMeta[k.id] = { name: k.name, email: k.email };
 
       const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
       const editTag = k.geaendert_am ? `<em style="font-size:10px;color:var(--text4)"> · editiert ${new Date(k.geaendert_am).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}</em>` : '';
@@ -317,23 +322,37 @@
 
       const aktionen = `<div style="display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap">
         ${aktuellerUser ? `
-          <button onclick="window._vote('${k.id}',1)"  style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${upStyle}">▲ ${v.up}</button>
-          <button onclick="window._vote('${k.id}',-1)" style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${downStyle}">▼ ${v.down}</button>
-          ${istEigen ? `<button onclick="window._editKommentar('${k.id}')" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">✏ Bearbeiten</button>` : ''}
-          ${istEigen || isAdmin ? `<button onclick="window._loescheKommentar('${k.id}',${isAdmin && !istEigen})" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">🗑 Löschen</button>` : ''}
-          ${!istEigen ? `<button onclick="window._zeigeProfil('${k.name.replace(/'/g,"&#39;")}','${k.email}')" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">👤</button>` : ''}
+          <button data-action="vote" data-id="${k.id}" data-wert="1"  style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${upStyle}">▲ ${v.up}</button>
+          <button data-action="vote" data-id="${k.id}" data-wert="-1" style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${downStyle}">▼ ${v.down}</button>
+          ${istEigen ? `<button data-action="edit" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">✏ Bearbeiten</button>` : ''}
+          ${istEigen || isAdmin ? `<button data-action="loeschen" data-id="${k.id}" data-hard="${isAdmin && !istEigen}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">🗑 Löschen</button>` : ''}
+          <button data-action="profil" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">👤</button>
         ` : `<span style="font-size:13px;color:var(--text4)">▲ ${v.up}</span><span style="font-size:13px;color:var(--text4)">▼ ${v.down}</span>`}
       </div>`;
 
       return `<div class="kommentar-item" id="k-${k.id}">
         <div class="kommentar-kopf">
-          <span class="kommentar-name" style="cursor:pointer" onclick="window._zeigeProfil('${k.name.replace(/'/g,"&#39;")}','${k.email}')">${k.name}</span>
+          <span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>
           <span class="kommentar-datum">${datum}${editTag}</span>
         </div>
         <div class="kommentar-text" id="kt-${k.id}">${k.inhalt.replace(/</g,'&lt;')}</div>
         ${aktionen}
       </div>`;
     }).join('');
+
+    // Event Delegation — ein Listener für alle Aktionen
+    liste.onclick = async e => {
+      const el = e.target.closest('[data-action]');
+      if (!el) return;
+      const action = el.dataset.action;
+      const id     = el.dataset.id;
+      const meta   = id ? kommentarMeta[id] : null;
+      if (action === 'profil')      window._zeigeProfil(meta.name, meta.email);
+      if (action === 'vote')        vote(id, parseInt(el.dataset.wert));
+      if (action === 'edit')        window._editKommentar(id);
+      if (action === 'loeschen')    window._loescheKommentar(id, el.dataset.hard === 'true');
+      if (action === 'entignoriere') window._entIgnoriereUser(el.dataset.email);
+    };
 
     // Ban-Hinweis im Formular anzeigen
     const form = document.getElementById('kommentar-form');
