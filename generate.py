@@ -764,73 +764,91 @@ def spieler_fetch():
         except Exception as e:
             print(f"(TM Fehler: {e})", end=" ")
 
-        # 4. TM Performance-Daten (Saison-Aggregat)
+        # 4. TM Performance + Transfer-History → BL-Karriere
         karriere = []
         if tm_id:
             try:
-                perf = get_json(
-                    f"https://www.transfermarkt.de/ceapi/performance-game/{tm_id}",
-                    headers={"x-tmapi-version": "1"}
-                )
-                games = perf.get("data", {}).get("performance", [])
-
-                # Nur Bundesliga (L1), gruppiert nach Saison + TM-Club
                 from collections import defaultdict
+                import datetime as dt
 
-                # TM-Club-ID → OpenLigaDB-Teamname (für Icon-Matching im Browser)
-                TM_CLUB_NAMEN = {
-                    "27": "FC Bayern München", "16": "Borussia Dortmund",
-                    "23826": "RB Leipzig", "15": "Bayer 04 Leverkusen",
-                    "24": "Eintracht Frankfurt", "79": "VfB Stuttgart",
-                    "18": "Borussia Mönchengladbach", "17": "Sport-Club Freiburg",
-                    "89": "1. FC Union Berlin", "39": "1. FSV Mainz 05",
-                    "167": "FC Augsburg", "86": "SV Werder Bremen",
-                    "533": "TSG Hoffenheim", "41": "Hamburger SV",
-                    "16": "1. FC Köln", "33": "FC Schalke 04",
-                    "96": "SC Paderborn 07", "3980": "SV Elversberg",
-                    "31": "1. FC Heidenheim 1846", "984": "Holstein Kiel",
-                    "1": "1. FC Kaiserslautern", "162": "Bochum",
-                    "148": "Tottenham Hotspur",  # für Kane's Vergangenheit
-                }
+                perf, transfers_resp = None, None
+                try:
+                    perf = get_json(
+                        f"https://www.transfermarkt.de/ceapi/performance-game/{tm_id}",
+                        headers={"x-tmapi-version": "1"}
+                    )
+                except Exception:
+                    pass
+                try:
+                    transfers_resp = get_json(
+                        f"https://www.transfermarkt.de/ceapi/transferHistory/list/{tm_id}",
+                        headers={"x-tmapi-version": "1"}
+                    )
+                except Exception:
+                    pass
 
-                bl_stats = defaultdict(lambda: defaultdict(lambda: {"spiele": 0, "tore": 0, "assists": 0}))
-                bl_meta = {}  # (saison_display, club_id) → season_id
+                # Transfer-History → Saison → Vereinsname
+                # Saison "24/25" startet ~01.08.2024, endet ~31.05.2025
+                def verein_fuer_saison(transfers_data, saison_str):
+                    """Bestimmt Vereinsname + Wappen-URL für eine Saison aus Transfer-History."""
+                    if not transfers_data:
+                        return None, None
+                    year_start = 2000 + int(saison_str[:2])
+                    season_end = dt.date(year_start + 1, 6, 30)
+
+                    tlist = sorted(
+                        [t for t in transfers_data.get("transfers", []) if t.get("dateUnformatted")],
+                        key=lambda t: t["dateUnformatted"]
+                    )
+                    current_name = None
+                    current_icon = None
+                    for t in tlist:
+                        try:
+                            d = dt.date.fromisoformat(t["dateUnformatted"])
+                        except Exception:
+                            continue
+                        if d >= season_end:
+                            break
+                        to = t.get("to", {})
+                        to_club = to.get("clubName", "")
+                        if to_club and to_club not in ("Vereinslos", "Without Club"):
+                            current_name = to_club
+                            current_icon = to.get("clubEmblem-1x", "")
+                    return current_name, current_icon
+
+                games = (perf or {}).get("data", {}).get("performance", [])
+
+                # Aggregiere BL-Spiele nach Saison
+                bl_stats = defaultdict(lambda: {"spiele": 0, "tore": 0, "assists": 0})
+                bl_season_id = {}
 
                 for g in games:
                     info = g.get("gameInformation", {})
-                    if info.get("competitionId") != "L1":
-                        continue
-                    if info.get("isNationalGame"):
+                    if info.get("competitionId") != "L1" or info.get("isNationalGame"):
                         continue
                     season_display = info.get("season", {}).get("display", "")
                     season_id = info.get("season", {}).get("id", 0)
                     if not season_display:
                         continue
-                    stats = g.get("statistics", {})
-                    club_id = str(stats.get("generalStatistics", {}).get("primaryClubId", ""))
-                    goal_stats = stats.get("goalStatistics", {})
-                    time_stats = stats.get("playingTimeStatistics", {})
+                    gs = g.get("statistics", {}).get("goalStatistics", {})
+                    bl_stats[season_display]["spiele"] += 1
+                    bl_stats[season_display]["tore"]   += gs.get("goalsScoredTotal") or 0
+                    bl_stats[season_display]["assists"] += gs.get("assists") or 0
+                    bl_season_id[season_display] = season_id
 
-                    bl_stats[season_display][club_id]["spiele"] += 1
-                    bl_stats[season_display][club_id]["tore"] += goal_stats.get("goalsScoredTotal") or 0
-                    bl_stats[season_display][club_id]["assists"] += goal_stats.get("assists") or 0
-                    bl_meta[(season_display, club_id)] = season_id
-
-                # Sortiert neueste Saison zuerst, pro Saison alle Clubs
-                seen_saisons = sorted(
-                    set(s for s, _ in bl_meta.keys()),
-                    key=lambda s: max(bl_meta[(s, c)] for c in bl_stats[s]),
-                    reverse=True
-                )
-                for saison in seen_saisons:
-                    for club_id, st in bl_stats[saison].items():
-                        karriere.append({
-                            "saison": saison,
-                            "verein": TM_CLUB_NAMEN.get(club_id, club_id),
-                            "spiele": st["spiele"],
-                            "tore": st["tore"],
-                            "assists": st["assists"],
-                        })
+                # Vereinsname + Wappen aus Transfer-History
+                for saison in sorted(bl_stats.keys(),
+                                     key=lambda s: bl_season_id.get(s, 0), reverse=True):
+                    st = bl_stats[saison]
+                    verein_name, verein_icon = verein_fuer_saison(transfers_resp, saison)
+                    karriere.append({
+                        "saison":      saison,
+                        "verein":      verein_name or "",
+                        "verein_icon": verein_icon or "",
+                        "spiele":      st["spiele"],
+                        "tore":        st["tore"],
+                        "assists":     st["assists"],
+                    })
             except Exception as e:
                 print(f"(Perf Fehler: {e})", end=" ")
 
