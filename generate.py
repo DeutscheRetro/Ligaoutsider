@@ -852,6 +852,28 @@ def spieler_fetch():
             except Exception as e:
                 print(f"(Perf Fehler: {e})", end=" ")
 
+        # Vereinshistorie aus Transfer-History (nur Profivereine, keine Leih-Enden)
+        vereinshistorie = []
+        if transfers_resp:
+            JUGEND_KEYWORDS = ("U17", "U18", "U19", "U21", "U23", "Jgd", "B-Junioren", "A-Junioren")
+            for t in transfers_resp.get("transfers", []):
+                fee = t.get("fee", "")
+                if fee in ("Leih-Ende", "-", "?"):
+                    continue
+                to = t.get("to", {})
+                club = to.get("clubName", "")
+                if not club or club in ("Vereinslos", "Without Club"):
+                    continue
+                if any(k in club for k in JUGEND_KEYWORDS):
+                    continue
+                year = (t.get("dateUnformatted") or "")[:4]
+                vereinshistorie.append({
+                    "jahr": year,
+                    "verein": club,
+                    "verein_icon": to.get("clubEmblem-1x", ""),
+                    "leihe": fee == "Leihe",
+                })
+
         # 5. Verein aus OpenLigaDB
         team_id = player_team.get(gid)
         verein = team_names.get(team_id, "") if team_id else ""
@@ -866,6 +888,7 @@ def spieler_fetch():
             "position": tm_position,
             "marktwert": tm_mw,
             "karriere": karriere,
+            "vereinshistorie": vereinshistorie,
             "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         }
 

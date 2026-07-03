@@ -496,22 +496,20 @@
         d.verein    && `<span>${d.verein}</span>`,
       ].filter(Boolean).join('<span style="color:var(--text4)"> · </span>');
 
-      // Karriere: nach Saison gruppieren
+      // Bundesliga Leistungsdaten nach Saison
       let karriereHtml = '';
       if (d.karriere && d.karriere.length) {
-        // Saisons in Reihenfolge (JSON ist bereits sortiert)
         const saisonOrder = [];
         const bySaison = {};
         d.karriere.forEach(k => {
           if (!bySaison[k.saison]) { bySaison[k.saison] = []; saisonOrder.push(k.saison); }
           bySaison[k.saison].push(k);
         });
-        karriereHtml = saisonOrder.map(saison => {
+        const saisonBlocks = saisonOrder.map(saison => {
           const rows = bySaison[saison].map(k => {
-            const icon = teamIcons[Object.keys(teamIcons).find(id => teamNames && teamNames[id] === k.verein)] || '';
-            const logoHtml = icon
-              ? `<img src="${icon}" title="${k.verein}" style="width:24px;height:24px;object-fit:contain;vertical-align:middle" onerror="this.style.display='none'">`
-              : `<span style="font-size:12px">${k.verein}</span>`;
+            const logoHtml = k.verein_icon
+              ? `<img src="${k.verein_icon}" title="${k.verein}" style="width:24px;height:24px;object-fit:contain;vertical-align:middle" onerror="this.style.display='none'">`
+              : `<span style="font-size:12px;color:var(--text3)">${k.verein}</span>`;
             return `<tr style="border-bottom:1px solid var(--border)">
               <td style="padding:6px 8px;white-space:nowrap">${logoHtml}</td>
               <td style="padding:6px 8px;text-align:right">${k.spiele}</td>
@@ -532,6 +530,27 @@
             </table>
           </div>`;
         }).join('');
+        karriereHtml = `
+          <div style="margin-top:20px;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);padding-bottom:6px">Bundesliga Leistungsdaten</div>
+          ${saisonBlocks}`;
+      }
+
+      // Vereinshistorie
+      let historyHtml = '';
+      if (d.vereinshistorie && d.vereinshistorie.length) {
+        const rows = d.vereinshistorie.map(v => {
+          const logo = v.verein_icon
+            ? `<img src="${v.verein_icon}" title="${v.verein}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;margin-right:6px" onerror="this.style.display='none'">`
+            : '';
+          const leihe = v.leihe ? `<span style="font-size:10px;color:var(--text4);margin-left:6px">(Leihe)</span>` : '';
+          return `<div style="display:flex;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+            <span style="color:var(--text4);font-size:11px;width:38px;flex-shrink:0">${v.jahr}</span>
+            ${logo}<span style="color:var(--text1)">${v.verein}</span>${leihe}
+          </div>`;
+        }).join('');
+        historyHtml = `
+          <div style="margin-top:20px;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);padding-bottom:6px">Vereinshistorie</div>
+          ${rows}`;
       }
 
       inhalt.innerHTML = `
@@ -540,6 +559,8 @@
           <div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.8">${infos}</div>
         </div>
         ${karriereHtml}
+        ${historyHtml}
+        <div style="margin-top:16px;font-size:10px;color:var(--text4)">Daten: Transfermarkt.de</div>
       `;
     }
 
