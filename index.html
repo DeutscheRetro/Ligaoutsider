@@ -117,6 +117,14 @@
     </aside>
   </div>
 
+  <!-- Spieler-Modal -->
+  <div id="spieler-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);overflow-y:auto;padding:20px 12px" onclick="if(event.target===this)this.style.display='none'">
+    <div style="max-width:480px;margin:0 auto;background:var(--bg2);border-radius:12px;overflow:hidden;position:relative">
+      <button onclick="document.getElementById('spieler-modal').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1">×</button>
+      <div id="spieler-modal-inhalt" style="padding:20px"></div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
@@ -417,15 +425,20 @@
           return `<img src="${url}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">`;
         }
 
+        function playerLi(p, valueHtml) {
+          return `<li data-playerid="${p.goalGetterId}" style="cursor:pointer" title="Profil anzeigen">
+            ${playerIcon(p)}
+            <span class="scorer-name">${p.goalGetterName}</span>
+            ${valueHtml}
+          </li>`;
+        }
+
         const top = data.sort((a,b) => b.goalCount - a.goalCount).slice(0, 8);
         document.getElementById('torjaeger-list').innerHTML = top
           .filter(p => p.goalCount > 0)
           .slice(0, 6)
-          .map(p => `<li>
-            ${playerIcon(p)}
-            <span class="scorer-name">${p.goalGetterName}</span>
-            <span class="scorer-goals">${p.goalCount}</span>
-          </li>`).join('') || '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Keine Daten</li>';
+          .map(p => playerLi(p, `<span class="scorer-goals">${p.goalCount}</span>`))
+          .join('') || '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Keine Daten</li>';
 
         const scorer = data
           .map(p => ({ ...p, score: p.goalCount + (p.assistCount || 0) }))
@@ -433,11 +446,16 @@
           .filter(p => p.score > 0)
           .slice(0, 6);
         document.getElementById('scorer-list').innerHTML = scorer
-          .map(p => `<li>
-            ${playerIcon(p)}
-            <span class="scorer-name">${p.goalGetterName}</span>
-            <span class="scorer-goals" title="Tore+Assists">${p.score}</span>
-          </li>`).join('') || '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Keine Daten</li>';
+          .map(p => playerLi(p, `<span class="scorer-goals" title="Tore+Assists">${p.score}</span>`))
+          .join('') || '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Keine Daten</li>';
+
+        // Klick-Handler für beide Listen
+        ['torjaeger-list','scorer-list'].forEach(listId => {
+          document.getElementById(listId).addEventListener('click', e => {
+            const li = e.target.closest('li[data-playerid]');
+            if (li) oeffneSpielerModal(li.dataset.playerid);
+          });
+        });
       } catch(e) {
         ['torjaeger-list','scorer-list'].forEach(id => {
           document.getElementById(id).innerHTML = '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Saison noch nicht gestartet</li>';
@@ -445,6 +463,87 @@
       }
     }
     ladeScorer();
+
+    // ─── Spieler-Modal ────────────────────────────────────────────────────────
+    async function oeffneSpielerModal(goalGetterId) {
+      const modal = document.getElementById('spieler-modal');
+      const inhalt = document.getElementById('spieler-modal-inhalt');
+      inhalt.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px 0">Lädt…</p>';
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      modal.addEventListener('hide', () => { document.body.style.overflow = ''; }, { once: true });
+
+      let d;
+      try {
+        const r = await fetch(`spieler/${goalGetterId}.json`);
+        if (!r.ok) throw new Error('nicht gefunden');
+        d = await r.json();
+      } catch(e) {
+        inhalt.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px 0">Keine Daten verfügbar</p>';
+        return;
+      }
+
+      const foto = d.foto ? `<img src="${d.foto}" alt="${d.name}"
+        style="width:90px;height:90px;object-fit:cover;border-radius:50%;border:2px solid var(--gold);flex-shrink:0"
+        onerror="this.style.display='none'">` : '';
+
+      const infos = [
+        d.position && `<span>${d.position}</span>`,
+        d.nation    && `<span>${d.nation}</span>`,
+        d.alter     && `<span>${d.alter} Jahre</span>`,
+        d.groesse   && `<span>${d.groesse}</span>`,
+        d.marktwert && `<span style="color:var(--gold)">${d.marktwert}</span>`,
+        d.verein    && `<span>${d.verein}</span>`,
+      ].filter(Boolean).join('<span style="color:var(--text4)"> · </span>');
+
+      const karriereTabelle = d.karriere && d.karriere.length ? `
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px">
+          <thead>
+            <tr style="color:var(--text3);border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:4px 6px;font-weight:600">Saison</th>
+              <th style="text-align:left;padding:4px 6px;font-weight:600">Liga</th>
+              <th style="text-align:right;padding:4px 6px;font-weight:600">Sp</th>
+              <th style="text-align:right;padding:4px 6px;font-weight:600">Tore</th>
+              <th style="text-align:right;padding:4px 6px;font-weight:600">Assists</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${d.karriere.map(k => `
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:5px 6px">${k.saison}</td>
+                <td style="padding:5px 6px;color:var(--text3)">${k.liga}</td>
+                <td style="padding:5px 6px;text-align:right">${k.spiele}</td>
+                <td style="padding:5px 6px;text-align:right;font-weight:600;color:var(--gold)">${k.tore}</td>
+                <td style="padding:5px 6px;text-align:right">${k.assists}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>` : '';
+
+      const lizenz = d.wiki_seite ? `
+        <p style="margin-top:14px;font-size:10px;color:var(--text4)">
+          Foto: <a href="${d.wiki_seite}" target="_blank" rel="noopener" style="color:var(--text4)">Wikipedia</a>${d.wiki_autor ? ` / ${d.wiki_autor}` : ''}, Lizenz:
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener" style="color:var(--text4)">CC BY-SA 4.0</a>
+        </p>` : '';
+
+      inhalt.innerHTML = `
+        <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+          ${foto}
+          <div>
+            <div style="font-size:20px;font-weight:700;color:var(--text1)">${d.name}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.8">${infos}</div>
+          </div>
+        </div>
+        ${karriereTabelle}
+        ${lizenz}
+      `;
+    }
+
+    document.getElementById('spieler-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
 
     // Feed laden
     fetch('feed.json')

@@ -653,9 +653,252 @@ def kickbase_fetch():
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler verarbeitet)")
 
 
+def spieler_fetch():
+    """Top-Scorer aus OpenLigaDB holen, Profildaten scrapen, spieler/*.json speichern."""
+    import urllib.request
+
+    UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+
+    def get_json(url, headers=None):
+        req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            return json.load(r)
+
+    def get_html(url):
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            return r.read().decode("utf-8", errors="replace")
+
+    SPIELER_ORDNER = Path("spieler")
+    SPIELER_ORDNER.mkdir(exist_ok=True)
+
+    # 1. Top-Scorer aus OpenLigaDB
+    print("📊 Lade Torjäger von OpenLigaDB …")
+    try:
+        scorer_data = get_json("https://api.openligadb.de/getgoalgetters/bl1/2025")
+    except Exception as e:
+        print(f"❌ OpenLigaDB Fehler: {e}")
+        return
+
+    top_scorer = sorted(scorer_data, key=lambda x: x["goalCount"], reverse=True)[:15]
+
+    # goalGetterId → teamId via Spieldaten (letzter Spieltag reicht)
+    player_team = {}
+    try:
+        matches = get_json("https://api.openligadb.de/getmatchdata/bl1/2025")
+        for m in matches:
+            for g in (m.get("goals") or []):
+                if g.get("goalGetterID") and g.get("scoringTeamId") and not g.get("isOwnGoal"):
+                    player_team[g["goalGetterID"]] = g["scoringTeamId"]
+    except Exception as e:
+        print(f"⚠️  Spieldaten Fehler: {e}")
+
+    # teamId → Name
+    team_names = {}
+    try:
+        teams = get_json("https://api.openligadb.de/getavailableteams/bl1/2025")
+        for t in teams:
+            team_names[t["teamId"]] = t["teamName"]
+    except Exception:
+        pass
+
+    for scorer in top_scorer:
+        gid = scorer["goalGetterId"]
+        name = scorer["goalGetterName"]
+        print(f"  → {name} …", end=" ", flush=True)
+
+        out_path = SPIELER_ORDNER / f"{gid}.json"
+
+        # 2. Wikipedia-Foto + Seitenlink
+        wiki_foto = None
+        wiki_seite = None
+        wiki_autor = None
+        try:
+            # Vollständigen Namen für Wikipedia brauchen wir — probiere zuerst mit Abkürzung
+            # OpenLigaDB gibt "H. Kane" → wir suchen via Wikipedia-Suche
+            wiki_search = get_json(
+                f"https://de.wikipedia.org/w/api.php?action=query&list=search"
+                f"&srsearch={urllib.parse.quote(name + ' Fußballer')}&srlimit=1&format=json"
+            )
+            hits = wiki_search.get("query", {}).get("search", [])
+            if hits:
+                page_title = hits[0]["title"]
+                summary = get_json(
+                    f"https://de.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(page_title)}"
+                )
+                wiki_foto = summary.get("thumbnail", {}).get("source")
+                wiki_seite = summary.get("content_urls", {}).get("desktop", {}).get("page")
+                # Bildautor via Commons API (best-effort)
+                img_file = summary.get("originalimage", {}).get("source", "")
+                m_file = re.search(r'/commons/[^/]+/[^/]+/([^/]+\.(?:jpg|jpeg|png|svg))', img_file, re.I)
+                if m_file:
+                    file_name = urllib.parse.unquote(m_file.group(1))
+                    img_info = get_json(
+                        f"https://commons.wikimedia.org/w/api.php?action=query&titles=File:{urllib.parse.quote(file_name)}"
+                        f"&prop=imageinfo&iiprop=extmetadata&format=json"
+                    )
+                    pages = img_info.get("query", {}).get("pages", {})
+                    for p in pages.values():
+                        meta = (p.get("imageinfo") or [{}])[0].get("extmetadata", {})
+                        artist = meta.get("Artist", {}).get("value", "")
+                        # Strip HTML tags
+                        artist = re.sub(r'<[^>]+>', '', artist).strip()
+                        if artist:
+                            wiki_autor = artist[:80]
+        except Exception:
+            pass
+
+        # 3. TM-ID via Namenssuche
+        tm_id = None
+        tm_mw = None
+        tm_alter = None
+        tm_groesse = None
+        tm_nation = None
+        tm_position = None
+        try:
+            # Suche nach vollem Namen (ohne Abkürzung) — nutze Wikipedia-Titel wenn verfügbar
+            vollname = page_title if 'page_title' in dir() and page_title else name
+            search_html = get_html(
+                f"https://www.transfermarkt.de/schnellsuche/ergebnis/schnellsuche?query={urllib.parse.quote(vollname)}&Spieler_page=0"
+            )
+            m_id = re.search(r'href="/[^/]+/profil/spieler/(\d+)"', search_html)
+            if m_id:
+                tm_id = m_id.group(1)
+
+                # Profilseite
+                profil_html = get_html(f"https://www.transfermarkt.de/x/profil/spieler/{tm_id}")
+
+                # Marktwert
+                m_mw = re.search(r'(\d+[,\.]\d+)\s*(Mio|Tsd)\.?\s*€', profil_html)
+                if m_mw:
+                    betrag = m_mw.group(1).replace(",", ".")
+                    einheit = m_mw.group(2)
+                    tm_mw = f"{m_mw.group(1)} {einheit}. €"
+
+                # Info-Tabelle parsen
+                info_block = re.search(r'class="info-table[^"]*">(.*?)class="box"', profil_html, re.DOTALL)
+                if info_block:
+                    block = info_block.group(1)
+                    # Alter
+                    m_age = re.search(r'\d{2}\.\d{2}\.\d{4}\s*\((\d+)\)', block)
+                    if m_age:
+                        tm_alter = int(m_age.group(1))
+                    # Größe
+                    m_gr = re.search(r'(\d,\d{2})\s*m', block)
+                    if m_gr:
+                        tm_groesse = m_gr.group(1) + " m"
+                    # Nationalität (text hinter Flagge)
+                    nations = re.findall(r'title="([A-ZÄÖÜ][a-zäöüA-ZÄÖÜ\s\-]+)"\s+alt="\1"[^>]+class="flaggenrahmen"', block)
+                    if nations:
+                        tm_nation = nations[0]
+                    # Position
+                    m_pos = re.search(r'Hauptposition.*?detail-position__position">([^<]+)<', profil_html, re.DOTALL)
+                    if m_pos:
+                        tm_position = m_pos.group(1).strip()
+        except Exception as e:
+            print(f"(TM Fehler: {e})", end=" ")
+
+        # 4. TM Performance-Daten (Saison-Aggregat)
+        karriere = []
+        if tm_id:
+            try:
+                perf = get_json(
+                    f"https://www.transfermarkt.de/ceapi/performance-game/{tm_id}",
+                    headers={"x-tmapi-version": "1"}
+                )
+                games = perf.get("data", {}).get("performance", [])
+
+                # Aggregieren nach Saison + Liga
+                from collections import defaultdict
+                saison_stats = defaultdict(lambda: {"spiele": 0, "tore": 0, "assists": 0, "minuten": 0})
+                saison_meta = {}  # saison_key → (display, liga)
+
+                LIGA_NAMEN = {
+                    "L1": "Bundesliga", "GB1": "Premier League", "ES1": "La Liga",
+                    "IT1": "Serie A", "FR1": "Ligue 1", "NL1": "Eredivisie",
+                    "PO1": "Primeira Liga", "TR1": "Süper Lig", "DFB": "DFB-Pokal",
+                    "CL": "Champions League", "EL": "Europa League", "FIWC": "WM",
+                    "EM": "EM",
+                }
+
+                for g in games:
+                    info = g.get("gameInformation", {})
+                    comp = info.get("competitionId", "")
+                    # Nur Ligaspiele (keine Pokal/Int für Karriere)
+                    if info.get("isNationalGame"):
+                        continue
+                    season_display = info.get("season", {}).get("display", "")
+                    if not season_display:
+                        continue
+                    key = f"{season_display}_{comp}"
+                    stats = g.get("statistics", {})
+                    goal_stats = stats.get("goalStatistics", {})
+                    time_stats = stats.get("playingTimeStatistics", {})
+
+                    if time_stats.get("participationState") == "not_in_squad":
+                        continue
+
+                    saison_stats[key]["spiele"] += 1
+                    saison_stats[key]["tore"] += goal_stats.get("goalsScoredTotal") or 0
+                    saison_stats[key]["assists"] += goal_stats.get("assists") or 0
+                    saison_stats[key]["minuten"] += time_stats.get("playedMinutes") or 0
+                    if key not in saison_meta:
+                        saison_meta[key] = {
+                            "saison": season_display,
+                            "liga": LIGA_NAMEN.get(comp, comp),
+                            "season_id": info.get("season", {}).get("id", 0)
+                        }
+
+                # Sortiert neueste Saison zuerst
+                for key in sorted(saison_stats.keys(),
+                                   key=lambda k: saison_meta[k]["season_id"], reverse=True):
+                    meta = saison_meta[key]
+                    st = saison_stats[key]
+                    karriere.append({
+                        "saison": meta["saison"],
+                        "liga": meta["liga"],
+                        "spiele": st["spiele"],
+                        "tore": st["tore"],
+                        "assists": st["assists"],
+                    })
+            except Exception as e:
+                print(f"(Perf Fehler: {e})", end=" ")
+
+        # 5. Verein aus OpenLigaDB
+        team_id = player_team.get(gid)
+        verein = team_names.get(team_id, "") if team_id else ""
+
+        result = {
+            "goalGetterId": gid,
+            "name": name,
+            "verein": verein,
+            "foto": wiki_foto,
+            "wiki_seite": wiki_seite,
+            "wiki_autor": wiki_autor,
+            "alter": tm_alter,
+            "groesse": tm_groesse,
+            "nation": tm_nation,
+            "position": tm_position,
+            "marktwert": tm_mw,
+            "karriere": karriere,
+            "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        }
+
+        out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        print("✅")
+        time.sleep(1.5)  # TM nicht überlasten
+
+    print(f"✅ spieler/ aktualisiert ({len(top_scorer)} Spieler)")
+
+
 if __name__ == "__main__":
+    import urllib.parse
     try:
         kickbase_fetch()
     except Exception as e:
         print(f"❌ kickbase_fetch Fehler: {e}")
+    try:
+        spieler_fetch()
+    except Exception as e:
+        print(f"❌ spieler_fetch Fehler: {e}")
     main()
