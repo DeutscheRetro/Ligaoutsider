@@ -709,51 +709,14 @@ def spieler_fetch():
 
         out_path = SPIELER_ORDNER / f"{gid}.json"
 
-        # 2. Wikipedia-Foto + Seitenlink
-        wiki_foto = None
-        wiki_seite = None
-        wiki_autor = None
-        page_title = None  # explizit zurücksetzen pro Spieler
-        try:
-            wiki_search = get_json(
-                f"https://de.wikipedia.org/w/api.php?action=query&list=search"
-                f"&srsearch={urllib.parse.quote(name + ' Fußballer')}&srlimit=1&format=json"
-            )
-            hits = wiki_search.get("query", {}).get("search", [])
-            if hits:
-                page_title = hits[0]["title"]
-                summary = get_json(
-                    f"https://de.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(page_title)}"
-                )
-                wiki_foto = summary.get("thumbnail", {}).get("source")
-                wiki_seite = summary.get("content_urls", {}).get("desktop", {}).get("page")
-                # Bildautor via Commons API (best-effort)
-                img_file = summary.get("originalimage", {}).get("source", "")
-                m_file = re.search(r'/commons/[^/]+/[^/]+/([^/]+\.(?:jpg|jpeg|png|svg))', img_file, re.I)
-                if m_file:
-                    file_name = urllib.parse.unquote(m_file.group(1))
-                    img_info = get_json(
-                        f"https://commons.wikimedia.org/w/api.php?action=query&titles=File:{urllib.parse.quote(file_name)}"
-                        f"&prop=imageinfo&iiprop=extmetadata&format=json"
-                    )
-                    pages = img_info.get("query", {}).get("pages", {})
-                    for p in pages.values():
-                        meta = (p.get("imageinfo") or [{}])[0].get("extmetadata", {})
-                        artist = meta.get("Artist", {}).get("value", "")
-                        # Strip HTML tags
-                        artist = re.sub(r'<[^>]+>', '', artist).strip()
-                        if artist:
-                            wiki_autor = artist[:80]
-        except Exception:
-            pass
-
-        # 3. TM-ID via Namenssuche
+        # 2. TM-ID + Profildaten
         tm_id = None
         tm_mw = None
         tm_alter = None
         tm_groesse = None
         tm_nation = None
         tm_position = None
+        tm_vollname = None
         try:
             # TM-Suche: "H. Kane" → "Kane", "Luis Díaz" → "Luis Díaz"
             m_abbr = re.match(r'^[A-Z]\.\s+(.+)$', name)
@@ -761,12 +724,15 @@ def spieler_fetch():
             search_html = get_html(
                 f"https://www.transfermarkt.de/schnellsuche/ergebnis/schnellsuche?query={urllib.parse.quote(tm_suchname)}&Spieler_page=0"
             )
-            m_id = re.search(r'href="/[^/]+/profil/spieler/(\d+)"', search_html)
+            m_id = re.search(r'href="/([^/]+)/profil/spieler/(\d+)"', search_html)
             if m_id:
-                tm_id = m_id.group(1)
+                tm_slug = m_id.group(1)
+                tm_id = m_id.group(2)
+                # Slug → vollständiger Name (z.B. "patrik-schick" → "Patrik Schick")
+                tm_vollname = tm_slug.replace("-", " ").title()
 
                 # Profilseite
-                profil_html = get_html(f"https://www.transfermarkt.de/x/profil/spieler/{tm_id}")
+                profil_html = get_html(f"https://www.transfermarkt.de/{tm_slug}/profil/spieler/{tm_id}")
 
                 # Marktwert
                 m_mw = re.search(r'(\d+[,\.]\d+)\s*(Mio|Tsd)\.?\s*€', profil_html)
@@ -872,9 +838,6 @@ def spieler_fetch():
             "goalGetterId": gid,
             "name": name,
             "verein": verein,
-            "foto": wiki_foto,
-            "wiki_seite": wiki_seite,
-            "wiki_autor": wiki_autor,
             "alter": tm_alter,
             "groesse": tm_groesse,
             "nation": tm_nation,

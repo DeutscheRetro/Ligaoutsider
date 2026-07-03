@@ -483,10 +483,6 @@
         return;
       }
 
-      const foto = d.foto ? `<img src="${d.foto}" alt="${d.name}"
-        style="width:90px;height:90px;object-fit:cover;border-radius:50%;border:2px solid var(--gold);flex-shrink:0"
-        onerror="this.style.display='none'">` : '';
-
       const infos = [
         d.position && `<span>${d.position}</span>`,
         d.nation    && `<span>${d.nation}</span>`,
@@ -519,22 +515,12 @@
           </tbody>
         </table>` : '';
 
-      const lizenz = d.wiki_seite ? `
-        <p style="margin-top:14px;font-size:10px;color:var(--text4)">
-          Foto: <a href="${d.wiki_seite}" target="_blank" rel="noopener" style="color:var(--text4)">Wikipedia</a>${d.wiki_autor ? ` / ${d.wiki_autor}` : ''}, Lizenz:
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener" style="color:var(--text4)">CC BY-SA 4.0</a>
-        </p>` : '';
-
       inhalt.innerHTML = `
-        <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
-          ${foto}
-          <div>
-            <div style="font-size:20px;font-weight:700;color:var(--text1)">${d.name}</div>
-            <div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.8">${infos}</div>
-          </div>
+        <div style="margin-bottom:14px">
+          <div style="font-size:20px;font-weight:700;color:var(--text1)">${d.name}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.8">${infos}</div>
         </div>
         ${karriereTabelle}
-        ${lizenz}
       `;
     }
 
