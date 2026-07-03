@@ -713,9 +713,8 @@ def spieler_fetch():
         wiki_foto = None
         wiki_seite = None
         wiki_autor = None
+        page_title = None  # explizit zurücksetzen pro Spieler
         try:
-            # Vollständigen Namen für Wikipedia brauchen wir — probiere zuerst mit Abkürzung
-            # OpenLigaDB gibt "H. Kane" → wir suchen via Wikipedia-Suche
             wiki_search = get_json(
                 f"https://de.wikipedia.org/w/api.php?action=query&list=search"
                 f"&srsearch={urllib.parse.quote(name + ' Fußballer')}&srlimit=1&format=json"
@@ -756,10 +755,11 @@ def spieler_fetch():
         tm_nation = None
         tm_position = None
         try:
-            # Suche nach vollem Namen (ohne Abkürzung) — nutze Wikipedia-Titel wenn verfügbar
-            vollname = page_title if 'page_title' in dir() and page_title else name
+            # TM-Suche: "H. Kane" → "Kane", "Luis Díaz" → "Luis Díaz"
+            m_abbr = re.match(r'^[A-Z]\.\s+(.+)$', name)
+            tm_suchname = m_abbr.group(1) if m_abbr else name
             search_html = get_html(
-                f"https://www.transfermarkt.de/schnellsuche/ergebnis/schnellsuche?query={urllib.parse.quote(vollname)}&Spieler_page=0"
+                f"https://www.transfermarkt.de/schnellsuche/ergebnis/schnellsuche?query={urllib.parse.quote(tm_suchname)}&Spieler_page=0"
             )
             m_id = re.search(r'href="/[^/]+/profil/spieler/(\d+)"', search_html)
             if m_id:
@@ -792,7 +792,7 @@ def spieler_fetch():
                     if nations:
                         tm_nation = nations[0]
                     # Position
-                    m_pos = re.search(r'Hauptposition.*?detail-position__position">([^<]+)<', profil_html, re.DOTALL)
+                    m_pos = re.search(r'<dt[^>]*>Hauptposition:</dt>\s*<dd[^>]*>([^<]+)<', profil_html)
                     if m_pos:
                         tm_position = m_pos.group(1).strip()
         except Exception as e:
