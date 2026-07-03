@@ -28,13 +28,6 @@
   async function setUser(user) {
     aktuellerUser = user;
     isAdmin = user.email === ADMIN_EMAIL;
-    // Netlify JWT an Supabase übergeben damit RLS Policies greifen
-    try {
-      const token = await user.jwt();
-      sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
-        global: { headers: { Authorization: `Bearer ${token}` } }
-      });
-    } catch(e) { /* anon bleibt */ }
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
     if (el) {
