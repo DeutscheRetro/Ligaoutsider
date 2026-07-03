@@ -326,8 +326,14 @@ async function doLoeschen(idx) {
   const a = feedDaten[idx];
   zeigeMsg('<span class="spinner"></span>Lösche…', false);
   try {
-    const htmlData = await ghGet(a.pfad);
-    await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
+    // HTML-Datei löschen – falls sie nicht existiert, trotzdem aus feed.json entfernen
+    try {
+      const htmlData = await ghGet(a.pfad);
+      await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
+    } catch(e) {
+      if (!e.message.includes('404')) throw e;
+      // 404 = Datei nicht in GitHub → nur aus feed.json entfernen
+    }
     feedDaten.splice(idx, 1);
     const feedData = await ghGet('feed.json');
     await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, '🗑 feed.json aktualisiert');
