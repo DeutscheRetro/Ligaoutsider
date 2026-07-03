@@ -71,22 +71,8 @@
       </div>
 
       <div class="kb-widget">
-        <div class="kb-widget-title">📈 MW-Raketen (7 Tage)</div>
-        <ul class="kb-list" id="kb-raketen">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">📉 MW-Crash (7 Tage)</div>
-        <ul class="kb-list" id="kb-crash">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">💎 Hidden Gems</div>
-        <ul class="kb-list" id="kb-gems">
+        <div class="kb-widget-title">⚽ Meiste Tore</div>
+        <ul class="kb-list" id="kb-tore">
           <li class="kb-loading">Lade Daten…</li>
         </ul>
       </div>
@@ -94,20 +80,6 @@
       <div class="kb-widget">
         <div class="kb-widget-title">🏆 Bester Spieltag</div>
         <ul class="kb-list" id="kb-spieltag">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">📊 Beliebteste Spieler</div>
-        <ul class="kb-list" id="kb-beliebt">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">⚡ Formstärkste (Ø 3 Spieltage)</div>
-        <ul class="kb-list" id="kb-form">
           <li class="kb-loading">Lade Daten…</li>
         </ul>
       </div>
@@ -171,10 +143,12 @@
       return s + v;
     }
     function renderList(id, items) {
-      document.getElementById(id).innerHTML = items.length
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = items.length
         ? items.map((p, i) => `<li class="kb-item">
             <span class="kb-rank">${i+1}.</span>
-            <img src="logos/${p.logo||''}.png" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">
+            ${p.logo ? `<img src="${p.logo}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">` : ''}
             <span class="kb-name" title="${p.name}">${p.name}</span>
             <span class="kb-val ${p.cls||''}">${p.val}</span>
           </li>`).join('')
@@ -189,20 +163,16 @@
           document.getElementById('kb-updated').textContent =
             'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
         }
-        renderList('kb-teuerste',   (d.teuerste   ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
-        renderList('kb-punkte',     (d.punkte      ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-effizienz',  (d.effizienz   ||[]).map(p => ({ ...p, val: p.eff.toFixed(1) })));
-        renderList('kb-raketen',    (d.raketen     ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls:'up' })));
-        renderList('kb-crash',      (d.crash       ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls:'down' })));
-        renderList('kb-gems',       (d.gems        ||[]).map(p => ({ ...p, val: p.eff.toFixed(1) })));
-        renderList('kb-spieltag',   (d.spieltag    ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-beliebt',    (d.beliebt     ||[]).map(p => ({ ...p, val: p.ownership.toFixed(1) + '%' })));
-        renderList('kb-form',       (d.form        ||[]).map(p => ({ ...p, val: 'Ø ' + p.avg.toFixed(1) })));
+        renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: p.mw + ' Mio' })));
+        renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
+        renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff.toFixed(2) + ' Pkt/Mio' })));
+        renderList('kb-tore',      (d.tore       ||[]).map(p => ({ ...p, val: p.goals + ' Tore' })));
+        renderList('kb-spieltag',  (d.spieltag   ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
       })
       .catch(() => {
-        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-gems'].forEach(id => {
-          document.getElementById(id).innerHTML =
-            '<li class="kb-loading">Daten werden bald verfügbar</li>';
+        ['kb-teuerste','kb-punkte','kb-effizienz','kb-tore','kb-spieltag'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.innerHTML = '<li class="kb-loading">Daten werden bald verfügbar</li>';
         });
       });
   </script>

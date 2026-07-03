@@ -556,108 +556,74 @@ def kickbase_fetch():
         print("⚠️  KICKBASE_EMAIL/PASSWORD nicht gesetzt – überspringe Kickbase.")
         return
 
+    CDN = "https://kickbase.b-cdn.net/"
     session = requests.Session()
-    session.headers.update({"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"})
+    session.headers.update({
+        "Content-Type": "application/json",
+        "User-Agent": "Kickbase GmbH/5.5.2 CFNetwork/1568.200.51 Darwin/24.1.0",
+    })
 
-    # Login
+    # Login (v4: em/pass → tkn)
     try:
         r = session.post("https://api.kickbase.com/v4/user/login",
-                         json={"email": email, "password": password, "ext": True}, timeout=15)
+                         json={"em": email, "pass": password, "loy": False, "rep": {}}, timeout=15)
         r.raise_for_status()
-        data = r.json()
-        token = data.get("token") or data.get("tk") or data.get("accessToken") or data.get("t")
+        token = r.json().get("tkn")
         if not token:
-            raise ValueError(f"Kein Token in Response: {list(data.keys())}")
+            raise ValueError(f"Kein tkn in Response: {list(r.json().keys())}")
         session.headers["Authorization"] = f"Bearer {token}"
         print("✅ Kickbase Login erfolgreich")
     except Exception as e:
         print(f"❌ Kickbase Login fehlgeschlagen: {e}")
         return
 
-    # Bundesliga = competition 1
-    COMP = "1"
-    LOGO_MAP = {
-        "FC Bayern München": "bayern", "Borussia Dortmund": "dortmund", "RB Leipzig": "leipzig",
-        "Bayer 04 Leverkusen": "leverkusen", "Eintracht Frankfurt": "frankfurt", "VfB Stuttgart": "stuttgart",
-        "Borussia Mönchengladbach": "gladbach", "Sport-Club Freiburg": "freiburg", "1. FC Union Berlin": "union",
-        "1. FSV Mainz 05": "mainz", "FC Augsburg": "augsburg", "SV Werder Bremen": "werder",
-        "TSG Hoffenheim": "hoffenheim", "Hamburger SV": "hsv", "1. FC Köln": "koeln",
-        "FC Schalke 04": "schalke", "SC Paderborn 07": "paderborn", "SV Elversberg": "elversberg",
-    }
-
+    # Top-25 Spieler (v4 gibt nur 25 zurück – Top nach Marktwert)
     try:
-        r = session.get(f"https://api.kickbase.com/v4/competitions/{COMP}/players", timeout=20)
+        r = session.get("https://api.kickbase.com/v4/competitions/1/players", timeout=20)
         r.raise_for_status()
-        body = r.json()
-        # v4 uses "it" as list key; fallback to "players" or raw list
-        raw = body.get("it") or body.get("players") or (body if isinstance(body, list) else [])
+        raw = r.json().get("it", [])
         print(f"  → {len(raw)} Spieler geladen")
-        if raw:
-            print(f"  → Beispiel-Keys: {list(raw[0].keys())[:12]}")
     except Exception as e:
         print(f"❌ Kickbase Spieler-Fetch fehlgeschlagen: {e}")
         return
 
     players = []
     for p in raw:
-        # v4 short keys: mv=marketValue, tp=totalPoints, ap=averagePoints, mvt=trend, knm=teamName
-        # Fallback auf Langform für Kompatibilität
-        mw   = p.get("mv") or p.get("marketValue", 0) or 0
-        pts  = p.get("tp") or p.get("totalPoints", 0) or 0
-        ap   = p.get("ap") or p.get("averagePoints", 0) or 0
-        team = p.get("knm") or p.get("teamName", "")
-        fn   = p.get("fn") or p.get("firstName", "")
-        ln   = p.get("ln") or p.get("lastName", "")
-        name = (fn + " " + ln).strip() or p.get("name", "")
-        logo = LOGO_MAP.get(team, "")
-        mw7  = p.get("mvt") or p.get("marketValueTrend", 0) or 0
-        own_pct = p.get("owp") or p.get("ownerPercentage", 0) or p.get("ownPercentage", 0) or 0
-        sp_pts = p.get("lp") or p.get("lastMatchPoints", 0) or p.get("currentSeasonMatchDayPoints", 0) or 0
+        # v4 Felder: n=Nachname, p=Punkte, mt=Marktwert, g=Tore, a=Assists,
+        #            pes=letzter Spieltag, ot.tim=Team-Bild (relativ), pos=Position
+        name   = p.get("n", "")
+        pts    = p.get("p", 0) or 0
+        mw     = p.get("mt", 0) or 0
+        goals  = p.get("g", 0) or 0
+        assists= p.get("a", 0) or 0
+        sp_pts = p.get("pes", 0) or 0
+        team_img_rel = (p.get("ot") or {}).get("tim", "")
+        logo   = CDN + team_img_rel if team_img_rel else ""
         players.append({
-            "name": name, "logo": logo, "mw": mw, "pts": pts, "ap": ap,
-            "mw7": mw7, "own": own_pct, "sp_pts": sp_pts,
+            "name": name, "logo": logo, "mw": mw, "pts": pts,
+            "goals": goals, "assists": assists, "sp_pts": sp_pts,
         })
 
-    # Effizienz: Punkte pro Million MW
+    # Effizienz: Punkte pro Marktwert-Einheit
     for p in players:
-        p["eff"] = round(p["pts"] / (p["mw"] / 1e6), 2) if p["mw"] > 500000 else 0
+        p["eff"] = round(p["pts"] / p["mw"], 2) if p["mw"] > 0 else 0
 
     def top(lst, key, n=10, reverse=True):
         return sorted([x for x in lst if x[key]], key=lambda x: x[key], reverse=reverse)[:n]
 
-    def fmt(lst, val_key, extra_key=None):
-        out = []
-        for p in lst:
-            d = {"name": p["name"], "logo": p["logo"]}
-            d[val_key] = p[val_key]
-            if extra_key:
-                d[extra_key] = p[extra_key]
-            out.append(d)
-        return out
-
-    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}    for p in top(players,"mw")]
-    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}   for p in top(players,"pts")]
-    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}   for p in top(players,"eff")]
-    raketen   = [{"name":p["name"],"logo":p["logo"],"diff":p["mw7"]}  for p in top(players,"mw7")]
-    crash     = [{"name":p["name"],"logo":p["logo"],"diff":p["mw7"]}  for p in top(players,"mw7",reverse=False)]
-    beliebt   = [{"name":p["name"],"logo":p["logo"],"ownership":p["own"]} for p in top(players,"own")]
-    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]} for p in top(players,"sp_pts")]
-    form_top  = [{"name":p["name"],"logo":p["logo"],"avg":p["ap"]}    for p in top(players,"ap")]
-    # Hidden Gems: hohe Effizienz aber geringe Ownership (unter 30%)
-    gems_raw  = [p for p in players if p["own"] < 30 and p["eff"] > 0]
-    gems      = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}   for p in top(gems_raw,"eff")]
+    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}       for p in top(players,"mw")]
+    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}      for p in top(players,"pts")]
+    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}      for p in top(players,"eff")]
+    tore      = [{"name":p["name"],"logo":p["logo"],"goals":p["goals"]}  for p in top(players,"goals")]
+    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]}   for p in top(players,"sp_pts")]
 
     result = {
         "updated":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "teuerste":  teuerste,
         "punkte":    punkte,
         "effizienz": effizienz,
-        "raketen":   raketen,
-        "crash":     crash,
-        "beliebt":   beliebt,
+        "tore":      tore,
         "spieltag":  spieltag,
-        "form":      form_top,
-        "gems":      gems,
     }
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler verarbeitet)")
