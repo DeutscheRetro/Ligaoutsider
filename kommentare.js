@@ -3,7 +3,7 @@
 // Optional: ARTIKEL_ID (nur auf Artikelseiten)
 
 (function () {
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   let aktuellerUser = null;
   let isAdmin = false;
   let ignorierteListe = JSON.parse(localStorage.getItem('lo_ignore') || '[]');
@@ -25,9 +25,16 @@
   // ─── Auth ────────────────────────────────────────────────────────────────────
   function anzeigeName(user) { return user.user_metadata?.full_name || user.email; }
 
-  function setUser(user) {
+  async function setUser(user) {
     aktuellerUser = user;
     isAdmin = user.email === ADMIN_EMAIL;
+    // Netlify JWT an Supabase übergeben damit RLS Policies greifen
+    try {
+      const token = await user.jwt();
+      sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+        global: { headers: { Authorization: `Bearer ${token}` } }
+      });
+    } catch(e) { /* anon bleibt */ }
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
     if (el) {
@@ -46,6 +53,7 @@
 
   function clearUser() {
     aktuellerUser = null; isAdmin = false;
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = '');
