@@ -334,9 +334,14 @@ async function doLoeschen(idx) {
       if (!e.message.includes('404')) throw e;
       // 404 = Datei nicht in GitHub → nur aus feed.json entfernen
     }
-    feedDaten.splice(idx, 1);
+    // Aktuelle feed.json von GitHub holen (SHA könnte veraltet sein durch Bot-Commits)
     const feedData = await ghGet('feed.json');
-    await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, '🗑 feed.json aktualisiert');
+    const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
+    const gefiltertesFeed = aktuellFeed.filter(x => x.id !== a.id);
+    await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
+    // Lokalen Stand synchronisieren
+    feedDaten = gefiltertesFeed;
+    feedSha = feedData.sha;
     zeigeMsg('✓ Gelöscht!', true);
     renderListe();
   } catch(e) {
