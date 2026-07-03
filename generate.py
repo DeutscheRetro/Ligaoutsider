@@ -577,45 +577,65 @@ def kickbase_fetch():
         print(f"❌ Kickbase Login fehlgeschlagen: {e}")
         return
 
-    # Top-25 Spieler (v4 gibt nur 25 zurück – Top nach Marktwert)
+    # Spieler-IDs aus Top-Liste holen, dann Einzeldetails abrufen (echte mv/tp)
     try:
         r = session.get("https://api.kickbase.com/v4/competitions/1/players", timeout=20)
         r.raise_for_status()
-        raw = r.json().get("it", [])
-        print(f"  → {len(raw)} Spieler geladen")
+        id_list = [(p["pi"], p.get("tid", "")) for p in r.json().get("it", [])]
+        print(f"  → {len(id_list)} Spieler-IDs geladen")
     except Exception as e:
-        print(f"❌ Kickbase Spieler-Fetch fehlgeschlagen: {e}")
+        print(f"❌ Kickbase Spieler-Liste fehlgeschlagen: {e}")
         return
 
+    import time as _time
     players = []
-    for p in raw:
-        # v4 Felder: n=Nachname, p=Punkte, mt=Marktwert, g=Tore, a=Assists,
-        #            pes=letzter Spieltag, ot.tim=Team-Bild (relativ), pos=Position
-        name   = p.get("n", "")
-        pts    = p.get("p", 0) or 0
-        mw     = p.get("mt", 0) or 0
-        goals  = p.get("g", 0) or 0
-        assists= p.get("a", 0) or 0
-        sp_pts = p.get("pes", 0) or 0
-        team_img_rel = (p.get("ot") or {}).get("tim", "")
-        logo   = CDN + team_img_rel if team_img_rel else ""
-        players.append({
-            "name": name, "logo": logo, "mw": mw, "pts": pts,
-            "goals": goals, "assists": assists, "sp_pts": sp_pts,
-        })
+    for pid, _ in id_list:
+        try:
+            r2 = session.get(f"https://api.kickbase.com/v4/competitions/1/players/{pid}", timeout=10)
+            r2.raise_for_status()
+            d  = r2.json()
+            tid = d.get("tid", "")
+            # Team-Icon aus Spieltagsdaten extrahieren
+            team_img = ""
+            for md in d.get("mdsum", []):
+                if md.get("t1") == tid:
+                    team_img = md.get("t1im", "")
+                    break
+                elif md.get("t2") == tid:
+                    team_img = md.get("t2im", "")
+                    break
+            logo = CDN + team_img if team_img else ""
+            players.append({
+                "name":    (d.get("fn", "") + " " + d.get("ln", "")).strip(),
+                "logo":    logo,
+                "mw":      d.get("mv", 0) or 0,
+                "pts":     d.get("tp", 0) or 0,
+                "ap":      d.get("ap", 0) or 0,
+                "goals":   d.get("g",  0) or 0,
+                "assists": d.get("a",  0) or 0,
+                "sp_pts":  d.get("pes", 0) or 0,
+                "mvt":     d.get("tfhmvt", 0) or 0,
+            })
+            _time.sleep(0.2)
+        except Exception as e:
+            print(f"  ⚠️ Spieler {pid}: {e}")
 
-    # Effizienz: Punkte pro Marktwert-Einheit
+    print(f"  → {len(players)} Spieler-Details geladen")
+
+    # Effizienz: Punkte pro Million Marktwert
     for p in players:
-        p["eff"] = round(p["pts"] / p["mw"], 2) if p["mw"] > 0 else 0
+        p["eff"] = round(p["pts"] / (p["mw"] / 1e6), 2) if p["mw"] > 500000 else 0
 
     def top(lst, key, n=10, reverse=True):
         return sorted([x for x in lst if x[key]], key=lambda x: x[key], reverse=reverse)[:n]
 
-    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}       for p in top(players,"mw")]
-    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}      for p in top(players,"pts")]
-    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}      for p in top(players,"eff")]
-    tore      = [{"name":p["name"],"logo":p["logo"],"goals":p["goals"]}  for p in top(players,"goals")]
-    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]}   for p in top(players,"sp_pts")]
+    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}        for p in top(players,"mw")]
+    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}       for p in top(players,"pts")]
+    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}       for p in top(players,"eff")]
+    tore      = [{"name":p["name"],"logo":p["logo"],"goals":p["goals"]}   for p in top(players,"goals")]
+    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]}    for p in top(players,"sp_pts")]
+    raketen   = [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]}      for p in top(players,"mvt")]
+    crash     = [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]}      for p in top(players,"mvt",reverse=False) if p["mvt"] < 0]
 
     result = {
         "updated":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -624,6 +644,8 @@ def kickbase_fetch():
         "effizienz": effizienz,
         "tore":      tore,
         "spieltag":  spieltag,
+        "raketen":   raketen,
+        "crash":     crash,
     }
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler verarbeitet)")

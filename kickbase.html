@@ -78,6 +78,20 @@
       </div>
 
       <div class="kb-widget">
+        <div class="kb-widget-title">📈 MW-Raketen (7 Tage)</div>
+        <ul class="kb-list" id="kb-raketen">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📉 MW-Crash (7 Tage)</div>
+        <ul class="kb-list" id="kb-crash">
+          <li class="kb-loading">Lade Daten…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
         <div class="kb-widget-title">🏆 Bester Spieltag</div>
         <ul class="kb-list" id="kb-spieltag">
           <li class="kb-loading">Lade Daten…</li>
@@ -163,11 +177,13 @@
           document.getElementById('kb-updated').textContent =
             'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
         }
-        renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: p.mw + ' Mio' })));
+        renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
         renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
         renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff.toFixed(2) + ' Pkt/Mio' })));
         renderList('kb-tore',      (d.tore       ||[]).map(p => ({ ...p, val: p.goals + ' Tore' })));
         renderList('kb-spieltag',  (d.spieltag   ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
+        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: '+' + fmtMW(p.diff), cls:'up' })));
+        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtMW(p.diff), cls:'down' })));
       })
       .catch(() => {
         ['kb-teuerste','kb-punkte','kb-effizienz','kb-tore','kb-spieltag'].forEach(id => {
