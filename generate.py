@@ -218,11 +218,13 @@ def ist_duplikat(neuer_titel: str, bestehende_titel: list) -> bool:
             "role": "user",
             "content": (
                 f"Ist diese neue Meldung ein Duplikat einer bereits vorhandenen?\n\n"
-                f"Regeln:\n"
-                f"- JA (Duplikat): Gleiches Ereignis, gleicher Stand, nur andere Quelle\n"
-                f"- JA (Duplikat): Gleiches Gerücht das schon berichtet wurde\n"
-                f"- NEIN (neu): Neue Entwicklung einer laufenden Geschichte (z.B. Gerücht → Bestätigung, Spekulation → offiziell)\n"
-                f"- NEIN (neu): Komplett anderes Thema\n\n"
+                f"JA (Duplikat) wenn:\n"
+                f"- Gleiches Ereignis, gleiche Personen/Vereine – egal ob andere Quelle oder leicht andere Formulierung\n"
+                f"- Gleicher Transfer, gleiche Vertragsverlängerung, gleiches Spiel – auch wenn einer 'offiziell' und der andere 'Bericht' ist\n"
+                f"- Beide Meldungen berichten im Kern dasselbe (z.B. 'X verlängert bei Y' und 'Y bindet X langfristig')\n\n"
+                f"NEIN (neu) nur wenn:\n"
+                f"- Komplett anderes Thema oder andere beteiligte Personen/Vereine\n"
+                f"- Echte neue Entwicklung: z.B. erst Gerücht, jetzt Transfer geplatzt\n\n"
                 f"NEUE MELDUNG: {neuer_titel}\n\n"
                 f"BEREITS VORHANDENE ARTIKEL:\n{titel_liste}\n\n"
                 f"Antworte nur mit JA oder NEIN."
@@ -486,6 +488,15 @@ def main():
                     continue
 
             print(f"  ✦  Prüfe: {titel[:60]}")
+
+            # Schnell-Ausschluss: Nationalmannschaft / DFB-Themen ohne KI-Kosten
+            _SKIP_KEYWORDS = ("Nagelsmann", "Nationalmannschaft", "DFB-Team", "EM 2026", "WM 2026",
+                              "Nations League", "Länderspiel", "U21-EM", "Olympia")
+            if any(kw.lower() in (titel + " " + beschr).lower() for kw in _SKIP_KEYWORDS):
+                print(f"  ✗  Keyword: Nationalmannschaft/DFB – übersprungen")
+                aid = artikel_id(url)
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                continue
 
             if not ist_relevant(titel, beschr):
                 print(f"  ✗  KI: nicht relevant")
