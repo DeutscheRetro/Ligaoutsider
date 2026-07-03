@@ -813,7 +813,7 @@ def spieler_fetch():
                         to_club = to.get("clubName", "")
                         if to_club and to_club not in ("Vereinslos", "Without Club"):
                             current_name = to_club
-                            current_icon = to.get("clubEmblem-1x", "")
+                            current_icon = to.get("clubEmblem-2x", "")
                     return current_name, current_icon
 
                 games = (perf or {}).get("data", {}).get("performance", [])
@@ -870,7 +870,7 @@ def spieler_fetch():
                 vereinshistorie.append({
                     "jahr": year,
                     "verein": club,
-                    "verein_icon": to.get("clubEmblem-1x", ""),
+                    "verein_icon": to.get("clubEmblem-2x", ""),
                     "leihe": fee == "Leihe",
                 })
 
