@@ -336,7 +336,7 @@
         <div class="feed-body">
           <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
           <a href="${a.pfad}" class="feed-title">${a.titel}</a>
-          <div class="feed-meta"><span class="feed-time">${a.datum}</span>${adminBtn}</div>
+          <div class="feed-meta"><span class="feed-time">${a.datum.split(' ')[0]}</span>${adminBtn}</div>
         </div>
       </li>`;
     }
