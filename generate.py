@@ -41,6 +41,19 @@ RSS_FEEDS = [
     # Reddit (100 Einträge)
     "https://www.reddit.com/r/bundesliga/new.rss?limit=100",
     "https://www.reddit.com/r/soccer/new.rss?limit=100",
+
+    # BILD via Nitter (Twitter) – fällt bei Nitter-Ausfall still aus
+    "https://nitter.net/BILD_Sport/rss",
+    "https://nitter.net/BILD_Bayern/rss",
+    "https://nitter.net/BILD_BVB/rss",
+    "https://nitter.net/BILD_Bayer04/rss",
+    "https://nitter.net/BILD_Leipzig/rss",
+    "https://nitter.net/BILD_Stuttgart/rss",
+    "https://nitter.net/BILD_Werder/rss",
+    "https://nitter.net/BILD_Eintracht/rss",
+    "https://nitter.net/BILD_FC/rss",
+    "https://nitter.net/BILD_Schalke04/rss",
+    "https://nitter.net/BILD_HSV/rss",
 ]
 
 # Artikel bis zu X Tage alt akzeptieren
