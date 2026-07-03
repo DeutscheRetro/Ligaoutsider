@@ -432,6 +432,7 @@ def artikel_html(
 def main():
     ARTIKEL_ORDNER.mkdir(exist_ok=True)
     bestehende = feed_laden()
+    rss_titel_dieser_lauf: list[str] = []  # raw RSS titles processed this run
     neu_generiert = 0
 
     print(f"Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} neue Artikel")
@@ -491,8 +492,8 @@ def main():
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 continue
 
-            # Duplikat-Check gegen bestehende Artikel-Titel
-            bestehende_titel = [a["titel"] for a in bestehende]
+            # Duplikat-Check gegen bestehende Artikel-Titel + raw RSS-Titel dieses Laufs
+            bestehende_titel = rss_titel_dieser_lauf + [a["titel"] for a in bestehende]
             if ist_duplikat(titel, bestehende_titel):
                 print(f"  ⊘  KI: Duplikat – Thema bereits vorhanden")
                 aid = artikel_id(url)
@@ -524,6 +525,7 @@ def main():
             datei_pfad = ARTIKEL_ORDNER / f"{aid}.html"
             datei_pfad.write_text(html, encoding="utf-8")
 
+            rss_titel_dieser_lauf.append(titel)
             badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
             bestehende.append({
                 "id":         aid,
