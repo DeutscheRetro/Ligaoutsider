@@ -774,59 +774,63 @@ def spieler_fetch():
                 )
                 games = perf.get("data", {}).get("performance", [])
 
-                # Aggregieren nach Saison + Liga
+                # Nur Bundesliga (L1), gruppiert nach Saison + TM-Club
                 from collections import defaultdict
-                saison_stats = defaultdict(lambda: {"spiele": 0, "tore": 0, "assists": 0, "minuten": 0})
-                saison_meta = {}  # saison_key → (display, liga)
 
-                LIGA_NAMEN = {
-                    "L1": "Bundesliga", "GB1": "Premier League", "ES1": "La Liga",
-                    "IT1": "Serie A", "FR1": "Ligue 1", "NL1": "Eredivisie",
-                    "PO1": "Primeira Liga", "TR1": "Süper Lig", "DFB": "DFB-Pokal",
-                    "CL": "Champions League", "EL": "Europa League", "FIWC": "WM",
-                    "EM": "EM",
+                # TM-Club-ID → OpenLigaDB-Teamname (für Icon-Matching im Browser)
+                TM_CLUB_NAMEN = {
+                    "27": "FC Bayern München", "16": "Borussia Dortmund",
+                    "23826": "RB Leipzig", "15": "Bayer 04 Leverkusen",
+                    "24": "Eintracht Frankfurt", "79": "VfB Stuttgart",
+                    "18": "Borussia Mönchengladbach", "17": "Sport-Club Freiburg",
+                    "89": "1. FC Union Berlin", "39": "1. FSV Mainz 05",
+                    "167": "FC Augsburg", "86": "SV Werder Bremen",
+                    "533": "TSG Hoffenheim", "41": "Hamburger SV",
+                    "16": "1. FC Köln", "33": "FC Schalke 04",
+                    "96": "SC Paderborn 07", "3980": "SV Elversberg",
+                    "31": "1. FC Heidenheim 1846", "984": "Holstein Kiel",
+                    "1": "1. FC Kaiserslautern", "162": "Bochum",
+                    "148": "Tottenham Hotspur",  # für Kane's Vergangenheit
                 }
+
+                bl_stats = defaultdict(lambda: defaultdict(lambda: {"spiele": 0, "tore": 0, "assists": 0}))
+                bl_meta = {}  # (saison_display, club_id) → season_id
 
                 for g in games:
                     info = g.get("gameInformation", {})
-                    comp = info.get("competitionId", "")
-                    # Nur Ligaspiele (keine Pokal/Int für Karriere)
+                    if info.get("competitionId") != "L1":
+                        continue
                     if info.get("isNationalGame"):
                         continue
                     season_display = info.get("season", {}).get("display", "")
+                    season_id = info.get("season", {}).get("id", 0)
                     if not season_display:
                         continue
-                    key = f"{season_display}_{comp}"
                     stats = g.get("statistics", {})
+                    club_id = str(stats.get("generalStatistics", {}).get("primaryClubId", ""))
                     goal_stats = stats.get("goalStatistics", {})
                     time_stats = stats.get("playingTimeStatistics", {})
 
-                    if time_stats.get("participationState") == "not_in_squad":
-                        continue
+                    bl_stats[season_display][club_id]["spiele"] += 1
+                    bl_stats[season_display][club_id]["tore"] += goal_stats.get("goalsScoredTotal") or 0
+                    bl_stats[season_display][club_id]["assists"] += goal_stats.get("assists") or 0
+                    bl_meta[(season_display, club_id)] = season_id
 
-                    saison_stats[key]["spiele"] += 1
-                    saison_stats[key]["tore"] += goal_stats.get("goalsScoredTotal") or 0
-                    saison_stats[key]["assists"] += goal_stats.get("assists") or 0
-                    saison_stats[key]["minuten"] += time_stats.get("playedMinutes") or 0
-                    if key not in saison_meta:
-                        saison_meta[key] = {
-                            "saison": season_display,
-                            "liga": LIGA_NAMEN.get(comp, comp),
-                            "season_id": info.get("season", {}).get("id", 0)
-                        }
-
-                # Sortiert neueste Saison zuerst
-                for key in sorted(saison_stats.keys(),
-                                   key=lambda k: saison_meta[k]["season_id"], reverse=True):
-                    meta = saison_meta[key]
-                    st = saison_stats[key]
-                    karriere.append({
-                        "saison": meta["saison"],
-                        "liga": meta["liga"],
-                        "spiele": st["spiele"],
-                        "tore": st["tore"],
-                        "assists": st["assists"],
-                    })
+                # Sortiert neueste Saison zuerst, pro Saison alle Clubs
+                seen_saisons = sorted(
+                    set(s for s, _ in bl_meta.keys()),
+                    key=lambda s: max(bl_meta[(s, c)] for c in bl_stats[s]),
+                    reverse=True
+                )
+                for saison in seen_saisons:
+                    for club_id, st in bl_stats[saison].items():
+                        karriere.append({
+                            "saison": saison,
+                            "verein": TM_CLUB_NAMEN.get(club_id, club_id),
+                            "spiele": st["spiele"],
+                            "tore": st["tore"],
+                            "assists": st["assists"],
+                        })
             except Exception as e:
                 print(f"(Perf Fehler: {e})", end=" ")
 
@@ -836,7 +840,7 @@ def spieler_fetch():
 
         result = {
             "goalGetterId": gid,
-            "name": name,
+            "name": tm_vollname or name,
             "verein": verein,
             "alter": tm_alter,
             "groesse": tm_groesse,
