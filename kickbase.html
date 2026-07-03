@@ -57,7 +57,7 @@
       </div>
 
       <div class="kb-widget">
-        <div class="kb-widget-title">⭐ Meiste Punkte (Saison)</div>
+        <div class="kb-widget-title">⭐ Meiste Punkte (Letzte Saison)</div>
         <ul class="kb-list" id="kb-punkte">
           <li class="kb-loading">Lade Daten…</li>
         </ul>
@@ -66,35 +66,28 @@
       <div class="kb-widget">
         <div class="kb-widget-title">🔥 Beste Effizienz (Pkt/Mio)</div>
         <ul class="kb-list" id="kb-effizienz">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">⚽ Meiste Tore</div>
-        <ul class="kb-list" id="kb-tore">
-          <li class="kb-loading">Lade Daten…</li>
+          <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
       </div>
 
       <div class="kb-widget">
         <div class="kb-widget-title">📈 MW-Raketen (7 Tage)</div>
         <ul class="kb-list" id="kb-raketen">
-          <li class="kb-loading">Lade Daten…</li>
+          <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
       </div>
 
       <div class="kb-widget">
         <div class="kb-widget-title">📉 MW-Crash (7 Tage)</div>
         <ul class="kb-list" id="kb-crash">
-          <li class="kb-loading">Lade Daten…</li>
+          <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
       </div>
 
       <div class="kb-widget">
         <div class="kb-widget-title">🏆 Bester Spieltag</div>
         <ul class="kb-list" id="kb-spieltag">
-          <li class="kb-loading">Lade Daten…</li>
+          <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
       </div>
 
@@ -179,11 +172,6 @@
         }
         renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
         renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff.toFixed(2) + ' Pkt/Mio' })));
-        renderList('kb-tore',      (d.tore       ||[]).map(p => ({ ...p, val: p.goals + ' Tore' })));
-        renderList('kb-spieltag',  (d.spieltag   ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: '+' + fmtMW(p.diff), cls:'up' })));
-        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtMW(p.diff), cls:'down' })));
       })
       .catch(() => {
         ['kb-teuerste','kb-punkte','kb-effizienz','kb-tore','kb-spieltag'].forEach(id => {
