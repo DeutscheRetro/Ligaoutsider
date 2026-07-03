@@ -582,7 +582,7 @@ def kickbase_fetch():
 
     # Spieler-IDs aus Top-Liste holen, dann Einzeldetails abrufen (echte mv/tp)
     try:
-        r = session.get("https://api.kickbase.com/v4/competitions/1/players", timeout=20)
+        r = session.get("https://api.kickbase.com/v4/competitions/1/players?limit=200", timeout=20)
         r.raise_for_status()
         id_list = [(p["pi"], p.get("tid", "")) for p in r.json().get("it", [])]
         print(f"  → {len(id_list)} Spieler-IDs geladen")
