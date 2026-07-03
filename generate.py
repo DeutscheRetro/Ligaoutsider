@@ -29,6 +29,8 @@ RSS_FEEDS = [
     "https://www.transfermarkt.de/rss/news",
     "https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1",
     "https://rss.dw.com/xml/sport-de",
+    "https://www.waz.de/sport/fussball/rss",
+    "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
 
     # Englische Quellen
     "https://bulinews.com/rss",
