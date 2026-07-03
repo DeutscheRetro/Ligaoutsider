@@ -634,6 +634,17 @@ def kickbase_fetch():
 
     teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}        for p in top(players,"mw")]
     punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}       for p in top(players,"pts")]
+
+    # Wenn API < 50 Spieler liefert (Saison noch nicht gestartet / unvollständig),
+    # bestehende punkte-Liste aus kickbase.json beibehalten statt mit falschen Top-10 überschreiben
+    if len(players) < 50:
+        try:
+            existing = json.loads(Path("kickbase.json").read_text(encoding="utf-8"))
+            if existing.get("punkte"):
+                punkte = existing["punkte"]
+                print(f"  ℹ️  Nur {len(players)} Spieler – punkte-Liste aus bestehendem kickbase.json übernommen")
+        except Exception:
+            pass
     effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}       for p in top(players,"eff")]
     tore      = [{"name":p["name"],"logo":p["logo"],"goals":p["goals"]}   for p in top(players,"goals")]
     spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]}    for p in top(players,"sp_pts")]
