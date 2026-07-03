@@ -84,68 +84,68 @@ W = "https://upload.wikimedia.org/wikipedia"  # Abkürzung
 
 VEREIN_WAPPEN = {
     # Bayern
-    "fc bayern münchen": "logos/bayern.png",
-    "fc bayern":         "logos/bayern.png",
-    "bayern":            "logos/bayern.png",
-    "fcb":               "logos/bayern.png",
+    "fc bayern münchen": "../logos/bayern.png",
+    "fc bayern":         "../logos/bayern.png",
+    "bayern":            "../logos/bayern.png",
+    "fcb":               "../logos/bayern.png",
     # Dortmund
-    "borussia dortmund": "logos/dortmund.png",
-    "dortmund":          "logos/dortmund.png",
-    "bvb":               "logos/dortmund.png",
+    "borussia dortmund": "../logos/dortmund.png",
+    "dortmund":          "../logos/dortmund.png",
+    "bvb":               "../logos/dortmund.png",
     # Leipzig
-    "rb leipzig":          "logos/leipzig.png",
-    "leipzig":             "logos/leipzig.png",
+    "rb leipzig":          "../logos/leipzig.png",
+    "leipzig":             "../logos/leipzig.png",
     # Leverkusen
-    "bayer 04":            "logos/leverkusen.png",
-    "leverkusen":          "logos/leverkusen.png",
+    "bayer 04":            "../logos/leverkusen.png",
+    "leverkusen":          "../logos/leverkusen.png",
     # Frankfurt
-    "eintracht frankfurt": "logos/frankfurt.png",
-    "eintracht":           "logos/frankfurt.png",
-    "frankfurt":           "logos/frankfurt.png",
-    "sge":                 "logos/frankfurt.png",
+    "eintracht frankfurt": "../logos/frankfurt.png",
+    "eintracht":           "../logos/frankfurt.png",
+    "frankfurt":           "../logos/frankfurt.png",
+    "sge":                 "../logos/frankfurt.png",
     # Stuttgart
-    "vfb stuttgart":    "logos/stuttgart.png",
-    "stuttgart":        "logos/stuttgart.png",
+    "vfb stuttgart":    "../logos/stuttgart.png",
+    "stuttgart":        "../logos/stuttgart.png",
     # Gladbach
-    "mönchengladbach":  "logos/gladbach.png",
-    "gladbach":         "logos/gladbach.png",
-    "borussia m":       "logos/gladbach.png",
+    "mönchengladbach":  "../logos/gladbach.png",
+    "gladbach":         "../logos/gladbach.png",
+    "borussia m":       "../logos/gladbach.png",
     # Freiburg
-    "sc freiburg":      "logos/freiburg.png",
-    "freiburg":         "logos/freiburg.png",
+    "sc freiburg":      "../logos/freiburg.png",
+    "freiburg":         "../logos/freiburg.png",
     # Union Berlin
-    "union berlin":     "logos/union.png",
-    "1. fc union":      "logos/union.png",
+    "union berlin":     "../logos/union.png",
+    "1. fc union":      "../logos/union.png",
     # Mainz
-    "fsv mainz":        "logos/mainz.png",
-    "mainz":            "logos/mainz.png",
+    "fsv mainz":        "../logos/mainz.png",
+    "mainz":            "../logos/mainz.png",
     # Augsburg
-    "fc augsburg":      "logos/augsburg.png",
-    "augsburg":         "logos/augsburg.png",
+    "fc augsburg":      "../logos/augsburg.png",
+    "augsburg":         "../logos/augsburg.png",
     # Werder
-    "sv werder":        "logos/werder.png",
-    "werder":           "logos/werder.png",
+    "sv werder":        "../logos/werder.png",
+    "werder":           "../logos/werder.png",
     # Hoffenheim
-    "tsg hoffenheim":   "logos/hoffenheim.png",
-    "hoffenheim":       "logos/hoffenheim.png",
-    "tsg 1899":         "logos/hoffenheim.png",
+    "tsg hoffenheim":   "../logos/hoffenheim.png",
+    "hoffenheim":       "../logos/hoffenheim.png",
+    "tsg 1899":         "../logos/hoffenheim.png",
     # HSV
-    "hamburger sv":     "logos/hsv.png",
-    "hamburger":        "logos/hsv.png",
-    "hsv":              "logos/hsv.png",
+    "hamburger sv":     "../logos/hsv.png",
+    "hamburger":        "../logos/hsv.png",
+    "hsv":              "../logos/hsv.png",
     # Köln
-    "1. fc köln":       "logos/koeln.png",
-    "köln":             "logos/koeln.png",
-    "effzeh":           "logos/koeln.png",
+    "1. fc köln":       "../logos/koeln.png",
+    "köln":             "../logos/koeln.png",
+    "effzeh":           "../logos/koeln.png",
     # Schalke
-    "fc schalke":       "logos/schalke.png",
-    "schalke":          "logos/schalke.png",
+    "fc schalke":       "../logos/schalke.png",
+    "schalke":          "../logos/schalke.png",
     # Paderborn
-    "sc paderborn":     "logos/paderborn.png",
-    "paderborn":        "logos/paderborn.png",
+    "sc paderborn":     "../logos/paderborn.png",
+    "paderborn":        "../logos/paderborn.png",
     # Elversberg
-    "sv elversberg":    "logos/elversberg.png",
-    "elversberg":       "logos/elversberg.png",
+    "sv elversberg":    "../logos/elversberg.png",
+    "elversberg":       "../logos/elversberg.png",
 }
 
 BADGE_KATEGORIEN = {
