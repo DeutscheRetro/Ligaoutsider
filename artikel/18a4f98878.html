@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schalke verlängert mit El-Faouzi: Aufstiegs-Gewinner bleibt – Ligaoutsider.de</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../artikel.css"/>
+  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+</head>
+<body>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="../index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="../archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="../kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="../forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <div class="artikel-wrap">
+    <a href="javascript:history.back()" class="artikel-back">← Zurück</a>
+    <article class="artikel">
+
+      <div class="artikel-header">
+        <img src="logos/schalke.png" class="artikel-wappen" alt="Wappen" onerror="this.style.display='none'"/>
+        <div>
+          <span class="feed-badge" style="background:#e8c000;color:#000">Transfer</span>
+          <h1 class="artikel-titel">Schalke verlängert mit El-Faouzi: Aufstiegs-Gewinner bleibt</h1>
+          <p class="artikel-meta">03.07.2026 09:53</p>
+        </div>
+      </div>
+
+      <div class="artikel-text">
+        <p>Der FC Schalke 04 hat sich die Dienste von Soufiane El-Faouzi gesichert. Der 23 Jahre alte Mittelfeldspieler verlängerte seinen Vertrag nach erfolgreicher Aufstiegssaison in die Bundesliga. El-Faouzi war der größte Marktwert-Gewinner der Königsblauen in der abgelaufenen Saison.</p><p>Der französische Mittelfeldspieler avancierte in der Zweiten Liga zur Schlüsselfigur im Aufstiegsprojekt. Sein Marktwert stieg erheblich und machte ihn zum wertvollsten Spieler im Kader. Mit der Vertragsverlängerung sichert sich Schalke eine wichtige Stütze für das Comeback in der Eliteliga.</p><p>Für die Aufstiegsmannschaft ist die Verlängerung ein Signal der Kontinuität. Das Mittelfeld soll eine Säule der Bundesliga-Rückkehr werden. El-Faouzi trägt damit Mitverantwortung beim Anspruch, sich in der höchsten Spielklasse zu etablieren.</p>
+      </div>
+
+      <div class="artikel-quelle">
+        Originalquelle: <a href="https://www.transfermarkt.de/schalke-04-bindet-el-faouzi-grosster-marktwert-gewinner-in-aufstiegssaison/view/news/482316" target="_blank" rel="noopener">Transfermarkt</a>
+      </div>
+
+    </article>
+
+    <!-- Kommentare -->
+    <section class="kommentare">
+      <h2>Kommentare</h2>
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+      <p id="k-gasthinweis" style="font-size:13px;color:var(--text4);margin-top:16px">
+        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent)">anmelden</a>, um Kommentare zu schreiben.
+      </p>
+      <form id="kommentar-form" style="display:none">
+        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent)"></strong></p>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+    </section>
+
+  </div>
+
+  <script>
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+    const ARTIKEL_ID    = '18a4f98878';
+    const ADMIN_EMAIL   = 'twitchpre@gmail.com';
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../kommentare.js"></script>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">© Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="../impressum.html">Impressum</a>
+        <a href="../datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
