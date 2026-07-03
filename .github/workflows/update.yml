@@ -2,20 +2,12 @@ name: Neue Artikel generieren
 
 on:
   schedule:
-    - cron: '17 7 * * *'    # 09:17  – erster Run
-    - cron: '52 8 * * *'    # 10:52  (+95min, langer Morgenabstand)
-    - cron: '38 9 * * *'    # 11:38  (+46min)
-    - cron: '19 10 * * *'   # 12:19  (+41min)
-    - cron: '7 11 * * *'    # 13:07  (+48min)
-    - cron: '51 11 * * *'   # 13:51  (+44min)
-    - cron: '33 12 * * *'   # 14:33  (+42min)
-    - cron: '22 13 * * *'   # 15:22  (+49min)
-    - cron: '4 14 * * *'    # 16:04  (+42min)
-    - cron: '48 14 * * *'   # 16:48  (+44min)
-    - cron: '31 15 * * *'   # 17:31  (+43min)
-    - cron: '29 16 * * *'   # 18:29  (+58min, Übergang Abend)
-    - cron: '47 17 * * *'   # 19:47  (+78min)
-    - cron: '11 19 * * *'   # 21:11  (+84min)
+    - cron: '17 6 * * *'    # 08:17 (UTC+2)
+    - cron: '53 8 * * *'    # 10:53
+    - cron: '28 11 * * *'   # 13:28
+    - cron: '47 13 * * *'   # 15:47
+    - cron: '22 16 * * *'   # 18:22
+    - cron: '58 18 * * *'   # 20:58
   workflow_dispatch:              # auch manuell per Knopfdruck auslösbar
 
 jobs:
