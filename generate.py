@@ -643,6 +643,9 @@ def kickbase_fetch():
             if existing.get("punkte"):
                 punkte = existing["punkte"]
                 print(f"  ℹ️  Nur {len(players)} Spieler – punkte-Liste aus bestehendem kickbase.json übernommen")
+            if existing.get("teuerste"):
+                teuerste = existing["teuerste"]
+                print(f"  ℹ️  Nur {len(players)} Spieler – teuerste-Liste aus bestehendem kickbase.json übernommen")
         except Exception:
             pass
     effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}       for p in top(players,"eff")]
