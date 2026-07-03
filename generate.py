@@ -561,10 +561,13 @@ def kickbase_fetch():
 
     # Login
     try:
-        r = session.post("https://api.kickbase.com/user/login",
+        r = session.post("https://api.kickbase.com/v4/user/login",
                          json={"email": email, "password": password, "ext": True}, timeout=15)
         r.raise_for_status()
-        token = r.json()["token"]
+        data = r.json()
+        token = data.get("token") or data.get("tk") or data.get("accessToken") or data.get("t")
+        if not token:
+            raise ValueError(f"Kein Token in Response: {list(data.keys())}")
         session.headers["Authorization"] = f"Bearer {token}"
         print("✅ Kickbase Login erfolgreich")
     except Exception as e:
@@ -583,26 +586,33 @@ def kickbase_fetch():
     }
 
     try:
-        r = session.get(f"https://api.kickbase.com/competition/{COMP}/players", timeout=20)
+        r = session.get(f"https://api.kickbase.com/v4/competitions/{COMP}/players", timeout=20)
         r.raise_for_status()
-        raw = r.json().get("players", r.json() if isinstance(r.json(), list) else [])
+        body = r.json()
+        # v4 uses "it" as list key; fallback to "players" or raw list
+        raw = body.get("it") or body.get("players") or (body if isinstance(body, list) else [])
+        print(f"  → {len(raw)} Spieler geladen")
+        if raw:
+            print(f"  → Beispiel-Keys: {list(raw[0].keys())[:12]}")
     except Exception as e:
         print(f"❌ Kickbase Spieler-Fetch fehlgeschlagen: {e}")
         return
 
     players = []
     for p in raw:
-        mw   = p.get("marketValue", 0) or 0
-        pts  = p.get("totalPoints", 0) or 0
-        ap   = p.get("averagePoints", 0) or 0
-        own  = p.get("teamData", {}).get("teamId") or p.get("teamId") or ""
-        team = p.get("teamName", "")
-        name = (p.get("firstName", "") + " " + p.get("lastName", "")).strip() or p.get("name", "")
+        # v4 short keys: mv=marketValue, tp=totalPoints, ap=averagePoints, mvt=trend, knm=teamName
+        # Fallback auf Langform für Kompatibilität
+        mw   = p.get("mv") or p.get("marketValue", 0) or 0
+        pts  = p.get("tp") or p.get("totalPoints", 0) or 0
+        ap   = p.get("ap") or p.get("averagePoints", 0) or 0
+        team = p.get("knm") or p.get("teamName", "")
+        fn   = p.get("fn") or p.get("firstName", "")
+        ln   = p.get("ln") or p.get("lastName", "")
+        name = (fn + " " + ln).strip() or p.get("name", "")
         logo = LOGO_MAP.get(team, "")
-        mw7  = p.get("marketValueTrend", 0) or 0  # einige APIs liefern absoluten 7-Tage-Diff
-        own_pct = p.get("ownerPercentage", 0) or p.get("ownPercentage", 0) or 0
-        # Letzte-Spieltag-Punkte
-        sp_pts = p.get("lastMatchPoints", 0) or p.get("currentSeasonMatchDayPoints", 0) or 0
+        mw7  = p.get("mvt") or p.get("marketValueTrend", 0) or 0
+        own_pct = p.get("owp") or p.get("ownerPercentage", 0) or p.get("ownPercentage", 0) or 0
+        sp_pts = p.get("lp") or p.get("lastMatchPoints", 0) or p.get("currentSeasonMatchDayPoints", 0) or 0
         players.append({
             "name": name, "logo": logo, "mw": mw, "pts": pts, "ap": ap,
             "mw7": mw7, "own": own_pct, "sp_pts": sp_pts,
