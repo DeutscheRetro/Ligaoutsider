@@ -392,28 +392,48 @@ async function doLoeschen(idx) {
   const a = feedDaten[idx];
   zeigeMsg('<span class="spinner"></span>Lösche…', false);
   try {
+    // HTML löschen (404 = schon weg, ignorieren)
     try {
       const htmlData = await ghGet(a.pfad);
       await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
     } catch(e) {
       if (!e.message.includes('404')) throw e;
     }
-    const feedData = await ghGet('feed.json');
-    const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
-    const gefiltertesFeed = aktuellFeed.filter(x => x.id !== a.id);
-    await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
-    feedDaten = gefiltertesFeed;
-    feedSha = feedData.sha;
 
-    // ID dauerhaft in deleted_ids.json blockieren
-    try {
-      const delData = await ghGet('deleted_ids.json');
-      const delIds = JSON.parse(decodeURIComponent(escape(atob(delData.content))));
-      if (!delIds.includes(a.id)) {
-        delIds.push(a.id);
-        await ghPut('deleted_ids.json', JSON.stringify(delIds, null, 2), delData.sha, `🚫 deleted_ids: ${a.id}`);
+    // feed.json mit Retry bei 409 (Bot könnte zeitgleich committen)
+    let versuche = 0;
+    while (versuche < 4) {
+      versuche++;
+      const feedData = await ghGet('feed.json');
+      const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
+      const gefiltertesFeed = aktuellFeed.filter(x => x.id !== a.id);
+      try {
+        await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
+        feedDaten = gefiltertesFeed;
+        break; // Erfolg
+      } catch(e) {
+        if (e.message.includes('409') && versuche < 4) {
+          await new Promise(r => setTimeout(r, 800 * versuche)); // kurz warten, dann nochmal
+          continue;
+        }
+        throw e;
       }
-    } catch(e) { /* deleted_ids.json nicht kritisch */ }
+    }
+
+    // ID dauerhaft in deleted_ids.json blockieren (Retry bei 409)
+    for (let v = 0; v < 3; v++) {
+      try {
+        const delData = await ghGet('deleted_ids.json');
+        const delIds = JSON.parse(decodeURIComponent(escape(atob(delData.content))));
+        if (!delIds.includes(a.id)) {
+          delIds.push(a.id);
+          await ghPut('deleted_ids.json', JSON.stringify(delIds, null, 2), delData.sha, `🚫 deleted_ids: ${a.id}`);
+        }
+        break;
+      } catch(e) {
+        if (e.message.includes('409') && v < 2) { await new Promise(r => setTimeout(r, 600)); continue; }
+      }
+    }
 
     zeigeMsg('✓ Gelöscht!', true);
     renderListe();
