@@ -26,6 +26,7 @@ RSS_FEEDS = [
     "https://newsfeed.kicker.de/news/bundesliga",
     "https://www.sportschau.de/fussball/bundesliga/index~rss2.xml",
     "https://sportbild.bild.de/feed/sportbild-home.xml",
+    "https://www.bild.de/rss-feeds/rss-16725492,feed=fussball-mix.bild.html",
     "https://www.transfermarkt.de/rss/news",
     "https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1",
     "https://rss.dw.com/xml/sport-de",
@@ -494,6 +495,35 @@ def artikel_html(
 </html>"""
 
 
+# ─── Ligainsider Scraper ──────────────────────────────────────────────────────
+
+def ligainsider_scrapen() -> list[dict]:
+    """Scrapt ligainsider.de (kein RSS) – gibt Liste mit url/titel/beschr zurück."""
+    import urllib.request as _req
+    items = []
+    urls_to_scrape = [
+        "https://www.ligainsider.de/",
+        "https://www.ligainsider.de/testspiele-news/uebersicht/",
+    ]
+    for page_url in urls_to_scrape:
+        try:
+            req = _req.Request(page_url, headers={"User-Agent": "Mozilla/5.0"})
+            html = _req.urlopen(req, timeout=10).read().decode("utf-8", errors="ignore")
+        except Exception as e:
+            print(f"  ⚠  Ligainsider-Scrape fehlgeschlagen ({page_url}): {e}")
+            continue
+        matches = re.findall(
+            r'<a class="newsboxlink" href="(/[^"]+)"><h3>(.*?)</h3></a>', html
+        )
+        for path, raw_title in matches:
+            title = raw_title.replace("&shy;", "").replace("&amp;", "&").strip()
+            full_url = "https://www.ligainsider.de" + path
+            if title and full_url not in [i["url"] for i in items]:
+                items.append({"url": full_url, "titel": title, "beschr": title})
+    print(f"  Ligainsider: {len(items)} Meldungen gefunden")
+    return items
+
+
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
 def main():
@@ -621,6 +651,84 @@ def main():
             facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
             neu_generiert += 1
             print(f"  ✅ Gespeichert: {ergebnis['titel'][:60]}")
+
+    # ─── Ligainsider Scraping ───────────────────────────────────────────────────
+    print("\nLigainsider.de scrapen …")
+    for item in ligainsider_scrapen():
+        if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
+            break
+        url    = item["url"]
+        titel  = item["titel"]
+        beschr = item["beschr"]
+        quelle_name = "ligainsider.de"
+
+        if schon_verarbeitet(url):
+            print(f"  ↩  Übersprungen (schon vorhanden): {titel[:60]}")
+            continue
+
+        print(f"  ✦  Prüfe: {titel[:60]}")
+
+        _SKIP_KEYWORDS = ("Nagelsmann", "Nationalmannschaft", "DFB-Team", "EM 2026", "WM 2026",
+                          "Nations League", "Länderspiel", "U21-EM", "Olympia")
+        if any(kw.lower() in titel.lower() for kw in _SKIP_KEYWORDS):
+            print(f"  ✗  Keyword: Nationalmannschaft/DFB – übersprungen")
+            aid = artikel_id(url)
+            (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+            continue
+
+        if not ist_relevant(titel, beschr):
+            print(f"  ✗  KI: nicht relevant")
+            aid = artikel_id(url)
+            (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+            continue
+
+        bestehende_titel = rss_titel_dieser_lauf + [a["titel"] for a in bestehende]
+        if ist_duplikat(titel, beschr, bestehende_titel):
+            print(f"  ⊘  KI: Duplikat – Thema bereits vorhanden")
+            aid = artikel_id(url)
+            (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+            continue
+
+        print(f"  ✓  KI: relevant & neu – schreibe Artikel …")
+        try:
+            ergebnis = artikel_generieren(titel, beschr, quelle_name, url)
+        except Exception as e:
+            print(f"  ⚠  Fehler beim Generieren: {e}")
+            continue
+
+        aid        = artikel_id(url)
+        datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+        wappen_url = verein_wappen_url(ergebnis["titel"] + " " + beschr)
+        html       = artikel_html(
+            datei_id   = aid,
+            titel      = ergebnis["titel"],
+            text       = ergebnis["text"],
+            kategorie  = ergebnis["kategorie"],
+            quelle_name= quelle_name,
+            quelle_url = url,
+            datum      = datum,
+            wappen_url = wappen_url,
+        )
+        datei_pfad = ARTIKEL_ORDNER / f"{aid}.html"
+        datei_pfad.write_text(html, encoding="utf-8")
+
+        rss_titel_dieser_lauf.append(titel)
+        badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
+        bestehende.append({
+            "id":         aid,
+            "titel":      ergebnis["titel"],
+            "kategorie":  ergebnis["kategorie"],
+            "badge":      badge_label,
+            "badge_bg":   badge_bg,
+            "badge_fg":   badge_fg,
+            "datum":      datum,
+            "wappen_url": wappen_url,
+            "pfad":       f"artikel/{aid}.html",
+        })
+        feed_speichern(bestehende)
+        facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
+        neu_generiert += 1
+        print(f"  ✅ Gespeichert: {ergebnis['titel'][:60]}")
 
     sitemap_generieren(bestehende)
 
