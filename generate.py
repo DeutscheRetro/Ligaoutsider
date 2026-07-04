@@ -592,9 +592,39 @@ def main():
             neu_generiert += 1
             print(f"  ✅ Gespeichert: {ergebnis['titel'][:60]}")
 
+    sitemap_generieren(bestehende)
+
     print(f"\n─" * 60)
     print(f"Fertig. {neu_generiert} neue Artikel generiert.")
     print(f"feed.json enthält jetzt {len(bestehende)} Artikel.")
+
+
+def sitemap_generieren(artikel_liste: list):
+    base = "https://ligaoutsider.de"
+    heute = datetime.date.today().isoformat()
+    urls = [
+        (f"{base}/", "1.0", "daily"),
+        (f"{base}/archiv.html", "0.8", "daily"),
+        (f"{base}/kickbase.html", "0.6", "weekly"),
+        (f"{base}/forum.html", "0.6", "weekly"),
+    ]
+    for a in artikel_liste:
+        urls.append((f"{base}/{a['pfad']}", "0.9", "monthly"))
+
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc, prio, freq in urls:
+        lines += [
+            "  <url>",
+            f"    <loc>{loc}</loc>",
+            f"    <lastmod>{heute}</lastmod>",
+            f"    <changefreq>{freq}</changefreq>",
+            f"    <priority>{prio}</priority>",
+            "  </url>",
+        ]
+    lines.append("</urlset>")
+    Path("sitemap.xml").write_text("\n".join(lines), encoding="utf-8")
+    print(f"✅ sitemap.xml generiert ({len(urls)} URLs)")
 
 
 def kickbase_fetch():
