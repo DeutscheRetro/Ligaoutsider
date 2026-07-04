@@ -360,6 +360,14 @@ def artikel_html(
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
   <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-SP8DWFL2SE');
+  </script>
 </head>
 <body>
 
