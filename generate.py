@@ -556,6 +556,12 @@ def main():
 
             if not url or not titel:
                 continue
+
+            # Gesperrte Domains
+            _BLOCKED_DOMAINS = ("ligainsider.de",)
+            if any(d in url for d in _BLOCKED_DOMAINS):
+                continue
+
             if schon_verarbeitet(url):
                 print(f"  ↩  Übersprungen (schon vorhanden): {titel[:60]}")
                 continue
