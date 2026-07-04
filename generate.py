@@ -231,30 +231,29 @@ def feed_speichern(artikel_liste: list):
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60.0)
 
 
-def ist_duplikat(neuer_titel: str, bestehende_titel: list) -> bool:
-    """Prüft ob ein Artikel inhaltlich schon vorhanden ist.
-    Gerücht ≠ Bestätigung → kein Duplikat.
-    Gleiches Gerücht nochmal → Duplikat.
-    """
+def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende_titel: list) -> bool:
+    """Prüft ob eine Meldung inhaltlich schon vorhanden ist oder eine neue Entwicklung darstellt."""
     if not bestehende_titel:
         return False
-    titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-40:])
+    titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-50:])
+    beschr_kurz = beschreibung[:400] if beschreibung else "(keine Beschreibung)"
     antwort = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=10,
         messages=[{
             "role": "user",
             "content": (
-                f"Ist diese neue Meldung ein Duplikat einer bereits vorhandenen?\n\n"
-                f"JA (Duplikat) wenn:\n"
-                f"- Gleiches Ereignis, gleiche Personen/Vereine – egal ob andere Quelle oder leicht andere Formulierung\n"
-                f"- Gleicher Transfer, gleiche Vertragsverlängerung, gleiches Spiel – auch wenn einer 'offiziell' und der andere 'Bericht' ist\n"
-                f"- Beide Meldungen berichten im Kern dasselbe (z.B. 'X verlängert bei Y' und 'Y bindet X langfristig')\n\n"
-                f"NEIN (neu) nur wenn:\n"
-                f"- Komplett anderes Thema oder andere beteiligte Personen/Vereine\n"
-                f"- Echte neue Entwicklung: z.B. erst Gerücht, jetzt Transfer geplatzt\n\n"
-                f"NEUE MELDUNG: {neuer_titel}\n\n"
-                f"BEREITS VORHANDENE ARTIKEL:\n{titel_liste}\n\n"
+                f"Du prüfst ob eine neue Fußball-Meldung ein Duplikat ist oder eine echte neue Entwicklung.\n\n"
+                f"NEUE MELDUNG:\n"
+                f"Titel: {neuer_titel}\n"
+                f"Inhalt: {beschr_kurz}\n\n"
+                f"BEREITS VERÖFFENTLICHTE ARTIKEL:\n{titel_liste}\n\n"
+                f"Antworte JA (Duplikat) wenn:\n"
+                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt (gleicher Transfer, gleiches Gerücht, gleiche Aussage) – egal ob andere Quelle oder Formulierung\n\n"
+                f"Antworte NEIN (neue Entwicklung) wenn:\n"
+                f"- Es eine neue Entwicklung zum Thema ist: z.B. Dementi nach Gerücht, offizieller Transfer nach Spekulation, Einigung nach Verhandlungen, Platzen eines Deals\n"
+                f"- Die beteiligten Personen oder Vereine komplett andere sind\n"
+                f"- Es sich um ein anderes Thema handelt\n\n"
                 f"Antworte nur mit JA oder NEIN."
             )
         }]
@@ -544,7 +543,7 @@ def main():
 
             # Duplikat-Check gegen bestehende Artikel-Titel + raw RSS-Titel dieses Laufs
             bestehende_titel = rss_titel_dieser_lauf + [a["titel"] for a in bestehende]
-            if ist_duplikat(titel, bestehende_titel):
+            if ist_duplikat(titel, beschr, bestehende_titel):
                 print(f"  ⊘  KI: Duplikat – Thema bereits vorhanden")
                 aid = artikel_id(url)
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
