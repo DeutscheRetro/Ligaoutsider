@@ -350,6 +350,9 @@ def artikel_html(
         '<div class="artikel-wappen-placeholder">BL</div>'
     )
 
+    artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
+    ersten_absatz = text.split("\n\n")[0].strip() if text else titel
+
     return f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -366,6 +369,31 @@ def artikel_html(
     function gtag(){{dataLayer.push(arguments);}}
     gtag('js', new Date());
     gtag('config', 'G-SP8DWFL2SE');
+  </script>
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "{titel}",
+    "datePublished": "{datum}",
+    "dateModified": "{datum}",
+    "author": {{
+      "@type": "Organization",
+      "name": "Ligaoutsider.de"
+    }},
+    "publisher": {{
+      "@type": "Organization",
+      "name": "Ligaoutsider.de",
+      "url": "https://ligaoutsider.de"
+    }},
+    "url": "{artikel_url}",
+    "description": "{ersten_absatz[:200].replace('"', '&quot;')}",
+    "inLanguage": "de",
+    "about": {{
+      "@type": "SportsOrganization",
+      "name": "1. Bundesliga"
+    }}
+  }}
   </script>
 </head>
 <body>
