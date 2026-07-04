@@ -404,6 +404,17 @@ async function doLoeschen(idx) {
     await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
     feedDaten = gefiltertesFeed;
     feedSha = feedData.sha;
+
+    // ID dauerhaft in deleted_ids.json blockieren
+    try {
+      const delData = await ghGet('deleted_ids.json');
+      const delIds = JSON.parse(decodeURIComponent(escape(atob(delData.content))));
+      if (!delIds.includes(a.id)) {
+        delIds.push(a.id);
+        await ghPut('deleted_ids.json', JSON.stringify(delIds, null, 2), delData.sha, `🚫 deleted_ids: ${a.id}`);
+      }
+    } catch(e) { /* deleted_ids.json nicht kritisch */ }
+
     zeigeMsg('✓ Gelöscht!', true);
     renderListe();
   } catch(e) {

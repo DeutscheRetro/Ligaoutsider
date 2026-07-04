@@ -178,9 +178,22 @@ def artikel_id(url: str) -> str:
     return hashlib.md5(url.encode()).hexdigest()[:10]
 
 
+def lade_deleted_ids() -> set:
+    p = Path("deleted_ids.json")
+    if not p.exists():
+        return set()
+    try:
+        return set(json.loads(p.read_text()))
+    except Exception:
+        return set()
+
+DELETED_IDS: set = set()  # wird in main() befüllt
+
 def schon_verarbeitet(url: str) -> bool:
     aid = artikel_id(url)
-    return (ARTIKEL_ORDNER / f"{aid}.html").exists()
+    if aid in DELETED_IDS:
+        return True
+    return (ARTIKEL_ORDNER / f"{aid}.html").exists() or (ARTIKEL_ORDNER / f"{aid}.skip").exists()
 
 
 def verein_wappen_url(text: str) -> str:
@@ -448,6 +461,8 @@ def artikel_html(
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
 def main():
+    global DELETED_IDS
+    DELETED_IDS = lade_deleted_ids()
     ARTIKEL_ORDNER.mkdir(exist_ok=True)
     bestehende = feed_laden()
     rss_titel_dieser_lauf: list[str] = []  # raw RSS titles processed this run
