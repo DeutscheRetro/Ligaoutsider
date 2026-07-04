@@ -203,7 +203,18 @@
         renderMain();
       });
     }
-    function setUser(user) {
+    async function setUser(user) {
+      // Ban-Check
+      try {
+        const r = await fetch('https://raw.githubusercontent.com/DeutscheRetro/Ligaoutsider/main/banned.json');
+        const banned = await r.json();
+        if (banned.includes(user.email)) {
+          netlifyIdentity.logout();
+          alert('Dein Account wurde gesperrt.');
+          return;
+        }
+      } catch(e) { /* bei Fehler trotzdem einloggen */ }
+
       aktuellerUser = user;
       const name = user.user_metadata?.full_name || user.email;
       document.getElementById('user-name').textContent      = name;

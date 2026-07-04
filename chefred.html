@@ -4,13 +4,14 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chefred – Ligaoutsider</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,sans-serif;background:#0d0d0d;color:#e0e0e0;font-size:14px}
     a{color:#e8c000;text-decoration:none}
-    .wrap{max-width:900px;margin:0 auto;padding:24px 16px}
+    .wrap{max-width:960px;margin:0 auto;padding:24px 16px}
     h1{color:#e8c000;font-size:22px;margin-bottom:4px}
-    .sub{color:#555;font-size:12px;margin-bottom:24px}
+    .sub{color:#555;font-size:12px;margin-bottom:20px}
 
     /* Login */
     .login{max-width:400px;margin:80px auto;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:32px}
@@ -24,9 +25,16 @@
     .btn-red{background:#c62828;color:#fff}
     .btn-green{background:#2e7d32;color:#fff}
     .btn-gray{background:#333;color:#ccc}
+    .btn-sm{padding:4px 10px;font-size:11px}
     .btn:hover{opacity:.85}
     .err{background:#b71c1c;color:#fff;padding:8px 12px;border-radius:5px;font-size:13px;margin-bottom:12px}
     .ok{background:#1b5e20;color:#fff;padding:8px 12px;border-radius:5px;font-size:13px;margin-bottom:12px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid #222;padding-bottom:0}
+    .tab{background:none;border:none;color:#888;font-size:13px;font-weight:700;padding:10px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+    .tab:hover{color:#ccc}
+    .tab.active{color:#e8c000;border-bottom-color:#e8c000}
 
     /* Artikel-Liste */
     .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -46,6 +54,29 @@
     .badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:#e8c000;color:#000}
     .spinner{display:inline-block;width:16px;height:16px;border:2px solid #333;border-top-color:#e8c000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
     @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+    .stat-card{background:#161616;border:1px solid #222;border-radius:8px;padding:20px;text-align:center}
+    .stat-card .num{font-size:36px;font-weight:900;color:#e8c000}
+    .stat-card .lbl{font-size:11px;color:#555;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+    .section-title{font-size:13px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin:24px 0 12px}
+    .bar-chart{display:flex;flex-direction:column;gap:6px}
+    .bar-row{display:flex;align-items:center;gap:10px;font-size:12px}
+    .bar-label{width:120px;text-align:right;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+    .bar-label-date{width:60px;text-align:right;color:#888;flex-shrink:0}
+    .bar-wrap{flex:1;background:#1a1a1a;border-radius:3px;height:18px;position:relative}
+    .bar-fill{height:100%;border-radius:3px;background:#e8c000;transition:width .4s}
+    .bar-val{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:#000}
+    .bar-val-out{margin-left:6px;font-size:11px;color:#555}
+
+    /* Moderation */
+    .user-table{width:100%;border-collapse:collapse}
+    .user-table th{text-align:left;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;border-bottom:1px solid #222}
+    .user-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;font-size:13px;vertical-align:middle}
+    .user-table tr:hover td{background:#161616}
+    .banned-row td{opacity:.4}
+    .banned-badge{display:inline-block;font-size:10px;background:#c62828;color:#fff;padding:2px 6px;border-radius:3px;font-weight:700;margin-left:6px}
   </style>
 </head>
 <body>
@@ -66,94 +97,114 @@
 
   <div id="msg" style="display:none;margin-bottom:16px"></div>
 
-  <div id="view-list">
-    <div class="toolbar">
-      <strong id="artikel-count"></strong>
-      <button class="btn btn-gray" onclick="ladeArtikel()">↻ Aktualisieren</button>
-    </div>
-    <div id="artikel-liste"><p style="color:#555">Lade…</p></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" id="tab-btn-artikel" onclick="zeigeTab('artikel')">📰 Artikel</button>
+    <button class="tab" id="tab-btn-stats" onclick="zeigeTab('stats')">📊 Stats</button>
+    <button class="tab" id="tab-btn-moderation" onclick="zeigeTab('moderation')">🛡 Moderation</button>
   </div>
 
-  <div id="view-editor" style="display:none">
-    <button class="btn btn-gray" onclick="zeigeListe()" style="margin-bottom:16px">← Zurück</button>
-    <div class="editor">
-      <h2 id="editor-titel-h">Artikel bearbeiten</h2>
-      <input type="hidden" id="edit-id"/>
-      <input type="hidden" id="edit-pfad"/>
-
-      <div class="field" style="margin-bottom:14px">
-        <label>Titel</label>
-        <input type="text" id="edit-titel"/>
+  <!-- TAB: ARTIKEL -->
+  <div id="tab-artikel">
+    <div id="view-list">
+      <div class="toolbar">
+        <strong id="artikel-count"></strong>
+        <button class="btn btn-gray" onclick="ladeArtikel()">↻ Aktualisieren</button>
       </div>
+      <div id="artikel-liste"><p style="color:#555">Lade…</p></div>
+    </div>
 
-      <div class="field" style="margin-bottom:14px">
-        <label>Vereinslogo</label>
-        <select id="edit-logo" onchange="updateLogoPreview()">
-          <option value="logos/bayern.png">FC Bayern München</option>
-          <option value="logos/leipzig.png">RB Leipzig</option>
-          <option value="logos/leverkusen.png">Bayer 04 Leverkusen</option>
-          <option value="logos/frankfurt.png">Eintracht Frankfurt</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png">Borussia Dortmund</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png">VfB Stuttgart</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png">TSG Hoffenheim</option>
-          <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png">SC Freiburg</option>
-          <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png">FC Augsburg</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png">1. FSV Mainz 05</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png">1. FC Union Berlin</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png">Borussia Mönchengladbach</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png">Hamburger SV</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png">1. FC Köln</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png">SV Werder Bremen</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png">FC Schalke 04</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png">SC Paderborn 07</option>
-          <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png">SV Elversberg</option>
-          <option value="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png">Bundesliga (allgemein)</option>
-        </select>
-        <img id="logo-preview" class="logo-preview" src="" alt=""/>
-      </div>
+    <div id="view-editor" style="display:none">
+      <button class="btn btn-gray" onclick="zeigeListe()" style="margin-bottom:16px">← Zurück</button>
+      <div class="editor">
+        <h2 id="editor-titel-h">Artikel bearbeiten</h2>
+        <input type="hidden" id="edit-id"/>
+        <input type="hidden" id="edit-pfad"/>
 
-      <div class="field" style="margin-bottom:14px">
-        <label>Text (Absätze mit Leerzeile trennen)</label>
-        <textarea id="edit-text" rows="10"></textarea>
-      </div>
+        <div class="field" style="margin-bottom:14px">
+          <label>Titel</label>
+          <input type="text" id="edit-titel"/>
+        </div>
 
-      <div class="actions-row">
-        <button class="btn btn-green" onclick="speichern()">💾 Speichern &amp; deployen</button>
-        <button class="btn btn-red" onclick="loeschen()">🗑 Artikel löschen</button>
-        <button class="btn btn-gray" onclick="zeigeListe()">Abbrechen</button>
+        <div class="field" style="margin-bottom:14px">
+          <label>Vereinslogo</label>
+          <select id="edit-logo" onchange="updateLogoPreview()">
+            <option value="logos/bayern.png">FC Bayern München</option>
+            <option value="logos/leipzig.png">RB Leipzig</option>
+            <option value="logos/leverkusen.png">Bayer 04 Leverkusen</option>
+            <option value="logos/frankfurt.png">Eintracht Frankfurt</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/60px-Borussia_Dortmund_logo.svg.png">Borussia Dortmund</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/60px-VfB_Stuttgart_1893_Logo.svg.png">VfB Stuttgart</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/60px-Logo_TSG_Hoffenheim.svg.png">TSG Hoffenheim</option>
+            <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/bf/SC_Freiburg_Logo.svg/60px-SC_Freiburg_Logo.svg.png">SC Freiburg</option>
+            <option value="https://upload.wikimedia.org/wikipedia/de/thumb/b/b5/Logo_FC_Augsburg.svg/60px-Logo_FC_Augsburg.svg.png">FC Augsburg</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/60px-Logo_Mainz_05.svg.png">1. FSV Mainz 05</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/60px-1._FC_Union_Berlin_Logo.svg.png">1. FC Union Berlin</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/60px-Borussia_M%C3%B6nchengladbach_logo.svg.png">Borussia Mönchengladbach</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hamburger_SV_logo.svg/60px-Hamburger_SV_logo.svg.png">Hamburger SV</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/60px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png">1. FC Köln</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/60px-SV-Werder-Bremen-Logo.svg.png">SV Werder Bremen</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/60px-FC_Schalke_04_Logo.svg.png">FC Schalke 04</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/60px-SC_Paderborn_07_Logo_new.svg.png">SC Paderborn 07</option>
+            <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/60px-SV_Elversberg_Logo_2021.svg.png">SV Elversberg</option>
+            <option value="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png">Bundesliga (allgemein)</option>
+          </select>
+          <img id="logo-preview" class="logo-preview" src="" alt=""/>
+        </div>
+
+        <div class="field" style="margin-bottom:14px">
+          <label>Text (Absätze mit Leerzeile trennen)</label>
+          <textarea id="edit-text" rows="10"></textarea>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-green" onclick="speichern()">💾 Speichern &amp; deployen</button>
+          <button class="btn btn-red" onclick="loeschen()">🗑 Artikel löschen</button>
+          <button class="btn btn-gray" onclick="zeigeListe()">Abbrechen</button>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- TAB: STATS -->
+  <div id="tab-stats" style="display:none">
+    <div id="stats-inhalt"><p style="color:#555"><span class="spinner"></span>Lade Stats…</p></div>
+  </div>
+
+  <!-- TAB: MODERATION -->
+  <div id="tab-moderation" style="display:none">
+    <div id="mod-msg" style="display:none;margin-bottom:16px"></div>
+    <div id="mod-inhalt"><p style="color:#555"><span class="spinner"></span>Lade Forum-Daten…</p></div>
   </div>
 </div>
 
 <script>
-const REPO    = 'DeutscheRetro/Ligaoutsider';
+const REPO     = 'DeutscheRetro/Ligaoutsider';
 const PASSWORT = 'chefred2026';
+const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
 let ghToken   = '';
 let feedDaten = [];
 let feedSha   = '';
+let bannedEmails = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 function login() {
   const pw = document.getElementById('pw').value;
   const tok = document.getElementById('gh-token').value.trim();
-  if (pw !== PASSWORT) {
-    zeigeFehler('login-err', 'Falsches Passwort');
-    return;
-  }
+  if (pw !== PASSWORT) { zeigeFehler('login-err', 'Falsches Passwort'); return; }
   if (tok) localStorage.setItem('gh_token', tok);
   ghToken = localStorage.getItem('gh_token') || '';
   if (!ghToken) { zeigeFehler('login-err', 'GitHub Token fehlt'); return; }
   sessionStorage.setItem('auth', '1');
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
-  ladeArtikel();
+  init();
 }
 
-function logout() {
-  sessionStorage.removeItem('auth');
-  location.reload();
-}
+function logout() { sessionStorage.removeItem('auth'); location.reload(); }
 
 function zeigeFehler(id, txt) {
   const el = document.getElementById(id);
@@ -186,6 +237,31 @@ async function ghDelete(path, sha, message) {
     body: JSON.stringify({ message, sha })
   });
   if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+async function init() {
+  // Parallel: Artikel + banned.json laden
+  await Promise.all([ladeArtikel(), ladeBanned()]);
+}
+
+async function ladeBanned() {
+  try {
+    const data = await ghGet('banned.json');
+    bannedEmails = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+  } catch(e) {
+    bannedEmails = [];
+  }
+}
+
+// ─── Tab-Navigation ───────────────────────────────────────────────────────────
+function zeigeTab(name) {
+  ['artikel','stats','moderation'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
+  });
+  if (name === 'stats') renderStats();
+  if (name === 'moderation') ladeModerationsdaten();
 }
 
 // ─── Artikel laden ────────────────────────────────────────────────────────────
@@ -229,7 +305,6 @@ async function bearbeiten(idx) {
   document.getElementById('edit-titel').value = a.titel;
   document.getElementById('editor-titel-h').textContent = 'Bearbeiten: ' + a.titel.substring(0,50);
 
-  // Logo Dropdown
   const sel = document.getElementById('edit-logo');
   let gefunden = false;
   for (let opt of sel.options) {
@@ -241,7 +316,6 @@ async function bearbeiten(idx) {
   }
   updateLogoPreview();
 
-  // Artikel-Text aus HTML laden
   document.getElementById('edit-text').value = 'Lade…';
   try {
     const htmlData = await ghGet(a.pfad);
@@ -254,13 +328,11 @@ async function bearbeiten(idx) {
   } catch(e) {
     document.getElementById('edit-text').value = '(Text konnte nicht geladen werden)';
   }
-
   zeigeEditor();
 }
 
 function updateLogoPreview() {
-  const url = document.getElementById('edit-logo').value;
-  document.getElementById('logo-preview').src = url;
+  document.getElementById('logo-preview').src = document.getElementById('edit-logo').value;
 }
 
 function zeigeEditor() {
@@ -275,17 +347,14 @@ function zeigeListe() {
 
 // ─── Speichern ────────────────────────────────────────────────────────────────
 async function speichern() {
-  const idx       = parseInt(document.getElementById('edit-pfad').value);
+  const idx        = parseInt(document.getElementById('edit-pfad').value);
   const neuerTitel = document.getElementById('edit-titel').value.trim();
   const neuesLogo  = document.getElementById('edit-logo').value;
   const neuerText  = document.getElementById('edit-text').value.trim();
 
   zeigeMsg('<span class="spinner"></span>Speichere…', false);
-
   try {
     const a = feedDaten[idx];
-
-    // Artikel-HTML aktualisieren
     const htmlData = await ghGet(a.pfad);
     let html = decodeURIComponent(escape(atob(htmlData.content)));
     html = html.replace(/<h1 class="artikel-titel">.*?<\/h1>/, `<h1 class="artikel-titel">${neuerTitel}</h1>`);
@@ -294,16 +363,13 @@ async function speichern() {
     if (neuesLogo) html = html.replace(/src="[^"]*" class="artikel-wappen"/, `src="${neuesLogo}" class="artikel-wappen"`);
     await ghPut(a.pfad, html, htmlData.sha, `✏️ Artikel bearbeitet: ${neuerTitel.substring(0,50)}`);
 
-    // feed.json aktualisieren
-    feedDaten[idx].titel     = neuerTitel;
+    feedDaten[idx].titel      = neuerTitel;
     feedDaten[idx].wappen_url = neuesLogo;
-    const neuesFeed = JSON.stringify(feedDaten, null, 2);
-    const feedData  = await ghGet('feed.json');
-    await ghPut('feed.json', neuesFeed, feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
+    const feedData = await ghGet('feed.json');
+    await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
 
     zeigeMsg('✓ Gespeichert! Netlify deployed in ~1 Minute.', true);
     renderListe();
-    setTimeout(zeigeliste, 2000);
   } catch(e) {
     zeigeMsg('Fehler: ' + e.message, false);
   }
@@ -326,20 +392,16 @@ async function doLoeschen(idx) {
   const a = feedDaten[idx];
   zeigeMsg('<span class="spinner"></span>Lösche…', false);
   try {
-    // HTML-Datei löschen – falls sie nicht existiert, trotzdem aus feed.json entfernen
     try {
       const htmlData = await ghGet(a.pfad);
       await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
     } catch(e) {
       if (!e.message.includes('404')) throw e;
-      // 404 = Datei nicht in GitHub → nur aus feed.json entfernen
     }
-    // Aktuelle feed.json von GitHub holen (SHA könnte veraltet sein durch Bot-Commits)
     const feedData = await ghGet('feed.json');
     const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
     const gefiltertesFeed = aktuellFeed.filter(x => x.id !== a.id);
     await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
-    // Lokalen Stand synchronisieren
     feedDaten = gefiltertesFeed;
     feedSha = feedData.sha;
     zeigeMsg('✓ Gelöscht!', true);
@@ -357,14 +419,210 @@ function zeigeMsg(txt, ok) {
   if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
 }
 
-function zeigeliste() { zeigeMsg('', false); zeigeMsg.style && (zeigeMsg.style.display='none'); }
+// ─── Stats ────────────────────────────────────────────────────────────────────
+function renderStats() {
+  if (!feedDaten.length) {
+    document.getElementById('stats-inhalt').innerHTML = '<p style="color:#555">Keine Daten geladen.</p>';
+    return;
+  }
+
+  const heute = new Date();
+  const vor30 = new Date(heute); vor30.setDate(heute.getDate() - 29);
+
+  // Artikel pro Tag (letzte 30 Tage)
+  const proTag = {};
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(heute); d.setDate(heute.getDate() - i);
+    proTag[d.toISOString().slice(0,10)] = 0;
+  }
+  feedDaten.forEach(a => {
+    const key = a.datum ? a.datum.slice(0,10) : null;
+    if (key && proTag[key] !== undefined) proTag[key]++;
+  });
+
+  // Top-Quellen (badge)
+  const quellen = {};
+  feedDaten.forEach(a => {
+    const q = a.badge || 'Unbekannt';
+    quellen[q] = (quellen[q] || 0) + 1;
+  });
+  const topQuellen = Object.entries(quellen).sort((a,b) => b[1]-a[1]).slice(0,10);
+
+  // Heute
+  const tagesKey = heute.toISOString().slice(0,10);
+  const heute_count = proTag[tagesKey] || 0;
+
+  // Max für Balken
+  const maxTag = Math.max(...Object.values(proTag), 1);
+  const maxQ   = topQuellen[0]?.[1] || 1;
+
+  // Letzten 14 Tage für Balken (lesbar)
+  const letzte14 = Object.entries(proTag).slice(-14);
+
+  document.getElementById('stats-inhalt').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num">${feedDaten.length}</div><div class="lbl">Artikel gesamt</div></div>
+      <div class="stat-card"><div class="num">${heute_count}</div><div class="lbl">Heute</div></div>
+      <div class="stat-card"><div class="num">${Object.keys(quellen).length}</div><div class="lbl">Verschiedene Quellen</div></div>
+      <div class="stat-card"><div class="num">${Math.round(feedDaten.length / 30)}</div><div class="lbl">Ø Artikel/Tag (30d)</div></div>
+    </div>
+
+    <div class="section-title">Artikel letzte 14 Tage</div>
+    <div class="bar-chart">
+      ${letzte14.map(([tag, n]) => {
+        const w = Math.round((n / maxTag) * 100);
+        const label = tag.slice(5); // MM-DD
+        return `<div class="bar-row">
+          <span class="bar-label-date">${label}</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${w}%">${n > 0 ? `<span class="bar-val">${n}</span>` : ''}</div></div>
+          ${n === 0 ? '<span class="bar-val-out">0</span>' : ''}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="section-title">Top-Quellen</div>
+    <div class="bar-chart">
+      ${topQuellen.map(([quelle, n]) => {
+        const w = Math.round((n / maxQ) * 100);
+        return `<div class="bar-row">
+          <span class="bar-label">${quelle}</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${w}%">${n > 3 ? `<span class="bar-val">${n}</span>` : ''}</div></div>
+          ${n <= 3 ? `<span class="bar-val-out">${n}</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ─── Moderation ───────────────────────────────────────────────────────────────
+async function ladeModerationsdaten() {
+  const el = document.getElementById('mod-inhalt');
+  el.innerHTML = '<p style="color:#555"><span class="spinner"></span>Lade Forum-Daten…</p>';
+
+  try {
+    // Threads + Posts parallel laden (max 1000 jeweils)
+    const [{ data: threads }, { data: posts }] = await Promise.all([
+      sb.from('forum_threads').select('id,autor_name,autor_email,created_at').limit(1000),
+      sb.from('forum_posts').select('id,autor_name,autor_email,created_at').limit(1000)
+    ]);
+
+    // User-Map aufbauen
+    const users = {};
+    (threads || []).forEach(t => {
+      const e = t.autor_email;
+      if (!users[e]) users[e] = { name: t.autor_name, email: e, threads: 0, posts: 0, letzter: t.created_at };
+      users[e].threads++;
+      if (t.created_at > users[e].letzter) users[e].letzter = t.created_at;
+    });
+    (posts || []).forEach(p => {
+      const e = p.autor_email;
+      if (!users[e]) users[e] = { name: p.autor_name, email: e, threads: 0, posts: 0, letzter: p.created_at };
+      users[e].posts++;
+      if (p.created_at > users[e].letzter) users[e].letzter = p.created_at;
+    });
+
+    const liste = Object.values(users).sort((a,b) => (b.threads + b.posts) - (a.threads + a.posts));
+
+    if (!liste.length) {
+      el.innerHTML = '<p style="color:#555">Keine Forum-Nutzer gefunden.</p>';
+      return;
+    }
+
+    el.innerHTML = `
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th>Threads</th>
+            <th>Posts</th>
+            <th>Letzter Beitrag</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${liste.map(u => {
+            const istGebannt = bannedEmails.includes(u.email);
+            const datum = u.letzter ? new Date(u.letzter).toLocaleDateString('de-DE') : '–';
+            return `<tr class="${istGebannt ? 'banned-row' : ''}">
+              <td>${u.name || '–'}${istGebannt ? '<span class="banned-badge">GEBANNT</span>' : ''}</td>
+              <td style="color:#555;font-size:12px">${u.email}</td>
+              <td>${u.threads}</td>
+              <td>${u.posts}</td>
+              <td style="color:#555;font-size:12px">${datum}</td>
+              <td>
+                ${istGebannt
+                  ? `<button class="btn btn-gray btn-sm" onclick="entbanne('${u.email}')">Entbannen</button>`
+                  : `<button class="btn btn-red btn-sm" onclick="banne('${u.email}', '${(u.name||'').replace(/'/g,'\\\'')}')" >Bannen</button>`
+                }
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch(e) {
+    el.innerHTML = `<div class="err">${e.message}</div>`;
+  }
+}
+
+async function banne(email, name) {
+  if (!confirm(`${name || email} wirklich permanent bannen?\n\nAlle Beiträge werden gelöscht.`)) return;
+
+  const msgEl = document.getElementById('mod-msg');
+  msgEl.className = 'err'; msgEl.innerHTML = '<span class="spinner"></span>Banne…'; msgEl.style.display = 'block';
+
+  try {
+    // Alle Posts + Threads löschen
+    const [{ error: e1 }, { error: e2 }] = await Promise.all([
+      sb.from('forum_posts').delete().eq('autor_email', email),
+      sb.from('forum_threads').delete().eq('autor_email', email)
+    ]);
+    if (e1) throw new Error('Posts: ' + e1.message);
+    if (e2) throw new Error('Threads: ' + e2.message);
+
+    // banned.json aktualisieren
+    const data = await ghGet('banned.json');
+    const aktuell = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    if (!aktuell.includes(email)) aktuell.push(email);
+    await ghPut('banned.json', JSON.stringify(aktuell, null, 2), data.sha, `🚫 User gebannt: ${email}`);
+    bannedEmails = aktuell;
+
+    msgEl.className = 'ok'; msgEl.innerHTML = `✓ ${email} gebannt und alle Beiträge gelöscht.`;
+    setTimeout(() => { msgEl.style.display = 'none'; }, 5000);
+    ladeModerationsdaten();
+  } catch(e) {
+    msgEl.innerHTML = 'Fehler: ' + e.message;
+  }
+}
+
+async function entbanne(email) {
+  if (!confirm(`${email} entbannen?`)) return;
+
+  const msgEl = document.getElementById('mod-msg');
+  msgEl.className = 'err'; msgEl.innerHTML = '<span class="spinner"></span>Entbanne…'; msgEl.style.display = 'block';
+
+  try {
+    const data = await ghGet('banned.json');
+    const aktuell = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    const neu = aktuell.filter(e => e !== email);
+    await ghPut('banned.json', JSON.stringify(neu, null, 2), data.sha, `✅ User entbannt: ${email}`);
+    bannedEmails = neu;
+
+    msgEl.className = 'ok'; msgEl.innerHTML = `✓ ${email} entbannt.`;
+    setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+    ladeModerationsdaten();
+  } catch(e) {
+    msgEl.innerHTML = 'Fehler: ' + e.message;
+  }
+}
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 if (sessionStorage.getItem('auth') === '1') {
   ghToken = localStorage.getItem('gh_token') || '';
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
-  ladeArtikel();
+  init();
 }
 document.getElementById('pw').addEventListener('keydown', e => e.key === 'Enter' && login());
 </script>
