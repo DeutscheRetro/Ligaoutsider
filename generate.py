@@ -361,7 +361,7 @@ def artikel_html(
   <title>{titel} – Ligaoutsider.de</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
+  <link rel="icon" href="../favicon.png" type="image/png"/>
   <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
