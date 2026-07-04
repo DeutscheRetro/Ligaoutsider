@@ -617,6 +617,7 @@ def main():
             })
 
             feed_speichern(bestehende)
+            facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
             neu_generiert += 1
             print(f"  ✅ Gespeichert: {ergebnis['titel'][:60]}")
 
@@ -625,6 +626,29 @@ def main():
     print(f"\n─" * 60)
     print(f"Fertig. {neu_generiert} neue Artikel generiert.")
     print(f"feed.json enthält jetzt {len(bestehende)} Artikel.")
+
+
+def facebook_post(titel: str, artikel_url: str):
+    """Postet neuen Artikel auf Facebook-Seite (benötigt FACEBOOK_PAGE_TOKEN + FACEBOOK_PAGE_ID)."""
+    page_token = os.environ.get("FACEBOOK_PAGE_TOKEN", "")
+    page_id    = os.environ.get("FACEBOOK_PAGE_ID", "")
+    if not page_token or not page_id:
+        return
+    import urllib.request as _req
+    import urllib.parse as _parse
+    data = _parse.urlencode({
+        "message":      f"⚽ {titel}\n\n{artikel_url}",
+        "link":         artikel_url,
+        "access_token": page_token,
+    }).encode()
+    try:
+        _req.urlopen(
+            _req.Request(f"https://graph.facebook.com/v19.0/{page_id}/feed", data=data),
+            timeout=10
+        )
+        print(f"  📘 Facebook-Post erstellt")
+    except Exception as e:
+        print(f"  ⚠️  Facebook-Post fehlgeschlagen: {e}")
 
 
 def sitemap_generieren(artikel_liste: list):
