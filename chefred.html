@@ -87,6 +87,7 @@
   <div id="login-err" style="display:none" class="err"></div>
   <div class="field"><label>Passwort</label><input type="password" id="pw" placeholder="Chefred-Passwort"/></div>
   <div class="field"><label>GitHub Token (einmalig)</label><input type="text" id="gh-token" placeholder="ghp_..."/><p style="font-size:11px;color:#555;margin-top:4px">Wird nur in diesem Browser gespeichert</p></div>
+  <div class="field"><label>Netlify Token (einmalig, für User-Stats)</label><input type="text" id="netlify-token" placeholder="nfp_..."/></div>
   <button class="btn btn-gold" onclick="login()">Einloggen</button>
 </div>
 
@@ -184,19 +185,26 @@ const PASSWORT = 'chefred2026';
 const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const NETLIFY_SITE_ID     = 'cb939f1a-0538-4e1d-ad3d-9ca81bed209a';
+const NETLIFY_IDENTITY_ID = '6a467b53e81902b5ccd77424';
 
-let ghToken   = '';
-let feedDaten = [];
-let feedSha   = '';
+let ghToken      = '';
+let netlifyToken = '';
+let feedDaten    = [];
+let feedSha      = '';
 let bannedEmails = [];
+let netlifyUsers = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 function login() {
-  const pw = document.getElementById('pw').value;
+  const pw  = document.getElementById('pw').value;
   const tok = document.getElementById('gh-token').value.trim();
+  const ntok = document.getElementById('netlify-token').value.trim();
   if (pw !== PASSWORT) { zeigeFehler('login-err', 'Falsches Passwort'); return; }
-  if (tok) localStorage.setItem('gh_token', tok);
-  ghToken = localStorage.getItem('gh_token') || '';
+  if (tok)  localStorage.setItem('gh_token', tok);
+  if (ntok) localStorage.setItem('netlify_token', ntok);
+  ghToken      = localStorage.getItem('gh_token') || '';
+  netlifyToken = localStorage.getItem('netlify_token') || '';
   if (!ghToken) { zeigeFehler('login-err', 'GitHub Token fehlt'); return; }
   sessionStorage.setItem('auth', '1');
   document.getElementById('page-login').style.display = 'none';
@@ -239,10 +247,21 @@ async function ghDelete(path, sha, message) {
   if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
 }
 
+// ─── Netlify Identity API ─────────────────────────────────────────────────────
+async function ladeNetlifyUsers() {
+  if (!netlifyToken) return;
+  try {
+    const r = await fetch(
+      `https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/identity/${NETLIFY_IDENTITY_ID}/users?per_page=1000`,
+      { headers: { Authorization: `Bearer ${netlifyToken}` } }
+    );
+    if (r.ok) netlifyUsers = await r.json();
+  } catch(e) { /* optional */ }
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
-  // Parallel: Artikel + banned.json laden
-  await Promise.all([ladeArtikel(), ladeBanned()]);
+  await Promise.all([ladeArtikel(), ladeBanned(), ladeNetlifyUsers()]);
 }
 
 async function ladeBanned() {
@@ -490,7 +509,22 @@ function renderStats() {
   // Letzten 14 Tage für Balken (lesbar)
   const letzte14 = Object.entries(proTag).slice(-14);
 
+  // User-Stats aus Netlify
+  const totalUser     = netlifyUsers.length;
+  const confirmedUser = netlifyUsers.filter(u => u.confirmed_at).length;
+  const heute7d = new Date(heute); heute7d.setDate(heute.getDate() - 7);
+  const neueUser7d = netlifyUsers.filter(u => u.created_at && new Date(u.created_at) > heute7d).length;
+
   document.getElementById('stats-inhalt').innerHTML = `
+    <div class="section-title">Nutzer (Netlify Identity)</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num">${totalUser}</div><div class="lbl">Registriert gesamt</div></div>
+      <div class="stat-card"><div class="num">${confirmedUser}</div><div class="lbl">Bestätigt</div></div>
+      <div class="stat-card"><div class="num">${neueUser7d}</div><div class="lbl">Neu (7 Tage)</div></div>
+      <div class="stat-card"><div class="num">${bannedEmails.length}</div><div class="lbl">Gebannt</div></div>
+    </div>
+
+    <div class="section-title">Artikel</div>
     <div class="stats-grid">
       <div class="stat-card"><div class="num">${feedDaten.length}</div><div class="lbl">Artikel gesamt</div></div>
       <div class="stat-card"><div class="num">${heute_count}</div><div class="lbl">Heute</div></div>
@@ -650,7 +684,8 @@ async function entbanne(email) {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 if (sessionStorage.getItem('auth') === '1') {
-  ghToken = localStorage.getItem('gh_token') || '';
+  ghToken      = localStorage.getItem('gh_token') || '';
+  netlifyToken = localStorage.getItem('netlify_token') || '';
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
   init();
