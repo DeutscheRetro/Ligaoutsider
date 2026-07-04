@@ -557,10 +557,23 @@ def main():
             if not url or not titel:
                 continue
 
-            # Gesperrte Domains
-            _BLOCKED_DOMAINS = ("ligainsider.de",)
-            if any(d in url for d in _BLOCKED_DOMAINS):
-                continue
+            # Ligainsider: Originalquelle extrahieren, nie LI als Quelle anzeigen
+            if "ligainsider.de" in url:
+                try:
+                    import urllib.request as _ureq
+                    _req = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                    _html = _ureq.urlopen(_req, timeout=8).read().decode("utf-8", errors="ignore")
+                    _m = re.search(
+                        r'<strong>Quelle:</strong>\s*<a[^>]+href="([^"]+)"', _html
+                    )
+                    if _m:
+                        url = _m.group(1)
+                        from urllib.parse import urlparse as _up
+                        quelle_name = _up(url).netloc.replace("www.", "")
+                    else:
+                        continue  # kein Original-Link → überspringen
+                except Exception:
+                    continue
 
             if schon_verarbeitet(url):
                 print(f"  ↩  Übersprungen (schon vorhanden): {titel[:60]}")
