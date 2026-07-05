@@ -179,23 +179,45 @@ VEREIN_WAPPEN = {
 
 # Mapping: Texttreffer → data-filter-Schlüssel (wie in index.html)
 VEREIN_FILTER = {
-    "fc bayern münchen": "Bayern", "fc bayern": "Bayern", "bayern": "Bayern", "fcb": "Bayern",
-    "borussia dortmund": "Dortmund", "dortmund": "Dortmund", "bvb": "Dortmund",
-    "rb leipzig": "Leipzig", "leipzig": "Leipzig",
-    "bayer 04": "Leverkusen", "bayer leverkusen": "Leverkusen", "leverkusen": "Leverkusen",
-    "eintracht frankfurt": "Frankfurt", "eintracht": "Frankfurt", "frankfurt": "Frankfurt", "sge": "Frankfurt",
-    "vfb stuttgart": "Stuttgart", "stuttgart": "Stuttgart",
-    "borussia mönchengladbach": "Gladbach", "mönchengladbach": "Gladbach", "gladbach": "Gladbach",
+    # Bayern – eindeutig genug als Eigenname
+    "fc bayern münchen": "Bayern", "fc bayern": "Bayern", "bayern münchen": "Bayern",
+    "fcb": "Bayern", "fc-bayern": "Bayern",
+    # Dortmund
+    "borussia dortmund": "Dortmund", "bvb": "Dortmund", "dortmund": "Dortmund",
+    # Leipzig – "leipzig" allein ist ok (keine große andere Fußball-Relevanz)
+    "rb leipzig": "Leipzig", "rasenballsport": "Leipzig", "leipzig": "Leipzig",
+    # Leverkusen – "leverkusen" eindeutig
+    "bayer 04 leverkusen": "Leverkusen", "bayer leverkusen": "Leverkusen",
+    "bayer 04": "Leverkusen", "leverkusen": "Leverkusen",
+    # Frankfurt – nur compound; alle kürzeren Keywords zu generisch
+    "eintracht frankfurt": "Frankfurt",
+    # Stuttgart – "stuttgart" oft Stadtname in Bundesliga-Kontext, compound bevorzugen
+    "vfb stuttgart": "Stuttgart", "vfb": "Stuttgart",
+    # Gladbach
+    "borussia mönchengladbach": "Gladbach", "mönchengladbach": "Gladbach",
+    "gladbach": "Gladbach", "bmg": "Gladbach", "die fohlen": "Gladbach",
+    # Freiburg – "freiburg" allein ok
     "sc freiburg": "Freiburg", "freiburg": "Freiburg",
-    "1. fc union berlin": "Union", "union berlin": "Union", "union": "Union",
-    "1. fsv mainz": "Mainz", "fsv mainz": "Mainz", "mainz": "Mainz",
+    # Union – "union" allein viel zu generisch
+    "1. fc union berlin": "Union", "union berlin": "Union", "fc union": "Union",
+    # Mainz – "mainz" allein ok (keine andere Bundesliga-Relevanz)
+    "1. fsv mainz": "Mainz", "fsv mainz": "Mainz", "mainz 05": "Mainz", "mainz": "Mainz",
+    # Augsburg – ok
     "fc augsburg": "Augsburg", "augsburg": "Augsburg",
+    # Werder – eindeutig
     "sv werder bremen": "Werder", "werder bremen": "Werder", "werder": "Werder",
+    # Hoffenheim – ok
     "tsg hoffenheim": "Hoffenheim", "tsg 1899": "Hoffenheim", "hoffenheim": "Hoffenheim",
-    "hamburger sv": "Hamburger", "hamburger": "Hamburger", "hsv": "Hamburger",
-    "1. fc köln": "Köln", "fc köln": "Köln", "köln": "Köln", "effzeh": "Köln",
-    "fc schalke 04": "Schalke", "fc schalke": "Schalke", "schalke": "Schalke",
+    # HSV – "hamburger" allein zu generisch
+    "hamburger sv": "Hamburger", "hsv": "Hamburger",
+    # Köln – "köln" oft Stadtname, compound bevorzugen
+    "1. fc köln": "Köln", "fc köln": "Köln", "effzeh": "Köln",
+    # Schalke
+    "fc schalke 04": "Schalke", "fc schalke": "Schalke", "schalke 04": "Schalke",
+    "schalke": "Schalke", "s04": "Schalke",
+    # Paderborn
     "sc paderborn": "Paderborn", "paderborn": "Paderborn",
+    # Elversberg
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
