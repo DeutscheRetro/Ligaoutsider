@@ -181,7 +181,7 @@ VEREIN_WAPPEN = {
 VEREIN_FILTER = {
     # Bayern – eindeutig genug als Eigenname
     "fc bayern münchen": "Bayern", "fc bayern": "Bayern", "bayern münchen": "Bayern",
-    "fcb": "Bayern", "fc-bayern": "Bayern",
+    "fc-bayern": "Bayern",
     # Dortmund
     "borussia dortmund": "Dortmund", "bvb": "Dortmund", "dortmund": "Dortmund",
     # Leipzig – "leipzig" allein ist ok (keine große andere Fußball-Relevanz)
@@ -716,10 +716,14 @@ def main():
                 src = eintrag.get("source", {})
                 if isinstance(src, dict) and src.get("title"):
                     quelle_name = src["title"]
-                elif hasattr(src, "title"):
+                elif hasattr(src, "title") and src.title:
                     quelle_name = src.title
-                from urllib.parse import urlparse as _up
-                quelle_name = _up(url).netloc.replace("www.", "") or quelle_name
+                else:
+                    # Fallback: Domain aus dem echten Artikel-Link (nicht google.com)
+                    from urllib.parse import urlparse as _up
+                    _netloc = _up(url).netloc.replace("www.", "")
+                    if _netloc and "google" not in _netloc:
+                        quelle_name = _netloc
 
             # Bei Reddit: echte Quell-URL aus dem Post holen
             ist_reddit = "reddit.com" in feed_url

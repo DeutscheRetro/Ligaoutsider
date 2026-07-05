@@ -10,7 +10,7 @@ FEED_JSON = Path("feed.json")
 
 VEREIN_FILTER = {
     "fc bayern münchen": "Bayern", "fc bayern": "Bayern", "bayern münchen": "Bayern",
-    "fcb": "Bayern", "fc-bayern": "Bayern",
+    "fc-bayern": "Bayern",
     "borussia dortmund": "Dortmund", "bvb": "Dortmund", "dortmund": "Dortmund",
     "rb leipzig": "Leipzig", "rasenballsport": "Leipzig", "leipzig": "Leipzig",
     "bayer 04 leverkusen": "Leverkusen", "bayer leverkusen": "Leverkusen",
