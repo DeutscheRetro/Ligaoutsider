@@ -331,7 +331,8 @@
 
     // ─── Feed & Filter ────────────────────────────────────────────────────────
     let alleArtikel   = [];
-    let aktiverFilter = null; // null = alle
+    const _urlFilter = new URLSearchParams(location.search).get('filter');
+    let aktiverFilter = _urlFilter || null; // null = alle
 
     function feedItem(a) {
       const slug = a.pfad.replace('artikel/', '').replace('.html', '');
@@ -354,7 +355,9 @@
       const q = (document.getElementById('search-input').value || '').trim().toLowerCase();
       return alleArtikel.filter(a => {
         const matchSearch = !q || a.titel.toLowerCase().includes(q);
-        const matchFilter = !aktiverFilter || a.titel.toLowerCase().includes(aktiverFilter.toLowerCase());
+        const matchFilter = !aktiverFilter ||
+          (a.vereine && a.vereine.includes(aktiverFilter)) ||
+          a.titel.toLowerCase().includes(aktiverFilter.toLowerCase());
         return matchSearch && matchFilter;
       });
     }

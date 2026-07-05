@@ -74,6 +74,24 @@
 .artikel-text p { margin-bottom: 16px; }
 .artikel-text p:last-child { margin-bottom: 0; }
 
+.verein-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.verein-tag {
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.verein-tag:hover { background: var(--accent); color: #000; }
+
 .artikel-quelle {
   margin-top: 24px;
   padding-top: 16px;

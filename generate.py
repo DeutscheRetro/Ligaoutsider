@@ -177,6 +177,37 @@ VEREIN_WAPPEN = {
     "elversberg":       "../logos/elversberg.png",
 }
 
+# Mapping: Texttreffer → data-filter-Schlüssel (wie in index.html)
+VEREIN_FILTER = {
+    "fc bayern münchen": "Bayern", "fc bayern": "Bayern", "bayern": "Bayern", "fcb": "Bayern",
+    "borussia dortmund": "Dortmund", "dortmund": "Dortmund", "bvb": "Dortmund",
+    "rb leipzig": "Leipzig", "leipzig": "Leipzig",
+    "bayer 04": "Leverkusen", "bayer leverkusen": "Leverkusen", "leverkusen": "Leverkusen",
+    "eintracht frankfurt": "Frankfurt", "eintracht": "Frankfurt", "frankfurt": "Frankfurt", "sge": "Frankfurt",
+    "vfb stuttgart": "Stuttgart", "stuttgart": "Stuttgart",
+    "borussia mönchengladbach": "Gladbach", "mönchengladbach": "Gladbach", "gladbach": "Gladbach",
+    "sc freiburg": "Freiburg", "freiburg": "Freiburg",
+    "1. fc union berlin": "Union", "union berlin": "Union", "union": "Union",
+    "1. fsv mainz": "Mainz", "fsv mainz": "Mainz", "mainz": "Mainz",
+    "fc augsburg": "Augsburg", "augsburg": "Augsburg",
+    "sv werder bremen": "Werder", "werder bremen": "Werder", "werder": "Werder",
+    "tsg hoffenheim": "Hoffenheim", "tsg 1899": "Hoffenheim", "hoffenheim": "Hoffenheim",
+    "hamburger sv": "Hamburger", "hamburger": "Hamburger", "hsv": "Hamburger",
+    "1. fc köln": "Köln", "fc köln": "Köln", "köln": "Köln", "effzeh": "Köln",
+    "fc schalke 04": "Schalke", "fc schalke": "Schalke", "schalke": "Schalke",
+    "sc paderborn": "Paderborn", "paderborn": "Paderborn",
+    "sv elversberg": "Elversberg", "elversberg": "Elversberg",
+}
+
+def vereine_im_text(text: str) -> list[str]:
+    """Gibt alle Filter-Schlüssel zurück für Klubs die im Text erwähnt werden."""
+    t = text.lower()
+    gefunden = set()
+    for key in sorted(VEREIN_FILTER, key=len, reverse=True):
+        if key in t:
+            gefunden.add(VEREIN_FILTER[key])
+    return sorted(gefunden)
+
 BADGE_KATEGORIEN = {
     "transfer":    ("Transfer",    "#e8c000", "#000"),
     "verletzung":  ("Verletzung",  "#e53935", "#fff"),
@@ -394,6 +425,7 @@ def artikel_html(
     quelle_url: str,
     datum: str,
     wappen_url: str,
+    vereine: list = None,
 ) -> str:
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
@@ -402,6 +434,13 @@ def artikel_html(
         if wappen_url else
         '<div class="artikel-wappen-placeholder">BL</div>'
     )
+    vereine_tags_html = ""
+    if vereine:
+        tags = "".join(
+            f'<a href="../index.html?filter={v}" class="verein-tag">{v}</a>'
+            for v in vereine
+        )
+        vereine_tags_html = f'<div class="verein-tags">{tags}</div>'
 
     artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
@@ -501,6 +540,8 @@ def artikel_html(
         {absaetze}
       </div>
 
+      {vereine_tags_html}
+
       <div class="artikel-quelle">
         Originalquelle: <a href="{quelle_url}" target="_blank" rel="noopener">{quelle_name}</a>
       </div>
@@ -568,6 +609,7 @@ def main():
 
         print(f"\nLese Feed: {feed_url}")
         feed = feedparser.parse(feed_url)
+        ist_google_news = "news.google.com" in feed_url
         quelle_name = feed.feed.get("title", feed_url)
 
         for eintrag in feed.entries:
@@ -577,6 +619,16 @@ def main():
             url   = eintrag.get("link", "")
             titel = eintrag.get("title", "")
             beschr = eintrag.get("summary", eintrag.get("description", ""))
+
+            # Bei Google News: echte Quelle aus entry.source extrahieren
+            if ist_google_news:
+                src = eintrag.get("source", {})
+                if isinstance(src, dict) and src.get("title"):
+                    quelle_name = src["title"]
+                elif hasattr(src, "title"):
+                    quelle_name = src.title
+                from urllib.parse import urlparse as _up
+                quelle_name = _up(url).netloc.replace("www.", "") or quelle_name
 
             # Bei Reddit: echte Quell-URL aus dem Post holen
             ist_reddit = "reddit.com" in feed_url
@@ -662,6 +714,8 @@ def main():
 
             aid        = artikel_id(url)
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+            volltext_fuer_vereine = ergebnis["titel"] + " " + ergebnis["text"] + " " + beschr
+            vereine    = vereine_im_text(volltext_fuer_vereine)
             wappen_url = verein_wappen_url(ergebnis["titel"] + " " + beschr)
             html       = artikel_html(
                 datei_id   = aid,
@@ -672,6 +726,7 @@ def main():
                 quelle_url = url,
                 datum      = datum,
                 wappen_url = wappen_url,
+                vereine    = vereine,
             )
 
             datei_pfad = ARTIKEL_ORDNER / f"{aid}.html"
@@ -688,6 +743,7 @@ def main():
                 "badge_fg":   badge_fg,
                 "datum":      datum,
                 "wappen_url": wappen_url,
+                "vereine":    vereine,
                 "pfad":       f"artikel/{aid}.html",
             })
 
