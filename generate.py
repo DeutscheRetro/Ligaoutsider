@@ -462,8 +462,8 @@ Antworte ausschließlich im folgenden JSON-Format (kein Markdown drumherum):
 }}"""
 
     antwort = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=1000,
+        model="claude-sonnet-4-6",
+        max_tokens=1200,
         messages=[{"role": "user", "content": prompt}]
     )
 
