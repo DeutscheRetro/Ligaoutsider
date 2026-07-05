@@ -430,14 +430,14 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
         messages=[{
             "role": "user",
             "content": (
-                f"Ist das eine relevante News über die 1. Bundesliga (Saison 2026/27)?\n"
-                f"Die 18 Klubs der 1. Bundesliga sind: {klubs}.\n"
+                f"Ist das eine relevante Fußball-News über einen der folgenden Klubs?\n"
+                f"Klubs: {klubs}.\n"
                 f"Antworte NUR mit JA wenn:\n"
-                f"- Es direkt um mindestens einen dieser 18 Klubs geht (Transfer, Spiel, Trainer, Verletzung, Vertrag)\n"
-                f"- Es eine echte redaktionelle News ist (kein Reddit-Userpost, kein Werbeartikel, kein Quiz)\n"
+                f"- Es direkt um mindestens einen dieser Klubs geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
+                f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
                 f"- Es KEIN WM-, EM- oder Nationalmannschafts-Thema ist (auch kein Interview mit Nationaltrainern wie Nagelsmann)\n"
-                f"- Es KEINE 2. Liga, Champions League ohne BL-Bezug oder andere Liga ist\n"
-                f"- Der Hauptfokus auf der 1. Bundesliga liegt, nicht nur eine Randerwähnung\n\n"
+                f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
+                f"- Der Fokus auf dem Klub liegt, nicht nur eine Randerwähnung\n\n"
                 f"Titel: {titel}\nBeschreibung: {beschreibung}\n\n"
                 f"Antworte nur mit JA oder NEIN."
             )
