@@ -221,19 +221,24 @@ VEREIN_FILTER = {
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
+def _count_key(key: str, text: str) -> int:
+    """Zählt Vorkommen von key in text mit Wortgrenzen (verhindert Substring-false-positives)."""
+    return len(re.findall(r'(?<!\w)' + re.escape(key) + r'(?!\w)', text))
+
+
 def vereine_im_text(titel: str, text: str) -> list[str]:
-    """Taggt Club nur wenn er im Titel steht ODER ≥2x im Artikeltext vorkommt."""
+    """Taggt Club nur wenn er im Titel steht ODER ≥2x im Artikeltext vorkommt.
+    Nutzt Wortgrenzen um Substrings wie 'anspruchsvollem' → 'hsv' zu verhindern."""
     t_lower = titel.lower()
     body_lower = text.lower()
     gefunden = set()
-    # Bereits geprüfte Club-Namen überspringen (längste Keys zuerst = kein Double-Count)
     bereits_gefunden: set[str] = set()
     for key in sorted(VEREIN_FILTER, key=len, reverse=True):
         club = VEREIN_FILTER[key]
         if club in bereits_gefunden:
             continue
-        in_titel = key in t_lower
-        count_body = body_lower.count(key)
+        in_titel = _count_key(key, t_lower) > 0
+        count_body = _count_key(key, body_lower)
         if in_titel or count_body >= 2:
             gefunden.add(club)
             bereits_gefunden.add(club)

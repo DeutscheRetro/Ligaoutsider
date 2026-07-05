@@ -38,6 +38,9 @@ VEREIN_FILTER = {
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
+def _count_key(key, text):
+    return len(re.findall(r'(?<!\w)' + re.escape(key) + r'(?!\w)', text))
+
 def vereine_im_text(titel: str, body: str) -> list:
     t_lower = titel.lower()
     body_lower = body.lower()
@@ -47,7 +50,7 @@ def vereine_im_text(titel: str, body: str) -> list:
         club = VEREIN_FILTER[key]
         if club in bereits:
             continue
-        if key in t_lower or body_lower.count(key) >= 2:
+        if _count_key(key, t_lower) > 0 or _count_key(key, body_lower) >= 2:
             gefunden.add(club)
             bereits.add(club)
     return sorted(gefunden)
