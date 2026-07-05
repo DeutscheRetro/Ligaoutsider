@@ -246,10 +246,27 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60
 
 
 def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende_titel: list) -> bool:
-    """Prüft ob eine Meldung inhaltlich schon vorhanden ist oder eine neue Entwicklung darstellt."""
+    """Prüft ob eine Meldung inhaltlich schon vorhanden ist oder eine echte neue Entwicklung darstellt."""
     if not bestehende_titel:
         return False
-    titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-50:])
+
+    # Schnell-Check: signifikante Namens-/Worteüberschneidung mit bestehendem Titel
+    def _schluesselwoerter(t: str) -> set:
+        stopwords = {"der", "die", "das", "ein", "eine", "und", "mit", "bei", "vor",
+                     "nach", "von", "an", "im", "am", "auf", "für", "zu", "in", "ist",
+                     "aus", "fc", "sv", "rb", "vfb", "sc", "bsc", "tsg"}
+        return {w.lower() for w in re.split(r'\W+', t) if len(w) > 3 and w.lower() not in stopwords}
+
+    neu_woerter = _schluesselwoerter(neuer_titel + " " + beschreibung)
+    for alt in bestehende_titel[-100:]:
+        alt_woerter = _schluesselwoerter(alt)
+        if neu_woerter and alt_woerter:
+            overlap = len(neu_woerter & alt_woerter) / min(len(neu_woerter), len(alt_woerter))
+            if overlap >= 0.6:  # 60% Schlüsselwort-Überschneidung → sofort Duplikat
+                return True
+
+    # KI-Check gegen alle 100 Titel
+    titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-100:])
     beschr_kurz = beschreibung[:400] if beschreibung else "(keine Beschreibung)"
     antwort = client.messages.create(
         model="claude-haiku-4-5-20251001",
@@ -263,11 +280,12 @@ def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende_titel: list) ->
                 f"Inhalt: {beschr_kurz}\n\n"
                 f"BEREITS VERÖFFENTLICHTE ARTIKEL:\n{titel_liste}\n\n"
                 f"Antworte JA (Duplikat) wenn:\n"
-                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt (gleicher Transfer, gleiches Gerücht, gleiche Aussage) – egal ob andere Quelle oder Formulierung\n\n"
-                f"Antworte NEIN (neue Entwicklung) wenn:\n"
-                f"- Es eine neue Entwicklung zum Thema ist: z.B. Dementi nach Gerücht, offizieller Transfer nach Spekulation, Einigung nach Verhandlungen, Platzen eines Deals\n"
-                f"- Die beteiligten Personen oder Vereine komplett andere sind\n"
-                f"- Es sich um ein anderes Thema handelt\n\n"
+                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt – egal ob andere Quelle, andere Formulierung oder leicht andere Details\n"
+                f"- Derselbe Spieler + dieselbe Situation (Verletzung, Transfer, Vertrag) bereits vorhanden ist\n\n"
+                f"Antworte NEIN nur wenn:\n"
+                f"- Es eine klare neue Entwicklung ist (Dementi, offizielle Bestätigung nach Gerücht, Platzen eines Deals)\n"
+                f"- Komplett andere Personen/Vereine beteiligt sind\n\n"
+                f"Im Zweifel: JA.\n"
                 f"Antworte nur mit JA oder NEIN."
             )
         }]
