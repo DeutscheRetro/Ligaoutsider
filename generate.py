@@ -221,13 +221,22 @@ VEREIN_FILTER = {
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
-def vereine_im_text(text: str) -> list[str]:
-    """Gibt alle Filter-Schlüssel zurück für Klubs die im Text erwähnt werden."""
-    t = text.lower()
+def vereine_im_text(titel: str, text: str) -> list[str]:
+    """Taggt Club nur wenn er im Titel steht ODER ≥2x im Artikeltext vorkommt."""
+    t_lower = titel.lower()
+    body_lower = text.lower()
     gefunden = set()
+    # Bereits geprüfte Club-Namen überspringen (längste Keys zuerst = kein Double-Count)
+    bereits_gefunden: set[str] = set()
     for key in sorted(VEREIN_FILTER, key=len, reverse=True):
-        if key in t:
-            gefunden.add(VEREIN_FILTER[key])
+        club = VEREIN_FILTER[key]
+        if club in bereits_gefunden:
+            continue
+        in_titel = key in t_lower
+        count_body = body_lower.count(key)
+        if in_titel or count_body >= 2:
+            gefunden.add(club)
+            bereits_gefunden.add(club)
     return sorted(gefunden)
 
 BADGE_KATEGORIEN = {
@@ -797,8 +806,7 @@ def main():
 
             aid        = artikel_id(url)
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
-            volltext_fuer_vereine = ergebnis["titel"] + " " + ergebnis["text"] + " " + beschr
-            vereine    = vereine_im_text(volltext_fuer_vereine)
+            vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"] + " " + beschr)
             wappen_url = verein_wappen_url(ergebnis["titel"] + " " + beschr)
             html       = artikel_html(
                 datei_id   = aid,

@@ -38,12 +38,18 @@ VEREIN_FILTER = {
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
-def vereine_im_text(text: str) -> list:
-    t = text.lower()
+def vereine_im_text(titel: str, body: str) -> list:
+    t_lower = titel.lower()
+    body_lower = body.lower()
     gefunden = set()
+    bereits: set = set()
     for key in sorted(VEREIN_FILTER, key=len, reverse=True):
-        if key in t:
-            gefunden.add(VEREIN_FILTER[key])
+        club = VEREIN_FILTER[key]
+        if club in bereits:
+            continue
+        if key in t_lower or body_lower.count(key) >= 2:
+            gefunden.add(club)
+            bereits.add(club)
     return sorted(gefunden)
 
 def artikel_text(artikel_id: str) -> str:
@@ -60,8 +66,9 @@ def artikel_text(artikel_id: str) -> str:
 feed = json.loads(FEED_JSON.read_text(encoding="utf-8"))
 
 for artikel in feed:
-    text = artikel.get("titel", "") + " " + artikel_text(artikel["id"])
-    artikel["vereine"] = vereine_im_text(text)
+    titel = artikel.get("titel", "")
+    body = artikel_text(artikel["id"])
+    artikel["vereine"] = vereine_im_text(titel, body)
 
 FEED_JSON.write_text(json.dumps(feed, ensure_ascii=False, indent=2), encoding="utf-8")
 print(f"Backfill abgeschlossen: {len(feed)} Artikel aktualisiert.")
