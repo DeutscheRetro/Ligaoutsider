@@ -467,7 +467,7 @@ def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_u
 
 STRIKTE REGELN:
 - Nur Fakten aus dem Quelltext verwenden. KEINE erfundenen Details.
-- Wenn der Quelltext wenig hergibt: KÜRZER schreiben (2 Absätze), nicht mit generischen Sätzen auffüllen.
+- Wenn der Quelltext wenig hergibt: Kontext zum Spieler einbauen – z.B. wie er letzte Saison spielte, seit wann er beim Club ist, woher er kam, Vertragssituation. Nur gesichertes Allgemeinwissen verwenden, keine Erfindungen.
 - VERBOTEN: Sätze wie „Solche Situationen sind im modernen Fußball nicht ungewöhnlich", „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex" oder ähnliche Plattitüden.
 - Spielernamen korrekt schreiben inkl. Akzente (z.B. João, Raphaël, Øyvind).
 - Keine Gedankenstriche als Satzzeichen. Klare, vollständige Sätze, max. 25 Wörter.
