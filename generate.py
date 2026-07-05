@@ -463,27 +463,26 @@ def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_u
     volltext = quellartikel_laden(quelle_url)
     quell_info = f"VOLLTEXT DER ORIGINALQUELLE:\n{volltext}" if volltext else f"BESCHREIBUNG: {beschreibung}"
 
-    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Dein Stil orientiert sich an kicker.de: sachlich, präzise, informativ. Fachkundige Sprache ohne Reißerisches. Keine KI-Floskeln, kein aufgeblasener Stil.
+    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret. Keine KI-Floskeln, kein aufgeblasener Stil.
 
-Strikte Regeln:
-- Seriöser Sportzeitungsstil wie kicker.de oder Sportschau
-- KEINE Gedankenstriche oder Bindestriche als Satzzeichen mitten im Satz
-- Klare, vollständige Sätze. Maximal 25 Wörter pro Satz.
-- Fakten zuerst. Hintergründe und Einordnung danach.
-- Keine Ausrufezeichen, keine Reißer-Formulierungen
-- Keine Aufzählungen, keine Bullet Points
-- Schreib wie ein erfahrener Fußballjournalist
-- Erfinde KEINE Fakten die nicht im Quelltext stehen
+STRIKTE REGELN:
+- Nur Fakten aus dem Quelltext verwenden. KEINE erfundenen Details.
+- Wenn der Quelltext wenig hergibt: KÜRZER schreiben (2 Absätze), nicht mit generischen Sätzen auffüllen.
+- VERBOTEN: Sätze wie „Solche Situationen sind im modernen Fußball nicht ungewöhnlich", „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex" oder ähnliche Plattitüden.
+- Spielernamen korrekt schreiben inkl. Akzente (z.B. João, Raphaël, Øyvind).
+- Keine Gedankenstriche als Satzzeichen. Klare, vollständige Sätze, max. 25 Wörter.
+- Keine Ausrufezeichen, keine Reißer-Formulierungen, keine Bullet Points.
+- Fakten zuerst, Einordnung nur wenn der Quelltext dafür Grundlage bietet.
 
-Basierend auf dieser Meldung:
+QUELLE:
 TITEL: {titel}
 QUELLE: {quelle_name} ({quelle_url})
 {quell_info}
 
 Erstelle:
-1. Einen präzisen, informativen Titel im Kicker-Stil (max. 80 Zeichen, keine Bindestriche als Satzzeichen)
-2. Drei bis vier Absätze eigener Text auf Deutsch
-3. Eine Kategorie aus: transfer, verletzung, aufstellung, interview, analyse, news
+1. Präzisen Titel im Kicker-Stil (max. 80 Zeichen)
+2. Zwei bis vier Absätze – so viele wie die Quellinfos rechtfertigen, nicht mehr
+3. Kategorie aus: transfer, verletzung, aufstellung, interview, analyse, news
 
 Antworte ausschließlich im folgenden JSON-Format (kein Markdown drumherum):
 {{
