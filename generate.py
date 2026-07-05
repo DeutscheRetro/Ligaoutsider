@@ -296,29 +296,69 @@ def feed_speichern(artikel_liste: list):
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60.0)
 
 
-def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende_titel: list) -> bool:
-    """Prüft ob eine Meldung inhaltlich schon vorhanden ist oder eine echte neue Entwicklung darstellt."""
-    if not bestehende_titel:
+def _schluesselwoerter(t: str) -> set:
+    stopwords = {"der", "die", "das", "ein", "eine", "und", "mit", "bei", "vor",
+                 "nach", "von", "an", "im", "am", "auf", "für", "zu", "in", "ist",
+                 "aus", "fc", "sv", "rb", "vfb", "sc", "bsc", "tsg"}
+    return {w.lower() for w in re.split(r'\W+', t) if len(w) > 3 and w.lower() not in stopwords}
+
+
+def _artikel_text_laden(artikel_id_str: str) -> str:
+    """Lädt Plaintext eines bestehenden Artikels aus dem HTML (max 800 Zeichen)."""
+    pfad = ARTIKEL_ORDNER / f"{artikel_id_str}.html"
+    if not pfad.exists():
+        return ""
+    try:
+        html = pfad.read_text(encoding="utf-8")
+        # Nur artikel-text div
+        m = re.search(r'<div class="artikel-text">(.*?)</div>', html, re.DOTALL)
+        block = m.group(1) if m else html
+        text = re.sub(r'<[^>]+>', ' ', block)
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text[:800]
+    except Exception:
+        return ""
+
+
+def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
+    """Prüft ob Meldung inhaltlich schon vorhanden oder echte neue Entwicklung.
+    bestehende: Liste von Artikel-Dicts (mit 'id' und 'titel').
+    """
+    if not bestehende:
         return False
 
-    # Schnell-Check: signifikante Namens-/Worteüberschneidung mit bestehendem Titel
-    def _schluesselwoerter(t: str) -> set:
-        stopwords = {"der", "die", "das", "ein", "eine", "und", "mit", "bei", "vor",
-                     "nach", "von", "an", "im", "am", "auf", "für", "zu", "in", "ist",
-                     "aus", "fc", "sv", "rb", "vfb", "sc", "bsc", "tsg"}
-        return {w.lower() for w in re.split(r'\W+', t) if len(w) > 3 and w.lower() not in stopwords}
+    bestehende_titel = [a["titel"] if isinstance(a, dict) else a for a in bestehende]
 
     neu_woerter = _schluesselwoerter(neuer_titel + " " + beschreibung)
-    for alt in bestehende_titel[-100:]:
-        alt_woerter = _schluesselwoerter(alt)
+
+    # Ähnliche Artikel finden (Keyword-Overlap ≥ 40%)
+    aehnliche = []
+    for a in bestehende[-100:]:
+        titel = a["titel"] if isinstance(a, dict) else a
+        alt_woerter = _schluesselwoerter(titel)
         if neu_woerter and alt_woerter:
             overlap = len(neu_woerter & alt_woerter) / min(len(neu_woerter), len(alt_woerter))
-            if overlap >= 0.6:  # 60% Schlüsselwort-Überschneidung → sofort Duplikat
-                return True
+            if overlap >= 0.6:
+                return True  # Sehr hoher Overlap → sofort Duplikat
+            if overlap >= 0.4:
+                aehnliche.append(a)
 
-    # KI-Check gegen alle 100 Titel
+    # KI-Check mit Volltexten ähnlicher Artikel
     titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-100:])
     beschr_kurz = beschreibung[:400] if beschreibung else "(keine Beschreibung)"
+
+    verwandte_texte = ""
+    for a in aehnliche[:3]:  # max 3 ähnliche Artikel vollständig laden
+        if isinstance(a, dict) and "id" in a:
+            txt = _artikel_text_laden(a["id"])
+            if txt:
+                verwandte_texte += f"\n---\nTitel: {a['titel']}\nText: {txt}\n"
+
+    verwandte_section = (
+        f"\nBESONDERS ÄHNLICHE BEREITS VERÖFFENTLICHTE ARTIKEL (Volltext):\n{verwandte_texte}"
+        if verwandte_texte else ""
+    )
+
     antwort = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=10,
@@ -329,13 +369,14 @@ def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende_titel: list) ->
                 f"NEUE MELDUNG:\n"
                 f"Titel: {neuer_titel}\n"
                 f"Inhalt: {beschr_kurz}\n\n"
-                f"BEREITS VERÖFFENTLICHTE ARTIKEL:\n{titel_liste}\n\n"
+                f"BEREITS VERÖFFENTLICHTE ARTIKEL (Titel):\n{titel_liste}"
+                f"{verwandte_section}\n\n"
                 f"Antworte JA (Duplikat) wenn:\n"
-                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt – egal ob andere Quelle, andere Formulierung oder leicht andere Details\n"
-                f"- Derselbe Spieler + dieselbe Situation (Verletzung, Transfer, Vertrag) bereits vorhanden ist\n\n"
+                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt – egal ob andere Quelle oder Formulierung\n"
+                f"- Derselbe Spieler + dieselbe Situation (gleicher Transferstand, gleiche Verletzung) bereits vorhanden\n\n"
                 f"Antworte NEIN nur wenn:\n"
-                f"- Es eine klare neue Entwicklung ist (Dementi, offizielle Bestätigung nach Gerücht, Platzen eines Deals)\n"
-                f"- Komplett andere Personen/Vereine beteiligt sind\n\n"
+                f"- Klare neue Entwicklung: neues Angebot, Einigung, Dementi, Platzen des Deals, Bestätigung nach Gerücht\n"
+                f"- Komplett andere Personen/Vereine\n\n"
                 f"Im Zweifel: JA.\n"
                 f"Antworte nur mit JA oder NEIN."
             )
@@ -716,9 +757,9 @@ def main():
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 continue
 
-            # Duplikat-Check gegen bestehende Artikel-Titel + raw RSS-Titel dieses Laufs
-            bestehende_titel = rss_titel_dieser_lauf + [a["titel"] for a in bestehende]
-            if ist_duplikat(titel, beschr, bestehende_titel):
+            # Duplikat-Check: RSS-Titel dieses Laufs (schnell) + bestehende Artikel (mit Volltext-KI)
+            rss_pseudo = [{"id": "", "titel": t} for t in rss_titel_dieser_lauf]
+            if ist_duplikat(titel, beschr, rss_pseudo + bestehende):
                 print(f"  ⊘  KI: Duplikat – Thema bereits vorhanden")
                 aid = artikel_id(url)
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
