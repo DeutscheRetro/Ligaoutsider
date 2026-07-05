@@ -300,8 +300,28 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
     return "JA" in antwort.content[0].text.upper()
 
 
+def quellartikel_laden(url: str) -> str:
+    """Lädt den Volltext eines Artikels von der Quell-URL (plain text, max 3000 Zeichen)."""
+    import urllib.request as _ureq
+    try:
+        req = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        html = _ureq.urlopen(req, timeout=10).read().decode("utf-8", errors="ignore")
+        # Skripte und Styles raus
+        html = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', html, flags=re.DOTALL | re.I)
+        # Tags raus
+        text = re.sub(r'<[^>]+>', ' ', html)
+        # Whitespace normalisieren
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text[:3000]
+    except Exception:
+        return ""
+
+
 def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_url: str) -> dict:
     """Lässt Claude einen eigenen Artikel schreiben und eine Kategorie wählen."""
+    volltext = quellartikel_laden(quelle_url)
+    quell_info = f"VOLLTEXT DER ORIGINALQUELLE:\n{volltext}" if volltext else f"BESCHREIBUNG: {beschreibung}"
+
     prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Dein Stil orientiert sich an kicker.de: sachlich, präzise, informativ. Fachkundige Sprache ohne Reißerisches. Keine KI-Floskeln, kein aufgeblasener Stil.
 
 Strikte Regeln:
@@ -312,11 +332,12 @@ Strikte Regeln:
 - Keine Ausrufezeichen, keine Reißer-Formulierungen
 - Keine Aufzählungen, keine Bullet Points
 - Schreib wie ein erfahrener Fußballjournalist
+- Erfinde KEINE Fakten die nicht im Quelltext stehen
 
 Basierend auf dieser Meldung:
 TITEL: {titel}
-BESCHREIBUNG: {beschreibung}
 QUELLE: {quelle_name} ({quelle_url})
+{quell_info}
 
 Erstelle:
 1. Einen präzisen, informativen Titel im Kicker-Stil (max. 80 Zeichen, keine Bindestriche als Satzzeichen)
