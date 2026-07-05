@@ -256,9 +256,29 @@ def badge_fuer_kategorie(kategorie: str) -> tuple:
 
 
 def feed_laden() -> list:
+    """Lädt feed.json – merged lokale Datei mit live Version von ligaoutsider.de."""
+    lokal = []
     if FEED_JSON.exists():
-        return json.loads(FEED_JSON.read_text(encoding="utf-8"))
-    return []
+        try:
+            lokal = json.loads(FEED_JSON.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    # Live-Version holen um parallele GitHub-Actions-Runs abzusichern
+    live = []
+    try:
+        import urllib.request as _ureq
+        r = _ureq.urlopen("https://ligaoutsider.de/feed.json", timeout=8)
+        live = json.loads(r.read().decode("utf-8"))
+        print(f"  Live feed.json geladen: {len(live)} Artikel")
+    except Exception as e:
+        print(f"  Live feed.json nicht erreichbar ({e}) – nur lokale Version")
+
+    # Merge: live + lokal, Duplikate per ID entfernen
+    merged = {a["id"]: a for a in live}
+    for a in lokal:
+        merged.setdefault(a["id"], a)
+    return list(merged.values())
 
 
 def feed_speichern(artikel_liste: list):
