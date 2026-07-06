@@ -8,12 +8,20 @@ on:
     - cron: '41 13 * * *'   # 15:41
     - cron: '33 17 * * *'   # 19:33
     - cron: '52 19 * * *'   # 21:52
-  workflow_dispatch:              # auch manuell per Knopfdruck auslösbar
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Manueller oder externer Trigger'
+        required: false
+        default: 'manuell'
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    concurrency:
+      group: generate-pipeline
+      cancel-in-progress: true
 
     steps:
       - name: Code holen
