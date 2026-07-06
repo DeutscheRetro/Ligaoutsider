@@ -53,6 +53,8 @@ jobs:
             echo "Keine neuen Artikel – kein Commit nötig"
           else
             git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
+            git stash -u 2>/dev/null || true
             git pull --rebase origin main
+            git stash pop 2>/dev/null || true
             git push
           fi
