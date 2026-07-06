@@ -1037,15 +1037,19 @@ def main():
             if fp is None and (ARTIKEL_ORDNER / f"{aid}.skip").exists():
                 continue  # wurde als Dup markiert
 
-            # Legacy Keyword-Dedup als Fallback wenn kein Fingerprint
-            if not fp:
-                rss_pseudo = [{"id": "", "titel": t} for t in [s.get("generated_title", s.get("title", "")) for s in published_stories[-100:]]]
-                if ist_duplikat(titel, beschr, rss_pseudo + bestehende):
-                    log.info(f"S4 keyword dup: {titel[:60]}")
-                    _log_skip(aid, titel, "stage4", "keyword_duplicate")
-                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                    stats["s4_dedup_early"] += 1
-                    continue
+            # Rapidfuzz-Titel-Check gegen published_stories (fängt null-Fingerprint-Einträge)
+            if not (ARTIKEL_ORDNER / f"{aid}.skip").exists():
+                from rapidfuzz import fuzz as _fuzz
+                pub_titles = [s.get("generated_title") or s.get("title", "") for s in published_stories[-150:]]
+                for pt in pub_titles:
+                    if pt and _fuzz.ratio(titel.lower(), pt.lower()) >= 88:
+                        log.info(f"S4 title-fuzz dup ({pt[:50]}): {titel[:50]}")
+                        _log_skip(aid, titel, "stage4", "title_fuzzy_duplicate")
+                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                        stats["s4_dedup_early"] += 1
+                        break
+            if (ARTIKEL_ORDNER / f"{aid}.skip").exists():
+                continue
 
             # ── Stage 5: Fulltext Fetch & Validation (CRITICAL GATE) ─────────
             log.info(f"S5 fetch fulltext: {titel[:60]}")
