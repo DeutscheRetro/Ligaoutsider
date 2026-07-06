@@ -438,7 +438,7 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
                 f"Antworte NUR mit JA wenn:\n"
                 f"- Es direkt um mindestens einen dieser Klubs geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
                 f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
-                f"- Es KEIN WM-, EM- oder Nationalmannschafts-Thema ist (auch kein Interview mit Nationaltrainern wie Nagelsmann)\n"
+                f"- Es KEIN WM-, EM-, Nationalmannschafts- oder Frauenfußball-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
                 f"- Der Fokus auf dem Klub liegt, nicht nur eine Randerwähnung\n\n"
                 f"Titel: {titel}\nBeschreibung: {beschreibung}\n\n"
@@ -854,7 +854,8 @@ def main():
 
             # Schnell-Ausschluss: Nationalmannschaft / DFB-Themen ohne KI-Kosten
             _SKIP_KEYWORDS = ("Nagelsmann", "Nationalmannschaft", "DFB-Team", "EM 2026", "WM 2026",
-                              "Nations League", "Länderspiel", "U21-EM", "Olympia")
+                              "Nations League", "Länderspiel", "U21-EM", "Olympia",
+                              "Frauen", "Frauenfußball", "Frauenbundesliga", "-Frauen")
             if any(kw.lower() in (titel + " " + beschr).lower() for kw in _SKIP_KEYWORDS):
                 print(f"  ✗  Keyword: Nationalmannschaft/DFB – übersprungen")
                 aid = artikel_id(url)
