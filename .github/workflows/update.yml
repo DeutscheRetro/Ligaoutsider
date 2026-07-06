@@ -49,6 +49,10 @@ jobs:
           git add feed.json artikel/
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -d spieler ] && git add spieler/ || true
-          git diff --staged --quiet || git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
-          git pull --rebase origin main
-          git push
+          if git diff --staged --quiet; then
+            echo "Keine neuen Artikel – kein Commit nötig"
+          else
+            git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
+            git pull --rebase origin main
+            git push
+          fi
