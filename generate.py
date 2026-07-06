@@ -434,17 +434,26 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
 
 
 def quellartikel_laden(url: str) -> str:
-    """Lädt den Volltext eines Artikels von der Quell-URL (plain text, max 3000 Zeichen)."""
+    """Lädt den Volltext eines Artikels von der Quell-URL (plain text, max 3000 Zeichen).
+    Folgt Google-News-Redirects automatisch."""
     import urllib.request as _ureq
     try:
         req = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        html = _ureq.urlopen(req, timeout=10).read().decode("utf-8", errors="ignore")
+        resp = _ureq.urlopen(req, timeout=10)
+        # Finale URL nach Redirect prüfen
+        final_url = resp.geturl()
+        if "google.com" in final_url:
+            return ""  # Redirect nicht aufgelöst – kein nutzbarer Inhalt
+        html = resp.read().decode("utf-8", errors="ignore")
         # Skripte und Styles raus
         html = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', html, flags=re.DOTALL | re.I)
         # Tags raus
         text = re.sub(r'<[^>]+>', ' ', html)
         # Whitespace normalisieren
         text = re.sub(r'\s+', ' ', text).strip()
+        # Mindestlänge: zu kurzer Text = Paywall/Fehler
+        if len(text) < 200:
+            return ""
         return text[:3000]
     except Exception:
         return ""
@@ -453,6 +462,8 @@ def quellartikel_laden(url: str) -> str:
 def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_url: str) -> dict:
     """Lässt Claude einen eigenen Artikel schreiben und eine Kategorie wählen."""
     volltext = quellartikel_laden(quelle_url)
+    if not volltext and len(beschreibung) < 100:
+        raise ValueError("Kein Volltext und keine brauchbare Beschreibung – Artikel übersprungen")
     quell_info = f"VOLLTEXT DER ORIGINALQUELLE:\n{volltext}" if volltext else f"BESCHREIBUNG: {beschreibung}"
 
     prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret. Keine KI-Floskeln, kein aufgeblasener Stil.
