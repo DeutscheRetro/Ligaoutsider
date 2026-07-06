@@ -1,0 +1,981 @@
+2026-07-06 15:56:42,587 INFO === Ligaoutsider Generator startet – max. 50 Artikel ===
+2026-07-06 15:56:42,588 INFO Feed: https://newsfeed.kicker.de/news/bundesliga
+2026-07-06 15:56:43,618 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:44,888 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:44,899 INFO S5 fetch fulltext: Tuchel zu Kane: "Habe mich bei Bayern gegen andere Meinungen
+2026-07-06 15:56:45,610 ERROR lxml parsing failed: Document is empty
+2026-07-06 15:56:45,611 ERROR lxml parser bytestring Document is empty
+2026-07-06 15:56:45,611 ERROR empty HTML tree: None
+2026-07-06 15:56:45,611 WARNING discarding data: None
+2026-07-06 15:56:45,612 INFO S5 fulltext fail (trafilatura_returned_empty): Tuchel zu Kane: "Habe mich bei Bayern gegen andere Meinungen
+2026-07-06 15:56:46,375 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:46,376 INFO S3 not relevant: Geplanter Eingriff: Musiala wurde erneut operiert
+2026-07-06 15:56:47,152 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:48,586 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:48,587 INFO S4 fingerprint dup: Touré kratzt an der Spitzengruppe: Die Rekord-Abgänge der 18
+2026-07-06 15:56:49,075 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:50,294 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:50,295 INFO S5 fetch fulltext: Kaminskis Abgang naht - und verschafft Köln Möglichkeiten
+2026-07-06 15:56:50,372 ERROR lxml parsing failed: Document is empty
+2026-07-06 15:56:50,372 ERROR lxml parser bytestring Document is empty
+2026-07-06 15:56:50,372 ERROR empty HTML tree: None
+2026-07-06 15:56:50,372 WARNING discarding data: None
+2026-07-06 15:56:50,373 INFO S5 fulltext fail (trafilatura_returned_empty): Kaminskis Abgang naht - und verschafft Köln Möglichkeiten
+2026-07-06 15:56:51,199 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:53,497 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:53,498 INFO S5 fetch fulltext: "Er bleibt": Upamecano beruhigt Bayern-Fans mit Olise-Aussag
+2026-07-06 15:56:53,572 ERROR lxml parsing failed: Document is empty
+2026-07-06 15:56:53,572 ERROR lxml parser bytestring Document is empty
+2026-07-06 15:56:53,572 ERROR empty HTML tree: None
+2026-07-06 15:56:53,572 WARNING discarding data: None
+2026-07-06 15:56:53,573 INFO S5 fulltext fail (trafilatura_returned_empty): "Er bleibt": Upamecano beruhigt Bayern-Fans mit Olise-Aussag
+2026-07-06 15:56:54,322 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:55,510 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:55,511 INFO S5 fetch fulltext: Gewaltige Schmerzgrenze: Warum Bayer weiter mit Kofane plant
+2026-07-06 15:56:55,587 ERROR lxml parsing failed: Document is empty
+2026-07-06 15:56:55,588 ERROR lxml parser bytestring Document is empty
+2026-07-06 15:56:55,588 ERROR empty HTML tree: None
+2026-07-06 15:56:55,588 WARNING discarding data: None
+2026-07-06 15:56:55,589 INFO S5 fulltext fail (trafilatura_returned_empty): Gewaltige Schmerzgrenze: Warum Bayer weiter mit Kofane plant
+2026-07-06 15:56:55,589 INFO Feed: https://www.sportschau.de/fussball/bundesliga/index~rss2.xml
+2026-07-06 15:56:56,768 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:56,769 INFO S3 not relevant: Fußball-Kalender der Sportschau: Jetzt herunterladen
+2026-07-06 15:56:56,772 INFO Feed: https://sportbild.bild.de/feed/sportbild-home.xml
+2026-07-06 15:56:58,776 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:58,777 INFO S3 not relevant: „Wenn das von mir verlangt wird“ - Vinicius spricht über Bra
+2026-07-06 15:56:59,433 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:59,433 INFO S3 not relevant: Anruf bei Fifa-Präsident Infantino - Trump gibt WM-Einmischu
+2026-07-06 15:56:59,886 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:56:59,886 INFO S3 not relevant: „Letzte Kurve – der F1-Check“ von Konstantin Rek - Diese una
+2026-07-06 15:57:00,781 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:00,782 INFO S3 not relevant: Pressemitteilung nach Balogun-Skandal - Belgien erhebt schwe
+2026-07-06 15:57:01,527 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:01,528 INFO S3 not relevant: Spannende Havertz-Parallele - DFB-Star mit epischem Clip bei
+2026-07-06 15:57:02,231 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:02,232 INFO S3 not relevant: Prozess um gestohlene Meisterschale - Serien-Dieb schweigt v
+2026-07-06 15:57:03,320 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:03,321 INFO S3 not relevant: SPORT BILD-Meinung - Trump pfeift, Infantino kniet – die Fif
+2026-07-06 15:57:04,549 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:04,550 INFO S3 not relevant: Brisanter Plan! - So kann die Uefa Infantino stürzen
+2026-07-06 15:57:05,554 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:05,555 INFO S3 not relevant: Barça, PSG, Aalborg!  - Füchse testen gegen Europas Giganten
+2026-07-06 15:57:06,067 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:06,068 INFO S3 not relevant: „Da liegt er falsch“ - Klare Ansage an Tuchel aus dem eigene
+2026-07-06 15:57:07,071 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:07,072 INFO S3 not relevant: „Die arbeiten da zusammen“ - Gräfe wittert Videoschiri-Versc
+2026-07-06 15:57:07,072 INFO S2 blacklist: Deutsche Top 50 Sportler - Meyfarth sprang von Gold zu Gold
+2026-07-06 15:57:07,736 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:07,737 INFO S3 not relevant: Diskussion um Bundesjugendspiele - Neureuther: „Umstellung w
+2026-07-06 15:57:08,639 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:08,640 INFO S3 not relevant: Letzter deutscher Sieger - Stich: Meine Top 5 auf Wimbledon-
+2026-07-06 15:57:09,268 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:09,269 INFO S3 not relevant: Steinbach, Anderson und Kayil - Die Pläne mit den neuen Deut
+2026-07-06 15:57:09,756 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:09,757 INFO S3 not relevant: Meint er das ernst? - Zlatan-Urteil zum Fifa-Skandal sorgt f
+2026-07-06 15:57:10,499 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:10,500 INFO S3 not relevant: Alle Infos im Live-Turnierbaum - Ronaldo vs. Yamal! So sieht
+2026-07-06 15:57:11,024 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:11,025 INFO S3 not relevant: Sie singen diesen Super-Hit - Gänsehaut-Moment der England-F
+2026-07-06 15:57:11,616 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:11,617 INFO S3 not relevant: Henderson stürzte nach dem Spiel - Hier bricht sich der Engl
+2026-07-06 15:57:12,102 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:12,103 INFO S3 not relevant: kicker - WM-News Clipout 3
+2026-07-06 15:57:12,103 INFO S2 blacklist: Ganz neue Formation - Norwegen-Armee rudert für Haaland
+2026-07-06 15:57:12,104 INFO S2 blacklist: Hätten Sie ihn entdeckt? - Norwegens Kronprinz feiert auf Fa
+2026-07-06 15:57:12,104 INFO S2 blacklist: Tausende Fans feiern - Riesen-Empfang für die Helden von Kap
+2026-07-06 15:57:13,113 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:13,114 INFO S3 not relevant: Kommentar von Henning Feindt - Europa muss jetzt Infantino s
+2026-07-06 15:57:14,540 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:14,541 INFO S3 not relevant: Nach WM-Aus - Musiala überraschend operiert!
+2026-07-06 15:57:15,296 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:15,297 INFO S3 not relevant: „Überschritt eine rote Linie“ - Uefa geht wegen Karten-Skand
+2026-07-06 15:57:16,143 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:16,144 INFO S3 not relevant: „Wovon träumt ihr nachts?“ - Klopp-Vorschlag sorgt für große
+2026-07-06 15:57:16,773 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:16,774 INFO S3 not relevant: Konkrete Zahlen genannt - Diskussion um Mega-Ablöse für Klop
+2026-07-06 15:57:17,792 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:17,792 INFO S3 not relevant: Nach Fifa-Skandal - Klopp-Vorschlag sorgt für Verwunderung
+2026-07-06 15:57:18,354 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:18,355 INFO S3 not relevant: Reif-Abrechnung mit Trump - „Da denkst du, irgendein IS-Typ 
+2026-07-06 15:57:18,907 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:18,908 INFO S3 not relevant: Stürzt jetzt Infantino? - „Alle Despoten haben eines gemeins
+2026-07-06 15:57:19,439 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:19,440 INFO S3 not relevant: Glaubt der das wirklich? - So rechtfertigt der Ami-Trainer d
+2026-07-06 15:57:20,037 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:20,038 INFO S3 not relevant: „Jeder möchte für ...“ - Transfer-Knall um Haaland? Vater fl
+2026-07-06 15:57:20,697 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:20,697 INFO S3 not relevant: Sperre von Spieler plötzlich aufgehoben - Wie US-Trainer Poc
+2026-07-06 15:57:21,189 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:21,190 INFO S3 not relevant: Stimme säuft komplett ab - So haben Sie Kane noch nie gehört
+2026-07-06 15:57:21,692 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:21,693 INFO S3 not relevant: So wird die Skandal-Entscheidung zerrissen - „Der schamlose 
+2026-07-06 15:57:22,197 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:22,198 INFO S3 not relevant: Trump-Telefonat mit Infantino - Rote Karte aufgehoben! Was d
+2026-07-06 15:57:23,059 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:23,060 INFO S3 not relevant: Aus der Kabine - Alle reden über DIESES Haaland-Foto
+2026-07-06 15:57:23,786 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:23,786 INFO S3 not relevant: Spruch nach England-Sieg - Tuchel: Was Kane von Trump forder
+2026-07-06 15:57:25,655 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:25,656 INFO S3 not relevant: Jetzt kommt eine Barça-Legende - Nächster WM-Trainer schmeiß
+2026-07-06 15:57:26,202 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:26,203 INFO S3 not relevant: Wimbledon - Wo läuft das Zverev-Achtelfinale heute im TV?
+2026-07-06 15:57:27,954 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:27,955 INFO S3 not relevant: „Feige, unterlegen und lächerlich“ - Brasilianer zerstören s
+2026-07-06 15:57:28,491 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:28,492 INFO S3 not relevant: Achtung, Fans! - Massive Änderungen heute bei der Tour de Fr
+2026-07-06 15:57:29,225 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:29,226 INFO S3 not relevant: Bei Kabinen-Party - Oben-Ohne-Haaland umarmt Prinzessin
+2026-07-06 15:57:29,910 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:29,911 INFO S3 not relevant: Superstar weint hemmungslos - Tränen-Abschied von Neymar
+2026-07-06 15:57:30,460 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:30,461 INFO S3 not relevant: Krankenhaus! - Riesiges Missgeschick von England-Star nach S
+2026-07-06 15:57:31,162 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:31,163 INFO S3 not relevant: Kurioser Moment nach England-Drama - SO haben Sie Kane noch 
+2026-07-06 15:57:31,839 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:31,840 INFO S3 not relevant: Geheimfavorit Norwegen im Viertelfinale - Haaland-Wahnsinn g
+2026-07-06 15:57:32,622 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:32,623 INFO S3 not relevant: Wilder Schlagabtausch gegen Mexiko - England erobert legendä
+2026-07-06 15:57:33,567 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:33,568 INFO S3 not relevant: 5-Tore-Wahnsinn - Englands Drama-Sieg im Video
+2026-07-06 15:57:33,568 INFO Feed: https://www.bild.de/rss-feeds/rss-16725492,feed=fussball-mix.bild.html
+2026-07-06 15:57:35,300 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:35,301 INFO S3 not relevant: Nach Horror-Sturz - WM-Aus für England-Superstar!
+2026-07-06 15:57:36,022 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:36,023 INFO S3 not relevant: Kölle kommt vom SSV Ulm - Hansa bedient sich wieder bei Drit
+2026-07-06 15:57:36,538 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:36,539 INFO S3 not relevant: FIFA-Boss Infantino - Der Mann, der unseren Fußball verkauft
+2026-07-06 15:57:37,338 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:38,347 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:38,347 INFO S5 fetch fulltext: Vorbereitungsstart beim HSV - Lokonga und Grønbaek waren die
+2026-07-06 15:57:38,737 INFO S5 fulltext fail (likely_paywall): Vorbereitungsstart beim HSV - Lokonga und Grønbaek waren die
+2026-07-06 15:57:39,414 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:39,415 INFO S3 not relevant: Absurde Situation um US-Stürmer - Ginge es nach Trump, dürft
+2026-07-06 15:57:40,420 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:40,421 INFO S3 not relevant: Nächster Preuße zur Fortuna - Bouchama folgt Ex-Trainer Ende
+2026-07-06 15:57:40,899 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:40,900 INFO S3 not relevant: Chaos beim Viertligisten  - Irrer Plan! Werden die Fans Trik
+2026-07-06 15:57:41,682 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:41,683 INFO S3 not relevant: Neue Nr. 1 beim FC St. Pauli - Blessins Erbe bringt Voll vor
+2026-07-06 15:57:43,666 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:44,928 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:44,929 INFO S5 fetch fulltext: Der große BILD-Check - So bundesligareif ist Schalke schon!
+2026-07-06 15:57:46,618 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:46,619 INFO S7 generate: Der große BILD-Check - So bundesligareif ist Schalke schon!
+2026-07-06 15:57:57,823 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:57,829 INFO   Kandidat: Schalke-Kader im Check: Sturm nur zu 25 Prozent bundesligare
+2026-07-06 15:57:58,341 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:58,342 INFO S3 not relevant: WM-Skandal um zurückgenommene Rote Karte - Trump gibt alles 
+2026-07-06 15:57:59,194 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:57:59,195 INFO S3 not relevant: Klub kassiert jetzt eine Ablöse - Aufstiegs-Favorit verliert
+2026-07-06 15:58:00,097 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:01,615 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:01,616 INFO S5 fetch fulltext: 14,5 Mio. Gewinn in 2 Monaten - Köln vor irrem Kaminski-Coup
+2026-07-06 15:58:02,079 INFO S5 fulltext fail (likely_paywall): 14,5 Mio. Gewinn in 2 Monaten - Köln vor irrem Kaminski-Coup
+2026-07-06 15:58:02,918 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:02,919 INFO S3 not relevant: Mac Nulty heiß auf 2. Liga - Neuer FCM-Abwehrchef hat schon 
+2026-07-06 15:58:03,357 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:03,358 INFO S3 not relevant: BILD in der Brasilien-Kabine - Diese Ancelotti-Zettel waren 
+2026-07-06 15:58:04,074 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:05,112 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:05,113 INFO S5 fetch fulltext: Roger Schmidt, Stefan Kuntz, Saudi-Arabien - Die irre Karrie
+2026-07-06 15:58:05,487 INFO S5 fulltext fail (too_short_51_words): Roger Schmidt, Stefan Kuntz, Saudi-Arabien - Die irre Karrie
+2026-07-06 15:58:06,067 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:06,068 INFO S3 not relevant: Heftige Anfeindungen nach WM-Aus - Kanada-Fans wüten gegen B
+2026-07-06 15:58:07,037 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:07,037 INFO S3 not relevant: Offizielles Statement - Belgien attackiert die Fifa
+2026-07-06 15:58:08,681 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:09,690 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:09,691 INFO S5 fetch fulltext: Fitness und Verantwortung - Das Torunarigha-Versprechen zum 
+2026-07-06 15:58:12,382 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:12,383 INFO S6 refined dup: Fitness und Verantwortung - Das Torunarigha-Versprechen zum 
+2026-07-06 15:58:13,101 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:13,102 INFO S3 not relevant: Kommentar von Henning Feindt - Europa muss jetzt Infantino s
+2026-07-06 15:58:13,881 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:13,882 INFO S3 not relevant: Vorsicht, Verwechslungsgefahr! - Schwedisches Model geht als
+2026-07-06 15:58:14,577 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:15,619 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:15,620 INFO S5 fetch fulltext: Poker zwischen 96 und Union - Was alles am Raab-Transfer hän
+2026-07-06 15:58:15,997 INFO S5 fulltext fail (too_short_56_words): Poker zwischen 96 und Union - Was alles am Raab-Transfer hän
+2026-07-06 15:58:15,998 INFO S2 blacklist: „Ich weiß nicht, ob …!“ - So denkt Wenger über Bald-Bundestr
+2026-07-06 15:58:16,511 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:17,803 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:17,804 INFO S5 fetch fulltext: Endlich mal! - Gute Kohle-Nachrichten von Werder
+2026-07-06 15:58:18,245 INFO S5 fulltext fail (too_short_39_words): Endlich mal! - Gute Kohle-Nachrichten von Werder
+2026-07-06 15:58:18,245 INFO S2 blacklist: Auftakt-Knaller - Gegen die Bayern! Union-Frauen eröffnen di
+2026-07-06 15:58:19,414 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:19,415 INFO S3 not relevant: „Kleine, feige und lächerliche Mannschaft“ - Brasilien-Medie
+2026-07-06 15:58:20,040 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:21,039 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:21,040 INFO S5 fetch fulltext: Bei Testspiel! - Kurioser Burcu-Platzverweis verwundert Lust
+2026-07-06 15:58:23,495 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:23,496 INFO S7 generate: Bei Testspiel! - Kurioser Burcu-Platzverweis verwundert Lust
+2026-07-06 15:58:31,804 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:31,805 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 643 (char 720)
+2026-07-06 15:58:32,586 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:32,587 INFO S3 not relevant: Schambein-Entzündung - Rückkehr-Fahrplan für RWE-Abwehrchef 
+2026-07-06 15:58:33,106 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:33,107 INFO S3 not relevant: Gegenüber der Konkurrenz - Welcher FCS-Profi einen klaren Vo
+2026-07-06 15:58:33,681 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:33,681 INFO S3 not relevant: 100.000 neue Follower - Überraschender WM-Schub für Castrop!
+2026-07-06 15:58:34,227 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:34,228 INFO S3 not relevant: Lecker, Laura! - Wontorra mit Riccardo, Pizza & Amore
+2026-07-06 15:58:35,085 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:36,340 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:36,341 INFO S5 fetch fulltext: Aufatmen bei Eintracht - Entwarnung bei Wettskandal-Profi Wa
+2026-07-06 15:58:36,769 INFO S5 fulltext fail (too_short_50_words): Aufatmen bei Eintracht - Entwarnung bei Wettskandal-Profi Wa
+2026-07-06 15:58:37,538 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:37,538 INFO S3 not relevant: Protest gegen Skandal-Entscheidung - Fifa erlaubt Belgien-Ei
+2026-07-06 15:58:38,504 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:38,505 INFO S3 not relevant: Nach England-Sieg gegen Mexiko - Plötzlich spricht Trump übe
+2026-07-06 15:58:39,383 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:40,327 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:40,328 INFO S5 fetch fulltext: Die wahren Zahlen - So viel verdient Nürnberg am Brown-Trans
+2026-07-06 15:58:40,666 INFO S5 fulltext fail (too_short_58_words): Die wahren Zahlen - So viel verdient Nürnberg am Brown-Trans
+2026-07-06 15:58:41,189 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:42,512 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:42,513 INFO S5 fetch fulltext: 98 Tore! 80 Tore! 64 Tore! - Stürmt Elversberg auch die Bund
+2026-07-06 15:58:42,887 INFO S5 fulltext fail (too_short_76_words): 98 Tore! 80 Tore! 64 Tore! - Stürmt Elversberg auch die Bund
+2026-07-06 15:58:43,440 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:43,441 INFO S3 not relevant: Heißes rennen um die Nummer eins - Kampfansage von Dynamo-Ke
+2026-07-06 15:58:44,432 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:44,433 INFO S3 not relevant: 2. Transfer-Hammer - Altglienicke holt nächsten Ex-Hertha-Pr
+2026-07-06 15:58:45,159 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:45,160 INFO S3 not relevant: Ex-Kapitän über den Bald-Bundestrainer - Gündogan: Klopp kan
+2026-07-06 15:58:45,653 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:45,654 INFO S3 not relevant: Der THORweger! - Haaland trifft, trommelt und feiert mit Pri
+2026-07-06 15:58:46,134 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:46,135 INFO S3 not relevant: Nachgehakt von Alfred Draxler - „Ich bin bereit“ – Das hat u
+2026-07-06 15:58:47,068 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:47,068 INFO S3 not relevant: Durchbruch oder weg - 96-Talent spielt um seine Zukunft
+2026-07-06 15:58:48,042 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:48,042 INFO S3 not relevant: Nach Viertelfinal-Einzug - Klare Haaland-Ansage an England
+2026-07-06 15:58:48,902 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:48,904 INFO S3 not relevant: Kurz nach der WM - Geheim-OP bei Musiala!
+2026-07-06 15:58:49,378 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:49,379 INFO S3 not relevant: Kastenmeier-Nachfolger - Bundesliga-Keeper wird Fortunas Num
+2026-07-06 15:58:49,965 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:49,966 INFO S3 not relevant: Vorbild Frankreich und Mbappé - Fischer verrät seinen Anti-B
+2026-07-06 15:58:50,635 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:50,635 INFO S3 not relevant: 136 Tore! - Berliner Amateur pulverisiert Deutschland-Rekord
+2026-07-06 15:58:51,819 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:51,820 INFO S3 not relevant: Infantino-Eklat bei der WM - Sogar Blatter ist fassungslos
+2026-07-06 15:58:52,500 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:52,501 INFO S3 not relevant: „Rote Linie überschritten“  - Uefa macht der Fifa schwere Vo
+2026-07-06 15:58:53,364 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:53,364 INFO S3 not relevant: Mannschaft muss umziehen - Helene Fischer vertreibt Zweitlig
+2026-07-06 15:58:54,127 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:54,128 INFO S3 not relevant: Nach der Skandal-Entscheidung - Die Welt zerreißt Infantino 
+2026-07-06 15:58:54,821 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:54,822 INFO S3 not relevant: Für die rechte Sturmseite - Zweitligist holt Super-Juwel aus
+2026-07-06 15:58:55,542 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:56,537 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:58:56,538 INFO S5 fetch fulltext: Es hat eine Besonderheit - So sieht das neue Auswärtstrikot 
+2026-07-06 15:59:00,820 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:00,821 INFO S7 generate: Es hat eine Besonderheit - So sieht das neue Auswärtstrikot 
+2026-07-06 15:59:08,108 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:08,109 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 213 (char 290)
+2026-07-06 15:59:09,466 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:09,467 INFO S3 not relevant: Sein Stürmer ist doch nicht gesperrt - US-Trainer Pochettino
+2026-07-06 15:59:10,119 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:10,120 INFO S3 not relevant: 96-Boss Boldt freut sich mit - Zweitliga-Managerin holt WM-T
+2026-07-06 15:59:10,665 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:10,666 INFO S3 not relevant: Gala-Auftritt bei Leitl - 3-Tore-Todorovic bleibt bei Hertha
+2026-07-06 15:59:11,397 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:11,398 INFO S3 not relevant: Was ist dran? - Frankreich-Gerüchte um Hannovers WM-Star
+2026-07-06 15:59:11,931 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:11,932 INFO S3 not relevant: Zoff um Staffeleinteilung - Einspruch! Ex-DDR-Oberligist wil
+2026-07-06 15:59:13,865 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:13,866 INFO S3 not relevant: 3:3 und neue Namen - Aber plötzlich hat Lok Leipzig ein groß
+2026-07-06 15:59:14,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:14,835 INFO S3 not relevant: Es ist nicht das erste Mal - Auch Ronaldo wurde von der Fifa
+2026-07-06 15:59:15,790 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:15,791 INFO S3 not relevant: „Es geht um die Glaubwürdigkeit der Fifa“ - DFB macht Infant
+2026-07-06 15:59:16,396 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:16,396 INFO S3 not relevant: Er kickt in der Bundesliga - Norwegens WM-Star plötzlich Bes
+2026-07-06 15:59:16,942 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:16,943 INFO S3 not relevant: Anruf beim Fifa-Boss, Rot-Sperre aufgehoben - Trump mischt s
+2026-07-06 15:59:22,270 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:22,270 INFO S3 not relevant: Brisantes Schreiben kurz vor der WM - Fifa verstößt gegen ei
+2026-07-06 15:59:22,793 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:22,794 INFO S3 not relevant: Fußball-Zukunft entscheidet sich in Amerika - Klopp-Showdown
+2026-07-06 15:59:23,652 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:23,653 INFO S3 not relevant: Norwegen feiert WM-Viertelfinale - Haalands Kabinen-Jubel mi
+2026-07-06 15:59:24,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:24,836 INFO S3 not relevant: Sonst haben alle abgesagt - Nur Zimmermann zeigt echte Fortu
+2026-07-06 15:59:25,593 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:25,593 INFO S3 not relevant: US-Präsident greift in unseren Sport ein - Trump-Anruf ersch
+2026-07-06 15:59:26,367 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:26,368 INFO S3 not relevant: Prügel-Paraguayer packt aus! - „Mbappé fragte mich: Willst d
+2026-07-06 15:59:26,368 INFO S2 blacklist: Peinliche Panne! - Senegal-Stars in Seattle gestrandet
+2026-07-06 15:59:26,860 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:26,861 INFO S3 not relevant: Es geht um einen Bayern-Star - Frankreich legt Protest bei d
+2026-07-06 15:59:27,444 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:27,445 INFO S3 not relevant: Nach WM-Aus - Brasilien-Star bricht in Tränen aus
+2026-07-06 15:59:28,402 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:28,403 INFO S3 not relevant: Bei Mexiko-Fans - Tuchel entschuldigt sich für Sieg
+2026-07-06 15:59:28,871 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:28,871 INFO S3 not relevant: Tuchel tobt ins Viertelfinale - Wildes WM-Spektakel!
+2026-07-06 15:59:29,384 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:29,384 INFO S3 not relevant: Er hatte gar nicht gespielt - Krankenhaus! England-Star verl
+2026-07-06 15:59:30,269 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:30,269 INFO S3 not relevant: Klopp-Brandrede gegen Trump und Infantino - „Das ist unser S
+2026-07-06 15:59:30,971 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:30,971 INFO S3 not relevant: Neuanfang für FCM-Profi - Wie Tachie jetzt durchstarten will
+2026-07-06 15:59:31,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:31,836 INFO S3 not relevant: Kritik am Verband! - Nächster WM-Trainer weg
+2026-07-06 15:59:32,558 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:32,559 INFO S3 not relevant: Skandal-Entscheidung nach Trump-Anruf - Belgien geht auf die
+2026-07-06 15:59:33,130 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:33,131 INFO S3 not relevant: Geschenk von Youtuber - Mexiko-Spieler müssen Luxusuhren zur
+2026-07-06 15:59:34,007 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:34,008 INFO S3 not relevant: Superstar tritt nach WM-Aus zurück - Neymars Zoff-Abschied
+2026-07-06 15:59:34,507 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:34,508 INFO S3 not relevant: Unwetter in Mexiko - Offiziell! England-Spiel wird verschobe
+2026-07-06 15:59:34,985 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:34,986 INFO S3 not relevant: Kommentar von Timm Detering - Halten Sie sich raus, Mr. Pres
+2026-07-06 15:59:35,752 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:35,753 INFO S3 not relevant: 28 Tore in 21 Stunden - Dynamos kurioser Küchen-Kampf
+2026-07-06 15:59:36,259 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:36,260 INFO S3 not relevant: Mammut-Leistung in Trendsportart - Deutscher stellt unglaubl
+2026-07-06 15:59:37,057 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:37,058 INFO S3 not relevant: Welche WM-Quoten er empfiehlt - Achtelfinal-Tipps vom Wett-P
+2026-07-06 15:59:37,837 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:37,838 INFO S3 not relevant: Brasiliens Legenden auf der Tribüne - Darf man sich hier noc
+2026-07-06 15:59:38,329 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:38,330 INFO S3 not relevant: Direkt zum Sendungs-Start - Kerner zu Klopp: „Gibt es was Ne
+2026-07-06 15:59:39,101 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:40,222 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:40,223 INFO S5 fetch fulltext: Er geht nach England - Bundesligist kassiert Rekord-Ablöse f
+2026-07-06 15:59:42,231 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:42,231 INFO S6 refined dup: Er geht nach England - Bundesligist kassiert Rekord-Ablöse f
+2026-07-06 15:59:42,733 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:42,734 INFO S3 not relevant: Es liegt an seinem Aberglauben - Brasilien-Star spielt unter
+2026-07-06 15:59:44,156 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:44,157 INFO S3 not relevant: Sogar Trump meldet sich - Fifa nimmt Rot-Sperre von US-Star 
+2026-07-06 15:59:44,708 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:44,709 INFO S3 not relevant: „Ich werde dich niemals vergessen“ - Schalke-Talent trauert 
+2026-07-06 15:59:45,681 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:45,682 INFO S3 not relevant: „Das ist kein Zufall“ - Rapp schafft komplizierte Tore bei S
+2026-07-06 15:59:45,682 INFO Feed: https://www.11freunde.de/feed
+2026-07-06 15:59:46,924 INFO S2 blacklist: WM 2026: Was bedeutet das Balogun-Urteil? „Jetzt ist alles m
+2026-07-06 15:59:46,924 INFO S2 blacklist: WM 2026 – Nach Druck aus dem Weißen Haus: Belgien gegen die 
+2026-07-06 15:59:47,601 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:47,602 INFO S3 not relevant: Harry Kane und Peter Crouch feiern nach Sieg bei WM: Britisc
+2026-07-06 15:59:47,602 INFO S2 blacklist: WM 2026: Trump, England, Haaland: Die WM dreht durch!
+2026-07-06 15:59:47,603 INFO S2 blacklist: WM 2026: Trump, England, Haaland: Die WM dreht durch!
+2026-07-06 15:59:47,603 INFO S2 blacklist: WM 2026: Norwegen gewinnt gegen Brasilien - Mitten ins Glück
+2026-07-06 15:59:48,186 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:48,187 INFO S3 not relevant: Mexiko vs. England: „Eines der besten Weltmeisterschaftsspie
+2026-07-06 15:59:48,187 INFO S2 blacklist: WM 2026: Harry Kane verliert nach Sieg seine Stimme
+2026-07-06 15:59:49,050 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:49,051 INFO S3 not relevant: Norwegen gegen Brasilien: „Glückwunsch an das norwegische La
+2026-07-06 15:59:49,051 INFO S2 blacklist: WM 2026: Brasilien - Norwegen im Liveticker – Denn euch ist 
+2026-07-06 15:59:50,017 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:51,349 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:51,350 INFO S5 fetch fulltext: Bundesliga: VfB, S04 und Effzeh: 5 aktuelle Gerüchte und Tra
+2026-07-06 15:59:52,242 INFO S5 fulltext fail (too_short_75_words): Bundesliga: VfB, S04 und Effzeh: 5 aktuelle Gerüchte und Tra
+2026-07-06 15:59:52,921 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:52,922 INFO S3 not relevant: 11FREUNDE-Instaschau: Leon Goretzka wechselt zu Germania Mal
+2026-07-06 15:59:52,923 INFO S2 blacklist: WM 2026: Hitze bei Paraguay vs. Frankreich – Heißer Tanz
+2026-07-06 15:59:52,923 INFO S2 blacklist: WM 2026: Frankreich überkommt Paraguays Tretereien
+2026-07-06 15:59:52,923 INFO S2 blacklist: WM 2026: Frankreich überkommt Paraguays Tretereien
+2026-07-06 15:59:55,059 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:55,060 INFO S3 not relevant: Paraguay gegen Frankreich: „Hätte Paraguay so gegen Deutschl
+2026-07-06 15:59:55,060 INFO S2 blacklist: WM 2026: Kanada – Marokko im Liveticker – Marokkoko
+2026-07-06 15:59:55,061 INFO S2 blacklist: WM 2026: 5 Erkenntnisse der Sechzehntelfinals
+2026-07-06 15:59:55,061 INFO S2 blacklist: WM 2026: Kap-Verde-Spieler bitten Lionel Messi um Erinnerung
+2026-07-06 15:59:55,061 INFO S2 blacklist: WM 2026: Irre! Kap Verde wirft beinahe Argentinien raus
+2026-07-06 15:59:55,062 INFO S2 blacklist: WM 2026: Irre! Kap Verde wirft beinahe Argentinien raus
+2026-07-06 15:59:55,062 INFO S2 blacklist: WM 2026 – Die Netzreaktionen: „Papa, wieso heiße ich Vozinha
+2026-07-06 15:59:55,062 INFO S2 blacklist: WM 2026: Australien - Ägypten im Liveticker: Karma is a Beac
+2026-07-06 15:59:55,063 INFO S2 blacklist: WM 2026: Panini-Sticker sammeln – Das Kleben geht weiter
+2026-07-06 15:59:55,063 INFO S2 blacklist: Nagelsmann zurückgetreten, Klopp soll kommen, aber viele Fra
+2026-07-06 15:59:55,063 INFO S2 blacklist: DFB-Team: Jürgen Klopp soll auf Julian Nagelsmann folgen – R
+2026-07-06 15:59:55,064 INFO S2 blacklist: Deutsche Nationalmannschaft: Nun doch! Nagelsmann vor Rücktr
+2026-07-06 15:59:55,064 INFO S2 blacklist: Deutsche Nationalmannschaft: Nun doch! Nagelsmann vor Rücktr
+2026-07-06 15:59:55,064 INFO S2 blacklist: WM 2026: Jubel von Lamine Yamals Bruder Keyne geht viral – K
+2026-07-06 15:59:55,065 INFO S2 blacklist: WM 2026: „Dürfen die armen österreichischen Kids jetzt endli
+2026-07-06 15:59:55,065 INFO S2 blacklist: WM 2026: Julian Nagelsmann tritt offenbar doch als Bundestra
+2026-07-06 15:59:55,652 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:55,653 INFO S3 not relevant: Spanien gegen Österreich im Liveticker: Wachablösung: Österr
+2026-07-06 15:59:55,655 INFO Feed: https://www.bundesliga.com/de/bundesliga/news.rss
+2026-07-06 15:59:57,093 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:57,093 INFO S3 not relevant: Alle Sommerwechsel im offiziellen Transfermarkt
+2026-07-06 15:59:57,609 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:57,610 INFO S3 not relevant: Sommerfahrplan der 2. Bundesliga: So bereiten sich die Clubs
+2026-07-06 15:59:58,139 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:59,146 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 15:59:59,147 INFO S5 fetch fulltext: Der Sommerfahrplan der Bundesliga: So bereiten sich die Team
+2026-07-06 15:59:59,435 INFO S5 fulltext fail (low_unique_content_ratio): Der Sommerfahrplan der Bundesliga: So bereiten sich die Team
+2026-07-06 16:00:00,368 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:00,369 INFO S3 not relevant: Diese Enttäuschung wird mich motivieren
+2026-07-06 16:00:00,946 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:00,947 INFO S3 not relevant: Ones to watch: Fünf Top-Talente der 2. Bundesliga
+2026-07-06 16:00:01,844 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:01,845 INFO S3 not relevant: Routine-Eingriff bei Musiala
+2026-07-06 16:00:02,460 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:02,461 INFO S3 not relevant: Voting: Welcher Spieler soll eine Playmobil-Figur werden?
+2026-07-06 16:00:03,206 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:04,813 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:04,814 INFO S5 fetch fulltext: Alle Sommerwechsel 2026 im offiziellen Transfermarkt
+2026-07-06 16:00:05,098 INFO S5 fulltext fail (likely_paywall): Alle Sommerwechsel 2026 im offiziellen Transfermarkt
+2026-07-06 16:00:05,099 INFO S2 blacklist: U 19 im Halbfinale: Bundesliga-Talente tragen Deutschlands E
+2026-07-06 16:00:06,162 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:06,163 INFO S3 not relevant: Supertalent gegen Superstar: Manzambi vs. Díaz
+2026-07-06 16:00:06,958 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:06,958 INFO S3 not relevant: Der Eisvogel schlägt wieder zu! Kane ist Englands Entscheide
+2026-07-06 16:00:08,475 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:08,476 INFO S3 not relevant: Absolutes Geschenk: Ex-Bundesliga-Star wechselt in die Kreis
+2026-07-06 16:00:09,341 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:09,342 INFO S3 not relevant: Norwegens Nusa schreibt Geschichte – und Bestseller!
+2026-07-06 16:00:10,249 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:10,250 INFO S3 not relevant: Kopf-an-Kopf-Rennen: Die Top-Torschützen der WM im Überblick
+2026-07-06 16:00:15,430 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:15,430 INFO S3 not relevant: Das Achtelfinale der WM: alle Spiele in der Übersicht
+2026-07-06 16:00:16,209 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:16,210 INFO S3 not relevant: Norwegen steht erstmals im Viertelfinale
+2026-07-06 16:00:16,986 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:18,023 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:18,024 INFO S5 fetch fulltext: Sánchez zieht es nach Nordamerika
+2026-07-06 16:00:18,196 INFO S5 fulltext fail (too_short_106_words): Sánchez zieht es nach Nordamerika
+2026-07-06 16:00:18,196 INFO S2 blacklist: Bestehen Norwegens Wikinger auch im gelben Meer?
+2026-07-06 16:00:18,197 INFO S2 blacklist: TV-Plan: So seht ihr alle Spiele der WM 2026
+2026-07-06 16:00:18,862 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:18,862 INFO S3 not relevant: Mbappé knackt Paraguays Abwehrbollwerk
+2026-07-06 16:00:20,013 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:20,014 INFO S3 not relevant: Marokko und die Bayern in Sorge
+2026-07-06 16:00:20,701 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:20,702 INFO S3 not relevant: Ounahi Doppelpack ebnet Marokko den Weg ins Viertelfinale
+2026-07-06 16:00:21,258 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:22,241 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:22,242 INFO S5 fetch fulltext: Rekorde bei Liverpool, Dortmund und Mainz: Klopp in Zahlen
+2026-07-06 16:00:23,895 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:23,896 INFO S7 generate: Rekorde bei Liverpool, Dortmund und Mainz: Klopp in Zahlen
+2026-07-06 16:00:32,614 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:32,617 INFO   Kandidat: Klopp in Zahlen: Bestmarken bei Mainz, BVB und Liverpool
+2026-07-06 16:00:32,617 INFO S2 blacklist: Jürgen Klopp ist bereit für den Bundestrainer-Job
+2026-07-06 16:00:32,618 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Testspiel+Ergebnis&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:33,626 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:33,627 INFO S3 not relevant: 2. Bundesliga: Fürth startet mit Niederlage in Testspiel-Som
+2026-07-06 16:00:34,471 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:34,472 INFO S3 not relevant: 2. Bundesliga: Lockerer Auftakt: Hertha gewinnt erstes Tests
+2026-07-06 16:00:34,474 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vorbereitung+Sommertour&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:34,845 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Verletzung+Ausfall+gesperrt&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:35,370 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Transfer+Wechsel+verpflichtet&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:37,984 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:39,823 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:39,824 INFO S5 fetch fulltext: Fixe Transfers Sommer 2026: Alle Wechsel in Bundesliga & 2. 
+2026-07-06 16:00:40,117 INFO S5 fulltext fail (google_redirect_unresolved): Fixe Transfers Sommer 2026: Alle Wechsel in Bundesliga & 2. 
+2026-07-06 16:00:42,160 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:43,117 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:43,118 INFO S5 fetch fulltext: Alle Sommerwechsel im offiziellen Transfermarkt - bundesliga
+2026-07-06 16:00:43,469 INFO S5 fulltext fail (google_redirect_unresolved): Alle Sommerwechsel im offiziellen Transfermarkt - bundesliga
+2026-07-06 16:00:46,376 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:47,469 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:47,470 INFO S5 fetch fulltext: Wechsel perfekt: FC Bayern verpflichtet deutschen Nationalsp
+2026-07-06 16:00:47,827 INFO S5 fulltext fail (google_redirect_unresolved): Wechsel perfekt: FC Bayern verpflichtet deutschen Nationalsp
+2026-07-06 16:00:47,832 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Gerücht+Interesse+Angebot&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:48,391 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vertrag+verlängert+ablösefrei&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:48,796 INFO Feed: https://news.google.com/rss/search?q=FC+Bayern+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:00:49,989 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:51,145 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:51,146 INFO S5 fetch fulltext: Transfer-Revolution beim FC Bayern? - sport.de
+2026-07-06 16:00:51,444 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Revolution beim FC Bayern? - sport.de
+2026-07-06 16:00:51,997 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:53,294 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:53,295 INFO S5 fetch fulltext: FC Bayern München, News und Gerüchte - "Er bleibt, er bleibt
+2026-07-06 16:00:53,586 INFO S5 fulltext fail (google_redirect_unresolved): FC Bayern München, News und Gerüchte - "Er bleibt, er bleibt
+2026-07-06 16:00:54,495 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:54,496 INFO S3 not relevant: Wechselt Michael Olise im Sommer zu Real Madrid? Frankreich-
+2026-07-06 16:00:55,756 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:56,966 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:56,966 INFO S5 fetch fulltext: FC Bayern verpflichtet DFB-Star Nathaniel Brown von Eintrach
+2026-07-06 16:00:57,213 INFO S5 fulltext fail (google_redirect_unresolved): FC Bayern verpflichtet DFB-Star Nathaniel Brown von Eintrach
+2026-07-06 16:00:58,026 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:59,768 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:00:59,769 INFO S5 fetch fulltext: FC Bayern, News und Gerüchte: Versteckter Hinweis? Real Madr
+2026-07-06 16:01:00,081 INFO S5 fulltext fail (google_redirect_unresolved): FC Bayern, News und Gerüchte: Versteckter Hinweis? Real Madr
+2026-07-06 16:01:00,615 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:01,715 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:01,716 INFO S5 fetch fulltext: Arijon Ibrahimovic verlängert Vertrag beim FC Bayern München
+2026-07-06 16:01:02,097 INFO S5 fulltext fail (google_redirect_unresolved): Arijon Ibrahimovic verlängert Vertrag beim FC Bayern München
+2026-07-06 16:01:07,386 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:08,727 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:08,728 INFO S5 fetch fulltext: Transfer-Wende beim FC Bayern? - sport.de
+2026-07-06 16:01:09,038 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Wende beim FC Bayern? - sport.de
+2026-07-06 16:01:09,952 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:09,952 INFO S3 not relevant: Karlsruhe verpflichtet Ofli vom FC Bayern München per Leihe 
+2026-07-06 16:01:11,446 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:11,447 INFO S3 not relevant: Transfer-Ticker: WM-Star nicht nur beim FC Bayern gehandelt 
+2026-07-06 16:01:12,291 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:12,292 INFO S3 not relevant: Die wichtigsten Transfer-News und Gerüchte aus der weiten Fu
+2026-07-06 16:01:13,161 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:13,162 INFO S3 not relevant: Bittere Pille nach dem Bayern-Transfer: Saibari muss WM-Acht
+2026-07-06 16:01:13,764 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:13,765 INFO S3 not relevant: BBL-Transfer-Ticker 2026: Wechsel, News und Gerüchte aller 1
+2026-07-06 16:01:14,310 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:14,311 INFO S3 not relevant: Sorgen um Bayerns WM-Transfer: Marokko-Trainer gibt Update z
+2026-07-06 16:01:15,129 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:15,130 INFO S3 not relevant: Ex-Bayern-Spielerin Stanway wechselt zum FC Arsenal - Sky.de
+2026-07-06 16:01:15,134 INFO Feed: https://news.google.com/rss/search?q=Borussia+Dortmund+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:01:16,421 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:17,938 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:17,939 INFO S5 fetch fulltext: BVB, News und Gerüchte: Finales Transfer-Angebot! Poker um S
+2026-07-06 16:01:18,225 INFO S5 fulltext fail (google_redirect_unresolved): BVB, News und Gerüchte: Finales Transfer-Angebot! Poker um S
+2026-07-06 16:01:19,109 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:20,318 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:20,318 INFO S5 fetch fulltext: Guirassy-Transfer: Fenerbahce gibt BVB Ultimatum - fussballd
+2026-07-06 16:01:20,613 INFO S5 fulltext fail (google_redirect_unresolved): Guirassy-Transfer: Fenerbahce gibt BVB Ultimatum - fussballd
+2026-07-06 16:01:21,085 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:22,387 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:22,388 INFO S5 fetch fulltext: Mutove sichert U23-Testsieg gegen Lünen - überraschender Etc
+2026-07-06 16:01:22,658 INFO S5 fulltext fail (google_redirect_unresolved): Mutove sichert U23-Testsieg gegen Lünen - überraschender Etc
+2026-07-06 16:01:23,541 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:23,541 INFO S3 not relevant: Niklas Süle wechselt zum SV Tiefenbach in die Kreisliga - Sk
+2026-07-06 16:01:24,252 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:25,119 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:25,120 INFO S5 fetch fulltext: BVB, News und Gerüchte: Bittere Transfer-Wende bei Borussia 
+2026-07-06 16:01:25,425 INFO S5 fulltext fail (google_redirect_unresolved): BVB, News und Gerüchte: Bittere Transfer-Wende bei Borussia 
+2026-07-06 16:01:26,179 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:27,420 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:27,421 INFO S5 fetch fulltext: BVB, News und Gerüchte: Finales Transfer-Angebot! Poker um S
+2026-07-06 16:01:27,729 INFO S5 fulltext fail (google_redirect_unresolved): BVB, News und Gerüchte: Finales Transfer-Angebot! Poker um S
+2026-07-06 16:01:27,736 INFO Feed: https://news.google.com/rss/search?q=Bayer+Leverkusen+Transfer+Verletzung&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:01:28,262 INFO Feed: https://news.google.com/rss/search?q=RB+Leipzig+VfB+Stuttgart+Eintracht+Frankfurt+News&hl=de&gl=DE&ceid=DE:de
+2026-07-06 16:01:28,780 INFO Feed: https://www.transfermarkt.de/rss/news
+2026-07-06 16:01:29,153 INFO Feed: https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1
+2026-07-06 16:01:29,230 INFO Feed: https://rss.dw.com/xml/sport-de
+2026-07-06 16:01:29,657 INFO Feed: https://www.waz.de/sport/fussball/rss
+2026-07-06 16:01:30,160 INFO Feed: https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/
+2026-07-06 16:01:30,598 INFO Feed: https://bulinews.com/rss
+2026-07-06 16:01:31,980 INFO Feed: https://www.eyefootball.com/rss_news_main.xml
+2026-07-06 16:01:32,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:32,836 INFO S3 not relevant: Chelsea to reduce asking price for Malo Gusto?
+2026-07-06 16:01:33,577 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:33,577 INFO S3 not relevant: Chelsea set asking price for French defender
+2026-07-06 16:01:34,084 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:34,085 INFO S3 not relevant: Chelsea make transfer decision on Romeo Lavia
+2026-07-06 16:01:34,801 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:34,802 INFO S3 not relevant: Como make surprise enquiry for Chelsea striker
+2026-07-06 16:01:35,827 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:35,828 INFO S3 not relevant: Chelsea centre-back to leave alongside Andrey Santos?
+2026-07-06 16:01:36,568 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:36,569 INFO S3 not relevant: Arsenal handed surprise boost in signing Chelsea star
+2026-07-06 16:01:37,074 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:37,075 INFO S3 not relevant: Man Utd make approach to sign Chelsea midfielder
+2026-07-06 16:01:37,597 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:37,598 INFO S3 not relevant: Liverpool stance on Virgil van Dijk revealed
+2026-07-06 16:01:38,075 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:38,076 INFO S3 not relevant: Chelsea star doubtful for World Cup round of 16 clash
+2026-07-06 16:01:39,131 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:39,132 INFO S3 not relevant: Man City stance on signing Enzo Fernandez revealed
+2026-07-06 16:01:39,930 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:39,931 INFO S3 not relevant: Bruno Fernandes pushed Man Utd to sign Portuguese star
+2026-07-06 16:01:40,459 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:40,460 INFO S3 not relevant: Granit Xhaka informs Chelsea decision to Xabi Alonso
+2026-07-06 16:01:41,658 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:41,659 INFO S3 not relevant: Arsenal agree deal to sell Leandro Trossard
+2026-07-06 16:01:42,249 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:42,250 INFO S3 not relevant: Chelsea eyeing surprise swoop for Dutch winger
+2026-07-06 16:01:42,788 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:42,789 INFO S3 not relevant: Granit Xhaka makes Chelsea transfer decision
+2026-07-06 16:01:43,846 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:43,847 INFO S3 not relevant: Man Utd poised to miss out on another midfielder
+2026-07-06 16:01:44,795 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:44,798 INFO S3 not relevant: Chelsea winger open to surprise Liverpool move
+2026-07-06 16:01:46,392 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:46,393 INFO S3 not relevant: Inter Milan on the verge of signing Chelsea star
+2026-07-06 16:01:47,283 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:47,283 INFO S3 not relevant: Arsenal handed boost in signing Chelsea star
+2026-07-06 16:01:47,913 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:47,914 INFO S3 not relevant: Real Madrid make new Enzo Fernandez decision
+2026-07-06 16:01:47,914 INFO Feed: https://feeds.skysports.com/skysports/bundesliga
+2026-07-06 16:01:47,972 INFO Feed: https://www.goal.com/feeds/de/news
+2026-07-06 16:01:48,430 INFO Feed: https://www.reddit.com/r/bundesliga/new.rss?limit=100
+2026-07-06 16:01:50,455 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:50,455 INFO S3 not relevant: Holstein Kiel verpflichtet Faride Alidou vom 1. FC Kaisersla
+2026-07-06 16:01:51,235 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:51,235 INFO S3 not relevant: US-Präsident Donald Trump hat ein persönliches Eingreifen na
+2026-07-06 16:01:52,332 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:52,333 INFO S3 not relevant: DFB-Präsident Neuendorf äußert sich zum Balogun-Fall
+2026-07-06 16:01:53,213 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:53,214 INFO S3 not relevant: UPDATE: RBFA STATEMENT REGARDING FOLARIN BALOGUN
+2026-07-06 16:01:54,044 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:54,045 INFO S3 not relevant: UEFA Statement zum Balogun Vorfall
+2026-07-06 16:01:54,674 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:54,675 INFO S3 not relevant: Ist Infantino gar nicht das Problem, sondern nur das Symptom
+2026-07-06 16:01:54,676 INFO S2 blacklist: Saisoneröffnungsspiel terminiert - Union empfängt Bayern zuh
+2026-07-06 16:01:54,676 INFO S2 blacklist: WM 2026: Sperre ausgesetzt - UEFA zu Balogun: "Rote Linie wu
+2026-07-06 16:01:54,676 INFO S2 blacklist: Eintracht Frankfurt Frauen mit Top-Transfer - Hanna Bennison
+2026-07-06 16:01:55,580 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:55,581 INFO S3 not relevant: Nach Rückkehr von WM - Geplanter Routine-Eingriff bei Jamal 
+2026-07-06 16:01:56,376 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:56,377 INFO S3 not relevant: Jürgen Klopp: "Wenn es tatsächlich so war, dass Trump und In
+2026-07-06 16:01:58,415 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:58,416 INFO S3 not relevant: Gedankenspiel zu Klopp
+2026-07-06 16:01:59,103 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:01:59,104 INFO S3 not relevant: Weder Bundesliga noch Serie A: Oliver Glasner wagt Herausfor
+2026-07-06 16:01:59,105 INFO S2 blacklist: Arsene Wenger: "Ich glaube nicht, dass Julian Nagelsmann gro
+2026-07-06 16:02:00,251 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:00,252 INFO S3 not relevant: DFB sucht einen neuen Trainer: Es kann nur Jürgen Klopp werd
+2026-07-06 16:02:00,989 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:00,990 INFO S3 not relevant: Nach WM-Aus gegen England: Mexiko-Trainer Javier Aguirre tri
+2026-07-06 16:02:01,720 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:01,721 INFO S3 not relevant: "Jetzt ist es zu Ende": Neymar verkündet Selecao-Rücktritt
+2026-07-06 16:02:02,390 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:02,391 INFO S3 not relevant: WM: Achterbahnfahrt im "Azteca": England wirft Mexiko in Unt
+2026-07-06 16:02:02,392 INFO S2 blacklist: Which manager would you hire?
+2026-07-06 16:02:02,392 INFO S2 blacklist: Wird der DFB unter Klopp wieder von seiner Ballbesitz-Identi
+2026-07-06 16:02:02,920 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:02,921 INFO S3 not relevant: Wie lange sehen sich Fußball-Fans das noch an?
+2026-07-06 16:02:02,921 INFO S2 blacklist: WM 2026: Erling Haaland wuchtet Norwegen gegen Brasilien wei
+2026-07-06 16:02:04,457 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:04,458 INFO S3 not relevant: Der belgische Verband ist überrascht über die FIFA-Entscheid
+2026-07-06 16:02:04,968 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:04,969 INFO S3 not relevant: Warum haben es in Deutschland andere Sportarten neben Fußbal
+2026-07-06 16:02:05,852 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:05,852 INFO S3 not relevant: Das Weiße Haus hat die FIFA direkt kontaktiert und Gianni In
+2026-07-06 16:02:06,532 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:06,533 INFO S3 not relevant: Jakub Kaminski vom 1. FC Köln soll für 20 Millionen Euro zu 
+2026-07-06 16:02:07,775 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:07,775 INFO S3 not relevant: "Wir haben einen krassen Vorteil - Haaland ist nicht zu stop
+2026-07-06 16:02:08,291 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:08,292 INFO S3 not relevant: FIFA setzt Rot-Sperre aus: Balogun gegen Belgien spielberech
+2026-07-06 16:02:09,406 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:11,845 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:11,846 INFO S4 fingerprint dup: 50 Millionen Euro: Bazoumana Touré wechselt für Rekordsumme 
+2026-07-06 16:02:12,345 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:12,346 INFO S3 not relevant: Jakub Kamiński to Benfica, what to expect?
+2026-07-06 16:02:13,184 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:13,185 INFO S3 not relevant: Bericht: Tabakovic vor Wechsel nach Salzburg – Erst viermal 
+2026-07-06 16:02:14,079 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:14,080 INFO S3 not relevant: Niklas Süle wechselt zum SV Tiefenbach in die Kreisliga
+2026-07-06 16:02:14,081 INFO S2 blacklist: Kostspieliger Sommer: Trainerwechsel und WM-Aus strapazieren
+2026-07-06 16:02:14,081 INFO S2 blacklist: "Wir Afrikaner akzeptieren zu oft, unterlegen zu sein": Von 
+2026-07-06 16:02:15,377 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:15,378 INFO S3 not relevant: Nach sensationellem Titelgewinn der asiatischen Champions Le
+2026-07-06 16:02:17,570 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:17,571 INFO S3 not relevant: WM-Kleinod: Flitzer-Analyse von Magenta TV beim K.o.-Spiel z
+2026-07-06 16:02:19,015 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:19,016 INFO S3 not relevant: "Collina macht seine eigenen Regeln": Scharfe Kritik von ZDF
+2026-07-06 16:02:19,966 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:19,967 INFO S3 not relevant: Hat die Kimmich-Generation ihre Chance gehabt und sollte nun
+2026-07-06 16:02:19,967 INFO S2 blacklist: Portugal-Ikone Luís Figo: "Es ist offensichtlich, dass einig
+2026-07-06 16:02:21,068 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:21,068 INFO S3 not relevant: 2.700 zusätzliche Fahrtkilometer: 1. FC Frankfurt (Oder) leg
+2026-07-06 16:02:21,595 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:23,016 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:23,017 INFO S5 fetch fulltext: Doch keine Premier League? Benfica neuer Favorit auf Kaminsk
+2026-07-06 16:02:23,096 INFO S5 fulltext fail (too_short_75_words): Doch keine Premier League? Benfica neuer Favorit auf Kaminsk
+2026-07-06 16:02:23,638 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:23,639 INFO S3 not relevant: Angebote von Feyenoord und Celtic: Hertha droht Absprung von
+2026-07-06 16:02:24,426 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:26,530 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:26,531 INFO S5 fetch fulltext: 100-Millionen-Schmerzgrenze: Warum Bayer weiter mit Christia
+2026-07-06 16:02:26,803 INFO S5 fulltext fail (too_short_36_words): 100-Millionen-Schmerzgrenze: Warum Bayer weiter mit Christia
+2026-07-06 16:02:27,344 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:27,345 INFO S3 not relevant: Nur noch Vierter Offizieller beim Spiel Portugal gegen Spani
+2026-07-06 16:02:28,093 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:28,094 INFO S3 not relevant: Neueinordnung Dfb leistung?
+2026-07-06 16:02:28,094 INFO S2 blacklist: WM 2026: Frankreich im Viertelfinale - Mbappé-Elfer knackt P
+2026-07-06 16:02:29,461 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:29,462 INFO S3 not relevant: Zeitgenaue Ansetzungen der Spiele 2. Bundesliga
+2026-07-06 16:02:30,109 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:31,906 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:31,907 INFO S5 fetch fulltext: Kanada-Coach Marsch klärt Davies-Rätsel auf: Nach Angaben de
+2026-07-06 16:02:32,213 INFO S5 fulltext fail (too_short_15_words): Kanada-Coach Marsch klärt Davies-Rätsel auf: Nach Angaben de
+2026-07-06 16:02:32,794 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:32,794 INFO S3 not relevant: Nach nur zwei WM-Spielen: Renard beendet Tunesien-Engagement
+2026-07-06 16:02:32,795 INFO S2 blacklist: WM 2026: Marokko quält sich gegen Kanada ins Viertelfinale
+2026-07-06 16:02:33,454 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:33,455 INFO S3 not relevant: Bittere Pille nach dem Bayern-Transfer: Saibari muss aufgrun
+2026-07-06 16:02:34,373 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:34,381 INFO S3 not relevant: Sorry England, but Harry Kane is as German as Thomas Tuchel
+2026-07-06 16:02:34,382 INFO S2 blacklist: U19-EM: Spanien gewinnt im dritten Gruppenspiel 4:0 gegen De
+2026-07-06 16:02:35,149 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:35,150 INFO S3 not relevant: Rangnick: "Wenn nicht einer mit österreichischen Vorfahren a
+2026-07-06 16:02:35,896 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:35,897 INFO S3 not relevant: Jürgen Klopp bekommt weitreichende Macht für fundamentale Ve
+2026-07-06 16:02:36,628 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:36,629 INFO S3 not relevant: Titel: Wäre Ole Werner eine gute Option für den BVB – jetzt,
+2026-07-06 16:02:38,123 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:38,124 INFO S3 not relevant: Hamann plädiert für Kimmich-Rücktritt: "Von so einem Spieler
+2026-07-06 16:02:38,775 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:38,776 INFO S3 not relevant: Südkoreas Nationaltrainer Hong Myung-bo verlässt nach Morddr
+2026-07-06 16:02:41,049 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:41,049 INFO S3 not relevant: "Mal was zurückzugeben": Mertesacker bereit für DFB-Posten
+2026-07-06 16:02:41,671 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:41,671 INFO S3 not relevant: Wiedersehen mit Walter: Schonlau wählt Kiel als neue Anlaufs
+2026-07-06 16:02:41,672 INFO S2 blacklist: WM 2026: Ghana zu harmlos — Souveränes Kolumbien komplettier
+2026-07-06 16:02:42,423 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:42,424 INFO S3 not relevant: Kap Verde gleicht zwei Mal aus: Argentinien verhindert Blama
+2026-07-06 16:02:42,424 INFO S2 blacklist: Was wäre passiert, wenn sich René Adler 2010 nicht verletzt 
+2026-07-06 16:02:42,424 INFO S2 blacklist: Warum erzählen alle (trotz dieser Trainerleistung) das Julia
+2026-07-06 16:02:43,322 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:43,323 INFO S3 not relevant: Mehmet Scholl hat es vor über 10 Jahren prophezeit. Er hatte
+2026-07-06 16:02:43,323 INFO S2 blacklist: Jürgen Klopp hat sich bei Magenta geäußert
+2026-07-06 16:02:44,655 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:44,655 INFO S3 not relevant: Streit mit VfB-Fans: Linken-Politikerin Akbulut soll wegen F
+2026-07-06 16:02:44,656 INFO S2 blacklist: WM 2026: Ägypten feiert - Salah und Co. nach Elfer-Drama geg
+2026-07-06 16:02:44,656 INFO S2 blacklist: Some armchair expert thoughts on the national team situation
+2026-07-06 16:02:44,657 INFO S2 blacklist: What burns me about this German team
+2026-07-06 16:02:45,348 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:46,240 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:46,241 INFO S5 fetch fulltext: Hedenkamp wird es - SC Paderborn 07 hat neuen Haupt- und Tri
+2026-07-06 16:02:46,388 INFO S5 fulltext fail (too_short_36_words): Hedenkamp wird es - SC Paderborn 07 hat neuen Haupt- und Tri
+2026-07-06 16:02:46,842 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:46,842 INFO S3 not relevant: Neues Stadion für den FCN in Nürnberg: Max-Morlock-Stadion s
+2026-07-06 16:02:46,843 INFO S2 blacklist: Nach DFB-Rücktritt: Nagelsmann kassiert Millionen-Abfindung
+2026-07-06 16:02:47,814 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:47,815 INFO S3 not relevant: Hans-Joachim Watzke und Rudi Völler werden die Vertragsverha
+2026-07-06 16:02:48,604 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:48,605 INFO S3 not relevant: Fürth stellt neues Heimtrikot vor
+2026-07-06 16:02:49,501 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:49,501 INFO S3 not relevant: Benjamin Zank stürmt fürs Kleeblatt
+2026-07-06 16:02:50,323 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:50,324 INFO S3 not relevant: Kleeblatt verpflichtet Paul Will fest
+2026-07-06 16:02:51,113 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:51,114 INFO S3 not relevant: HandOfBlood bringt Trinkpausen-Spott in ZDF-Trinkpause - DWD
+2026-07-06 16:02:51,653 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:52,659 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:02:52,660 INFO S5 fetch fulltext: FC Bayern holt Nathaniel Brown
+2026-07-06 16:03:04,791 INFO S5 fulltext fail (fetch_failed_ReadTimeout): FC Bayern holt Nathaniel Brown
+2026-07-06 16:03:05,673 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:05,674 INFO S3 not relevant: Union Berlins drittes Trikot
+2026-07-06 16:03:07,328 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:07,329 INFO S3 not relevant: Eine Hommage an die Lilie – Das neue Heimtrikot des SV 98
+2026-07-06 16:03:07,329 INFO S2 blacklist: Julian Nagelsmann verlässt den DFB
+2026-07-06 16:03:08,164 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:08,165 INFO S3 not relevant: Die neuen Hoffenheim Trikots
+2026-07-06 16:03:08,913 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:08,914 INFO S3 not relevant: DFB-Aufsichtsrat tagt: Müssen auch Völler und Rettig gehen?
+2026-07-06 16:03:09,685 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:10,950 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:10,951 INFO S5 fetch fulltext: Offiziell: Soufiane El-Faouzi unterschreibt beim FC Schalke 
+2026-07-06 16:03:13,132 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:13,133 INFO S7 generate: Offiziell: Soufiane El-Faouzi unterschreibt beim FC Schalke 
+2026-07-06 16:03:19,880 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:19,881 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 745 (char 815)
+2026-07-06 16:03:20,891 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:20,892 INFO S3 not relevant: Das sind die neuen SC-Trikots
+2026-07-06 16:03:20,892 INFO S2 blacklist: Klopp would be able to leave his current role for the DFB. A
+2026-07-06 16:03:21,372 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:21,376 INFO S3 not relevant: Nach Bild-Informationen gilt Jürgen Klopp als Nachfolge-Wuns
+2026-07-06 16:03:21,376 INFO S2 blacklist: Entscheidung gefallen! Nagelsmann tritt als Bundestrainer zu
+2026-07-06 16:03:21,376 INFO S2 blacklist: WM 2026: Abgezockte Schweizer lassen Algerien keine Chance
+2026-07-06 16:03:21,929 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:21,930 INFO S3 not relevant: Kroatiens doppeltes Drama in der Nachspielzeit: Feuerwerk in
+2026-07-06 16:03:22,837 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:22,838 INFO S3 not relevant: Weird decisions from croatia vs portugal game today?
+2026-07-06 16:03:22,838 INFO Feed: https://www.reddit.com/r/soccer/new.rss?limit=100
+2026-07-06 16:03:24,946 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:26,813 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:26,814 INFO S5 fetch fulltext: [Sabuncuoglu] Alexander Nübel to Besiktas is a done deal. Ba
+2026-07-06 16:03:26,959 INFO S5 fulltext fail (too_short_36_words): [Sabuncuoglu] Alexander Nübel to Besiktas is a done deal. Ba
+2026-07-06 16:03:27,646 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:27,647 INFO S3 not relevant: [Politico] Keir Starmer helped stop earlier England vs. Mexi
+2026-07-06 16:03:28,434 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:28,435 INFO S3 not relevant: [Moretto] Konstantinos Karetsas of Genk has been offered to 
+2026-07-06 16:03:29,683 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:29,683 INFO S3 not relevant: Neymar supposely closed and filmed ad Deals for winning WC b
+2026-07-06 16:03:30,522 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:30,523 INFO S3 not relevant: Dan Burn's contributions vs Mexico, courtesy of the BBC's 3D
+2026-07-06 16:03:31,273 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:31,274 INFO S3 not relevant: [Everton] Tyrique George Signs For Everton On Permanent Deal
+2026-07-06 16:03:32,544 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:32,545 INFO S3 not relevant: The French Football Federation (FFF) has appealed to FIFA to
+2026-07-06 16:03:33,062 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:33,064 INFO S3 not relevant: Ronaldo blasts Ancelotti for Neymar pick, says João Pedro om
+2026-07-06 16:03:34,628 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:34,629 INFO S3 not relevant: Mikel Merino: “Cristiano is an elite player, one of the best
+2026-07-06 16:03:35,368 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:35,369 INFO S3 not relevant: [Paraguayan Senator Celeste Josefina Amarilla]: “[Mbappé] ha
+2026-07-06 16:03:35,369 INFO S2 blacklist: Olympiacos sign center-back Zinedin Smajlović from Sandefjor
+2026-07-06 16:03:36,372 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:36,373 INFO S3 not relevant: Trump confirms that he called FIFA about Balogun’s red card:
+2026-07-06 16:03:36,838 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:36,839 INFO S3 not relevant: [Round of 16 - Day 2] All Goals with Scoring Nation Commenta
+2026-07-06 16:03:37,362 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:37,363 INFO S3 not relevant: No politics in sport. Senator Ted Cruz to Trump: "On behalf 
+2026-07-06 16:03:37,923 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:37,924 INFO S3 not relevant: Balogun is the second time in World Cup history where an exp
+2026-07-06 16:03:38,443 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:38,444 INFO S3 not relevant: [OC] I spent 200 hours manually clipping 3000+ penalties
+2026-07-06 16:03:39,433 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:39,434 INFO S3 not relevant: Nottingham Forest: Oliver Glasner named head coach
+2026-07-06 16:03:39,929 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:39,930 INFO S3 not relevant: FIGC President Malagò slams 'absurd' Balogun decision: 'Foun
+2026-07-06 16:03:40,687 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:40,688 INFO S3 not relevant: Neymar Apologises to Ødegaard After The Match.
+2026-07-06 16:03:41,669 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:41,670 INFO S3 not relevant: [Official] ADO Den Haag appoints Steven Gunn as Director of 
+2026-07-06 16:03:42,678 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:42,679 INFO S3 not relevant: Bobby Vincent: While it [not signing Xhaka] is undoubtedly a
+2026-07-06 16:03:43,667 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:43,668 INFO S3 not relevant: Jordan Henderson is set to play no further part in the World
+2026-07-06 16:03:47,730 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:47,730 INFO S3 not relevant: Daily Discussion
+2026-07-06 16:03:48,228 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:48,229 INFO S3 not relevant: Indirect free kick awarded to England because of incorrect k
+2026-07-06 16:03:48,922 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:48,923 INFO S3 not relevant: Thousands welcome home Cape Verde footballers after stunning
+2026-07-06 16:03:49,740 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:49,741 INFO S3 not relevant: [Germany FA] President Bernd Neuendorf: “Fifa should now iss
+2026-07-06 16:03:50,224 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:50,225 INFO S3 not relevant: Update: Belgian football federation statement
+2026-07-06 16:03:50,818 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:50,819 INFO S3 not relevant: [Bild+] Newcastle interested in signing Angelo Stiller
+2026-07-06 16:03:51,745 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:51,746 INFO S3 not relevant: From Mussolini to Trump: A Look Back at Political Interferen
+2026-07-06 16:03:52,245 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:52,246 INFO S3 not relevant: Vinicius Jr: “Ancelotti decided to give the penalty to Bruno
+2026-07-06 16:03:52,837 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:52,838 INFO S3 not relevant: Norwegian fans at a massive watch party at the Ullevall Stad
+2026-07-06 16:03:53,551 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:53,552 INFO S3 not relevant: Filipe Luís new head coach of AS Monaco
+2026-07-06 16:03:54,055 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:54,056 INFO S3 not relevant: [Fabrizio Romano] Kang-in Lee to Atlético Madrid, here we go
+2026-07-06 16:03:54,737 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:54,738 INFO S3 not relevant: Official Source: Udiness Signs Chakvetadze
+2026-07-06 16:03:56,986 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:56,987 INFO S3 not relevant: Memo Ochoa walks to the midfield at Estadio Azteca and is ch
+2026-07-06 16:03:57,857 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:57,858 INFO S3 not relevant: [VI, official IG post inside] Sébastien Haller signs with Sa
+2026-07-06 16:03:58,645 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:58,646 INFO S3 not relevant: Members list of FIFA's disciplinary committee that lifted Ba
+2026-07-06 16:03:59,142 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:59,142 INFO S3 not relevant: Dutch FA to sue over racist slurs after World Cup exit
+2026-07-06 16:03:59,940 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:03:59,941 INFO S3 not relevant: The most painful ‘Aztecazo’: Mexican media reacts to devasta
+2026-07-06 16:04:00,441 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:00,442 INFO S3 not relevant: FC Barcelona appoints Benjamin Kugel as the new fitness coac
+2026-07-06 16:04:01,006 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:01,007 INFO S3 not relevant: Nani: “Bruno Fernandes is more about the final touches, and 
+2026-07-06 16:04:01,854 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:03,109 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:03,110 INFO S5 fetch fulltext: [FC Bayern] Planned routine surgery for Jamal Musiala
+2026-07-06 16:04:03,256 INFO S5 fulltext fail (too_short_36_words): [FC Bayern] Planned routine surgery for Jamal Musiala
+2026-07-06 16:04:06,568 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:06,569 INFO S3 not relevant: Jose Felix Diaz - Manchester United is coming for Tchouameni
+2026-07-06 16:04:07,256 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:07,257 INFO S3 not relevant: Under the theme "EVOLUTION! The J.League is evolving", the j
+2026-07-06 16:04:09,337 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:09,338 INFO S3 not relevant: [FR12/Plettenberg] 'KNVB to hold first talks with Arne Slot'
+2026-07-06 16:04:11,771 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:11,772 INFO S3 not relevant: Belgium's poster ahead of the Belgium vs USA game with a sub
+2026-07-06 16:04:12,534 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:12,535 INFO S3 not relevant: Selina Cerci signs for Arsenal
+2026-07-06 16:04:13,401 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:13,401 INFO S3 not relevant: Norwegian royal princess Ingrid Alexandra visited Norway's l
+2026-07-06 16:04:14,243 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:14,244 INFO S3 not relevant: Stat Record: Neymar Jr joins elite club by becoming one of t
+2026-07-06 16:04:15,304 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:15,305 INFO S3 not relevant: Arsène Wenger on French Football: “I think our success comes
+2026-07-06 16:04:16,400 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:16,401 INFO S3 not relevant: [BBC] The students of a Wiltshire primary school watch a rep
+2026-07-06 16:04:17,239 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:17,240 INFO S3 not relevant: Joseph Blatter, former FIFA president: "If a US President in
+2026-07-06 16:04:17,963 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:17,964 INFO S3 not relevant: Explained: Folarin Balogun’s World Cup red-card reversal, Tr
+2026-07-06 16:04:18,851 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:18,852 INFO S3 not relevant: England’s 10 men hang on after Kane penalty to beat Mexico i
+2026-07-06 16:04:19,485 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:19,486 INFO S3 not relevant: Belgian Minister of Foreign Affairs, Maxime Prévot, calls li
+2026-07-06 16:04:21,081 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:21,082 INFO S3 not relevant: Belgian newspaper La Libre titles: 349 million Americans + F
+2026-07-06 16:04:21,739 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:21,740 INFO S3 not relevant: Mexican and English fans sing "Hey Jude" together after expe
+2026-07-06 16:04:22,242 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:22,243 INFO S3 not relevant: [Tottenham Hotspur] Welcome, Sandro! Tonali makes the move t
+2026-07-06 16:04:23,060 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:23,061 INFO S3 not relevant: Aaron Ibrahim‘s great goal in Antwerp‘s friendly match again
+2026-07-06 16:04:23,584 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:23,585 INFO S3 not relevant: UEFA statement on the Balogun case
+2026-07-06 16:04:24,041 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:24,042 INFO S3 not relevant: Goalie Jordan Pickford will break England's all time World C
+2026-07-06 16:04:24,896 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:24,897 INFO S3 not relevant: Go Ahead Eagles are set to make a major move in the transfer
+2026-07-06 16:04:25,396 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:25,397 INFO S3 not relevant: Donald Trump: “Harry Kane of England is a GREAT player!!!”
+2026-07-06 16:04:26,204 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:26,204 INFO S3 not relevant: [Official] Nottingham Forest confirm appointment of Oliver G
+2026-07-06 16:04:27,203 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:27,204 INFO S3 not relevant: [Athletic Club] legendary goalkeeper Carmelo Cedrún, one-tim
+2026-07-06 16:04:27,705 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:27,706 INFO S3 not relevant: Atalanta star Ederson set for second medical in the UK with 
+2026-07-06 16:04:28,246 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:28,247 INFO S3 not relevant: Brazil's 34% possession against Norway is their lowest ever 
+2026-07-06 16:04:29,725 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:29,726 INFO S3 not relevant: Faroe Islands Premier League: in their 0-2 loss to Víkingur 
+2026-07-06 16:04:30,538 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:30,539 INFO S3 not relevant: [BBC] ITV sells media and entertainment arm to Sky for £1.6b
+2026-07-06 16:04:31,052 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:31,053 INFO S3 not relevant: Monday Moan
+2026-07-06 16:04:32,195 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:32,196 INFO S3 not relevant: Felix Kroos: "The last match of your career was exactly two 
+2026-07-06 16:04:32,734 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:32,735 INFO S3 not relevant: FIFA omits slide regarding automatic 1-match suspension afte
+2026-07-06 16:04:33,336 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:33,337 INFO S3 not relevant: Belgium granted right to appeal against FIFA’s Folarin Balog
+2026-07-06 16:04:34,338 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:34,338 INFO S3 not relevant: Neymar intentionally bumping into Ødegaard after he scored t
+2026-07-06 16:04:35,176 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:35,176 INFO S3 not relevant: Jürgen Klopp on Trump and Infantino: “Let's just say: this i
+2026-07-06 16:04:35,656 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:35,657 INFO S3 not relevant: World Cup 2026: An incredible night when English heroes were
+2026-07-06 16:04:36,152 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:36,153 INFO S3 not relevant: Neymar and Martin Ødegaard after the match.
+2026-07-06 16:04:37,005 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:37,006 INFO S3 not relevant: ‘Very bright future’ - Cristiano Ronaldo talks Lamine Yamal 
+2026-07-06 16:04:37,527 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:37,528 INFO S3 not relevant: Inside the White House push to get Folarin Balogun back on t
+2026-07-06 16:04:38,578 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:38,579 INFO S3 not relevant: [BBC Sport] Thomas Tuchel on what he made of the refereeing 
+2026-07-06 16:04:39,679 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:39,680 INFO S3 not relevant: Mexico coach Javier Aguire saying "fuck you" to Anthony Gord
+2026-07-06 16:04:40,272 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:40,273 INFO S3 not relevant: Tuchel on Balogun decision "I think first of all, to be very
+2026-07-06 16:04:41,004 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:41,005 INFO S3 not relevant: Trump’s call to Infantino and plot to ‘free’ Balogun that sp
+2026-07-06 16:04:41,767 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:41,768 INFO S3 not relevant: Jude Bellingham becomes the 4th highest player with most goa
+2026-07-06 16:04:42,227 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:42,228 INFO S3 not relevant: Jude Bellingham’s advice to England supporters: “Take anothe
+2026-07-06 16:04:43,061 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:43,062 INFO S3 not relevant: Brazil's longest drought (map of every European country that
+2026-07-06 16:04:43,845 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:43,846 INFO S3 not relevant: England's Henderson injures wrist in World Cup celebrations.
+2026-07-06 16:04:44,681 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:44,681 INFO S3 not relevant: English fans serenading Jude Bellingham singing, "Hey Jude" 
+2026-07-06 16:04:45,871 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:45,872 INFO S3 not relevant: Mexico’s kidnapping crisis: 'How can they hold a World Cup?’
+2026-07-06 16:04:46,639 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:46,640 INFO S3 not relevant: Henderson forearm injury on Fox Sports post
+2026-07-06 16:04:47,388 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:47,389 INFO S3 not relevant: Brazil searching for more quality midfielders, says Ancelott
+2026-07-06 16:04:48,191 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:48,192 INFO S3 not relevant: London celebrates their victory to Mexico 3 a 2. And now the
+2026-07-06 16:04:49,217 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:49,218 INFO S3 not relevant: [OptaJoe] 81 - With another goal and assist today, Harry Kan
+2026-07-06 16:04:49,867 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:49,868 INFO S3 not relevant: BRA vs NOR: Brazil players barely touched the ball for nearl
+2026-07-06 16:04:50,764 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:50,765 INFO S3 not relevant: Jordan Henderson's injury after falling over advertising hoa
+2026-07-06 16:04:51,807 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:51,808 INFO S3 not relevant: Jordan Henderson suffers freak injury after falling over adv
+2026-07-06 16:04:52,614 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:52,617 INFO S3 not relevant: Erling Haaland hails ‘one of the sickest days’ in Norway’s h
+2026-07-06 16:04:53,323 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:53,324 INFO S3 not relevant: Bellingham consoles and trade shirt with Mora after the game
+2026-07-06 16:04:54,156 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:54,157 INFO S3 not relevant: [Ornstein] Dan Burn confirms Jordan Henderson suffered injur
+2026-07-06 16:04:54,872 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:54,873 INFO S3 not relevant: World Cup 2026 Golden Boot race
+2026-07-06 16:04:54,874 INFO S8 QA: 2 Kandidaten …
+2026-07-06 16:04:58,803 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-06 16:04:58,804 INFO QA APPROVE [0]: Schalke-Kader im Check: Sturm nur zu 25 Prozent bundesligare
+2026-07-06 16:04:58,804 INFO QA REJECT [1]: Text bricht mitten im Satz ab ('Bei Borussia Dortmu') und ist damit unvollständig und nicht publizierbar.
+2026-07-06 16:04:58,804 INFO S8 approved: 1 / 2
+2026-07-06 16:04:58,808 INFO Veröffentlicht: Schalke-Kader im Check: Sturm nur zu 25 Prozent bundesligare
+2026-07-06 16:04:58,809 INFO === Fertig. 1 neue Artikel. feed.json: 95 ===
+2026-07-06 16:04:58,809 INFO Stats: {"ts": "20260706_1556", "ingested": 1184, "s2_pre_filter": 62, "s3_relevance": 334, "s4_dedup_early": 2, "s5_fulltext_fail": 37, "s6_dedup_refined": 2, "s7_generated": 2, "s8_qa_rejected": 1, "published": 1}
