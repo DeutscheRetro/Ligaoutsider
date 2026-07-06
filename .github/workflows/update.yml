@@ -40,7 +40,7 @@ jobs:
         run: |
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
-          git add feed.json artikel/
+          git add feed.json artikel/ data/ logs/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -d spieler ] && git add spieler/ || true
           if git diff --staged --quiet; then

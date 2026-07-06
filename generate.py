@@ -11,6 +11,7 @@ import hashlib
 import datetime
 import re
 import time
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
 import feedparser
@@ -18,6 +19,30 @@ import anthropic
 from slugify import slugify
 
 load_dotenv()
+
+# ─── Logging ──────────────────────────────────────────────────────────────────
+
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
+_run_ts = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_DIR / f"run_{_run_ts}.log", encoding="utf-8"),
+        logging.StreamHandler(),
+    ],
+)
+log = logging.getLogger("ligaoutsider")
+
+# Skips als JSONL
+_skips_path = LOG_DIR / f"skips_{_run_ts[:8]}.jsonl"
+
+def _log_skip(item_id: str, title: str, stage: str, reason: str):
+    entry = {"ts": datetime.datetime.now().isoformat(), "id": item_id,
+             "title": title[:80], "stage": stage, "reason": reason}
+    with _skips_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 # ─── Konfiguration ────────────────────────────────────────────────────────────
 
@@ -348,6 +373,70 @@ def _eigennamen(t: str) -> set:
     return {w for w in re.split(r'\W+', t) if len(w) > 3 and w[0].isupper()}
 
 
+# ─── Published Stories (persistenter State) ───────────────────────────────────
+
+PUBLISHED_JSON = Path("data/published_stories.json")
+
+def lade_published_stories() -> list[dict]:
+    PUBLISHED_JSON.parent.mkdir(exist_ok=True)
+    if not PUBLISHED_JSON.exists():
+        return []
+    try:
+        return json.loads(PUBLISHED_JSON.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+def speichere_published_stories(stories: list[dict]):
+    PUBLISHED_JSON.parent.mkdir(exist_ok=True)
+    PUBLISHED_JSON.write_text(
+        json.dumps(stories[-1000:], ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+
+# ─── Content Fingerprint (Stage 4) ────────────────────────────────────────────
+
+def fingerprint_generieren(titel: str, summary: str) -> dict | None:
+    """Haiku extrahiert strukturierten Story-Fingerprint als JSON."""
+    try:
+        antwort = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=300,
+            messages=[{"role": "user", "content": (
+                f'Extrahiere einen Story-Fingerprint als reines JSON (kein Markdown):\n'
+                f'{{"event_type":"transfer|verletzung|trainerwechsel|spielergebnis|testspiel|geruecht|vereinsnews|analyse|sonstiges",'
+                f'"main_teams":["max 3 Teams"],'
+                f'"main_players":["max 3 Spieler"],'
+                f'"one_sentence_summary":"1 Satz Kern-Ereignis"}}\n\n'
+                f'Titel: {titel}\nZusammenfassung: {summary[:500]}'
+            )}]
+        )
+        roh = antwort.content[0].text.strip()
+        m = re.search(r'\{.*\}', roh, re.DOTALL)
+        if m:
+            return json.loads(m.group())
+    except Exception:
+        pass
+    return None
+
+
+def _fingerprints_aehnlich(fp1: dict, fp2: dict) -> bool:
+    """True wenn zwei Fingerprints dieselbe Story beschreiben."""
+    from rapidfuzz import fuzz
+    # Gleicher Event-Typ + mind. 2 gemeinsame Entitäten
+    if fp1.get("event_type") == fp2.get("event_type"):
+        e1 = set(fp1.get("main_teams", []) + fp1.get("main_players", []))
+        e2 = set(fp2.get("main_teams", []) + fp2.get("main_players", []))
+        if len(e1 & e2) >= 2:
+            return True
+    # Fuzzy auf one_sentence_summary
+    s1 = fp1.get("one_sentence_summary", "")
+    s2 = fp2.get("one_sentence_summary", "")
+    if s1 and s2 and fuzz.ratio(s1, s2) >= 85:
+        return True
+    return False
+
+
 def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
     """Prüft ob Meldung inhaltlich schon vorhanden oder echte neue Entwicklung.
     bestehende: Liste von Artikel-Dicts (mit 'id' und 'titel').
@@ -449,61 +538,84 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
     return "JA" in antwort.content[0].text.upper()
 
 
-def quellartikel_laden(url: str) -> str:
-    """Lädt den Volltext eines Artikels von der Quell-URL (plain text, max 3000 Zeichen).
-    Folgt Google-News-Redirects automatisch."""
-    import urllib.request as _ureq
+def fetch_fulltext(url: str) -> tuple[str | None, str]:
+    """Lädt Volltext via trafilatura. Gibt (text, reason) zurück — reason='ok' oder Fehlergrund."""
+    import trafilatura
+    import requests as _req
+    MIN_WORDS = 250
+    PAYWALL_MARKERS = ["paywall", "abo", "abonnenten", "premium",
+                       "login erforderlich", "nur für abonnenten", "artikelende"]
     try:
-        req = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        resp = _ureq.urlopen(req, timeout=10)
-        # Finale URL nach Redirect prüfen
-        final_url = resp.geturl()
-        if "google.com" in final_url:
-            return ""  # Redirect nicht aufgelöst – kein nutzbarer Inhalt
-        html = resp.read().decode("utf-8", errors="ignore")
-        # Skripte und Styles raus
-        html = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', html, flags=re.DOTALL | re.I)
-        # Tags raus
-        text = re.sub(r'<[^>]+>', ' ', html)
-        # Whitespace normalisieren
-        text = re.sub(r'\s+', ' ', text).strip()
-        # Mindestlänge: zu kurzer Text = Paywall/Fehler
-        if len(text) < 200:
-            return ""
-        return text[:3000]
-    except Exception:
-        return ""
+        # Redirect folgen (inkl. Google News)
+        try:
+            r = _req.get(url, allow_redirects=True, timeout=12,
+                         headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"})
+            final_url = r.url
+            if "google.com" in final_url:
+                return None, "google_redirect_unresolved"
+            html_content = r.content
+        except Exception as e:
+            return None, f"fetch_failed_{type(e).__name__}"
+
+        text = trafilatura.extract(
+            html_content,
+            include_comments=False,
+            include_tables=False,
+            output_format="txt",
+            favor_precision=True,
+        )
+        if not text:
+            return None, "trafilatura_returned_empty"
+
+        words = text.split()
+        if len(words) < MIN_WORDS:
+            return None, f"too_short_{len(words)}_words"
+
+        text_lower = text.lower()
+        for marker in PAYWALL_MARKERS:
+            if marker in text_lower:
+                return None, "likely_paywall"
+
+        unique_ratio = len(set(words)) / len(words)
+        if unique_ratio < 0.4:
+            return None, "low_unique_content_ratio"
+
+        return text[:4000], "ok"
+
+    except Exception as e:
+        return None, f"exception_{type(e).__name__}"
 
 
-def artikel_generieren(titel: str, beschreibung: str, quelle_name: str, quelle_url: str) -> dict:
-    """Lässt Claude einen eigenen Artikel schreiben und eine Kategorie wählen."""
-    volltext = quellartikel_laden(quelle_url)
-    if not volltext and len(beschreibung) < 100:
-        raise ValueError("Kein Volltext und keine brauchbare Beschreibung – Artikel übersprungen")
-    quell_info = f"VOLLTEXT DER ORIGINALQUELLE:\n{volltext}" if volltext else f"BESCHREIBUNG: {beschreibung}"
+# Legacy-Wrapper für Abwärtskompatibilität (intern nicht mehr genutzt)
+def quellartikel_laden(url: str) -> str:
+    text, reason = fetch_fulltext(url)
+    return text or ""
 
-    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret. Keine KI-Floskeln, kein aufgeblasener Stil.
 
-STRIKTE REGELN:
-- Nur Fakten aus dem Quelltext verwenden. KEINE erfundenen Details.
-- Wenn der Quelltext wenig hergibt: Kontext zum Spieler einbauen – z.B. wie er letzte Saison spielte, seit wann er beim Club ist, woher er kam, Vertragssituation. Nur gesichertes Allgemeinwissen verwenden, keine Erfindungen.
-- VERBOTEN: Sätze wie „Solche Situationen sind im modernen Fußball nicht ungewöhnlich", „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex" oder ähnliche Plattitüden.
-- Spielernamen korrekt schreiben inkl. Akzente (z.B. João, Raphaël, Øyvind).
-- Keine Gedankenstriche als Satzzeichen. Klare, vollständige Sätze, max. 25 Wörter.
-- Keine Ausrufezeichen, keine Reißer-Formulierungen, keine Bullet Points.
-- Fakten zuerst, Einordnung nur wenn der Quelltext dafür Grundlage bietet.
+def artikel_generieren(titel: str, volltext: str, quelle_name: str, quelle_url: str) -> dict:
+    """Lässt Sonnet Artikel schreiben. Bekommt validierten Volltext (Stage 5 Survivor)."""
+    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret.
 
-QUELLE:
-TITEL: {titel}
-QUELLE: {quelle_name} ({quelle_url})
-{quell_info}
+ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
+- Nur Fakten, Namen, Zahlen aus dem QUELLTEXT verwenden.
+- Steht eine Information nicht im Quelltext → weglassen oder "laut Quelle nicht spezifiziert".
+- KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
+- VERBOTEN: „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex", alle Plattitüden.
+- Spielernamen korrekt inkl. Akzente (João, Raphaël, Øyvind).
+- Keine Gedankenstriche als Satzzeichen. Klare Sätze, max. 25 Wörter. Keine Ausrufezeichen.
+
+QUELLTEXT (vollständig):
+{volltext}
+
+Originaltitel: {titel}
+Quelle: {quelle_name} ({quelle_url})
 
 Erstelle:
 1. Präzisen Titel im Kicker-Stil (max. 80 Zeichen)
-2. Zwei bis vier Absätze – so viele wie die Quellinfos rechtfertigen, nicht mehr
-3. Kategorie aus: transfer, verletzung, aufstellung, interview, analyse, news
+2. Zwei bis vier Absätze – so viele wie Quellinfos rechtfertigen, nicht mehr
+3. Kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 
-Antworte ausschließlich im folgenden JSON-Format (kein Markdown drumherum):
+Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
 {{
   "titel": "...",
   "text": "Absatz 1.\\n\\nAbsatz 2.\\n\\nAbsatz 3.",
@@ -517,7 +629,6 @@ Antworte ausschließlich im folgenden JSON-Format (kein Markdown drumherum):
     )
 
     roh = antwort.content[0].text.strip()
-    # JSON aus der Antwort extrahieren (Claude hält sich fast immer dran)
     match = re.search(r'\{.*\}', roh, re.DOTALL)
     if not match:
         raise ValueError(f"Kein JSON in Antwort: {roh}")
@@ -703,12 +814,11 @@ def artikel_html(
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
 def qualitaets_check(kandidaten: list) -> list:
-    """Sonnet prüft alle Kandidaten eines Runs: Duplikate, Leerinhalt, Qualität.
+    """Sonnet prüft alle Kandidaten als Batch mit strukturiertem JSON-Output.
     Gibt nur approved Kandidaten zurück."""
     if not kandidaten:
         return []
 
-    # Übersicht für Sonnet aufbauen
     liste = ""
     for i, k in enumerate(kandidaten):
         text_preview = k["ergebnis"]["text"][:300].replace("\n", " ")
@@ -716,34 +826,48 @@ def qualitaets_check(kandidaten: list) -> list:
 
     antwort = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=500,
+        max_tokens=800,
         messages=[{
             "role": "user",
             "content": (
-                f"Du bist Qualitätsredakteur für eine Fußball-Nachrichtenseite. "
-                f"Prüfe diese {len(kandidaten)} generierten Artikel-Kandidaten und entscheide welche veröffentlicht werden sollen.\n\n"
+                f"Du bist leitender QS-Redakteur von ligaoutsider.de.\n"
+                f"Reviewe {len(kandidaten)} Kandidaten. Für JEDEN prüfe:\n"
+                f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt'\n"
+                f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
+                f"3. Qualität: Substanz, lesbar, nicht leer/generisch\n\n"
                 f"KANDIDATEN:\n{liste}\n\n"
-                f"ABLEHNEN wenn:\n"
-                f"- Inhalt leer, nichtssagend oder enthält Sätze wie 'Details nicht bekannt' / 'Quelle gibt keine Infos'\n"
-                f"- Zwei oder mehr Kandidaten behandeln dasselbe Thema (gleicher Spieler + gleiche Situation) → nur den besten behalten\n"
-                f"- Artikel enthält offensichtlich falsche Fakten oder ist reiner Lückenfüller\n\n"
-                f"Antworte NUR mit einer kommagetrennten Liste der APPROVED Index-Nummern (z.B. '0,2,4') oder 'keine' wenn alle abgelehnt."
+                f"Output NUR als valides JSON-Array:\n"
+                f'[{{"id":0,"decision":"APPROVE"|"REJECT","reason":"1 Satz"}},...]'
             )
         }]
     )
 
-    roh = antwort.content[0].text.strip().lower()
-    if roh == "keine" or not roh:
+    roh = antwort.content[0].text.strip()
+    m = re.search(r'\[.*\]', roh, re.DOTALL)
+    if not m:
+        log.warning(f"QA: Kein JSON-Array in Antwort: {roh[:200]}")
+        # Fallback: alle ablehnen
+        return []
+
+    try:
+        ergebnisse = json.loads(m.group())
+    except json.JSONDecodeError:
+        log.warning("QA: JSON-Parse-Fehler, alle abgelehnt")
         return []
 
     approved = []
-    for part in roh.replace(" ", "").split(","):
-        try:
-            idx = int(part)
-            if 0 <= idx < len(kandidaten):
+    for item in ergebnisse:
+        if isinstance(item, dict) and item.get("decision") == "APPROVE":
+            idx = item.get("id")
+            if isinstance(idx, int) and 0 <= idx < len(kandidaten):
                 approved.append(kandidaten[idx])
-        except ValueError:
-            pass
+                log.info(f"QA APPROVE [{idx}]: {kandidaten[idx]['ergebnis']['titel'][:60]}")
+            else:
+                log.warning(f"QA: ungültiger Index {idx}")
+        elif isinstance(item, dict):
+            idx = item.get("id", "?")
+            reason = item.get("reason", "")
+            log.info(f"QA REJECT [{idx}]: {reason}")
     return approved
 
 
@@ -752,31 +876,59 @@ def main():
     DELETED_IDS = lade_deleted_ids()
     ARTIKEL_ORDNER.mkdir(exist_ok=True)
     bestehende = feed_laden()
-    rss_titel_dieser_lauf: list[str] = []  # raw RSS titles processed this run
-    neu_generiert = 0
-    kandidaten: list[dict] = []  # generierte Artikel vor QA
+    published_stories = lade_published_stories()
 
-    print(f"Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} neue Artikel")
-    print("─" * 60)
+    # Fingerprints aus published_stories für Dedup
+    pub_fingerprints: list[dict] = [s["fingerprint"] for s in published_stories if s.get("fingerprint")]
+    pub_urls: set[str] = {s.get("original_url", "") for s in published_stories}
+
+    # Run-Stats
+    stats = {
+        "ts": _run_ts, "ingested": 0,
+        "s2_pre_filter": 0, "s3_relevance": 0, "s4_dedup_early": 0,
+        "s5_fulltext_fail": 0, "s6_dedup_refined": 0,
+        "s7_generated": 0, "s8_qa_rejected": 0, "published": 0,
+    }
+
+    neu_generiert = 0
+    kandidaten: list[dict] = []
+    batch_fingerprints: list[dict] = []  # Fingerprints dieses Runs für Intra-Batch-Dedup
+
+    _SKIP_KEYWORDS = (
+        "nagelsmann", "nationalmannschaft", "dfb-team", "em 2026", "wm 2026",
+        "nations league", "länderspiel", "u21-em", "olympia",
+        "frauen", "frauenfußball", "frauenbundesliga", "-frauen",
+    )
+
+    log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
     for feed_url in RSS_FEEDS:
         if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
             break
 
-        print(f"\nLese Feed: {feed_url}")
-        feed = feedparser.parse(feed_url)
+        log.info(f"Feed: {feed_url}")
+        try:
+            feed = feedparser.parse(feed_url)
+        except Exception as e:
+            log.error(f"Feed-Parse-Fehler: {e}")
+            continue
+
         ist_google_news = "news.google.com" in feed_url
-        quelle_name = feed.feed.get("title", feed_url)
+        feed_quelle = feed.feed.get("title", feed_url)
 
         for eintrag in feed.entries:
             if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
                 break
 
-            url   = eintrag.get("link", "")
-            titel = eintrag.get("title", "")
+            url    = eintrag.get("link", "")
+            titel  = eintrag.get("title", "").strip()
             beschr = eintrag.get("summary", eintrag.get("description", ""))
 
-            # Bei Google News: echte Quelle aus entry.source extrahieren
+            if not url or not titel:
+                continue
+
+            # Quelle bei Google News aus entry.source
+            quelle_name = feed_quelle
             if ist_google_news:
                 src = eintrag.get("source", {})
                 if isinstance(src, dict) and src.get("title"):
@@ -784,167 +936,217 @@ def main():
                 elif hasattr(src, "title") and src.title:
                     quelle_name = src.title
                 else:
-                    # Fallback: Domain aus dem echten Artikel-Link (nicht google.com)
                     from urllib.parse import urlparse as _up
                     _netloc = _up(url).netloc.replace("www.", "")
                     if _netloc and "google" not in _netloc:
                         quelle_name = _netloc
 
-            # Bei Nitter/Twitter: echte Artikel-URL aus Tweet-Text extrahieren
-            ist_nitter = "nitter.net" in feed_url
-            if ist_nitter:
-                # Tweet-Beschreibung enthält meist einen bild.de o.ä. Link
-                m = re.search(r'https?://(?!nitter|twitter|x\.com)[^\s<>"\']+', beschr)
-                if m:
-                    echte_url = m.group(0).rstrip(".,)")
-                    from urllib.parse import urlparse as _up
-                    quelle_name = _up(echte_url).netloc.replace("www.", "")
-                    url = echte_url
-
-            # Bei Reddit: echte Quell-URL aus dem Post holen
-            ist_reddit = "reddit.com" in feed_url
-            if ist_reddit:
-                echte_url = eintrag.get("url", "") or eintrag.get("source", {}).get("href", "")
-                # Reddit-Posts haben die verlinkte URL oft im "url"-Feld
+            # Reddit: echte URL extrahieren
+            if "reddit.com" in feed_url:
+                echte_url = eintrag.get("url", "")
                 if not echte_url:
-                    # Aus der Beschreibung extrahieren
-                    import re as _re
-                    m = _re.search(r'href="(https?://(?!www\.reddit)[^"]+)"', beschr)
+                    m = re.search(r'href="(https?://(?!www\.reddit)[^"]+)"', beschr)
                     echte_url = m.group(1) if m else ""
                 if echte_url and "reddit.com" not in echte_url:
                     from urllib.parse import urlparse as _up
                     quelle_name = _up(echte_url).netloc.replace("www.", "")
                     url = echte_url
 
-            if not url or not titel:
-                continue
-
-            # Ligainsider: Originalquelle extrahieren, nie LI als Quelle anzeigen
+            # Ligainsider: Originalquelle extrahieren
             if "ligainsider.de" in url:
                 try:
                     import urllib.request as _ureq
-                    _req = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                    _html = _ureq.urlopen(_req, timeout=8).read().decode("utf-8", errors="ignore")
-                    _m = re.search(
-                        r'<strong>Quelle:</strong>\s*<a[^>]+href="([^"]+)"', _html
-                    )
+                    _rq = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                    _html = _ureq.urlopen(_rq, timeout=8).read().decode("utf-8", errors="ignore")
+                    _m = re.search(r'<strong>Quelle:</strong>\s*<a[^>]+href="([^"]+)"', _html)
                     if _m:
                         url = _m.group(1)
                         from urllib.parse import urlparse as _up
                         quelle_name = _up(url).netloc.replace("www.", "")
                     else:
-                        continue  # kein Original-Link → überspringen
+                        continue
                 except Exception:
                     continue
 
-            if schon_verarbeitet(url):
-                print(f"  ↩  Übersprungen (schon vorhanden): {titel[:60]}")
+            aid = artikel_id(url)
+            stats["ingested"] += 1
+
+            # ── Stage 2: Pre-Filter Gate ──────────────────────────────────────
+            # Exact: schon verarbeitet (lokale .html/.skip oder published_stories)
+            if schon_verarbeitet(url) or url in pub_urls:
+                log.debug(f"S2 skip (already processed): {titel[:60]}")
                 continue
 
-            # Alters-Check: Einträge älter als MAX_ALTER_TAGE überspringen
+            # Alters-Check
             veroeffentlicht = eintrag.get("published_parsed") or eintrag.get("updated_parsed")
             if veroeffentlicht:
-                alter = (datetime.datetime.now() - datetime.datetime(*veroeffentlicht[:6]))
+                alter = datetime.datetime.now() - datetime.datetime(*veroeffentlicht[:6])
                 if alter.days > MAX_ALTER_TAGE:
-                    aid = artikel_id(url)
                     (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                     continue
 
-            print(f"  ✦  Prüfe: {titel[:60]}")
-
-            # Schnell-Ausschluss: Nationalmannschaft / DFB-Themen ohne KI-Kosten
-            _SKIP_KEYWORDS = ("Nagelsmann", "Nationalmannschaft", "DFB-Team", "EM 2026", "WM 2026",
-                              "Nations League", "Länderspiel", "U21-EM", "Olympia",
-                              "Frauen", "Frauenfußball", "Frauenbundesliga", "-Frauen")
-            if any(kw.lower() in (titel + " " + beschr).lower() for kw in _SKIP_KEYWORDS):
-                print(f"  ✗  Keyword: Nationalmannschaft/DFB – übersprungen")
-                aid = artikel_id(url)
+            # Blacklist-Keywords
+            text_check = (titel + " " + beschr).lower()
+            if any(kw in text_check for kw in _SKIP_KEYWORDS):
+                log.info(f"S2 blacklist: {titel[:60]}")
+                _log_skip(aid, titel, "stage2", "blacklist_keyword")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s2_pre_filter"] += 1
                 continue
 
+            # ── Stage 3: Relevance Gate (Haiku) ──────────────────────────────
             if not ist_relevant(titel, beschr):
-                print(f"  ✗  KI: nicht relevant")
-                aid = artikel_id(url)
+                log.info(f"S3 not relevant: {titel[:60]}")
+                _log_skip(aid, titel, "stage3", "not_relevant")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s3_relevance"] += 1
                 continue
 
-            # Duplikat-Check: RSS-Titel dieses Laufs (schnell) + bestehende Artikel (mit Volltext-KI)
-            rss_pseudo = [{"id": "", "titel": t} for t in rss_titel_dieser_lauf]
-            if ist_duplikat(titel, beschr, rss_pseudo + bestehende):
-                print(f"  ⊘  KI: Duplikat – Thema bereits vorhanden")
-                aid = artikel_id(url)
+            # ── Stage 4: Fingerprint + Early Dedup ───────────────────────────
+            fp = fingerprint_generieren(titel, beschr)
+            if fp:
+                # Check gegen published + Batch
+                for existing_fp in pub_fingerprints + batch_fingerprints:
+                    if _fingerprints_aehnlich(fp, existing_fp):
+                        log.info(f"S4 fingerprint dup: {titel[:60]}")
+                        _log_skip(aid, titel, "stage4", "fingerprint_duplicate")
+                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                        stats["s4_dedup_early"] += 1
+                        fp = None
+                        break
+            if fp is None and (ARTIKEL_ORDNER / f"{aid}.skip").exists():
+                continue  # wurde als Dup markiert
+
+            # Legacy Keyword-Dedup als Fallback wenn kein Fingerprint
+            if not fp:
+                rss_pseudo = [{"id": "", "titel": t} for t in [s.get("generated_title", s.get("title", "")) for s in published_stories[-100:]]]
+                if ist_duplikat(titel, beschr, rss_pseudo + bestehende):
+                    log.info(f"S4 keyword dup: {titel[:60]}")
+                    _log_skip(aid, titel, "stage4", "keyword_duplicate")
+                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                    stats["s4_dedup_early"] += 1
+                    continue
+
+            # ── Stage 5: Fulltext Fetch & Validation (CRITICAL GATE) ─────────
+            log.info(f"S5 fetch fulltext: {titel[:60]}")
+            volltext, reason = fetch_fulltext(url)
+            if reason != "ok":
+                log.info(f"S5 fulltext fail ({reason}): {titel[:60]}")
+                _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s5_fulltext_fail"] += 1
                 continue
 
-            print(f"  ✓  KI: relevant & neu – schreibe Artikel …")
+            # ── Stage 6: Refined Dedup mit Fulltext ──────────────────────────
+            if fp:
+                # Fingerprint mit Volltext updaten (besserer Kontext)
+                fp_refined = fingerprint_generieren(titel, volltext[:600])
+                if fp_refined:
+                    fp = fp_refined
+                for existing_fp in pub_fingerprints + batch_fingerprints:
+                    if _fingerprints_aehnlich(fp, existing_fp):
+                        log.info(f"S6 refined dup: {titel[:60]}")
+                        _log_skip(aid, titel, "stage6", "refined_fingerprint_duplicate")
+                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                        stats["s6_dedup_refined"] += 1
+                        fp = None
+                        break
+                if fp is None:
+                    continue
 
+            # ── Stage 7: Article Generation (Sonnet) ─────────────────────────
+            log.info(f"S7 generate: {titel[:60]}")
             try:
-                ergebnis = artikel_generieren(titel, beschr, quelle_name, url)
+                ergebnis = artikel_generieren(titel, volltext, quelle_name, url)
             except Exception as e:
-                print(f"  ⚠  Fehler beim Generieren: {e}")
+                log.warning(f"S7 generation error: {e}")
                 continue
 
-            aid        = artikel_id(url)
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
-            vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"] + " " + beschr)
-            wappen_url = verein_wappen_url(ergebnis["titel"] + " " + beschr)
+            vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"])
+            wappen_url = verein_wappen_url(ergebnis["titel"] + " " + ergebnis["text"][:200])
 
-            rss_titel_dieser_lauf.append(titel)
+            if fp:
+                batch_fingerprints.append(fp)
+
             kandidaten.append({
-                "aid":        aid,
-                "datum":      datum,
-                "ergebnis":   ergebnis,
+                "aid":         aid,
+                "datum":       datum,
+                "ergebnis":    ergebnis,
                 "quelle_name": quelle_name,
-                "url":        url,
-                "wappen_url": wappen_url,
-                "vereine":    vereine,
+                "url":         url,
+                "wappen_url":  wappen_url,
+                "vereine":     vereine,
+                "fingerprint": fp,
             })
-            print(f"  📝 Kandidat: {ergebnis['titel'][:60]}")
+            stats["s7_generated"] += 1
+            log.info(f"  Kandidat: {ergebnis['titel'][:60]}")
 
-    # ── Batch-QA ─────────────────────────────────────────────────────────────
+    # ── Stage 8: Batch Quality Gate (Sonnet) ─────────────────────────────────
     if kandidaten:
-        print(f"\n🔍 QA-Check: {len(kandidaten)} Kandidaten prüfen …")
+        log.info(f"S8 QA: {len(kandidaten)} Kandidaten …")
         approved = qualitaets_check(kandidaten)
-        print(f"  ✅ Approved: {len(approved)} / {len(kandidaten)}")
+        stats["s8_qa_rejected"] = len(kandidaten) - len(approved)
+        log.info(f"S8 approved: {len(approved)} / {len(kandidaten)}")
+    else:
+        approved = []
 
-        for k in approved:
-            ergebnis = k["ergebnis"]
-            aid = k["aid"]
-            html = artikel_html(
-                datei_id    = aid,
-                titel       = ergebnis["titel"],
-                text        = ergebnis["text"],
-                kategorie   = ergebnis["kategorie"],
-                quelle_name = k["quelle_name"],
-                quelle_url  = k["url"],
-                datum       = k["datum"],
-                wappen_url  = k["wappen_url"],
-                vereine     = k["vereine"],
-            )
-            (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
-            badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
-            bestehende.append({
-                "id":         aid,
-                "titel":      ergebnis["titel"],
-                "kategorie":  ergebnis["kategorie"],
-                "badge":      badge_label,
-                "badge_bg":   badge_bg,
-                "badge_fg":   badge_fg,
-                "datum":      k["datum"],
-                "wappen_url": k["wappen_url"],
-                "vereine":    k["vereine"],
-                "pfad":       f"artikel/{aid}.html",
-            })
-            feed_speichern(bestehende)
-            facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
-            neu_generiert += 1
-            print(f"  ✅ Veröffentlicht: {ergebnis['titel'][:60]}")
+    # ── Stage 9/10: Publish & Persist ────────────────────────────────────────
+    for k in approved:
+        ergebnis = k["ergebnis"]
+        aid = k["aid"]
+        html = artikel_html(
+            datei_id    = aid,
+            titel       = ergebnis["titel"],
+            text        = ergebnis["text"],
+            kategorie   = ergebnis["kategorie"],
+            quelle_name = k["quelle_name"],
+            quelle_url  = k["url"],
+            datum       = k["datum"],
+            wappen_url  = k["wappen_url"],
+            vereine     = k["vereine"],
+        )
+        (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
+        badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
+        feed_entry = {
+            "id":         aid,
+            "titel":      ergebnis["titel"],
+            "kategorie":  ergebnis["kategorie"],
+            "badge":      badge_label,
+            "badge_bg":   badge_bg,
+            "badge_fg":   badge_fg,
+            "datum":      k["datum"],
+            "wappen_url": k["wappen_url"],
+            "vereine":    k["vereine"],
+            "pfad":       f"artikel/{aid}.html",
+        }
+        bestehende.append(feed_entry)
+        feed_speichern(bestehende)
+
+        # Persistenter State updaten
+        published_stories.append({
+            "id":             aid,
+            "generated_title": ergebnis["titel"],
+            "original_url":   k["url"],
+            "fingerprint":    k.get("fingerprint"),
+            "published_at":   datetime.datetime.now().isoformat(),
+            "source":         k["quelle_name"],
+        })
+        speichere_published_stories(published_stories)
+
+        facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
+        neu_generiert += 1
+        stats["published"] += 1
+        log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
 
     sitemap_generieren(bestehende)
 
-    print(f"\n─" * 60)
-    print(f"Fertig. {neu_generiert} neue Artikel generiert.")
-    print(f"feed.json enthält jetzt {len(bestehende)} Artikel.")
+    # Run-Stats speichern
+    stats_path = LOG_DIR / f"run_{_run_ts}.json"
+    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
+    log.info(f"Stats: {json.dumps(stats)}")
 
 
 def facebook_post(titel: str, artikel_url: str):
