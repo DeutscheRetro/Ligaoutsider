@@ -3,17 +3,11 @@ name: Neue Artikel generieren
 on:
   schedule:
     - cron: '17 6 * * *'    # 08:17 (UTC+2)
-    - cron: '0 8 * * *'     # 10:00
-    - cron: '0 9 * * *'     # 11:00
-    - cron: '0 10 * * *'    # 12:00
-    - cron: '0 11 * * *'    # 13:00
-    - cron: '0 12 * * *'    # 14:00
-    - cron: '0 13 * * *'    # 15:00
-    - cron: '0 14 * * *'    # 16:00
-    - cron: '0 15 * * *'    # 17:00
-    - cron: '0 16 * * *'    # 18:00
-    - cron: '0 17 * * *'    # 19:00
-    - cron: '58 18 * * *'   # 20:58
+    - cron: '47 9 * * *'    # 11:47
+    - cron: '23 12 * * *'   # 14:23
+    - cron: '41 13 * * *'   # 15:41
+    - cron: '33 17 * * *'   # 19:33
+    - cron: '52 19 * * *'   # 21:52
   workflow_dispatch:              # auch manuell per Knopfdruck auslösbar
 
 jobs:
