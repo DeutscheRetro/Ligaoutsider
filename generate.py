@@ -702,6 +702,51 @@ def artikel_html(
 
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
+def qualitaets_check(kandidaten: list) -> list:
+    """Sonnet prüft alle Kandidaten eines Runs: Duplikate, Leerinhalt, Qualität.
+    Gibt nur approved Kandidaten zurück."""
+    if not kandidaten:
+        return []
+
+    # Übersicht für Sonnet aufbauen
+    liste = ""
+    for i, k in enumerate(kandidaten):
+        text_preview = k["ergebnis"]["text"][:300].replace("\n", " ")
+        liste += f"\n[{i}] Titel: {k['ergebnis']['titel']}\n    Text: {text_preview}\n"
+
+    antwort = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=500,
+        messages=[{
+            "role": "user",
+            "content": (
+                f"Du bist Qualitätsredakteur für eine Fußball-Nachrichtenseite. "
+                f"Prüfe diese {len(kandidaten)} generierten Artikel-Kandidaten und entscheide welche veröffentlicht werden sollen.\n\n"
+                f"KANDIDATEN:\n{liste}\n\n"
+                f"ABLEHNEN wenn:\n"
+                f"- Inhalt leer, nichtssagend oder enthält Sätze wie 'Details nicht bekannt' / 'Quelle gibt keine Infos'\n"
+                f"- Zwei oder mehr Kandidaten behandeln dasselbe Thema (gleicher Spieler + gleiche Situation) → nur den besten behalten\n"
+                f"- Artikel enthält offensichtlich falsche Fakten oder ist reiner Lückenfüller\n\n"
+                f"Antworte NUR mit einer kommagetrennten Liste der APPROVED Index-Nummern (z.B. '0,2,4') oder 'keine' wenn alle abgelehnt."
+            )
+        }]
+    )
+
+    roh = antwort.content[0].text.strip().lower()
+    if roh == "keine" or not roh:
+        return []
+
+    approved = []
+    for part in roh.replace(" ", "").split(","):
+        try:
+            idx = int(part)
+            if 0 <= idx < len(kandidaten):
+                approved.append(kandidaten[idx])
+        except ValueError:
+            pass
+    return approved
+
+
 def main():
     global DELETED_IDS
     DELETED_IDS = lade_deleted_ids()
@@ -709,6 +754,7 @@ def main():
     bestehende = feed_laden()
     rss_titel_dieser_lauf: list[str] = []  # raw RSS titles processed this run
     neu_generiert = 0
+    kandidaten: list[dict] = []  # generierte Artikel vor QA
 
     print(f"Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} neue Artikel")
     print("─" * 60)
@@ -841,22 +887,40 @@ def main():
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
             vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"] + " " + beschr)
             wappen_url = verein_wappen_url(ergebnis["titel"] + " " + beschr)
-            html       = artikel_html(
-                datei_id   = aid,
-                titel      = ergebnis["titel"],
-                text       = ergebnis["text"],
-                kategorie  = ergebnis["kategorie"],
-                quelle_name= quelle_name,
-                quelle_url = url,
-                datum      = datum,
-                wappen_url = wappen_url,
-                vereine    = vereine,
-            )
-
-            datei_pfad = ARTIKEL_ORDNER / f"{aid}.html"
-            datei_pfad.write_text(html, encoding="utf-8")
 
             rss_titel_dieser_lauf.append(titel)
+            kandidaten.append({
+                "aid":        aid,
+                "datum":      datum,
+                "ergebnis":   ergebnis,
+                "quelle_name": quelle_name,
+                "url":        url,
+                "wappen_url": wappen_url,
+                "vereine":    vereine,
+            })
+            print(f"  📝 Kandidat: {ergebnis['titel'][:60]}")
+
+    # ── Batch-QA ─────────────────────────────────────────────────────────────
+    if kandidaten:
+        print(f"\n🔍 QA-Check: {len(kandidaten)} Kandidaten prüfen …")
+        approved = qualitaets_check(kandidaten)
+        print(f"  ✅ Approved: {len(approved)} / {len(kandidaten)}")
+
+        for k in approved:
+            ergebnis = k["ergebnis"]
+            aid = k["aid"]
+            html = artikel_html(
+                datei_id    = aid,
+                titel       = ergebnis["titel"],
+                text        = ergebnis["text"],
+                kategorie   = ergebnis["kategorie"],
+                quelle_name = k["quelle_name"],
+                quelle_url  = k["url"],
+                datum       = k["datum"],
+                wappen_url  = k["wappen_url"],
+                vereine     = k["vereine"],
+            )
+            (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
             badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
             bestehende.append({
                 "id":         aid,
@@ -865,16 +929,15 @@ def main():
                 "badge":      badge_label,
                 "badge_bg":   badge_bg,
                 "badge_fg":   badge_fg,
-                "datum":      datum,
-                "wappen_url": wappen_url,
-                "vereine":    vereine,
+                "datum":      k["datum"],
+                "wappen_url": k["wappen_url"],
+                "vereine":    k["vereine"],
                 "pfad":       f"artikel/{aid}.html",
             })
-
             feed_speichern(bestehende)
             facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
             neu_generiert += 1
-            print(f"  ✅ Gespeichert: {ergebnis['titel'][:60]}")
+            print(f"  ✅ Veröffentlicht: {ergebnis['titel'][:60]}")
 
     sitemap_generieren(bestehende)
 
