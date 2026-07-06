@@ -1446,6 +1446,7 @@ def spieler_fetch():
 
         # 4. TM Performance + Transfer-History → BL-Karriere
         karriere = []
+        transfers_resp = None
         if tm_id:
             try:
                 from collections import defaultdict
