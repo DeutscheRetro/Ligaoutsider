@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 import feedparser
 import anthropic
 from slugify import slugify
+from url_cache import URLCache
 
 load_dotenv()
 
@@ -80,6 +81,26 @@ RSS_FEEDS = [
     # Reddit (100 Einträge)
     "https://www.reddit.com/r/bundesliga/new.rss?limit=100",
     "https://www.reddit.com/r/soccer/new.rss?limit=100",
+
+    # kicker Team-Feeds – 18 Erstligisten 2026/27
+    "https://rss.kicker.de/news/fc-bayern-muenchen",
+    "https://rss.kicker.de/news/borussia-dortmund",
+    "https://rss.kicker.de/news/rb-leipzig",
+    "https://rss.kicker.de/news/bayer-leverkusen",
+    "https://rss.kicker.de/news/vfb-stuttgart",
+    "https://rss.kicker.de/news/eintracht-frankfurt",
+    "https://rss.kicker.de/news/borussia-moenchengladbach",
+    "https://rss.kicker.de/news/sc-freiburg",
+    "https://rss.kicker.de/news/tsg-hoffenheim",
+    "https://rss.kicker.de/news/fsv-mainz-05",
+    "https://rss.kicker.de/news/fc-augsburg",
+    "https://rss.kicker.de/news/1-fc-union-berlin",
+    "https://rss.kicker.de/news/sv-werder-bremen",
+    "https://rss.kicker.de/news/1-fc-heidenheim",
+    "https://rss.kicker.de/news/vfl-bochum",
+    "https://rss.kicker.de/news/fc-schalke-04",
+    "https://rss.kicker.de/news/sv-elversberg",
+    "https://rss.kicker.de/news/sc-paderborn-07",
 ]
 
 # Artikel bis zu X Tage alt akzeptieren
@@ -94,7 +115,7 @@ FEED_JSON      = Path("feed.json")
 
 DISQUS_SHORTNAME = "ligaoutsider"  # <-- später auf disqus.com eintragen
 
-# ─── 1. Bundesliga Klubs 2025/26 ──────────────────────────────────────────────
+# ─── 1. Bundesliga Klubs 2026/27 ──────────────────────────────────────────────
 
 BL1_KLUBS = [
     "FC Bayern", "Bayern München", "Bayern",
@@ -110,8 +131,8 @@ BL1_KLUBS = [
     "FC Augsburg", "Augsburg",
     "SV Werder Bremen", "Werder",
     "TSG Hoffenheim", "Hoffenheim",
-    "Hamburger SV", "HSV",
-    "1. FC Köln", "Köln",
+    "1. FC Heidenheim", "Heidenheim",
+    "VfL Bochum", "Bochum",
     "FC Schalke 04", "Schalke",
     "SC Paderborn", "Paderborn",
     "SV Elversberg", "Elversberg",
@@ -289,14 +310,28 @@ def schon_verarbeitet(url: str) -> bool:
     return (ARTIKEL_ORDNER / f"{aid}.html").exists() or (ARTIKEL_ORDNER / f"{aid}.skip").exists()
 
 
-def verein_wappen_url(text: str) -> str:
-    # Längere/spezifischere Namen zuerst prüfen (verhindert z.B. "Bayern" vor "Leipzig")
-    text_lower = text.lower()
-    sortiert = sorted(VEREIN_WAPPEN.keys(), key=len, reverse=True)
-    for key in sortiert:
-        if key in text_lower:
-            return VEREIN_WAPPEN[key]
-    return BL_LOGO
+def verein_wappen_url(text: str, title: str = "") -> str:
+    """Findet das relevanteste Vereinslogo per Scoring aggregiert pro Logo-URL."""
+    full_lower = (title + " " + text).lower()
+    title_lower = title.lower()
+    logo_scores: dict[str, int] = {}
+    for key, logo_url in VEREIN_WAPPEN.items():
+        count = full_lower.count(key)
+        if count == 0:
+            continue
+        score = count * 10
+        if key in title_lower:
+            score += 50
+        pos = full_lower.find(key)
+        if pos != -1:
+            if pos < len(full_lower) * 0.33:
+                score += 15
+            elif pos < len(full_lower) * 0.66:
+                score += 5
+        logo_scores[logo_url] = logo_scores.get(logo_url, 0) + score
+    if not logo_scores:
+        return BL_LOGO
+    return max(logo_scores, key=logo_scores.get)  # type: ignore[arg-type]
 
 
 def badge_fuer_kategorie(kategorie: str) -> tuple:
@@ -903,6 +938,9 @@ def main():
     batch_fingerprints: list[dict] = []  # Fingerprints dieses Runs für Intra-Batch-Dedup
     batch_titles: list[str] = []  # für Intra-Batch rapidfuzz Titel-Dedup (Stage 2)
 
+    url_cache = URLCache("data/seen_urls.json", max_age_days=30)
+    log.info(f"URL-Cache geladen: {url_cache.get_seen_count()} bekannte URLs (letzte 30 Tage)")
+
     _SKIP_KEYWORDS = (
         "nagelsmann", "nationalmannschaft", "dfb-team", "em 2026", "wm 2026",
         "nations league", "länderspiel", "u21-em", "olympia",
@@ -934,6 +972,10 @@ def main():
             beschr = eintrag.get("summary", eintrag.get("description", ""))
 
             if not url or not titel:
+                continue
+
+            # URL-Cache: bereits gesehene Einträge sofort überspringen
+            if url_cache.is_seen(url):
                 continue
 
             # Quelle bei Google News aus entry.source
@@ -978,6 +1020,7 @@ def main():
                     continue
 
             aid = artikel_id(url)
+            url_cache.mark_seen(url)
             stats["ingested"] += 1
 
             # ── Stage 2: Pre-Filter Gate ──────────────────────────────────────
@@ -1088,7 +1131,7 @@ def main():
 
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
             vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"])
-            wappen_url = verein_wappen_url(ergebnis["titel"] + " " + ergebnis["text"][:200])
+            wappen_url = verein_wappen_url(ergebnis["text"][:400], title=ergebnis["titel"])
 
             if fp:
                 batch_fingerprints.append(fp)
@@ -1173,6 +1216,9 @@ def main():
     # Run-Stats speichern
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    url_cache.cleanup_and_save()
+    log.info(f"URL-Cache gespeichert: {url_cache.get_seen_count()} URLs")
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
     log.info(f"Stats: {json.dumps(stats)}")
