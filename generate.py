@@ -730,6 +730,17 @@ def main():
                     if _netloc and "google" not in _netloc:
                         quelle_name = _netloc
 
+            # Bei Nitter/Twitter: echte Artikel-URL aus Tweet-Text extrahieren
+            ist_nitter = "nitter.net" in feed_url
+            if ist_nitter:
+                # Tweet-Beschreibung enthält meist einen bild.de o.ä. Link
+                m = re.search(r'https?://(?!nitter|twitter|x\.com)[^\s<>"\']+', beschr)
+                if m:
+                    echte_url = m.group(0).rstrip(".,)")
+                    from urllib.parse import urlparse as _up
+                    quelle_name = _up(echte_url).netloc.replace("www.", "")
+                    url = echte_url
+
             # Bei Reddit: echte Quell-URL aus dem Post holen
             ist_reddit = "reddit.com" in feed_url
             if ist_reddit:
