@@ -568,8 +568,16 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
             return None, "trafilatura_returned_empty"
 
         words = text.split()
-        if len(words) < MIN_WORDS:
-            return None, f"too_short_{len(words)}_words"
+        word_count = len(words)
+        MIN_WORDS = 160
+        if word_count < MIN_WORDS:
+            # Kurze Transfermeldungen erlauben wenn Key-Indicators vorhanden
+            _KEY = ["wechselt", "transfer", "verpflichtet", "verletzt",
+                    "verlängert", "ablöse", "testspiel", "trainiert", "abgang", "zugang"]
+            if word_count >= 100 and any(k in text.lower() for k in _KEY):
+                pass  # short but relevant
+            else:
+                return None, f"too_short_{word_count}_words"
 
         text_lower = text.lower()
         for marker in PAYWALL_MARKERS:
@@ -893,6 +901,7 @@ def main():
     neu_generiert = 0
     kandidaten: list[dict] = []
     batch_fingerprints: list[dict] = []  # Fingerprints dieses Runs für Intra-Batch-Dedup
+    batch_titles: list[str] = []  # für Intra-Batch rapidfuzz Titel-Dedup (Stage 2)
 
     _SKIP_KEYWORDS = (
         "nagelsmann", "nationalmannschaft", "dfb-team", "em 2026", "wm 2026",
@@ -985,6 +994,17 @@ def main():
                     (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                     continue
 
+            # Intra-Batch Titel-Dedup via rapidfuzz (Stage 2)
+            if batch_titles:
+                from rapidfuzz import process as _rfp
+                match = _rfp.extractOne(titel, batch_titles, score_cutoff=88)
+                if match:
+                    log.debug(f"S2 batch title dup ({match[1]}%): {titel[:60]}")
+                    _log_skip(aid, titel, "stage2", f"batch_title_dup_{match[1]:.0f}pct")
+                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                    stats["s2_pre_filter"] += 1
+                    continue
+
             # Blacklist-Keywords
             text_check = (titel + " " + beschr).lower()
             if any(kw in text_check for kw in _SKIP_KEYWORDS):
@@ -1068,6 +1088,7 @@ def main():
 
             if fp:
                 batch_fingerprints.append(fp)
+            batch_titles.append(titel)
 
             kandidaten.append({
                 "aid":         aid,
@@ -1133,13 +1154,17 @@ def main():
             "source":         k["quelle_name"],
         })
         speichere_published_stories(published_stories)
-
-        facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
         neu_generiert += 1
         stats["published"] += 1
         log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
 
     sitemap_generieren(bestehende)
+
+    # Stage 9: Facebook-Posts nach finalem Publish (alle approved, nicht pro Kandidat)
+    for k in approved:
+        ergebnis = k["ergebnis"]
+        aid = k["aid"]
+        facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
 
     # Run-Stats speichern
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
