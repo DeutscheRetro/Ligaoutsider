@@ -455,10 +455,35 @@ def fingerprint_generieren(titel: str, summary: str) -> dict | None:
     return None
 
 
+def _fingerprint_similarity(fp1: dict, fp2: dict) -> float:
+    """Jaccard-Similarity zweier Fingerprints: Teams (60%) + Spieler (40%)."""
+    t1 = {t.lower() for t in fp1.get("main_teams", [])}
+    t2 = {t.lower() for t in fp2.get("main_teams", [])}
+    p1 = {p.lower() for p in fp1.get("main_players", [])}
+    p2 = {p.lower() for p in fp2.get("main_players", [])}
+    team_score = len(t1 & t2) / len(t1 | t2) if (t1 | t2) else 0.0
+    player_score = len(p1 & p2) / len(p1 | p2) if (p1 | p2) else 0.0
+    return round(team_score * 0.6 + player_score * 0.4, 3)
+
+
+def _is_update_artikel(title: str, text: str) -> bool:
+    """Erkennt ob Artikel eine offizielle Bestätigung/Update ist (kein Gerücht)."""
+    combined = (title + " " + text).lower()
+    update_signals = [
+        "offiziell", "bestätigt", "unterschrieben", "vollzogen",
+        "wechselt zu", "ablöse", "fix", "perfekt", "beschlossene sache",
+        "offiziell bestätigt", "transfer ist perfekt",
+    ]
+    return any(signal in combined for signal in update_signals)
+
+
 def _fingerprints_aehnlich(fp1: dict, fp2: dict) -> bool:
     """True wenn zwei Fingerprints dieselbe Story beschreiben."""
     from rapidfuzz import fuzz
-    # Gleicher Event-Typ + mind. 2 gemeinsame Entitäten
+    # Jaccard-Similarity ≥ 0.85 auf Teams + Spieler
+    if _fingerprint_similarity(fp1, fp2) >= 0.85:
+        return True
+    # Gleicher Event-Typ + mind. 2 gemeinsame Entitäten (Fallback)
     if fp1.get("event_type") == fp2.get("event_type"):
         e1 = set(fp1.get("main_teams", []) + fp1.get("main_players", []))
         e2 = set(fp2.get("main_teams", []) + fp2.get("main_players", []))
@@ -470,6 +495,17 @@ def _fingerprints_aehnlich(fp1: dict, fp2: dict) -> bool:
     if s1 and s2 and fuzz.ratio(s1, s2) >= 85:
         return True
     return False
+
+
+def _ist_innerhalb_tage(published_at_str: str, days: int = 14) -> bool:
+    """True wenn published_at innerhalb der letzten N Tage."""
+    if not published_at_str:
+        return False
+    try:
+        ts = datetime.datetime.fromisoformat(published_at_str)
+        return (datetime.datetime.now() - ts).days <= days
+    except Exception:
+        return False
 
 
 def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
@@ -921,8 +957,11 @@ def main():
     bestehende = feed_laden()
     published_stories = lade_published_stories()
 
-    # Fingerprints aus published_stories für Dedup
-    pub_fingerprints: list[dict] = [s["fingerprint"] for s in published_stories if s.get("fingerprint")]
+    # Fingerprints aus published_stories für Dedup (mit Timestamp für Zeitfenster-Check)
+    pub_fingerprints: list[tuple[dict, str]] = [
+        (s["fingerprint"], s.get("published_at", ""))
+        for s in published_stories if s.get("fingerprint")
+    ]
     pub_urls: set[str] = {s.get("original_url", "") for s in published_stories}
 
     # Run-Stats
@@ -935,7 +974,7 @@ def main():
 
     neu_generiert = 0
     kandidaten: list[dict] = []
-    batch_fingerprints: list[dict] = []  # Fingerprints dieses Runs für Intra-Batch-Dedup
+    batch_fingerprints: list[tuple[dict, str]] = []  # (fingerprint, published_at) für Intra-Batch-Dedup
     batch_titles: list[str] = []  # für Intra-Batch rapidfuzz Titel-Dedup (Stage 2)
 
     url_cache = URLCache("data/seen_urls.json", max_age_days=30)
@@ -1068,15 +1107,20 @@ def main():
             # ── Stage 4: Fingerprint + Early Dedup ───────────────────────────
             fp = fingerprint_generieren(titel, beschr)
             if fp:
-                # Check gegen published + Batch
-                for existing_fp in pub_fingerprints + batch_fingerprints:
-                    if _fingerprints_aehnlich(fp, existing_fp):
-                        log.info(f"S4 fingerprint dup: {titel[:60]}")
-                        _log_skip(aid, titel, "stage4", "fingerprint_duplicate")
-                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                        stats["s4_dedup_early"] += 1
-                        fp = None
-                        break
+                is_update = _is_update_artikel(titel, beschr)
+                for existing_fp, existing_ts in pub_fingerprints + batch_fingerprints:
+                    if not _fingerprints_aehnlich(fp, existing_fp):
+                        continue
+                    # Ähnlicher Fingerprint gefunden — Update-Bypass prüfen
+                    if is_update and _ist_innerhalb_tage(existing_ts, days=14):
+                        log.info(f"S4 update-bypass (Folgeartikel): {titel[:60]}")
+                        break  # durchlassen
+                    log.info(f"S4 fingerprint dup: {titel[:60]}")
+                    _log_skip(aid, titel, "stage4", "fingerprint_duplicate")
+                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                    stats["s4_dedup_early"] += 1
+                    fp = None
+                    break
             if fp is None and (ARTIKEL_ORDNER / f"{aid}.skip").exists():
                 continue  # wurde als Dup markiert
 
@@ -1110,14 +1154,19 @@ def main():
                 fp_refined = fingerprint_generieren(titel, volltext[:600])
                 if fp_refined:
                     fp = fp_refined
-                for existing_fp in pub_fingerprints + batch_fingerprints:
-                    if _fingerprints_aehnlich(fp, existing_fp):
-                        log.info(f"S6 refined dup: {titel[:60]}")
-                        _log_skip(aid, titel, "stage6", "refined_fingerprint_duplicate")
-                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                        stats["s6_dedup_refined"] += 1
-                        fp = None
+                is_update = _is_update_artikel(titel, volltext[:400])
+                for existing_fp, existing_ts in pub_fingerprints + batch_fingerprints:
+                    if not _fingerprints_aehnlich(fp, existing_fp):
+                        continue
+                    if is_update and _ist_innerhalb_tage(existing_ts, days=14):
+                        log.info(f"S6 update-bypass (Folgeartikel): {titel[:60]}")
                         break
+                    log.info(f"S6 refined dup: {titel[:60]}")
+                    _log_skip(aid, titel, "stage6", "refined_fingerprint_duplicate")
+                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                    stats["s6_dedup_refined"] += 1
+                    fp = None
+                    break
                 if fp is None:
                     continue
 
@@ -1134,7 +1183,7 @@ def main():
             wappen_url = verein_wappen_url(ergebnis["text"][:400], title=ergebnis["titel"])
 
             if fp:
-                batch_fingerprints.append(fp)
+                batch_fingerprints.append((fp, datetime.datetime.now().isoformat()))
             batch_titles.append(titel)
 
             kandidaten.append({
