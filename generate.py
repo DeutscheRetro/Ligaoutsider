@@ -343,6 +343,11 @@ def _artikel_text_laden(artikel_id_str: str) -> str:
         return ""
 
 
+def _eigennamen(t: str) -> set:
+    """Extrahiert großgeschriebene Wörter (Spieler-/Clubnamen) aus einem Titel."""
+    return {w for w in re.split(r'\W+', t) if len(w) > 3 and w[0].isupper()}
+
+
 def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
     """Prüft ob Meldung inhaltlich schon vorhanden oder echte neue Entwicklung.
     bestehende: Liste von Artikel-Dicts (mit 'id' und 'titel').
@@ -353,18 +358,28 @@ def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
     bestehende_titel = [a["titel"] if isinstance(a, dict) else a for a in bestehende]
 
     neu_woerter = _schluesselwoerter(neuer_titel + " " + beschreibung)
+    neu_namen = _eigennamen(neuer_titel)
 
-    # Ähnliche Artikel finden (Keyword-Overlap ≥ 40%)
+    # Ähnliche Artikel finden
     aehnliche = []
     for a in bestehende[-100:]:
         titel = a["titel"] if isinstance(a, dict) else a
         alt_woerter = _schluesselwoerter(titel)
+        alt_namen = _eigennamen(titel)
+
         if neu_woerter and alt_woerter:
             overlap = len(neu_woerter & alt_woerter) / min(len(neu_woerter), len(alt_woerter))
             if overlap >= 0.6:
-                return True  # Sehr hoher Overlap → sofort Duplikat
-            if overlap >= 0.4:
-                aehnliche.append(a)
+                return True  # Sehr hoher Keyword-Overlap → sofort Duplikat
+
+        # Eigennamen-Check: ≥2 gleiche Eigennamen = sehr wahrscheinlich selbes Thema → KI-Check
+        gemeinsame_namen = neu_namen & alt_namen
+        if len(gemeinsame_namen) >= 2:
+            aehnliche.append(a)
+            continue
+
+        if neu_woerter and alt_woerter and overlap >= 0.4:
+            aehnliche.append(a)
 
     # KI-Check mit Volltexten ähnlicher Artikel
     titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-100:])
@@ -395,11 +410,12 @@ def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
                 f"BEREITS VERÖFFENTLICHTE ARTIKEL (Titel):\n{titel_liste}"
                 f"{verwandte_section}\n\n"
                 f"Antworte JA (Duplikat) wenn:\n"
-                f"- Eine bereits vorhandene Meldung denselben Sachverhalt beschreibt – egal ob andere Quelle oder Formulierung\n"
-                f"- Derselbe Spieler + dieselbe Situation (gleicher Transferstand, gleiche Verletzung) bereits vorhanden\n\n"
+                f"- Derselbe Spieler + derselbe Zielclub bereits vorhanden – EGAL ob andere Quelle, andere Ablösesumme oder andere Formulierung\n"
+                f"- Derselbe Spieler + dieselbe Verletzung/Sperre bereits vorhanden\n"
+                f"- Gleicher Sachverhalt aus anderer Perspektive (z.B. 'Rekordabgang für Club X' vs 'Spieler wechselt zu Club Y')\n\n"
                 f"Antworte NEIN nur wenn:\n"
-                f"- Klare neue Entwicklung: neues Angebot, Einigung, Dementi, Platzen des Deals, Bestätigung nach Gerücht\n"
-                f"- Komplett andere Personen/Vereine\n\n"
+                f"- Komplett neue Entwicklung: Einigung nach Gerücht, Dementi, Platzen des Deals, medizinischer Check bestanden\n"
+                f"- Komplett andere Personen oder Vereine\n\n"
                 f"Im Zweifel: JA.\n"
                 f"Antworte nur mit JA oder NEIN."
             )
