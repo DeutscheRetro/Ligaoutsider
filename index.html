@@ -216,8 +216,8 @@
       { pos:10, name:'1. FSV Mainz 05',           sp:0, pkt:0, zone:'' },
       { pos:11, name:'1. FC Union Berlin',        sp:0, pkt:0, zone:'' },
       { pos:12, name:'Borussia Mönchengladbach',  sp:0, pkt:0, zone:'' },
-      { pos:13, name:'Hamburger SV',              sp:0, pkt:0, zone:'' },
-      { pos:14, name:'1. FC Köln',                sp:0, pkt:0, zone:'' },
+      { pos:13, name:'1. FC Heidenheim',           sp:0, pkt:0, zone:'' },
+      { pos:14, name:'VfL Bochum',                sp:0, pkt:0, zone:'' },
       { pos:15, name:'SV Werder Bremen',          sp:0, pkt:0, zone:'' },
       { pos:16, name:'FC Schalke 04',             sp:0, pkt:0, zone:'' },
       { pos:17, name:'SC Paderborn 07',           sp:0, pkt:0, zone:'' },
@@ -235,7 +235,8 @@
       'Bayer 04 Leverkusen':'leverkusen','Eintracht Frankfurt':'frankfurt','VfB Stuttgart':'stuttgart',
       'Borussia Mönchengladbach':'gladbach','Sport-Club Freiburg':'freiburg','1. FC Union Berlin':'union',
       '1. FSV Mainz 05':'mainz','FC Augsburg':'augsburg','SV Werder Bremen':'werder',
-      'TSG Hoffenheim':'hoffenheim','TSG 1899 Hoffenheim':'hoffenheim','Hamburger SV':'hsv','1. FC Köln':'koeln',
+      'TSG Hoffenheim':'hoffenheim','TSG 1899 Hoffenheim':'hoffenheim',
+      '1. FC Heidenheim':'heidenheim','VfL Bochum':'bochum',
       'FC Schalke 04':'schalke','SC Paderborn 07':'paderborn','SV Elversberg':'elversberg'
     };
     document.getElementById('tabelle-body').innerHTML = TABELLE_2526.map(t => {
@@ -261,21 +262,21 @@
     const SPIELE = [
       { datum:'Sa 22.08.', wbw:'SUP', heim:'Borussia Dortmund',      gast:'FC Bayern München',       info:'Supercup · 20:30' },
       { datum:'Fr 28.08.', wbw:'BL',  heim:'FC Bayern München',       gast:'VfB Stuttgart',           info:'1. Spieltag · 20:30' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'Borussia Dortmund',      gast:'Hamburger SV',       info:'1. Spieltag' },
+      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'Borussia Dortmund',      gast:'1. FC Heidenheim',   info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'RB Leipzig',             gast:'Borussia Mönchengladbach', info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'Sport-Club Freiburg',    gast:'SV Werder Bremen',   info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'FC Augsburg',            gast:'FC Schalke 04',      info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FSV Mainz 05',        gast:'SC Paderborn 07',    info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FC Union Berlin',     gast:'Eintracht Frankfurt',info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FC Köln',             gast:'TSG Hoffenheim',     info:'1. Spieltag' },
+      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'VfL Bochum',             gast:'TSG Hoffenheim',     info:'1. Spieltag' },
       { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'SV Elversberg',          gast:'Bayer 04 Leverkusen',info:'1. Spieltag' },
       { datum:'Di/Mi 1./2.09.',   wbw:'DFB', heim:'–',                     gast:'–',                  info:'DFB-Pokal Runde 1' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'VfB Stuttgart',          gast:'1. FC Köln',         info:'2. Spieltag' },
+      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'VfB Stuttgart',          gast:'VfL Bochum',         info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'TSG Hoffenheim',         gast:'Borussia Dortmund',  info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Bayer 04 Leverkusen',    gast:'1. FC Union Berlin', info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Eintracht Frankfurt',    gast:'FC Augsburg',        info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Borussia Mönchengladbach',gast:'SV Elversberg',     info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Hamburger SV',           gast:'1. FSV Mainz 05',    info:'2. Spieltag' },
+      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'1. FC Heidenheim',        gast:'1. FSV Mainz 05',    info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'SV Werder Bremen',       gast:'RB Leipzig',         info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'FC Schalke 04',          gast:'FC Bayern München',  info:'2. Spieltag' },
       { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'SC Paderborn 07',        gast:'Sport-Club Freiburg',info:'2. Spieltag' },
@@ -287,7 +288,7 @@
       'Bayer 04 Leverkusen':'Leverkusen','Eintracht Frankfurt':'Frankfurt','VfB Stuttgart':'Stuttgart',
       'Borussia Mönchengladbach':'Gladbach','Sport-Club Freiburg':'Freiburg','1. FC Union Berlin':'Union',
       '1. FSV Mainz 05':'Mainz','FC Augsburg':'Augsburg','SV Werder Bremen':'Bremen',
-      'TSG Hoffenheim':'Hoffenheim','Hamburger SV':'HSV','1. FC Köln':'Köln',
+      'TSG Hoffenheim':'Hoffenheim','1. FC Heidenheim':'Heidenheim','VfL Bochum':'Bochum',
       'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','–':'–'
     };
 
