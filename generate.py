@@ -598,7 +598,7 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
                 f"Antworte NUR mit JA wenn:\n"
                 f"- Es direkt um mindestens einen dieser Klubs geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
                 f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
-                f"- Es KEIN WM-, EM-, Nationalmannschafts- oder Frauenfußball-Thema ist\n"
+                f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
                 f"- Der Fokus auf dem Klub liegt, nicht nur eine Randerwähnung\n\n"
                 f"Titel: {titel}\nBeschreibung: {beschreibung}\n\n"
@@ -984,6 +984,7 @@ def main():
         "nagelsmann", "nationalmannschaft", "dfb-team", "em 2026", "wm 2026",
         "nations league", "länderspiel", "u21-em", "olympia",
         "frauen", "frauenfußball", "frauenbundesliga", "-frauen",
+        "2. bundesliga", "2. liga", "zweite bundesliga", "zweitliga",
     )
 
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
