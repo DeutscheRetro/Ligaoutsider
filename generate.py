@@ -312,8 +312,11 @@ def schon_verarbeitet(url: str) -> bool:
 
 def verein_wappen_url(text: str, title: str = "") -> str:
     """Findet das relevanteste Vereinslogo per Scoring aggregiert pro Logo-URL."""
+    _context_kw = ("wechselt", "transfer", "verletzung", "verpflichtet", "spielt",
+                   "trainer", "vertrag", "ablöse", "gegen", "siegt", "verliert")
     full_lower = (title + " " + text).lower()
     title_lower = title.lower()
+    text_len = len(full_lower) or 1
     logo_scores: dict[str, int] = {}
     for key, logo_url in VEREIN_WAPPEN.items():
         count = full_lower.count(key)
@@ -321,13 +324,18 @@ def verein_wappen_url(text: str, title: str = "") -> str:
             continue
         score = count * 10
         if key in title_lower:
-            score += 50
+            score += 100  # Titel stark bevorzugen
         pos = full_lower.find(key)
         if pos != -1:
-            if pos < len(full_lower) * 0.33:
+            if pos < text_len * 0.25:
                 score += 15
-            elif pos < len(full_lower) * 0.66:
-                score += 5
+            elif pos < text_len * 0.5:
+                score += 8
+        # Kontext-Bonus: Club nahe an Kontext-Keywords
+        for kw in _context_kw:
+            if f"{key} {kw}" in full_lower or f"{kw} {key}" in full_lower:
+                score += 20
+                break
         logo_scores[logo_url] = logo_scores.get(logo_url, 0) + score
     if not logo_scores:
         return BL_LOGO
