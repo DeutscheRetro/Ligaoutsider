@@ -73,7 +73,7 @@ RSS_FEEDS = [
     "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
 
     # Englische Quellen
-    "https://bulinews.com/rss",
+    "https://bulinews.com/rss.xml",
     "https://www.eyefootball.com/rss_news_main.xml",
     "https://feeds.skysports.com/skysports/bundesliga",
     "https://www.goal.com/feeds/de/news",
@@ -1106,7 +1106,8 @@ def main():
                 continue
 
             # ── Stage 3: Relevance Gate (Haiku) ──────────────────────────────
-            if not ist_relevant(titel, beschr):
+            _ist_kicker_team = "rss.kicker.de/news/" in feed_url
+            if not _ist_kicker_team and not ist_relevant(titel, beschr):
                 log.info(f"S3 not relevant: {titel[:60]}")
                 _log_skip(aid, titel, "stage3", "not_relevant")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
