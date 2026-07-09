@@ -1410,31 +1410,54 @@ def main():
         approved = []
 
     # ── Stage 9.5: Final Pre-Publish Check ────────────────────────────────────
-    # 1) Generierten Titel gegen alle published_stories + bestehende Feed-Einträge prüfen
-    # 2) news_archive event_stage Check
     news_archive = lade_news_archive()
     from rapidfuzz import fuzz as _fuzz2
-    all_pub_titles = (
-        [s.get("generated_title") or s.get("title", "") for s in published_stories]
-        + [e.get("titel", "") for e in bestehende]
-    )
+
+    # Archiv-Summaries + Titel für Content-Vergleich (letzte 7 Tage)
+    cutoff_95 = datetime.datetime.now() - datetime.timedelta(days=7)
+    archive_recent = [
+        e for e in news_archive
+        if _ist_innerhalb_tage(e.get("published_at", ""), days=7)
+    ]
+    archive_summaries = [(e.get("summary", ""), e.get("title", "")) for e in archive_recent]
+
     final_approved = []
     for k in approved:
         fp = k.get("fingerprint") or {}
         titel_k = k["ergebnis"]["titel"]
+        new_summary = fp.get("summary") or fp.get("one_sentence_summary", "")
 
-        # Generierter Titel gegen alle bekannten Titel (fuzz)
-        dup_title = False
-        for pt in all_pub_titles:
-            if pt and _fuzz2.ratio(titel_k.lower(), pt.lower()) >= 88:
-                log.info(f"S9.5 gen-title dup ({pt[:50]}): {titel_k[:50]}")
-                _log_skip(k["aid"], titel_k, "s9.5", "generated_title_duplicate")
-                dup_title = True
-                break
-        if dup_title:
+        # 1) Summary-Vergleich gegen news_archive (letzten 7 Tage) — Inhalt statt Titel
+        dup = False
+        if new_summary:
+            for arch_summary, arch_title in archive_summaries:
+                if not arch_summary:
+                    continue
+                sim = _fuzz2.token_set_ratio(new_summary.lower(), arch_summary.lower())
+                if sim >= 82:
+                    log.info(f"S9.5 summary-dup (sim={sim}, '{arch_title[:40]}'): {titel_k[:50]}")
+                    _log_skip(k["aid"], titel_k, "s9.5", f"summary_duplicate_sim{sim}")
+                    dup = True
+                    break
+
+        # 2) Titel-Fallback wenn kein Summary vorhanden
+        if not dup and not new_summary:
+            all_pub_titles = (
+                [s.get("generated_title") or s.get("title", "") for s in published_stories[-200:]]
+                + [e.get("titel", "") for e in bestehende]
+            )
+            for pt in all_pub_titles:
+                if pt and _fuzz2.ratio(titel_k.lower(), pt.lower()) >= 88:
+                    log.info(f"S9.5 title-dup ({pt[:40]}): {titel_k[:50]}")
+                    _log_skip(k["aid"], titel_k, "s9.5", "title_duplicate_fallback")
+                    dup = True
+                    break
+
+        if dup:
             stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
             continue
 
+        # 3) event_stage Check (gleiche Stage = echtes Dup, andere Stage = neue Entwicklung)
         if final_pre_publish_check(titel_k, fp, news_archive):
             _log_skip(k["aid"], titel_k, "s9.5", "final_pre_publish_duplicate")
             stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
