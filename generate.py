@@ -92,7 +92,7 @@ RSS_FEEDS = [
     # Englische Quellen
     "https://bulinews.com/rss.xml",
     "https://www.eyefootball.com/rss_news_main.xml",
-    "https://www.goal.com/feeds/de/news",
+    "https://www.ligaportal.at/international/deutsche-bundesliga?format=feed&type=rss",
 
     # Reddit (100 Einträge)
     "https://www.reddit.com/r/bundesliga/new.rss?limit=100",
