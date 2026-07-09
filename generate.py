@@ -458,6 +458,60 @@ def lade_published_stories() -> list[dict]:
     except Exception:
         return []
 
+NEWS_ARCHIVE_JSON = Path("data/news_archive.json")
+
+def lade_news_archive() -> list[dict]:
+    if NEWS_ARCHIVE_JSON.exists():
+        try:
+            return json.loads(NEWS_ARCHIVE_JSON.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return []
+
+def speichere_news_archive(archive: list[dict]):
+    NEWS_ARCHIVE_JSON.write_text(json.dumps(archive, ensure_ascii=False, indent=2), encoding="utf-8")
+
+def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
+    """True = Duplikat (skip), False = neu publizieren.
+    Gleicher main_club + gleiche main_players + gleiche event_stage innerhalb 7 Tage → Duplikat.
+    Andere event_stage → neue Entwicklung → publizieren."""
+    if not fp:
+        return False
+    new_club = (fp.get("main_club") or "").lower().strip()
+    new_stage = fp.get("event_stage", "sonstiges")
+    new_players = {p.lower() for p in fp.get("main_players", [])}
+
+    cutoff = datetime.datetime.now() - datetime.timedelta(days=7)
+    for entry in archive:
+        try:
+            entry_ts = datetime.datetime.fromisoformat(entry.get("published_at", ""))
+        except Exception:
+            continue
+        if entry_ts < cutoff:
+            continue
+
+        old_club = (entry.get("main_club") or "").lower().strip()
+        old_stage = entry.get("event_stage", "sonstiges")
+        old_players = {p.lower() for p in entry.get("main_players", [])}
+
+        # Gleicher Verein?
+        if new_club and old_club and new_club != old_club:
+            continue
+
+        # Spieler-Überschneidung?
+        if new_players and old_players and not (new_players & old_players):
+            continue
+
+        # Gleiche event_stage → echtes Duplikat
+        if new_stage == old_stage and new_stage not in ("sonstiges", ""):
+            log.info(f"FinalCheck SKIP: {new_club}/{new_players} stage={new_stage} bereits in Archiv")
+            return True
+
+        # Andere event_stage → neue Entwicklung → durchlassen
+        # (z.B. geruecht → vollzogen)
+
+    return False
+
 def speichere_published_stories(stories: list[dict]):
     PUBLISHED_JSON.parent.mkdir(exist_ok=True)
     PUBLISHED_JSON.write_text(
@@ -469,18 +523,27 @@ def speichere_published_stories(stories: list[dict]):
 # ─── Content Fingerprint (Stage 4) ────────────────────────────────────────────
 
 def fingerprint_generieren(titel: str, summary: str) -> dict | None:
-    """Haiku extrahiert strukturierten Story-Fingerprint als JSON."""
+    """Haiku extrahiert strukturierten Story-Fingerprint als JSON.
+    Enthält jetzt auch main_club, event_stage, summary für news_archive."""
     try:
         antwort = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=300,
+            max_tokens=500,
             messages=[{"role": "user", "content": (
                 f'Extrahiere einen Story-Fingerprint als reines JSON (kein Markdown):\n'
                 f'{{"event_type":"transfer|verletzung|trainerwechsel|spielergebnis|testspiel|geruecht|vereinsnews|analyse|sonstiges",'
+                f'"main_club":"der primäre Bundesliga-Verein des Artikels (vollständiger Name)",'
+                f'"event_stage":"geruecht|angebot|einigung|vollzogen|verletzung|kader|vertrag|trainer|sonstiges",'
                 f'"main_teams":["max 3 Teams"],'
                 f'"main_players":["max 3 Spieler"],'
+                f'"summary":"2-3 Sätze faktische Zusammenfassung (max 60 Wörter)",'
                 f'"one_sentence_summary":"1 Satz Kern-Ereignis"}}\n\n'
-                f'Titel: {titel}\nZusammenfassung: {summary[:500]}'
+                f'Regeln:\n'
+                f'- event_stage=geruecht: nur Interesse/Spekulationen\n'
+                f'- event_stage=angebot: konkretes Angebot liegt vor\n'
+                f'- event_stage=einigung: Einigung erzielt, Transfer noch nicht vollzogen\n'
+                f'- event_stage=vollzogen: Transfer/Vertrag offiziell bestätigt/unterschrieben\n\n'
+                f'Titel: {titel}\nZusammenfassung: {summary[:800]}'
             )}]
         )
         roh = antwort.content[0].text.strip()
@@ -1343,6 +1406,20 @@ def main():
     else:
         approved = []
 
+    # ── Stage 9.5: Final Pre-Publish Check gegen news_archive ─────────────────
+    news_archive = lade_news_archive()
+    final_approved = []
+    for k in approved:
+        fp = k.get("fingerprint") or {}
+        titel_k = k["ergebnis"]["titel"]
+        if final_pre_publish_check(titel_k, fp, news_archive):
+            _log_skip(k["aid"], titel_k, "s9.5", "final_pre_publish_duplicate")
+            stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
+        else:
+            final_approved.append(k)
+    log.info(f"S9.5 FinalCheck: {len(final_approved)}/{len(approved)} durch")
+    approved = final_approved
+
     # ── Stage 9/10: Publish & Persist ────────────────────────────────────────
     for k in approved:
         ergebnis = k["ergebnis"]
@@ -1385,6 +1462,22 @@ def main():
             "source":         k["quelle_name"],
         })
         speichere_published_stories(published_stories)
+
+        # news_archive.json Eintrag
+        fp = k.get("fingerprint") or {}
+        archive_entry = {
+            "id":           aid,
+            "title":        ergebnis["titel"],
+            "published_at": datetime.datetime.now().isoformat(),
+            "main_club":    fp.get("main_club", ""),
+            "event_stage":  fp.get("event_stage", "sonstiges"),
+            "summary":      fp.get("summary") or fp.get("one_sentence_summary", ""),
+            "main_players": fp.get("main_players", []),
+            "source_url":   k["url"],
+        }
+        news_archive.append(archive_entry)
+        speichere_news_archive(news_archive)
+
         neu_generiert += 1
         stats["published"] += 1
         log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
