@@ -1266,11 +1266,13 @@ def main():
 
     sitemap_generieren(bestehende)
 
-    # Stage 9: Facebook-Posts nach finalem Publish (alle approved, nicht pro Kandidat)
+    # Stage 9: Facebook-Posts & Reddit nach finalem Publish
     for k in approved:
         ergebnis = k["ergebnis"]
         aid = k["aid"]
-        facebook_post(ergebnis["titel"], f"https://ligaoutsider.de/artikel/{aid}.html")
+        artikel_url = f"https://ligaoutsider.de/artikel/{aid}.html"
+        facebook_post(ergebnis["titel"], artikel_url)
+        reddit_post(ergebnis["titel"], ergebnis["text"], artikel_url)
 
     # Run-Stats speichern
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
@@ -1281,6 +1283,31 @@ def main():
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
     log.info(f"Stats: {json.dumps(stats)}")
+
+
+def reddit_post(titel: str, text: str, artikel_url: str):
+    """Postet Artikel als Text-Post auf r/ligaoutsider (benötigt REDDIT_* Secrets)."""
+    client_id     = os.environ.get("REDDIT_CLIENT_ID", "")
+    client_secret = os.environ.get("REDDIT_CLIENT_SECRET", "")
+    username      = os.environ.get("REDDIT_USERNAME", "")
+    password      = os.environ.get("REDDIT_PASSWORD", "")
+    if not all([client_id, client_secret, username, password]):
+        log.info("Reddit: Keine Credentials – übersprungen")
+        return
+    try:
+        import praw
+        reddit = praw.Reddit(
+            client_id=client_id,
+            client_secret=client_secret,
+            username=username,
+            password=password,
+            user_agent="ligaoutsider-bot/1.0",
+        )
+        body = f"{text}\n\n---\n[➡️ Vollständiger Artikel auf Ligaoutsider.de]({artikel_url})"
+        reddit.subreddit("ligaoutsider").submit(titel, selftext=body)
+        log.info(f"Reddit: Gepostet – {titel[:60]}")
+    except Exception as e:
+        log.warning(f"Reddit-Post fehlgeschlagen: {e}")
 
 
 def facebook_post(titel: str, artikel_url: str):

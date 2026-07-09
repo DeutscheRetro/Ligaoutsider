@@ -42,9 +42,13 @@ jobs:
 
       - name: Artikel generieren
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          KICKBASE_EMAIL:    ${{ secrets.KICKBASE_EMAIL }}
-          KICKBASE_PASSWORD: ${{ secrets.KICKBASE_PASSWORD }}
+          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          KICKBASE_EMAIL:       ${{ secrets.KICKBASE_EMAIL }}
+          KICKBASE_PASSWORD:    ${{ secrets.KICKBASE_PASSWORD }}
+          REDDIT_CLIENT_ID:     ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME:      ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD:      ${{ secrets.REDDIT_PASSWORD }}
         run: python generate.py
 
       - name: Änderungen committen & pushen
