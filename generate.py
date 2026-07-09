@@ -621,8 +621,58 @@ def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
     return "JA" in antwort.content[0].text.upper()
 
 
+_BL_SPIELER_CACHE: list[str] = []
+_BL_SPIELER_LOADED = False
+
+def _lade_bl_spieler() -> list[str]:
+    """Lädt aktuelle BL-Spielernamen von OpenLigaDB (gecacht pro Run)."""
+    global _BL_SPIELER_CACHE, _BL_SPIELER_LOADED
+    if _BL_SPIELER_LOADED:
+        return _BL_SPIELER_CACHE
+    _BL_SPIELER_LOADED = True
+    try:
+        import requests as _req
+        r = _req.get(
+            "https://api.openligadb.de/getplayers/bl1/2025",
+            timeout=10,
+            headers={"Accept": "application/json"},
+        )
+        if r.status_code == 200:
+            players = r.json()
+            names = []
+            for p in players:
+                n = p.get("playerName", "")
+                if n and len(n) > 3:
+                    names.append(n)
+                    # Nachname allein (letztes Wort) als Extra-Token
+                    parts = n.split()
+                    if len(parts) > 1:
+                        names.append(parts[-1])
+            _BL_SPIELER_CACHE = list(set(names))
+            log.info(f"BL-Spielerliste geladen: {len(_BL_SPIELER_CACHE)} Namen")
+    except Exception as e:
+        log.warning(f"OpenLigaDB Spieler-Load fehlgeschlagen: {e}")
+    return _BL_SPIELER_CACHE
+
+
 def ist_relevant(titel: str, beschreibung: str) -> bool:
-    """Fragt Claude: Ist das eine echte 1. Bundesliga-News?"""
+    """Fragt Claude: Ist das eine echte 1. Bundesliga-News?
+    Vorher: schneller Keyword-Check auf Klubs + BL-Spieler (spart Haiku-Calls)."""
+    combined = (titel + " " + beschreibung).lower()
+
+    # Schnell-Check: Klub im Titel/Beschreibung → direkt an Haiku
+    klub_gefunden = any(k.lower() in combined for k in BL1_KLUBS)
+
+    # Spieler-Fallback: Spielername aus OpenLigaDB im Text?
+    if not klub_gefunden:
+        spieler = _lade_bl_spieler()
+        if any(s.lower() in combined for s in spieler if len(s) > 4):
+            klub_gefunden = True  # Spieler gefunden → Haiku entscheidet
+
+    # Wenn kein Treffer: sofort NEIN (kein Haiku-Call nötig)
+    if not klub_gefunden:
+        return False
+
     klubs = ", ".join(BL1_KLUBS)
     antwort = client.messages.create(
         model="claude-haiku-4-5-20251001",
@@ -630,20 +680,42 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
         messages=[{
             "role": "user",
             "content": (
-                f"Ist das eine relevante Fußball-News über einen der folgenden Klubs?\n"
+                f"Ist das eine relevante Fußball-News über einen der folgenden Klubs oder deren Spieler?\n"
                 f"Klubs: {klubs}.\n"
                 f"Antworte NUR mit JA wenn:\n"
-                f"- Es direkt um mindestens einen dieser Klubs geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
+                f"- Es direkt um mindestens einen dieser Klubs oder einen ihrer Spieler geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
                 f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
                 f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
-                f"- Der Fokus auf dem Klub liegt, nicht nur eine Randerwähnung\n\n"
+                f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n\n"
                 f"Titel: {titel}\nBeschreibung: {beschreibung}\n\n"
                 f"Antworte nur mit JA oder NEIN."
             )
         }]
     )
     return "JA" in antwort.content[0].text.upper()
+
+
+def _decode_google_news_url(google_url: str) -> str | None:
+    """Dekodiert Google News Redirect-URL zu echter Artikel-URL via Base64-Protobuf-Trick."""
+    import base64
+    m = re.search(r'articles/(CBMi[A-Za-z0-9_=-]+)', google_url)
+    if not m:
+        return None
+    try:
+        encoded = m.group(1)
+        # Protobuf-Prefix überspringen: "CBMi" = 4 Bytes wire-format header
+        # Der Rest ist base64url-kodierte URL
+        b64 = encoded[4:]
+        # Padding ergänzen
+        b64 += '=' * (4 - len(b64) % 4)
+        decoded = base64.urlsafe_b64decode(b64).decode('utf-8', errors='ignore')
+        url_match = re.search(r'https?://[^\x00-\x1f\s]+', decoded)
+        if url_match:
+            return url_match.group(0).rstrip('\x00').rstrip('=')
+    except Exception:
+        pass
+    return None
 
 
 def fetch_fulltext(url: str) -> tuple[str | None, str]:
@@ -654,9 +726,17 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
     PAYWALL_MARKERS = ["paywall", "abo", "abonnenten", "premium",
                        "login erforderlich", "nur für abonnenten", "artikelende"]
     try:
-        # Redirect folgen (inkl. Google News)
+        # Google News Redirect vorab dekodieren
+        fetch_url = url
+        if "news.google.com" in url:
+            decoded = _decode_google_news_url(url)
+            if decoded:
+                fetch_url = decoded
+                log.debug(f"Google News dekodiert: {decoded[:80]}")
+
+        # Redirect folgen
         try:
-            r = _req.get(url, allow_redirects=True, timeout=12,
+            r = _req.get(fetch_url, allow_redirects=True, timeout=12,
                          headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"})
             final_url = r.url
             if "google.com" in final_url:
