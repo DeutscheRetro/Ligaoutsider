@@ -72,10 +72,13 @@ RSS_FEEDS = [
     "https://www.waz.de/sport/fussball/rss",
     "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
 
+    # Sky Deutschland (kein nativer RSS – via Google News)
+    "https://news.google.com/rss/search?q=site:sport.sky.de+Bundesliga&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=site:sport.sky.de+Transfer+Bundesliga&hl=de&gl=DE&ceid=DE:de",
+
     # Englische Quellen
     "https://bulinews.com/rss.xml",
     "https://www.eyefootball.com/rss_news_main.xml",
-    "https://feeds.skysports.com/skysports/bundesliga",
     "https://www.goal.com/feeds/de/news",
 
     # Reddit (100 Einträge)
@@ -150,43 +153,56 @@ VEREIN_WAPPEN = {
     "fc bayern":         "../logos/bayern.png",
     "bayern":            "../logos/bayern.png",
     "fcb":               "../logos/bayern.png",
+    "allianz arena":     "../logos/bayern.png",
     # Dortmund
     "borussia dortmund": "../logos/dortmund.png",
     "dortmund":          "../logos/dortmund.png",
     "bvb":               "../logos/dortmund.png",
+    "signal iduna":      "../logos/dortmund.png",
     # Leipzig
     "rb leipzig":          "../logos/leipzig.png",
     "leipzig":             "../logos/leipzig.png",
+    "red bull arena":      "../logos/leipzig.png",
     # Leverkusen
     "bayer 04":            "../logos/leverkusen.png",
     "leverkusen":          "../logos/leverkusen.png",
+    "bayarena":            "../logos/leverkusen.png",
     # Frankfurt
     "eintracht frankfurt": "../logos/frankfurt.png",
     "eintracht":           "../logos/frankfurt.png",
     "frankfurt":           "../logos/frankfurt.png",
     "sge":                 "../logos/frankfurt.png",
+    "deutsche bank park":  "../logos/frankfurt.png",
     # Stuttgart
     "vfb stuttgart":    "../logos/stuttgart.png",
     "stuttgart":        "../logos/stuttgart.png",
+    "mhp arena":        "../logos/stuttgart.png",
     # Gladbach
     "mönchengladbach":  "../logos/gladbach.png",
     "gladbach":         "../logos/gladbach.png",
     "borussia m":       "../logos/gladbach.png",
+    "borussia-park":    "../logos/gladbach.png",
     # Freiburg
     "sc freiburg":      "../logos/freiburg.png",
     "freiburg":         "../logos/freiburg.png",
+    "europa-park stadion": "../logos/freiburg.png",
     # Union Berlin
     "union berlin":     "../logos/union.png",
     "1. fc union":      "../logos/union.png",
+    "an der alten försterei": "../logos/union.png",
     # Mainz
     "fsv mainz":        "../logos/mainz.png",
     "mainz":            "../logos/mainz.png",
+    "mewa arena":       "../logos/mainz.png",
     # Augsburg
     "fc augsburg":      "../logos/augsburg.png",
     "augsburg":         "../logos/augsburg.png",
+    "www arena":        "../logos/augsburg.png",
     # Werder
     "sv werder":        "../logos/werder.png",
     "werder":           "../logos/werder.png",
+    "weserstadion":     "../logos/werder.png",
+    "wohninvest weserstadion": "../logos/werder.png",
     # Hoffenheim
     "tsg hoffenheim":   "../logos/hoffenheim.png",
     "hoffenheim":       "../logos/hoffenheim.png",
@@ -1190,7 +1206,7 @@ def main():
 
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
             vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"])
-            wappen_url = verein_wappen_url(ergebnis["text"][:400], title=ergebnis["titel"])
+            wappen_url = verein_wappen_url(ergebnis["text"][:1200], title=ergebnis["titel"])
 
             if fp:
                 batch_fingerprints.append((fp, datetime.datetime.now().isoformat()))
