@@ -72,10 +72,6 @@ RSS_FEEDS = [
     "https://www.waz.de/sport/fussball/rss",
     "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
 
-    # Sky Deutschland (kein nativer RSS – via Google News)
-    "https://news.google.com/rss/search?q=site:sport.sky.de+Bundesliga&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=site:sport.sky.de+Transfer+Bundesliga&hl=de&gl=DE&ceid=DE:de",
-
     # Englische Quellen
     "https://bulinews.com/rss.xml",
     "https://www.eyefootball.com/rss_news_main.xml",
@@ -1013,13 +1009,29 @@ def main():
 
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
-    for feed_url in RSS_FEEDS:
+    # Sky DE direkt scrapen → als synthetisches RSS in den Feed-Loop einreihen
+    _sky_items = sky_de_items()
+    if _sky_items:
+        _sky_xml = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Sky Sport DE</title>' + "".join(
+            f'<item><title>{it["title"].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")}</title>'
+            f'<link>{it["link"]}</link></item>'
+            for it in _sky_items
+        ) + "</channel></rss>"
+        _SKY_SENTINEL = "__sky_de__"
+        _sky_feed_cache = {_SKY_SENTINEL: feedparser.parse(_sky_xml)}
+    else:
+        _SKY_SENTINEL = None
+        _sky_feed_cache = {}
+
+    _all_feeds = RSS_FEEDS + ([_SKY_SENTINEL] if _SKY_SENTINEL else [])
+
+    for feed_url in _all_feeds:
         if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
             break
 
         log.info(f"Feed: {feed_url}")
         try:
-            feed = feedparser.parse(feed_url)
+            feed = _sky_feed_cache[feed_url] if feed_url in _sky_feed_cache else feedparser.parse(feed_url)
         except Exception as e:
             log.error(f"Feed-Parse-Fehler: {e}")
             continue
@@ -1299,6 +1311,32 @@ def main():
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
     log.info(f"Stats: {json.dumps(stats)}")
+
+
+def sky_de_items() -> list[dict]:
+    """Scrapt sport.sky.de/fussball direkt und gibt Feed-kompatible Dicts zurück."""
+    import re as _re
+    sky_url = "https://sport.sky.de/fussball"
+    try:
+        resp = requests.get(sky_url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+    except Exception as e:
+        log.warning(f"Sky DE Scraper: Fetch fehlgeschlagen: {e}")
+        return []
+    # Artikel-Links: /fussball/artikel/{slug}/{id}/{cat}
+    pattern = _re.compile(r'href="(/fussball/artikel/([^/"]+)/\d+/\d+)"')
+    seen = set()
+    items = []
+    for m in pattern.finditer(resp.text):
+        path, slug = m.group(1), m.group(2)
+        url = f"https://sport.sky.de{path}"
+        if url in seen:
+            continue
+        seen.add(url)
+        titel = slug.replace("-", " ").title()
+        items.append({"link": url, "title": titel, "summary": "", "_sky_de": True})
+    log.info(f"Sky DE Scraper: {len(items)} Artikel gefunden")
+    return items
 
 
 def reddit_post(titel: str, text: str, artikel_url: str):
