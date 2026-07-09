@@ -1409,12 +1409,32 @@ def main():
     else:
         approved = []
 
-    # ── Stage 9.5: Final Pre-Publish Check gegen news_archive ─────────────────
+    # ── Stage 9.5: Final Pre-Publish Check ────────────────────────────────────
+    # 1) Generierten Titel gegen alle published_stories + bestehende Feed-Einträge prüfen
+    # 2) news_archive event_stage Check
     news_archive = lade_news_archive()
+    from rapidfuzz import fuzz as _fuzz2
+    all_pub_titles = (
+        [s.get("generated_title") or s.get("title", "") for s in published_stories]
+        + [e.get("titel", "") for e in bestehende]
+    )
     final_approved = []
     for k in approved:
         fp = k.get("fingerprint") or {}
         titel_k = k["ergebnis"]["titel"]
+
+        # Generierter Titel gegen alle bekannten Titel (fuzz)
+        dup_title = False
+        for pt in all_pub_titles:
+            if pt and _fuzz2.ratio(titel_k.lower(), pt.lower()) >= 88:
+                log.info(f"S9.5 gen-title dup ({pt[:50]}): {titel_k[:50]}")
+                _log_skip(k["aid"], titel_k, "s9.5", "generated_title_duplicate")
+                dup_title = True
+                break
+        if dup_title:
+            stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
+            continue
+
         if final_pre_publish_check(titel_k, fp, news_archive):
             _log_skip(k["aid"], titel_k, "s9.5", "final_pre_publish_duplicate")
             stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
