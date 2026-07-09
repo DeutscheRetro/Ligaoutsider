@@ -718,24 +718,19 @@ def _lade_bl_spieler() -> list[str]:
     return _BL_SPIELER_CACHE
 
 
-def ist_relevant(titel: str, beschreibung: str) -> bool:
-    """Fragt Claude: Ist das eine echte 1. Bundesliga-News?
-    Vorher: schneller Keyword-Check auf Klubs + BL-Spieler (spart Haiku-Calls)."""
+def keyword_pre_filter(titel: str, beschreibung: str) -> bool:
+    """Stage 3: Billiger Keyword-Check — kein Haiku-Call.
+    Lässt durch wenn BL-Klub ODER BL-Spieler im Titel/Beschreibung vorkommt."""
     combined = (titel + " " + beschreibung).lower()
+    if any(k.lower() in combined for k in BL1_KLUBS):
+        return True
+    spieler = _lade_bl_spieler()
+    return any(s.lower() in combined for s in spieler if len(s) > 4)
 
-    # Schnell-Check: Klub im Titel/Beschreibung → direkt an Haiku
-    klub_gefunden = any(k.lower() in combined for k in BL1_KLUBS)
 
-    # Spieler-Fallback: Spielername aus OpenLigaDB im Text?
-    if not klub_gefunden:
-        spieler = _lade_bl_spieler()
-        if any(s.lower() in combined for s in spieler if len(s) > 4):
-            klub_gefunden = True  # Spieler gefunden → Haiku entscheidet
-
-    # Wenn kein Treffer: sofort NEIN (kein Haiku-Call nötig)
-    if not klub_gefunden:
-        return False
-
+def ist_relevant(titel: str, volltext: str) -> bool:
+    """Stage 5.5: Haiku beurteilt Relevanz anhand des ECHTEN Artikeltexts (nicht RSS-Snippet).
+    Volltext wird auf 1500 Zeichen gekürzt — enthält Kern-Infos."""
     klubs = ", ".join(BL1_KLUBS)
     antwort = client.messages.create(
         model="claude-haiku-4-5-20251001",
@@ -751,7 +746,7 @@ def ist_relevant(titel: str, beschreibung: str) -> bool:
                 f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
                 f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n\n"
-                f"Titel: {titel}\nBeschreibung: {beschreibung}\n\n"
+                f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
                 f"Antworte nur mit JA oder NEIN."
             )
         }]
@@ -1293,11 +1288,11 @@ def main():
                 stats["s2_pre_filter"] += 1
                 continue
 
-            # ── Stage 3: Relevance Gate (Haiku) ──────────────────────────────
+            # ── Stage 3: Keyword Pre-Filter (kein Haiku-Call) ────────────────
             _ist_kicker_team = "rss.kicker.de/news/" in feed_url
-            if not _ist_kicker_team and not ist_relevant(titel, beschr):
-                log.info(f"S3 not relevant: {titel[:60]}")
-                _log_skip(aid, titel, "stage3", "not_relevant")
+            if not _ist_kicker_team and not keyword_pre_filter(titel, beschr):
+                log.info(f"S3 keyword miss: {titel[:60]}")
+                _log_skip(aid, titel, "stage3", "keyword_pre_filter")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 stats["s3_relevance"] += 1
                 continue
@@ -1344,6 +1339,14 @@ def main():
                 _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 stats["s5_fulltext_fail"] += 1
+                continue
+
+            # ── Stage 5.5: Relevanz-Check mit echtem Volltext (Haiku) ────────
+            if not _ist_kicker_team and not ist_relevant(titel, volltext):
+                log.info(f"S5.5 not relevant (fulltext): {titel[:60]}")
+                _log_skip(aid, titel, "stage5.5", "not_relevant_fulltext")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s3_relevance"] += 1
                 continue
 
             # ── Stage 6: Refined Dedup mit Fulltext ──────────────────────────
