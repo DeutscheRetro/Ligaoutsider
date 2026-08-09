@@ -153,10 +153,10 @@
       return v.toLocaleString('de-DE') + ' €';
     }
     function fmtDiff(v) {
-      const s = v >= 0 ? '+' : '';
+      const s = v >= 0 ? '+' : '-';
       const abs = Math.abs(v);
-      if (abs >= 1e6) return s + (v/1e6).toFixed(1).replace('.',',') + ' Mio. €';
-      return s + Math.abs(v).toLocaleString('de-DE') + ' €';
+      if (abs >= 1e6) return s + (abs/1e6).toFixed(1).replace('.',',') + ' Mio. €';
+      return s + abs.toLocaleString('de-DE') + ' €';
     }
     function renderList(id, items) {
       const el = document.getElementById(id);
