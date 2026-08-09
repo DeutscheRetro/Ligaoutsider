@@ -1676,7 +1676,7 @@ def kickbase_fetch():
         mvt = p.get("mvTrend") or 0
         players.append({
             "name":   p.get("name", ""),
-            "logo":   p.get("image") or p.get("fallbackImage", ""),
+            "logo":   p.get("image") or p.get("fallbackImage") or "",
             "team":   p.get("teamName", ""),
             "mw":     mw,
             "pts":    pts,
