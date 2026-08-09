@@ -1652,111 +1652,52 @@ def sitemap_generieren(artikel_liste: list):
 
 
 def kickbase_fetch():
-    """Kickbase-Daten holen und kickbase.json schreiben."""
-    import requests
+    """Kickbase-Daten via BaseXI (base-xi.de) holen — kein Login nötig."""
+    import requests as _req
 
-    email    = os.environ.get("KICKBASE_EMAIL", "")
-    password = os.environ.get("KICKBASE_PASSWORD", "")
-    if not email or not password:
-        print("⚠️  KICKBASE_EMAIL/PASSWORD nicht gesetzt – überspringe Kickbase.")
-        return
+    session = _req.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0", "Referer": "https://www.base-xi.de/players"})
 
-    CDN = "https://kickbase.b-cdn.net/"
-    session = requests.Session()
-    session.headers.update({
-        "Content-Type": "application/json",
-        "User-Agent": "Kickbase GmbH/5.5.2 CFNetwork/1568.200.51 Darwin/24.1.0",
-    })
-
-    # Login (v4: em/pass → tkn)
     try:
-        r = session.post("https://api.kickbase.com/v4/user/login",
-                         json={"em": email, "pass": password, "loy": False, "rep": {}}, timeout=15)
+        # Session-Cookie setzen
+        session.get("https://www.base-xi.de/players", timeout=10)
+        r = session.get("https://www.base-xi.de/api/players?comp=bl1&t=1", timeout=20)
         r.raise_for_status()
-        token = r.json().get("tkn")
-        if not token:
-            raise ValueError(f"Kein tkn in Response: {list(r.json().keys())}")
-        session.headers["Authorization"] = f"Bearer {token}"
-        print("✅ Kickbase Login erfolgreich")
+        data = r.json()
+        print(f"  → {len(data)} Spieler von BaseXI geladen")
     except Exception as e:
-        print(f"❌ Kickbase Login fehlgeschlagen: {e}")
+        print(f"❌ BaseXI Fetch fehlgeschlagen: {e}")
         return
 
-    # Spieler-IDs aus Top-Liste holen, dann Einzeldetails abrufen (echte mv/tp)
-    try:
-        r = session.get("https://api.kickbase.com/v4/competitions/1/players?limit=200", timeout=20)
-        r.raise_for_status()
-        id_list = [(p["pi"], p.get("tid", "")) for p in r.json().get("it", [])]
-        print(f"  → {len(id_list)} Spieler-IDs geladen")
-    except Exception as e:
-        print(f"❌ Kickbase Spieler-Liste fehlgeschlagen: {e}")
-        return
-
-    import time as _time
     players = []
-    for pid, _ in id_list:
-        try:
-            r2 = session.get(f"https://api.kickbase.com/v4/competitions/1/players/{pid}", timeout=10)
-            r2.raise_for_status()
-            d  = r2.json()
-            tid = d.get("tid", "")
-            # Team-Icon aus Spieltagsdaten extrahieren
-            team_img = ""
-            for md in d.get("mdsum", []):
-                if md.get("t1") == tid:
-                    team_img = md.get("t1im", "")
-                    break
-                elif md.get("t2") == tid:
-                    team_img = md.get("t2im", "")
-                    break
-            logo = CDN + team_img if team_img else ""
-            players.append({
-                "name":    (d.get("fn", "") + " " + d.get("ln", "")).strip(),
-                "logo":    logo,
-                "mw":      d.get("mv", 0) or 0,
-                "pts":     d.get("tp", 0) or 0,
-                "ap":      d.get("ap", 0) or 0,
-                "goals":   d.get("g",  0) or 0,
-                "assists": d.get("a",  0) or 0,
-                "sp_pts":  d.get("pes", 0) or 0,
-                "mvt":     d.get("tfhmvt", 0) or 0,
-            })
-            _time.sleep(0.2)
-        except Exception as e:
-            print(f"  ⚠️ Spieler {pid}: {e}")
-
-    print(f"  → {len(players)} Spieler-Details geladen")
-
-    # Effizienz: Punkte pro Million Marktwert
-    for p in players:
-        p["eff"] = round(p["pts"] / (p["mw"] / 1e6), 2) if p["mw"] > 500000 else 0
+    for p in data:
+        mw  = p.get("marketValue") or 0
+        pts = p.get("totalPoints") or 0
+        mvt = p.get("mvTrend") or 0
+        players.append({
+            "name":   p.get("name", ""),
+            "logo":   p.get("image") or p.get("fallbackImage", ""),
+            "team":   p.get("teamName", ""),
+            "mw":     mw,
+            "pts":    pts,
+            "ap":     p.get("avgPoints") or 0,
+            "mvt":    mvt,
+            "eff":    round(pts / (mw / 1e6), 2) if mw > 500000 and pts > 0 else 0,
+        })
 
     def top(lst, key, n=10, reverse=True):
-        return sorted([x for x in lst if x[key]], key=lambda x: x[key], reverse=reverse)[:n]
-
-    teuerste  = [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}        for p in top(players,"mw")]
-    punkte    = [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}       for p in top(players,"pts")]
-
-    # Wenn API < 50 Spieler liefert (Saison noch nicht gestartet / unvollständig),
-    # bestehende punkte-Liste aus kickbase.json beibehalten statt mit falschen Top-10 überschreiben
-    effizienz = [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}       for p in top(players,"eff")]
-    tore      = [{"name":p["name"],"logo":p["logo"],"goals":p["goals"]}   for p in top(players,"goals")]
-    spieltag  = [{"name":p["name"],"logo":p["logo"],"pts":p["sp_pts"]}    for p in top(players,"sp_pts")]
-    raketen   = [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]}      for p in top(players,"mvt")]
-    crash     = [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]}      for p in top(players,"mvt",reverse=False) if p["mvt"] < 0]
+        return sorted([x for x in lst if x.get(key)], key=lambda x: x[key], reverse=reverse)[:n]
 
     result = {
         "updated":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "teuerste":  teuerste,
-        "punkte":    punkte,
-        "effizienz": effizienz,
-        "tore":      tore,
-        "spieltag":  spieltag,
-        "raketen":   raketen,
-        "crash":     crash,
+        "teuerste":  [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}   for p in top(players,"mw")],
+        "punkte":    [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}  for p in top(players,"pts")],
+        "effizienz": [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}  for p in top(players,"eff")],
+        "raketen":   [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]} for p in top(players,"mvt")],
+        "crash":     [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]} for p in top(players,"mvt",reverse=False) if p["mvt"] < 0],
     }
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"✅ kickbase.json geschrieben ({len(players)} Spieler verarbeitet)")
+    print(f"✅ kickbase.json geschrieben ({len(players)} Spieler, via BaseXI)")
 
 
 def spieler_fetch():
