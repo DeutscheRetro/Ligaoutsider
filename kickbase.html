@@ -181,8 +181,8 @@
         }
         renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
         renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls: 'green' })));
-        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls: 'red' })));
+        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
+        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
         renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff + ' Pkt/Mio' })));
       })
       .catch(() => {

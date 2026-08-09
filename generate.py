@@ -1693,8 +1693,8 @@ def kickbase_fetch():
         "teuerste":  [{"name":p["name"],"logo":p["logo"],"mw":p["mw"]}   for p in top(players,"mw")],
         "punkte":    [{"name":p["name"],"logo":p["logo"],"pts":p["pts"]}  for p in top(players,"pts")],
         "effizienz": [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}  for p in top(players,"eff")],
-        "raketen":   [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]} for p in top(players,"mvt")],
-        "crash":     [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"]} for p in top(players,"mvt",reverse=False) if p["mvt"] < 0],
+        "raketen":   [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"],"mw":p["mw"]} for p in top(players,"mvt")],
+        "crash":     [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"],"mw":p["mw"]} for p in top(players,"mvt",reverse=False) if p["mvt"] < 0],
     }
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler, via BaseXI)")
