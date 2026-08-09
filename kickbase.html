@@ -80,14 +80,14 @@
       </div>
 
       <div class="kb-widget">
-        <div class="kb-widget-title">📈 MW-Raketen (7 Tage)</div>
+        <div class="kb-widget-title">📈 MW-Raketen (24h)</div>
         <ul class="kb-list" id="kb-raketen">
           <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
       </div>
 
       <div class="kb-widget">
-        <div class="kb-widget-title">📉 MW-Crash (7 Tage)</div>
+        <div class="kb-widget-title">📉 MW-Crash (24h)</div>
         <ul class="kb-list" id="kb-crash">
           <li class="kb-loading">Saison noch nicht gestartet</li>
         </ul>
@@ -148,15 +148,15 @@
 
     // Kickbase-Daten aus kickbase.json laden (wird von generate.py befüllt)
     function fmtMW(v) {
-      if (v >= 1e6) return (v/1e6).toFixed(1) + ' Mio';
-      if (v >= 1e3) return (v/1e3).toFixed(0) + ' Tsd';
-      return v;
+      const abs = Math.abs(v);
+      if (abs >= 1e6) return (v/1e6).toFixed(1).replace('.',',') + ' Mio. €';
+      return v.toLocaleString('de-DE') + ' €';
     }
     function fmtDiff(v) {
       const s = v >= 0 ? '+' : '';
-      if (Math.abs(v) >= 1e6) return s + (v/1e6).toFixed(1) + ' Mio';
-      if (Math.abs(v) >= 1e3) return s + (v/1e3).toFixed(0) + ' Tsd';
-      return s + v;
+      const abs = Math.abs(v);
+      if (abs >= 1e6) return s + (v/1e6).toFixed(1).replace('.',',') + ' Mio. €';
+      return s + Math.abs(v).toLocaleString('de-DE') + ' €';
     }
     function renderList(id, items) {
       const el = document.getElementById(id);
@@ -181,8 +181,8 @@
         }
         renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
         renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: '+' + fmtMW(p.diff), cls: 'green' })));
-        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtMW(p.diff), cls: 'red' })));
+        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls: 'green' })));
+        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff), cls: 'red' })));
         renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff + ' Pkt/Mio' })));
       })
       .catch(() => {
