@@ -402,11 +402,11 @@ def feed_laden() -> list:
 
 
 def feed_speichern(artikel_liste: list):
-    # Neueste zuerst, maximal 100 im Index
+    # Neueste zuerst
     from datetime import datetime
     artikel_liste.sort(key=lambda x: datetime.strptime(x["datum"], "%d.%m.%Y %H:%M"), reverse=True)
     FEED_JSON.write_text(
-        json.dumps(artikel_liste[:100], ensure_ascii=False, indent=2),
+        json.dumps(artikel_liste[:100_000], ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
 
