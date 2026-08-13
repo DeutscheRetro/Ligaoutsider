@@ -1336,10 +1336,22 @@ def main():
             volltext, reason = fetch_fulltext(url)
             if reason != "ok":
                 log.info(f"S5 fulltext fail ({reason}): {titel[:60]}")
-                _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}")
-                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 stats["s5_fulltext_fail"] += 1
-                continue
+                # Dauerhafte Fehler: .skip setzen (paywall, google-Redirect, Exception)
+                _PERMANENT_SKIP = {"likely_paywall", "google_redirect_unresolved", "low_unique_content_ratio"}
+                if reason in _PERMANENT_SKIP or reason.startswith("exception_"):
+                    _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}")
+                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                    continue
+                # Temporärer Fehler (trafilatura_returned_empty, too_short, fetch_failed):
+                # Fallback auf RSS-Beschreibung wenn ausreichend lang
+                beschr_clean = re.sub(r'<[^>]+>', ' ', beschr).strip()
+                if len(beschr_clean.split()) >= 60:
+                    volltext = beschr_clean
+                    log.info(f"S5 fulltext fallback auf RSS-Beschreibung ({len(beschr_clean.split())} Wörter): {titel[:50]}")
+                else:
+                    _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}_rss_too_short")
+                    continue
 
             # ── Stage 5.5: Relevanz-Check mit echtem Volltext (Haiku) ────────
             if not _ist_kicker_team and not ist_relevant(titel, volltext):
