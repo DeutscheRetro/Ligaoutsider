@@ -1470,6 +1470,8 @@ def main():
     for k in approved:
         ergebnis = k["ergebnis"]
         aid = k["aid"]
+        _wu = k["wappen_url"]
+        _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
         html = artikel_html(
             datei_id    = aid,
             titel       = ergebnis["titel"],
@@ -1478,7 +1480,7 @@ def main():
             quelle_name = k["quelle_name"],
             quelle_url  = k["url"],
             datum       = k["datum"],
-            wappen_url  = k["wappen_url"],
+            wappen_url  = _artikel_wu,
             vereine     = k["vereine"],
         )
         (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
