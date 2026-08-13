@@ -815,12 +815,12 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
 
         words = text.split()
         word_count = len(words)
-        MIN_WORDS = 160
+        MIN_WORDS = 60
         if word_count < MIN_WORDS:
             # Kurze Transfermeldungen erlauben wenn Key-Indicators vorhanden
             _KEY = ["wechselt", "transfer", "verpflichtet", "verletzt",
                     "verlängert", "ablöse", "testspiel", "trainiert", "abgang", "zugang"]
-            if word_count >= 100 and any(k in text.lower() for k in _KEY):
+            if word_count >= 40 and any(k in text.lower() for k in _KEY):
                 pass  # short but relevant
             else:
                 return None, f"too_short_{word_count}_words"
@@ -1346,7 +1346,7 @@ def main():
                 # Temporärer Fehler (trafilatura_returned_empty, too_short, fetch_failed):
                 # Fallback auf RSS-Beschreibung wenn ausreichend lang
                 beschr_clean = re.sub(r'<[^>]+>', ' ', beschr).strip()
-                if len(beschr_clean.split()) >= 60:
+                if len(beschr_clean.split()) >= 30:
                     volltext = beschr_clean
                     log.info(f"S5 fulltext fallback auf RSS-Beschreibung ({len(beschr_clean.split())} Wörter): {titel[:50]}")
                 else:
