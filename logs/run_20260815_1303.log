@@ -1,0 +1,316 @@
+2026-08-15 13:04:02,136 INFO URL-Cache geladen: 18267 bekannte URLs (letzte 30 Tage)
+2026-08-15 13:04:02,137 INFO === Ligaoutsider Generator startet – max. 50 Artikel ===
+2026-08-15 13:04:02,137 WARNING Sky DE Scraper: Fetch fehlgeschlagen: name 'requests' is not defined
+2026-08-15 13:04:02,137 INFO Feed: https://newsfeed.kicker.de/news/bundesliga
+2026-08-15 13:04:04,060 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:04,096 INFO S5 fetch fulltext: LIVE! Härtetest vor Supercup: Bayern fordert Leipzig im Tele
+2026-08-15 13:04:04,788 ERROR lxml parsing failed: Document is empty
+2026-08-15 13:04:04,788 ERROR lxml parser bytestring Document is empty
+2026-08-15 13:04:04,788 ERROR empty HTML tree: None
+2026-08-15 13:04:04,788 WARNING discarding data: None
+2026-08-15 13:04:04,789 INFO S5 fulltext fail (trafilatura_returned_empty): LIVE! Härtetest vor Supercup: Bayern fordert Leipzig im Tele
+2026-08-15 13:04:04,789 INFO S5 fulltext fallback auf RSS-Beschreibung (33 Wörter): LIVE! Härtetest vor Supercup: Bayern fordert Leipz
+2026-08-15 13:04:05,365 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:06,927 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:06,930 INFO S6 refined dup: LIVE! Härtetest vor Supercup: Bayern fordert Leipzig im Tele
+2026-08-15 13:04:07,359 INFO S3 keyword miss: "Halt die Schnauze!": Als Kaiserslautern Karlsruhe in die 3.
+2026-08-15 13:04:09,226 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:09,230 INFO S4 fingerprint dup: Nach El-Mala-Aus: Konstantelias im BVB-Fokus
+2026-08-15 13:04:09,230 INFO Feed: https://www.sportschau.de/fussball/bundesliga/index~rss2.xml
+2026-08-15 13:04:09,595 INFO Feed: https://sportbild.bild.de/feed/sportbild-home.xml
+2026-08-15 13:04:09,971 INFO S3 keyword miss: Wichtig für Wehrlein - Porsche-Pilot holt sich Pole vor Team
+2026-08-15 13:04:09,972 INFO S3 keyword miss: Explosion im letzten Versuch - Mihambo-Krimi in Weitsprung-Q
+2026-08-15 13:04:09,972 INFO S3 keyword miss: Aus im Vorlauf - Tränen-Drama! Großer Frust bei unserer Staf
+2026-08-15 13:04:09,973 INFO S3 keyword miss: Weltmeister viel teurer als gedacht - „Verlockendes“ Mega-An
+2026-08-15 13:04:09,973 INFO S3 keyword miss: Titelkampf eng wie nie - Wehrlein holt sich extrem wichtige 
+2026-08-15 13:04:09,973 INFO S3 keyword miss: Foto aufgetaucht - Neuer Wirbel um Star-Spielerin Cunningham
+2026-08-15 13:04:09,974 INFO S2 blacklist: Reporter gegen Olympia-Siegerinnen - Unsere Bob-Heldinnen st
+2026-08-15 13:04:09,974 INFO S3 keyword miss: Sprint-Star Ansah - Das süße Geheimnis von unserem EM-Helden
+2026-08-15 13:04:09,974 INFO Feed: https://www.bild.de/rss-feeds/rss-16725492,feed=fussball-mix.bild.html
+2026-08-15 13:04:10,440 INFO S3 keyword miss: Choreo-Boykott und drei Doppelpacker - 4:2! Klose baut seine
+2026-08-15 13:04:12,748 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:12,751 INFO S5 fetch fulltext: Test-Kracher gegen Leipzig im Live-Ticker - Bayern mit Neuzu
+2026-08-15 13:04:13,526 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:15,187 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:15,190 INFO S6 update-bypass (Folgeartikel): Test-Kracher gegen Leipzig im Live-Ticker - Bayern mit Neuzu
+2026-08-15 13:04:15,190 INFO S7 generate: Test-Kracher gegen Leipzig im Live-Ticker - Bayern mit Neuzu
+2026-08-15 13:04:19,441 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:19,445 INFO   Kandidat: Telekom-Cup: Bayern empfangen RB Leipzig zum Testspiel
+2026-08-15 13:04:19,445 INFO S2 blacklist: 2. Liga am Samstag - Spektakel-Derby! Klose jetzt Tabellenfü
+2026-08-15 13:04:19,446 INFO S3 keyword miss: Traumtor und zwei Vorlagen - 4:1! Hertha-Held Winkler zerleg
+2026-08-15 13:04:20,977 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:20,980 INFO S4 fingerprint dup: Große Namen dabei - Diese Real-Stars laufen auf Schalke auf!
+2026-08-15 13:04:20,981 INFO S3 keyword miss: Statement vor Härtetest - Elvedi-Entscheidung gefallen?
+2026-08-15 13:04:20,981 INFO S3 keyword miss: Nach Versöhnung mit seiner Ehefrau - Skandal-Profi Walker zu
+2026-08-15 13:04:22,908 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:22,912 INFO S5 fetch fulltext: Hass gegen Reis - Werder-Boss kritisiert einige HSV-Fans
+2026-08-15 13:04:23,627 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:26,143 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:26,146 INFO S6 refined dup: Hass gegen Reis - Werder-Boss kritisiert einige HSV-Fans
+2026-08-15 13:04:27,528 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:27,531 INFO S4 fingerprint dup: Heute treffen sie als Trainer aufeinander! - Besondere Vorge
+2026-08-15 13:04:27,532 INFO S3 keyword miss: Nach wenigen Wochen unverzichtbar - Was Kühlwetter zur schne
+2026-08-15 13:04:27,532 INFO Feed: https://www.11freunde.de/feed
+2026-08-15 13:04:28,476 INFO Feed: https://www.bundesliga.com/de/bundesliga/news.rss
+2026-08-15 13:04:28,800 INFO S2 blacklist: Elversberg leiht Torjäger Noel Futkeu von Frankfurt aus
+2026-08-15 13:04:28,800 INFO Feed: https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtUmxHZ0pFUlNnQVAB?hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:28,981 INFO S2 blacklist: Hertha empfängt Heidenheim zum ersten Heimspiel der Saison -
+2026-08-15 13:04:28,981 INFO S2 blacklist: 2. Bundesliga heute: Fürth - Nürnberg LIVE im TV, Liveticker
+2026-08-15 13:04:28,982 INFO S2 blacklist: Der sechste EM-Tag im Überblick: Drama um deutsche Staffel -
+2026-08-15 13:04:30,558 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:30,562 INFO S5 fetch fulltext: FC Bayern: Besondere Vorgeschichte von Vincent Kompany und M
+2026-08-15 13:04:30,713 INFO S5 fulltext fail (google_redirect_unresolved): FC Bayern: Besondere Vorgeschichte von Vincent Kompany und M
+2026-08-15 13:04:32,245 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:32,249 INFO S5 fetch fulltext: Nach El-Mala-Absage: Dieser Kandidat wird beim BVB heiß - fu
+2026-08-15 13:04:32,399 INFO S5 fulltext fail (google_redirect_unresolved): Nach El-Mala-Absage: Dieser Kandidat wird beim BVB heiß - fu
+2026-08-15 13:04:32,400 INFO S2 blacklist: „Absolute Schande“: Deutsche Schwimm-Stars mit massiver Krit
+2026-08-15 13:04:33,807 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:33,810 INFO S5 fetch fulltext: EM-Entscheidungen im Gehen: Linke geht an Medaille vorbei - 
+2026-08-15 13:04:33,960 INFO S5 fulltext fail (google_redirect_unresolved): EM-Entscheidungen im Gehen: Linke geht an Medaille vorbei - 
+2026-08-15 13:04:33,961 INFO S2 blacklist: 14:28 Verletzungsdesaster: Deutsche Staffel kommt nicht ins 
+2026-08-15 13:04:33,961 INFO S3 keyword miss: DTM-Qualifying Nürburgring 1: Ferrari-Pole, Dämpfer für Tite
+2026-08-15 13:04:33,962 INFO S2 blacklist: Nationalmannschaft: Eberl kündigt Klopp-Besuche beim FC Baye
+2026-08-15 13:04:33,962 INFO S3 keyword miss: Finale in London: FORMEL E LIVE BEI BILD - BILD
+2026-08-15 13:04:33,962 INFO S3 keyword miss: Siebenkampf: Weißenberg bei Comeback stark unterwegs - euros
+2026-08-15 13:04:33,963 INFO S3 keyword miss: NBA - Neue Details zum Schröder-Trade enthüllt: So teuer war
+2026-08-15 13:04:33,963 INFO S3 keyword miss: 13 Millionen Euro: Pogacar kommt Einnahmen-Rekord näher - eu
+2026-08-15 13:04:35,495 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:35,498 INFO S5 fetch fulltext: +++ Live-Ticker Gelände Vielseitigkeits WM Aachen +++ - Equi
+2026-08-15 13:04:35,672 INFO S5 fulltext fail (google_redirect_unresolved): +++ Live-Ticker Gelände Vielseitigkeits WM Aachen +++ - Equi
+2026-08-15 13:04:35,672 INFO S3 keyword miss: Leichtathletik-EM: "Das ist ihr nicht gegönnt und nicht gewü
+2026-08-15 13:04:35,673 INFO S3 keyword miss: Katharina Hemmer will auf die WM-Kür verzichten - Equestrian
+2026-08-15 13:04:35,673 INFO S3 keyword miss: Leroy Sané als "furchtbar" abgestempelt - Galatasaray hat gr
+2026-08-15 13:04:35,674 INFO S3 keyword miss: Bochum holt Braunschweig zurück auf den Boden - sportschau.d
+2026-08-15 13:04:35,674 INFO S2 blacklist: 2. Bundesliga im Liveticker: Fürth gegen Nürnberg hier verfo
+2026-08-15 13:04:37,778 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:37,782 INFO S5 fetch fulltext: Borussia Mönchengladbach: Gladbach startet neue Stadion-Ära 
+2026-08-15 13:04:37,941 INFO S5 fulltext fail (google_redirect_unresolved): Borussia Mönchengladbach: Gladbach startet neue Stadion-Ära 
+2026-08-15 13:04:37,942 INFO S2 blacklist: Leichtathletik-EM 2026: Zeitplan, Termine & TV-Übertragung i
+2026-08-15 13:04:40,503 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:40,507 INFO S5 fetch fulltext: Transfer kurz vor Abschluss: Werder holt Eren Dinkci zurück 
+2026-08-15 13:04:40,663 INFO S5 fulltext fail (google_redirect_unresolved): Transfer kurz vor Abschluss: Werder holt Eren Dinkci zurück 
+2026-08-15 13:04:40,664 INFO S3 keyword miss: Das letzte Kapitel: Monfils tritt ab - mit einem letzten Zie
+2026-08-15 13:04:40,664 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Testspiel+Ergebnis&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:41,082 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vorbereitung+Sommertour&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:41,318 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Verletzung+Ausfall+gesperrt&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:41,638 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Transfer+Wechsel+verpflichtet&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:42,041 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Gerücht+Interesse+Angebot&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:42,426 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vertrag+verlängert+ablösefrei&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:42,786 INFO Feed: https://news.google.com/rss/search?q=FC+Bayern+München+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:44,841 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:44,844 INFO S5 fetch fulltext: Geht jetzt alles ganz schnell? Verkaufskandidat des FC Bayer
+2026-08-15 13:04:44,994 INFO S5 fulltext fail (google_redirect_unresolved): Geht jetzt alles ganz schnell? Verkaufskandidat des FC Bayer
+2026-08-15 13:04:44,995 INFO Feed: https://news.google.com/rss/search?q=Borussia+Dortmund+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:46,853 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:46,857 INFO S5 fetch fulltext: Zeitnahe Entscheidung: BVB gibt neues El Mala-Angebot ab - F
+2026-08-15 13:04:47,011 INFO S5 fulltext fail (google_redirect_unresolved): Zeitnahe Entscheidung: BVB gibt neues El Mala-Angebot ab - F
+2026-08-15 13:04:48,496 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:48,500 INFO S5 fetch fulltext: Transfer-Jagd auf BVB-Star: Fabio Silva hinterlegt Wunsch - 
+2026-08-15 13:04:48,649 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Jagd auf BVB-Star: Fabio Silva hinterlegt Wunsch - 
+2026-08-15 13:04:50,214 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:50,218 INFO S5 fetch fulltext: BVB bei Abwehr-Juwel in der Pole Position: Sticht Dortmund L
+2026-08-15 13:04:50,376 INFO S5 fulltext fail (google_redirect_unresolved): BVB bei Abwehr-Juwel in der Pole Position: Sticht Dortmund L
+2026-08-15 13:04:50,376 INFO Feed: https://news.google.com/rss/search?q=Bayer+04+Leverkusen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:50,926 INFO Feed: https://news.google.com/rss/search?q=RB+Leipzig+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:51,458 INFO Feed: https://news.google.com/rss/search?q=VfB+Stuttgart+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:53,345 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:53,349 INFO S4 fingerprint dup: Laurin Ulrich vor Wechsel: VfB Stuttgart verleiht Talent an 
+2026-08-15 13:04:53,349 INFO Feed: https://news.google.com/rss/search?q=Eintracht+Frankfurt+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:55,134 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:55,138 INFO S5 fetch fulltext: Neue Transfer-Realität bei Eintracht Frankfurt - sport.de
+2026-08-15 13:04:55,287 INFO S5 fulltext fail (google_redirect_unresolved): Neue Transfer-Realität bei Eintracht Frankfurt - sport.de
+2026-08-15 13:04:55,288 INFO Feed: https://news.google.com/rss/search?q=Borussia+Mönchengladbach+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:57,734 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:04:57,738 INFO S5 fetch fulltext: Gladbachs neuer Abwehr-Turm?: Dieser Riese aus England könnt
+2026-08-15 13:04:57,902 INFO S5 fulltext fail (google_redirect_unresolved): Gladbachs neuer Abwehr-Turm?: Dieser Riese aus England könnt
+2026-08-15 13:04:57,903 INFO Feed: https://news.google.com/rss/search?q=SC+Freiburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:58,383 INFO Feed: https://news.google.com/rss/search?q=TSG+Hoffenheim+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:58,848 INFO Feed: https://news.google.com/rss/search?q=FSV+Mainz+05+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:59,373 INFO Feed: https://news.google.com/rss/search?q=FC+Augsburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:04:59,853 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Union+Berlin+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:00,391 INFO Feed: https://news.google.com/rss/search?q=SV+Werder+Bremen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:00,841 INFO Feed: https://news.google.com/rss/search?q=Hamburger+SV+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:01,373 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Köln+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:03,786 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:03,789 INFO S5 fetch fulltext: Zoff im Poker um El Mala: Leidet jetzt die FC-Fanfreundschaf
+2026-08-15 13:05:03,961 INFO S5 fulltext fail (google_redirect_unresolved): Zoff im Poker um El Mala: Leidet jetzt die FC-Fanfreundschaf
+2026-08-15 13:05:03,962 INFO Feed: https://news.google.com/rss/search?q=FC+Schalke+04+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:04,452 INFO Feed: https://news.google.com/rss/search?q=SV+Elversberg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:04,925 INFO Feed: https://news.google.com/rss/search?q=SC+Paderborn+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-08-15 13:05:05,370 INFO Feed: https://www.transfermarkt.de/rss/news
+2026-08-15 13:05:05,417 INFO Feed: https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1
+2026-08-15 13:05:05,479 INFO Feed: https://rss.dw.com/xml/sport-de
+2026-08-15 13:05:05,654 INFO Feed: https://www.waz.de/sport/fussball/rss
+2026-08-15 13:05:06,010 INFO Feed: https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/
+2026-08-15 13:05:06,611 INFO Feed: https://bulinews.com/rss.xml
+2026-08-15 13:05:07,053 INFO S2 blacklist: 2. Bundesliga: Emphatic first half enough for Hertha to secu
+2026-08-15 13:05:07,054 INFO S2 blacklist: 2. Bundesliga: Magdeburg bounce back with dominant win over 
+2026-08-15 13:05:08,647 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:08,650 INFO S5 fetch fulltext: Confirmed Pre-season Lineups: FC Bayern vs. RB Leipzig
+2026-08-15 13:05:11,120 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:12,837 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:12,841 INFO S6 refined dup: Confirmed Pre-season Lineups: FC Bayern vs. RB Leipzig
+2026-08-15 13:05:12,841 INFO S2 blacklist: Confirmed 2. Bundesliga lineups: VfL Osnabrück vs. 1. FC Mag
+2026-08-15 13:05:12,842 INFO S2 blacklist: Confirmed 2. Bundesliga lineups: Hertha BSC vs. 1. FC Heiden
+2026-08-15 13:05:12,842 INFO S2 blacklist: Confirmed 2. Bundesliga Lineups: Greuther Fürth vs. 1. FC Nü
+2026-08-15 13:05:12,843 INFO Feed: https://www.eyefootball.com/rss_news_main.xml
+2026-08-15 13:05:13,192 INFO S3 keyword miss: AC Milan make bid for Croatian youngster Kumar
+2026-08-15 13:05:15,430 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:15,433 INFO S5 fetch fulltext: Celtic complete Mika Baur transfer
+2026-08-15 13:05:16,353 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:16,354 INFO S5.5 not relevant (fulltext): Celtic complete Mika Baur transfer
+2026-08-15 13:05:16,354 INFO S3 keyword miss: Charlton seal major coup in signing Kenyan starlet Ouma
+2026-08-15 13:05:16,354 INFO S3 keyword miss: Hull City back in for Kevin Danois
+2026-08-15 13:05:16,355 INFO S3 keyword miss: AC Milan make move for Tiago Gabriel
+2026-08-15 13:05:16,355 INFO S3 keyword miss: Everton looking to sign Barcelona youngster Hector Fort
+2026-08-15 13:05:16,356 INFO S3 keyword miss: Kodai Sano completes PSV Eindhoven move
+2026-08-15 13:05:16,356 INFO S3 keyword miss: Milan make fresh bid for Cher Ndour
+2026-08-15 13:05:16,356 INFO S3 keyword miss: Troyes complete Dermane Kerim deal
+2026-08-15 13:05:16,357 INFO S3 keyword miss: Lyon to complete loan deal for Zachary Athekame from AC Mila
+2026-08-15 13:05:17,774 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:17,778 INFO S5 fetch fulltext: Deniz Zeitler joins Paderborn
+2026-08-15 13:05:17,976 INFO S5 fulltext fail (likely_paywall): Deniz Zeitler joins Paderborn
+2026-08-15 13:05:19,892 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:19,895 INFO S4 fingerprint dup: Mainz chasing AC Milan prospect
+2026-08-15 13:05:19,896 INFO S3 keyword miss: Benfica closing in on move for Bastien Meupiyou
+2026-08-15 13:05:19,896 INFO S3 keyword miss: Chelsea table new bid for Said Remadnia
+2026-08-15 13:05:19,896 INFO S3 keyword miss: Hull City complete move for Mendy
+2026-08-15 13:05:19,897 INFO S3 keyword miss: Juventus back in for Lens defender
+2026-08-15 13:05:19,897 INFO S3 keyword miss: Loan move beckons for Aaron Anselmino despite injury
+2026-08-15 13:05:19,898 INFO S3 keyword miss: AC Milan chase Tiago Gabriel
+2026-08-15 13:05:19,898 INFO S3 keyword miss: Fulham chase Rennes defender
+2026-08-15 13:05:19,898 INFO Feed: https://www.ligaportal.at/international/deutsche-bundesliga?format=feed&type=rss
+2026-08-15 13:05:21,977 INFO Feed: https://www.reddit.com/r/bundesliga/new.rss?limit=100
+2026-08-15 13:05:22,904 INFO S3 keyword miss: Gala gegen 1. FC Heidenheim - Hertha BSC überrascht mit Wow-
+2026-08-15 13:05:22,905 INFO S2 blacklist: 2. Bundesliga: VfL Osnabrück mit 0:3-Heimdebakel gegen den 1
+2026-08-15 13:05:22,905 INFO S2 blacklist: Tim Kleindienst bei WM genervt von Trump und Infantino: "Imm
+2026-08-15 13:05:22,905 INFO S3 keyword miss: Bewerbung für Klopp: Alexander Nübel überzeugt bei Besiktas 
+2026-08-15 13:05:24,405 INFO S3 keyword miss: Nach 0:2-Rückstand - Holstein Kiel punktet gegen St. Pauli
+2026-08-15 13:05:24,406 INFO S3 keyword miss: Heimpleite nach 6:1-Auftaktsieg: Bochum holt Braunschweig zu
+2026-08-15 13:05:25,842 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:25,846 INFO S5 fetch fulltext: Urteil ist da: Gericht bestärkt Ausbaupläne des 1. FC Köln i
+2026-08-15 13:05:26,757 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:28,309 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:28,313 INFO S7 generate: Urteil ist da: Gericht bestärkt Ausbaupläne des 1. FC Köln i
+2026-08-15 13:05:41,019 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:41,020 WARNING S7 generation error: Expecting property name enclosed in double quotes: line 3 column 756 (char 841)
+2026-08-15 13:05:41,020 INFO S3 keyword miss: Ball gegen den Kopf, Karriereende: Patrick Erras erlitt im B
+2026-08-15 13:05:42,715 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:42,717 INFO S4 fingerprint dup: BVB steigt aus dem Poker um Said El Mala vom 1. FC Köln aus
+2026-08-15 13:05:42,717 INFO S3 keyword miss: Zwischen Ebbelwoi, Dialekt und Kneipenwärme: Das neue Eintra
+2026-08-15 13:05:42,718 INFO S3 keyword miss: Sofortiger Abschied: Laura Wontorra verlässt DAZN vorzeitig 
+2026-08-15 13:05:44,159 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:44,163 INFO S5 fetch fulltext: „Schlag ins Gesicht“: Mega-Deal des FC Bayern sorgt für heft
+2026-08-15 13:05:45,708 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:47,462 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:47,465 INFO S7 generate: „Schlag ins Gesicht“: Mega-Deal des FC Bayern sorgt für heft
+2026-08-15 13:05:57,386 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:57,387 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 1143 (char 1212)
+2026-08-15 13:05:57,388 INFO S3 keyword miss: Geburtsstunde(n) einer einzigartigen Freundschaft
+2026-08-15 13:05:59,093 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:05:59,095 INFO S4 fingerprint dup: 1. FC Köln lehnt neues BVB Argument für Said El Mala ab
+2026-08-15 13:06:00,492 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:00,496 INFO S4 fingerprint dup: Wechsel zu Red&Gold-Partnerclub: Armindo Sieb vom FC Bayern 
+2026-08-15 13:06:01,801 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:01,805 INFO S5 fetch fulltext: Offiziell: Mika Baur wechselt von Paderborn zu Celtic
+2026-08-15 13:06:02,456 WARNING discarding data: None
+2026-08-15 13:06:02,457 INFO S5 fulltext fail (trafilatura_returned_empty): Offiziell: Mika Baur wechselt von Paderborn zu Celtic
+2026-08-15 13:06:05,237 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:05,239 INFO S4 fingerprint dup: Die große El-Mala-Frage: Wechselt der Nationalspieler in die
+2026-08-15 13:06:07,142 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:07,146 INFO S5 fetch fulltext: Diant Ramaj vor Dortmund-Abgang: BVB-Torwart steht vor Leihe
+2026-08-15 13:06:07,230 INFO S5 fulltext fail (too_short_15_words): Diant Ramaj vor Dortmund-Abgang: BVB-Torwart steht vor Leihe
+2026-08-15 13:06:07,231 INFO S3 keyword miss: 50+1 in der Bundesliga nach Prüfung durch Kartellamt: Endlic
+2026-08-15 13:06:07,231 INFO S3 keyword miss: 🎧 Der Zug - Der rätselhafte Tod von Fußballfan Hannes S. in 
+2026-08-15 13:06:07,232 INFO S3 keyword miss: Kein neues Angebot für Said El Mala – noch kein einziges für
+2026-08-15 13:06:07,232 INFO S3 keyword miss: Erstes Trainer-Duell für Jürgen Klopp beim Nations-League-Au
+2026-08-15 13:06:07,233 INFO S2 blacklist: Das r/Bundesliga Zweitliga-Auswärtstrikotranking 2026/27 - D
+2026-08-15 13:06:07,233 INFO S3 keyword miss: [Dynamo Dresden] Offener Brief des Turnustreffens zum Thema 
+2026-08-15 13:06:07,234 INFO S3 keyword miss: Fußball-Quoten im Wandel: Neue AGF-Auswertung führt TV- und 
+2026-08-15 13:06:07,234 INFO S3 keyword miss: "Scheiße, wusste ich nicht": St.-Pauli-Vermarktungschef Mush
+2026-08-15 13:06:07,234 INFO S3 keyword miss: Im Namen des Herrn: Wieso 1000 Zeugen Jehovas das Volksparks
+2026-08-15 13:06:07,235 INFO S3 keyword miss: Wie der FCN zur Talentschmiede wurde: Uzun, Brown, Jeltsch -
+2026-08-15 13:06:07,235 INFO S3 keyword miss: Hertha BSC muss Fredi Bobic zahlen: Laut "Berliner Morgenpos
+2026-08-15 13:06:07,236 INFO S3 keyword miss: Statements zur Stellungnahme des Bundeskartellamts
+2026-08-15 13:06:07,236 INFO S3 keyword miss: Statement der Bayer AG zur abschließenden, rechtlich nicht b
+2026-08-15 13:06:07,236 INFO S3 keyword miss: Auswärts in Saarbrücken: Rot-Weiss Essen verurteilt Fan für 
+2026-08-15 13:06:08,837 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:08,840 INFO S4 fingerprint dup: Miron Muslic erteilt möglichen Interessenten für den Sommer 
+2026-08-15 13:06:08,840 INFO S3 keyword miss: Wie Glasner auf dem "Manager-Friedhof" bestehen will: Mit Cr
+2026-08-15 13:06:11,523 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:11,524 INFO S4 fingerprint dup: Sky Info: BVB erhöht Angebot für Said El Mala auf 50 + 5 Mil
+2026-08-15 13:06:11,525 INFO S3 keyword miss: Bayer 04 holt argentinischen Vizeweltmeister Facundo Medina 
+2026-08-15 13:06:11,527 INFO Feed: https://www.reddit.com/r/soccer/new.rss?limit=100
+2026-08-15 13:06:12,433 INFO S3 keyword miss: Match Thread: Chelsea vs Real Sociedad | Club Friendly
+2026-08-15 13:06:12,433 INFO S2 blacklist: Post Match Thread: 2. Bundesliga Saturday Konferenz (Simulca
+2026-08-15 13:06:12,434 INFO S3 keyword miss: Sporting CP's announcement video for Nestory Irankunda
+2026-08-15 13:06:12,434 INFO S3 keyword miss: Hertha BSC [4]-1 Heidenheim - Oluwaseun Adewumi 90'
+2026-08-15 13:06:12,434 INFO S3 keyword miss: Greuther Fürth 2-[4] Nürnberg - Piet Scobel 74'
+2026-08-15 13:06:12,435 INFO S3 keyword miss: Osnabrück 0-[3] Magdeburg - Emmanuel Iyoha 69'
+2026-08-15 13:06:12,435 INFO S3 keyword miss: Match Thread: Feyenoord Rotterdam vs Go Ahead Eagles Live Sc
+2026-08-15 13:06:12,435 INFO S3 keyword miss: [Milannews]Leão responds to fake news from Gazzetta: "You Ly
+2026-08-15 13:06:12,436 INFO S3 keyword miss: [Florian Plettenberg] Amar Dedic to Newcastle United - Done 
+2026-08-15 13:06:12,436 INFO S3 keyword miss: Greuther Fürth 2-[3] Nürnberg - Julian Justvan 54'
+2026-08-15 13:06:14,737 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:14,741 INFO S5 fetch fulltext: [calcioefinanza.it] From Burke to Diomande: In eight years R
+2026-08-15 13:06:14,796 INFO S5 fulltext fail (too_short_36_words): [calcioefinanza.it] From Burke to Diomande: In eight years R
+2026-08-15 13:06:14,796 INFO S5 fulltext fallback auf RSS-Beschreibung (214 Wörter): [calcioefinanza.it] From Burke to Diomande: In eig
+2026-08-15 13:06:15,347 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:17,181 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:17,185 INFO S7 generate: [calcioefinanza.it] From Burke to Diomande: In eight years R
+2026-08-15 13:06:24,560 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:24,562 INFO   Kandidat: Von Burke bis Diomandé: RB Leipzig erlöst über eine Milliard
+2026-08-15 13:06:24,563 INFO S3 keyword miss: Hertha BSC 3-[1] Heidenheim - Jan Schöppner 49'
+2026-08-15 13:06:24,563 INFO S3 keyword miss: [The Herald] Sebastian Pocognoli is the front runner for the
+2026-08-15 13:06:24,563 INFO S3 keyword miss: Bolton [2]-0 Preston - Thierry Gale 25'
+2026-08-15 13:06:24,564 INFO S3 keyword miss: [RMTV] Mbappé: “I am very happy to be back and to have my fi
+2026-08-15 13:06:24,564 INFO S3 keyword miss: Greuther Fürth 2-[2] Nürnberg - Julian Justvan 45+3'
+2026-08-15 13:06:24,564 INFO S3 keyword miss: Bolton [1]-0 Preston - Sam Dalby 14'
+2026-08-15 13:06:24,565 INFO S3 keyword miss: Greuther Fürth [2]-1 Nürnberg - Felix Klaus 39'
+2026-08-15 13:06:24,565 INFO S3 keyword miss: Osnabrück 0-[2] Magdeburg - Alexander Nollenberger 35'
+2026-08-15 13:06:24,565 INFO S3 keyword miss: Hertha BSC [3]-0 Heidenheim - Deyovaisio Zeefuik 35'
+2026-08-15 13:06:24,566 INFO S3 keyword miss: Ashley Phillips signs for Middlesbrough from Tottenham Hotsp
+2026-08-15 13:06:24,566 INFO S3 keyword miss: Greuther Fürth 1-[1] Nürnberg - Piet Scobel 26'
+2026-08-15 13:06:24,566 INFO S3 keyword miss: Osnabrück 0-[1] Magdeburg - Alexander Nollenberger 24'
+2026-08-15 13:06:24,567 INFO S3 keyword miss: Hertha BSC [2]-0 Heidenheim - Marten Winkler 26' (Great Solo
+2026-08-15 13:06:24,567 INFO S3 keyword miss: Greuther Fürth [1]-0 Nürnberg - Felix Klaus (Pen) 22'
+2026-08-15 13:06:24,567 INFO S3 keyword miss: Match Thread: Bolton Wanderers vs Preston North End | Englis
+2026-08-15 13:06:24,567 INFO S3 keyword miss: Joe Gelhardt completes Hull City return on a a four-year con
+2026-08-15 13:06:24,568 INFO S3 keyword miss: Kashima Antlers [2] - 1 Nagoya Grampus - Ikuma Sekigawa 90+7
+2026-08-15 13:06:24,568 INFO S3 keyword miss: Hertha BSC [1]-0 Heidenheim - Sebastian Grønning 2'
+2026-08-15 13:06:24,568 INFO S3 keyword miss: Ciro Immobile retires: "It's time to stop. I loved football.
+2026-08-15 13:06:24,569 INFO S2 blacklist: Match Thread: 2. Bundesliga Saturday Konferenz (Simulcast) -
+2026-08-15 13:06:24,569 INFO S3 keyword miss: [MP Zarah Sultana] “Sickened by the news that Jeff Bezos’ co
+2026-08-15 13:06:24,569 INFO S3 keyword miss: Kashima Antlers 1 - [1] Nagoya Grampus - Naomichi Ueda (OG) 
+2026-08-15 13:06:24,570 INFO S3 keyword miss: Steven Benda joins Nottingham Forest
+2026-08-15 13:06:24,570 INFO S3 keyword miss: Daily Discussion | August 15, 2026
+2026-08-15 13:06:24,570 INFO S3 keyword miss: /r/soccer predicts... The 2026/27 Predictions Survey
+2026-08-15 13:06:24,571 INFO Feed: https://rss.kicker.de/news/fc-bayern-muenchen
+2026-08-15 13:06:24,606 INFO Feed: https://rss.kicker.de/news/borussia-dortmund
+2026-08-15 13:06:24,639 INFO Feed: https://rss.kicker.de/news/rb-leipzig
+2026-08-15 13:06:24,756 INFO Feed: https://rss.kicker.de/news/bayer-leverkusen
+2026-08-15 13:06:24,790 INFO Feed: https://rss.kicker.de/news/vfb-stuttgart
+2026-08-15 13:06:24,842 INFO Feed: https://rss.kicker.de/news/eintracht-frankfurt
+2026-08-15 13:06:24,967 INFO Feed: https://rss.kicker.de/news/borussia-moenchengladbach
+2026-08-15 13:06:25,081 INFO Feed: https://rss.kicker.de/news/sc-freiburg
+2026-08-15 13:06:25,231 INFO Feed: https://rss.kicker.de/news/tsg-hoffenheim
+2026-08-15 13:06:25,264 INFO Feed: https://rss.kicker.de/news/fsv-mainz-05
+2026-08-15 13:06:25,289 INFO Feed: https://rss.kicker.de/news/fc-augsburg
+2026-08-15 13:06:25,310 INFO Feed: https://rss.kicker.de/news/1-fc-union-berlin
+2026-08-15 13:06:25,336 INFO Feed: https://rss.kicker.de/news/sv-werder-bremen
+2026-08-15 13:06:25,436 INFO Feed: https://rss.kicker.de/news/hamburger-sv
+2026-08-15 13:06:25,568 INFO Feed: https://rss.kicker.de/news/1-fc-koeln
+2026-08-15 13:06:25,592 INFO Feed: https://rss.kicker.de/news/fc-schalke-04
+2026-08-15 13:06:25,620 INFO Feed: https://rss.kicker.de/news/sv-elversberg
+2026-08-15 13:06:25,746 INFO Feed: https://rss.kicker.de/news/sc-paderborn-07
+2026-08-15 13:06:25,777 INFO S8 QA: 2 Kandidaten …
+2026-08-15 13:06:29,788 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 13:06:29,789 INFO QA REJECT [0]: Text bricht mitten im Satz ab und enthält eine unbelegte Behauptung über eine angebliche Vereinbarung im Zuge einer Trainerablöse ohne nachprüfbare Fakten.
+2026-08-15 13:06:29,789 INFO QA APPROVE [1]: Von Burke bis Diomandé: RB Leipzig erlöst über eine Milliard
+2026-08-15 13:06:29,789 INFO S8 approved: 1 / 2
+2026-08-15 13:06:29,793 INFO S9.5 FinalCheck: 1/1 durch
+2026-08-15 13:06:29,815 INFO Veröffentlicht: Von Burke bis Diomandé: RB Leipzig erlöst über eine Milliard
+2026-08-15 13:06:29,816 INFO Reddit: Keine Credentials – übersprungen
+2026-08-15 13:06:29,848 INFO URL-Cache gespeichert: 18398 URLs
+2026-08-15 13:06:29,849 INFO === Fertig. 1 neue Artikel. feed.json: 626 ===
+2026-08-15 13:06:29,849 INFO Stats: {"ts": "20260815_1303", "ingested": 183, "s2_pre_filter": 21, "s3_relevance": 96, "s4_dedup_early": 11, "s5_fulltext_fail": 18, "s6_dedup_refined": 3, "s7_generated": 2, "s8_qa_rejected": 1, "published": 1}
