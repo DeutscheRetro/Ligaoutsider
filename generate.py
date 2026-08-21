@@ -336,7 +336,13 @@ def schon_verarbeitet(url: str) -> bool:
     aid = artikel_id(url)
     if aid in DELETED_IDS:
         return True
-    return (ARTIKEL_ORDNER / f"{aid}.html").exists() or (ARTIKEL_ORDNER / f"{aid}.skip").exists()
+    html_file = ARTIKEL_ORDNER / f"{aid}.html"
+    if html_file.exists():
+        # Regenerate if SEO tags missing
+        if 'rel="canonical"' not in html_file.read_text(encoding='utf-8', errors='ignore'):
+            return False
+        return True
+    return (ARTIKEL_ORDNER / f"{aid}.skip").exists()
 
 
 def verein_wappen_url(text: str, title: str = "") -> str:
