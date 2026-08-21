@@ -32,6 +32,16 @@
   status = 200
 
 [[redirects]]
+  from = "/rss.xml"
+  to = "/rss.xml"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+
+[[redirects]]
   from = "/artikel/*"
   to = "/artikel/:splat"
   status = 200
