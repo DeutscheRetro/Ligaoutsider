@@ -1560,6 +1560,7 @@ def main():
         log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
 
     sitemap_generieren(bestehende)
+    rss_generieren(bestehende)
 
     # Stage 9: Facebook-Posts & Reddit nach finalem Publish
     for k in approved:
@@ -1687,6 +1688,53 @@ def sitemap_generieren(artikel_liste: list):
     except Exception as _e:
         print(f"⚠️ Google Sitemap-Ping fehlgeschlagen: {_e}")
 
+
+
+
+def rss_generieren(artikel_liste: list):
+    from email.utils import formatdate
+    import time
+
+    base = "https://ligaoutsider.de"
+    items = []
+    for a in artikel_liste[:50]:  # Max 50 Einträge im Feed
+        titel = a.get("titel", "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        link = f"{base}/{a['pfad']}"
+        desc = a.get("kategorie", "").replace("&", "&amp;")
+        badge = a.get("badge", "")
+        if badge:
+            desc = f"[{badge}] {desc}"
+        # Datum parsen für RFC-2822
+        try:
+            from datetime import datetime as _dt
+            dt = _dt.strptime(a["datum"], "%d.%m.%Y %H:%M")
+            pub_date = formatdate(timeval=time.mktime(dt.timetuple()), localtime=True)
+        except Exception:
+            pub_date = formatdate()
+        vereine = a.get("vereine", [])
+        verein_str = ", ".join(vereine) if isinstance(vereine, list) else str(vereine)
+        items.append(f"""  <item>
+    <title>{titel}</title>
+    <link>{link}</link>
+    <guid isPermaLink="true">{link}</guid>
+    <description>{desc}</description>
+    <category>{verein_str}</category>
+    <pubDate>{pub_date}</pubDate>
+  </item>""")
+
+    rss = f"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">
+  <channel>
+    <title>Ligaoutsider – Bundesliga News</title>
+    <link>{base}/</link>
+    <description>Aktuelle Bundesliga-News, Transfers und Gerüchte</description>
+    <language>de-de</language>
+    <atom:link href="{base}/rss.xml" rel="self" type="application/rss+xml"/>
+{chr(10).join(items)}
+  </channel>
+</rss>"""
+    Path("rss.xml").write_text(rss, encoding="utf-8")
+    print(f"✅ rss.xml generiert ({len(items)} Einträge)")
 
 def kickbase_fetch():
     """Kickbase-Daten via BaseXI (base-xi.de) holen — kein Login nötig."""
