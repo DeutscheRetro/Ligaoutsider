@@ -919,6 +919,8 @@ def artikel_html(
 
     artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
+    meta_desc = ersten_absatz[:155].replace('"', '&quot;').replace('\n', ' ')
+    og_image = f"https://ligaoutsider.de/{wappen_url}" if wappen_url and not wappen_url.startswith('http') else (wappen_url or "https://ligaoutsider.de/logos/bundesliga.png")
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -926,6 +928,15 @@ def artikel_html(
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{titel} – Ligaoutsider.de</title>
+  <link rel="canonical" href="{artikel_url}"/>
+  <meta name="description" content="{meta_desc}"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="{titel}"/>
+  <meta property="og:description" content="{meta_desc}"/>
+  <meta property="og:url" content="{artikel_url}"/>
+  <meta property="og:image" content="{og_image}"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
@@ -1018,7 +1029,7 @@ def artikel_html(
       {vereine_tags_html}
 
       <div class="artikel-quelle">
-        Originalquelle: <a href="{quelle_url}" target="_blank" rel="noopener">{quelle_name}</a>
+        <a href="{quelle_url}" target="_blank" rel="noopener noreferrer">Quelle</a>
       </div>
 
     </article>
@@ -1663,6 +1674,12 @@ def sitemap_generieren(artikel_liste: list):
     lines.append("</urlset>")
     Path("sitemap.xml").write_text("\n".join(lines), encoding="utf-8")
     print(f"✅ sitemap.xml generiert ({len(urls)} URLs)")
+    try:
+        import urllib.request as _ur
+        _ur.urlopen("https://www.google.com/ping?sitemap=https://ligaoutsider.de/sitemap.xml", timeout=5)
+        print("✅ Google Sitemap-Ping gesendet")
+    except Exception as _e:
+        print(f"⚠️ Google Sitemap-Ping fehlgeschlagen: {_e}")
 
 
 def kickbase_fetch():
