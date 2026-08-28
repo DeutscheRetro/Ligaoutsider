@@ -249,80 +249,83 @@
       return `<tr><td style="padding:4px 8px">${posHtml}</td><td>${logoHtml}</td><td>${t.name}</td><td>${t.sp}</td></tr>`;
     }).join('');
 
-    // ─── Nächste Spiele ───────────────────────────────────────────────────────
-    // Spielplan 2026/27 (Quelle: DFL 02.07.2026)
-    const WETTBEWERB = {
-      'BL':      { kürzel:'BL',     farbe:'#d32f2f', label:'Bundesliga' },
-      'SUP':     { kürzel:'SUP',    farbe:'#e8c000', label:'Supercup' },
-      'DFB':     { kürzel:'DFB',    farbe:'#2e7d32', label:'DFB-Pokal' },
-      'UCL':     { kürzel:'UCL',    farbe:'#1565c0', label:'Champions League' },
-      'UECL':    { kürzel:'UECL',   farbe:'#00796b', label:'Europa Conference League' },
-    };
+    // ─── Nächste Spiele (OpenLigaDB Live) ─────────────────────────────────
+    (async () => {
+      const el = document.getElementById('spiele-list');
+      const KÜRZEL = {
+        'FC Bayern München':'Bayern','Borussia Dortmund':'BVB','RB Leipzig':'Leipzig',
+        'Bayer 04 Leverkusen':'Leverkusen','Eintracht Frankfurt':'Frankfurt','VfB Stuttgart':'Stuttgart',
+        'Borussia Mönchengladbach':'Gladbach','Sport-Club Freiburg':'Freiburg','1. FC Union Berlin':'Union',
+        '1. FSV Mainz 05':'Mainz','FC Augsburg':'Augsburg','SV Werder Bremen':'Bremen',
+        'TSG Hoffenheim':'Hoffenheim','Hamburger SV':'HSV','1. FC Köln':'Köln',
+        'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg',
+      };
+      const kürzel = n => KÜRZEL[n] || n;
+      const todayStr = () => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      };
+      const fmtDatum = iso => {
+        const d = new Date(iso);
+        const today = todayStr();
+        const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        if (ds === today) return 'HEUTE';
+        const wd = ['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()];
+        return `${wd} ${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.`;
+      };
+      const fmtTime = iso => {
+        const d = new Date(iso);
+        return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      };
+      try {
+        // Aktuellen Spieltag holen
+        const grp = await fetch('https://api.openligadb.de/getcurrentgroup/bl1').then(r=>r.json());
+        const gid = grp.groupOrderID;
+        // Aktuellen + nächsten Spieltag laden
+        const [cur, nxt] = await Promise.all([
+          fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid}`).then(r=>r.json()),
+          fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid+1}`).then(r=>r.json()).catch(()=>[]),
+        ]);
+        const spiele = [...cur, ...nxt];
 
-    const SPIELE = [
-      { datum:'Sa 22.08.', wbw:'SUP', heim:'Borussia Dortmund',      gast:'FC Bayern München',       info:'Supercup · 20:30' },
-      { datum:'Fr 28.08.', wbw:'BL',  heim:'FC Bayern München',       gast:'VfB Stuttgart',           info:'1. Spieltag · 20:30' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'Borussia Dortmund',      gast:'Hamburger SV',       info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'RB Leipzig',             gast:'Borussia Mönchengladbach', info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'Sport-Club Freiburg',    gast:'SV Werder Bremen',   info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'FC Augsburg',            gast:'FC Schalke 04',      info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FSV Mainz 05',        gast:'SC Paderborn 07',    info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FC Union Berlin',     gast:'Eintracht Frankfurt',info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'1. FC Köln',             gast:'TSG Hoffenheim',     info:'1. Spieltag' },
-      { datum:'Sa/So 29./30.08.', wbw:'BL', heim:'SV Elversberg',          gast:'Bayer 04 Leverkusen',info:'1. Spieltag' },
-      { datum:'Di/Mi 1./2.09.',   wbw:'DFB', heim:'–',                     gast:'–',                  info:'DFB-Pokal Runde 1' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'VfB Stuttgart',          gast:'1. FC Köln',         info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'TSG Hoffenheim',         gast:'Borussia Dortmund',  info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Bayer 04 Leverkusen',    gast:'1. FC Union Berlin', info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Eintracht Frankfurt',    gast:'FC Augsburg',        info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Borussia Mönchengladbach',gast:'SV Elversberg',     info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'Hamburger SV',           gast:'1. FSV Mainz 05',    info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'SV Werder Bremen',       gast:'RB Leipzig',         info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'FC Schalke 04',          gast:'FC Bayern München',  info:'2. Spieltag' },
-      { datum:'Fr-So 4.-6.09.',   wbw:'BL', heim:'SC Paderborn 07',        gast:'Sport-Club Freiburg',info:'2. Spieltag' },
-      { datum:'Di-Do 8.-10.09.',  wbw:'UCL', heim:'–',                     gast:'–',                  info:'Champions League Spieltag 1' },
-    ];
+        // Nach Datum gruppieren
+        const gruppen = {};
+        spiele.forEach(m => {
+          const ds = fmtDatum(m.matchDateTime);
+          if (!gruppen[ds]) gruppen[ds] = [];
+          gruppen[ds].push(m);
+        });
 
-    const KÜRZEL = {
-      'FC Bayern München':'Bayern','Borussia Dortmund':'BVB','RB Leipzig':'Leipzig',
-      'Bayer 04 Leverkusen':'Leverkusen','Eintracht Frankfurt':'Frankfurt','VfB Stuttgart':'Stuttgart',
-      'Borussia Mönchengladbach':'Gladbach','Sport-Club Freiburg':'Freiburg','1. FC Union Berlin':'Union',
-      '1. FSV Mainz 05':'Mainz','FC Augsburg':'Augsburg','SV Werder Bremen':'Bremen',
-      'TSG Hoffenheim':'Hoffenheim','Hamburger SV':'HSV','1. FC Köln':'Köln',
-      'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','–':'–'
-    };
-
-    // Nach Datum gruppieren
-    const gruppen = {};
-    SPIELE.forEach(s => {
-      if (!gruppen[s.datum]) gruppen[s.datum] = [];
-      gruppen[s.datum].push(s);
-    });
-
-    document.getElementById('spiele-list').innerHTML = Object.entries(gruppen).map(([datum, spiele]) => {
-      const spieleHtml = spiele.map(s => {
-        const wb = WETTBEWERB[s.wbw];
-        const badge = `<span style="background:${wb.farbe};color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px">${wb.kürzel}</span>`;
-        const heim = KÜRZEL[s.heim] || s.heim;
-        const gast = KÜRZEL[s.gast] || s.gast;
-        const score = s.ergebnis
-          ? `<span style="font-weight:800;color:#e8c000">${s.ergebnis}</span>`
-          : `<span style="color:var(--text4)">vs.</span>`;
-        if (s.heim === '–') {
-          return `<div style="padding:4px 12px;font-size:11px;color:var(--text4);border-bottom:1px solid var(--item-border)">${badge} ${s.info}</div>`;
-        }
-        return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
-          ${badge}
-          <span style="font-size:12px;font-weight:600;color:var(--text2)">${heim}</span>
-          <span style="font-size:11px;flex-shrink:0">${score}</span>
-          <span style="font-size:12px;font-weight:600;color:var(--text2)">${gast}</span>
-        </div>`;
-      }).join('');
-      return `<li>
-        <div style="padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)">${datum}</div>
-        ${spieleHtml}
-      </li>`;
-    }).join('');
+        el.innerHTML = Object.entries(gruppen).map(([datum, matches]) => {
+          const isHeute = datum === 'HEUTE';
+          const headerStyle = isHeute
+            ? 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;background:#d32f2f;border-bottom:1px solid var(--item-border)'
+            : 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)';
+          const rows = matches.map(m => {
+            const finished = m.matchIsFinished;
+            const goals1 = m.matchResults?.find(r=>r.resultTypeID===2)?.pointsTeam1 ?? m.matchResults?.[0]?.pointsTeam1;
+            const goals2 = m.matchResults?.find(r=>r.resultTypeID===2)?.pointsTeam2 ?? m.matchResults?.[0]?.pointsTeam2;
+            const hasScore = finished && goals1 !== undefined;
+            const score = hasScore
+              ? `<span style="font-weight:800;color:#e8c000;min-width:34px;text-align:center">${goals1}:${goals2}</span>`
+              : `<span style="color:var(--text4);min-width:34px;text-align:center;font-size:10px">${fmtTime(m.matchDateTime)}</span>`;
+            const badge = `<span style="background:#d32f2f;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0">BL</span>`;
+            return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
+              ${badge}
+              <span style="font-size:12px;font-weight:600;color:var(--text2);flex:1;text-align:right">${kürzel(m.team1.teamName)}</span>
+              ${score}
+              <span style="font-size:12px;font-weight:600;color:var(--text2);flex:1">${kürzel(m.team2.teamName)}</span>
+            </div>`;
+          }).join('');
+          return `<li>
+            <div style="${headerStyle}">${datum}</div>
+            ${rows}
+          </li>`;
+        }).join('');
+      } catch(e) {
+        el.innerHTML = '<li style="padding:12px;color:var(--text4);font-size:12px">Spielplan nicht verfügbar</li>';
+      }
+    })();
 
     // ─── Feed & Filter ────────────────────────────────────────────────────────
     let alleArtikel   = [];
