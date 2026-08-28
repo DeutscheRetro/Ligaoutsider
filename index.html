@@ -286,7 +286,10 @@
           fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid}`).then(r=>r.json()),
           fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid+1}`).then(r=>r.json()).catch(()=>[]),
         ]);
-        const spiele = [...cur, ...nxt];
+        const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        const spiele = [...cur, ...nxt].filter(m =>
+          !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo)
+        );
 
         // Nach Datum gruppieren
         const gruppen = {};
