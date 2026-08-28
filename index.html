@@ -287,9 +287,9 @@
           fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid+1}`).then(r=>r.json()).catch(()=>[]),
         ]);
         const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-        const spiele = [...cur, ...nxt].filter(m =>
-          !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo)
-        );
+        const spiele = [...cur, ...nxt]
+          .filter(m => !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo))
+          .sort((a,b) => new Date(a.matchDateTime) - new Date(b.matchDateTime));
 
         // Nach Datum gruppieren
         const gruppen = {};
@@ -302,7 +302,7 @@
         el.innerHTML = Object.entries(gruppen).map(([datum, matches]) => {
           const isHeute = datum === 'HEUTE';
           const headerStyle = isHeute
-            ? 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;background:#d32f2f;border-bottom:1px solid var(--item-border)'
+            ? 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;background:#2e7d32;border-bottom:1px solid var(--item-border)'
             : 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)';
           const rows = matches.map(m => {
             const finished = m.matchIsFinished;
