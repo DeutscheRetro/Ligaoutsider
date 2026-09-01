@@ -1,0 +1,695 @@
+2026-09-01 15:24:48,467 INFO URL-Cache geladen: 20717 bekannte URLs (letzte 30 Tage)
+2026-09-01 15:24:48,467 INFO === Ligaoutsider Generator startet – max. 50 Artikel ===
+2026-09-01 15:24:48,467 WARNING Sky DE Scraper: Fetch fehlgeschlagen: name 'requests' is not defined
+2026-09-01 15:24:48,467 INFO Feed: https://newsfeed.kicker.de/news/bundesliga
+2026-09-01 15:24:52,175 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:24:52,200 INFO S5 fetch fulltext: Konkurrenz ausgestochen: Ben Farhat unterschreibt in Freibur
+2026-09-01 15:24:53,143 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:24:53,143 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:24:53,143 ERROR empty HTML tree: None
+2026-09-01 15:24:53,143 WARNING discarding data: None
+2026-09-01 15:24:53,144 INFO S5 fulltext fail (trafilatura_returned_empty): Konkurrenz ausgestochen: Ben Farhat unterschreibt in Freibur
+2026-09-01 15:24:54,828 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:24:54,832 INFO S4 fingerprint dup: "Situation kurzfristig verändert": HSV verleiht Philippe an 
+2026-09-01 15:24:57,050 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:24:57,052 INFO S4 fingerprint dup: Leihe offiziell: Werder holt auch noch Ndiaye
+2026-09-01 15:24:58,428 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:24:58,432 INFO S5 fetch fulltext: Gladbach vor Last-Minute-Coup mit Kühn
+2026-09-01 15:24:58,504 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:24:58,504 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:24:58,504 ERROR empty HTML tree: None
+2026-09-01 15:24:58,504 WARNING discarding data: None
+2026-09-01 15:24:58,504 INFO S5 fulltext fail (trafilatura_returned_empty): Gladbach vor Last-Minute-Coup mit Kühn
+2026-09-01 15:25:00,893 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:00,897 INFO S5 fetch fulltext: Paderborns stürmischer Neustart mit Pieringer & Co.
+2026-09-01 15:25:00,968 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:25:00,968 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:25:00,968 ERROR empty HTML tree: None
+2026-09-01 15:25:00,968 WARNING discarding data: None
+2026-09-01 15:25:00,969 INFO S5 fulltext fail (trafilatura_returned_empty): Paderborns stürmischer Neustart mit Pieringer & Co.
+2026-09-01 15:25:00,969 INFO S5 fulltext fallback auf RSS-Beschreibung (39 Wörter): Paderborns stürmischer Neustart mit Pieringer & Co
+2026-09-01 15:25:01,472 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:03,945 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:03,949 INFO S7 generate: Paderborns stürmischer Neustart mit Pieringer & Co.
+2026-09-01 15:25:11,118 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:11,121 INFO   Kandidat: SC Paderborn 07 arbeitet nach torlosen Auftakt an Sturm-Vers
+2026-09-01 15:25:12,713 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:12,717 INFO S5 fetch fulltext: Hoffenheims Chaves vor dem Abflug nach Brasilien
+2026-09-01 15:25:12,788 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:25:12,788 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:25:12,788 ERROR empty HTML tree: None
+2026-09-01 15:25:12,788 WARNING discarding data: None
+2026-09-01 15:25:12,789 INFO S5 fulltext fail (trafilatura_returned_empty): Hoffenheims Chaves vor dem Abflug nach Brasilien
+2026-09-01 15:25:14,406 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:14,409 INFO S4 fingerprint dup: Freund über Ito: "Planen, dass er bei uns bleibt"
+2026-09-01 15:25:14,409 INFO Feed: https://www.sportschau.de/fussball/bundesliga/index~rss2.xml
+2026-09-01 15:25:16,713 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:16,717 INFO S5 fetch fulltext: Paderborn leiht Philippe, Diaby zurück bei Bayer
+2026-09-01 15:25:17,481 INFO S5 fulltext fail (too_short_38_words): Paderborn leiht Philippe, Diaby zurück bei Bayer
+2026-09-01 15:25:17,482 INFO Feed: https://sportbild.bild.de/feed/sportbild-home.xml
+2026-09-01 15:25:18,508 INFO S3 keyword miss: Auch Sebastian Vettel beteiligt - Bewegende Schumi-Erinnerun
+2026-09-01 15:25:18,508 INFO S3 keyword miss: Für 55 Mio.! - WM-Star neuer Goretzka-Kollege
+2026-09-01 15:25:18,508 INFO S3 keyword miss: Offizielles Klub-Statement - Neapel-Star muss am Herzen oper
+2026-09-01 15:25:18,509 INFO S3 keyword miss: Nach Liebes-Aus mit Tennis-Ass - Netflix-Star Riddle bei US 
+2026-09-01 15:25:18,509 INFO S3 keyword miss: Weltmeister ersetzt ihn - Alonso wird Patzer-Keeper los
+2026-09-01 15:25:18,509 INFO S3 keyword miss: Heftige Pyro-Explosion - Spieler erleidet Knalltrauma und Sc
+2026-09-01 15:25:18,510 INFO Feed: https://www.bild.de/rss-feeds/rss-16725492,feed=fussball-mix.bild.html
+2026-09-01 15:25:19,129 INFO S3 keyword miss: Gesundheitliche Gründe - Ex-Bundesligastar schmeißt in der 4
+2026-09-01 15:25:19,129 INFO S3 keyword miss: Mega-Umbruch nach Abstieg - Traditionsklub holt 19 Neue!
+2026-09-01 15:25:19,130 INFO S2 blacklist: Zwei Monate nach WM-Aus - Rüdiger tritt aus Nationalmannscha
+2026-09-01 15:25:21,380 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:21,382 INFO S4 fingerprint dup: Witziger Seitenhieb gegen Sky - Union-Star macht den Haaland
+2026-09-01 15:25:23,040 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:23,044 INFO S5 fetch fulltext: Nur noch einer in der Wunschelf - Das Ende der HSV-Aufstiegs
+2026-09-01 15:25:24,110 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:26,409 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:26,412 INFO S7 generate: Nur noch einer in der Wunschelf - Das Ende der HSV-Aufstiegs
+2026-09-01 15:25:31,630 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:31,631 INFO   Kandidat: HSV krempelt Kader um: Heuer Fernandes als letzter Aufstiegs
+2026-09-01 15:25:33,119 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:33,123 INFO S5 fetch fulltext: Kennen Sie ihn noch? - TV-Legende weint wegen HSV-Aufstieg
+2026-09-01 15:25:34,139 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:36,019 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:36,022 INFO S7 generate: Kennen Sie ihn noch? - TV-Legende weint wegen HSV-Aufstieg
+2026-09-01 15:25:42,845 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:42,846 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 428 (char 495)
+2026-09-01 15:25:44,827 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:44,830 INFO S4 fingerprint dup: Bayer-Rückkehr offiziell - Diaby: „Ich bin wieder zu Hause!“
+2026-09-01 15:25:44,830 INFO S2 blacklist: Köln zum Zweitliga-Titel geführt - Funkel spricht über seine
+2026-09-01 15:25:44,831 INFO S3 keyword miss: Fans fliehen ++ Becher fliegen ++ Spieler diskutieren - Wut-
+2026-09-01 15:25:46,263 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:46,267 INFO S5 fetch fulltext: Tränen bei Fans und Stars  - Diese Köln-Szenen gehen unter d
+2026-09-01 15:25:47,428 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:48,910 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:48,913 INFO S7 generate: Tränen bei Fans und Stars  - Diese Köln-Szenen gehen unter d
+2026-09-01 15:25:58,047 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:25:58,048 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 780 (char 856)
+2026-09-01 15:25:58,048 INFO S2 blacklist: „Gäule mit mir durchgegangen“  - Buschmann bittet live um En
+2026-09-01 15:25:58,049 INFO S3 keyword miss: Wechsel zu Traditionsklub - Hansa Rostock lässt Gebuhr gehen
+2026-09-01 15:26:00,419 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:00,423 INFO S5 fetch fulltext: Nach 1:2-Pleite gegen das Wunderdorf - Bittere Tränen bei La
+2026-09-01 15:26:01,374 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:01,375 INFO S5.5 not relevant (fulltext): Nach 1:2-Pleite gegen das Wunderdorf - Bittere Tränen bei La
+2026-09-01 15:26:03,327 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:03,331 INFO S5 fetch fulltext: Hamburgs größte Fußball-Party aller Zeiten - 100.000 feiern 
+2026-09-01 15:26:04,377 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:06,090 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:06,094 INFO S7 generate: Hamburgs größte Fußball-Party aller Zeiten - 100.000 feiern 
+2026-09-01 15:26:16,182 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:16,183 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 488 (char 568)
+2026-09-01 15:26:16,183 INFO S2 blacklist: Aufstiegsfeier eskaliert - Viele Schwerverletzte nach Platzs
+2026-09-01 15:26:16,184 INFO S3 keyword miss: Meister-Held mit Neapel - Herz-OP bei Serie-A-Star
+2026-09-01 15:26:17,959 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:17,962 INFO S5 fetch fulltext: Platzsturm in Hamburg - HSV-Fans zerstören  das Aufstiegs-To
+2026-09-01 15:26:19,383 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:21,957 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:21,961 INFO S7 generate: Platzsturm in Hamburg - HSV-Fans zerstören  das Aufstiegs-To
+2026-09-01 15:26:29,852 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:29,853 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 766 (char 846)
+2026-09-01 15:26:31,555 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:31,558 INFO S5 fetch fulltext: Aufstiegs-Explosion beim HSV! - „Als hätte jemand 7 Jahre Ch
+2026-09-01 15:26:32,756 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:32,757 INFO S5.5 not relevant (fulltext): Aufstiegs-Explosion beim HSV! - „Als hätte jemand 7 Jahre Ch
+2026-09-01 15:26:34,963 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:34,967 INFO S5 fetch fulltext: Deutscher Offensiv-Star kommt - Transfer-Coup für Gladbach!
+2026-09-01 15:26:36,539 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:38,216 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:38,221 INFO S7 generate: Deutscher Offensiv-Star kommt - Transfer-Coup für Gladbach!
+2026-09-01 15:26:46,458 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:46,460 INFO   Kandidat: Gladbach leiht Nicolas Kühn ablösefrei von AC Como
+2026-09-01 15:26:46,460 INFO S3 keyword miss: Trainer verärgert - Kuriose Adeyemi-Szenen nach Barça-Sieg
+2026-09-01 15:26:48,211 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:48,215 INFO S5 fetch fulltext: Nach 316 Tagen - Emotionales Comeback von Bayern-Star
+2026-09-01 15:26:49,167 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:49,167 INFO S5.5 not relevant (fulltext): Nach 316 Tagen - Emotionales Comeback von Bayern-Star
+2026-09-01 15:26:50,735 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:50,739 INFO S5 fetch fulltext: Nach Verletzungsschock - Bayern-Boss verkündet monatelangen 
+2026-09-01 15:26:51,814 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:53,651 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:26:53,654 INFO S7 generate: Nach Verletzungsschock - Bayern-Boss verkündet monatelangen 
+2026-09-01 15:27:01,390 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:01,391 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 524 (char 589)
+2026-09-01 15:27:03,061 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:03,065 INFO S5 fetch fulltext: Neon-Verkauf startet - BVB-Sondertrikot gibt’s auch bei BILD
+2026-09-01 15:27:04,060 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:05,701 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:05,704 INFO S7 generate: Neon-Verkauf startet - BVB-Sondertrikot gibt’s auch bei BILD
+2026-09-01 15:27:11,803 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:11,804 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 395 (char 474)
+2026-09-01 15:27:13,721 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:13,725 INFO S5 fetch fulltext: Transfer fix - Stuttgart macht mit Bankdrücker Gewinn
+2026-09-01 15:27:14,692 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:17,132 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:17,136 INFO S7 generate: Transfer fix - Stuttgart macht mit Bankdrücker Gewinn
+2026-09-01 15:27:23,999 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:24,001 INFO   Kandidat: VfB Stuttgart verkauft Jovanovic für 6,5 Mio. Euro an Udines
+2026-09-01 15:27:25,447 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:25,451 INFO S5 fetch fulltext: BILD kennt die Wechsel-Details - Der Freiburg-Plan mit Offen
+2026-09-01 15:27:26,009 INFO S5 fulltext fail (too_short_47_words): BILD kennt die Wechsel-Details - Der Freiburg-Plan mit Offen
+2026-09-01 15:27:26,010 INFO S3 keyword miss: Trainer gesperrt - Carl Zeiss Jena ohne Boss gegen den Angst
+2026-09-01 15:27:26,010 INFO S3 keyword miss: Ist dieser Kader aufstiegsreif? - Hannover 96 im Transfer-Ch
+2026-09-01 15:27:27,649 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:27,652 INFO S5 fetch fulltext: Nach sportlichem Traumstart - Elversberg hat jetzt Riesenärg
+2026-09-01 15:27:28,063 INFO S5 fulltext fail (too_short_40_words): Nach sportlichem Traumstart - Elversberg hat jetzt Riesenärg
+2026-09-01 15:27:28,063 INFO S3 keyword miss: Fürs Magdeburg-Spiel - So plant Leitl mit Schweden-Stürmer N
+2026-09-01 15:27:29,884 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:29,888 INFO S5 fetch fulltext: Wechsel vom Tisch - Dieser Spieler bleibt bei Werder
+2026-09-01 15:27:30,320 INFO S5 fulltext fail (too_short_29_words): Wechsel vom Tisch - Dieser Spieler bleibt bei Werder
+2026-09-01 15:27:30,321 INFO Feed: https://www.11freunde.de/feed
+2026-09-01 15:27:31,715 INFO S3 keyword miss: Hertha BSC: Warum der Club nicht die Demokratie retten wird 
+2026-09-01 15:27:31,715 INFO Feed: https://www.bundesliga.com/de/bundesliga/news.rss
+2026-09-01 15:27:34,122 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:34,126 INFO S5 fetch fulltext: Der SC Freiburg holt Louey Ben Farhat vom Karlsruher SC
+2026-09-01 15:27:34,832 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:37,247 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:37,251 INFO S7 generate: Der SC Freiburg holt Louey Ben Farhat vom Karlsruher SC
+2026-09-01 15:27:45,782 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:45,782 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 849 (char 920)
+2026-09-01 15:27:45,783 INFO S3 keyword miss: Greuther Fürth verpflichtet Faton Ademi aus Aachen
+2026-09-01 15:27:47,762 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:47,766 INFO S5 fetch fulltext: Augsburg holt Arijon Ibrahimović vom FC Bayern
+2026-09-01 15:27:48,485 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:50,613 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:50,617 INFO S7 generate: Augsburg holt Arijon Ibrahimović vom FC Bayern
+2026-09-01 15:27:57,062 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:57,064 INFO   Kandidat: FC Augsburg leiht Arijon Ibrahimović vom FC Bayern München
+2026-09-01 15:27:58,608 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:27:58,612 INFO S4 update-bypass (Folgeartikel): Rayan Philippe wechselt zum SC Paderborn
+2026-09-01 15:27:58,612 INFO S5 fetch fulltext: Rayan Philippe wechselt zum SC Paderborn
+2026-09-01 15:27:59,265 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:00,646 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:00,649 INFO S6 update-bypass (Folgeartikel): Rayan Philippe wechselt zum SC Paderborn
+2026-09-01 15:28:00,649 INFO S7 generate: Rayan Philippe wechselt zum SC Paderborn
+2026-09-01 15:28:06,823 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:06,825 INFO   Kandidat: SC Paderborn leiht Rayan Philippe vom Hamburger SV
+2026-09-01 15:28:08,850 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:08,854 INFO S5 fetch fulltext: Moussa Ndiaye wechselt zurück nach Deutschland
+2026-09-01 15:28:09,751 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:11,383 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:11,386 INFO S7 generate: Moussa Ndiaye wechselt zurück nach Deutschland
+2026-09-01 15:28:19,174 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:19,176 INFO   Kandidat: Werder Bremen leiht Moussa Ndiaye von RSC Anderlecht
+2026-09-01 15:28:20,559 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:20,562 INFO S4 fingerprint dup: Bayer 04 Leverkusen holt Diaby zurück
+2026-09-01 15:28:22,473 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:22,477 INFO S5 fetch fulltext: SGD leiht Kennedy Okpala
+2026-09-01 15:28:23,223 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:23,224 INFO S5.5 not relevant (fulltext): SGD leiht Kennedy Okpala
+2026-09-01 15:28:23,224 INFO Feed: https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtUmxHZ0pFUlNnQVAB?hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:28:25,275 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:25,279 INFO S5 fetch fulltext: HSV holt Vieira und El Ouahdi - Möller Wolfe vor Unterschrif
+2026-09-01 15:28:25,643 INFO S5 fulltext fail (google_redirect_unresolved): HSV holt Vieira und El Ouahdi - Möller Wolfe vor Unterschrif
+2026-09-01 15:28:25,643 INFO S2 blacklist: Rüdiger verkündet Rücktritt aus DFB-Team: „Weg für die junge
+2026-09-01 15:28:27,043 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:27,046 INFO S5 fetch fulltext: Transfer-Ticker: Bundesligist verkündet Rekord-Deal - sport.
+2026-09-01 15:28:27,365 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Ticker: Bundesligist verkündet Rekord-Deal - sport.
+2026-09-01 15:28:27,366 INFO S3 keyword miss: Transfer-Ticker: Barca holt ersehnten Mittelstürmer - Joyn
+2026-09-01 15:28:27,366 INFO S3 keyword miss: Vuelta - 10. Etappe heute live im Ticker: Ausreißer suchen i
+2026-09-01 15:28:27,367 INFO S3 keyword miss: Nick Woltemade wechselt zu Juventus Turin - Sport1
+2026-09-01 15:28:28,784 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:28,787 INFO S4 update-bypass (Folgeartikel): Offiziell: RB Leipzig kauft Guiu - FussballTransfers.com
+2026-09-01 15:28:28,788 INFO S5 fetch fulltext: Offiziell: RB Leipzig kauft Guiu - FussballTransfers.com
+2026-09-01 15:28:29,080 INFO S5 fulltext fail (google_redirect_unresolved): Offiziell: RB Leipzig kauft Guiu - FussballTransfers.com
+2026-09-01 15:28:29,080 INFO S2 blacklist: Nationalmannschaft: Klopp-Besuch beim FC Bayern hinterlässt 
+2026-09-01 15:28:31,180 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:31,184 INFO S5 fetch fulltext: Vor Pokalspiel in Osnabrück: Kompany bestätigt Torwart-Entsc
+2026-09-01 15:28:31,589 INFO S5 fulltext fail (google_redirect_unresolved): Vor Pokalspiel in Osnabrück: Kompany bestätigt Torwart-Entsc
+2026-09-01 15:28:33,577 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:33,581 INFO S4 fingerprint dup: Augsburg holt Ibrahimovic – Perspektive bei Bayern verschlec
+2026-09-01 15:28:33,581 INFO S3 keyword miss: US Open: Naomi Osaka ehrt NBA-Legende mit besonderem Auftakt
+2026-09-01 15:28:33,581 INFO S3 keyword miss: Insolvenzverfahren eröffnet: Der alte TSV 1860 München wird 
+2026-09-01 15:28:35,825 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:35,829 INFO S5 fetch fulltext: Frankfurts Larsson vor Wechsel zum FC Fulham – SGE würde 100
+2026-09-01 15:28:36,118 INFO S5 fulltext fail (google_redirect_unresolved): Frankfurts Larsson vor Wechsel zum FC Fulham – SGE würde 100
+2026-09-01 15:28:36,119 INFO S3 keyword miss: Hertha BSC: Nilsson da, Wunschtransfer Hong platzt - B.Z Ber
+2026-09-01 15:28:37,653 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:37,656 INFO S4 fingerprint dup: FC Bayern: Kompany gibt vor dem DFB-Pokal Update zu Musiala!
+2026-09-01 15:28:39,274 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:39,278 INFO S5 fetch fulltext: Dynamo und Paderborn bestätigen Okpala-Leihe – Gesuchtes Pro
+2026-09-01 15:28:39,564 INFO S5 fulltext fail (google_redirect_unresolved): Dynamo und Paderborn bestätigen Okpala-Leihe – Gesuchtes Pro
+2026-09-01 15:28:39,565 INFO S3 keyword miss: VfL Bochum gelingt Schlag auf dem Transfermarkt: Steuckers k
+2026-09-01 15:28:39,566 INFO S3 keyword miss: US Open in New York: So denkt Rivale Tsitsipas über die Kyrg
+2026-09-01 15:28:41,051 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:41,054 INFO S5 fetch fulltext: Schock-Diagnose! Bayern-Angreifer fällt monatelang aus - FCB
+2026-09-01 15:28:41,395 INFO S5 fulltext fail (google_redirect_unresolved): Schock-Diagnose! Bayern-Angreifer fällt monatelang aus - FCB
+2026-09-01 15:28:41,395 INFO S3 keyword miss: "Mister Buchbach" Anton Bobenstetter im db24-Interview: "Das
+2026-09-01 15:28:43,391 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:43,395 INFO S5 fetch fulltext: Freund bestätigt Transfer-Entscheidung des FC Bayern - sport
+2026-09-01 15:28:43,681 INFO S5 fulltext fail (google_redirect_unresolved): Freund bestätigt Transfer-Entscheidung des FC Bayern - sport
+2026-09-01 15:28:44,973 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:44,977 INFO S5 fetch fulltext: Fussballtransfers: Gerüchte und News im Transferticker am De
+2026-09-01 15:28:45,330 INFO S5 fulltext fail (google_redirect_unresolved): Fussballtransfers: Gerüchte und News im Transferticker am De
+2026-09-01 15:28:47,082 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:47,086 INFO S5 fetch fulltext: 30-Millionen-Angebot: Sano beißt an – FSV Mainz 05 - Fussbal
+2026-09-01 15:28:47,437 INFO S5 fulltext fail (google_redirect_unresolved): 30-Millionen-Angebot: Sano beißt an – FSV Mainz 05 - Fussbal
+2026-09-01 15:28:47,437 INFO S3 keyword miss: Pogacar bereits am Montag am Schlüsselbein operiert - Radspo
+2026-09-01 15:28:49,617 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:49,622 INFO S5 fetch fulltext: Hannover 96 und die Stürmersuche: Marvin Ducksch plötzlich a
+2026-09-01 15:28:49,913 INFO S5 fulltext fail (google_redirect_unresolved): Hannover 96 und die Stürmersuche: Marvin Ducksch plötzlich a
+2026-09-01 15:28:51,933 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:51,934 INFO S4 fingerprint dup: "Das muss man sagen" - Klubchef enthüllt: Ohne Jürgen Klopp 
+2026-09-01 15:28:53,761 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:53,766 INFO S5 fetch fulltext: Kehrer als Soforthilfe für die Abwehr: Ajax verhandelt Last-
+2026-09-01 15:28:54,107 INFO S5 fulltext fail (google_redirect_unresolved): Kehrer als Soforthilfe für die Abwehr: Ajax verhandelt Last-
+2026-09-01 15:28:55,853 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:55,857 INFO S4 update-bypass (Folgeartikel): Nach Blitz-Rot gegen HSV: DFB-Sportgericht verkündet Strafe 
+2026-09-01 15:28:55,857 INFO S5 fetch fulltext: Nach Blitz-Rot gegen HSV: DFB-Sportgericht verkündet Strafe 
+2026-09-01 15:28:56,147 INFO S5 fulltext fail (google_redirect_unresolved): Nach Blitz-Rot gegen HSV: DFB-Sportgericht verkündet Strafe 
+2026-09-01 15:28:58,068 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:28:58,072 INFO S5 fetch fulltext: "Hätten es mehr verdient": Polens Trainer mit Spitze nach DB
+2026-09-01 15:28:58,397 INFO S5 fulltext fail (google_redirect_unresolved): "Hätten es mehr verdient": Polens Trainer mit Spitze nach DB
+2026-09-01 15:28:58,397 INFO S3 keyword miss: Der Löwen-Tag: Das ist los bei Sechzig! - dieblaue24.com
+2026-09-01 15:28:58,398 INFO S3 keyword miss: "Hat versagt": Ex-Uefa-Chef teilt gegen Infantino aus - T-On
+2026-09-01 15:29:00,556 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:00,560 INFO S5 fetch fulltext: Werder Bremen: Neue Entwicklung! Top-Talent vor Last-Minute-
+2026-09-01 15:29:00,860 INFO S5 fulltext fail (google_redirect_unresolved): Werder Bremen: Neue Entwicklung! Top-Talent vor Last-Minute-
+2026-09-01 15:29:00,861 INFO S3 keyword miss: XL-Kader von Hansa Rostock könnte kleiner werden: Abwehrspie
+2026-09-01 15:29:02,706 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:02,707 INFO S4 fingerprint dup: Nicolas entscheidet sich für Gladbach-Verbleib - LigaInsider
+2026-09-01 15:29:02,708 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Testspiel+Ergebnis&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:03,342 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vorbereitung+Sommertour&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:03,772 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Verletzung+Ausfall+gesperrt&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:04,311 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Transfer+Wechsel+verpflichtet&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:04,811 INFO S3 keyword miss: Barça verpflichtet Alvarez-Alternative: Wechsel von Arsenal-
+2026-09-01 15:29:04,812 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Gerücht+Interesse+Angebot&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:05,217 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vertrag+verlängert+ablösefrei&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:05,602 INFO Feed: https://news.google.com/rss/search?q=FC+Bayern+München+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:08,056 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:08,059 INFO S4 fingerprint dup: Arijon Ibrahimovic wechselt vom FC Bayern per Leihe nach Aug
+2026-09-01 15:29:08,060 INFO Feed: https://news.google.com/rss/search?q=Borussia+Dortmund+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:10,297 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:10,301 INFO S5 fetch fulltext: BVB, Gerücht: Angebot aus England für Luca Reggiani - SPOX
+2026-09-01 15:29:10,570 INFO S5 fulltext fail (google_redirect_unresolved): BVB, Gerücht: Angebot aus England für Luca Reggiani - SPOX
+2026-09-01 15:29:10,571 INFO S3 keyword miss: Transferticker: Deadline-Day: Aachen-Doppelschlag, Mause bal
+2026-09-01 15:29:10,571 INFO Feed: https://news.google.com/rss/search?q=Bayer+04+Leverkusen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:11,098 INFO Feed: https://news.google.com/rss/search?q=RB+Leipzig+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:12,721 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:12,725 INFO S4 fingerprint dup: RB Leipzig: Conrad Harder wird an Racing Straßburg verliehen
+2026-09-01 15:29:14,008 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:14,011 INFO S4 fingerprint dup: Marc Guiu zu RB Leipzig: Stürmer-Talent kommt vom FC Chelsea
+2026-09-01 15:29:16,335 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:16,339 INFO S5 fetch fulltext: Transferticker: Deadline-Day: Schalke und RWE verleihen Ersa
+2026-09-01 15:29:16,610 INFO S5 fulltext fail (google_redirect_unresolved): Transferticker: Deadline-Day: Schalke und RWE verleihen Ersa
+2026-09-01 15:29:16,611 INFO Feed: https://news.google.com/rss/search?q=VfB+Stuttgart+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:17,308 INFO Feed: https://news.google.com/rss/search?q=Eintracht+Frankfurt+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:19,301 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:19,305 INFO S5 fetch fulltext: Irre Schallmauer: Eintracht Frankfurt wird am Deadline Day m
+2026-09-01 15:29:19,586 INFO S5 fulltext fail (google_redirect_unresolved): Irre Schallmauer: Eintracht Frankfurt wird am Deadline Day m
+2026-09-01 15:29:19,586 INFO S3 keyword miss: Kalimuendo, Joselu und Co.: Eintracht vor hektischem Deadlin
+2026-09-01 15:29:21,629 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:21,632 INFO S5 fetch fulltext: Turbulenter Deadline Day bei Eintracht Frankfurt: Glückt Mar
+2026-09-01 15:29:21,927 INFO S5 fulltext fail (google_redirect_unresolved): Turbulenter Deadline Day bei Eintracht Frankfurt: Glückt Mar
+2026-09-01 15:29:21,928 INFO S3 keyword miss: Transfer-Ticker heute LIVE: Alle Transfers, Wechsel und Gerü
+2026-09-01 15:29:21,928 INFO Feed: https://news.google.com/rss/search?q=Borussia+Mönchengladbach+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:24,380 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:24,384 INFO S5 fetch fulltext: Sky: Gladbach vor Verpflichtung von Kühn - n-tv.de
+2026-09-01 15:29:24,715 INFO S5 fulltext fail (google_redirect_unresolved): Sky: Gladbach vor Verpflichtung von Kühn - n-tv.de
+2026-09-01 15:29:26,672 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:26,676 INFO S5 fetch fulltext: Gladbach landet Transferkracher am Deadline Day - 90min.de
+2026-09-01 15:29:27,004 INFO S5 fulltext fail (google_redirect_unresolved): Gladbach landet Transferkracher am Deadline Day - 90min.de
+2026-09-01 15:29:27,004 INFO Feed: https://news.google.com/rss/search?q=SC+Freiburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:29,403 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:29,407 INFO S5 fetch fulltext: Newsblog: Alle Spiele in der UEFA-Conference-League-Ligaphas
+2026-09-01 15:29:29,693 INFO S5 fulltext fail (google_redirect_unresolved): Newsblog: Alle Spiele in der UEFA-Conference-League-Ligaphas
+2026-09-01 15:29:29,694 INFO Feed: https://news.google.com/rss/search?q=TSG+Hoffenheim+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:30,270 INFO Feed: https://news.google.com/rss/search?q=FSV+Mainz+05+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:30,952 INFO Feed: https://news.google.com/rss/search?q=FC+Augsburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:31,470 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Union+Berlin+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:32,116 INFO Feed: https://news.google.com/rss/search?q=SV+Werder+Bremen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:32,835 INFO Feed: https://news.google.com/rss/search?q=Hamburger+SV+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:34,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:34,839 INFO S5 fetch fulltext: Transfer-Knall: HSV gelingt spektakulärer Doppelschlag - spo
+2026-09-01 15:29:35,175 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Knall: HSV gelingt spektakulärer Doppelschlag - spo
+2026-09-01 15:29:36,749 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:36,753 INFO S5 fetch fulltext: Sky: Wolfe besteht Medizincheck beim HSV - n-tv.de
+2026-09-01 15:29:37,057 INFO S5 fulltext fail (google_redirect_unresolved): Sky: Wolfe besteht Medizincheck beim HSV - n-tv.de
+2026-09-01 15:29:38,682 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:38,686 INFO S5 fetch fulltext: Transfer-Bilanz: HSV – Last-Minute-Verstärkungen? - fussball
+2026-09-01 15:29:38,890 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Bilanz: HSV – Last-Minute-Verstärkungen? - fussball
+2026-09-01 15:29:40,618 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:40,622 INFO S5 fetch fulltext: HSV schlägt doppelt zu: Vieira bleibt, El Ouahdi kommt für M
+2026-09-01 15:29:40,956 INFO S5 fulltext fail (google_redirect_unresolved): HSV schlägt doppelt zu: Vieira bleibt, El Ouahdi kommt für M
+2026-09-01 15:29:40,957 INFO S3 keyword miss: Transfer-Ticker heute LIVE: Alle Transfers, Wechsel und Gerü
+2026-09-01 15:29:40,957 INFO S3 keyword miss: Transfer-Ticker heute LIVE: Alle Transfers, Wechsel und Gerü
+2026-09-01 15:29:40,958 INFO S3 keyword miss: Transfer-News im Live-Blog: Transfer-Coup: Regionalligist ve
+2026-09-01 15:29:40,958 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Köln+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:41,520 INFO S3 keyword miss: Die wichtigsten Transfer-News und Gerüchte aus der weiten Fu
+2026-09-01 15:29:41,521 INFO Feed: https://news.google.com/rss/search?q=FC+Schalke+04+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:43,220 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:43,224 INFO S5 fetch fulltext: Transfer-Ticker: FC Bayern verkündet Abgang - sport.de
+2026-09-01 15:29:43,571 INFO S5 fulltext fail (google_redirect_unresolved): Transfer-Ticker: FC Bayern verkündet Abgang - sport.de
+2026-09-01 15:29:45,491 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:45,494 INFO S4 fingerprint dup: Werder Bremen verpflichtet Moussa Ndiaye: Linksverteidiger k
+2026-09-01 15:29:45,495 INFO Feed: https://news.google.com/rss/search?q=SV+Elversberg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:46,110 INFO Feed: https://news.google.com/rss/search?q=SC+Paderborn+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-01 15:29:46,693 INFO Feed: https://www.transfermarkt.de/rss/news
+2026-09-01 15:29:46,796 INFO Feed: https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1
+2026-09-01 15:29:46,930 INFO Feed: https://rss.dw.com/xml/sport-de
+2026-09-01 15:29:47,394 INFO Feed: https://www.waz.de/sport/fussball/rss
+2026-09-01 15:29:47,883 INFO Feed: https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/
+2026-09-01 15:29:50,865 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:50,869 INFO S5 fetch fulltext: Doppeltes Comeback: Oberdorf und Gwinn zurück im Glück
+2026-09-01 15:29:51,698 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:51,699 INFO S5.5 not relevant (fulltext): Doppeltes Comeback: Oberdorf und Gwinn zurück im Glück
+2026-09-01 15:29:51,699 INFO Feed: https://bulinews.com/rss.xml
+2026-09-01 15:29:52,185 INFO S3 keyword miss: Rüdiger confirms international retirement
+2026-09-01 15:29:53,646 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:53,650 INFO S4 fingerprint dup: Bayern youngster officially joins Augsburg on loan
+2026-09-01 15:29:53,650 INFO S3 keyword miss: Rüdiger reportedly set to retire from German national team t
+2026-09-01 15:29:55,473 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:55,476 INFO S4 fingerprint dup: Saibari reveals how one Champions League match influenced hi
+2026-09-01 15:29:56,954 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:56,957 INFO S4 fingerprint dup: Paderborn bring in HSV attacker on loan
+2026-09-01 15:29:58,316 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:58,319 INFO S4 fingerprint dup: Werder Bremen sign former Barcelona youth prospect on loan f
+2026-09-01 15:29:59,669 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:29:59,671 INFO S4 fingerprint dup: Official: Leverkusen re-sign Moussa Diaby
+2026-09-01 15:30:01,504 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:01,510 INFO S5 fetch fulltext: Gladbach closing in on loan deal for Como winger
+2026-09-01 15:30:03,428 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:05,306 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:05,310 INFO S7 generate: Gladbach closing in on loan deal for Como winger
+2026-09-01 15:30:11,334 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:11,336 INFO   Kandidat: Kühn vor Leihe zu Gladbach: Como-Stürmer in medizinischem Ch
+2026-09-01 15:30:13,001 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:13,004 INFO S5 fetch fulltext: Roma return with improved terms for Stuttgart winger Lewelin
+2026-09-01 15:30:14,966 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:17,312 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:17,316 INFO S7 generate: Roma return with improved terms for Stuttgart winger Lewelin
+2026-09-01 15:30:26,158 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:26,160 INFO   Kandidat: Roma erhöht Angebot für Leweling – Einigung im Wettlauf gege
+2026-09-01 15:30:27,643 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:27,646 INFO S4 fingerprint dup: Dortmund youngster handed two-game suspension after sending 
+2026-09-01 15:30:27,647 INFO Feed: https://www.eyefootball.com/rss_news_main.xml
+2026-09-01 15:30:28,273 INFO Feed: https://www.ligaportal.at/international/deutsche-bundesliga?format=feed&type=rss
+2026-09-01 15:30:32,518 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:32,522 INFO S4 update-bypass (Folgeartikel): FC Bayern München: Ibrahimovic wechselt zum FC Augsburg
+2026-09-01 15:30:32,522 INFO S5 fetch fulltext: FC Bayern München: Ibrahimovic wechselt zum FC Augsburg
+2026-09-01 15:30:33,978 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:35,442 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:35,446 INFO S6 update-bypass (Folgeartikel): FC Bayern München: Ibrahimovic wechselt zum FC Augsburg
+2026-09-01 15:30:35,446 INFO S7 generate: FC Bayern München: Ibrahimovic wechselt zum FC Augsburg
+2026-09-01 15:30:41,145 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:41,147 INFO   Kandidat: FCA leiht Ibrahimovic von Bayern München aus
+2026-09-01 15:30:43,495 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:43,497 INFO S4 fingerprint dup: SV Werder Bremen holt Linksverteidiger Ndiaye aus Belgien
+2026-09-01 15:30:43,497 INFO S2 blacklist: SC Paderborn leiht Angreifer Philippe vom HSV aus
+2026-09-01 15:30:43,498 INFO S2 blacklist: Bayer 04 Leverkusen macht Diaby-Rückkehr perfekt
+2026-09-01 15:30:44,842 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:44,846 INFO S4 update-bypass (Folgeartikel): VfB Stuttgart gibt Jovanovic zu Serie-A-Klub ab
+2026-09-01 15:30:44,846 INFO S5 fetch fulltext: VfB Stuttgart gibt Jovanovic zu Serie-A-Klub ab
+2026-09-01 15:30:46,311 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:48,205 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:48,209 INFO S6 refined dup: VfB Stuttgart gibt Jovanovic zu Serie-A-Klub ab
+2026-09-01 15:30:48,209 INFO Feed: https://www.reddit.com/r/bundesliga/new.rss?limit=100
+2026-09-01 15:30:50,949 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:50,953 INFO S5 fetch fulltext: Nächster Verletzungsschock: Werder Bremen muss wochenlang au
+2026-09-01 15:30:51,094 INFO S5 fulltext fail (too_short_36_words): Nächster Verletzungsschock: Werder Bremen muss wochenlang au
+2026-09-01 15:30:52,596 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:52,600 INFO S5 fetch fulltext: [Offiziell] Der SC Freiburg verpflichtet Louey Ben Farhat un
+2026-09-01 15:30:54,208 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:56,048 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:30:56,052 INFO S7 generate: [Offiziell] Der SC Freiburg verpflichtet Louey Ben Farhat un
+2026-09-01 15:31:02,979 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:02,981 INFO   Kandidat: SC Freiburg verpflichtet Ben Farhat und leiht ihn zum KSC zu
+2026-09-01 15:31:02,981 INFO S2 blacklist: Antonio Rüdiger beendet DFB-Karriere - Real-Madrid-Star trit
+2026-09-01 15:31:04,197 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:04,201 INFO S4 update-bypass (Folgeartikel): Offiziell: FCA holt U21-Nationalspieler Arijon Ibrahimović
+2026-09-01 15:31:04,201 INFO S5 fetch fulltext: Offiziell: FCA holt U21-Nationalspieler Arijon Ibrahimović
+2026-09-01 15:31:05,693 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:07,295 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:07,297 INFO S6 refined dup: Offiziell: FCA holt U21-Nationalspieler Arijon Ibrahimović
+2026-09-01 15:31:09,190 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:09,194 INFO S4 fingerprint dup: HSV verleiht Rayan Philippe an SC Paderborn
+2026-09-01 15:31:10,727 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:10,731 INFO S4 fingerprint dup: Moussa Ndiaye kommt auf Leih-Basis vom RSC Anderlecht [zu We
+2026-09-01 15:31:10,731 INFO S3 keyword miss: Bayer 04 holt Stürmerstar Moussa Diaby zurück
+2026-09-01 15:31:11,973 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:11,977 INFO S5 fetch fulltext: Dynamo Dresden leiht Kennedy Okpala vom SC Paderborn
+2026-09-01 15:31:13,657 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:13,658 INFO S5.5 not relevant (fulltext): Dynamo Dresden leiht Kennedy Okpala vom SC Paderborn
+2026-09-01 15:31:15,622 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:15,625 INFO S4 fingerprint dup: Kastriot Imeri folgt Mauro Lustrinelli nach Berlin
+2026-09-01 15:31:17,299 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:17,303 INFO S5 fetch fulltext: Dynamo Dresden leiht Bundesliga-Juwel Patrice Covic von Werd
+2026-09-01 15:31:17,796 INFO S5 fulltext fail (google_redirect_unresolved): Dynamo Dresden leiht Bundesliga-Juwel Patrice Covic von Werd
+2026-09-01 15:31:19,690 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:19,694 INFO S5 fetch fulltext: Mit Kaufoption: Leihe von Christian Gomis zu CD Teneriffa [m
+2026-09-01 15:31:20,817 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:22,627 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:22,631 INFO S7 generate: Mit Kaufoption: Leihe von Christian Gomis zu CD Teneriffa [m
+2026-09-01 15:31:29,316 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:29,317 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 762 (char 839)
+2026-09-01 15:31:31,455 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:31,459 INFO S5 fetch fulltext: Dylan Leonard bekommt Spielpraxis bei Alemannia Aachen [per 
+2026-09-01 15:31:32,470 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:34,864 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:34,867 INFO S7 generate: Dylan Leonard bekommt Spielpraxis bei Alemannia Aachen [per 
+2026-09-01 15:31:40,724 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:40,726 INFO   Kandidat: Schalke leiht Dylan Leonard an Alemannia Aachen aus
+2026-09-01 15:31:42,293 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:42,295 INFO S4 fingerprint dup: HSV verstärkt sich mit Fabio Vieira von Arsenal
+2026-09-01 15:31:44,345 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:44,349 INFO S5 fetch fulltext: Sky: Dynamo Dresden möchte Werder Bremens Patrice Covic ausl
+2026-09-01 15:31:44,675 INFO S5 fulltext fail (too_short_15_words): Sky: Dynamo Dresden möchte Werder Bremens Patrice Covic ausl
+2026-09-01 15:31:46,091 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:46,094 INFO S4 update-bypass (Folgeartikel): Offiziell: Ilyas Ansah wechselt zu Hull City
+2026-09-01 15:31:46,094 INFO S5 fetch fulltext: Offiziell: Ilyas Ansah wechselt zu Hull City
+2026-09-01 15:31:47,874 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:49,903 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:49,906 INFO S6 update-bypass (Folgeartikel): Offiziell: Ilyas Ansah wechselt zu Hull City
+2026-09-01 15:31:49,906 INFO S7 generate: Offiziell: Ilyas Ansah wechselt zu Hull City
+2026-09-01 15:31:55,419 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:55,420 INFO   Kandidat: Ilyas Ansah verlässt Union Berlin und wechselt zu Hull City
+2026-09-01 15:31:55,421 INFO S3 keyword miss: Jonas Oehmichen wechselt zu Alemannia Aachen
+2026-09-01 15:31:55,421 INFO S3 keyword miss: Leon Jensen wechselt zum DSC
+2026-09-01 15:31:56,828 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:31:56,832 INFO S5 fetch fulltext: Zakaria El Ouahdi verstärkt den HSV
+2026-09-01 15:31:58,310 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:00,674 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:00,678 INFO S7 generate: Zakaria El Ouahdi verstärkt den HSV
+2026-09-01 15:32:11,391 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:11,392 WARNING S7 generation error: Expecting property name enclosed in double quotes: line 3 column 783 (char 838)
+2026-09-01 15:32:13,194 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:13,197 INFO S4 fingerprint dup: Neuzugang im Sturm: RB Leipzig verpflichtet Marc Guiu vom Ch
+2026-09-01 15:32:15,151 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:15,154 INFO S4 fingerprint dup: Nach Rückkehr von Nkunku: Leipzig gibt Harder an Straßburg a
+2026-09-01 15:32:16,597 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:16,601 INFO S5 fetch fulltext: Adil Aouchiche unterschreibt auf Schalke langfristigen Vertr
+2026-09-01 15:32:17,724 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:19,527 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:19,531 INFO S7 generate: Adil Aouchiche unterschreibt auf Schalke langfristigen Vertr
+2026-09-01 15:32:25,776 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:25,778 INFO   Kandidat: Aouchiche verlängert auf Schalke bis 2030 – ohne Ausstiegskl
+2026-09-01 15:32:27,238 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:27,242 INFO S5 fetch fulltext: Transfer-Ticker: 1. FC Köln beschäftigt sich mit Borna Sosa 
+2026-09-01 15:32:28,495 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:30,580 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:30,584 INFO S7 generate: Transfer-Ticker: 1. FC Köln beschäftigt sich mit Borna Sosa 
+2026-09-01 15:32:35,015 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:35,016 INFO   Kandidat: 1. FC Köln: Borna Sosa von Crystal Palace auf dem Zettel
+2026-09-01 15:32:36,345 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:36,348 INFO S4 update-bypass (Folgeartikel): Offiziell: Eintracht Frankfurt verpflichtet Lilian Brassier
+2026-09-01 15:32:36,348 INFO S5 fetch fulltext: Offiziell: Eintracht Frankfurt verpflichtet Lilian Brassier
+2026-09-01 15:32:37,779 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:39,204 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:39,207 INFO S6 update-bypass (Folgeartikel): Offiziell: Eintracht Frankfurt verpflichtet Lilian Brassier
+2026-09-01 15:32:39,207 INFO S7 generate: Offiziell: Eintracht Frankfurt verpflichtet Lilian Brassier
+2026-09-01 15:32:48,442 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:48,444 INFO   Kandidat: Eintracht Frankfurt verpflichtet Lilian Brassier bis 2031
+2026-09-01 15:32:49,873 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:49,876 INFO S4 fingerprint dup: FC leiht Mikey Moore aus
+2026-09-01 15:32:49,876 INFO S3 keyword miss: Hertha BSC verpflichtet Gustaf Nilsson leihweise
+2026-09-01 15:32:51,184 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:51,188 INFO S5 fetch fulltext: Sky: Kennedy Okpala wechselt auf Leihbasis vom SC Paderborn 
+2026-09-01 15:32:51,478 INFO S5 fulltext fail (too_short_15_words): Sky: Kennedy Okpala wechselt auf Leihbasis vom SC Paderborn 
+2026-09-01 15:32:52,975 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:52,979 INFO S5 fetch fulltext: Eintracht Frankfurt: Doan kommt zurück
+2026-09-01 15:32:53,480 INFO S5 fulltext fail (too_short_22_words): Eintracht Frankfurt: Doan kommt zurück
+2026-09-01 15:32:55,021 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:55,025 INFO S5 fetch fulltext: Modekollektion nach Prügelskandal gestoppt: BVB schmeißt JP 
+2026-09-01 15:32:56,201 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:57,685 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:32:57,689 INFO S7 generate: Modekollektion nach Prügelskandal gestoppt: BVB schmeißt JP 
+2026-09-01 15:33:05,005 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:05,006 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 253 (char 330)
+2026-09-01 15:33:05,007 INFO S3 keyword miss: "Holt Euch keine Tickets für Dresden!": Die Ultras von Herth
+2026-09-01 15:33:06,370 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:06,374 INFO S4 fingerprint dup: Arijon Ibrahimovic vor Wechsel von FC Bayern nach Augsburg
+2026-09-01 15:33:08,810 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:08,813 INFO S4 fingerprint dup: Vom BVB über Kopenhagen zum Corum FK: Moukoko vor Wechsel zu
+2026-09-01 15:33:10,459 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:10,463 INFO S4 update-bypass (Folgeartikel): [Abendblatt] Nächster HSV-Transfer fix: Nach Vieira und El O
+2026-09-01 15:33:10,463 INFO S5 fetch fulltext: [Abendblatt] Nächster HSV-Transfer fix: Nach Vieira und El O
+2026-09-01 15:33:11,005 INFO S5 fulltext fail (too_short_27_words): [Abendblatt] Nächster HSV-Transfer fix: Nach Vieira und El O
+2026-09-01 15:33:12,888 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:12,890 INFO S4 fingerprint dup: Köln tütet Moore-Deal mit Tottenham ein – Wird wertvollster 
+2026-09-01 15:33:15,118 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:15,122 INFO S5 fetch fulltext: Mehr Münster-Auswärtsfahrer bei Viktoria als Hoffenheimer be
+2026-09-01 15:33:15,531 INFO S5 fulltext fail (too_short_36_words): Mehr Münster-Auswärtsfahrer bei Viktoria als Hoffenheimer be
+2026-09-01 15:33:17,708 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:17,712 INFO S5 fetch fulltext: Defensiv-Allrounder für die Breite: Werder Bremen wird wohl 
+2026-09-01 15:33:18,054 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:33:18,055 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:33:18,055 ERROR empty HTML tree: None
+2026-09-01 15:33:18,055 WARNING discarding data: None
+2026-09-01 15:33:18,055 INFO S5 fulltext fail (trafilatura_returned_empty): Defensiv-Allrounder für die Breite: Werder Bremen wird wohl 
+2026-09-01 15:33:20,072 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:20,076 INFO S5 fetch fulltext: The once prominent Big 6
+2026-09-01 15:33:20,189 INFO S5 fulltext fail (too_short_8_words): The once prominent Big 6
+2026-09-01 15:33:21,694 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:21,698 INFO S5 fetch fulltext: Nick Woltemade steht beim BVB ganz oben auf der Liste. Aus f
+2026-09-01 15:33:22,659 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:24,646 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:24,648 INFO S6 refined dup: Nick Woltemade steht beim BVB ganz oben auf der Liste. Aus f
+2026-09-01 15:33:24,648 INFO S3 keyword miss: Max Meyer wechselt zu Rot-Weiß Oberhausen
+2026-09-01 15:33:26,496 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:26,500 INFO S5 fetch fulltext: Anton Kade zaubert sich gegen Schalke 04 auf Jürgen Klopps Z
+2026-09-01 15:33:29,310 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:31,227 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:31,231 INFO S7 generate: Anton Kade zaubert sich gegen Schalke 04 auf Jürgen Klopps Z
+2026-09-01 15:33:40,453 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:40,455 INFO   Kandidat: Kade glänzt beim 3:0 gegen Schalke – Klopp schaut genau hin
+2026-09-01 15:33:42,762 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:42,766 INFO S5 fetch fulltext: Verlässt Reims nach zwei Jahren: Fürth holt Ex-Union-Stürmer
+2026-09-01 15:33:42,869 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:33:42,869 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:33:42,869 ERROR empty HTML tree: None
+2026-09-01 15:33:42,869 WARNING discarding data: None
+2026-09-01 15:33:42,870 INFO S5 fulltext fail (trafilatura_returned_empty): Verlässt Reims nach zwei Jahren: Fürth holt Ex-Union-Stürmer
+2026-09-01 15:33:42,870 INFO S3 keyword miss: Holstein Kiel kassiert bittere Pleite in Magdeburg
+2026-09-01 15:33:42,871 INFO S3 keyword miss: Titz kann aufatmen: Zwei Darmstädter Handspiele sorgen für H
+2026-09-01 15:33:42,871 INFO S2 blacklist: 2. Bundesliga: Kaiserslautern entführt Sieg beim FC St. Paul
+2026-09-01 15:33:44,251 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:44,255 INFO S5 fetch fulltext: Essen verpflichtet Nick Bätzner vom SC Paderborn
+2026-09-01 15:33:46,257 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:46,258 INFO S5.5 not relevant (fulltext): Essen verpflichtet Nick Bätzner vom SC Paderborn
+2026-09-01 15:33:48,497 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:48,501 INFO S5 fetch fulltext: Gladbach: Keine schwerwiegende Verletzung der Halswirbelsäul
+2026-09-01 15:33:49,387 WARNING discarding data: None
+2026-09-01 15:33:49,388 INFO S5 fulltext fail (trafilatura_returned_empty): Gladbach: Keine schwerwiegende Verletzung der Halswirbelsäul
+2026-09-01 15:33:49,388 INFO S3 keyword miss: Offiziell: Arthur Theate wechselt auf Leihbasis mit Kaufopti
+2026-09-01 15:33:52,022 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:52,027 INFO S5 fetch fulltext: Füllkrug: "Man muss festhalten, dass es in England keine Erf
+2026-09-01 15:33:52,132 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:33:52,132 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:33:52,132 ERROR empty HTML tree: None
+2026-09-01 15:33:52,132 WARNING discarding data: None
+2026-09-01 15:33:52,133 INFO S5 fulltext fail (trafilatura_returned_empty): Füllkrug: "Man muss festhalten, dass es in England keine Erf
+2026-09-01 15:33:53,446 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:53,450 INFO S4 fingerprint dup: VfB Stuttgart lehnt Top-Angebot für Jamie Leweling ab: Nach 
+2026-09-01 15:33:53,450 INFO S3 keyword miss: DSC holt Mittelstürmer David Min auf Leihbasis vom FC Utrech
+2026-09-01 15:33:53,451 INFO S3 keyword miss: "Ich gehe davon aus, dass er bleibt": Rolfes deutet Bayer-Ke
+2026-09-01 15:33:54,906 INFO S3 keyword miss: Bundesliga: Konstan­te­lias verletzt sich am Knie
+2026-09-01 15:33:54,907 INFO S3 keyword miss: Der Club bleibt Tabellenführer: Brutal effiziente Nürnberger
+2026-09-01 15:33:54,907 INFO S3 keyword miss: "Momo wird definitiv über den September hinaus bei uns bleib
+2026-09-01 15:33:54,907 INFO S3 keyword miss: Offiziell: Michael Zetterer wechselt zu Leeds United
+2026-09-01 15:33:56,777 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:56,781 INFO S4 fingerprint dup: Bundesliga: Borussia Dortmund besiegt den HSV nach Blitzstar
+2026-09-01 15:33:56,781 INFO S3 keyword miss: Reese über Pfeifkonzert in Karlsruhe: "Wenn man von 30.000 M
+2026-09-01 15:33:59,138 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:33:59,142 INFO S5 fetch fulltext: Dramatische Szene bei Leipzig-Gladbach: Große Sorge um Fohle
+2026-09-01 15:34:00,110 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:02,440 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:02,443 INFO S6 refined dup: Dramatische Szene bei Leipzig-Gladbach: Große Sorge um Fohle
+2026-09-01 15:34:03,956 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:03,960 INFO S5 fetch fulltext: Ablösefreier Rechtsverteidiger: Darmstadt 98 verpflichtet Ex
+2026-09-01 15:34:04,060 ERROR lxml parsing failed: Document is empty
+2026-09-01 15:34:04,060 ERROR lxml parser bytestring Document is empty
+2026-09-01 15:34:04,060 ERROR empty HTML tree: None
+2026-09-01 15:34:04,060 WARNING discarding data: None
+2026-09-01 15:34:04,061 INFO S5 fulltext fail (trafilatura_returned_empty): Ablösefreier Rechtsverteidiger: Darmstadt 98 verpflichtet Ex
+2026-09-01 15:34:04,061 INFO S3 keyword miss: Deutscher Meister! KFC Uerdingen holt den Titel im Amputiert
+2026-09-01 15:34:06,313 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:06,317 INFO S4 fingerprint dup: Tor und halber Assist gegen Ex-Club: Reitz und RB verhageln 
+2026-09-01 15:34:08,472 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:08,475 INFO S4 fingerprint dup: Sieg gegen Hoffenheim: Köln feiert El Mala und Doppel-Torsch
+2026-09-01 15:34:08,476 INFO Feed: https://www.reddit.com/r/soccer/new.rss?limit=100
+2026-09-01 15:34:09,308 INFO S3 keyword miss: Inter d'Escaldes will play in the Conference League with 19 
+2026-09-01 15:34:09,308 INFO S3 keyword miss: Chemik Bydgoszcz 0-2 Piast Gliwice - Maciek Kucharski 67' (P
+2026-09-01 15:34:09,309 INFO S3 keyword miss: [Feyenoord] Feyenoord and Luka Ivanušec part ways by mutual 
+2026-09-01 15:34:09,309 INFO S3 keyword miss: Siarka Tarnobrzeg 2-[1] Zagłębie Lubin - Damian Michalski 65
+2026-09-01 15:34:09,309 INFO S3 keyword miss: Mercato : Sunderland are once again reviving the Malick Fofa
+2026-09-01 15:34:09,309 INFO S3 keyword miss: [Fabrice Hawkins]: Malo Gusto is set to stay at Chelsea Live
+2026-09-01 15:34:09,310 INFO S3 keyword miss: 60-cap Andorran international striker Ricard "Cucu" Fernande
+2026-09-01 15:34:09,310 INFO S3 keyword miss: Cincinnati finalising deal for Slavia Prague's Doudera
+2026-09-01 15:34:09,310 INFO S3 keyword miss: Siarka Tarnobrzeg 2-0 Zagłębie Lubin - Patryk Peciak 47' (Po
+2026-09-01 15:34:09,311 INFO S3 keyword miss: [CNNBrasil] Al Ittihad reached an agreement with Benfica for
+2026-09-01 15:34:09,311 INFO S3 keyword miss: [Di Marzio] Parma set to sign 16-year-old Roberto Scaglione 
+2026-09-01 15:34:09,311 INFO S3 keyword miss: The last days of the football market taking place in one hot
+2026-09-01 15:34:09,311 INFO S3 keyword miss: Ufficiale | Pape Matar Sarr is a Juventus player
+2026-09-01 15:34:09,312 INFO S3 keyword miss: Paulo Dybala’s farewell to Messi
+2026-09-01 15:34:09,312 INFO S3 keyword miss: Allsvenskan table after matchday 19
+2026-09-01 15:34:09,312 INFO S3 keyword miss: Leicester City sign Emil Riis from Bristol City
+2026-09-01 15:34:11,205 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:11,209 INFO S4 fingerprint dup: [FC Bayern] Arijon Ibrahimović out on loan to FC Augsburg
+2026-09-01 15:34:11,209 INFO S3 keyword miss: Trabzonspor parted ways with Fatih Tekke
+2026-09-01 15:34:11,209 INFO S3 keyword miss: [GE] Flamengo signs Joaquín Freitas from River Plate
+2026-09-01 15:34:11,210 INFO S3 keyword miss: Deportivo A Coruña and Atlético Madrid have reached a full a
+2026-09-01 15:34:11,210 INFO S3 keyword miss: [David Medina & Isaac Suarez] Tagliafico priorites Atlético 
+2026-09-01 15:34:11,210 INFO S3 keyword miss: [Footmercato] Verbal agreeement between Panathinaikos, Giron
+2026-09-01 15:34:11,210 INFO S3 keyword miss: [Todoalicante] Fulham in advanced talks with Elche for the A
+2026-09-01 15:34:11,211 INFO S3 keyword miss: Sirius winger Isak Bjerkebo hints that a transfer to Sevilla
+2026-09-01 15:34:11,211 INFO S3 keyword miss: Antonio Rüdiger has decided retire from the German national 
+2026-09-01 15:34:11,211 INFO S3 keyword miss: [Sky Sports] Fulham are in talks to sign Elche CB David Affe
+2026-09-01 15:34:11,212 INFO S3 keyword miss: [GE] Flamengo signs Anthony Valencia from Royal Antwerp
+2026-09-01 15:34:11,212 INFO S3 keyword miss: Siarka Tarnobrzeg 1-0 Zagłębie Lubin - Maciej Urbański OG 6'
+2026-09-01 15:34:11,212 INFO S3 keyword miss: Chemik Bydgoszcz 0-1 Piast Gliwice - Aleksander Karbowski OG
+2026-09-01 15:34:13,868 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:13,872 INFO S4 fingerprint dup: Jadon Sancho remains Borussia Dortmund target despite Ethan 
+2026-09-01 15:34:13,872 INFO S3 keyword miss: [EXCLUSIVE FM] Besiktas wants to hijack transfer of Lyon tar
+2026-09-01 15:34:13,872 INFO S3 keyword miss: Newcastle United sign Matias Fernandez-Pardo
+2026-09-01 15:34:13,873 INFO S3 keyword miss: Manuel Ángel is already in London to sign for Fulham. The de
+2026-09-01 15:34:13,873 INFO S3 keyword miss: [Standard Sport] Kenny Tete to Everton deal in doubt with th
+2026-09-01 15:34:13,873 INFO S3 keyword miss: Dominik Kotarski joins Dinamo Zagreb on a 1 year loan
+2026-09-01 15:34:15,090 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:15,094 INFO S5 fetch fulltext: Patrik Kristal joins Thun on loan from 1. FC Köln
+2026-09-01 15:34:15,236 INFO S5 fulltext fail (too_short_36_words): Patrik Kristal joins Thun on loan from 1. FC Köln
+2026-09-01 15:34:15,236 INFO S3 keyword miss: [Record] Pedro Gonçalves (Pote) will sign for Fiorentina tod
+2026-09-01 15:34:15,237 INFO S3 keyword miss: Millwall are in talks over the potential loan return of Crys
+2026-09-01 15:34:16,776 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:16,780 INFO S5 fetch fulltext: Crystal Palace are showing late interest in Mainz midfielder
+2026-09-01 15:34:16,932 INFO S5 fulltext fail (too_short_36_words): Crystal Palace are showing late interest in Mainz midfielder
+2026-09-01 15:34:18,730 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:18,733 INFO S4 fingerprint dup: OFFICIAL: Bayer Leverkusen sign Moussa Diaby
+2026-09-01 15:34:18,733 INFO S3 keyword miss: EXCL: Brighton & Hove Albion reach agreement with Millwall t
+2026-09-01 15:34:20,475 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:20,479 INFO S5 fetch fulltext: [Bulinews] Fulham open talks over late move for Bayern defen
+2026-09-01 15:34:20,622 INFO S5 fulltext fail (too_short_36_words): [Bulinews] Fulham open talks over late move for Bayern defen
+2026-09-01 15:34:20,623 INFO S3 keyword miss: [Craig Hope] EXCLUSIVE: Newcastle have rejected a second off
+2026-09-01 15:34:20,623 INFO S3 keyword miss: Colorado Rapids agree club-record deal to sign Morgan Whitta
+2026-09-01 15:34:20,623 INFO S3 keyword miss: Widzew Łódź sign Dani Silva on loan from Midtjylland
+2026-09-01 15:34:20,624 INFO S3 keyword miss: [Hugo Guillemet - L'Equipe] Lyon and Crystal Palace reach an
+2026-09-01 15:34:20,624 INFO S3 keyword miss: Korona II Kielce 0-1 Radomiak Radom - Ronaldo Lumungo 31' (P
+2026-09-01 15:34:20,624 INFO S3 keyword miss: Atlético Madrid join Juventus in the race for Nicolás Taglia
+2026-09-01 15:34:20,625 INFO S3 keyword miss: Gabriel Jesus signs for FC Barcelona
+2026-09-01 15:34:20,625 INFO S3 keyword miss: Saba Goglichidze set to join Monza on loan
+2026-09-01 15:34:20,625 INFO Feed: https://rss.kicker.de/news/fc-bayern-muenchen
+2026-09-01 15:34:20,818 INFO Feed: https://rss.kicker.de/news/borussia-dortmund
+2026-09-01 15:34:20,997 INFO Feed: https://rss.kicker.de/news/rb-leipzig
+2026-09-01 15:34:21,191 INFO Feed: https://rss.kicker.de/news/bayer-leverkusen
+2026-09-01 15:34:21,281 INFO Feed: https://rss.kicker.de/news/vfb-stuttgart
+2026-09-01 15:34:21,482 INFO Feed: https://rss.kicker.de/news/eintracht-frankfurt
+2026-09-01 15:34:21,721 INFO Feed: https://rss.kicker.de/news/borussia-moenchengladbach
+2026-09-01 15:34:21,935 INFO Feed: https://rss.kicker.de/news/sc-freiburg
+2026-09-01 15:34:22,125 INFO Feed: https://rss.kicker.de/news/tsg-hoffenheim
+2026-09-01 15:34:22,163 INFO Feed: https://rss.kicker.de/news/fsv-mainz-05
+2026-09-01 15:34:22,359 INFO Feed: https://rss.kicker.de/news/fc-augsburg
+2026-09-01 15:34:22,442 INFO Feed: https://rss.kicker.de/news/1-fc-union-berlin
+2026-09-01 15:34:22,487 INFO Feed: https://rss.kicker.de/news/sv-werder-bremen
+2026-09-01 15:34:22,667 INFO Feed: https://rss.kicker.de/news/hamburger-sv
+2026-09-01 15:34:22,854 INFO Feed: https://rss.kicker.de/news/1-fc-koeln
+2026-09-01 15:34:22,891 INFO Feed: https://rss.kicker.de/news/fc-schalke-04
+2026-09-01 15:34:23,081 INFO Feed: https://rss.kicker.de/news/sv-elversberg
+2026-09-01 15:34:23,284 INFO Feed: https://rss.kicker.de/news/sc-paderborn-07
+2026-09-01 15:34:23,490 INFO S8 QA: 17 Kandidaten …
+2026-09-01 15:34:41,314 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-01 15:34:41,315 WARNING QA: Kein JSON-Array in Antwort: ```json
+[
+  {"id":0,"decision":"REJECT","reason":"Enthält explizite Lückenfüller-Formulierungen ('nicht näher spezifiziert') und bricht mitten im Satz ab – keine publishbare Substanz."},
+  {"id":1,"de
+2026-09-01 15:34:41,315 INFO S8 approved: 0 / 17
+2026-09-01 15:34:41,318 INFO S9.5 FinalCheck: 0/0 durch
+2026-09-01 15:34:41,623 INFO URL-Cache gespeichert: 20911 URLs
+2026-09-01 15:34:41,623 INFO === Fertig. 0 neue Artikel. feed.json: 805 ===
+2026-09-01 15:34:41,623 INFO Stats: {"ts": "20260901_1524", "ingested": 252, "s2_pre_filter": 10, "s3_relevance": 108, "s4_dedup_early": 38, "s5_fulltext_fail": 51, "s6_dedup_refined": 4, "s7_generated": 17, "s8_qa_rejected": 17, "published": 0}
