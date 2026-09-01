@@ -74,7 +74,7 @@
       <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
       <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
       <a href="forum.html" class="section-nav-link">💬 Forum</a>
-      <button onclick="document.getElementById('news-einsenden-modal').style.display='block'" style="background:var(--accent);color:#111;border:none;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-left:8px">+ News einsenden</button>
+      <button id="news-einsenden-btn" onclick="document.getElementById('news-einsenden-modal').style.display='flex'" style="display:none;background:var(--accent);color:#111;border:none;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-left:8px">+ News einsenden</button>
     </div>
   </nav>
 
@@ -156,6 +156,7 @@
         isAdmin = false;
         document.getElementById('user-info').style.display = 'none';
         document.getElementById('login-btn').style.display = '';
+        document.getElementById('news-einsenden-btn').style.display = 'none';
         document.getElementById('signup-btn').style.display = '';
         renderFeed();
       });
@@ -167,6 +168,7 @@
       document.getElementById('user-name').textContent = name;
       document.getElementById('user-info').style.display = 'flex';
       document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('news-einsenden-btn').style.display = '';
       document.getElementById('signup-btn').style.display = 'none';
       renderFeed();
     }
@@ -585,6 +587,8 @@
   async function newEinsenden() {
     const url = document.getElementById('news-url-input').value.trim();
     const status = document.getElementById('news-einsenden-status');
+    const _nu = netlifyIdentity.currentUser();
+    if (!_nu) { status.style.color='#e53935'; status.textContent='Bitte zuerst anmelden.'; return; }
     if (!url || !url.startsWith('http')) { status.style.color='#e53935'; status.textContent='Bitte gültige URL eingeben.'; return; }
     status.style.color='var(--text3)'; status.textContent='Wird eingereicht…';
     try {
