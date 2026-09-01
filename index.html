@@ -599,7 +599,7 @@
         body: JSON.stringify({ url })
       });
       if (res.ok) {
-        status.style.color='#2e7d32'; status.textContent='✅ Eingereicht! Wird beim nächsten Update geprüft.';
+        status.style.color='#2e7d32'; status.textContent='✅ Vielen Dank! Deine Einsendung wird in Kürze geprüft.';
         document.getElementById('news-url-input').value='';
       } else {
         status.style.color='#e53935'; status.textContent='Fehler beim Einsenden. Bitte später nochmal versuchen.';
