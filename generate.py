@@ -1196,7 +1196,39 @@ def main():
         _SKY_SENTINEL = None
         _sky_feed_cache = {}
 
-    _all_feeds = RSS_FEEDS + ([_SKY_SENTINEL] if _SKY_SENTINEL else [])
+    # Eingereichte URLs aus Supabase laden
+    _submitted_urls = []
+    try:
+        import urllib.request as _ur2, json as _json2
+        _supa_url = "https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?status=eq.pending&select=id,url"
+        _supa_key = os.environ.get("SUPABASE_SERVICE_KEY", "")
+        if _supa_key:
+            _req2 = _ur2.Request(_supa_url, headers={
+                "apikey": _supa_key, "Authorization": f"Bearer {_supa_key}"
+            })
+            with _ur2.urlopen(_req2, timeout=10) as _r2:
+                _rows = _json2.loads(_r2.read())
+            _submitted_urls = [r["url"] for r in _rows if r.get("url")]
+            _submitted_ids  = [r["id"]  for r in _rows if r.get("id")]
+            if _submitted_urls:
+                log.info(f"📥 {len(_submitted_urls)} eingereichte URLs aus Supabase")
+                # Als 'processed' markieren
+                for _sid in _submitted_ids:
+                    try:
+                        _upd = _ur2.Request(
+                            f"https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?id=eq.{_sid}",
+                            data=b'{"status":"processed"}',
+                            headers={"apikey": _supa_key, "Authorization": f"Bearer {_supa_key}",
+                                     "Content-Type": "application/json", "Prefer": "return=minimal"},
+                            method="PATCH"
+                        )
+                        _ur2.urlopen(_upd, timeout=5)
+                    except Exception:
+                        pass
+    except Exception as _e2:
+        log.warning(f"Supabase submitted_urls Fehler: {_e2}")
+
+    _all_feeds = RSS_FEEDS + ([_SKY_SENTINEL] if _SKY_SENTINEL else []) + _submitted_urls
 
     for feed_url in _all_feeds:
         if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
