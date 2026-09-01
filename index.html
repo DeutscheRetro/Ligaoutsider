@@ -74,6 +74,7 @@
       <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
       <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
       <a href="forum.html" class="section-nav-link">💬 Forum</a>
+      <button onclick="document.getElementById('news-einsenden-modal').style.display='block'" style="background:var(--accent);color:#111;border:none;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-left:8px">+ News einsenden</button>
     </div>
   </nav>
 
@@ -568,5 +569,46 @@
       });
   </script>
 
+  <!-- News einsenden Modal -->
+  <div id="news-einsenden-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+    <div style="background:var(--bg2);border-radius:8px;padding:24px;width:90%;max-width:480px;position:relative">
+      <button onclick="document.getElementById('news-einsenden-modal').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer">×</button>
+      <h3 style="margin:0 0 8px;font-size:16px">News einsenden</h3>
+      <p style="font-size:12px;color:var(--text3);margin:0 0 16px">Artikel-URL einsenden — wird beim nächsten Update geprüft und ggf. veröffentlicht.</p>
+      <input id="news-url-input" type="url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px;border-radius:4px;border:1px solid var(--item-border);background:var(--bg3);color:var(--text1);font-size:14px;margin-bottom:12px"/>
+      <button onclick="newEinsenden()" style="background:var(--accent);color:#111;border:none;border-radius:4px;padding:10px 20px;font-size:14px;font-weight:800;cursor:pointer;width:100%">Einsenden</button>
+      <div id="news-einsenden-status" style="margin-top:10px;font-size:12px;text-align:center"></div>
+    </div>
+  </div>
+
+  <script>
+  async function newEinsenden() {
+    const url = document.getElementById('news-url-input').value.trim();
+    const status = document.getElementById('news-einsenden-status');
+    if (!url || !url.startsWith('http')) { status.style.color='#e53935'; status.textContent='Bitte gültige URL eingeben.'; return; }
+    status.style.color='var(--text3)'; status.textContent='Wird eingereicht…';
+    try {
+      const res = await fetch('https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls', {
+        method: 'POST',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns',
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ url })
+      });
+      if (res.ok) {
+        status.style.color='#2e7d32'; status.textContent='✅ Eingereicht! Wird beim nächsten Update geprüft.';
+        document.getElementById('news-url-input').value='';
+      } else {
+        status.style.color='#e53935'; status.textContent='Fehler beim Einsenden. Bitte später nochmal versuchen.';
+      }
+    } catch(e) {
+      status.style.color='#e53935'; status.textContent='Netzwerkfehler. Bitte später nochmal versuchen.';
+    }
+  }
+  document.getElementById('news-url-input').addEventListener('keydown', e => { if(e.key==='Enter') newEinsenden(); });
+  </script>
 </body>
 </html>
