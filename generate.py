@@ -751,7 +751,8 @@ def ist_relevant(titel: str, volltext: str) -> bool:
                 f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
                 f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
-                f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n\n"
+                f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n"
+                f"- Wenn ein Spieler eines dieser Klubs im Ausland spielt (Leihe, Auslandsklub): NUR JA wenn Transfer zurück, Vertragsende, oder direkter Bezug zu diesen Klubs. Ein Tor in der Ligue 1/Premier League/Serie A ist KEIN Grund für JA.\n\n"
                 f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
                 f"Antworte nur mit JA oder NEIN."
             )
