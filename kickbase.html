@@ -102,9 +102,37 @@
       </div>
 
       <div class="kb-widget">
-        <div class="kb-widget-title">🏆 Bester Spieltag</div>
-        <ul class="kb-list" id="kb-spieltag">
-          <li class="kb-loading">Saison noch nicht gestartet</li>
+        <div class="kb-widget-title">⚡ Punkteschnitt</div>
+        <ul class="kb-list" id="kb-schnitt">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">💎 Unterbewertet</div>
+        <ul class="kb-list" id="kb-schnaeppchen">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🚑 Angeschlagen &amp; verletzt</div>
+        <ul class="kb-list" id="kb-verletzt">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📈 Gewinner der Woche</div>
+        <ul class="kb-list" id="kb-woche">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">📉 Verlierer der Woche</div>
+        <ul class="kb-list" id="kb-wocheminus">
+          <li class="kb-loading">Lädt…</li>
         </ul>
       </div>
 
@@ -174,7 +202,9 @@
         ? items.map((p, i) => `<li class="kb-item">
             <span class="kb-rank">${i+1}.</span>
             ${p.logo ? `<img src="${p.logo}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">` : ''}
-            <span class="kb-name" title="${p.name}">${p.name}</span>
+            <span class="kb-name" title="${p.hinweis ? p.name + ' – ' + p.hinweis : p.name}">${p.name}${
+              p.hinweis ? `<span style="display:block;font-size:10px;color:var(--text4);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.hinweis}</span>` : ''
+            }</span>
             <span class="kb-val ${p.cls||''}">${p.val}</span>
           </li>`).join('')
         : '<li class="kb-loading">Keine Daten</li>';
@@ -193,9 +223,14 @@
         renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
         renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
         renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff + ' Pkt/Mio' })));
+        renderList('kb-schnitt',   (d.schnitt    ||[]).map(p => ({ ...p, val: p.ap + ' Pkt/Spiel' })));
+        renderList('kb-woche',     (d.woche      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
+        renderList('kb-wocheminus',(d.wocheminus ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
+        renderList('kb-schnaeppchen', (d.schnaeppchen ||[]).map(p => ({ ...p, val: p.faktor + 'x (' + fmtMW(p.mw) + ')', cls: 'green' })));
+        renderList('kb-verletzt',  (d.verletzt   ||[]).map(p => ({ ...p, val: fmtMW(p.mw), cls: 'red', hinweis: p.info })));
       })
       .catch(() => {
-        ['kb-teuerste','kb-punkte','kb-effizienz','kb-tore','kb-spieltag'].forEach(id => {
+        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-schnitt','kb-schnaeppchen','kb-verletzt','kb-woche','kb-wocheminus'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.innerHTML = '<li class="kb-loading">Daten werden bald verfügbar</li>';
         });

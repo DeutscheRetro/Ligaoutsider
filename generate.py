@@ -2063,24 +2063,49 @@ def kickbase_fetch():
         print(f"❌ BaseXI Fetch fehlgeschlagen: {e}")
         return
 
+    # Ohne Mindesteinsatz besteht die Effizienz-Liste aus billigen Bankspielern:
+    # wer 1,1 Mio wert ist und 85 Punkte holt, schlaegt rechnerisch jeden Stammspieler.
+    max_spieltage = max((p.get("matchesPlayed") or 0) for p in data) if data else 0
+    min_spiele = max(1, round(max_spieltage * 0.75))
+    min_starts = 1 if max_spieltage < 3 else 2
+
     players = []
     for p in data:
         mw  = p.get("marketValue") or 0
         pts = p.get("totalPoints") or 0
         mvt = p.get("mvTrend") or 0
+        spiele = p.get("matchesPlayed") or 0
+        starts = p.get("starts") or 0
+        stammspieler = spiele >= min_spiele and starts >= min_starts
         players.append({
             "name":   p.get("name", ""),
             "logo":   p.get("image") or p.get("fallbackImage") or "",
             "team":   p.get("teamName", ""),
+            "pos":    p.get("position", ""),
             "mw":     mw,
             "pts":    pts,
             "ap":     p.get("avgPoints") or 0,
             "mvt":    mvt,
-            "eff":    round(pts / (mw / 1e6), 2) if mw > 500000 and pts > 0 else 0,
+            "t7":     p.get("trend7d") or 0,
+            "fair":   p.get("fairValue") or 0,
+            "spiele": spiele,
+            "status": p.get("status") or 0,
+            "info":   (p.get("statusText") or "").strip(),
+            "eff":    round(pts / (mw / 1e6), 2) if (mw > 500000 and pts > 0 and stammspieler) else 0,
         })
 
     def top(lst, key, n=10, reverse=True):
         return sorted([x for x in lst if x.get(key)], key=lambda x: x[key], reverse=reverse)[:n]
+
+    # Angeschlagene und ausfallende Spieler (status != 0)
+    angeschlagen = [p for p in players if p["status"]]
+    angeschlagen.sort(key=lambda p: p["mw"], reverse=True)
+
+    # Unterbewertet: fairValue deutlich ueber Marktwert. 0,5 Mio ist bei BaseXI
+    # ein Platzhalter statt einer echten Schaetzung, deshalb erst ab 1 Mio.
+    schnaeppchen = sorted(
+        (p for p in players if p["fair"] > 1_000_000 and p["mw"] > 1_000_000 and p["spiele"] >= 2),
+        key=lambda p: p["fair"] / p["mw"], reverse=True)
 
     result = {
         "updated":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -2089,6 +2114,16 @@ def kickbase_fetch():
         "effizienz": [{"name":p["name"],"logo":p["logo"],"eff":p["eff"]}  for p in top(players,"eff")],
         "raketen":   [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"],"mw":p["mw"]} for p in top(players,"mvt")],
         "crash":     [{"name":p["name"],"logo":p["logo"],"diff":p["mvt"],"mw":p["mw"]} for p in top(players,"mvt",reverse=False) if p["mvt"] < 0],
+        "schnitt":   [{"name":p["name"],"logo":p["logo"],"ap":p["ap"]}
+                      for p in top([p for p in players if p["spiele"] >= 2], "ap")],
+        "woche":     [{"name":p["name"],"logo":p["logo"],"diff":p["t7"],"mw":p["mw"]} for p in top(players,"t7")],
+        "wocheminus":[{"name":p["name"],"logo":p["logo"],"diff":p["t7"],"mw":p["mw"]}
+                      for p in top(players,"t7",reverse=False) if p["t7"] < 0],
+        "schnaeppchen": [{"name":p["name"],"logo":p["logo"],"mw":p["mw"],
+                          "fair":p["fair"],"faktor":round(p["fair"]/p["mw"],2)}
+                         for p in schnaeppchen[:10]],
+        "verletzt":  [{"name":p["name"],"logo":p["logo"],"mw":p["mw"],
+                       "info":p["info"] or "angeschlagen"} for p in angeschlagen[:10]],
     }
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler, via BaseXI)")
