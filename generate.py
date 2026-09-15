@@ -2089,6 +2089,7 @@ def kickbase_fetch():
             "t7":     p.get("trend7d") or 0,
             "fair":   p.get("fairValue") or 0,
             "spiele": spiele,
+            "stamm":  stammspieler,
             "status": p.get("status") or 0,
             "info":   (p.get("statusText") or "").strip(),
             "eff":    round(pts / (mw / 1e6), 2) if (mw > 500000 and pts > 0 and stammspieler) else 0,
@@ -2101,10 +2102,16 @@ def kickbase_fetch():
     angeschlagen = [p for p in players if p["status"]]
     angeschlagen.sort(key=lambda p: p["mw"], reverse=True)
 
-    # Unterbewertet: fairValue deutlich ueber Marktwert. 0,5 Mio ist bei BaseXI
-    # ein Platzhalter statt einer echten Schaetzung, deshalb erst ab 1 Mio.
+    # Unterbewertet: fairValue deutlich ueber Marktwert.
+    # Zwei Fallstricke der Quelle:
+    #   0,5 Mio ist ein Platzhalter statt einer Schaetzung -> erst ab 1 Mio.
+    #   fairValue haengt an der Vorsaison (r=0,81) und kaum an der laufenden
+    #   (r=0,37). Ohne Einsatzhuerde stehen Spieler oben, die letztes Jahr stark
+    #   waren und jetzt auf der Bank sitzen - Kramaric fuehrte die Liste mit
+    #   minus drei Punkten und null Startelf-Einsaetzen an.
     schnaeppchen = sorted(
-        (p for p in players if p["fair"] > 1_000_000 and p["mw"] > 1_000_000 and p["spiele"] >= 2),
+        (p for p in players
+         if p["fair"] > 1_000_000 and p["mw"] > 1_000_000 and p["pts"] > 0 and p["stamm"]),
         key=lambda p: p["fair"] / p["mw"], reverse=True)
 
     result = {

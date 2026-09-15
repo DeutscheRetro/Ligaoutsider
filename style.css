@@ -326,6 +326,10 @@ ul { list-style: none; }
 .kb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .kb-widget { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
 .kb-widget-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #000; background: var(--accent); padding: 8px 14px; }
+.kb-widget-sub {
+  font-size: 11px; line-height: 1.45; color: var(--text3);
+  padding: 8px 14px 0; margin: 0;
+}
 .kb-list { padding: 4px 0; }
 .kb-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--item-border); font-size: 12px; }
 .kb-item:last-child { border-bottom: none; }
