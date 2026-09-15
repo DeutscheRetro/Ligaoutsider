@@ -11,12 +11,13 @@
   // ─── Theme ───────────────────────────────────────────────────────────────────
   function applyTheme(t) {
     document.body.classList.toggle('light', t === 'light');
+    document.documentElement.classList.toggle('light', t === 'light');
     const icon  = document.getElementById('theme-icon');
     const label = document.getElementById('theme-label');
     if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
     if (label) label.textContent = t === 'light' ? 'Dunkel' : 'Hell';
   }
-  applyTheme(localStorage.getItem('theme') || (document.body.classList.contains('light') ? 'light' : 'dark'));
+  applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const t = document.body.classList.contains('light') ? 'dark' : 'light';
     localStorage.setItem('theme', t); applyTheme(t);

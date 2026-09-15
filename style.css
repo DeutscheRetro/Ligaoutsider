@@ -7,16 +7,19 @@
   --border:      #1e1e1e;
   --border2:     #2a2a2a;
   --text:        #e0e0e0;
+  --text1:       #e0e0e0;
   --text2:       #ccc;
   --text3:       #888;
   --text4:       #555;
   --accent:      #e8c000;
+  --gold:        #e8c000;
   --header-bg:   #111;
   --item-hover:  #181818;
   --item-border: #1a1a1a;
 }
 
-body.light {
+body.light,
+html.light body {
   --bg:          #f0f0f0;
   --bg2:         #ffffff;
   --bg3:         #f7f7f7;
@@ -24,10 +27,12 @@ body.light {
   --border:      #ddd;
   --border2:     #ccc;
   --text:        #111;
+  --text1:       #111;
   --text2:       #333;
   --text3:       #666;
   --text4:       #999;
   --accent:      #c8a000;
+  --gold:        #b08400;
   --header-bg:   #1a1a1a;
   --item-hover:  #f5f5f5;
   --item-border: #eee;
@@ -291,7 +296,11 @@ ul { list-style: none; }
 
 /* ─── Section Nav ─── */
 .section-nav { background: var(--bg2); border-bottom: 1px solid var(--border); }
-.section-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; }
+.section-nav { overflow-x: auto; scrollbar-width: none; }
+.section-nav::-webkit-scrollbar { display: none; }
+.section-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; }
+.section-nav-link { flex-shrink: 0; white-space: nowrap; }
+#news-einsenden-btn { flex-shrink: 0; white-space: nowrap; }
 .section-nav-link {
   font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
   padding: 10px 16px; color: var(--text4);
@@ -330,7 +339,20 @@ ul { list-style: none; }
 /* ─── Responsive ─── */
 @media (max-width: 860px) { .site-content { grid-template-columns: 1fr; } .kb-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 540px) { .kb-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 720px) {
+  .header-inner { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+  .logo { font-size: 22px; }
+  .logo-de { font-size: 14px; }
+  .header-right { flex-wrap: wrap; gap: 8px; width: 100%; }
+  .search-form { flex: 1 1 100%; order: 3; }
+  .search-input { width: 100%; }
+  .theme-toggle { order: 1; }
+  .auth-buttons { order: 2; margin-left: auto; }
+  .auth-btn { padding: 4px 8px; font-size: 11px; }
+  .auth-username { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
 @media (max-width: 480px) {
   .feed-title { font-size: 13px; }
-  .search-input { width: 130px; }
 }

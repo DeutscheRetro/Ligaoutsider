@@ -4,9 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Newsarchiv – Ligaoutsider.de</title>
+  <meta name="description" content="Alle Bundesliga-News im Archiv: Transfers, Analysen, Interviews und Spielberichte aus der Saison 2026/27."/>
+  <link rel="canonical" href="https://ligaoutsider.de/archiv.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Newsarchiv – Ligaoutsider.de"/>
+  <meta property="og:description" content="Alle Bundesliga-News im Archiv: Transfers, Analysen, Interviews und Spielberichte aus der Saison 2026/27."/>
+  <meta property="og:url" content="https://ligaoutsider.de/archiv.html"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" href="favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
@@ -81,10 +89,11 @@
     const btn = document.getElementById('theme-toggle');
     function applyTheme(t) {
       document.body.classList.toggle('light', t === 'light');
+      document.documentElement.classList.toggle('light', t === 'light');
       document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
       document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
     }
-    applyTheme(localStorage.getItem('theme') || (document.body.classList.contains('light') ? 'light' : 'dark'));
+    applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
     btn.addEventListener('click', () => {
       const t = document.body.classList.contains('light') ? 'dark' : 'light';
       localStorage.setItem('theme', t); applyTheme(t);

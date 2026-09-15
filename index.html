@@ -4,8 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ligaoutsider.de – Bundesliga News</title>
+  <meta name="description" content="Bundesliga News, Transfers, Analysen und Kickbase-Stats – täglich aktuell. Alle 18 Klubs, Tabelle, Torjäger und Spielplan auf einen Blick." />
+  <link rel="canonical" href="https://ligaoutsider.de/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ligaoutsider.de – Bundesliga News" />
+  <meta property="og:description" content="Bundesliga News, Transfers, Analysen und Kickbase-Stats – täglich aktuell." />
+  <meta property="og:url" content="https://ligaoutsider.de/" />
+  <meta property="og:site_name" content="Ligaoutsider.de" />
+  <meta property="og:locale" content="de_DE" />
+  <link rel="alternate" type="application/rss+xml" title="Ligaoutsider.de News" href="/rss.xml" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="favicon.png" type="image/png" />
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
@@ -124,7 +134,7 @@
   <!-- Spieler-Modal -->
   <div id="spieler-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);overflow-y:auto;padding:20px 12px" onclick="if(event.target===this)this.style.display='none'">
     <div style="max-width:480px;margin:0 auto;background:var(--bg2);border-radius:12px;overflow:hidden;position:relative">
-      <button onclick="document.getElementById('spieler-modal').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1">×</button>
+      <button onclick="document.getElementById('spieler-modal').style.display='none';document.body.style.overflow=''" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1">×</button>
       <div id="spieler-modal-inhalt" style="padding:20px"></div>
     </div>
   </div>
@@ -192,6 +202,7 @@
 
     function setTheme(light) {
       document.body.classList.toggle('light', light);
+      document.documentElement.classList.toggle('light', light);
       icon.textContent  = light ? '🌙' : '☀️';
       label.textContent = light ? 'Dunkel' : 'Hell';
       localStorage.setItem('theme', light ? 'light' : 'dark');
@@ -462,7 +473,6 @@
       inhalt.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px 0">Lädt…</p>';
       modal.style.display = 'block';
       document.body.style.overflow = 'hidden';
-      modal.addEventListener('hide', () => { document.body.style.overflow = ''; }, { once: true });
 
       let d;
       try {

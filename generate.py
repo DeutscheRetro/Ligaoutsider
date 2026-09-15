@@ -927,7 +927,7 @@ def artikel_html(
     artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
     meta_desc = ersten_absatz[:155].replace('"', '&quot;').replace('\n', ' ')
-    og_image = f"https://ligaoutsider.de/{wappen_url}" if wappen_url and not wappen_url.startswith('http') else (wappen_url or "https://ligaoutsider.de/logos/bundesliga.png")
+    og_image = f"https://ligaoutsider.de/{wappen_url.lstrip('./')}" if wappen_url and not wappen_url.startswith('http') else (wappen_url or "https://ligaoutsider.de/logos/bundesliga.png")
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -947,7 +947,7 @@ def artikel_html(
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light');</script>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
   <script>
