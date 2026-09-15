@@ -1,5 +1,5 @@
 // kommentare.js – Ligaoutsider Kommentarsystem
-// Erwartet als Globals: SUPABASE_URL, SUPABASE_ANON, ADMIN_EMAIL
+// Erwartet als Globals: SUPABASE_URL, SUPABASE_ANON
 // Optional: ARTIKEL_ID (nur auf Artikelseiten)
 
 (function () {

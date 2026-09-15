@@ -151,7 +151,6 @@
 
   <script>
     // ─── Netlify Identity ─────────────────────────────────────────────────────
-    const ADMIN_EMAIL = 'twitchpre@gmail.com';
     let isAdmin = false;
 
     if (window.netlifyIdentity) {
@@ -174,7 +173,9 @@
 
     function showUser(user) {
       const name = user.user_metadata?.full_name || user.email;
-      isAdmin = user.email === ADMIN_EMAIL;
+      // Rolle aus dem Identity-Token, nicht per E-Mail-Vergleich
+      const rollen = (user.app_metadata && user.app_metadata.roles) || [];
+      isAdmin = rollen.some(r => r === 'admin' || r === 'moderator');
       document.getElementById('user-name').textContent = name;
       document.getElementById('user-info').style.display = 'flex';
       document.getElementById('login-btn').style.display = 'none';
