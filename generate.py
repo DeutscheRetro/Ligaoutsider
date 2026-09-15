@@ -128,6 +128,8 @@ MAX_ARTIKEL_PRO_LAUF = 50
 # Wo Artikel gespeichert werden
 ARTIKEL_ORDNER = Path("artikel")
 FEED_JSON      = Path("feed.json")
+OG_ORDNER      = Path("og")
+FONT_ORDNER    = Path(__file__).parent / "fonts"
 
 DISQUS_SHORTNAME = "ligaoutsider"  # <-- später auf disqus.com eintragen
 
@@ -896,6 +898,96 @@ Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
     return json.loads(match.group())
 
 
+# ─── og:image-Karten ──────────────────────────────────────────────────────────
+
+def _og_wrap(draw, text, font, max_w):
+    words, lines, cur = text.split(), [], ""
+    for w in words:
+        probe = f"{cur} {w}".strip()
+        if draw.textlength(probe, font=font) <= max_w:
+            cur = probe
+        else:
+            if cur:
+                lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
+    """1200x630-Karte für Social-Previews. Gibt die oeffentliche URL zurueck
+    oder None, wenn die Karte nicht erzeugt werden konnte."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        log.warning("Pillow fehlt – keine og:image-Karten")
+        return None
+
+    try:
+        OG_ORDNER.mkdir(parents=True, exist_ok=True)
+        W, H = 1200, 630
+        img = Image.new("RGB", (W, H), "#0d0d0d")
+        d = ImageDraw.Draw(img)
+        d.rectangle([0, 0, W, 10], fill="#e8c000")
+
+        fett = str(FONT_ORDNER / "InterDisplay-ExtraBold.ttf")
+        tile, tile_x = 220, 80
+        text_x = tile_x + tile + 56
+        text_w = W - text_x - 70
+        badge_h, badge_gap = 46, 30
+
+        label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
+
+        for size in (62, 56, 50, 45, 41):
+            f_titel = ImageFont.truetype(fett, size)
+            lines = _og_wrap(d, titel, f_titel, text_w)
+            if len(lines) <= 4:
+                break
+        lines = lines[:4]
+        lh = int(size * 1.16)
+
+        block_h = badge_h + badge_gap + lh * len(lines)
+        top = max(90, (H - 70 - block_h) // 2)
+
+        ty = max(60, min(top + (block_h - tile) // 2, H - 150 - tile))
+        d.rounded_rectangle([tile_x, ty, tile_x + tile, ty + tile], radius=20, fill="#17171a")
+
+        logo_datei = None
+        if wappen_url:
+            logo_datei = Path(wappen_url.lstrip("./"))
+        if logo_datei and logo_datei.exists():
+            logo = Image.open(logo_datei).convert("RGBA")
+            scale = min(150 / logo.width, 150 / logo.height)
+            logo = logo.resize((max(1, round(logo.width * scale)),
+                                max(1, round(logo.height * scale))), Image.LANCZOS)
+            img.paste(logo, (tile_x + (tile - logo.width) // 2,
+                             ty + (tile - logo.height) // 2), logo)
+
+        f_badge = ImageFont.truetype(fett, 26)
+        bw = d.textlength(label.upper(), font=f_badge)
+        d.rounded_rectangle([text_x, top, text_x + bw + 34, top + badge_h], radius=6, fill=badge_bg)
+        d.text((text_x + 17, top + 9), label.upper(), font=f_badge, fill=badge_fg)
+
+        y = top + badge_h + badge_gap
+        for ln in lines:
+            d.text((text_x, y), ln, font=f_titel, fill="#ffffff")
+            y += lh
+
+        f_mark = ImageFont.truetype(fett, 32)
+        x, my = 80, H - 68
+        for teil, farbe in (("Liga", "#e8c000"), ("outsider", "#ffffff"), (".de", "#777777")):
+            d.text((x, my), teil, font=f_mark, fill=farbe)
+            x += d.textlength(teil, font=f_mark)
+
+        img.save(OG_ORDNER / f"{datei_id}.jpg", "JPEG",
+                 quality=82, optimize=True, progressive=True)
+        return f"https://ligaoutsider.de/og/{datei_id}.jpg"
+    except Exception as e:
+        log.warning(f"og:image fuer {datei_id} fehlgeschlagen: {e}")
+        return None
+
+
 # ─── HTML-Erzeugung ───────────────────────────────────────────────────────────
 
 def artikel_html(
@@ -908,6 +1000,7 @@ def artikel_html(
     datum: str,
     wappen_url: str,
     vereine: list = None,
+    og_image_url: str = None,
 ) -> str:
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
@@ -927,7 +1020,28 @@ def artikel_html(
     artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
     meta_desc = ersten_absatz[:155].replace('"', '&quot;').replace('\n', ' ')
-    og_image = f"https://ligaoutsider.de/{wappen_url.lstrip('./')}" if wappen_url and not wappen_url.startswith('http') else (wappen_url or "https://ligaoutsider.de/logos/bundesliga.png")
+    titel_attr = titel.replace('"', '&quot;')
+    # schema.org verlangt ISO 8601, sonst ignoriert Google das Datum
+    _dm = re.match(r"(\d{2})\.(\d{2})\.(\d{4})[ T](\d{2}):(\d{2})", datum or "")
+    datum_iso = (f"{_dm.group(3)}-{_dm.group(2)}-{_dm.group(1)}"
+                 f"T{_dm.group(4)}:{_dm.group(5)}:00+02:00") if _dm else datum
+    # JSON-LD-Werte muessen JSON-escaped sein, sonst zerlegen Anfuehrungszeichen den Block
+    titel_json = json.dumps(titel, ensure_ascii=False)
+    desc_json = json.dumps(ersten_absatz[:200], ensure_ascii=False)
+    if og_image_url:
+        og_image = og_image_url
+        # Masse nur angeben, wenn es wirklich die 1200x630-Karte ist
+        og_masse = ('  <meta property="og:image:width" content="1200"/>\n'
+                    '  <meta property="og:image:height" content="630"/>\n')
+        twitter_card = "summary_large_image"
+    elif wappen_url and not wappen_url.startswith('http'):
+        og_image = f"https://ligaoutsider.de/{wappen_url.lstrip('./')}"
+        og_masse = ""
+        twitter_card = "summary"
+    else:
+        og_image = wappen_url or "https://ligaoutsider.de/logos/bundesliga.png"
+        og_masse = ""
+        twitter_card = "summary"
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -938,12 +1052,17 @@ def artikel_html(
   <link rel="canonical" href="{artikel_url}"/>
   <meta name="description" content="{meta_desc}"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:title" content="{titel}"/>
+  <meta property="og:title" content="{titel_attr}"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="{artikel_url}"/>
   <meta property="og:image" content="{og_image}"/>
+{og_masse}  <meta property="og:image:alt" content="{titel_attr}"/>
   <meta property="og:site_name" content="Ligaoutsider.de"/>
   <meta property="og:locale" content="de_DE"/>
+  <meta name="twitter:card" content="{twitter_card}"/>
+  <meta name="twitter:title" content="{titel_attr}"/>
+  <meta name="twitter:description" content="{meta_desc}"/>
+  <meta name="twitter:image" content="{og_image}"/>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
@@ -960,9 +1079,9 @@ def artikel_html(
   {{
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "headline": "{titel}",
-    "datePublished": "{datum}",
-    "dateModified": "{datum}",
+    "headline": {titel_json},
+    "datePublished": "{datum_iso}",
+    "dateModified": "{datum_iso}",
     "author": {{
       "@type": "Organization",
       "name": "Ligaoutsider.de"
@@ -973,7 +1092,7 @@ def artikel_html(
       "url": "https://ligaoutsider.de"
     }},
     "url": "{artikel_url}",
-    "description": "{ersten_absatz[:200].replace('"', '&quot;')}",
+    "description": {desc_json},
     "inLanguage": "de",
     "about": {{
       "@type": "SportsOrganization",
@@ -1534,6 +1653,7 @@ def main():
         aid = k["aid"]
         _wu = k["wappen_url"]
         _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
+        _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu)
         html = artikel_html(
             datei_id    = aid,
             titel       = ergebnis["titel"],
@@ -1544,6 +1664,7 @@ def main():
             datum       = k["datum"],
             wappen_url  = _artikel_wu,
             vereine     = k["vereine"],
+            og_image_url = _og_url,
         )
         (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
         badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
