@@ -157,7 +157,7 @@
         document.getElementById('user-info').style.display = 'none';
         document.getElementById('login-btn').style.display = '';
         document.getElementById('signup-btn').style.display = '';
-        renderFeed();
+        if (typeof renderFeed === 'function') renderFeed();
       });
       netlifyIdentity.init();
     }
@@ -169,7 +169,7 @@
       document.getElementById('user-info').style.display = 'flex';
       document.getElementById('login-btn').style.display = 'none';
       document.getElementById('signup-btn').style.display = 'none';
-      renderFeed();
+      if (typeof renderFeed === 'function') renderFeed();
     }
 
     document.getElementById('login-btn').addEventListener('click', e => {
