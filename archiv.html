@@ -174,9 +174,26 @@
       });
     });
 
-    fetch('feed.json')
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(artikel => { alleArtikel = artikel; renderArchiv(); })
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+
+    // Frisch ausgeblendete Artikel liegen in Supabase, bis der naechste Build
+    // sie wirklich entfernt. Faellt der Abruf aus, wird nichts gefiltert.
+    async function versteckteIds() {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/hidden_articles?select=artikel_id`, {
+          headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
+        });
+        if (!r.ok) return new Set();
+        return new Set((await r.json()).map(x => x.artikel_id));
+      } catch { return new Set(); }
+    }
+
+    Promise.all([
+      fetch('feed.json').then(r => r.ok ? r.json() : Promise.reject()),
+      versteckteIds()
+    ])
+      .then(([artikel, versteckt]) => { alleArtikel = artikel.filter(a => !versteckt.has(a.id)); renderArchiv(); })
       .catch(() => {
         document.getElementById('archiv-list').innerHTML =
           '<li class="archiv-item"><span style="color:var(--text4);font-size:12px">Keine Artikel gefunden.</span></li>';

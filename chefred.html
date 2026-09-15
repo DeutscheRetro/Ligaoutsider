@@ -6,6 +6,7 @@
   <title>Chefred – Ligaoutsider</title>
   <link rel="icon" href="favicon.png" type="image/png"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,sans-serif;background:#0d0d0d;color:#e0e0e0;font-size:14px}
@@ -86,7 +87,8 @@
 <div id="page-login" class="login">
   <h2>⚽ Chefred</h2>
   <div id="login-err" style="display:none" class="err"></div>
-  <div class="field"><label>Passwort</label><input type="password" id="pw" placeholder="Chefred-Passwort"/></div>
+  <p style="font-size:12px;color:#888;margin-bottom:14px">Anmeldung über dein Ligaoutsider-Konto. Es braucht die Rolle <b>admin</b> oder <b>moderator</b>.</p>
+  <button class="btn btn-gold" style="margin-bottom:16px" onclick="netlifyIdentity.open('login')">Mit Konto anmelden</button>
   <div class="field"><label>GitHub Token (einmalig)</label><input type="text" id="gh-token" placeholder="ghp_..."/><p style="font-size:11px;color:#555;margin-top:4px">Wird nur in diesem Browser gespeichert</p></div>
   <div class="field"><label>Netlify Token (einmalig, für User-Stats)</label><input type="text" id="netlify-token" placeholder="nfp_..."/></div>
   <button class="btn btn-gold" onclick="login()">Einloggen</button>
@@ -182,7 +184,21 @@
 
 <script>
 const REPO     = 'DeutscheRetro/Ligaoutsider';
-const PASSWORT = 'chefred2026';
+
+// Schreibzugriffe auf die Datenbank laufen serverseitig; der anon-Key liest nur.
+async function loApi(aktion, daten = {}) {
+  const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+  if (!user) throw new Error('Nicht angemeldet');
+  const token = await user.jwt();
+  const res = await fetch('/.netlify/functions/api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ aktion, ...daten })
+  });
+  const antwort = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(antwort.fehler || `Fehler ${res.status}`);
+  return antwort;
+}
 const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -198,10 +214,15 @@ let netlifyUsers = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 function login() {
-  const pw  = document.getElementById('pw').value;
   const tok = document.getElementById('gh-token').value.trim();
   const ntok = document.getElementById('netlify-token').value.trim();
-  if (pw !== PASSWORT) { zeigeFehler('login-err', 'Falsches Passwort'); return; }
+  const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+  if (!user) { zeigeFehler('login-err', 'Bitte zuerst mit deinem Konto anmelden'); return; }
+  const rollen = (user.app_metadata && user.app_metadata.roles) || [];
+  if (!rollen.some(r => r === 'admin' || r === 'moderator')) {
+    zeigeFehler('login-err', 'Dieses Konto hat keine Redaktionsrechte');
+    return;
+  }
   if (tok)  localStorage.setItem('gh_token', tok);
   if (ntok) localStorage.setItem('netlify_token', ntok);
   ghToken      = localStorage.getItem('gh_token') || '';
@@ -412,6 +433,10 @@ async function doLoeschen(idx) {
   const a = feedDaten[idx];
   zeigeMsg('<span class="spinner"></span>Lösche…', false);
   try {
+    // Sofort ausblenden: die Seite filtert dagegen, bis der Build durch ist
+    try { await loApi('artikel_ausblenden', { artikel_id: a.id }); }
+    catch (e) { console.warn('Sofort-Ausblenden fehlgeschlagen:', e.message); }
+
     // HTML löschen (404 = schon weg, ignorieren)
     try {
       const htmlData = await ghGet(a.pfad);
@@ -645,13 +670,9 @@ async function banne(email, name) {
   msgEl.className = 'err'; msgEl.innerHTML = '<span class="spinner"></span>Banne…'; msgEl.style.display = 'block';
 
   try {
-    // Alle Posts + Threads löschen
-    const [{ error: e1 }, { error: e2 }] = await Promise.all([
-      sb.from('forum_posts').delete().eq('autor_email', email),
-      sb.from('forum_threads').delete().eq('autor_email', email)
-    ]);
-    if (e1) throw new Error('Posts: ' + e1.message);
-    if (e2) throw new Error('Threads: ' + e2.message);
+    // Alle Posts + Threads löschen (serverseitig, nur mit Admin-Rolle)
+    await loApi('user_purge', { email });
+    await loApi('ban', { email });
 
     // banned.json aktualisieren
     const data = await ghGet('banned.json');

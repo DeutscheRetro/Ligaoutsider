@@ -567,11 +567,28 @@
       }
     });
 
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+
+    // Frisch ausgeblendete Artikel liegen in Supabase, bis der naechste Build
+    // sie wirklich entfernt. Faellt der Abruf aus, wird nichts gefiltert.
+    async function versteckteIds() {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/hidden_articles?select=artikel_id`, {
+          headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
+        });
+        if (!r.ok) return new Set();
+        return new Set((await r.json()).map(x => x.artikel_id));
+      } catch { return new Set(); }
+    }
+
     // Feed laden
-    fetch('feed.json')
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(artikel => {
-        alleArtikel = artikel;
+    Promise.all([
+      fetch('feed.json').then(r => r.ok ? r.json() : Promise.reject()),
+      versteckteIds()
+    ])
+      .then(([artikel, versteckt]) => {
+        alleArtikel = artikel.filter(a => !versteckt.has(a.id));
         renderFeed();
       })
       .catch(() => {
@@ -601,21 +618,18 @@
     if (!url || !url.startsWith('http')) { status.style.color='#e53935'; status.textContent='Bitte gültige URL eingeben.'; return; }
     status.style.color='var(--text3)'; status.textContent='Wird eingereicht…';
     try {
-      const res = await fetch('https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls', {
+      const token = await _nu.jwt();
+      const res = await fetch('/.netlify/functions/api', {
         method: 'POST',
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns',
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ url })
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ aktion: 'news_einsenden', url })
       });
       if (res.ok) {
         status.style.color='#2e7d32'; status.textContent='✅ Vielen Dank! Deine Einsendung wird in Kürze geprüft.';
         document.getElementById('news-url-input').value='';
       } else {
-        status.style.color='#e53935'; status.textContent='Fehler beim Einsenden. Bitte später nochmal versuchen.';
+        const a = await res.json().catch(() => ({}));
+        status.style.color='#e53935'; status.textContent = a.fehler || 'Fehler beim Einsenden. Bitte später nochmal versuchen.';
       }
     } catch(e) {
       status.style.color='#e53935'; status.textContent='Netzwerkfehler. Bitte später nochmal versuchen.';

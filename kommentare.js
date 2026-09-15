@@ -6,7 +6,26 @@
   let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   let aktuellerUser = null;
   let isAdmin = false;
+  let darfLoeschen = false;
   let ignorierteListe = JSON.parse(localStorage.getItem('lo_ignore') || '[]');
+
+  // ─── Schreibzugriffe ─────────────────────────────────────────────────────────
+  // Der anon-Key darf nur noch lesen. Jede Aenderung geht an die Netlify
+  // Function, die das Identity-Token serverseitig prueft.
+  async function api(aktion, daten = {}) {
+    const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+    if (!user) throw new Error('Nicht angemeldet');
+    const token = await user.jwt();
+    const res = await fetch('/.netlify/functions/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ aktion, ...daten })
+    });
+    const antwort = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(antwort.fehler || `Fehler ${res.status}`);
+    return antwort;
+  }
+  window._loApi = api;
 
   // ─── Theme ───────────────────────────────────────────────────────────────────
   function applyTheme(t) {
@@ -28,7 +47,10 @@
 
   async function setUser(user) {
     aktuellerUser = user;
-    isAdmin = user.email === ADMIN_EMAIL;
+    // Rollen kommen aus dem Identity-Token, nicht aus einem E-Mail-Vergleich
+    const rollen = (user.app_metadata && user.app_metadata.roles) || [];
+    isAdmin = rollen.includes('admin');
+    darfLoeschen = isAdmin || rollen.includes('moderator');
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
     if (el) {
@@ -46,7 +68,7 @@
   }
 
   function clearUser() {
-    aktuellerUser = null; isAdmin = false;
+    aktuellerUser = null; isAdmin = false; darfLoeschen = false;
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');
@@ -69,10 +91,7 @@
   async function pruefeBan(email) {
     const { data } = await sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle();
     if (!data) return null;
-    if (data.gebannt_bis && new Date(data.gebannt_bis) < new Date()) {
-      await sb.from('user_bans').delete().eq('email', email);
-      return null;
-    }
+    if (data.gebannt_bis && new Date(data.gebannt_bis) < new Date()) return null;
     return data;
   }
 
@@ -88,15 +107,8 @@
   // ─── Votes ───────────────────────────────────────────────────────────────────
   async function vote(kommentarId, wert) {
     if (!aktuellerUser) return;
-    const email = aktuellerUser.email;
-    const { data: existing } = await sb.from('kommentar_votes')
-      .select('id, vote').eq('kommentar_id', kommentarId).eq('voter_email', email).maybeSingle();
-    if (existing) {
-      if (existing.vote === wert) await sb.from('kommentar_votes').delete().eq('id', existing.id);
-      else await sb.from('kommentar_votes').update({ vote: wert }).eq('id', existing.id);
-    } else {
-      await sb.from('kommentar_votes').insert({ kommentar_id: kommentarId, voter_email: email, vote: wert });
-    }
+    try { await api('vote', { kommentar_id: kommentarId, wert }); }
+    catch (e) { alert(e.message); return; }
     ladeKommentare();
   }
   window._vote = vote;
@@ -146,16 +158,15 @@
     const tage = parseInt(document.getElementById('ban-dauer').value);
     const grund = document.getElementById('ban-grund').value.trim();
     const bis = tage === 0 ? null : new Date(Date.now() + tage * 86400000).toISOString();
-    await sb.from('user_bans').upsert({
-      email, grund: grund || null, gebannt_bis: bis, gebannt_von: aktuellerUser.email
-    }, { onConflict: 'email' });
+    try { await api('ban', { email, grund: grund || null, gebannt_bis: bis }); }
+    catch (e) { alert(e.message); return; }
     document.getElementById('ban-modal')?.remove();
     document.getElementById('profil-modal')?.remove();
     ladeKommentare();
   };
 
   window._entbanneUser = async function(email) {
-    await sb.from('user_bans').delete().eq('email', email);
+    try { await api('unban', { email }); } catch (e) { alert(e.message); return; }
     document.getElementById('profil-modal')?.remove();
     ladeKommentare();
   };
@@ -216,7 +227,7 @@
               style="padding:8px;background:${istIgn ? 'var(--bg4)' : 'var(--bg4)'};color:${istIgn ? 'var(--accent)' : 'var(--text)'};border:1px solid var(--border2);border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">
               ${istIgn ? '✓ Nicht mehr ignorieren' : '🙈 Ignorieren'}
             </button>
-            ${isAdmin ? `
+            ${darfLoeschen ? `
               ${istGebannt
                 ? `<button onclick="window._entbanneUser('${email}')" style="padding:8px;background:var(--bg4);color:#4caf50;border:1px solid #4caf50;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">✓ Entbannen</button>`
                 : `<button onclick="window._zeigeBanModal('${email}','${name}')" style="padding:8px;background:#c62828;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">🚫 Bannen</button>`
@@ -269,18 +280,16 @@
     if (!ta) return;
     const sauber = bereinigen(ta.value).slice(0, 1000);
     if (!sauber) return;
-    await sb.from('kommentare').update({ inhalt: sauber, geaendert_am: new Date().toISOString() }).eq('id', id);
+    try { await api('kommentar_edit', { id, inhalt: sauber }); }
+    catch (e) { alert(e.message); return; }
     ladeKommentare();
   };
 
   // ─── Löschen ─────────────────────────────────────────────────────────────────
   window._loescheKommentar = async function(id, hardDelete) {
     if (!confirm('Kommentar wirklich löschen?')) return;
-    if (hardDelete) {
-      await sb.from('kommentare').delete().eq('id', id);
-    } else {
-      await sb.from('kommentare').update({ geloescht: true, inhalt: '' }).eq('id', id);
-    }
+    try { await api('kommentar_loeschen', { id, hart: !!hardDelete }); }
+    catch (e) { alert(e.message); return; }
     ladeKommentare();
   };
 
@@ -348,7 +357,7 @@
           <button data-action="vote" data-id="${k.id}" data-wert="1"  style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${upStyle}">▲ ${v.up}</button>
           <button data-action="vote" data-id="${k.id}" data-wert="-1" style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${downStyle}">▼ ${v.down}</button>
           ${istEigen ? `<button data-action="edit" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">✏ Bearbeiten</button>` : ''}
-          ${istEigen || isAdmin ? `<button data-action="loeschen" data-id="${k.id}" data-hard="${isAdmin && !istEigen}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">🗑 Löschen</button>` : ''}
+          ${istEigen || darfLoeschen ? `<button data-action="loeschen" data-id="${k.id}" data-hard="${darfLoeschen && !istEigen}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">🗑 Löschen</button>` : ''}
           <button data-action="profil" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">👤</button>
         ` : `<span style="font-size:13px;color:var(--text4)">▲ ${v.up}</span><span style="font-size:13px;color:var(--text4)">▼ ${v.down}</span>`}
       </div>`;
@@ -407,9 +416,9 @@
     if (!sauberName || !sauberInhalt) { status.textContent = 'Kein HTML oder Links erlaubt.'; return; }
 
     status.textContent = 'Wird gesendet…';
-    const { error } = await sb.from('kommentare').insert({
-      artikel_id: ARTIKEL_ID, name: sauberName, email: aktuellerUser.email, inhalt: sauberInhalt
-    });
+    let error = null;
+    try { await api('kommentar_neu', { artikel_id: ARTIKEL_ID, inhalt: sauberInhalt }); }
+    catch (e) { error = e; }
 
     if (error) {
       status.textContent = 'Fehler: ' + error.message;

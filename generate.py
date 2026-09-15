@@ -84,39 +84,41 @@ RSS_FEEDS = [
     "https://news.google.com/rss/search?q=SV+Elversberg+Transfer+News&hl=de&gl=DE&ceid=DE:de",
     "https://news.google.com/rss/search?q=SC+Paderborn+Transfer+News&hl=de&gl=DE&ceid=DE:de",
     "https://www.transfermarkt.de/rss/news",
-    "https://www.transfermarkt.de/bundesliga/news/wettbewerb/L1?rss=1",
-    "https://rss.dw.com/xml/sport-de",
     "https://www.waz.de/sport/fussball/rss",
     "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
 
     # Englische Quellen
     "https://bulinews.com/rss.xml",
+    "https://www.abendblatt.de/sport/rss",
+    "https://www.merkur.de/sport/fc-bayern/rssfeed.rdf",
     "https://www.eyefootball.com/rss_news_main.xml",
     "https://www.ligaportal.at/international/deutsche-bundesliga?format=feed&type=rss",
 
     # Reddit (100 Einträge)
-    "https://www.reddit.com/r/bundesliga/new.rss?limit=100",
     "https://www.reddit.com/r/soccer/new.rss?limit=100",
 
     # kicker Team-Feeds – 18 Erstligisten 2026/27
-    "https://rss.kicker.de/news/fc-bayern-muenchen",
-    "https://rss.kicker.de/news/borussia-dortmund",
-    "https://rss.kicker.de/news/rb-leipzig",
-    "https://rss.kicker.de/news/bayer-leverkusen",
-    "https://rss.kicker.de/news/vfb-stuttgart",
-    "https://rss.kicker.de/news/eintracht-frankfurt",
-    "https://rss.kicker.de/news/borussia-moenchengladbach",
-    "https://rss.kicker.de/news/sc-freiburg",
-    "https://rss.kicker.de/news/tsg-hoffenheim",
-    "https://rss.kicker.de/news/fsv-mainz-05",
-    "https://rss.kicker.de/news/fc-augsburg",
-    "https://rss.kicker.de/news/1-fc-union-berlin",
-    "https://rss.kicker.de/news/sv-werder-bremen",
-    "https://rss.kicker.de/news/hamburger-sv",
-    "https://rss.kicker.de/news/1-fc-koeln",
-    "https://rss.kicker.de/news/fc-schalke-04",
-    "https://rss.kicker.de/news/sv-elversberg",
-    "https://rss.kicker.de/news/sc-paderborn-07",
+    # Host rss.kicker.de existiert nicht mehr; newsfeed.kicker.de/team/<slug>
+    # ist der aktuelle Pfad. Diese Feeds umgehen den Keyword-Vorfilter.
+    "https://newsfeed.kicker.de/team/fc-bayern-muenchen",
+    "https://newsfeed.kicker.de/team/borussia-dortmund",
+    "https://newsfeed.kicker.de/team/rb-leipzig",
+    "https://newsfeed.kicker.de/team/bayer-04-leverkusen",
+    "https://newsfeed.kicker.de/team/vfb-stuttgart",
+    "https://newsfeed.kicker.de/team/eintracht-frankfurt",
+    "https://newsfeed.kicker.de/team/bor-moenchengladbach",
+    "https://newsfeed.kicker.de/team/sc-freiburg",
+    "https://newsfeed.kicker.de/team/tsg-hoffenheim",
+    "https://newsfeed.kicker.de/team/1-fsv-mainz-05",
+    "https://newsfeed.kicker.de/team/fc-augsburg",
+    "https://newsfeed.kicker.de/team/1-fc-union-berlin",
+    "https://newsfeed.kicker.de/team/werder-bremen",
+    "https://newsfeed.kicker.de/team/hamburger-sv",
+    "https://newsfeed.kicker.de/team/1-fc-koeln",
+    "https://newsfeed.kicker.de/team/fc-schalke-04",
+    "https://newsfeed.kicker.de/team/sv-elversberg",
+    "https://newsfeed.kicker.de/team/sc-paderborn-07",
+    "https://newsfeed.kicker.de/news/champions-league",
 ]
 
 # Artikel bis zu X Tage alt akzeptieren
@@ -808,6 +810,35 @@ def _lade_bl_spieler() -> list[str]:
     return _BL_SPIELER_CACHE
 
 
+# Klubs ausserhalb der 1. Bundesliga. Mehrwortig, wo der Stadtname sonst mit
+# einem Erstligisten kollidiert (Koeln, Leipzig, Muenchen).
+NICHT_BL_KLUBS = (
+    "dynamo dresden", "hannover 96", "rot-weiss essen", "rot-weiß essen",
+    "lok leipzig", "chemie leipzig", "karlsruher sc", "fortuna düsseldorf",
+    "hertha bsc", "1. fc nürnberg", "greuther fürth", "sv darmstadt",
+    "holstein kiel", "vfl bochum", "arminia bielefeld", "preußen münster",
+    "ssv ulm", "eintracht braunschweig", "hansa rostock", "msv duisburg",
+    "sv sandhausen", "jahn regensburg", "sc verl", "waldhof mannheim",
+    "energie cottbus", "viktoria köln", "tsv 1860", "1860 münchen",
+    "1. fc saarbrücken", "erzgebirge aue", "vfl osnabrück", "wehen wiesbaden",
+    "1. fc magdeburg", "kaiserslautern", "alemannia aachen", "stuttgarter kickers",
+    "fc ingolstadt", "vfb oldenburg",
+)
+
+
+def nur_fremdklub(titel: str) -> bool:
+    """Titel dreht sich um einen Nicht-Erstligisten und nennt keinen BL-Klub.
+
+    Bewusst eng gefasst: sobald auch ein Bundesligist im Titel steht, bleibt
+    der Artikel drin. "Hansa Rostock verliert Test gegen Gladbach" ist echte
+    Gladbach-News, auch wenn Rostock vorne steht.
+    """
+    t = titel.lower()
+    if not any(k in t for k in NICHT_BL_KLUBS):
+        return False
+    return not any(_count_key(k, t) for k in VEREIN_WAPPEN)
+
+
 def keyword_pre_filter(titel: str, beschreibung: str) -> bool:
     """Stage 3: Billiger Keyword-Check — kein Haiku-Call.
     Lässt durch wenn BL-Klub ODER BL-Spieler im Titel/Beschreibung vorkommt."""
@@ -846,26 +877,73 @@ def ist_relevant(titel: str, volltext: str) -> bool:
     return "JA" in antwort.content[0].text.upper()
 
 
+_GN_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+          "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
+
+
 def _decode_google_news_url(google_url: str) -> str | None:
-    """Dekodiert Google News Redirect-URL zu echter Artikel-URL via Base64-Protobuf-Trick."""
+    """Loest einen Google-News-Link zur echten Artikel-URL auf.
+
+    Frueher steckte die Ziel-URL base64-kodiert im Pfad. Seit Google auf
+    undurchsichtige Artikel-IDs (AU_yqL...) umgestellt hat, greift der alte
+    Weg nicht mehr - er wird nur noch fuer Altbestaende versucht. Danach
+    fragen wir denselben Endpunkt ab, den die Google-News-Oberflaeche nutzt.
+
+    Schlaegt alles fehl, gibt die Funktion None zurueck und der Artikel wird
+    uebersprungen; die Pipeline darf daran nie haengen bleiben.
+    """
     import base64
-    m = re.search(r'articles/(CBMi[A-Za-z0-9_=-]+)', google_url)
+    import requests as _req
+
+    m = re.search(r'articles/([A-Za-z0-9_=-]+)', google_url)
     if not m:
         return None
+    artikel_id = m.group(1)
+
+    # Altes Format: Ziel-URL steckt direkt im base64-Teil
+    if artikel_id.startswith("CBMi"):
+        try:
+            b64 = artikel_id[4:]
+            b64 += "=" * (-len(b64) % 4)
+            roh = base64.urlsafe_b64decode(b64).decode("utf-8", errors="ignore")
+            treffer = re.search(r'https?://[^\x00-\x1f\s]+', roh)
+            if treffer:
+                ziel = treffer.group(0).rstrip("\x00").rstrip("=")
+                if "google.com" not in ziel:
+                    return ziel
+        except Exception:
+            pass
+
+    # Aktuelles Format: Signatur von der Artikelseite holen, dann aufloesen
     try:
-        encoded = m.group(1)
-        # Protobuf-Prefix überspringen: "CBMi" = 4 Bytes wire-format header
-        # Der Rest ist base64url-kodierte URL
-        b64 = encoded[4:]
-        # Padding ergänzen
-        b64 += '=' * (4 - len(b64) % 4)
-        decoded = base64.urlsafe_b64decode(b64).decode('utf-8', errors='ignore')
-        url_match = re.search(r'https?://[^\x00-\x1f\s]+', decoded)
-        if url_match:
-            return url_match.group(0).rstrip('\x00').rstrip('=')
-    except Exception:
-        pass
-    return None
+        s = _req.Session()
+        s.headers.update({"User-Agent": _GN_UA})
+        s.cookies.set("CONSENT", "YES+cb", domain=".google.com")
+        seite = s.get(f"https://news.google.com/rss/articles/{artikel_id}", timeout=10)
+        sig = re.search(r'data-n-a-sg="([^"]+)"', seite.text)
+        ts = re.search(r'data-n-a-ts="([^"]+)"', seite.text)
+        if not (sig and ts):
+            return None
+
+        nutzlast = json.dumps([
+            "Fbv4je",
+            json.dumps(["garturlreq", [["de", "DE", ["FINANCE_TOP_INDICES", "WEB_TEST_1_0_0"],
+                                        None, None, 1, 1, "DE:de", None, 180, None, None, None,
+                                        None, None, 0, None, None, [1608992194]],
+                                       "de", "DE", 1, [2, 4, 8], 1, 1, None, 0, 0, None, 0],
+                        artikel_id, int(ts.group(1)), sig.group(1)]),
+        ])
+        antwort = s.post(
+            "https://news.google.com/_/DotsSplashUi/data/batchexecute",
+            data={"f.req": json.dumps([[nutzlast and json.loads(nutzlast)]])},
+            headers={"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+            timeout=10,
+        )
+        ziel = re.search(r'"(https?://(?:(?!news\.google\.com)[^"\\])+)"', antwort.text)
+        return ziel.group(1) if ziel else None
+    except Exception as e:
+        log.debug(f"Google-News-Aufloesung fehlgeschlagen: {e}")
+        return None
 
 
 def fetch_fulltext(url: str) -> tuple[str | None, str]:
@@ -1534,6 +1612,14 @@ def main():
             if any(kw in text_check for kw in _SKIP_KEYWORDS):
                 log.info(f"S2 blacklist: {titel[:60]}")
                 _log_skip(aid, titel, "stage2", "blacklist_keyword")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s2_pre_filter"] += 1
+                continue
+
+            # Reine Unterhaus-Meldung: spart Volltext-Abruf und Haiku-Call
+            if nur_fremdklub(titel):
+                log.info(f"S2 kein BL-Klub im Titel: {titel[:60]}")
+                _log_skip(aid, titel, "stage2", "nur_fremdklub")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 stats["s2_pre_filter"] += 1
                 continue

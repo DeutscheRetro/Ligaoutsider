@@ -189,8 +189,26 @@
   <script>
     const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
-    const ADMIN_EMAIL   = 'twitchpre@gmail.com';
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // Der anon-Key darf nur lesen. Schreibzugriffe laufen ueber die Netlify
+    // Function, die das Identity-Token serverseitig prueft.
+    async function loApi(aktion, daten = {}) {
+      const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+      if (!user) throw new Error('Nicht angemeldet');
+      const token = await user.jwt();
+      const res = await fetch('/.netlify/functions/api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ aktion, ...daten })
+      });
+      const antwort = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(antwort.fehler || `Fehler ${res.status}`);
+      return antwort;
+    }
+
+    const rollenVon = u => (u && u.app_metadata && u.app_metadata.roles) || [];
+    const darfLoeschen = u => rollenVon(u).some(r => r === 'admin' || r === 'moderator');
 
     let aktuellerUser = null;
     let aktiveKat     = 'Allgemein';
@@ -308,7 +326,7 @@
         .eq('thread_id', thread.id)
         .order('erstellt_am', { ascending: true });
 
-      const isAdmin = aktuellerUser?.email === ADMIN_EMAIL;
+      const isAdmin = darfLoeschen(aktuellerUser);
       document.getElementById('post-liste').innerHTML = (!error && data?.length)
         ? data.map(p => `
           <div class="post-item">
@@ -355,14 +373,11 @@
       const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
       const email = aktuellerUser.email;
 
-      const { data: thread, error: e1 } = await sb.from('forum_threads').insert({
-        kategorie: aktiveKat, titel, autor_name: name, autor_email: email
-      }).select().single();
-      if (e1) { status.textContent = 'Fehler: ' + e1.message; return; }
-
-      await sb.from('forum_posts').insert({
-        thread_id: thread.id, inhalt, autor_name: name, autor_email: email
-      });
+      let thread;
+      try {
+        const r = await loApi('forum_thread_neu', { kategorie: aktiveKat, titel, inhalt });
+        thread = { id: r.thread_id, titel, antworten: 0 };
+      } catch (e) { status.textContent = 'Fehler: ' + e.message; return; }
 
       schliesseModal();
       aktiverThread = thread;
@@ -378,24 +393,19 @@
       const name  = aktuellerUser.user_metadata?.full_name || aktuellerUser.email;
       const email = aktuellerUser.email;
 
-      const { error } = await sb.from('forum_posts').insert({
-        thread_id: aktiverThread.id, inhalt, autor_name: name, autor_email: email
-      });
-      if (error) { status.textContent = 'Fehler: ' + error.message; return; }
+      let r;
+      try { r = await loApi('forum_post_neu', { thread_id: aktiverThread.id, inhalt }); }
+      catch (e) { status.textContent = 'Fehler: ' + e.message; return; }
 
-      await sb.from('forum_threads').update({
-        letzter_beitrag: new Date().toISOString(),
-        antworten: (aktiverThread.antworten || 0) + 1
-      }).eq('id', aktiverThread.id);
-
-      aktiverThread.antworten = (aktiverThread.antworten || 0) + 1;
+      aktiverThread.antworten = r.antworten ?? (aktiverThread.antworten || 0) + 1;
       status.textContent = '✓ Gesendet!';
       setTimeout(() => renderMain(), 500);
     }
 
     async function loeschePost(id) {
       if (!confirm('Beitrag löschen?')) return;
-      await sb.from('forum_posts').delete().eq('id', id);
+      try { await loApi('forum_post_loeschen', { id }); }
+      catch (e) { alert(e.message); return; }
       renderMain();
     }
 
