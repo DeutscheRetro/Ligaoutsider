@@ -204,7 +204,9 @@ VEREIN_WAPPEN = {
     # Union Berlin
     "union berlin":     "logos/union.png",
     "1. fc union":      "logos/union.png",
+    "union":            "logos/union.png",
     "an der alten försterei": "logos/union.png",
+    "köpenick":         "logos/union.png",
     # Mainz
     "fsv mainz":        "logos/mainz.png",
     "mainz":            "logos/mainz.png",
@@ -238,6 +240,7 @@ VEREIN_WAPPEN = {
     "paderborn":        "logos/paderborn.png",
     # Elversberg
     "sv elversberg":    "logos/elversberg.png",
+    "sve":              "logos/elversberg.png",
     "elversberg":       "logos/elversberg.png",
 }
 
@@ -285,9 +288,46 @@ VEREIN_FILTER = {
     "sv elversberg": "Elversberg", "elversberg": "Elversberg",
 }
 
+# Kanonische Klubnamen, die das Modell in "hauptklub" zurueckgeben darf,
+# plus das zugehoerige Wappen. Reihenfolge = Reihenfolge im Prompt.
+KLUB_LOGO = {
+    "Bayern":      "logos/bayern.png",
+    "Dortmund":    "logos/dortmund.png",
+    "Leipzig":     "logos/leipzig.png",
+    "Leverkusen":  "logos/leverkusen.png",
+    "Frankfurt":   "logos/frankfurt.png",
+    "Stuttgart":   "logos/stuttgart.png",
+    "Gladbach":    "logos/gladbach.png",
+    "Freiburg":    "logos/freiburg.png",
+    "Union":       "logos/union.png",
+    "Mainz":       "logos/mainz.png",
+    "Augsburg":    "logos/augsburg.png",
+    "Werder":      "logos/werder.png",
+    "Hoffenheim":  "logos/hoffenheim.png",
+    "HSV":         "logos/hsv.png",
+    "Köln":        "logos/koeln.png",
+    "Schalke":     "logos/schalke.png",
+    "Paderborn":   "logos/paderborn.png",
+    "Elversberg":  "logos/elversberg.png",
+}
+
+# "HSV" liest sich im Prompt natuerlicher, der Filter-Chip auf der Seite
+# heisst aber "Hamburger" – wie vereine_im_text() den Klub benennt.
+KLUB_FILTERNAME = {"HSV": "Hamburger"}
+
+
 def _count_key(key: str, text: str) -> int:
-    """Zählt Vorkommen von key in text mit Wortgrenzen (verhindert Substring-false-positives)."""
-    return len(re.findall(r'(?<!\w)' + re.escape(key) + r'(?!\w)', text))
+    """Zählt Vorkommen von key in text am Wortanfang.
+
+    Rechts bewusst offen: deutsche Beugungen wie 'Frankfurter', 'Kölner',
+    'Schalker' oder 'Bayerns' sind echte Treffer. Die Grenze links verhindert
+    Substring-Unfug wie 'anspruchsvollem' → hsv oder 'ausgezeichnet' → sge.
+
+    Kurze Kürzel (BVB, SGE, SVE) sind Akronyme statt Wortstämme und brauchen
+    auch rechts eine Grenze, sonst schlägt 'SVE' auf 'Sven' und 'Svensson' an.
+    """
+    rechts = r'(?!\w)' if len(key) <= 3 else ''
+    return len(re.findall(r'(?<!\w)' + re.escape(key) + rechts, text))
 
 
 def vereine_im_text(titel: str, text: str) -> list[str]:
@@ -350,33 +390,75 @@ def schon_verarbeitet(url: str) -> bool:
 def verein_wappen_url(text: str, title: str = "") -> str:
     """Findet das relevanteste Vereinslogo per Scoring aggregiert pro Logo-URL."""
     _context_kw = ("wechselt", "transfer", "verletzung", "verpflichtet", "spielt",
-                   "trainer", "vertrag", "ablöse", "gegen", "siegt", "verliert")
+                   "trainer", "vertrag", "ablöse", "siegt", "verliert")
+    # "gegen X" / "bei X" markiert den Gegner, nicht das Thema des Artikels
+    _gegner_kw = ("gegen", "bei", "auswärts bei", "zu gast bei", "empfängt")
     full_lower = (title + " " + text).lower()
     title_lower = title.lower()
+    # Gleichnamige Klubs ausserhalb der Liga ausblenden, bevor gezaehlt wird
+    for fremd in ("philadelphia union", "union saint-gilloise", "union berlin ii"):
+        full_lower = full_lower.replace(fremd, " ")
+        title_lower = title_lower.replace(fremd, " ")
     text_len = len(full_lower) or 1
-    logo_scores: dict[str, int] = {}
+
+    # Erst pro Logo aggregieren. Mehrere Keys zeigen auf denselben Klub
+    # ("stuttgart", "vfb stuttgart"); ohne Aggregation kassiert der Klub
+    # jeden Bonus mehrfach und ueberholt den eigentlich gemeinten.
+    agg: dict[str, dict] = {}
     for key, logo_url in VEREIN_WAPPEN.items():
-        count = full_lower.count(key)
+        count = _count_key(key, full_lower)
         if count == 0:
             continue
-        score = count * 10
-        if key in title_lower:
-            score += 100  # Titel stark bevorzugen
-        pos = full_lower.find(key)
-        if pos != -1:
-            if pos < text_len * 0.25:
-                score += 15
-            elif pos < text_len * 0.5:
-                score += 8
-        # Kontext-Bonus: Club nahe an Kontext-Keywords
-        for kw in _context_kw:
-            if f"{key} {kw}" in full_lower or f"{kw} {key}" in full_lower:
-                score += 20
-                break
-        logo_scores[logo_url] = logo_scores.get(logo_url, 0) + score
-    if not logo_scores:
+        m_full = re.search(r'(?<!\w)' + re.escape(key), full_lower)
+        m_titel = re.search(r'(?<!\w)' + re.escape(key), title_lower)
+        a = agg.setdefault(logo_url, {"count": 0, "pos": text_len, "titel_pos": None,
+                                      "kontext": False, "gegner": False})
+        # max statt sum: der kuerzere Key zaehlt die Treffer des laengeren mit
+        a["count"] = max(a["count"], count)
+        if m_full:
+            a["pos"] = min(a["pos"], m_full.start())
+        if m_titel:
+            a["titel_pos"] = (m_titel.start() if a["titel_pos"] is None
+                              else min(a["titel_pos"], m_titel.start()))
+        if any(f"{key} {kw}" in full_lower or f"{kw} {key}" in full_lower
+               for kw in _context_kw):
+            a["kontext"] = True
+        if any(f"{kw} {key}" in title_lower for kw in _gegner_kw):
+            a["gegner"] = True
+
+    if not agg:
         return BL_LOGO
-    return max(logo_scores, key=logo_scores.get)  # type: ignore[arg-type]
+
+    # Wer im Titel zuerst steht, ist fast immer das Thema – Bonus nur einmal
+    im_titel = [(v["titel_pos"], k) for k, v in agg.items() if v["titel_pos"] is not None]
+    erster_im_titel = min(im_titel)[1] if im_titel else None
+
+    logo_scores: dict[str, int] = {}
+    for logo_url, a in agg.items():
+        score = a["count"] * 10
+        if a["titel_pos"] is not None:
+            score += 100
+        if logo_url == erster_im_titel:
+            score += 45
+        if a["pos"] < text_len * 0.25:
+            score += 15
+        elif a["pos"] < text_len * 0.5:
+            score += 8
+        if a["kontext"]:
+            score += 20
+        if a["gegner"]:
+            score -= 60
+        logo_scores[logo_url] = score
+
+    bestes = max(logo_scores, key=logo_scores.get)  # type: ignore[arg-type]
+    # Ligaweite Artikel (Spielplan, Testspiel-Uebersichten) nennen viele Klubs,
+    # keinen im Titel und haben keinen klaren Schwerpunkt – da ist das neutrale
+    # Bundesliga-Logo ehrlicher als ein willkuerlich gewaehltes Wappen.
+    if not im_titel and len(agg) >= 5:
+        rest = sorted((s for k, s in logo_scores.items() if k != bestes), reverse=True)
+        if rest and logo_scores[bestes] < rest[0] * 1.5:
+            return BL_LOGO
+    return bestes
 
 
 def badge_fuer_kategorie(kategorie: str) -> tuple:
@@ -730,10 +812,10 @@ def keyword_pre_filter(titel: str, beschreibung: str) -> bool:
     """Stage 3: Billiger Keyword-Check — kein Haiku-Call.
     Lässt durch wenn BL-Klub ODER BL-Spieler im Titel/Beschreibung vorkommt."""
     combined = (titel + " " + beschreibung).lower()
-    if any(k.lower() in combined for k in BL1_KLUBS):
+    if any(_count_key(k.lower(), combined) for k in BL1_KLUBS):
         return True
     spieler = _lade_bl_spieler()
-    return any(s.lower() in combined for s in spieler if len(s) > 4)
+    return any(_count_key(s.lower(), combined) for s in spieler if len(s) > 4)
 
 
 def ist_relevant(titel: str, volltext: str) -> bool:
@@ -754,6 +836,7 @@ def ist_relevant(titel: str, volltext: str) -> bool:
                 f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
                 f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n"
+                f"- Es KEIN Ranking, keine Liste und keine Statistik-Übersicht ist, in der einer dieser Klubs lediglich als ein Eintrag unter vielen auftaucht (z. B. Markenwert-Rankings, Follower-Zahlen, Europa-Tabellen). Geht es zentral um einen Klub außerhalb der Liste: NEIN.\n"
                 f"- Wenn ein Spieler eines dieser Klubs im Ausland spielt (Leihe, Auslandsklub): NUR JA wenn Transfer zurück, Vertragsende, oder direkter Bezug zu diesen Klubs. Ein Tor in der Ligue 1/Premier League/Serie A ist KEIN Grund für JA.\n\n"
                 f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
                 f"Antworte nur mit JA oder NEIN."
@@ -857,6 +940,7 @@ def quellartikel_laden(url: str) -> str:
 
 def artikel_generieren(titel: str, volltext: str, quelle_name: str, quelle_url: str) -> dict:
     """Lässt Sonnet Artikel schreiben. Bekommt validierten Volltext (Stage 5 Survivor)."""
+    klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret.
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
@@ -877,12 +961,23 @@ Erstelle:
 1. Präzisen Titel im Kicker-Stil (max. 80 Zeichen)
 2. Zwei bis vier Absätze – so viele wie Quellinfos rechtfertigen, nicht mehr
 3. Kategorie: transfer | verletzung | aufstellung | interview | analyse | news
+4. Hauptklub: Der EINE Klub, um den es im Artikel zentral geht.
+   Erlaubt ist ausschließlich einer dieser Werte:
+   {klub_liste}
+   Regeln dafür:
+   - Der Klub, dessen Perspektive der Artikel einnimmt – nicht der Gegner.
+     "Schalke gewinnt bei Union" → Schalke. "Bayern verpflichtet Brown von Frankfurt" → Bayern.
+   - Wird ein Klub nur als Gegner, in einer Rangliste, Tabelle oder Aufzählung
+     erwähnt, ist er NICHT der Hauptklub.
+   - Geht es zentral um einen Klub außerhalb dieser Liste (z. B. Real Madrid,
+     Nationalmannschaft, 2. Liga) oder um keinen Klub: "keiner".
 
 Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
 {{
   "titel": "...",
   "text": "Absatz 1.\\n\\nAbsatz 2.\\n\\nAbsatz 3.",
-  "kategorie": "..."
+  "kategorie": "...",
+  "hauptklub": "..."
 }}"""
 
     antwort = client.messages.create(
@@ -1301,20 +1396,6 @@ def main():
 
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
-    # Sky DE direkt scrapen → als synthetisches RSS in den Feed-Loop einreihen
-    _sky_items = sky_de_items()
-    if _sky_items:
-        _sky_xml = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Sky Sport DE</title>' + "".join(
-            f'<item><title>{it["title"].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")}</title>'
-            f'<link>{it["link"]}</link></item>'
-            for it in _sky_items
-        ) + "</channel></rss>"
-        _SKY_SENTINEL = "__sky_de__"
-        _sky_feed_cache = {_SKY_SENTINEL: feedparser.parse(_sky_xml)}
-    else:
-        _SKY_SENTINEL = None
-        _sky_feed_cache = {}
-
     # Eingereichte URLs aus Supabase laden
     _submitted_urls = []
     try:
@@ -1347,7 +1428,7 @@ def main():
     except Exception as _e2:
         log.warning(f"Supabase submitted_urls Fehler: {_e2}")
 
-    _all_feeds = RSS_FEEDS + ([_SKY_SENTINEL] if _SKY_SENTINEL else []) + _submitted_urls
+    _all_feeds = RSS_FEEDS + _submitted_urls
 
     for feed_url in _all_feeds:
         if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
@@ -1355,7 +1436,7 @@ def main():
 
         log.info(f"Feed: {feed_url}")
         try:
-            feed = _sky_feed_cache[feed_url] if feed_url in _sky_feed_cache else feedparser.parse(feed_url)
+            feed = feedparser.parse(feed_url)
         except Exception as e:
             log.error(f"Feed-Parse-Fehler: {e}")
             continue
@@ -1560,9 +1641,23 @@ def main():
                 log.warning(f"S7 generation error: {e}")
                 continue
 
+            # Sonnet hat den Volltext gelesen und nennt den Hauptklub. Sagt es
+            # "keiner", geht es zentral um einen Klub ausserhalb der Liga.
+            hauptklub = str(ergebnis.get("hauptklub", "")).strip()
+            if hauptklub.lower() in ("keiner", "keine", "none", ""):
+                _log_skip(aid, titel, "S7.5", "kein_bl_hauptklub")
+                stats["s7_5_kein_hauptklub"] = stats.get("s7_5_kein_hauptklub", 0) + 1
+                log.info(f"S7.5 kein BL-Hauptklub: {ergebnis['titel'][:60]}")
+                continue
+
             datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
             vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"])
-            wappen_url = verein_wappen_url(ergebnis["text"][:1200], title=ergebnis["titel"])
+            if hauptklub in KLUB_LOGO:
+                wappen_url = KLUB_LOGO[hauptklub]
+                vereine = sorted(set(vereine) | {KLUB_FILTERNAME.get(hauptklub, hauptklub)})
+            else:
+                log.warning(f"S7.5 unbekannter Hauptklub {hauptklub!r} – Fallback auf Scoring")
+                wappen_url = verein_wappen_url(ergebnis["text"][:1200], title=ergebnis["titel"])
 
             if fp:
                 batch_fingerprints.append((fp, datetime.datetime.now().isoformat()))
@@ -1733,32 +1828,6 @@ def main():
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
     log.info(f"Stats: {json.dumps(stats)}")
-
-
-def sky_de_items() -> list[dict]:
-    """Scrapt sport.sky.de/fussball direkt und gibt Feed-kompatible Dicts zurück."""
-    import re as _re
-    sky_url = "https://sport.sky.de/fussball"
-    try:
-        resp = requests.get(sky_url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
-        resp.raise_for_status()
-    except Exception as e:
-        log.warning(f"Sky DE Scraper: Fetch fehlgeschlagen: {e}")
-        return []
-    # Artikel-Links: /fussball/artikel/{slug}/{id}/{cat}
-    pattern = _re.compile(r'href="(/fussball/artikel/([^/"]+)/\d+/\d+)"')
-    seen = set()
-    items = []
-    for m in pattern.finditer(resp.text):
-        path, slug = m.group(1), m.group(2)
-        url = f"https://sport.sky.de{path}"
-        if url in seen:
-            continue
-        seen.add(url)
-        titel = slug.replace("-", " ").title()
-        items.append({"link": url, "title": titel, "summary": "", "_sky_de": True})
-    log.info(f"Sky DE Scraper: {len(items)} Artikel gefunden")
-    return items
 
 
 def reddit_post(titel: str, text: str, artikel_url: str):
