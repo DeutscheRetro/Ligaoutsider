@@ -868,6 +868,7 @@ def ist_relevant(titel: str, volltext: str) -> bool:
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
                 f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n"
                 f"- Es KEIN Ranking, keine Liste und keine Statistik-Übersicht ist, in der einer dieser Klubs lediglich als ein Eintrag unter vielen auftaucht (z. B. Markenwert-Rankings, Follower-Zahlen, Europa-Tabellen). Geht es zentral um einen Klub außerhalb der Liste: NEIN.\n"
+                f"- Es um ein AKTUELLES Geschehen geht. Historische Rückblicke auf vergangene Spielzeiten, Jubiläums- und Archivstücke sind NEIN, auch wenn der Klub stimmt. Nenne der Artikel eine zurückliegende Saison als Schauplatz (etwa 2009/10), ist das ein klares NEIN.\n"
                 f"- Wenn ein Spieler eines dieser Klubs im Ausland spielt (Leihe, Auslandsklub): NUR JA wenn Transfer zurück, Vertragsende, oder direkter Bezug zu diesen Klubs. Ein Tor in der Ligue 1/Premier League/Serie A ist KEIN Grund für JA.\n\n"
                 f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
                 f"Antworte nur mit JA oder NEIN."
@@ -1470,6 +1471,11 @@ def main():
         "nations league", "länderspiel", "u21-em", "olympia",
         "frauen", "frauenfußball", "frauenbundesliga", "-frauen",
         "2. bundesliga", "2. liga", "zweite bundesliga", "zweitliga",
+        # Rueckblicke: kicker spielt Archivmaterial in die Team-Feeds.
+        # Bewusst eng: "retro" oder "legendär" allein wirft auch aktuelle News
+        # raus, etwa das Retro-Trikot, das Frankfurts Vereinswebsite lahmlegte.
+        "heute vor", "vor x jahren", "rückblick auf die saison",
+        "in den 70ern", "in den 80ern", "in den 90ern", "jahrestag",
     )
 
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
@@ -1535,6 +1541,16 @@ def main():
 
             # URL-Cache: bereits gesehene Einträge sofort überspringen
             if url_cache.is_seen(url):
+                continue
+
+            # Video- und Galerieseiten haben keinen Artikeltext. Was daraus
+            # entsteht, ist duenn und oft ein historischer Rueckblick - so kam
+            # ein Bericht ueber die Champions League 2009/10 als aktuelle News
+            # auf die Seite. Bei kicker ist knapp ein Drittel des Team-Feeds Video.
+            if re.search(r'/(video|videos|galerie|bildergalerie|podcast|audio)([/\-]|$|#|\?)', url.lower()):
+                log.info(f"S1 Medienseite ohne Artikeltext: {titel[:60]}")
+                _log_skip(artikel_id(url), titel, "stage1", "medienseite")
+                url_cache.mark_seen(url)
                 continue
 
             # Quelle bei Google News aus entry.source
@@ -2090,6 +2106,8 @@ def kickbase_fetch():
             "fair":   p.get("fairValue") or 0,
             "spiele": spiele,
             "stamm":  stammspieler,
+            "apvor":  p.get("avgPrevSeason") or 0,
+            "formdiff": (p.get("avgPoints") or 0) - (p.get("avgPrevSeason") or 0),
             "status": p.get("status") or 0,
             "info":   (p.get("statusText") or "").strip(),
             "eff":    round(pts / (mw / 1e6), 2) if (mw > 500000 and pts > 0 and stammspieler) else 0,
@@ -2097,6 +2115,10 @@ def kickbase_fetch():
 
     def top(lst, key, n=10, reverse=True):
         return sorted([x for x in lst if x.get(key)], key=lambda x: x[key], reverse=reverse)[:n]
+
+    # Formcheck: Punkteschnitt jetzt gegen Vorsaison. Nur wer in beiden Saisons
+    # genug gespielt hat, sonst vergleicht man Zufallswerte.
+    formspieler = [p for p in players if p["stamm"] and p["apvor"]]
 
     # Angeschlagene und ausfallende Spieler (status != 0)
     angeschlagen = [p for p in players if p["status"]]
@@ -2131,7 +2153,17 @@ def kickbase_fetch():
                          for p in schnaeppchen[:10]],
         "verletzt":  [{"name":p["name"],"logo":p["logo"],"mw":p["mw"],
                        "info":p["info"] or "angeschlagen"} for p in angeschlagen[:10]],
+        "formauf":   [{"name":p["name"],"logo":p["logo"],"diff":p["formdiff"],
+                       "ap":p["ap"],"vor":p["apvor"]} for p in top(formspieler,"formdiff")],
+        "formab":    [{"name":p["name"],"logo":p["logo"],"diff":p["formdiff"],
+                       "ap":p["ap"],"vor":p["apvor"]}
+                      for p in top(formspieler,"formdiff",reverse=False) if p["formdiff"] < 0],
     }
+    for feld, pos in (("torwart", "Torwart"), ("abwehr", "Abwehr"),
+                      ("mittelfeld", "Mittelfeld"), ("sturm", "Sturm")):
+        result[feld] = [{"name":p["name"],"logo":p["logo"],"ap":p["ap"]}
+                        for p in top([x for x in players
+                                      if x["pos"] == pos and x["stamm"]], "ap")]
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler, via BaseXI)")
 

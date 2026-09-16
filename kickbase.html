@@ -138,6 +138,47 @@
           <li class="kb-loading">Lädt…</li>
         </ul>
       </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🚀 In Form</div>
+        <p class="kb-widget-sub">Punkteschnitt dieser Saison gegen die Vorsaison – wer sich am stärksten gesteigert hat.</p>
+        <ul class="kb-list" id="kb-formauf">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🥶 Formkrise</div>
+        <p class="kb-widget-sub">Punkteschnitt dieser Saison gegen die Vorsaison – wer am stärksten abgefallen ist.</p>
+        <ul class="kb-list" id="kb-formab">
+          <li class="kb-loading">Lädt…</li>
+        </ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🧤 Beste Torhüter</div>
+        <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
+        <ul class="kb-list" id="kb-torwart"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🛡 Beste Abwehr</div>
+        <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
+        <ul class="kb-list" id="kb-abwehr"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">🎯 Bestes Mittelfeld</div>
+        <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
+        <ul class="kb-list" id="kb-mittelfeld"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+
+      <div class="kb-widget">
+        <div class="kb-widget-title">⚽ Bester Sturm</div>
+        <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
+        <ul class="kb-list" id="kb-sturm"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+
       <div class="kb-widget">
         <div class="kb-widget-title">🚑 Angeschlagen &amp; verletzt</div>
         <p class="kb-widget-sub">Gemeldete Ausfälle und angeschlagene Spieler, nach Marktwert sortiert.</p>
@@ -238,10 +279,15 @@
         renderList('kb-woche',     (d.woche      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
         renderList('kb-wocheminus',(d.wocheminus ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
         renderList('kb-schnaeppchen', (d.schnaeppchen ||[]).map(p => ({ ...p, val: p.faktor + 'x (' + fmtMW(p.mw) + ')', cls: 'green' })));
+        const fmtForm = p => (p.diff > 0 ? '+' : '') + p.diff + ' (' + p.vor + '→' + p.ap + ')';
+        renderList('kb-formauf',   (d.formauf    ||[]).map(p => ({ ...p, val: fmtForm(p), cls: 'green' })));
+        renderList('kb-formab',    (d.formab     ||[]).map(p => ({ ...p, val: fmtForm(p), cls: 'red' })));
+        ['torwart','abwehr','mittelfeld','sturm'].forEach(pos =>
+          renderList('kb-' + pos, (d[pos] ||[]).map(p => ({ ...p, val: p.ap + ' Pkt/Spiel' }))));
         renderList('kb-verletzt',  (d.verletzt   ||[]).map(p => ({ ...p, val: fmtMW(p.mw), cls: 'red', hinweis: p.info })));
       })
       .catch(() => {
-        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-schnitt','kb-schnaeppchen','kb-verletzt','kb-woche','kb-wocheminus'].forEach(id => {
+        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-schnitt','kb-schnaeppchen','kb-verletzt','kb-woche','kb-wocheminus','kb-formauf','kb-formab','kb-torwart','kb-abwehr','kb-mittelfeld','kb-sturm'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.innerHTML = '<li class="kb-loading">Daten werden bald verfügbar</li>';
         });
