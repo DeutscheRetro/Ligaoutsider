@@ -124,6 +124,7 @@
       <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
       <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
       <a href="forum.html" class="section-nav-link active">💬 Forum</a>
+      <a href="nachrichten.html" class="section-nav-link" id="nav-nachrichten">✉️ Nachrichten</a>
     </div>
   </nav>
 
@@ -207,8 +208,13 @@
       return antwort;
     }
 
-    const rollenVon = u => (u && u.app_metadata && u.app_metadata.roles) || [];
-    const darfLoeschen = u => rollenVon(u).some(r => r === 'admin' || r === 'moderator');
+    // Rollen kommen vom Server, nicht aus dem Token
+    let _darfLoeschen = false;
+    async function rollenLaden() {
+      try { const w = await loApi('wer_bin_ich'); _darfLoeschen = !!w.darfLoeschen; }
+      catch { _darfLoeschen = false; }
+    }
+    const darfLoeschen = () => _darfLoeschen;
 
     let aktuellerUser = null;
     let aktiveKat     = 'Allgemein';
@@ -252,6 +258,7 @@
       } catch(e) { /* bei Fehler trotzdem einloggen */ }
 
       aktuellerUser = user;
+      await rollenLaden();
       const name = user.user_metadata?.full_name || user.email;
       document.getElementById('user-name').textContent      = name;
       document.getElementById('user-info').style.display    = 'flex';
@@ -326,7 +333,7 @@
         .eq('thread_id', thread.id)
         .order('erstellt_am', { ascending: true });
 
-      const isAdmin = darfLoeschen(aktuellerUser);
+      const isAdmin = darfLoeschen();
       document.getElementById('post-liste').innerHTML = (!error && data?.length)
         ? data.map(p => `
           <div class="post-item">

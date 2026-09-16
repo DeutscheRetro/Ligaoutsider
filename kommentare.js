@@ -47,10 +47,15 @@
 
   async function setUser(user) {
     aktuellerUser = user;
-    // Rollen kommen aus dem Identity-Token, nicht aus einem E-Mail-Vergleich
-    const rollen = (user.app_metadata && user.app_metadata.roles) || [];
-    isAdmin = rollen.includes('admin');
-    darfLoeschen = isAdmin || rollen.includes('moderator');
+    // Rollen liegen in der Datenbank; der Server ist die Wahrheit. Das Token
+    // dient nur noch dem Nachweis, wer man ist.
+    try {
+      const wer = await api('wer_bin_ich');
+      isAdmin = !!wer.istAdmin;
+      darfLoeschen = !!wer.darfLoeschen;
+    } catch {
+      isAdmin = false; darfLoeschen = false;
+    }
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
     if (el) {
@@ -65,6 +70,7 @@
     if (document.getElementById('kommentar-form')) document.getElementById('kommentar-form').style.display = 'block';
     if (document.getElementById('k-username'))     document.getElementById('k-username').textContent = name;
     if (typeof ARTIKEL_ID !== 'undefined') ladeKommentare();
+    ungeleseneAnzeigen();
   }
 
   function clearUser() {
@@ -86,6 +92,19 @@
   document.getElementById('login-btn')  ?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
   document.getElementById('signup-btn') ?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
   document.getElementById('logout-btn') ?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+
+  // ─── Ungelesene Nachrichten in der Navigation ───────────────────────────────
+  async function ungeleseneAnzeigen() {
+    const link = document.getElementById('nav-nachrichten');
+    if (!link || !aktuellerUser) return;
+    try {
+      const r = await api('postfach');
+      const n = r.ungelesen || 0;
+      link.textContent = n ? `\u2709\uFE0F Nachrichten (${n})` : '\u2709\uFE0F Nachrichten';
+      link.style.color = n ? 'var(--accent)' : '';
+    } catch {}
+  }
 
   // ─── Ban-Check ───────────────────────────────────────────────────────────────
   async function pruefeBan(email) {
@@ -223,6 +242,10 @@
         <div style="font-size:12px;color:var(--text4);margin-bottom:16px">Dabei seit: <span style="color:var(--text3)">${dabei}</span></div>
         ${!istEigen && aktuellerUser ? `
           <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="nachrichten.html?an=${encodeURIComponent(email)}"
+              style="padding:8px;background:var(--accent);color:#111;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none">
+              ✉️ Nachricht schreiben
+            </a>
             <button onclick="window._${istIgn ? 'entIgnoriereUser' : 'ignoriereUser'}('${email}');document.getElementById('profil-modal').remove()"
               style="padding:8px;background:${istIgn ? 'var(--bg4)' : 'var(--bg4)'};color:${istIgn ? 'var(--accent)' : 'var(--text)'};border:1px solid var(--border2);border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">
               ${istIgn ? '✓ Nicht mehr ignorieren' : '🙈 Ignorieren'}

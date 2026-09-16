@@ -178,7 +178,11 @@
   <!-- TAB: MODERATION -->
   <div id="tab-moderation" style="display:none">
     <div id="mod-msg" style="display:none;margin-bottom:16px"></div>
-    <div id="mod-inhalt"><p style="color:#555"><span class="spinner"></span>Lade Forum-Daten…</p></div>
+    <div class="toolbar">
+      <input type="text" id="mod-suche" placeholder="Nach Name oder E-Mail suchen…" style="max-width:320px" oninput="renderNutzer()"/>
+      <button class="btn btn-gray" onclick="ladeModerationsdaten()">↻ Aktualisieren</button>
+    </div>
+    <div id="mod-inhalt"><p style="color:#555"><span class="spinner"></span>Lade Nutzer…</p></div>
   </div>
 </div>
 
@@ -279,6 +283,459 @@ async function ladeNetlifyUsers() {
     );
     if (r.ok) netlifyUsers = await r.json();
   } catch(e) { /* optional */ }
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+async function init() {
+  await Promise.all([ladeArtikel(), ladeBanned(), ladeNetlifyUsers()]);
+}
+
+async function ladeBanned() {
+  try {
+    const data = await ghGet('banned.json');
+    bannedEmails = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+  } catch(e) {
+    bannedEmails = [];
+  }
+}
+
+// ─── Tab-Navigation ───────────────────────────────────────────────────────────
+function zeigeTab(name) {
+  ['artikel','stats','moderation'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
+  });
+  if (name === 'stats') renderStats();
+  if (name === 'moderation') ladeModerationsdaten();
+}
+
+// ─── Artikel laden ────────────────────────────────────────────────────────────
+async function ladeArtikel() {
+  const liste = document.getElementById('artikel-liste');
+  liste.innerHTML = '<p style="color:#555"><span class="spinner"></span>Lade feed.json…</p>';
+  try {
+    const data = await ghGet('feed.json');
+    feedSha   = data.sha;
+    feedDaten = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    document.getElementById('artikel-count').textContent = feedDaten.length + ' Artikel';
+    renderListe();
+  } catch(e) {
+    liste.innerHTML = `<div class="err">${e.message}</div>`;
+  }
+}
+
+function renderListe() {
+  const liste = document.getElementById('artikel-liste');
+  if (!feedDaten.length) { liste.innerHTML = '<p style="color:#555">Keine Artikel</p>'; return; }
+  liste.innerHTML = feedDaten.map((a, i) => `
+    <div class="artikel-card">
+      <img src="${a.wappen_url || ''}" onerror="this.style.display='none'" />
+      <div class="artikel-card-body">
+        <div class="artikel-card-titel">${a.titel}</div>
+        <div class="artikel-card-meta">${a.datum} · <span class="badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span></div>
+      </div>
+      <div class="artikel-card-actions">
+        <button class="btn btn-gold" onclick="bearbeiten(${i})">Bearbeiten</button>
+        <button class="btn btn-red" onclick="schnellLoeschen(${i})">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Editor ───────────────────────────────────────────────────────────────────
+async function bearbeiten(idx) {
+  const a = feedDaten[idx];
+  document.getElementById('edit-id').value   = a.id;
+  document.getElementById('edit-pfad').value = idx;
+  document.getElementById('edit-titel').value = a.titel;
+  document.getElementById('editor-titel-h').textContent = 'Bearbeiten: ' + a.titel.substring(0,50);
+
+  const sel = document.getElementById('edit-logo');
+  let gefunden = false;
+  for (let opt of sel.options) {
+    if (opt.value === a.wappen_url) { opt.selected = true; gefunden = true; break; }
+  }
+  if (!gefunden && a.wappen_url) {
+    const opt = new Option(a.wappen_url, a.wappen_url, true, true);
+    sel.add(opt);
+  }
+  updateLogoPreview();
+
+  document.getElementById('edit-text').value = 'Lade…';
+  try {
+    const htmlData = await ghGet(a.pfad);
+    const html = decodeURIComponent(escape(atob(htmlData.content)));
+    const match = html.match(/<div class="artikel-text">([\s\S]*?)<\/div>/);
+    if (match) {
+      const text = match[1].replace(/<p>([\s\S]*?)<\/p>/g, '$1\n\n').replace(/<[^>]+>/g,'').trim();
+      document.getElementById('edit-text').value = text;
+    }
+  } catch(e) {
+    document.getElementById('edit-text').value = '(Text konnte nicht geladen werden)';
+  }
+  zeigeEditor();
+}
+
+function updateLogoPreview() {
+  document.getElementById('logo-preview').src = document.getElementById('edit-logo').value;
+}
+
+function zeigeEditor() {
+  document.getElementById('view-list').style.display   = 'none';
+  document.getElementById('view-editor').style.display = 'block';
+}
+
+function zeigeListe() {
+  document.getElementById('view-list').style.display   = 'block';
+  document.getElementById('view-editor').style.display = 'none';
+}
+
+// ─── Speichern ────────────────────────────────────────────────────────────────
+async function speichern() {
+  const idx        = parseInt(document.getElementById('edit-pfad').value);
+  const neuerTitel = document.getElementById('edit-titel').value.trim();
+  const neuesLogo  = document.getElementById('edit-logo').value;
+  const neuerText  = document.getElementById('edit-text').value.trim();
+
+  zeigeMsg('<span class="spinner"></span>Speichere…', false);
+  try {
+    const a = feedDaten[idx];
+    const htmlData = await ghGet(a.pfad);
+    let html = decodeURIComponent(escape(atob(htmlData.content)));
+    html = html.replace(/<h1 class="artikel-titel">.*?<\/h1>/, `<h1 class="artikel-titel">${neuerTitel}</h1>`);
+    const absaetze = neuerText.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
+    html = html.replace(/<div class="artikel-text">[\s\S]*?<\/div>/, `<div class="artikel-text">${absaetze}</div>`);
+    if (neuesLogo) html = html.replace(/src="[^"]*" class="artikel-wappen"/, `src="${neuesLogo}" class="artikel-wappen"`);
+    await ghPut(a.pfad, html, htmlData.sha, `✏️ Artikel bearbeitet: ${neuerTitel.substring(0,50)}`);
+
+    feedDaten[idx].titel      = neuerTitel;
+    feedDaten[idx].wappen_url = neuesLogo;
+    const feedData = await ghGet('feed.json');
+    await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
+
+    zeigeMsg('✓ Gespeichert! Netlify deployed in ~1 Minute.', true);
+    renderListe();
+  } catch(e) {
+    zeigeMsg('Fehler: ' + e.message, false);
+  }
+}
+
+// ─── Löschen ──────────────────────────────────────────────────────────────────
+async function loeschen() {
+  if (!confirm('Artikel wirklich löschen?')) return;
+  const idx = parseInt(document.getElementById('edit-pfad').value);
+  await doLoeschen(idx);
+  zeigeListe();
+}
+
+async function schnellLoeschen(idx) {
+  if (!confirm('Artikel wirklich löschen?')) return;
+  await doLoeschen(idx);
+}
+
+async function doLoeschen(idx) {
+  const a = feedDaten[idx];
+  zeigeMsg('<span class="spinner"></span>Lösche…', false);
+  try {
+    // Sofort ausblenden: die Seite filtert dagegen, bis der Build durch ist
+    try { await loApi('artikel_ausblenden', { artikel_id: a.id }); }
+    catch (e) { console.warn('Sofort-Ausblenden fehlgeschlagen:', e.message); }
+
+    // HTML löschen (404 = schon weg, ignorieren)
+    try {
+      const htmlData = await ghGet(a.pfad);
+      await ghDelete(a.pfad, htmlData.sha, `🗑 Artikel gelöscht: ${a.titel.substring(0,50)}`);
+    } catch(e) {
+      if (!e.message.includes('404')) throw e;
+    }
+
+    // feed.json mit Retry bei 409 (Bot könnte zeitgleich committen)
+    let versuche = 0;
+    while (versuche < 4) {
+      versuche++;
+      const feedData = await ghGet('feed.json');
+      const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
+      const gefiltertesFeed = aktuellFeed.filter(x => x.id !== a.id);
+      try {
+        await ghPut('feed.json', JSON.stringify(gefiltertesFeed, null, 2), feedData.sha, `🗑 feed.json: ${a.titel.substring(0,50)}`);
+        feedDaten = gefiltertesFeed;
+        break; // Erfolg
+      } catch(e) {
+        if (e.message.includes('409') && versuche < 4) {
+          await new Promise(r => setTimeout(r, 800 * versuche)); // kurz warten, dann nochmal
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    // ID dauerhaft in deleted_ids.json blockieren (Retry bei 409)
+    for (let v = 0; v < 3; v++) {
+      try {
+        const delData = await ghGet('deleted_ids.json');
+        const delIds = JSON.parse(decodeURIComponent(escape(atob(delData.content))));
+        if (!delIds.includes(a.id)) {
+          delIds.push(a.id);
+          await ghPut('deleted_ids.json', JSON.stringify(delIds, null, 2), delData.sha, `🚫 deleted_ids: ${a.id}`);
+        }
+        break;
+      } catch(e) {
+        if (e.message.includes('409') && v < 2) { await new Promise(r => setTimeout(r, 600)); continue; }
+      }
+    }
+
+    zeigeMsg('✓ Gelöscht!', true);
+    renderListe();
+  } catch(e) {
+    zeigeMsg('Fehler: ' + e.message, false);
+  }
+}
+
+function zeigeMsg(txt, ok) {
+  const el = document.getElementById('msg');
+  el.className = ok ? 'ok' : 'err';
+  el.innerHTML = txt;
+  el.style.display = 'block';
+  if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+function renderStats() {
+  if (!feedDaten.length) {
+    document.getElementById('stats-inhalt').innerHTML = '<p style="color:#555">Keine Daten geladen.</p>';
+    return;
+  }
+
+  const heute = new Date();
+  const vor30 = new Date(heute); vor30.setDate(heute.getDate() - 29);
+
+  // Artikel pro Tag (letzte 30 Tage)
+  const proTag = {};
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(heute); d.setDate(heute.getDate() - i);
+    proTag[d.toISOString().slice(0,10)] = 0;
+  }
+  feedDaten.forEach(a => {
+    const key = a.datum ? a.datum.slice(0,10) : null;
+    if (key && proTag[key] !== undefined) proTag[key]++;
+  });
+
+  // Top-Quellen (badge)
+  const quellen = {};
+  feedDaten.forEach(a => {
+    const q = a.badge || 'Unbekannt';
+    quellen[q] = (quellen[q] || 0) + 1;
+  });
+  const topQuellen = Object.entries(quellen).sort((a,b) => b[1]-a[1]).slice(0,10);
+
+  // Heute
+  const tagesKey = heute.toISOString().slice(0,10);
+  const heute_count = proTag[tagesKey] || 0;
+
+  // Max für Balken
+  const maxTag = Math.max(...Object.values(proTag), 1);
+  const maxQ   = topQuellen[0]?.[1] || 1;
+
+  // Letzten 14 Tage für Balken (lesbar)
+  const letzte14 = Object.entries(proTag).slice(-14);
+
+  // User-Stats aus Netlify
+  const totalUser     = netlifyUsers.length;
+  const confirmedUser = netlifyUsers.filter(u => u.confirmed_at).length;
+  const heute7d = new Date(heute); heute7d.setDate(heute.getDate() - 7);
+  const neueUser7d = netlifyUsers.filter(u => u.created_at && new Date(u.created_at) > heute7d).length;
+
+  document.getElementById('stats-inhalt').innerHTML = `
+    <div class="section-title">Nutzer (Netlify Identity)</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num">${totalUser}</div><div class="lbl">Registriert gesamt</div></div>
+      <div class="stat-card"><div class="num">${confirmedUser}</div><div class="lbl">Bestätigt</div></div>
+      <div class="stat-card"><div class="num">${neueUser7d}</div><div class="lbl">Neu (7 Tage)</div></div>
+      <div class="stat-card"><div class="num">${bannedEmails.length}</div><div class="lbl">Gebannt</div></div>
+    </div>
+
+    <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>Seitenaufrufe</span>
+      <a href="https://analytics.google.com/" target="_blank" class="btn btn-gray btn-sm">📊 Google Analytics öffnen ↗</a>
+    </div>
+    <p style="color:#555;font-size:12px;margin-bottom:24px">Echtzeit-Daten, Seitenaufrufe, Nutzerherkunft → direkt in GA4 verfügbar (Property G-SP8DWFL2SE).</p>
+
+    <div class="section-title">Artikel</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num">${feedDaten.length}</div><div class="lbl">Artikel gesamt</div></div>
+      <div class="stat-card"><div class="num">${heute_count}</div><div class="lbl">Heute</div></div>
+      <div class="stat-card"><div class="num">${Object.keys(quellen).length}</div><div class="lbl">Verschiedene Quellen</div></div>
+      <div class="stat-card"><div class="num">${Math.round(feedDaten.length / 30)}</div><div class="lbl">Ø Artikel/Tag (30d)</div></div>
+    </div>
+
+    <div class="section-title">Artikel letzte 14 Tage</div>
+    <div class="bar-chart">
+      ${letzte14.map(([tag, n]) => {
+        const w = Math.round((n / maxTag) * 100);
+        const label = tag.slice(5); // MM-DD
+        return `<div class="bar-row">
+          <span class="bar-label-date">${label}</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${w}%">${n > 0 ? `<span class="bar-val">${n}</span>` : ''}</div></div>
+          ${n === 0 ? '<span class="bar-val-out">0</span>' : ''}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="section-title">Top-Quellen</div>
+    <div class="bar-chart">
+      ${topQuellen.map(([quelle, n]) => {
+        const w = Math.round((n / maxQ) * 100);
+        return `<div class="bar-row">
+          <span class="bar-label">${quelle}</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${w}%">${n > 3 ? `<span class="bar-val">${n}</span>` : ''}</div></div>
+          ${n <= 3 ? `<span class="bar-val-out">${n}</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ─── Moderation ───────────────────────────────────────────────────────────────
+let nutzerListe = [];
+
+async function ladeModerationsdaten() {
+  const el = document.getElementById('mod-inhalt');
+  el.innerHTML = '<p style="color:#555"><span class="spinner"></span>Lade Nutzer…</p>';
+  try {
+    const r = await loApi('nutzer_liste');
+    nutzerListe = r.nutzer || [];
+    renderNutzer();
+  } catch(e) {
+    el.innerHTML = `<div class="err">${e.message}</div>`;
+  }
+}
+
+function renderNutzer() {
+  const el = document.getElementById('mod-inhalt');
+  const q = (document.getElementById('mod-suche')?.value || '').trim().toLowerCase();
+  const liste = nutzerListe.filter(u =>
+    !q || u.email.includes(q) || (u.name || '').toLowerCase().includes(q));
+
+  if (!nutzerListe.length) {
+    el.innerHTML = '<p style="color:#555">Noch keine Nutzer mit Aktivität, Rolle oder Sperre.</p>';
+    return;
+  }
+  if (!liste.length) {
+    el.innerHTML = `<p style="color:#555">Kein Treffer für „${q}".</p>`;
+    return;
+  }
+
+  const rollenChip = r =>
+    `<span class="banned-badge" style="background:${r === 'admin' ? '#1565c0' : '#6a1fbf'}">${r}</span>`;
+
+  el.innerHTML = `
+    <p style="color:#555;font-size:12px;margin-bottom:10px">${liste.length} von ${nutzerListe.length} Nutzern</p>
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Name</th><th>E-Mail</th><th>Rollen</th>
+          <th>Komm.</th><th>Forum</th><th>Letzte Aktivität</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${liste.map(u => {
+          const datum = u.letzte_aktivitaet
+            ? new Date(u.letzte_aktivitaet).toLocaleDateString('de-DE') : '–';
+          const e = u.email.replace(/'/g, "\\'");
+          return `<tr class="${u.gebannt ? 'banned-row' : ''}">
+            <td>${u.name || '–'}${u.gebannt ? '<span class="banned-badge">GEBANNT</span>' : ''}</td>
+            <td style="color:#555;font-size:12px">${u.email}</td>
+            <td>${(u.rollen || []).map(rollenChip).join(' ') || '<span style="color:#444">–</span>'}</td>
+            <td>${u.kommentare}</td>
+            <td>${u.threads + u.posts}</td>
+            <td style="color:#555;font-size:12px">${datum}</td>
+            <td style="white-space:nowrap">
+              <button class="btn btn-gray btn-sm" onclick="rollenDialog('${e}')">Rollen</button>
+              ${u.gebannt
+                ? `<button class="btn btn-gray btn-sm" onclick="entbanne('${e}')">Entbannen</button>`
+                : `<button class="btn btn-red btn-sm" onclick="banne('${e}')">Bannen</button>`}
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function rollenDialog(email) {
+  const u = nutzerListe.find(x => x.email === email);
+  const hat = new Set(u?.rollen || []);
+  const m = document.createElement('div');
+  m.id = 'rollen-modal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:3000;display:flex;align-items:center;justify-content:center';
+  m.innerHTML = `
+    <div style="background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:24px;max-width:360px;width:90%">
+      <div style="font-size:15px;font-weight:800;color:#e8c000;margin-bottom:6px">Rollen vergeben</div>
+      <div style="font-size:12px;color:#888;margin-bottom:16px">${email}</div>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;text-transform:none;font-size:13px;color:#ddd">
+        <input type="checkbox" id="r-admin" ${hat.has('admin') ? 'checked' : ''} style="width:auto"/>
+        <span><b>admin</b> – darf alles, auch Rollen vergeben</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:18px;text-transform:none;font-size:13px;color:#ddd">
+        <input type="checkbox" id="r-moderator" ${hat.has('moderator') ? 'checked' : ''} style="width:auto"/>
+        <span><b>moderator</b> – darf löschen, bannen, ausblenden</span>
+      </label>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-gold" style="flex:1" onclick="rollenSpeichern('${email.replace(/'/g, "\\'")}')">Speichern</button>
+        <button class="btn btn-gray" onclick="document.getElementById('rollen-modal').remove()">Abbrechen</button>
+      </div>
+      <div id="rollen-status" style="font-size:12px;margin-top:10px"></div>
+    </div>`;
+  m.addEventListener('click', ev => { if (ev.target === m) m.remove(); });
+  document.body.appendChild(m);
+}
+
+async function rollenSpeichern(email) {
+  const st = document.getElementById('rollen-status');
+  const rollen = [];
+  if (document.getElementById('r-admin').checked) rollen.push('admin');
+  if (document.getElementById('r-moderator').checked) rollen.push('moderator');
+  st.style.color = '#888'; st.textContent = 'Speichere…';
+  try {
+    await loApi('rolle_setzen', { email, rollen });
+    document.getElementById('rollen-modal').remove();
+    zeigeMsgMod(`✓ Rollen für ${email} gespeichert: ${rollen.join(', ') || 'keine'}`, true);
+    ladeModerationsdaten();
+  } catch(e) {
+    st.style.color = '#e53935'; st.textContent = e.message;
+  }
+}
+
+function zeigeMsgMod(txt, ok) {
+  const el = document.getElementById('mod-msg');
+  el.className = ok ? 'ok' : 'err';
+  el.innerHTML = txt;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+async function banne(email) {
+  if (!confirm(`${email} sperren?\n\nAlle Kommentare und Forenbeiträge werden gelöscht.`)) return;
+  zeigeMsgMod('<span class="spinner"></span>Sperre…', false);
+  try {
+    await loApi('user_purge', { email });
+    await loApi('ban', { email });
+    zeigeMsgMod(`✓ ${email} gesperrt, Beiträge gelöscht.`, true);
+    ladeModerationsdaten();
+  } catch(e) {
+    zeigeMsgMod('Fehler: ' + e.message, false);
+  }
+}
+
+async function entbanne(email) {
+  if (!confirm(`${email} entsperren?`)) return;
+  zeigeMsgMod('<span class="spinner"></span>Entsperre…', false);
+  try {
+    await loApi('unban', { email });
+    zeigeMsgMod(`✓ ${email} entsperrt.`, true);
+    ladeModerationsdaten();
+  } catch(e) {
+    zeigeMsgMod('Fehler: ' + e.message, false);
+  }
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

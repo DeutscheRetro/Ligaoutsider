@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nachrichten – Ligaoutsider.de</title>
+  <meta name="description" content="Private Nachrichten auf Ligaoutsider.de."/>
+  <meta name="robots" content="noindex"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    .pf-wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; display: flex; gap: 20px; align-items: flex-start; }
+    .pf-liste { flex: 0 0 300px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .pf-haupt { flex: 1; min-width: 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; display: flex; flex-direction: column; min-height: 420px; }
+    .pf-kopf { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 800; font-size: 13px; }
+    .pf-eintrag { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--item-border); padding: 12px 16px; cursor: pointer; color: var(--text); }
+    .pf-eintrag:hover { background: var(--item-hover); }
+    .pf-eintrag.aktiv { background: var(--bg3); border-left: 3px solid var(--accent); }
+    .pf-name { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .pf-vorschau { font-size: 12px; color: var(--text3); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pf-punkt { background: var(--accent); color: #000; font-size: 10px; font-weight: 800; border-radius: 9px; padding: 1px 6px; }
+    .pf-verlauf { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 460px; }
+    .pf-blase { max-width: 78%; padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 1.45; word-wrap: break-word; }
+    .pf-ich { align-self: flex-end; background: var(--accent); color: #111; }
+    .pf-du { align-self: flex-start; background: var(--bg4); color: var(--text); }
+    .pf-zeit { font-size: 10px; opacity: .65; margin-top: 3px; }
+    .pf-senden { border-top: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 8px; }
+    .pf-senden textarea { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: 5px; color: var(--text); padding: 8px 10px; font-size: 14px; font-family: inherit; min-height: 44px; max-height: 120px; resize: vertical; }
+    .pf-leer { color: var(--text4); font-size: 13px; padding: 40px 16px; text-align: center; }
+    @media (max-width: 760px) {
+      .pf-wrap { flex-direction: column; }
+      .pf-liste { flex: 1 1 auto; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span><span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+      <a href="nachrichten.html" class="section-nav-link active">✉️ Nachrichten</a>
+    </div>
+  </nav>
+
+  <div class="pf-wrap">
+    <div class="pf-liste">
+      <div class="pf-kopf">Gespräche</div>
+      <div id="pf-gespraeche"><p class="pf-leer">Lädt…</p></div>
+    </div>
+
+    <div class="pf-haupt">
+      <div class="pf-kopf" id="pf-titel">Kein Gespräch gewählt</div>
+      <div class="pf-verlauf" id="pf-verlauf">
+        <p class="pf-leer">Wähle links ein Gespräch oder schreibe jemandem aus den Kommentaren.</p>
+      </div>
+      <div class="pf-senden" id="pf-senden" style="display:none">
+        <textarea id="pf-text" placeholder="Nachricht schreiben…" maxlength="2000"></textarea>
+        <button class="auth-btn auth-btn--primary" onclick="senden()">Senden</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+<script>
+  function applyTheme(t) {
+    document.body.classList.toggle('light', t === 'light');
+    document.documentElement.classList.toggle('light', t === 'light');
+    document.getElementById('theme-icon').textContent  = t === 'light' ? '🌙' : '☀️';
+    document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+  }
+  applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const t = document.body.classList.contains('light') ? 'dark' : 'light';
+    localStorage.setItem('theme', t); applyTheme(t);
+  });
+
+  async function api(aktion, daten = {}) {
+    const u = window.netlifyIdentity && netlifyIdentity.currentUser();
+    if (!u) throw new Error('Nicht angemeldet');
+    const token = await u.jwt();
+    const r = await fetch('/.netlify/functions/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ aktion, ...daten })
+    });
+    const a = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(a.fehler || ('Fehler ' + r.status));
+    return a;
+  }
+
+  let gespraeche = [];
+  let aktiv = null;
+  let meineMail = '';
+
+  function zeit(iso) {
+    const d = new Date(iso), heute = new Date();
+    const gleich = d.toDateString() === heute.toDateString();
+    return gleich
+      ? d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+      : d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' +
+        d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  }
+  const escape = s => String(s).replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+  async function laden(waehle) {
+    try {
+      const r = await api('postfach');
+      gespraeche = r.gespraeche || [];
+      renderListe();
+      const ziel = waehle || (aktiv && aktiv.partner);
+      if (ziel) oeffne(ziel);
+    } catch (e) {
+      document.getElementById('pf-gespraeche').innerHTML =
+        `<p class="pf-leer">${escape(e.message)}</p>`;
+    }
+  }
+
+  function renderListe() {
+    const el = document.getElementById('pf-gespraeche');
+    if (!gespraeche.length) {
+      el.innerHTML = '<p class="pf-leer">Noch keine Nachrichten.</p>';
+      return;
+    }
+    el.innerHTML = gespraeche.map(g => `
+      <button class="pf-eintrag ${aktiv && aktiv.partner === g.partner ? 'aktiv' : ''}"
+              onclick="oeffne('${escape(g.partner)}')">
+        <div class="pf-name">
+          <span>${escape(g.partner_name || g.partner)}</span>
+          ${g.ungelesen ? `<span class="pf-punkt">${g.ungelesen}</span>` : ''}
+        </div>
+        <div class="pf-vorschau">${escape(g.letzte || '')}</div>
+      </button>`).join('');
+  }
+
+  async function oeffne(partner) {
+    aktiv = gespraeche.find(g => g.partner === partner) || { partner, partner_name: partner, nachrichten: [] };
+    document.getElementById('pf-titel').textContent = aktiv.partner_name || partner;
+    document.getElementById('pf-senden').style.display = 'flex';
+
+    const v = document.getElementById('pf-verlauf');
+    v.innerHTML = (aktiv.nachrichten || []).map(n => `
+      <div class="pf-blase ${n.von === meineMail ? 'pf-ich' : 'pf-du'}">
+        ${escape(n.inhalt)}
+        <div class="pf-zeit">${zeit(n.am)}</div>
+      </div>`).join('') || '<p class="pf-leer">Noch keine Nachrichten in diesem Gespräch.</p>';
+    v.scrollTop = v.scrollHeight;
+    renderListe();
+
+    if (aktiv.ungelesen) {
+      try { await api('nachrichten_gelesen', { partner }); aktiv.ungelesen = 0; renderListe(); } catch {}
+    }
+  }
+
+  async function senden() {
+    const ta = document.getElementById('pf-text');
+    const text = ta.value.trim();
+    if (!text || !aktiv) return;
+    ta.disabled = true;
+    try {
+      await api('nachricht_senden', { an: aktiv.partner, inhalt: text });
+      ta.value = '';
+      await laden(aktiv.partner);
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      ta.disabled = false;
+      ta.focus();
+    }
+  }
+  document.getElementById('pf-text').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); senden(); }
+  });
+
+  function angemeldet(u) {
+    meineMail = u.email;
+    document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+    document.getElementById('user-info').style.display = 'flex';
+    document.getElementById('login-btn').style.display = 'none';
+    document.getElementById('signup-btn').style.display = 'none';
+    // ?an=mail öffnet direkt ein Gespräch, etwa aus dem Profil eines Kommentars
+    const ziel = new URLSearchParams(location.search).get('an');
+    laden(ziel || null);
+    if (ziel && !gespraeche.some(g => g.partner === ziel)) {
+      aktiv = { partner: ziel.toLowerCase(), partner_name: ziel, nachrichten: [] };
+      setTimeout(() => oeffne(aktiv.partner), 300);
+    }
+  }
+
+  if (window.netlifyIdentity) {
+    netlifyIdentity.on('init', u => {
+      if (u) angemeldet(u);
+      else document.getElementById('pf-gespraeche').innerHTML =
+        '<p class="pf-leer">Bitte melde dich an, um Nachrichten zu sehen.</p>';
+    });
+    netlifyIdentity.on('login', u => { angemeldet(u); netlifyIdentity.close(); });
+    netlifyIdentity.on('logout', () => location.reload());
+    netlifyIdentity.init();
+  }
+  document.getElementById('login-btn') ?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
+  document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+  document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+</script>
+</body>
+</html>

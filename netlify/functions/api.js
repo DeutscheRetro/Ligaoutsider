@@ -43,6 +43,22 @@ const loesche = (tabelle, filter) => db(`${tabelle}?${filter}`, { method: "DELET
 
 const sauber = (s, max) => String(s ?? "").replace(/<[^>]*>/g, "").trim().slice(0, max);
 
+// Rollen kommen aus der Datenbank und zusaetzlich aus dem Identity-Token.
+// Die Vereinigung beider Quellen sorgt dafuer, dass niemand ausgesperrt wird,
+// wenn eine Seite leer ist - und dass Aenderungen in der Datenbank sofort
+// greifen, statt erst nach einem erneuten Login.
+async function rollenVon(email, tokenRollen) {
+  let ausDb = [];
+  try {
+    const treffer = await hole(
+      `benutzer_rollen?email=eq.${encodeURIComponent(email)}&select=rollen`);
+    if (treffer && treffer.length) ausDb = treffer[0].rollen || [];
+  } catch (e) {
+    console.error("Rollen konnten nicht geladen werden:", e.message);
+  }
+  return [...new Set([...(tokenRollen || []), ...ausDb])];
+}
+
 async function istGebannt(email) {
   const treffer = await hole(`user_bans?email=eq.${encodeURIComponent(email)}&select=gebannt_bis`);
   if (!treffer || !treffer.length) return false;
@@ -59,7 +75,7 @@ exports.handler = async (event, context) => {
 
   const email = user.email;
   const name = (user.user_metadata && user.user_metadata.full_name) || email;
-  const rollen = (user.app_metadata && user.app_metadata.roles) || [];
+  const rollen = await rollenVon(email, (user.app_metadata || {}).roles);
   const istAdmin = rollen.includes("admin");
   const darfLoeschen = istAdmin || rollen.includes("moderator");
 
@@ -241,6 +257,154 @@ exports.handler = async (event, context) => {
         if (!/^https?:\/\/\S+$/i.test(url)) return json(400, { fehler: "Bitte gueltige URL eingeben" });
         await lege_an("submitted_urls", { url, eingereicht_von: email });
         return json(200, { ok: true });
+      }
+
+      // ─── Nutzerverwaltung ──────────────────────────────────────────────────
+      case "nutzer_liste": {
+        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
+        // Die Konten selbst liegen bei Netlify Identity. Ohne Netlify-Token
+        // stellen wir die Liste aus dem zusammen, was wir selbst kennen:
+        // Kommentatoren, Forenautoren, vergebene Rollen und Sperren.
+        const [kommentare, threads, posts, rollenZeilen, bans] = await Promise.all([
+          hole("kommentare?select=name,email,erstellt_am"),
+          hole("forum_threads?select=autor_name,autor_email,created_at"),
+          hole("forum_posts?select=autor_name,autor_email,created_at"),
+          hole("benutzer_rollen?select=email,rollen,notiz,geaendert_am"),
+          hole("user_bans?select=email,grund,gebannt_bis"),
+        ]);
+
+        const leute = {};
+        const eintrag = (mail) => {
+          const e = String(mail || "").toLowerCase();
+          if (!e) return null;
+          if (!leute[e]) leute[e] = { email: e, name: e, kommentare: 0, threads: 0,
+                                      posts: 0, letzte_aktivitaet: null, rollen: [],
+                                      notiz: "", gebannt: false };
+          return leute[e];
+        };
+        const zaehle = (mail, anzeige, datum, feld) => {
+          const p = eintrag(mail);
+          if (!p) return;
+          if (anzeige) p.name = anzeige;
+          p[feld]++;
+          if (datum && (!p.letzte_aktivitaet || datum > p.letzte_aktivitaet))
+            p.letzte_aktivitaet = datum;
+        };
+        (kommentare || []).forEach(k => zaehle(k.email, k.name, k.erstellt_am, "kommentare"));
+        (threads || []).forEach(t => zaehle(t.autor_email, t.autor_name, t.created_at, "threads"));
+        (posts || []).forEach(p => zaehle(p.autor_email, p.autor_name, p.created_at, "posts"));
+
+        // Auch wer nur eine Rolle oder eine Sperre hat, gehoert in die Liste
+        (rollenZeilen || []).forEach(r => {
+          const p = eintrag(r.email);
+          if (p) { p.rollen = r.rollen || []; p.notiz = r.notiz || ""; }
+        });
+        (bans || []).forEach(b => {
+          const p = eintrag(b.email);
+          if (p) {
+            p.gebannt = !b.gebannt_bis || new Date(b.gebannt_bis) > new Date();
+            p.ban_grund = b.grund || "";
+            p.ban_bis = b.gebannt_bis;
+          }
+        });
+
+        const liste = Object.values(leute);
+        liste.sort((a, b) => (b.letzte_aktivitaet || "").localeCompare(a.letzte_aktivitaet || ""));
+        return json(200, { nutzer: liste });
+      }
+
+      case "rolle_setzen": {
+        if (!istAdmin) return json(403, { fehler: "Nur Admin" });
+        const ziel = sauber(body.email, 200).toLowerCase();
+        if (!ziel) return json(400, { fehler: "E-Mail fehlt" });
+        const erlaubt = ["admin", "moderator"];
+        const neue = (Array.isArray(body.rollen) ? body.rollen : [])
+          .map(r => String(r).trim().toLowerCase())
+          .filter(r => erlaubt.includes(r));
+        // Wer sich selbst die Adminrolle nimmt, sperrt sich aus
+        if (ziel === email.toLowerCase() && !neue.includes("admin"))
+          return json(400, { fehler: "Du kannst dir die Adminrolle nicht selbst entziehen" });
+        await db("benutzer_rollen", {
+          method: "POST",
+          headers: { Prefer: "resolution=merge-duplicates" },
+          body: JSON.stringify({
+            email: ziel, rollen: neue, notiz: sauber(body.notiz, 200) || null,
+            geaendert_am: new Date().toISOString(), geaendert_von: email,
+          }),
+        });
+        return json(200, { ok: true, rollen: neue });
+      }
+
+      // ─── Direktnachrichten ─────────────────────────────────────────────────
+      case "nachricht_senden": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        const an = sauber(body.an, 200).toLowerCase();
+        const inhalt = sauber(body.inhalt, 2000);
+        if (!an || !inhalt) return json(400, { fehler: "Empfaenger oder Text fehlt" });
+        if (an === email.toLowerCase()) return json(400, { fehler: "Nicht an dich selbst" });
+        // Flut bremsen: hoechstens 20 Nachrichten in 10 Minuten
+        const grenze = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+        const letzte = await hole(
+          `nachrichten?von_email=eq.${encodeURIComponent(email)}&erstellt_am=gt.${grenze}&select=id`);
+        if ((letzte || []).length >= 20)
+          return json(429, { fehler: "Zu viele Nachrichten. Bitte kurz warten." });
+        await lege_an("nachrichten", { von_email: email, von_name: name, an_email: an, inhalt });
+        return json(200, { ok: true });
+      }
+
+      case "postfach": {
+        const alle = await hole(
+          `nachrichten?or=(von_email.eq.${encodeURIComponent(email)},an_email.eq.${encodeURIComponent(email)})` +
+          `&order=erstellt_am.desc&limit=500`);
+        const meine = (alle || []).filter(n => !(n.geloescht_von || []).includes(email));
+        // Nach Gespraechspartner buendeln
+        const gespraeche = {};
+        for (const n of meine) {
+          const partner = n.von_email === email ? n.an_email : n.von_email;
+          if (!gespraeche[partner]) {
+            gespraeche[partner] = {
+              partner,
+              partner_name: n.von_email === email ? partner : n.von_name,
+              letzte: n.inhalt, letzte_am: n.erstellt_am, ungelesen: 0, nachrichten: [],
+            };
+          }
+          if (n.an_email === email && !n.gelesen) gespraeche[partner].ungelesen++;
+          gespraeche[partner].nachrichten.push({
+            id: n.id, von: n.von_email, name: n.von_name,
+            inhalt: n.inhalt, am: n.erstellt_am, gelesen: n.gelesen,
+          });
+        }
+        const liste = Object.values(gespraeche);
+        liste.forEach(g => g.nachrichten.reverse());
+        liste.sort((a, b) => (b.letzte_am || "").localeCompare(a.letzte_am || ""));
+        return json(200, {
+          gespraeche: liste,
+          ungelesen: liste.reduce((s, g) => s + g.ungelesen, 0),
+        });
+      }
+
+      case "nachrichten_gelesen": {
+        const partner = sauber(body.partner, 200).toLowerCase();
+        if (!partner) return json(400, { fehler: "Partner fehlt" });
+        await aendere("nachrichten",
+          `an_email=eq.${encodeURIComponent(email)}&von_email=eq.${encodeURIComponent(partner)}&gelesen=is.false`,
+          { gelesen: true });
+        return json(200, { ok: true });
+      }
+
+      case "gespraech_loeschen": {
+        const partner = sauber(body.partner, 200).toLowerCase();
+        if (!partner) return json(400, { fehler: "Partner fehlt" });
+        // Nur fuer einen selbst ausblenden, der andere behaelt seinen Verlauf
+        const betroffen = await hole(
+          `nachrichten?or=(and(von_email.eq.${encodeURIComponent(email)},an_email.eq.${encodeURIComponent(partner)}),` +
+          `and(von_email.eq.${encodeURIComponent(partner)},an_email.eq.${encodeURIComponent(email)}))&select=id,geloescht_von`);
+        for (const n of betroffen || []) {
+          const markiert = new Set(n.geloescht_von || []);
+          markiert.add(email);
+          await aendere("nachrichten", `id=eq.${n.id}`, { geloescht_von: [...markiert] });
+        }
+        return json(200, { ok: true, betroffen: (betroffen || []).length });
       }
 
       case "wer_bin_ich":
