@@ -246,16 +246,16 @@
       });
     }
     async function setUser(user) {
-      // Ban-Check
+      // Sperre pruefen. Verbindlich entscheidet der Server bei jedem Schreiben;
+      // das hier dient nur einer verstaendlichen Rueckmeldung.
       try {
-        const r = await fetch('https://raw.githubusercontent.com/DeutscheRetro/Ligaoutsider/main/banned.json');
-        const banned = await r.json();
-        if (banned.includes(user.email)) {
-          netlifyIdentity.logout();
-          alert('Dein Account wurde gesperrt.');
-          return;
+        const { data } = await sb.from('user_bans')
+          .select('gebannt_bis').eq('email', user.email).maybeSingle();
+        const gesperrt = data && (!data.gebannt_bis || new Date(data.gebannt_bis) > new Date());
+        if (gesperrt) {
+          alert('Dein Konto ist gesperrt. Du kannst mitlesen, aber nicht schreiben.');
         }
-      } catch(e) { /* bei Fehler trotzdem einloggen */ }
+      } catch(e) { /* bei Fehler normal fortfahren */ }
 
       aktuellerUser = user;
       await rollenLaden();

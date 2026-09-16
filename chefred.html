@@ -238,7 +238,6 @@ let ghToken      = '';
 let netlifyToken = '';
 let feedDaten    = [];
 let feedSha      = '';
-let bannedEmails = [];
 let netlifyUsers = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
@@ -327,16 +326,7 @@ async function ladeNetlifyUsers() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
-  await Promise.all([ladeArtikel(), ladeBanned(), ladeNetlifyUsers()]);
-}
-
-async function ladeBanned() {
-  try {
-    const data = await ghGet('banned.json');
-    bannedEmails = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-  } catch(e) {
-    bannedEmails = [];
-  }
+  await Promise.all([ladeArtikel(), ladeNetlifyUsers()]);
 }
 
 // ─── Tab-Navigation ───────────────────────────────────────────────────────────
@@ -345,7 +335,11 @@ function zeigeTab(name) {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
     document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
   });
-  if (name === 'stats') renderStats();
+  if (name === 'stats') {
+    // Die Sperrzahl stammt aus der Nutzerliste; beim ersten Aufruf fehlt sie noch
+    if (!nutzerListe.length) ladeModerationsdaten().then(renderStats);
+    else renderStats();
+  }
   if (name === 'kommentare') ladeKommentarListe();
   if (name === 'moderation') ladeModerationsdaten();
 }
@@ -592,7 +586,7 @@ function renderStats() {
       <div class="stat-card"><div class="num">${totalUser}</div><div class="lbl">Registriert gesamt</div></div>
       <div class="stat-card"><div class="num">${confirmedUser}</div><div class="lbl">Bestätigt</div></div>
       <div class="stat-card"><div class="num">${neueUser7d}</div><div class="lbl">Neu (7 Tage)</div></div>
-      <div class="stat-card"><div class="num">${bannedEmails.length}</div><div class="lbl">Gebannt</div></div>
+      <div class="stat-card"><div class="num">${nutzerListe.filter(u => u.gebannt).length}</div><div class="lbl">Gebannt</div></div>
     </div>
 
     <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
