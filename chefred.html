@@ -242,6 +242,15 @@ let bannedEmails = [];
 let netlifyUsers = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
+// Ohne init() stellt das Widget die Sitzung beim Laden nicht wieder her;
+// currentUser() bliebe null und jeder Serveraufruf scheiterte mit
+// "Nicht angemeldet", obwohl man angemeldet ist.
+if (window.netlifyIdentity) {
+  netlifyIdentity.on('login', () => { netlifyIdentity.close(); login(); });
+  netlifyIdentity.on('logout', () => { sessionStorage.removeItem('auth'); location.reload(); });
+  netlifyIdentity.init();
+}
+
 async function login() {
   const tok = document.getElementById('gh-token').value.trim();
   const ntok = document.getElementById('netlify-token').value.trim();
