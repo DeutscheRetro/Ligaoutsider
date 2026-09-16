@@ -330,10 +330,17 @@ exports.handler = async (event, context) => {
         // Mitglieder auftauchen und nicht nur, wer schon geschrieben hat.
         let kontenQuelle = "nur eigene Daten";
         try {
-          const konten = await netlifyIdentityApi("/users?per_page=1000");
-          if (konten) {
+          // Netlify erlaubt hoechstens 500 pro Seite und blaettert danach
+          const konten = [];
+          for (let seite = 1; seite <= 10; seite++) {
+            const teil = await netlifyIdentityApi(`/users?per_page=500&page=${seite}`);
+            const zeilen = Array.isArray(teil) ? teil : (teil && teil.users) || [];
+            konten.push(...zeilen);
+            if (zeilen.length < 500) break;
+          }
+          if (NETLIFY_TOKEN) {
             kontenQuelle = "Netlify";
-            (Array.isArray(konten) ? konten : konten.users || []).forEach(k => {
+            konten.forEach(k => {
               const p = eintrag(k.email);
               if (!p) return;
               p.konto_id = k.id;
