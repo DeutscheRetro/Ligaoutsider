@@ -939,13 +939,19 @@ async function entbanne(email) {
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
-if (sessionStorage.getItem('auth') === '1') {
+// Die Hauptseite erst zeigen, wenn wirklich eine Anmeldung vorliegt. Frueher
+// genuegte ein Merker in der Sitzungsablage - dann stand das Panel offen,
+// obwohl jeder Serveraufruf mit "Nicht angemeldet" scheiterte.
+function seiteOeffnenWennAngemeldet() {
+  const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+  if (!user || sessionStorage.getItem('auth') !== '1') return;
   ghToken      = localStorage.getItem('gh_token') || '';
   netlifyToken = localStorage.getItem('netlify_token') || '';
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
   init();
 }
+if (window.netlifyIdentity) netlifyIdentity.on('init', seiteOeffnenWennAngemeldet);
 </script>
 </body>
 </html>
