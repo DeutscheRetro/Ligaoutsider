@@ -267,8 +267,8 @@ exports.handler = async (event, context) => {
         // Kommentatoren, Forenautoren, vergebene Rollen und Sperren.
         const [kommentare, threads, posts, rollenZeilen, bans] = await Promise.all([
           hole("kommentare?select=name,email,erstellt_am"),
-          hole("forum_threads?select=autor_name,autor_email,created_at"),
-          hole("forum_posts?select=autor_name,autor_email,created_at"),
+          hole("forum_threads?select=autor_name,autor_email,erstellt_am"),
+          hole("forum_posts?select=autor_name,autor_email,erstellt_am"),
           hole("benutzer_rollen?select=email,rollen,notiz,geaendert_am"),
           hole("user_bans?select=email,grund,gebannt_bis"),
         ]);
@@ -291,8 +291,8 @@ exports.handler = async (event, context) => {
             p.letzte_aktivitaet = datum;
         };
         (kommentare || []).forEach(k => zaehle(k.email, k.name, k.erstellt_am, "kommentare"));
-        (threads || []).forEach(t => zaehle(t.autor_email, t.autor_name, t.created_at, "threads"));
-        (posts || []).forEach(p => zaehle(p.autor_email, p.autor_name, p.created_at, "posts"));
+        (threads || []).forEach(t => zaehle(t.autor_email, t.autor_name, t.erstellt_am, "threads"));
+        (posts || []).forEach(p => zaehle(p.autor_email, p.autor_name, p.erstellt_am, "posts"));
 
         // Auch wer nur eine Rolle oder eine Sperre hat, gehoert in die Liste
         (rollenZeilen || []).forEach(r => {
