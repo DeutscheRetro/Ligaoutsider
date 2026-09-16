@@ -105,6 +105,7 @@
   <div class="tabs">
     <button class="tab active" id="tab-btn-artikel" onclick="zeigeTab('artikel')">📰 Artikel</button>
     <button class="tab" id="tab-btn-stats" onclick="zeigeTab('stats')">📊 Stats</button>
+    <button class="tab" id="tab-btn-kommentare" onclick="zeigeTab('kommentare')">💬 Kommentare</button>
     <button class="tab" id="tab-btn-moderation" onclick="zeigeTab('moderation')">🛡 Moderation</button>
   </div>
 
@@ -176,6 +177,30 @@
   </div>
 
   <!-- TAB: MODERATION -->
+  <div id="tab-kommentare" style="display:none">
+    <div id="komm-msg" style="display:none;margin-bottom:16px"></div>
+    <div class="toolbar">
+      <input type="text" id="komm-suche" placeholder="Nach Text, Name oder E-Mail suchen…" style="max-width:320px" oninput="renderKommentare()"/>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="display:flex;align-items:center;gap:6px;text-transform:none;font-size:12px;color:#888;margin:0">
+          <input type="checkbox" id="komm-geloeschte" style="width:auto" onchange="renderKommentare()"/> gelöschte zeigen
+        </label>
+        <button class="btn btn-gray" onclick="ladeKommentarListe()">↻ Aktualisieren</button>
+      </div>
+    </div>
+    <div class="toolbar" style="margin-bottom:10px">
+      <label style="display:flex;align-items:center;gap:6px;text-transform:none;font-size:12px;color:#ccc;margin:0">
+        <input type="checkbox" id="komm-alle" style="width:auto" onchange="alleWaehlen(this.checked)"/> Alle auswählen
+      </label>
+      <div style="display:flex;gap:8px">
+        <span id="komm-gewaehlt" style="font-size:12px;color:#888;align-self:center"></span>
+        <button class="btn btn-gray btn-sm" onclick="auswahlLoeschen(false)">Ausgewählte ausblenden</button>
+        <button class="btn btn-red btn-sm" onclick="auswahlLoeschen(true)">Endgültig löschen</button>
+      </div>
+    </div>
+    <div id="komm-inhalt"><p style="color:#555">Lade…</p></div>
+  </div>
+
   <div id="tab-moderation" style="display:none">
     <div id="mod-msg" style="display:none;margin-bottom:16px"></div>
     <div class="toolbar">
@@ -307,11 +332,12 @@ async function ladeBanned() {
 
 // ─── Tab-Navigation ───────────────────────────────────────────────────────────
 function zeigeTab(name) {
-  ['artikel','stats','moderation'].forEach(t => {
+  ['artikel','stats','kommentare','moderation'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
     document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
   });
   if (name === 'stats') renderStats();
+  if (name === 'kommentare') ladeKommentarListe();
   if (name === 'moderation') ladeModerationsdaten();
 }
 
@@ -602,6 +628,144 @@ function renderStats() {
 }
 
 // ─── Moderation ───────────────────────────────────────────────────────────────
+// ─── Kommentarverwaltung ──────────────────────────────────────────────────────
+let kommentarListe = [];
+
+function kommEscape(t) {
+  return String(t ?? '').replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+async function ladeKommentarListe() {
+  const el = document.getElementById('komm-inhalt');
+  el.innerHTML = '<p style="color:#555"><span class="spinner"></span>Lade Kommentare…</p>';
+  try {
+    const r = await loApi('kommentar_liste');
+    kommentarListe = r.kommentare || [];
+    renderKommentare();
+  } catch(e) {
+    el.innerHTML = `<div class="err">${kommEscape(e.message)}</div>`;
+  }
+}
+
+function titelZuArtikel(aid) {
+  const a = (feedDaten || []).find(x => x.id === aid);
+  return a ? a.titel : aid;
+}
+
+function gefilterteKommentare() {
+  const q = (document.getElementById('komm-suche')?.value || '').trim().toLowerCase();
+  const mitGeloeschten = document.getElementById('komm-geloeschte')?.checked;
+  return kommentarListe.filter(k => {
+    if (!mitGeloeschten && k.geloescht) return false;
+    if (!q) return true;
+    return (k.inhalt || '').toLowerCase().includes(q)
+        || (k.name || '').toLowerCase().includes(q)
+        || (k.email || '').toLowerCase().includes(q)
+        || titelZuArtikel(k.artikel_id).toLowerCase().includes(q);
+  });
+}
+
+function renderKommentare() {
+  const el = document.getElementById('komm-inhalt');
+  const liste = gefilterteKommentare();
+
+  if (!kommentarListe.length) {
+    el.innerHTML = '<p style="color:#555">Noch keine Kommentare.</p>';
+    zaehleAuswahl();
+    return;
+  }
+  if (!liste.length) {
+    el.innerHTML = '<p style="color:#555">Kein Treffer.</p>';
+    zaehleAuswahl();
+    return;
+  }
+
+  el.innerHTML = `
+    <p style="color:#555;font-size:12px;margin-bottom:10px">${liste.length} von ${kommentarListe.length} Kommentaren</p>
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>Kommentar</th><th>Von</th><th>Artikel</th><th>Datum</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${liste.map(k => {
+          const datum = k.erstellt_am
+            ? new Date(k.erstellt_am).toLocaleDateString('de-DE') + ' ' +
+              new Date(k.erstellt_am).toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' })
+            : '–';
+          const text = k.geloescht
+            ? '<i style="color:#555">— gelöscht —</i>'
+            : kommEscape((k.inhalt || '').slice(0, 140)) + ((k.inhalt || '').length > 140 ? '…' : '');
+          const artikel = kommEscape(titelZuArtikel(k.artikel_id).slice(0, 44));
+          return `<tr class="${k.geloescht ? 'banned-row' : ''}">
+            <td><input type="checkbox" class="komm-box" value="${k.id}" style="width:auto" onchange="zaehleAuswahl()"/></td>
+            <td style="max-width:360px">${text}</td>
+            <td style="font-size:12px">${kommEscape(k.name || '–')}<br><span style="color:#555;font-size:11px">${kommEscape(k.email || '')}</span></td>
+            <td style="font-size:12px;color:#888">${artikel}</td>
+            <td style="color:#555;font-size:12px;white-space:nowrap">${datum}</td>
+            <td><button class="btn btn-red btn-sm" onclick="einzelnLoeschen('${k.id}')">Löschen</button></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+  document.getElementById('komm-alle').checked = false;
+  zaehleAuswahl();
+}
+
+function alleWaehlen(an) {
+  document.querySelectorAll('.komm-box').forEach(b => { b.checked = an; });
+  zaehleAuswahl();
+}
+
+function gewaehlteIds() {
+  return [...document.querySelectorAll('.komm-box')].filter(b => b.checked).map(b => b.value);
+}
+
+function zaehleAuswahl() {
+  const n = gewaehlteIds().length;
+  const el = document.getElementById('komm-gewaehlt');
+  if (el) el.textContent = n ? `${n} ausgewählt` : '';
+}
+
+function zeigeMsgKomm(txt, ok) {
+  const el = document.getElementById('komm-msg');
+  el.className = ok ? 'ok' : 'err';
+  el.innerHTML = txt;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+async function auswahlLoeschen(hart) {
+  const ids = gewaehlteIds();
+  if (!ids.length) { zeigeMsgKomm('Nichts ausgewählt.', false); return; }
+  const was = hart
+    ? `${ids.length} Kommentar(e) ENDGÜLTIG löschen?\n\nDas lässt sich nicht rückgängig machen.`
+    : `${ids.length} Kommentar(e) ausblenden?\n\nSie erscheinen als „gelöscht", der Eintrag bleibt erhalten.`;
+  if (!confirm(was)) return;
+  zeigeMsgKomm('<span class="spinner"></span>Lösche…', false);
+  try {
+    const r = await loApi('kommentare_loeschen', { ids, hart: !!hart });
+    zeigeMsgKomm(`✓ ${r.anzahl} Kommentar(e) ${hart ? 'gelöscht' : 'ausgeblendet'}.`, true);
+    ladeKommentarListe();
+  } catch(e) {
+    zeigeMsgKomm('Fehler: ' + kommEscape(e.message), false);
+  }
+}
+
+async function einzelnLoeschen(id) {
+  if (!confirm('Diesen Kommentar endgültig löschen?')) return;
+  try {
+    await loApi('kommentare_loeschen', { ids: [id], hart: true });
+    zeigeMsgKomm('✓ Kommentar gelöscht.', true);
+    ladeKommentarListe();
+  } catch(e) {
+    zeigeMsgKomm('Fehler: ' + kommEscape(e.message), false);
+  }
+}
+
 let nutzerListe = [];
 let kontenQuelle = '';
 

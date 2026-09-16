@@ -277,6 +277,33 @@ exports.handler = async (event, context) => {
         return json(200, { ok: true });
       }
 
+      // ─── Kommentarverwaltung ───────────────────────────────────────────────
+      case "kommentar_liste": {
+        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
+        const nur = sauber(body.artikel_id, 64);
+        const filter = nur ? `&artikel_id=eq.${encodeURIComponent(nur)}` : "";
+        const zeilen = await hole(
+          `kommentare?select=id,artikel_id,name,email,inhalt,erstellt_am,geloescht` +
+          `${filter}&order=erstellt_am.desc&limit=500`);
+        return json(200, { kommentare: zeilen || [] });
+      }
+
+      case "kommentare_loeschen": {
+        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
+        const ids = (Array.isArray(body.ids) ? body.ids : [])
+          .map(i => String(i).trim())
+          .filter(i => /^[0-9a-f-]{36}$/i.test(i));
+        if (!ids.length) return json(400, { fehler: "Keine gueltigen IDs" });
+        if (ids.length > 200) return json(400, { fehler: "Hoechstens 200 auf einmal" });
+        const liste = ids.map(i => `"${i}"`).join(",");
+        if (body.hart) {
+          await loesche("kommentare", `id=in.(${liste})`);
+        } else {
+          await aendere("kommentare", `id=in.(${liste})`, { geloescht: true, inhalt: "" });
+        }
+        return json(200, { ok: true, anzahl: ids.length });
+      }
+
       // ─── Nutzerverwaltung ──────────────────────────────────────────────────
       case "nutzer_liste": {
         if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });

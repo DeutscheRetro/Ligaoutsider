@@ -96,13 +96,13 @@
 
   // ─── Ungelesene Nachrichten in der Navigation ───────────────────────────────
   async function ungeleseneAnzeigen() {
-    const link = document.getElementById('nav-nachrichten');
-    if (!link || !aktuellerUser) return;
+    const zahl = document.getElementById('nachrichten-zahl');
+    if (!zahl || !aktuellerUser) return;
     try {
       const r = await api('postfach');
       const n = r.ungelesen || 0;
-      link.textContent = n ? `\u2709\uFE0F Nachrichten (${n})` : '\u2709\uFE0F Nachrichten';
-      link.style.color = n ? 'var(--accent)' : '';
+      zahl.textContent = n > 99 ? '99+' : String(n);
+      zahl.hidden = !n;
     } catch {}
   }
 

@@ -1292,6 +1292,7 @@ def artikel_html(
         <div class="auth-buttons">
           <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
           <span id="user-info" style="display:none">
+            <a href="../nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
             <span id="user-name" class="auth-username"></span>
             <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
           </span>

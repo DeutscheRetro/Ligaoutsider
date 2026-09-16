@@ -257,6 +257,20 @@ ul { list-style: none; }
 .auth-btn--primary { background: var(--accent); color: #000 !important; border-color: var(--accent); }
 .auth-btn--primary:hover { opacity: 0.85; }
 .auth-username { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+/* Postfach-Icon links neben dem Namen */
+.post-icon {
+  position: relative; display: inline-flex; align-items: center;
+  font-size: 15px; line-height: 1; text-decoration: none;
+  padding: 3px 4px; border-radius: 4px; margin-right: 2px;
+}
+.post-icon:hover { background: var(--item-hover); }
+.post-zahl {
+  position: absolute; top: -4px; right: -6px;
+  background: #e53935; color: #fff;
+  font-size: 9px; font-weight: 800; line-height: 1;
+  min-width: 14px; padding: 2px 4px; border-radius: 8px; text-align: center;
+}
 #user-info { display: flex; align-items: center; gap: 8px; }
 
 /* ─── Mehr-Button ─── */
