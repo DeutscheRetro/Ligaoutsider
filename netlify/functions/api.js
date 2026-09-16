@@ -13,6 +13,24 @@
 const SUPABASE_URL = "https://rsodjlglzwlscamdlwev.supabase.co";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+// Die Konten selbst liegen bei Netlify Identity, nicht bei uns. Ohne Token
+// faellt die Nutzerliste auf das zurueck, was wir aus eigenen Daten kennen.
+const NETLIFY_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
+const NETLIFY_SITE = "cb939f1a-0538-4e1d-ad3d-9ca81bed209a";
+const NETLIFY_IDENTITY = "6a467b53e81902b5ccd77424";
+
+async function netlifyIdentityApi(pfad, options = {}) {
+  if (!NETLIFY_TOKEN) return null;
+  const res = await fetch(
+    `https://api.netlify.com/api/v1/sites/${NETLIFY_SITE}/identity/${NETLIFY_IDENTITY}${pfad}`,
+    { ...options, headers: { Authorization: `Bearer ${NETLIFY_TOKEN}`,
+                             "Content-Type": "application/json",
+                             ...(options.headers || {}) } });
+  if (!res.ok) throw new Error(`Netlify ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
 const json = (code, body) => ({
   statusCode: code,
   headers: { "Content-Type": "application/json" },
@@ -308,9 +326,53 @@ exports.handler = async (event, context) => {
           }
         });
 
+        // Registrierte Konten von Netlify dazunehmen, damit auch stille
+        // Mitglieder auftauchen und nicht nur, wer schon geschrieben hat.
+        let kontenQuelle = "nur eigene Daten";
+        try {
+          const konten = await netlifyIdentityApi("/users?per_page=1000");
+          if (konten) {
+            kontenQuelle = "Netlify";
+            (Array.isArray(konten) ? konten : konten.users || []).forEach(k => {
+              const p = eintrag(k.email);
+              if (!p) return;
+              p.konto_id = k.id;
+              p.registriert = k.created_at;
+              p.bestaetigt = !!k.confirmed_at;
+              p.letzter_login = k.last_login_at || null;
+              const anzeige = (k.user_metadata || {}).full_name;
+              if (anzeige && p.name === p.email) p.name = anzeige;
+            });
+          }
+        } catch (e) {
+          console.error("Netlify-Konten nicht abrufbar:", e.message);
+          kontenQuelle = "Netlify-Abruf fehlgeschlagen";
+        }
+
         const liste = Object.values(leute);
-        liste.sort((a, b) => (b.letzte_aktivitaet || "").localeCompare(a.letzte_aktivitaet || ""));
-        return json(200, { nutzer: liste });
+        liste.sort((a, b) =>
+          (b.letzte_aktivitaet || b.registriert || "").localeCompare(
+            a.letzte_aktivitaet || a.registriert || ""));
+        return json(200, { nutzer: liste, quelle: kontenQuelle });
+      }
+
+      case "konto_loeschen": {
+        if (!istAdmin) return json(403, { fehler: "Nur Admin" });
+        const ziel = sauber(body.email, 200).toLowerCase();
+        if (!ziel) return json(400, { fehler: "E-Mail fehlt" });
+        if (ziel === email.toLowerCase())
+          return json(400, { fehler: "Du kannst dein eigenes Konto hier nicht loeschen" });
+        if (!NETLIFY_TOKEN)
+          return json(400, { fehler: "Ohne NETLIFY_AUTH_TOKEN koennen Konten nicht geloescht werden" });
+        if (!body.konto_id) return json(400, { fehler: "Konto-ID fehlt" });
+        // Erst Inhalte, dann das Konto - sonst bleiben verwaiste Beitraege
+        const e2 = encodeURIComponent(ziel);
+        await loesche("forum_posts", `autor_email=eq.${e2}`);
+        await loesche("forum_threads", `autor_email=eq.${e2}`);
+        await loesche("kommentare", `email=eq.${e2}`);
+        await loesche("benutzer_rollen", `email=eq.${e2}`);
+        await netlifyIdentityApi(`/users/${body.konto_id}`, { method: "DELETE" });
+        return json(200, { ok: true });
       }
 
       case "rolle_setzen": {

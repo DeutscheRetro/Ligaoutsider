@@ -603,6 +603,7 @@ function renderStats() {
 
 // ─── Moderation ───────────────────────────────────────────────────────────────
 let nutzerListe = [];
+let kontenQuelle = '';
 
 async function ladeModerationsdaten() {
   const el = document.getElementById('mod-inhalt');
@@ -610,6 +611,7 @@ async function ladeModerationsdaten() {
   try {
     const r = await loApi('nutzer_liste');
     nutzerListe = r.nutzer || [];
+    kontenQuelle = r.quelle || '';
     renderNutzer();
   } catch(e) {
     el.innerHTML = `<div class="err">${e.message}</div>`;
@@ -635,18 +637,22 @@ function renderNutzer() {
     `<span class="banned-badge" style="background:${r === 'admin' ? '#1565c0' : '#6a1fbf'}">${r}</span>`;
 
   el.innerHTML = `
-    <p style="color:#555;font-size:12px;margin-bottom:10px">${liste.length} von ${nutzerListe.length} Nutzern</p>
+    <p style="color:#555;font-size:12px;margin-bottom:10px">${liste.length} von ${nutzerListe.length} Nutzern${
+      kontenQuelle && kontenQuelle !== 'Netlify'
+        ? ` · <span style="color:#e8a000">Kontoliste unvollständig (${kontenQuelle})</span>` : ''}</p>
     <table class="user-table">
       <thead>
         <tr>
           <th>Name</th><th>E-Mail</th><th>Rollen</th>
-          <th>Komm.</th><th>Forum</th><th>Letzte Aktivität</th><th></th>
+          <th>Komm.</th><th>Forum</th><th>Registriert</th><th>Letzte Aktivität</th><th></th>
         </tr>
       </thead>
       <tbody>
         ${liste.map(u => {
           const datum = u.letzte_aktivitaet
             ? new Date(u.letzte_aktivitaet).toLocaleDateString('de-DE') : '–';
+          const reg = u.registriert
+            ? new Date(u.registriert).toLocaleDateString('de-DE') : '–';
           const e = u.email.replace(/'/g, "\\'");
           return `<tr class="${u.gebannt ? 'banned-row' : ''}">
             <td>${u.name || '–'}${u.gebannt ? '<span class="banned-badge">GEBANNT</span>' : ''}</td>
@@ -654,12 +660,14 @@ function renderNutzer() {
             <td>${(u.rollen || []).map(rollenChip).join(' ') || '<span style="color:#444">–</span>'}</td>
             <td>${u.kommentare}</td>
             <td>${u.threads + u.posts}</td>
+            <td style="color:#555;font-size:12px">${reg}${u.bestaetigt === false ? ' <span style="color:#e8a000">unbestätigt</span>' : ''}</td>
             <td style="color:#555;font-size:12px">${datum}</td>
             <td style="white-space:nowrap">
               <button class="btn btn-gray btn-sm" onclick="rollenDialog('${e}')">Rollen</button>
               ${u.gebannt
                 ? `<button class="btn btn-gray btn-sm" onclick="entbanne('${e}')">Entbannen</button>`
                 : `<button class="btn btn-red btn-sm" onclick="banne('${e}')">Bannen</button>`}
+              ${u.konto_id ? `<button class="btn btn-red btn-sm" onclick="kontoLoeschen('${e}','${u.konto_id}')">Konto löschen</button>` : ''}
             </td>
           </tr>`;
         }).join('')}
@@ -717,6 +725,19 @@ function zeigeMsgMod(txt, ok) {
   el.innerHTML = txt;
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+async function kontoLoeschen(email, kontoId) {
+  if (!confirm(`Konto ${email} endgültig löschen?\n\nAlle Kommentare, Forenbeiträge und Rollen werden mitgelöscht. Das lässt sich nicht rückgängig machen.`)) return;
+  if (!confirm(`Wirklich sicher? ${email} wird unwiderruflich entfernt.`)) return;
+  zeigeMsgMod('<span class="spinner"></span>Lösche Konto…', false);
+  try {
+    await loApi('konto_loeschen', { email, konto_id: kontoId });
+    zeigeMsgMod(`✓ Konto ${email} gelöscht.`, true);
+    ladeModerationsdaten();
+  } catch(e) {
+    zeigeMsgMod('Fehler: ' + e.message, false);
+  }
 }
 
 async function banne(email) {
