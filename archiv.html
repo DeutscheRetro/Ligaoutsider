@@ -132,6 +132,25 @@
     let aktSeite = 1;
     let proSeite = 25;
 
+    // Kommentarzahlen je Artikel; faellt der Abruf aus, bleibt die Spalte leer
+    let kommentarZahlen = {};
+    async function ladeKommentarZahlen() {
+      try {
+        const r = await fetch(
+          `${SUPABASE_URL}/rest/v1/kommentare?select=artikel_id&geloescht=is.false`,
+          { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } });
+        if (!r.ok) return;
+        const zaehler = {};
+        (await r.json()).forEach(k => { zaehler[k.artikel_id] = (zaehler[k.artikel_id] || 0) + 1; });
+        kommentarZahlen = zaehler;
+        renderArchiv();
+      } catch {}
+    }
+    function kommentarChip(id) {
+      const n = kommentarZahlen[id] || 0;
+      return n ? `<span class="feed-komm" title="${n} Kommentare">💬 ${n}</span>` : '';
+    }
+
     function renderArchiv() {
       const total = alleArtikel.length;
       const pages = Math.ceil(total / proSeite);
@@ -143,7 +162,7 @@
         <li class="archiv-item">
           <img src="${a.wappen_url || ''}" alt="" onerror="this.style.display='none'">
           <a href="${a.pfad || a.url || '#'}" class="archiv-title">${a.titel}</a>
-          <span class="archiv-date">${formatDate(a.datum)}</span>
+          <span class="archiv-date">${formatDate(a.datum)}</span>${kommentarChip(a.id)}
         </li>
       `).join('');
 
@@ -194,7 +213,11 @@
       fetch('feed.json').then(r => r.ok ? r.json() : Promise.reject()),
       versteckteIds()
     ])
-      .then(([artikel, versteckt]) => { alleArtikel = artikel.filter(a => !versteckt.has(a.id)); renderArchiv(); })
+      .then(([artikel, versteckt]) => {
+        alleArtikel = artikel.filter(a => !versteckt.has(a.id));
+        renderArchiv();
+        ladeKommentarZahlen();
+      })
       .catch(() => {
         document.getElementById('archiv-list').innerHTML =
           '<li class="archiv-item"><span style="color:var(--text4);font-size:12px">Keine Artikel gefunden.</span></li>';

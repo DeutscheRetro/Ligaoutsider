@@ -96,6 +96,8 @@
         <h2 id="feed-titel">Aktuell</h2>
       </div>
 
+      <div class="aufmacher" id="aufmacher"></div>
+
       <ul class="feed" id="feed">
         <li class="feed-loading">Lade Artikel …</li>
       </ul>
@@ -347,7 +349,7 @@
         <div class="feed-body">
           <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
           <a href="${a.pfad}" class="feed-title">${a.titel}</a>
-          <div class="feed-meta"><span class="feed-time">${a.datum.split(' ')[0]}</span>${adminBtn}</div>
+          <div class="feed-meta"><span class="feed-time">${a.datum.split(' ')[0]}</span>${kommentarChip(a.id)}${adminBtn}</div>
         </div>
       </li>`;
     }
@@ -363,17 +365,61 @@
       });
     }
 
+    // Kommentarzahlen je Artikel. Faellt der Abruf aus, bleibt die Anzeige
+    // einfach leer statt die Liste zu blockieren.
+    let kommentarZahlen = {};
+    async function ladeKommentarZahlen() {
+      try {
+        const r = await fetch(
+          `${SUPABASE_URL}/rest/v1/kommentare?select=artikel_id&geloescht=is.false`,
+          { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } });
+        if (!r.ok) return;
+        const zaehler = {};
+        (await r.json()).forEach(k => { zaehler[k.artikel_id] = (zaehler[k.artikel_id] || 0) + 1; });
+        kommentarZahlen = zaehler;
+        renderFeed();
+      } catch {}
+    }
+    function kommentarChip(id) {
+      const n = kommentarZahlen[id] || 0;
+      return n ? `<span class="feed-komm" title="${n} Kommentare">💬 ${n}</span>` : '';
+    }
+
+    function aufmacherKarte(a) {
+      const bild = a.wappen_url || 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/120px-Bundesliga_logo_%282017%29.svg.png';
+      return `<article class="auf-karte">
+        <div class="auf-kopf">
+          <img src="${bild}" class="auf-wappen" alt="" onerror="this.style.display='none'">
+          <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
+        </div>
+        <a href="${a.pfad}" class="auf-titel">${a.titel}</a>
+        <p class="auf-text">${a.anriss ? a.anriss + '…' : ''}</p>
+        <div class="auf-fuss">
+          <span class="feed-time">${a.datum.split(' ')[0]}</span>${kommentarChip(a.id)}
+          <a href="${a.pfad}" class="auf-mehr">Weiterlesen</a>
+        </div>
+      </article>`;
+    }
+
     function renderFeed() {
       const liste = gefiltert();
       const feed  = document.getElementById('feed');
       const btn   = document.getElementById('mehr-btn');
       const titel = document.getElementById('feed-titel');
+      const auf   = document.getElementById('aufmacher');
 
       titel.textContent = aktiverFilter || 'Aktuell';
-      feed.innerHTML = liste.length
-        ? liste.slice(0, 50).map(feedItem).join('')
-        : '<li class="feed-loading">Keine Artikel gefunden.</li>';
-      btn.style.display = liste.length > 50 ? 'block' : 'none';
+
+      // Aufmacher nur in der ungefilterten Ansicht, sonst doppelt sich alles
+      const suche = (document.getElementById('search-input').value || '').trim();
+      const zeigeAufmacher = !aktiverFilter && !suche && liste.length >= 3;
+      auf.innerHTML = zeigeAufmacher ? liste.slice(0, 3).map(aufmacherKarte).join('') : '';
+      const rest = zeigeAufmacher ? liste.slice(3) : liste;
+
+      feed.innerHTML = rest.length
+        ? rest.slice(0, 50).map(feedItem).join('')
+        : (zeigeAufmacher ? '' : '<li class="feed-loading">Keine Artikel gefunden.</li>');
+      btn.style.display = rest.length > 50 ? 'block' : 'none';
     }
 
     // Team-Chip Filter
@@ -592,6 +638,7 @@
       .then(([artikel, versteckt]) => {
         alleArtikel = artikel.filter(a => !versteckt.has(a.id));
         renderFeed();
+        ladeKommentarZahlen();
       })
       .catch(() => {
         document.getElementById('feed').innerHTML =

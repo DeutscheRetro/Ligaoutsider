@@ -1876,6 +1876,7 @@ def main():
             "datum":      k["datum"],
             "wappen_url": k["wappen_url"],
             "vereine":    k["vereine"],
+            "anriss":     " ".join(ergebnis["text"].split()[:30]),
             "pfad":       f"artikel/{aid}.html",
         }
         bestehende.append(feed_entry)
