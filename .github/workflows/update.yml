@@ -55,6 +55,7 @@ jobs:
           git config user.email "bot@ligaoutsider.de"
           git add feed.json artikel/ data/ logs/ sitemap.xml rss.xml og/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
+          [ -f comunio.json ] && git add comunio.json || true
           [ -d spieler ] && git add spieler/ || true
           if git diff --staged --quiet; then
             echo "Keine neuen Artikel – kein Commit nötig"

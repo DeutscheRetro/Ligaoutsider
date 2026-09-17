@@ -1306,6 +1306,7 @@ def artikel_html(
       <a href="../index.html" class="section-nav-link">Aktuelle News</a>
       <a href="../archiv.html" class="section-nav-link">Newsarchiv</a>
       <a href="../kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="../comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="../forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>
@@ -1989,6 +1990,7 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/", "1.0", "daily"),
         (f"{base}/archiv.html", "0.8", "daily"),
         (f"{base}/kickbase.html", "0.6", "weekly"),
+        (f"{base}/comunio.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
     ]
     for a in artikel_liste:
@@ -2062,6 +2064,128 @@ def rss_generieren(artikel_liste: list):
 </rss>"""
     Path("rss.xml").write_text(rss, encoding="utf-8")
     print(f"✅ rss.xml generiert ({len(items)} Einträge)")
+
+COMUNIO_BASE = "https://stats.comunio.de"
+COMUNIO_KLUB = [  # Teilstring im Comstats-Klubnamen -> Logo
+    ("Bayern", "bayern"), ("Dortmund", "dortmund"), ("Leipzig", "leipzig"),
+    ("Leverkusen", "leverkusen"), ("Frankfurt", "frankfurt"), ("Stuttgart", "stuttgart"),
+    ("gladbach", "gladbach"), ("Freiburg", "freiburg"), ("Union", "union"),
+    ("Mainz", "mainz"), ("Augsburg", "augsburg"), ("Werder", "werder"),
+    ("Hoffenheim", "hoffenheim"), ("Hamburg", "hsv"), ("Köln", "koeln"),
+    ("Schalke", "schalke"), ("Paderborn", "paderborn"), ("Elversberg", "elversberg"),
+]
+
+
+def _comunio_logo(klub):
+    for teil, datei in COMUNIO_KLUB:
+        if klub and teil.lower() in klub.lower():
+            return f"logos/{datei}.png"
+    return ""
+
+
+def _comunio_tabellen(pfad, session):
+    """Alle Spielertabellen einer Comstats-Seite als Zeilen-Dicts."""
+    import html as _html
+    r = session.get(COMUNIO_BASE + pfad, timeout=20)
+    r.raise_for_status()
+    tabellen = []
+    for tb in re.findall(r"<table class='(?:playersTable|rangliste)[^']*'>(.*?)</table>", r.text, re.S):
+        zeilen = []
+        for tr in re.findall(r"<tr>(.*?)</tr>", tb, re.S):
+            name = re.search(r"<a class='playerName[^>]*>(.*?)</a>", tr)
+            if not name:
+                continue
+            nach_name = tr[name.end():]
+            werte = [re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", td))).replace(" ", "").strip()
+                     for td in re.findall(r"<td[^>]*>(.*?)</td>", nach_name, re.S)]
+            pos = re.search(r"class='vectoricon pos[^']*' alt='([^']+)'", tr)
+            zeilen.append({
+                "name": _html.unescape(name.group(1)),
+                "klubs": [_html.unescape(k) for k in re.findall(r'title="([^"]+)" class=\'clubicon', tr)],
+                "pos": pos.group(1) if pos else "",
+                "werte": [w for w in werte if w],
+            })
+        tabellen.append(zeilen)
+    return tabellen
+
+
+def _zahl(txt):
+    txt = (txt or "").replace(".", "").replace(",", ".").replace("+", "").replace("%", "").replace(" ", "")
+    try:
+        return float(txt)
+    except ValueError:
+        return 0.0
+
+
+def comunio_fetch():
+    """Comunio-Statistiken von Comstats (stats.comunio.de) holen — Quelle wird auf der Seite genannt."""
+    import requests as _req
+    session = _req.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0 (Ligaoutsider.de)"})
+
+    def spieler(z, **extra):
+        klub = z["klubs"][0] if z["klubs"] else ""
+        return {"name": z["name"], "klub": klub, "logo": _comunio_logo(klub), "pos": z["pos"], **extra}
+
+    # Spalten nach dem Namen: Klub(leer), Marktwert, Einsätze "3 (3)", Tore, Punkte, Punkte/Spiel
+    def punkte_zeile(z):
+        w = z["werte"]
+        einsaetze = int(_zahl(w[1].split("(")[0])) if len(w) > 1 else 0
+        return spieler(z, mw=int(_zahl(w[0])), spiele=einsaetze, tore=int(_zahl(w[2])),
+                       pts=int(_zahl(w[3])), ap=round(_zahl(w[4]), 2))
+
+    result = {"updated": datetime.datetime.now(datetime.timezone.utc).isoformat()}
+
+    # Marktwert
+    mw = _comunio_tabellen("/toplist/mv_ovr_25-Top25_Marktwerte", session)[0]
+    result["teuerste"] = [spieler(z, mw=int(_zahl(z["werte"][0]))) for z in mw[:10]]
+
+    # Punkte – Basis für Schnitt und Effizienz
+    alle = [punkte_zeile(z) for z in _comunio_tabellen("/toplist/pts_ovr_100-Top100_Punkte_Spieler", session)[0]]
+    result["punkte"] = alle[:10]
+    max_spiele = max((p["spiele"] for p in alle), default=0)
+    min_spiele = max(1, round(max_spiele * 0.75))
+    stamm = [p for p in alle if p["spiele"] >= min_spiele]
+    result["schnitt"] = sorted(stamm, key=lambda p: -p["ap"])[:10]
+    for p in stamm:
+        p["eff"] = round(p["pts"] / (p["mw"] / 1e6), 1) if p["mw"] else 0
+    result["effizienz"] = sorted(stamm, key=lambda p: -p["eff"])[:10]
+    result["torjaeger"] = sorted([p for p in alle if p["tore"] > 0], key=lambda p: (-p["tore"], -p["pts"]))[:10]
+
+    # Beste je Position (Punkte pro Spiel, nur Stammkräfte)
+    for key, pfad in [("torwart", "ppm_gk_25-Top25_Punkte_pro_Spiel_Torhueter"),
+                      ("abwehr", "ppm_def_25-Top25_Punkte_pro_Spiel_Abwehr"),
+                      ("mittelfeld", "ppm_mf_25-Top25_Punkte_pro_Spiel_Mittelfeld"),
+                      ("sturm", "ppm_off_25-Top25_Punkte_pro_Spiel_Sturm")]:
+        liste = [punkte_zeile(z) for z in _comunio_tabellen("/toplist/" + pfad, session)[0]]
+        result[key] = [p for p in liste if p["spiele"] >= min_spiele][:8]
+        time.sleep(1)
+
+    # Marktwert-Gewinner/-Verlierer: Tabellen Tag+, Tag-, Woche+, Woche-, Monat+, Monat-
+    pt = _comunio_tabellen("/toplist/pt-Gewinner_Verlierer", session)
+    def trend(z):
+        w = z["werte"]
+        return spieler(z, mw=int(_zahl(w[0])), diff=int(_zahl(w[1])), proz=_zahl(w[2]))
+    for key, idx in [("raketen", 0), ("crash", 1), ("woche", 2), ("wocheminus", 3)]:
+        result[key] = [trend(z) for z in pt[idx][:10]] if len(pt) > idx else []
+
+    # Nachfrage durch Manager: Tabelle 0 = trendend, 1 = aufsteigend
+    tr = _comunio_tabellen("/trending", session)
+    def gefragt(z):
+        return spieler(z, pts=int(_zahl(z["werte"][0])), mw=int(_zahl(z["werte"][1])))
+    result["trend"] = [gefragt(z) for z in tr[0][:10]] if tr else []
+    result["aufsteigend"] = [gefragt(z) for z in tr[1][:10]] if len(tr) > 1 else []
+
+    # Punkterekorde an einem Spieltag, aktuelle Saison: Punkte, Tore "3 (0)" (davon Elfmeter), Saison, Gegner
+    rek = _comunio_tabellen("/toplist/mptsreccurseason_ovr_100-Top100_Punkterekorde_Spieler_Spieltag_Aktuelle_Saison", session)
+    result["rekorde"] = [spieler(z, pts=int(_zahl(z["werte"][0])),
+                                 tore=int(_zahl(z["werte"][1].split("(")[0])),
+                                 gegner=z["klubs"][1] if len(z["klubs"]) > 1 else "")
+                         for z in (rek[0][:10] if rek else [])]
+
+    Path("comunio.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"✅ comunio.json geschrieben ({len(alle)} Spieler, via Comstats)")
+
 
 def kickbase_fetch():
     """Kickbase-Daten via BaseXI (base-xi.de) holen — kein Login nötig."""
@@ -2423,6 +2547,10 @@ if __name__ == "__main__":
         kickbase_fetch()
     except Exception as e:
         print(f"❌ kickbase_fetch Fehler: {e}")
+    try:
+        comunio_fetch()
+    except Exception as e:
+        print(f"❌ comunio_fetch Fehler: {e}")
     try:
         spieler_fetch()
     except Exception as e:

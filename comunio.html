@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kickbase-Stats – Ligaoutsider.de</title>
-  <meta name="description" content="Kickbase-Statistiken der Bundesliga: teuerste Spieler, Punktebeste, Marktwert-Raketen und Crashs – täglich aktualisiert."/>
-  <link rel="canonical" href="https://ligaoutsider.de/kickbase.html"/>
+  <title>Comunio-Stats – Ligaoutsider.de</title>
+  <meta name="description" content="Comunio-Statistiken der Bundesliga: teuerste Spieler, Punktebeste, Marktwert-Gewinner, Trend-Spieler und Rekorde – täglich aktualisiert."/>
+  <link rel="canonical" href="https://ligaoutsider.de/comunio.html"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:title" content="Kickbase-Stats – Ligaoutsider.de"/>
-  <meta property="og:description" content="Kickbase-Statistiken der Bundesliga: teuerste Spieler, Punktebeste, Marktwert-Raketen und Crashs – täglich aktualisiert."/>
-  <meta property="og:url" content="https://ligaoutsider.de/kickbase.html"/>
+  <meta property="og:title" content="Comunio-Stats – Ligaoutsider.de"/>
+  <meta property="og:description" content="Comunio-Statistiken der Bundesliga: teuerste Spieler, Punktebeste, Marktwert-Gewinner, Trend-Spieler und Rekorde – täglich aktualisiert."/>
+  <meta property="og:url" content="https://ligaoutsider.de/comunio.html"/>
   <meta property="og:site_name" content="Ligaoutsider.de"/>
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="style.css"/>
@@ -54,15 +54,15 @@
     <div class="section-nav-inner">
       <a href="index.html" class="section-nav-link">Aktuelle News</a>
       <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
-      <a href="kickbase.html" class="section-nav-link active">Kickbase-Stats</a>
-      <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="comunio.html" class="section-nav-link active">Comunio-Stats</a>
       <a href="forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>
 
   <div class="kb-wrap">
     <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:16px">
-      <h2 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Kickbase-Stats</h2>
+      <h2 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--accent)">Comunio-Stats</h2>
       <span id="kb-updated" style="font-size:11px;color:var(--text4)"></span>
     </div>
 
@@ -70,127 +70,87 @@
 
       <div class="kb-widget">
         <div class="kb-widget-title">💰 Teuerste Spieler</div>
-        <p class="kb-widget-sub">Höchster Marktwert in der Liga.</p>
-        <ul class="kb-list" id="kb-teuerste">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
+        <p class="kb-widget-sub">Höchster Comunio-Marktwert in der Liga.</p>
+        <ul class="kb-list" id="cm-teuerste"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">⭐ Meiste Punkte</div>
         <p class="kb-widget-sub">Gesamtpunkte dieser Saison.</p>
-        <ul class="kb-list" id="kb-punkte">
-          <li class="kb-loading">Lade Daten…</li>
-        </ul>
+        <ul class="kb-list" id="cm-punkte"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">🔥 Beste Effizienz (Pkt/Mio)</div>
-        <p class="kb-widget-sub">Punkte je Million Marktwert – nur Spieler mit genug Einsätzen.</p>
-        <ul class="kb-list" id="kb-effizienz">
-          <li class="kb-loading">Saison noch nicht gestartet</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">📈 MW-Raketen (24h)</div>
-        <p class="kb-widget-sub">Größter Marktwertgewinn der letzten 24 Stunden.</p>
-        <ul class="kb-list" id="kb-raketen">
-          <li class="kb-loading">Saison noch nicht gestartet</li>
-        </ul>
-      </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">📉 MW-Crash (24h)</div>
-        <p class="kb-widget-sub">Größter Marktwertverlust der letzten 24 Stunden.</p>
-        <ul class="kb-list" id="kb-crash">
-          <li class="kb-loading">Saison noch nicht gestartet</li>
-        </ul>
-      </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">⚡ Punkteschnitt</div>
-        <p class="kb-widget-sub">Punkte pro Spiel statt Gesamtpunkte.</p>
-        <ul class="kb-list" id="kb-schnitt">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <p class="kb-widget-sub">Punkte pro Spiel, nur Spieler mit genug Einsätzen.</p>
+        <ul class="kb-list" id="cm-schnitt"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
-        <div class="kb-widget-title">💎 Unterbewertet</div>
-        <p class="kb-widget-sub">Geschätzter fairer Wert geteilt durch Marktwert: 3,0x heißt dreifach unterbewertet.</p>
-        <ul class="kb-list" id="kb-schnaeppchen">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <div class="kb-widget-title">🔥 Beste Effizienz (Pkt/Mio)</div>
+        <p class="kb-widget-sub">Punkte je Million Marktwert – wer am meisten fürs Geld liefert.</p>
+        <ul class="kb-list" id="cm-effizienz"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
-
+      <div class="kb-widget">
+        <div class="kb-widget-title">📈 MW-Gewinner (Tag)</div>
+        <p class="kb-widget-sub">Größter Marktwertgewinn zum Vortag.</p>
+        <ul class="kb-list" id="cm-raketen"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+      <div class="kb-widget">
+        <div class="kb-widget-title">📉 MW-Verlierer (Tag)</div>
+        <p class="kb-widget-sub">Größter Marktwertverlust zum Vortag.</p>
+        <ul class="kb-list" id="cm-crash"><li class="kb-loading">Lädt…</li></ul>
+      </div>
       <div class="kb-widget">
         <div class="kb-widget-title">📈 Gewinner der Woche</div>
-        <p class="kb-widget-sub">Marktwertgewinn der letzten sieben Tage.</p>
-        <ul class="kb-list" id="kb-woche">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <p class="kb-widget-sub">Marktwertgewinn zur Vorwoche.</p>
+        <ul class="kb-list" id="cm-woche"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">📉 Verlierer der Woche</div>
-        <p class="kb-widget-sub">Marktwertverlust der letzten sieben Tage.</p>
-        <ul class="kb-list" id="kb-wocheminus">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <p class="kb-widget-sub">Marktwertverlust zur Vorwoche.</p>
+        <ul class="kb-list" id="cm-wocheminus"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
-        <div class="kb-widget-title">🚀 In Form</div>
-        <p class="kb-widget-sub">Punkteschnitt dieser Saison gegen die Vorsaison – wer sich am stärksten gesteigert hat.</p>
-        <ul class="kb-list" id="kb-formauf">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <div class="kb-widget-title">🔎 Gerade gefragt</div>
+        <p class="kb-widget-sub">Spieler, nach denen Comunio-Manager in den letzten Stunden am häufigsten suchen.</p>
+        <ul class="kb-list" id="cm-trend"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
-        <div class="kb-widget-title">🥶 Formkrise</div>
-        <p class="kb-widget-sub">Punkteschnitt dieser Saison gegen die Vorsaison – wer am stärksten abgefallen ist.</p>
-        <ul class="kb-list" id="kb-formab">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
+        <div class="kb-widget-title">🌱 Im Kommen</div>
+        <p class="kb-widget-sub">Nachfrage steigt deutlich, aber noch nicht ganz oben – oft der nächste Transfer-Hype.</p>
+        <ul class="kb-list" id="cm-aufsteigend"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
+      <div class="kb-widget">
+        <div class="kb-widget-title">🏆 Spieltagsrekorde</div>
+        <p class="kb-widget-sub">Meiste Punkte eines Spielers an einem einzigen Spieltag dieser Saison.</p>
+        <ul class="kb-list" id="cm-rekorde"><li class="kb-loading">Lädt…</li></ul>
+      </div>
+      <div class="kb-widget">
+        <div class="kb-widget-title">🥅 Torjäger</div>
+        <p class="kb-widget-sub">Tore dieser Saison, bei Gleichstand entscheiden die Punkte.</p>
+        <ul class="kb-list" id="cm-torjaeger"><li class="kb-loading">Lädt…</li></ul>
+      </div>
       <div class="kb-widget">
         <div class="kb-widget-title">🧤 Beste Torhüter</div>
         <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
-        <ul class="kb-list" id="kb-torwart"><li class="kb-loading">Lädt…</li></ul>
+        <ul class="kb-list" id="cm-torwart"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">🛡 Beste Abwehr</div>
         <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
-        <ul class="kb-list" id="kb-abwehr"><li class="kb-loading">Lädt…</li></ul>
+        <ul class="kb-list" id="cm-abwehr"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">🎯 Bestes Mittelfeld</div>
         <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
-        <ul class="kb-list" id="kb-mittelfeld"><li class="kb-loading">Lädt…</li></ul>
+        <ul class="kb-list" id="cm-mittelfeld"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
       <div class="kb-widget">
         <div class="kb-widget-title">⚽ Bester Sturm</div>
         <p class="kb-widget-sub">Punkte pro Spiel, nur Stammkräfte.</p>
-        <ul class="kb-list" id="kb-sturm"><li class="kb-loading">Lädt…</li></ul>
+        <ul class="kb-list" id="cm-sturm"><li class="kb-loading">Lädt…</li></ul>
       </div>
-
-      <div class="kb-widget">
-        <div class="kb-widget-title">🚑 Angeschlagen &amp; verletzt</div>
-        <p class="kb-widget-sub">Gemeldete Ausfälle und angeschlagene Spieler, nach Marktwert sortiert.</p>
-        <ul class="kb-list" id="kb-verletzt">
-          <li class="kb-loading">Lädt…</li>
-        </ul>
-      </div>
-
 
     </div>
+    <p class="cm-quelle">Quelle: <a href="https://stats.comunio.de/" target="_blank" rel="noopener">Comstats (stats.comunio.de)</a></p>
   </div>
 
   <footer class="site-footer">
@@ -237,7 +197,7 @@
     document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
     document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
 
-    // Kickbase-Daten aus kickbase.json laden (wird von generate.py befüllt)
+    // Comunio-Daten aus comunio.json laden (wird von generate.py aus Comstats befüllt)
     function fmtMW(v) {
       const abs = Math.abs(v);
       if (abs >= 1e6) return (v/1e6).toFixed(1).replace('.',',') + ' Mio. €';
@@ -264,7 +224,7 @@
         : '<li class="kb-loading">Keine Daten</li>';
     }
 
-    fetch('kickbase.json')
+    fetch('comunio.json')
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(d => {
         if (d.updated) {
@@ -272,26 +232,23 @@
           document.getElementById('kb-updated').textContent =
             'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
         }
-        renderList('kb-teuerste',  (d.teuerste  ||[]).map(p => ({ ...p, val: fmtMW(p.mw) })));
-        renderList('kb-punkte',    (d.punkte     ||[]).map(p => ({ ...p, val: p.pts + ' Pkt' })));
-        renderList('kb-raketen',   (d.raketen    ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
-        renderList('kb-crash',     (d.crash      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
-        renderList('kb-effizienz', (d.effizienz  ||[]).map(p => ({ ...p, val: p.eff + ' Pkt/Mio' })));
-        renderList('kb-schnitt',   (d.schnitt    ||[]).map(p => ({ ...p, val: p.ap + ' Pkt/Spiel' })));
-        renderList('kb-woche',     (d.woche      ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'green' })));
-        renderList('kb-wocheminus',(d.wocheminus ||[]).map(p => ({ ...p, val: fmtDiff(p.diff) + (p.mw ? ' (' + fmtMW(p.mw) + ')' : ''), cls: 'red' })));
-        renderList('kb-schnaeppchen', (d.schnaeppchen ||[]).map(p => ({ ...p, val: p.faktor + 'x (' + fmtMW(p.mw) + ')', cls: 'green' })));
-        const fmtForm = p => (p.diff > 0 ? '+' : '') + p.diff + ' (' + p.vor + '→' + p.ap + ')';
-        renderList('kb-formauf',   (d.formauf    ||[]).map(p => ({ ...p, val: fmtForm(p), cls: 'green' })));
-        renderList('kb-formab',    (d.formab     ||[]).map(p => ({ ...p, val: fmtForm(p), cls: 'red' })));
-        ['torwart','abwehr','mittelfeld','sturm'].forEach(pos =>
-          renderList('kb-' + pos, (d[pos] ||[]).map(p => ({ ...p, val: p.ap + ' Pkt/Spiel' }))));
-        renderList('kb-verletzt',  (d.verletzt   ||[]).map(p => ({ ...p, val: fmtMW(p.mw), cls: 'red', hinweis: p.info })));
+        const L = (id, items, f) => renderList('cm-' + id, (items || []).map(p => ({ ...p, hinweis: p.klub, ...f(p) })));
+        const mwTrend = p => ({ val: fmtDiff(p.diff) + ' (' + (p.proz > 0 ? '+' : '') + String(p.proz).replace('.', ',') + ' %)', cls: p.diff >= 0 ? 'green' : 'red' });
+        const komma = v => String(v).replace('.', ',');
+        L('teuerste',    d.teuerste,    p => ({ val: fmtMW(p.mw) }));
+        L('punkte',      d.punkte,      p => ({ val: p.pts + ' Pkt' }));
+        L('schnitt',     d.schnitt,     p => ({ val: komma(p.ap) + ' Pkt/Spiel' }));
+        L('effizienz',   d.effizienz,   p => ({ val: komma(p.eff) + ' Pkt/Mio' }));
+        ['raketen','crash','woche','wocheminus'].forEach(k => L(k, d[k], mwTrend));
+        L('trend',       d.trend,       p => ({ val: p.pts + ' Pkt · ' + fmtMW(p.mw) }));
+        L('aufsteigend', d.aufsteigend, p => ({ val: p.pts + ' Pkt · ' + fmtMW(p.mw) }));
+        L('rekorde',     d.rekorde,     p => ({ val: p.pts + ' Pkt', hinweis: p.gegner ? 'gegen ' + p.gegner : p.klub }));
+        L('torjaeger',   d.torjaeger,   p => ({ val: p.tore + ' Tore' }));
+        ['torwart','abwehr','mittelfeld','sturm'].forEach(k => L(k, d[k], p => ({ val: komma(p.ap) + ' Pkt/Spiel' })));
       })
       .catch(() => {
-        ['kb-teuerste','kb-punkte','kb-effizienz','kb-raketen','kb-crash','kb-schnitt','kb-schnaeppchen','kb-verletzt','kb-woche','kb-wocheminus','kb-formauf','kb-formab','kb-torwart','kb-abwehr','kb-mittelfeld','kb-sturm'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.innerHTML = '<li class="kb-loading">Daten werden bald verfügbar</li>';
+        document.querySelectorAll('.kb-list').forEach(el => {
+          el.innerHTML = '<li class="kb-loading">Daten werden bald verfügbar</li>';
         });
       });
   </script>
