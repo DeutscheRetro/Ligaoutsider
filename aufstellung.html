@@ -134,7 +134,7 @@
     function spieler(p, klasse) {
       const tip = esc(p.name + (p.grund ? ' – ' + p.grund : ''));
       const news = p.news ? ` <a class="au-news" href="${esc(p.news)}" title="Zum Artikel">📰</a>` : '';
-      return `<span class="${klasse}" title="${tip}"><i class="au-dot ${p.ampel}"></i>${p.nr != null ? `<b>${esc(p.nr)}</b>` : ''}${esc(p.name)}${news}</span>`;
+      return `<span class="${klasse}" title="${tip}"><i class="au-dot ${p.ampel}"></i>${p.nr != null ? `<b>${esc(p.nr)}</b>` : ''}<span class="au-nm"><span>${esc(p.name)}${news}</span>${p.pos ? `<small>${esc(p.pos)}</small>` : ''}</span></span>`;
     }
 
     function prozent(p) {

@@ -492,4 +492,8 @@ ul { list-style: none; }
 .au-balken{width:44px;height:5px;border-radius:3px;background:var(--bg4);overflow:hidden}
 .au-balken i{display:block;height:100%;background:currentColor}
 .au-proz.hoch{color:#3fae4a}.au-proz.mittel{color:#e8a800}.au-proz.niedrig{color:var(--text3)}
-.au-zeile .au-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.au-zeile .au-name{flex-shrink:0;white-space:normal}
+.au-zeile .au-grund{min-width:0}
+.au-nm{display:flex;flex-direction:column;line-height:1.25}
+.au-nm small{font-size:10px;color:var(--text4);font-weight:400}
+.au-name b{min-width:18px;text-align:right}

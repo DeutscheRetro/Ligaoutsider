@@ -2205,6 +2205,132 @@ def comunio_fetch():
     print(f"✅ comunio.json geschrieben ({len(alle)} Spieler, via Comstats)")
 
 
+# ─── Spieler-Datenbank (Transfermarkt-Kader, abgeglichen mit Kickbase) ────────
+TM_SAISON = 2026
+TM_POS_GRUPPE = {
+    "Torwart": "Torwart",
+    "Innenverteidiger": "Abwehr", "Linker Verteidiger": "Abwehr", "Rechter Verteidiger": "Abwehr",
+    "Defensives Mittelfeld": "Mittelfeld", "Zentrales Mittelfeld": "Mittelfeld",
+    "Offensives Mittelfeld": "Mittelfeld", "Linkes Mittelfeld": "Mittelfeld", "Rechtes Mittelfeld": "Mittelfeld",
+    "Linksaußen": "Sturm", "Rechtsaußen": "Sturm", "Hängende Spitze": "Sturm", "Mittelstürmer": "Sturm",
+}
+
+
+def _namens_schluessel(name):
+    import unicodedata
+    n = unicodedata.normalize("NFKD", (name or "").lower())
+    n = "".join(c for c in n if not unicodedata.combining(c))
+    n = n.replace("ø", "o").replace("æ", "ae").replace("ß", "ss").replace("ł", "l").replace("đ", "d")
+    return re.sub(r"[^a-z ]", " ", n).split()
+
+
+def _tm_kader(pfad, session):
+    import html as _html
+    r = session.get(f"https://www.transfermarkt.de{pfad}", timeout=25)
+    r.raise_for_status()
+    kader = []
+    for zeile in re.findall(r'<tr class="(?:odd|even)">(.*?)</tr>\s*(?=<tr class="(?:odd|even)"|</tbody>)', r.text, re.S):
+        link = re.search(r'<td class="hauptlink">\s*<a href="/([^"]+)/profil/spieler/(\d+)">\s*(.*?)\s*</a>', zeile, re.S)
+        if not link:
+            continue
+        # Hinter dem Namen hängen Symbole mit title: Kapitän, Verletzung, Sperre
+        symbole = [_html.unescape(t) for t in re.findall(r'<span title="([^"]+)"', link.group(3))]
+        name = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<span.*", "", link.group(3), flags=re.S))).strip()
+        pos = re.search(r"<tr>\s*<td>\s*([^<]+?)\s*</td>\s*</tr>\s*</table>", zeile, re.S)
+        nr = re.search(r"<div class=rn_nummer>([^<]*)</div>", zeile)
+        zellen = [re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", z))).strip()
+                  for z in re.findall(r'<td class="zentriert">(.*?)</td>', zeile, re.S)]
+        nation = re.findall(r'class="flaggenrahmen"[^>]*|title="([^"]+)" alt="[^"]+" class="flaggenrahmen"', zeile)
+        mw = re.search(r'marktwertverlauf/spieler/\d+">([^<]+)</a>', zeile)
+        geb = next((z for z in zellen if re.match(r"\d\d\.\d\d\.\d{4}", z)), "")
+        kader.append({
+            "name": name,
+            "tm_id": int(link.group(2)),
+            "kapitaen": "Mannschaftskapitän" in symbole,
+            "tm_hinweise": [t for t in symbole if t != "Mannschaftskapitän"],
+            "nr": (nr.group(1).strip() if nr else "").replace("-", "") or None,
+            "position": _html.unescape(pos.group(1)).strip() if pos else "",
+            "geboren": geb[:10],
+            "nation": [n for n in nation if n],
+            "fuss": next((z for z in zellen if z in ("links", "rechts", "beidfüßig")), ""),
+            "vertrag_bis": zellen[-1] if zellen and re.match(r"\d\d\.\d\d\.\d{4}", zellen[-1]) else "",
+            "tm_marktwert": _html.unescape(mw.group(1)).strip() if mw else "",
+        })
+    return kader
+
+
+def spieler_db_fetch():
+    """Alle Bundesliga-Kader von Transfermarkt, je Spieler mit Kickbase-Daten verknüpft → spieler_db.json."""
+    import difflib
+    import requests as _req
+    tm = _req.Session()
+    tm.headers.update({"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
+    liga = tm.get(f"https://www.transfermarkt.de/1-bundesliga/startseite/wettbewerb/L1/saison_id/{TM_SAISON}", timeout=25).text
+    vereine = sorted(set(re.findall(rf'href="/([^"/]+)/startseite/verein/(\d+)/saison_id/{TM_SAISON}"', liga)))
+    if len(vereine) < 18:
+        raise RuntimeError(f"Transfermarkt liefert nur {len(vereine)} Vereine")
+
+    kb = _req.Session()
+    kb.headers.update({"User-Agent": "Mozilla/5.0", "Referer": "https://www.base-xi.de/players"})
+    kb.get("https://www.base-xi.de/players", timeout=10)
+    kb_spieler = kb.get("https://www.base-xi.de/api/players?comp=bl1&t=1", timeout=20).json()
+    kb_nach_logo = {}
+    for p in kb_spieler:
+        kb_nach_logo.setdefault(_comunio_logo(p.get("teamName") or ""), []).append(p)
+
+    teams = {}
+    for slug, vid in vereine:
+        kader = _tm_kader(f"/{slug}/kader/verein/{vid}/saison_id/{TM_SAISON}/plus/1", tm)
+        time.sleep(2)
+        # Vereinsname aus dem Slug ist ungenau → über Logo-Zuordnung auf den Kickbase-Namen
+        logo = _comunio_logo(slug.replace("-", " ").replace("monchengladbach", "gladbach")
+                             .replace("rasenballsport", "leipzig").replace("koln", "köln"))
+        kb_team = kb_nach_logo.get(logo, [])
+        team_name = kb_team[0]["teamName"] if kb_team else slug
+        frei = list(kb_team)
+        for s_ in kader:
+            s_["gruppe"] = TM_POS_GRUPPE.get(s_["position"], "")
+            ks = _namens_schluessel(s_["name"])
+            treffer = None
+            # 1. exakter Name, 2. gleicher Nachname + Rückennummer, 3. gleicher Nachname, 4. ähnlich
+            for pruef in (
+                lambda k: _namens_schluessel(k["name"]) == ks,
+                lambda k: _namens_schluessel(k["name"])[-1:] == ks[-1:] and str(k.get("shirtNumber")) == str(s_["nr"]),
+                lambda k: _namens_schluessel(k["name"])[-1:] == ks[-1:],
+                # vertauschte/zusammengezogene Namen ("Min-jae Kim" / "Kim Minjae")
+                lambda k: sorted("".join(_namens_schluessel(k["name"]))) == sorted("".join(ks)),
+                # Namenszusätze ("Lukeba Castello Jr.", Doppelnamen)
+                lambda k: len(set(_namens_schluessel(k["name"])) & set(ks)) >= 2,
+            ):
+                kandidaten = [k for k in frei if pruef(k)]
+                if len(kandidaten) == 1:
+                    treffer = kandidaten[0]
+                    break
+            if not treffer:
+                namen = {" ".join(_namens_schluessel(k["name"])): k for k in frei}
+                nah = difflib.get_close_matches(" ".join(ks), list(namen), n=1, cutoff=0.8)
+                treffer = namen[nah[0]] if nah else None
+            if treffer:
+                frei.remove(treffer)
+                s_["kickbase"] = {"id": treffer.get("id"), "name": treffer.get("name"),
+                                  "position": treffer.get("position"), "nr": treffer.get("shirtNumber")}
+            else:
+                s_["kickbase"] = None
+        teams[team_name] = {
+            "logo": logo, "tm_id": int(vid), "spieler": kader,
+            "nur_kickbase": [{"id": k.get("id"), "name": k.get("name"), "position": k.get("position"),
+                              "nr": k.get("shirtNumber")} for k in frei],
+        }
+
+    Path("spieler_db.json").write_text(json.dumps({
+        "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "saison": TM_SAISON, "teams": teams,
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    n = sum(len(t["spieler"]) for t in teams.values())
+    ok = sum(1 for t in teams.values() for s_ in t["spieler"] if s_["kickbase"])
+    print(f"✅ spieler_db.json geschrieben ({n} Spieler, {ok} mit Kickbase verknüpft)")
+
+
 # ─── Aufstellungs-Check ───────────────────────────────────────────────────────
 # Kickbase-Statuscodes: 0 fit, 2 angeschlagen; alles andere
 # (1 verletzt, 8/16/32 Sperren, 256 nicht im Kader …) heißt Ausfall.
@@ -2272,11 +2398,23 @@ def aufstellung_fetch():
     daten = session.get("https://www.base-xi.de/api/players?comp=bl1&t=1", timeout=20).json()
     hinweise, formationen = _news_hinweise()
 
+    # Spieler-Datenbank: echte Kader, genaue Positionen, Transfermarkt-Hinweise
+    db = {}
+    try:
+        for t in json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))["teams"].values():
+            for e in t["spieler"]:
+                if e.get("kickbase"):
+                    db[str(e["kickbase"]["id"])] = e
+    except Exception as ex:
+        print(f"⚠️  spieler_db.json nicht nutzbar: {ex}")
+
     teams = {}
     for p in daten:
         team = p.get("teamName") or ""
         if not team or p.get("position") not in POS_REIHE:
             continue
+        if db and str(p.get("id")) not in db:
+            continue  # nur Kickbase kennt ihn – kein Profikader
         teams.setdefault(team, []).append(p)
 
     spiele, ergebnis_teams = {}, {}
@@ -2311,18 +2449,32 @@ def aufstellung_fetch():
                     ampel = "rot"
                 elif not re.search(r"soll morgen|wieder (voll )?im training|zurück im", text):
                     ampel = "gelb"
+            eintrag = db.get(str(p.get("id"))) or {}
+            anstoss = ((p.get("next_match") or {}).get("date_iso") or "")[:10]
+            tm_grund = ""
+            for h in eintrag.get("tm_hinweise", []):
+                bis = re.search(r"(?:bis|am) (\d\d)\.(\d\d)\.(\d{4})", h)
+                datum = f"{bis.group(3)}-{bis.group(2)}-{bis.group(1)}" if bis else ""
+                if "sperre" in h.lower():
+                    # nur Bundesliga- oder wettbewerbsübergreifende Sperren zählen
+                    if re.search(r"bundesliga|wettbewerbsübergreifend", h, re.I) and (not datum or not anstoss or datum >= anstoss):
+                        ampel, tm_grund = "rot", h.split(" – ")[0] + (f" bis {bis.group(1)}.{bis.group(2)}." if bis else "")
+                elif "Rückkehr vsl." in h and datum and anstoss and datum > anstoss:
+                    ampel, tm_grund = "rot", h
             grund = roh_text.replace("AchKrankes", "Achilles").strip()
             # Hinweise auf andere Spiele als das nächste sind für die Anzeige irreführend
             grund = re.sub(r"\s*[-,]?\s*verpasst\b[^,;.]*?\b([A-Z0-9]{2,4}) \((?:H|A)\)",
                            lambda m: m.group(0) if m.group(1) == naechster else "", grund).strip(" -,")
-            grund = grund or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
+            grund = tm_grund or grund or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
             news = hinweise.get((logo, _nachname(p.get("name"))))
             if news:
                 grund = news.get("grund") or grund
                 ampel = {"faellt_aus": "rot", "fraglich": "gelb"}.get(news["status"], "gruen")
             kader.append({
-                "name": p.get("name", ""), "reihe": POS_REIHE[p["position"]],
-                "nr": p.get("shirtNumber"), "ampel": ampel, "grund": grund,
+                "name": eintrag.get("name") or p.get("name", ""),
+                "reihe": POS_REIHE.get(eintrag.get("gruppe")) or POS_REIHE[p["position"]],
+                "pos": eintrag.get("position", ""),
+                "nr": eintrag.get("nr") or p.get("shirtNumber"), "ampel": ampel, "grund": grund,
                 "news": news["pfad"] if news else "", "angekuendigt": bool(news and news["status"] == "startelf"),
                 "starts": p.get("starts") or 0, "spiele": p.get("matchesPlayed") or 0,
                 "starts_vor": p.get("startsPrevSeason") or 0, "minuten": p.get("avgMinutes") or 0,
@@ -2356,20 +2508,26 @@ def aufstellung_fetch():
             anz = {"abw": teile[0], "st": teile[-1], "mf": sum(teile[1:-1])}
             form_txt = news_form["formation"]
 
-        elf = {"tw": [], "abw": [], "mf": [], "st": []}
-        soll = {"tw": 1, **anz}
-        for p in verfuegbar:
-            if len(elf[p["reihe"]]) < soll[p["reihe"]]:
-                elf[p["reihe"]].append(p)
-        # Fehlt eine Positionsgruppe (dünner Kader), mit den Besten auffüllen
-        rest = [p for p in verfuegbar if not any(p in v for v in elf.values())]
-        for reihe in ("abw", "mf", "st"):
-            while len(elf[reihe]) < soll[reihe] and rest:
-                elf[reihe].append(rest.pop(0))
+        # Elf: bester Torwart + zehn Feldspieler mit höchster Wahrscheinlichkeit,
+        # dabei 3–5 Verteidiger (eine Elf ohne Abwehr wäre offensichtlich falsch)
+        elf = {"tw": [p for p in verfuegbar if p["reihe"] == "tw"][:1], "abw": [], "mf": [], "st": []}
+        feld = [p for p in verfuegbar if p["reihe"] != "tw"]
+        abw_min = 4 if len([p for p in feld if p["reihe"] == "abw" and wert(p) >= 0.4]) >= 4 else 3
+        gewaehlt = [p for p in feld if p["reihe"] == "abw"][:abw_min]
+        for p in feld:
+            if len(gewaehlt) >= 10:
+                break
+            if p in gewaehlt:
+                continue
+            if p["reihe"] == "abw" and sum(q["reihe"] == "abw" for q in gewaehlt) >= 5:
+                continue
+            gewaehlt.append(p)
+        for p in gewaehlt:
+            elf[p["reihe"]].append(p)
         in_elf = {id(p) for v in elf.values() for p in v}
 
         def sauber(p, sicher=None):
-            q = {k: p[k] for k in ("name", "nr", "ampel", "grund", "news", "reihe")}
+            q = {k: p[k] for k in ("name", "nr", "ampel", "grund", "news", "reihe", "pos")}
             q["prozent"] = round(wert(p) * 100)
             if not q["grund"] and p["ampel"] == "gruen":
                 if not spiele_team:
@@ -2791,6 +2949,12 @@ if __name__ == "__main__":
         comunio_fetch()
     except Exception as e:
         print(f"❌ comunio_fetch Fehler: {e}")
+    try:
+        db_datei = Path("spieler_db.json")
+        if not db_datei.exists() or time.time() - db_datei.stat().st_mtime > 20 * 3600:
+            spieler_db_fetch()
+    except Exception as e:
+        print(f"❌ spieler_db_fetch Fehler: {e}")
     try:
         aufstellung_fetch()
     except Exception as e:

@@ -57,6 +57,7 @@ jobs:
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -f comunio.json ] && git add comunio.json || true
           [ -f aufstellung.json ] && git add aufstellung.json || true
+          [ -f spieler_db.json ] && git add spieler_db.json || true
           [ -d spieler ] && git add spieler/ || true
           if git diff --staged --quiet; then
             echo "Keine neuen Artikel – kein Commit nötig"
