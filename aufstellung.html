@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aufstellungs-Check – Ligaoutsider.de</title>
+  <meta name="description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf, Taktik, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
+  <link rel="canonical" href="https://ligaoutsider.de/aufstellung.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Aufstellungs-Check – Ligaoutsider.de"/>
+  <meta property="og:description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf, Taktik, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
+  <meta property="og:url" content="https://ligaoutsider.de/aufstellung.html"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SP8DWFL2SE');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <a href="nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="aufstellung.html" class="section-nav-link active">Aufstellungen</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <div class="kb-wrap">
+    <div class="au-kopf">
+      <h2 class="au-h">Aufstellungs-Check</h2>
+      <span id="au-stand" class="au-stand"></span>
+    </div>
+    <p class="au-intro">Voraussichtliche Startelf und Grundordnung für jedes Spiel – errechnet aus Einsatzdaten, gemeldeten Verletzungen und unseren News. Keine offiziellen Aufstellungen.</p>
+    <div class="au-filter">
+      <select id="au-team" aria-label="Verein wählen"><option value="">Alle Spiele</option></select>
+      <label><input type="checkbox" id="au-nurprobleme"> Nur Spiele mit Ausfällen oder Fragezeichen</label>
+    </div>
+    <div class="au-legende">
+      <span><i class="au-dot gruen"></i> spielt</span>
+      <span><i class="au-dot gelb"></i> fraglich</span>
+      <span><i class="au-dot rot"></i> fällt aus</span>
+      <span><i class="au-dot offen"></i> Startplatz offen</span>
+      <span>📰 &nbsp;Hinweis aus unseren News</span>
+    </div>
+    <div id="au-partien"><p class="kb-loading">Lade Aufstellungen…</p></div>
+    <p class="cm-quelle"><a href="https://www.base-xi.de/" target="_blank" rel="noopener noreferrer">Quelle</a></p>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Theme
+    function applyTheme(t) {
+      document.body.classList.toggle('light', t === 'light');
+      document.documentElement.classList.toggle('light', t === 'light');
+      document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+    }
+    applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const t = document.body.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('theme', t); applyTheme(t);
+    });
+
+    // Auth
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init', u => { if (u) showUser(u); });
+      netlifyIdentity.on('login', u => { showUser(u); netlifyIdentity.close(); });
+      netlifyIdentity.on('logout', () => {
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('login-btn').style.display = '';
+        document.getElementById('signup-btn').style.display = '';
+      });
+    }
+    function showUser(u) {
+      document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+      document.getElementById('user-info').style.display = 'flex';
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('signup-btn').style.display = 'none';
+    }
+    document.getElementById('login-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
+    document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+    document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+    // Aufstellungen aus aufstellung.json (generate.py: aufstellung_fetch)
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const kurz = n => { const t = String(n).split(' '); return t.length > 1 ? t.slice(1).join(' ') : n; };
+    let AU = null;
+
+    function spieler(p, klasse) {
+      const dot = p.ampel === 'gruen' && p.sicher === false ? 'offen' : p.ampel;
+      const tip = esc(p.name + (p.grund ? ' – ' + p.grund : ''));
+      const news = p.news ? ` <a class="au-news" href="${esc(p.news)}" title="Zum Artikel">📰</a>` : '';
+      return `<span class="${klasse}" title="${tip}"><i class="au-dot ${dot}"></i>${p.nr != null ? `<b>${esc(p.nr)}</b>` : ''}${esc(kurz(p.name))}${news}</span>`;
+    }
+
+    function feld(t) {
+      const reihe = arr => `<div class="au-reihe">${arr.map(p => spieler(p, 'au-chip')).join('')}</div>`;
+      // Bei z. B. 4-2-3-1 das Mittelfeld auf mehrere Reihen verteilen (hinten zuerst)
+      const teile = String(t.formation).split('-').map(Number);
+      const mf = [...(t.elf.mf || [])];
+      const mfReihen = [];
+      teile.slice(1, -1).forEach(n => mfReihen.push(mf.splice(0, n)));
+      if (mf.length) mfReihen.push(mf);
+      const reihen = [reihe(t.elf.st || []), ...mfReihen.reverse().map(reihe), reihe(t.elf.abw || []), reihe(t.elf.tw || [])];
+      return `<div class="au-feld">${reihen.join('')}</div>`;
+    }
+
+    function liste(titel, arr, leer) {
+      if (!arr.length && !leer) return '';
+      return `<div class="au-liste"><div class="au-liste-t">${titel}</div>${arr.length
+        ? arr.map(p => `<div class="au-zeile">${spieler(p, 'au-name')}<span class="au-grund">${esc(p.grund || '')}</span></div>`).join('')
+        : `<div class="au-zeile au-leer">${leer}</div>`}</div>`;
+    }
+
+    function teamSpalte(name) {
+      const t = AU.teams[name];
+      if (!t) return `<div class="au-team"><p class="kb-loading">Keine Daten für ${esc(name)}</p></div>`;
+      const form = t.formation_quelle
+        ? `<a href="${esc(t.formation_quelle)}" title="Laut unseren News">${esc(t.formation)} 📰</a>`
+        : `<span title="Geschätzt aus den bisherigen Startelf-Einsätzen">${esc(t.formation)}</span>`;
+      return `<div class="au-team">
+        <div class="au-team-kopf"><img src="${esc(t.logo)}" alt="" onerror="this.style.display='none'"><span>${esc(name)}</span><span class="au-form">${form}</span></div>
+        ${feld(t)}
+        ${liste('🚑 Fällt aus', t.ausfall, 'Keine Ausfälle gemeldet')}
+        ${liste('❓ Fraglich', t.fraglich)}
+        ${liste('🪑 Bank', t.bank)}
+      </div>`;
+    }
+
+    function probleme(name) {
+      const t = AU.teams[name];
+      return t ? t.ausfall.length + t.fraglich.length : 0;
+    }
+
+    function render() {
+      const team = document.getElementById('au-team').value;
+      const nurProbleme = document.getElementById('au-nurprobleme').checked;
+      const partien = AU.partien.filter(s =>
+        (!team || s.heim === team || s.gast === team) &&
+        (!nurProbleme || probleme(s.heim) + probleme(s.gast) > 0));
+      document.getElementById('au-partien').innerHTML = partien.length ? partien.map((s, i) => `
+        <details class="au-partie" ${i === 0 || team ? 'open' : ''}>
+          <summary>
+            <span class="au-paarung">${esc(s.heim)} – ${esc(s.gast)}</span>
+            <span class="au-meta">${probleme(s.heim) + probleme(s.gast) ? `<span class="au-prob" title="Ausfälle und fragliche Spieler"><i class="au-dot rot"></i>${probleme(s.heim) + probleme(s.gast)} Personalsorgen</span>` : ''}<span>${esc(s.anstoss_text || '')}</span></span>
+          </summary>
+          <div class="au-teams">${teamSpalte(s.heim)}${teamSpalte(s.gast)}</div>
+        </details>`).join('') : '<p class="kb-loading">Keine passenden Spiele</p>';
+    }
+
+    fetch('aufstellung.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => {
+        AU = d;
+        const dt = new Date(d.updated);
+        document.getElementById('au-stand').textContent = (d.spieltag ? d.spieltag + '. Spieltag · ' : '') +
+          'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        const sel = document.getElementById('au-team');
+        Object.keys(d.teams).sort((a, b) => a.localeCompare(b, 'de')).forEach(n => sel.add(new Option(n, n)));
+        try { sel.value = localStorage.getItem('au-team') || ''; } catch (e) {}
+        sel.addEventListener('change', () => { try { localStorage.setItem('au-team', sel.value); } catch (e) {} render(); });
+        document.getElementById('au-nurprobleme').addEventListener('change', render);
+        render();
+      })
+      .catch(() => {
+        document.getElementById('au-partien').innerHTML = '<p class="kb-loading">Aufstellungen werden bald verfügbar</p>';
+      });
+  </script>
+
+</body>
+</html>

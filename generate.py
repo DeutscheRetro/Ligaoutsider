@@ -1050,13 +1050,24 @@ Erstelle:
      erwähnt, ist er NICHT der Hauptklub.
    - Geht es zentral um einen Klub außerhalb dieser Liste (z. B. Real Madrid,
      Nationalmannschaft, 2. Liga) oder um keinen Klub: "keiner".
+5. Spielerstatus: Nur wenn der Quelltext ausdrücklich sagt, ob ein Bundesliga-Spieler
+   am nächsten Spiel teilnehmen kann. Pro Spieler ein Eintrag:
+   - "spieler": Nachname wie im Text, "klub": einer der Werte aus Punkt 4
+   - "status": "faellt_aus" | "fraglich" | "spielt" | "startelf"
+     ("spielt" = wieder fit/einsatzbereit, "startelf" = Startelfeinsatz angekündigt)
+   - "grund": max. 8 Wörter, z. B. "Muskelfaserriss" oder "Rückkehr ins Mannschaftstraining"
+   Keine Transfers, keine Gerüchte, keine Vermutungen. Sonst leere Liste.
+6. Formation: Nur wenn der Quelltext die Grundordnung für das nächste Spiel des Hauptklubs
+   nennt (z. B. "4-2-3-1", "Dreierkette" → "3-4-3" nur wenn die Zahlen genannt sind). Sonst "".
 
 Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
 {{
   "titel": "...",
   "text": "Absatz 1.\\n\\nAbsatz 2.\\n\\nAbsatz 3.",
   "kategorie": "...",
-  "hauptklub": "..."
+  "hauptklub": "...",
+  "spielerstatus": [{{"spieler": "...", "klub": "...", "status": "...", "grund": "..."}}],
+  "formation": ""
 }}"""
 
     antwort = client.messages.create(
@@ -1307,6 +1318,7 @@ def artikel_html(
       <a href="../archiv.html" class="section-nav-link">Newsarchiv</a>
       <a href="../kickbase.html" class="section-nav-link">Kickbase-Stats</a>
       <a href="../comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="../aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="../forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>
@@ -1878,6 +1890,10 @@ def main():
             "wappen_url": k["wappen_url"],
             "vereine":    k["vereine"],
             "anriss":     " ".join(ergebnis["text"].split()[:30]),
+            "spielerstatus": [x for x in (ergebnis.get("spielerstatus") or [])
+                              if isinstance(x, dict) and x.get("spieler") and x.get("status")],
+            "formation":  (ergebnis.get("formation") or "").strip(),
+            "hauptklub":  ergebnis.get("hauptklub", ""),
             "pfad":       f"artikel/{aid}.html",
         }
         bestehende.append(feed_entry)
@@ -1991,6 +2007,7 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/archiv.html", "0.8", "daily"),
         (f"{base}/kickbase.html", "0.6", "weekly"),
         (f"{base}/comunio.html", "0.6", "weekly"),
+        (f"{base}/aufstellung.html", "0.7", "daily"),
         (f"{base}/forum.html", "0.6", "weekly"),
     ]
     for a in artikel_liste:
@@ -2185,6 +2202,181 @@ def comunio_fetch():
 
     Path("comunio.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✅ comunio.json geschrieben ({len(alle)} Spieler, via Comstats)")
+
+
+# ─── Aufstellungs-Check ───────────────────────────────────────────────────────
+# Kickbase-Statuscodes: 0 fit, 2 angeschlagen, 4 Aufbautraining; alles andere
+# (1 verletzt, 8/16/32 Sperren, 256 nicht im Kader …) heißt Ausfall.
+AMPEL_GELB = {2, 4}
+STATUS_TEXT = {1: "verletzt", 2: "angeschlagen", 4: "im Aufbautraining"}
+POS_REIHE = {"Torwart": "tw", "Abwehr": "abw", "Mittelfeld": "mf", "Sturm": "st"}
+
+
+def _nachname(name):
+    return (name or "").split()[-1].lower() if name else ""
+
+
+def _news_hinweise(tage=6):
+    """Spielerstatus aus den Artikeln der letzten Tage, neuester Hinweis zuerst."""
+    try:
+        feed = json.loads(FEED_JSON.read_text(encoding="utf-8"))
+    except Exception:
+        return {}, {}
+    grenze = datetime.datetime.now() - datetime.timedelta(days=tage)
+    hinweise, formationen = {}, {}
+    for e in feed:  # feed ist neueste zuerst sortiert
+        try:
+            dt = datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M")
+        except Exception:
+            continue
+        if dt < grenze:
+            continue
+        for h in e.get("spielerstatus") or []:
+            logo = _comunio_logo(KLUB_FILTERNAME.get(h.get("klub"), h.get("klub")) or "")
+            key = (logo, _nachname(h["spieler"]))
+            hinweise.setdefault(key, {**h, "pfad": e["pfad"], "datum": e["datum"]})
+        f = (e.get("formation") or "").strip()
+        if re.fullmatch(r"\d(-\d){2,3}", f) and e.get("hauptklub"):
+            logo = _comunio_logo(KLUB_FILTERNAME.get(e["hauptklub"], e["hauptklub"]))
+            formationen.setdefault(logo, {"formation": f, "pfad": e["pfad"]})
+    return hinweise, formationen
+
+
+def _formation_aus_statistik(kader):
+    """Durchschnittliche Startelf-Besetzung je Positionsgruppe, auf 10 Feldspieler gerundet."""
+    spiele = max((p["spiele_team"] for p in kader), default=0)
+    anteile = {}
+    for pos in ("abw", "mf", "st"):
+        jetzt = sum(p["starts"] for p in kader if p["reihe"] == pos) / spiele if spiele else 0
+        vor = sum(p["starts_vor"] for p in kader if p["reihe"] == pos) / 34
+        anteile[pos] = 0.7 * jetzt + 0.3 * vor if spiele else vor
+    # Kickbase führt offensive Außenverteidiger als Abwehr und Flügelspieler als Sturm –
+    # daher eine Fünferkette bzw. drei Stürmer erst bei klarer Mehrheit
+    abw = anteile["abw"]
+    st = anteile["st"]
+    anz = {"abw": 3 if abw < 3.4 else (5 if abw >= 4.85 else 4),
+           "st": 1 if st < 1.45 else (3 if st >= 2.6 else 2)}
+    anz["mf"] = 10 - anz["abw"] - anz["st"]
+    return anz
+
+
+def aufstellung_fetch():
+    """Voraussichtliche Startelf je Team aus Kickbase-Daten (BaseXI) plus News-Hinweisen."""
+    import requests as _req
+    session = _req.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0", "Referer": "https://www.base-xi.de/players"})
+    session.get("https://www.base-xi.de/players", timeout=10)
+    daten = session.get("https://www.base-xi.de/api/players?comp=bl1&t=1", timeout=20).json()
+    hinweise, formationen = _news_hinweise()
+
+    teams = {}
+    for p in daten:
+        team = p.get("teamName") or ""
+        if not team or p.get("position") not in POS_REIHE:
+            continue
+        teams.setdefault(team, []).append(p)
+
+    spiele, ergebnis_teams = {}, {}
+    for team, roh in teams.items():
+        logo = _comunio_logo(team)
+        spiele_team = max((p.get("matchesPlayed") or 0) for p in roh)
+        kader = []
+        for p in roh:
+            status = p.get("status") or 0
+            ampel = "gruen" if status == 0 else ("gelb" if status in AMPEL_GELB else "rot")
+            grund = (p.get("statusText") or "").strip() or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
+            news = hinweise.get((logo, _nachname(p.get("name"))))
+            if news:
+                grund = news.get("grund") or grund
+                ampel = {"faellt_aus": "rot", "fraglich": "gelb"}.get(news["status"], "gruen")
+            kader.append({
+                "name": p.get("name", ""), "reihe": POS_REIHE[p["position"]],
+                "nr": p.get("shirtNumber"), "ampel": ampel, "grund": grund,
+                "news": news["pfad"] if news else "", "angekuendigt": bool(news and news["status"] == "startelf"),
+                "starts": p.get("starts") or 0, "spiele": p.get("matchesPlayed") or 0,
+                "starts_vor": p.get("startsPrevSeason") or 0, "minuten": p.get("avgMinutes") or 0,
+                "spiele_team": spiele_team, "mw": p.get("marketValue") or 0,
+            })
+
+        def wert(p):
+            jetzt = p["starts"] / spiele_team if spiele_team else 0
+            vor = min(1, p["starts_vor"] / 30)
+            w = (0.6 * jetzt + 0.25 * vor + 0.15 * p["minuten"] / 90) if spiele_team else (0.7 * vor + 0.3 * min(1, p["mw"] / 3e7))
+            if p["angekuendigt"]:
+                w += 1
+            if p["ampel"] == "gelb":
+                w *= 0.6
+            return w
+
+        verfuegbar = sorted([p for p in kader if p["ampel"] != "rot"], key=wert, reverse=True)
+        anz = _formation_aus_statistik(kader)
+        news_form = formationen.get(logo)
+        form_txt = f"{anz['abw']}-{anz['mf']}-{anz['st']}"
+        if news_form:
+            teile = [int(x) for x in news_form["formation"].split("-")]
+            anz = {"abw": teile[0], "st": teile[-1], "mf": sum(teile[1:-1])}
+            form_txt = news_form["formation"]
+
+        elf = {"tw": [], "abw": [], "mf": [], "st": []}
+        soll = {"tw": 1, **anz}
+        for p in verfuegbar:
+            if len(elf[p["reihe"]]) < soll[p["reihe"]]:
+                elf[p["reihe"]].append(p)
+        # Fehlt eine Positionsgruppe (dünner Kader), mit den Besten auffüllen
+        rest = [p for p in verfuegbar if not any(p in v for v in elf.values())]
+        for reihe in ("abw", "mf", "st"):
+            while len(elf[reihe]) < soll[reihe] and rest:
+                elf[reihe].append(rest.pop(0))
+        in_elf = {id(p) for v in elf.values() for p in v}
+
+        def sauber(p, sicher=None):
+            q = {k: p[k] for k in ("name", "nr", "ampel", "grund", "news", "reihe")}
+            if not q["grund"] and p["ampel"] == "gruen":
+                q["grund"] = f"{p['starts']}/{spiele_team} Startelf · Ø {p['minuten']} min" if spiele_team else ""
+            if sicher is not None:
+                q["sicher"] = sicher
+            return q
+
+        grenze = sorted((wert(p) for p in verfuegbar if id(p) in in_elf))
+        ergebnis_teams[team] = {
+            "logo": logo, "formation": form_txt,
+            "formation_quelle": news_form["pfad"] if news_form else "",
+            "elf": {k: [sauber(p, wert(p) >= 0.55 and p["ampel"] == "gruen") for p in v] for k, v in elf.items()},
+            "bank": [sauber(p) for p in verfuegbar if id(p) not in in_elf and p["spiele"] > 0][:9],
+            "fraglich": [sauber(p) for p in verfuegbar if p["ampel"] == "gelb" and id(p) not in in_elf],
+            "ausfall": [sauber(p) for p in sorted(kader, key=lambda p: -p["mw"]) if p["ampel"] == "rot"],
+        }
+
+        nm = roh[0].get("next_match") or {}
+        md = roh[0].get("match_data") or {}
+        if nm.get("date_iso") and md.get("home_game") is not None:
+            heim, gast = (team, md.get("next_opponent")) if md["home_game"] else (md.get("next_opponent"), team)
+            # date_iso ist nicht verlässlich zeitzonenbehaftet – "date" ist deutsche Ortszeit
+            tag = datetime.date.fromisoformat(nm["date_iso"][:10])
+            wt = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"][tag.weekday()]
+            spiele[(heim, gast)] = {"heim": heim, "gast": gast, "anstoss": nm["date_iso"],
+                                   "anstoss_text": f"{wt} {nm.get('date', '')}".strip(),
+                                   "spieltag": nm.get("matchday")}
+
+    # Gegnernamen aus match_data können von teamName abweichen ("FC Bayern" vs. "FC Bayern München")
+    def team_key(name):
+        logo = _comunio_logo(name)
+        return next((t for t in ergebnis_teams if ergebnis_teams[t]["logo"] == logo), name)
+
+    partien = {}
+    for sp in spiele.values():
+        heim, gast = team_key(sp["heim"]), team_key(sp["gast"])
+        partien[(heim, gast)] = {**sp, "heim": heim, "gast": gast}
+    partien = sorted(partien.values(), key=lambda s: s["anstoss"])
+
+    result = {
+        "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "spieltag": partien[0]["spieltag"] if partien else None,
+        "partien": partien,
+        "teams": ergebnis_teams,
+    }
+    Path("aufstellung.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"✅ aufstellung.json geschrieben ({len(partien)} Partien, {len(ergebnis_teams)} Teams)")
 
 
 def kickbase_fetch():
@@ -2551,6 +2743,10 @@ if __name__ == "__main__":
         comunio_fetch()
     except Exception as e:
         print(f"❌ comunio_fetch Fehler: {e}")
+    try:
+        aufstellung_fetch()
+    except Exception as e:
+        print(f"❌ aufstellung_fetch Fehler: {e}")
     try:
         spieler_fetch()
     except Exception as e:
