@@ -2,10 +2,10 @@ name: Neue Artikel generieren
 
 on:
   schedule:
-    - cron: '0 7 * * *'     # 09:00 (UTC+2)
-    - cron: '0 11 * * *'    # 13:00 (UTC+2)
-    - cron: '0 15 * * *'    # 17:00 (UTC+2)
-    - cron: '0 18 * * *'    # 20:00 (UTC+2)
+    - cron: '0 5 * * *'     # 07:00 (UTC+2)
+    - cron: '0 8 * * *'     # 10:00 (UTC+2)
+    - cron: '0 12 * * *'    # 14:00 (UTC+2)
+    - cron: '0 16 * * *'    # 18:00 (UTC+2)
   workflow_dispatch:
     inputs:
       reason:
