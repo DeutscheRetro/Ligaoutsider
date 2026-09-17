@@ -107,6 +107,7 @@
     <button class="tab" id="tab-btn-stats" onclick="zeigeTab('stats')">📊 Stats</button>
     <button class="tab" id="tab-btn-kommentare" onclick="zeigeTab('kommentare')">💬 Kommentare</button>
     <button class="tab" id="tab-btn-moderation" onclick="zeigeTab('moderation')">🛡 Moderation</button>
+    <button class="tab" id="tab-btn-spieler" onclick="zeigeTab('spieler')">⚽ Spieler</button>
   </div>
 
   <!-- TAB: ARTIKEL -->
@@ -208,6 +209,23 @@
       <button class="btn btn-gray" onclick="ladeModerationsdaten()">↻ Aktualisieren</button>
     </div>
     <div id="mod-inhalt"><p style="color:#555"><span class="spinner"></span>Lade Nutzer…</p></div>
+  </div>
+
+  <div id="tab-spieler" style="display:none">
+    <div class="toolbar">
+      <input type="text" id="sp-suche" placeholder="Spieler suchen…" style="max-width:260px" oninput="renderSpieler()"/>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select id="sp-team" onchange="renderSpieler()" style="width:auto"><option value="">Alle Vereine</option></select>
+        <select id="sp-filter" onchange="renderSpieler()" style="width:auto">
+          <option value="">Alle Spieler</option>
+          <option value="abweichung">Position weicht von Kickbase ab</option>
+          <option value="ohne">Nicht bei Kickbase</option>
+          <option value="hinweis">Mit Verletzung/Sperre</option>
+        </select>
+      </div>
+    </div>
+    <p id="sp-stand" style="font-size:12px;color:#555;margin-bottom:10px"></p>
+    <div id="sp-inhalt"><p style="color:#555">Lade…</p></div>
   </div>
 </div>
 
@@ -331,7 +349,7 @@ async function init() {
 
 // ─── Tab-Navigation ───────────────────────────────────────────────────────────
 function zeigeTab(name) {
-  ['artikel','stats','kommentare','moderation'].forEach(t => {
+  ['artikel','stats','kommentare','moderation','spieler'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
     document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
   });
@@ -342,6 +360,71 @@ function zeigeTab(name) {
   }
   if (name === 'kommentare') ladeKommentarListe();
   if (name === 'moderation') ladeModerationsdaten();
+  if (name === 'spieler') ladeSpielerDb();
+}
+
+// ─── Spieler-Datenbank (spieler_db.json) ─────────────────────────────────────
+let spielerDb = null;
+const KB_GRUPPE = { Torwart: 'Torwart', Abwehr: 'Abwehr', Mittelfeld: 'Mittelfeld', Sturm: 'Sturm' };
+
+async function ladeSpielerDb() {
+  if (spielerDb) return renderSpieler();
+  try {
+    const r = await fetch('/spieler_db.json?t=' + Date.now());
+    spielerDb = await r.json();
+  } catch (e) {
+    document.getElementById('sp-inhalt').innerHTML = '<p style="color:#e05555">spieler_db.json konnte nicht geladen werden.</p>';
+    return;
+  }
+  const sel = document.getElementById('sp-team');
+  Object.keys(spielerDb.teams).sort((a, b) => a.localeCompare(b, 'de')).forEach(n => sel.add(new Option(n, n)));
+  const dt = new Date(spielerDb.updated);
+  document.getElementById('sp-stand').textContent = 'Transfermarkt-Kader, Stand ' + dt.toLocaleDateString('de-DE') + ' ' +
+    dt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  renderSpieler();
+}
+
+function renderSpieler() {
+  if (!spielerDb) return;
+  const q = document.getElementById('sp-suche').value.trim().toLowerCase();
+  const team = document.getElementById('sp-team').value;
+  const filter = document.getElementById('sp-filter').value;
+  const zeilen = [];
+  for (const [tn, t] of Object.entries(spielerDb.teams)) {
+    if (team && tn !== team) continue;
+    for (const s of t.spieler) {
+      const kb = s.kickbase;
+      const abweichung = kb && s.gruppe && kb.position !== s.gruppe;
+      if (filter === 'abweichung' && !abweichung) continue;
+      if (filter === 'ohne' && kb) continue;
+      if (filter === 'hinweis' && !(s.tm_hinweise || []).length) continue;
+      if (q && !(s.name + ' ' + (kb ? kb.name : '')).toLowerCase().includes(q)) continue;
+      zeilen.push({ tn, t, s, kb, abweichung });
+    }
+    if (filter !== 'abweichung' && filter !== 'hinweis') {
+      for (const k of t.nur_kickbase || []) {
+        if (filter === 'ohne') continue;
+        if (q && !k.name.toLowerCase().includes(q)) continue;
+        zeilen.push({ tn, t, s: { name: k.name, nr: k.nr, position: '', gruppe: '', tm_hinweise: ['Nur bei Kickbase, nicht im Profikader'] }, kb: k, nurKb: true });
+      }
+    }
+  }
+  document.getElementById('sp-inhalt').innerHTML = zeilen.length ? `
+    <p style="font-size:12px;color:#888;margin-bottom:8px">${zeilen.length} Spieler</p>
+    <table class="user-table">
+      <tr><th>#</th><th>Spieler</th><th>Verein</th><th>Position (TM)</th><th>Kickbase</th><th>Geb.</th><th>Vertrag</th><th>Marktwert</th><th>Hinweis</th></tr>
+      ${zeilen.map(({ tn, t, s, kb, abweichung, nurKb }) => `<tr>
+        <td style="color:#666">${kommEscape(s.nr || '')}</td>
+        <td><b>${kommEscape(s.name)}</b>${s.kapitaen ? ' <span title="Kapitän">©</span>' : ''}${kb && kb.name !== s.name ? `<br><small style="color:#666">KB: ${kommEscape(kb.name)}</small>` : ''}</td>
+        <td><img src="/${kommEscape(t.logo)}" style="width:16px;height:16px;vertical-align:middle;margin-right:6px">${kommEscape(tn)}</td>
+        <td>${kommEscape(s.position || '')}</td>
+        <td style="color:${nurKb ? '#e8a800' : abweichung ? '#e05555' : kb ? '#888' : '#555'}">${kb ? kommEscape(kb.position || '') : '–'}${abweichung ? ' ⚠' : ''}</td>
+        <td style="color:#888">${kommEscape(s.geboren || '')}</td>
+        <td style="color:#888">${kommEscape(s.vertrag_bis || '')}</td>
+        <td>${kommEscape(s.tm_marktwert || '')}</td>
+        <td style="color:#e05555;font-size:12px">${(s.tm_hinweise || []).map(kommEscape).join('<br>')}</td>
+      </tr>`).join('')}
+    </table>` : '<p style="color:#555">Keine Spieler gefunden.</p>';
 }
 
 // ─── Artikel laden ────────────────────────────────────────────────────────────
