@@ -2091,6 +2091,7 @@ COMUNIO_KLUB = [  # Teilstring im Comstats-Klubnamen -> Logo
     ("Mainz", "mainz"), ("Augsburg", "augsburg"), ("Werder", "werder"),
     ("Hoffenheim", "hoffenheim"), ("Hamburg", "hsv"), ("Köln", "koeln"),
     ("Schalke", "schalke"), ("Paderborn", "paderborn"), ("Elversberg", "elversberg"),
+    ("Munich", "bayern"), ("Cologne", "koeln"), ("Koln", "koeln"), ("Bremen", "werder"),
 ]
 
 
@@ -2221,6 +2222,8 @@ def _namens_schluessel(name):
     n = unicodedata.normalize("NFKD", (name or "").lower())
     n = "".join(c for c in n if not unicodedata.combining(c))
     n = n.replace("ø", "o").replace("æ", "ae").replace("ß", "ss").replace("ł", "l").replace("đ", "d")
+    # Umschrift angleichen: "schwaebe" (URL) == "schwäbe" (nach NFKD "schwabe")
+    n = n.replace("ae", "a").replace("oe", "o").replace("ue", "u")
     return re.sub(r"[^a-z ]", " ", n).split()
 
 
@@ -2331,6 +2334,77 @@ def spieler_db_fetch():
     print(f"✅ spieler_db.json geschrieben ({n} Spieler, {ok} mit Kickbase verknüpft)")
 
 
+# ─── Fremde Aufstellungsprognosen (LigaInsider, RotoWire) ─────────────────────
+QUELLEN_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+
+
+def _ligainsider_prognosen(session):
+    """Voraussichtliche Elf je Team: {logo: {"start": [...], "wackel": [...], "alt": [...]}} – Namen als Slug-Vollnamen."""
+    uebersicht = session.get("https://www.ligainsider.de/bundesliga/spieltage/", timeout=20).text
+    teams = sorted(set(re.findall(r'href="/bundesliga/team/([a-z0-9-]+)/(\d+)/saison-', uebersicht)))
+    ergebnis = {}
+    for slug, tid in teams:
+        try:
+            t = session.get(f"https://www.ligainsider.de/{slug}/{tid}/", timeout=20).text
+            a = t.find('<div class="player_position_row')
+            b = t.find('league_name_holder', a)
+            if a < 0 or b < 0:
+                continue
+            block = t[a:b]
+            start, wackel, alt = [], [], []
+            for spalte in block.split('<div class="player_position_column')[1:]:
+                namen = re.findall(r'<div class="player_name"><a href="/([a-z0-9-]+)_\d+/"', spalte)
+                if not namen:
+                    continue
+                if "sub_child" in spalte and len(namen) > 1:
+                    wackel.append(namen[0].replace("-", " "))
+                    alt.extend(n.replace("-", " ") for n in namen[1:])
+                else:
+                    start.append(namen[0].replace("-", " "))
+            stand = re.search(r"Letzte Aktualisierung:[^|]*\|\s*([\d.]+ [\d:]+)", t)
+            if len(start) + len(wackel) >= 10:
+                ergebnis[_comunio_logo(slug.replace("-", " ").replace("koeln", "köln").replace("moenchengladbach", "gladbach"))] = {
+                    "start": start, "wackel": wackel, "alt": alt, "stand": stand.group(1) if stand else ""}
+        except Exception as ex:
+            print(f"  ⚠️ LigaInsider {slug}: {ex}")
+        time.sleep(1.5)
+    return ergebnis
+
+
+def _rotowire_prognosen(session):
+    """{logo: {"start": [...], "bestaetigt": bool}} von RotoWire (Vollnamen aus dem title-Attribut)."""
+    import html as _html
+    t = session.get("https://www.rotowire.com/soccer/lineups.php?league=BUND", timeout=25).text
+    ergebnis = {}
+    for spiel in t.split('class="lineup is-soccer"')[1:]:
+        namen = [re.sub(r"\s+", " ", _html.unescape(n)).strip()
+                 for n in re.findall(r'class="lineup__mteam is-(?:home|visit)">\s*([^<]+)', spiel)]
+        listen = re.findall(r'<ul class="lineup__list is-(home|visit)">(.*?)</ul>', spiel, re.S)
+        for (seite, inhalt), team in zip(listen, namen):
+            vor_verletzt = re.split(r'lineup__title', inhalt)[0]
+            spieler = [_html.unescape(n) for n in re.findall(r'<li class="lineup__player">.*?<a title="([^"]+)"', vor_verletzt, re.S)]
+            if len(spieler) >= 10:
+                ergebnis[_comunio_logo(team)] = {"start": spieler[:11], "bestaetigt": "is-confirmed" in vor_verletzt}
+    return ergebnis
+
+
+def _finde_spieler(name, kader):
+    """Ordnet einen fremden Spielernamen einem Kaderspieler zu (oder None)."""
+    ks = _namens_schluessel(name)
+    if not ks:
+        return None
+    for pruef in (
+        lambda k: _namens_schluessel(k["name"]) == ks,
+        lambda k: sorted("".join(_namens_schluessel(k["name"]))) == sorted("".join(ks)),
+        lambda k: len(set(_namens_schluessel(k["name"])) & set(ks)) >= 2,
+        lambda k: _namens_schluessel(k["name"])[-1:] == ks[-1:],
+    ):
+        treffer = [k for k in kader if pruef(k)]
+        if len(treffer) == 1:
+            return treffer[0]
+    return None
+
+
 # ─── Aufstellungs-Check ───────────────────────────────────────────────────────
 # Kickbase-Statuscodes: 0 fit, 2 angeschlagen; alles andere
 # (1 verletzt, 8/16/32 Sperren, 256 nicht im Kader …) heißt Ausfall.
@@ -2397,6 +2471,18 @@ def aufstellung_fetch():
     session.get("https://www.base-xi.de/players", timeout=10)
     daten = session.get("https://www.base-xi.de/api/players?comp=bl1&t=1", timeout=20).json()
     hinweise, formationen = _news_hinweise()
+
+    fremd = {}
+    qs = _req.Session()
+    qs.headers.update({"User-Agent": QUELLEN_UA, "Accept-Language": "de-DE,de;q=0.9"})
+    for quelle, abruf in (("ligainsider", _ligainsider_prognosen), ("rotowire", _rotowire_prognosen)):
+        try:
+            daten_q = abruf(qs)
+            print(f"  → {quelle}: {len(daten_q)} Teams")
+            for logo, d in daten_q.items():
+                fremd.setdefault(logo, {})[quelle] = d
+        except Exception as ex:
+            print(f"  ⚠️ {quelle} nicht verfügbar: {ex}")
 
     # Spieler-Datenbank: echte Kader, genaue Positionen, Transfermarkt-Hinweise
     db = {}
@@ -2481,7 +2567,33 @@ def aufstellung_fetch():
                 "spiele_team": spiele_team, "mw": p.get("marketValue") or 0,
             })
 
+        quellen_team = fremd.get(logo, {})
+        zuordnung = {}
+        for quelle, d in quellen_team.items():
+            for art in ("start", "wackel", "alt"):
+                for n in d.get(art, []):
+                    k = _finde_spieler(n, kader)
+                    if k is not None:
+                        zuordnung.setdefault(id(k), {})[quelle] = art
+
         def wert(p):
+            """Mittel aus LigaInsider, RotoWire und eigenem Modell."""
+            if p["ampel"] == "rot":
+                return 0.0
+            anteile = [(modell(p), 0.25)]
+            z = zuordnung.get(id(p), {})
+            if "ligainsider" in quellen_team:
+                anteile.append(({"start": 1.0, "wackel": 0.6, "alt": 0.35}.get(z.get("ligainsider"), 0.03), 0.4))
+            if "rotowire" in quellen_team:
+                anteile.append((1.0 if z.get("rotowire") == "start" else 0.03, 0.35))
+            w = sum(a * g for a, g in anteile) / sum(g for _, g in anteile)
+            if p["ampel"] == "gelb":
+                w = min(w, 0.6)
+            if p["angekuendigt"]:
+                w = max(w, 0.9)
+            return round(min(0.97, w), 3)
+
+        def modell(p):
             """Startelf-Wahrscheinlichkeit 0..1: Startquote dieser Saison, mit der
             Vorsaison als Vorwissen geglättet (zählt wie zwei Spiele)."""
             if p["ampel"] == "rot":
@@ -2494,7 +2606,11 @@ def aufstellung_fetch():
             basis = spiele_team
             if p["spiele"] and p["starts"] >= 0.75 * p["spiele"]:
                 basis = p["spiele"]
-            w = (p["starts"] + 2 * vor) / (basis + 2)
+            if not p["spiele"] and spiele_team >= 2:
+                # diese Saison noch keine Minute: Vorsaison zählt kaum
+                w = min(0.15, (2 * vor) / (spiele_team + 2) * 0.5)
+            else:
+                w = (p["starts"] + 2 * vor) / (basis + 2)
             if p["ampel"] == "gelb":
                 w *= 0.5
             return max(0.0, min(0.95, w))
@@ -2545,6 +2661,7 @@ def aufstellung_fetch():
 
         ergebnis_teams[team] = {
             "logo": logo, "formation": form_txt if news_form else "",
+            "quellen": sorted(quellen_team),
             "formation_quelle": news_form["pfad"] if news_form else "",
             "elf": {k: [sauber(p) for p in sorted(v, key=wert, reverse=True)] for k, v in elf.items()},
             "bank": [sauber(p) for p in verfuegbar
