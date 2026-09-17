@@ -2206,9 +2206,9 @@ def comunio_fetch():
 
 
 # ─── Aufstellungs-Check ───────────────────────────────────────────────────────
-# Kickbase-Statuscodes: 0 fit, 2 angeschlagen, 4 Aufbautraining; alles andere
+# Kickbase-Statuscodes: 0 fit, 2 angeschlagen; alles andere
 # (1 verletzt, 8/16/32 Sperren, 256 nicht im Kader …) heißt Ausfall.
-AMPEL_GELB = {2, 4}
+AMPEL_GELB = {2}  # 4 = Aufbautraining: noch nicht im Teamtraining, also Ausfall
 STATUS_TEXT = {1: "verletzt", 2: "angeschlagen", 4: "im Aufbautraining"}
 POS_REIHE = {"Torwart": "tw", "Abwehr": "abw", "Mittelfeld": "mf", "Sturm": "st"}
 
@@ -2294,7 +2294,16 @@ def aufstellung_fetch():
             # ("verpasst KOE (H)" bei nächstem Gegner KOE). Alles andere ist veraltet
             # oder betrifft spätere Spiele – dann entscheidet der Statuscode.
             genannt = re.findall(r"verpasst\b[^,;.]*?\b([A-Z0-9]{2,4}) \((?:H|A)\)", roh_text)
+            # "Rückkehr gegen B04 (H)": erst dann wieder dabei – beim nächsten Gegner fraglich, sonst Ausfall
+            rueckkehr = re.findall(r"rückkehr\b[^,;.]*?\b([A-Z0-9]{2,4}) \((?:H|A)\)", roh_text, re.I)
             if naechster and naechster in genannt:
+                ampel = "rot"
+            elif rueckkehr and ampel != "gruen" or rueckkehr and status == 0 and text:
+                ampel = "gelb" if naechster in [r.upper() for r in rueckkehr] else "rot"
+            elif re.search(r"fällt\b.*\baus\b|ausfall|nächste woche|wochen|monate|saisonaus|kreuzband"
+                           # noch nicht im Mannschaftstraining → spielt am Wochenende nicht
+                           r"|individuell|laufprogramm|aufbautraining|reha\b|keine option"
+                           r"|(nach|vor) der lsp|rückkehr ins (team|mannschafts)training|trainingseinstieg", text):
                 ampel = "rot"
             elif status == 0 and text:
                 # Kickbase lässt den Status oft auf 0, obwohl der Text eine Blessur meldet
@@ -2302,7 +2311,11 @@ def aufstellung_fetch():
                     ampel = "rot"
                 elif not re.search(r"soll morgen|wieder (voll )?im training|zurück im", text):
                     ampel = "gelb"
-            grund = (p.get("statusText") or "").strip() or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
+            grund = roh_text.replace("AchKrankes", "Achilles").strip()
+            # Hinweise auf andere Spiele als das nächste sind für die Anzeige irreführend
+            grund = re.sub(r"\s*[-,]?\s*verpasst\b[^,;.]*?\b([A-Z0-9]{2,4}) \((?:H|A)\)",
+                           lambda m: m.group(0) if m.group(1) == naechster else "", grund).strip(" -,")
+            grund = grund or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
             news = hinweise.get((logo, _nachname(p.get("name"))))
             if news:
                 grund = news.get("grund") or grund

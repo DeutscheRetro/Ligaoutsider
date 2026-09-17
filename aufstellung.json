@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-17T14:23:20.859643+00:00",
+ "updated": "2026-09-17T14:27:05.543561+00:00",
  "spieltag": 4,
  "partien": [
   {
@@ -254,18 +254,18 @@
      "prozent": 13
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Tim Binder",
      "nr": 0,
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Nach Muskelfaserriss - trainiert individuell mit Ball",
      "news": "",
      "reihe": "mf",
      "prozent": 0
     }
-   ],
-   "ausfall": []
+   ]
   },
   "Bayer 04 Leverkusen": {
    "logo": "logos/leverkusen.png",
@@ -645,17 +645,7 @@
      "prozent": 17
     }
    ],
-   "fraglich": [
-    {
-     "name": "Paul Nebel",
-     "nr": 8,
-     "ampel": "gelb",
-     "grund": "Adduktorenverletzung - Hoffnung auf Trainingseinstieg vor der LSP",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 16
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Robin Zentner",
@@ -676,10 +666,19 @@
      "prozent": 0
     },
     {
+     "name": "Paul Nebel",
+     "nr": 8,
+     "ampel": "rot",
+     "grund": "Adduktorenverletzung - Hoffnung auf Trainingseinstieg vor der LSP",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
      "name": "Silvan Widmer",
      "nr": 30,
      "ampel": "rot",
-     "grund": "Kniereizung - verpasst kurzfristig HSV (A)",
+     "grund": "Patellasehnenverletzung am Knie - fällt mehrere Wochen aus",
      "news": "",
      "reihe": "abw",
      "prozent": 0
@@ -1046,62 +1045,7 @@
      "prozent": 29
     }
    ],
-   "fraglich": [
-    {
-     "name": "Tiago Tomás",
-     "nr": 8,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - absolviert Laufprogramm",
-     "news": "",
-     "reihe": "st",
-     "prozent": 28
-    },
-    {
-     "name": "Dennis Seimen",
-     "nr": 41,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - teilintegriert im Teamtraining",
-     "news": "",
-     "reihe": "tw",
-     "prozent": 20
-    },
-    {
-     "name": "Nikolas Nartey",
-     "nr": 28,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung im Oberschenkel - kurz vor Rückkehr ins Teamtraining",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 9
-    },
-    {
-     "name": "Lorenz Assignon",
-     "nr": 22,
-     "ampel": "gelb",
-     "grund": "Trainingsrückstand - noch keine Option für BVB (H)",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 8
-    },
-    {
-     "name": "Luca Jaquez",
-     "nr": 14,
-     "ampel": "gelb",
-     "grund": "Nach muskulären Problemen -  trainiert individuell mit Ball",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 7
-    },
-    {
-     "name": "Dan-Axel Zagadou",
-     "nr": 23,
-     "ampel": "gelb",
-     "grund": "Oberschenkelverletzung - fällt mehrere Wochen aus",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 2
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Angelo Stiller",
@@ -1110,6 +1054,60 @@
      "grund": "Knieverletzung nach Zusammenprall mit Kabak",
      "news": "artikel/82521fb604.html",
      "reihe": "mf",
+     "prozent": 0
+    },
+    {
+     "name": "Dennis Seimen",
+     "nr": 41,
+     "ampel": "rot",
+     "grund": "Nach Muskelverletzung - teilintegriert im Teamtraining, Rückkehr nach der LSP",
+     "news": "",
+     "reihe": "tw",
+     "prozent": 0
+    },
+    {
+     "name": "Nikolas Nartey",
+     "nr": 28,
+     "ampel": "rot",
+     "grund": "Nach Muskelverletzung im Oberschenkel - kurz vor Rückkehr ins Teamtraining",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
+     "name": "Tiago Tomás",
+     "nr": 8,
+     "ampel": "rot",
+     "grund": "Nach Muskelverletzung - absolviert Laufprogramm",
+     "news": "",
+     "reihe": "st",
+     "prozent": 0
+    },
+    {
+     "name": "Lorenz Assignon",
+     "nr": 22,
+     "ampel": "rot",
+     "grund": "Trainingsrückstand - noch keine Option für BVB (H)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Luca Jaquez",
+     "nr": 14,
+     "ampel": "rot",
+     "grund": "Nach muskulären Problemen -  trainiert individuell mit Ball",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Dan-Axel Zagadou",
+     "nr": 23,
+     "ampel": "rot",
+     "grund": "Oberschenkelverletzung - fällt mehrere Wochen aus",
+     "news": "",
+     "reihe": "abw",
      "prozent": 0
     },
     {
@@ -1283,18 +1281,17 @@
      "prozent": 24
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Christoph Baumgartner",
      "nr": 14,
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Nach Muskelverletzung Oberschenkel - trainiert individuell mit Ball",
      "news": "",
      "reihe": "mf",
-     "prozent": 20
-    }
-   ],
-   "ausfall": [
+     "prozent": 0
+    },
     {
      "name": "Assan Ouédraogo",
      "nr": 8,
@@ -1661,7 +1658,7 @@
      "name": "Farès Chaïbi",
      "nr": 8,
      "ampel": "gelb",
-     "grund": "Krank - verpasst M05 (A)",
+     "grund": "Krank",
      "news": "",
      "reihe": "mf",
      "prozent": 24
@@ -1857,18 +1854,18 @@
      "prozent": 33
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Alexander Prass",
      "nr": 22,
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Adduktorenprobleme - soll nächste Woche voll trainieren",
      "news": "",
      "reihe": "mf",
-     "prozent": 8
+     "prozent": 0
     }
-   ],
-   "ausfall": []
+   ]
   },
   "1. FC Köln": {
    "logo": "logos/koeln.png",
@@ -2214,15 +2211,6 @@
    ],
    "fraglich": [
     {
-     "name": "Anton Kade",
-     "nr": 30,
-     "ampel": "gelb",
-     "grund": "Nach Muskelbündelriss - trainiert individuell",
-     "news": "",
-     "reihe": "st",
-     "prozent": 37
-    },
-    {
      "name": "Faik Sakar",
      "nr": 23,
      "ampel": "gelb",
@@ -2233,6 +2221,15 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Anton Kade",
+     "nr": 30,
+     "ampel": "rot",
+     "grund": "Nach Muskelbündelriss - trainiert individuell",
+     "news": "",
+     "reihe": "st",
+     "prozent": 0
+    },
     {
      "name": "Sima Suso",
      "nr": 8,
@@ -2410,7 +2407,7 @@
      "name": "Dejan Ljubičić",
      "nr": 21,
      "ampel": "rot",
-     "grund": "verletzt",
+     "grund": "Knieverletzung - fällt bis auf Weiteres aus",
      "news": "",
      "reihe": "mf",
      "prozent": 0
@@ -2550,6 +2547,15 @@
      "prozent": 60
     },
     {
+     "name": "Daiki Hashioka",
+     "nr": 14,
+     "ampel": "gruen",
+     "grund": "1 von 1 Einsätzen in der Startelf · Ø 76 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 40
+    },
+    {
      "name": "Daniel Batz",
      "nr": 33,
      "ampel": "gruen",
@@ -2597,42 +2603,6 @@
    ],
    "fraglich": [
     {
-     "name": "Hugo Bolin",
-     "nr": 38,
-     "ampel": "gelb",
-     "grund": "Muskuläre Probleme - trainiert individuell",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 33
-    },
-    {
-     "name": "Daiki Hashioka",
-     "nr": 14,
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 20
-    },
-    {
-     "name": "Jens Castrop",
-     "nr": 17,
-     "ampel": "gelb",
-     "grund": "Schulterverletzung - nach Operation, fällt mehrere Monate aus",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 13
-    },
-    {
-     "name": "Nicolas Kühn",
-     "nr": 19,
-     "ampel": "gelb",
-     "grund": "im Aufbautraining",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 2
-    },
-    {
      "name": "Yukhym Konoplia",
      "nr": 22,
      "ampel": "gelb",
@@ -2653,10 +2623,37 @@
      "prozent": 0
     },
     {
+     "name": "Hugo Bolin",
+     "nr": 38,
+     "ampel": "rot",
+     "grund": "Muskuläre Probleme - trainiert individuell",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
+     "name": "Nicolas Kühn",
+     "nr": 19,
+     "ampel": "rot",
+     "grund": "im Aufbautraining",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
      "name": "Enzo Leopold",
      "nr": 8,
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt lange aus",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
+     "name": "Jens Castrop",
+     "nr": 17,
+     "ampel": "rot",
+     "grund": "Schulterverletzung - nach Operation, fällt mehrere Monate aus",
      "news": "",
      "reihe": "mf",
      "prozent": 0
@@ -2870,15 +2867,6 @@
      "prozent": 29
     },
     {
-     "name": "Alexander Røssing-Lelesiit",
-     "nr": 38,
-     "ampel": "gelb",
-     "grund": "Nach Syndesmose-Schaden - absolviert Teile des Teamtrainings",
-     "news": "",
-     "reihe": "st",
-     "prozent": 3
-    },
-    {
      "name": "Otto Stange",
      "nr": 19,
      "ampel": "gelb",
@@ -2888,7 +2876,17 @@
      "prozent": 1
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Alexander Røssing-Lelesiit",
+     "nr": 38,
+     "ampel": "rot",
+     "grund": "Nach Syndesmose-Schaden - trainiert teilintegriert, verpasst KOE (H)",
+     "news": "",
+     "reihe": "st",
+     "prozent": 0
+    }
+   ]
   },
   "SV Werder Bremen": {
    "logo": "logos/werder.png",
@@ -3052,37 +3050,10 @@
    ],
    "fraglich": [
     {
-     "name": "Felix Agu",
-     "nr": 27,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - befindet sich im Aufbautraining",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 6
-    },
-    {
-     "name": "Keke Topp",
-     "nr": 9,
-     "ampel": "gelb",
-     "grund": "Kreuzbandriss - Rückkehr wohl erst 2027",
-     "news": "",
-     "reihe": "st",
-     "prozent": 5
-    },
-    {
      "name": "Moussa Ndiaye",
      "nr": 16,
      "ampel": "gelb",
      "grund": "angeschlagen",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 1
-    },
-    {
-     "name": "Oskar Wójcik",
-     "nr": 3,
-     "ampel": "gelb",
-     "grund": "Muskuläre Probleme - trainiert individuell, verpasst SCF (A)",
      "news": "",
      "reihe": "abw",
      "prozent": 1
@@ -3103,6 +3074,33 @@
      "nr": 11,
      "ampel": "rot",
      "grund": "Muskelverletzung im Oberschenkel  - fällt monatelang aus",
+     "news": "",
+     "reihe": "st",
+     "prozent": 0
+    },
+    {
+     "name": "Oskar Wójcik",
+     "nr": 3,
+     "ampel": "rot",
+     "grund": "Muskuläre Probleme - trainiert individuell",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Felix Agu",
+     "nr": 27,
+     "ampel": "rot",
+     "grund": "Nach Muskelverletzung - befindet sich im Aufbautraining",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Keke Topp",
+     "nr": 9,
+     "ampel": "rot",
+     "grund": "Kreuzbandriss - Rückkehr wohl erst 2027",
      "news": "",
      "reihe": "st",
      "prozent": 0
@@ -3274,7 +3272,7 @@
      "name": "Felix Götze",
      "nr": 20,
      "ampel": "gelb",
-     "grund": "Nach Zusammenprall - verpasst SCF (H)",
+     "grund": "Nach Zusammenprall",
      "news": "",
      "reihe": "abw",
      "prozent": 18
@@ -3287,27 +3285,27 @@
      "news": "",
      "reihe": "mf",
      "prozent": 11
-    },
+    }
+   ],
+   "ausfall": [
     {
      "name": "Sven Michel",
      "nr": 11,
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Nach Muskelbündelriss - trainiert individuell",
      "news": "",
      "reihe": "st",
-     "prozent": 4
+     "prozent": 0
     },
     {
      "name": "Nyamekye Awortwie-Grant",
      "nr": 4,
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Außenbandverletzung - fällt rund 6 Wochen aus",
      "news": "",
      "reihe": "abw",
      "prozent": 0
-    }
-   ],
-   "ausfall": [
+    },
     {
      "name": "Timur Gayret",
      "nr": 44,
@@ -3484,7 +3482,7 @@
      "name": "Tom Zimmerschied",
      "nr": 29,
      "ampel": "gelb",
-     "grund": "Rückenprobleme - teilintegriertes Teamtraining, verpasst FCB (H)",
+     "grund": "Rückenprobleme - teilintegriertes Teamtraining",
      "news": "",
      "reihe": "mf",
      "prozent": 20
@@ -3663,46 +3661,19 @@
    ],
    "fraglich": [
     {
-     "name": "Andrej Ilic",
-     "nr": 23,
-     "ampel": "gelb",
-     "grund": "Nach Lebensmittelvergiftung - längerfristiger Ausfall zeichnet sich ab",
-     "news": "",
-     "reihe": "st",
-     "prozent": 16
-    },
-    {
      "name": "Oliver Burke",
      "nr": 7,
      "ampel": "gelb",
-     "grund": "AchKrankessehnenprobleme - verpasst auch S04 (H)",
+     "grund": "Achillessehnenprobleme",
      "news": "",
      "reihe": "st",
      "prozent": 14
     },
     {
-     "name": "Stanley Nsoki",
-     "nr": 34,
-     "ampel": "gelb",
-     "grund": "Muskelverletzung an der Wade - arbeitet individuell",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 7
-    },
-    {
-     "name": "Kastriot Imeri",
-     "nr": 0,
-     "ampel": "gelb",
-     "grund": "Nach Oberschenkelverletzung - Hoffnung auf Rückkehr nächste Woche",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 1
-    },
-    {
      "name": "Marvin Friedrich",
      "nr": 5,
      "ampel": "gelb",
-     "grund": "Angeschlagen - verpasst S04 (H)",
+     "grund": "Angeschlagen",
      "news": "",
      "reihe": "abw",
      "prozent": 1
@@ -3714,6 +3685,33 @@
      "nr": 18,
      "ampel": "rot",
      "grund": "Krank - verpasst FCB (A)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Andrej Ilic",
+     "nr": 23,
+     "ampel": "rot",
+     "grund": "Nach Lebensmittelvergiftung - längerfristiger Ausfall zeichnet sich ab",
+     "news": "",
+     "reihe": "st",
+     "prozent": 0
+    },
+    {
+     "name": "Kastriot Imeri",
+     "nr": 0,
+     "ampel": "rot",
+     "grund": "Nach Oberschenkelverletzung - Hoffnung auf Rückkehr nächste Woche",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    },
+    {
+     "name": "Stanley Nsoki",
+     "nr": 34,
+     "ampel": "rot",
+     "grund": "Muskelverletzung an der Wade - arbeitet individuell",
      "news": "",
      "reihe": "abw",
      "prozent": 0
