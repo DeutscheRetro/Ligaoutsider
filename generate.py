@@ -2324,7 +2324,12 @@ def aufstellung_fetch():
             if p["angekuendigt"]:
                 return 0.95
             vor = min(1, p["starts_vor"] / 30) if p["starts_vor"] else min(0.5, p["mw"] / 4e7)
-            w = (p["starts"] + 2 * vor) / (spiele_team + 2)
+            # Wer in fast jedem seiner Einsätze begonnen hat, hat verpasste Spiele meist
+            # wegen Verletzung/Sperre gefehlt – die zählen nicht gegen ihn.
+            basis = spiele_team
+            if p["spiele"] and p["starts"] >= 0.75 * p["spiele"]:
+                basis = p["spiele"]
+            w = (p["starts"] + 2 * vor) / (basis + 2)
             if p["ampel"] == "gelb":
                 w *= 0.5
             return max(0.0, min(0.95, w))
@@ -2354,7 +2359,15 @@ def aufstellung_fetch():
             q = {k: p[k] for k in ("name", "nr", "ampel", "grund", "news", "reihe")}
             q["prozent"] = round(wert(p) * 100)
             if not q["grund"] and p["ampel"] == "gruen":
-                q["grund"] = f"{p['starts']}/{spiele_team} Startelf · Ø {p['minuten']} min" if spiele_team else ""
+                if not spiele_team:
+                    q["grund"] = ""
+                elif not p["spiele"]:
+                    q["grund"] = "noch ohne Einsatz"
+                else:
+                    q["grund"] = f"{p['starts']} von {p['spiele']} Einsätzen in der Startelf · Ø {p['minuten']} min"
+                    if p["spiele"] < spiele_team:
+                        fehlt = spiele_team - p["spiele"]
+                        q["grund"] += f" · {fehlt} Spiel{'e' if fehlt > 1 else ''} ohne Einsatz"
             if sicher is not None:
                 q["sicher"] = sicher
             return q
