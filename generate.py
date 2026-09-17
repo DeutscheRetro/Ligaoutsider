@@ -2287,6 +2287,22 @@ def aufstellung_fetch():
         for p in roh:
             status = p.get("status") or 0
             ampel = "gruen" if status == 0 else ("gelb" if status in AMPEL_GELB else "rot")
+            roh_text = p.get("statusText") or ""
+            text = roh_text.lower()
+            naechster = ((p.get("match_data") or {}).get("next_abbr") or "").upper()
+            # "verpasst KOE (H)" nennt ein konkretes Spiel: nur beim nächsten Gegner ein Ausfall
+            genannt = re.findall(r"verpasst (?:auch |wohl |voraussichtlich )*([A-Z0-9]{2,4}) \((?:H|A)\)", roh_text)
+            if genannt:
+                if naechster and naechster in genannt:
+                    ampel = "rot"
+                elif status == 0:
+                    ampel = "gelb"
+            # Kickbase lässt den Status oft auf 0, obwohl der Text eine Blessur meldet
+            elif status == 0 and text:
+                if re.search(r"verpasst|fällt .*aus|fehlt (?!im (team)?training)", text):
+                    ampel = "rot"
+                elif not re.search(r"soll morgen|wieder (voll )?im training|zurück im", text):
+                    ampel = "gelb"
             grund = (p.get("statusText") or "").strip() or STATUS_TEXT.get(status, "" if status == 0 else "fehlt laut Kickbase")
             news = hinweise.get((logo, _nachname(p.get("name"))))
             if news:

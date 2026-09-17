@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-17T14:14:19.823137+00:00",
+ "updated": "2026-09-17T14:16:08.987304+00:00",
  "spieltag": 4,
  "partien": [
   {
@@ -254,7 +254,17 @@
      "prozent": 13
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Tim Binder",
+     "nr": 0,
+     "ampel": "gelb",
+     "grund": "Nach Muskelfaserriss - trainiert individuell mit Ball",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 0
+    }
+   ],
    "ausfall": []
   },
   "Bayer 04 Leverkusen": {
@@ -669,7 +679,7 @@
      "name": "Silvan Widmer",
      "nr": 30,
      "ampel": "rot",
-     "grund": "Patellasehnenverletzung am Knie - fällt mehrere Wochen aus",
+     "grund": "Kniereizung - verpasst kurzfristig HSV (A)",
      "news": "",
      "reihe": "abw",
      "prozent": 0
@@ -1034,15 +1044,6 @@
      "news": "",
      "reihe": "mf",
      "prozent": 29
-    },
-    {
-     "name": "Nikolas Nartey",
-     "nr": 28,
-     "ampel": "gruen",
-     "grund": "Nach Muskelverletzung im Oberschenkel - kurz vor Rückkehr ins Teamtraining",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 19
     }
    ],
    "fraglich": [
@@ -1063,6 +1064,15 @@
      "news": "",
      "reihe": "st",
      "prozent": 17
+    },
+    {
+     "name": "Nikolas Nartey",
+     "nr": 28,
+     "ampel": "gelb",
+     "grund": "Nach Muskelverletzung im Oberschenkel - kurz vor Rückkehr ins Teamtraining",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 9
     },
     {
      "name": "Lorenz Assignon",
@@ -1578,13 +1588,13 @@
       "prozent": 60
      },
      {
-      "name": "Farès Chaïbi",
-      "nr": 8,
+      "name": "Mario Götze",
+      "nr": 27,
       "ampel": "gruen",
-      "grund": "Krank - verpasst M05 (A)",
+      "grund": "1/3 Startelf · Ø 52 min",
       "news": "",
       "reihe": "mf",
-      "prozent": 48
+      "prozent": 31
      }
     ],
     "st": [
@@ -1608,15 +1618,6 @@
      "news": "",
      "reihe": "st",
      "prozent": 57
-    },
-    {
-     "name": "Mario Götze",
-     "nr": 27,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 52 min",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 31
     },
     {
      "name": "Ayoube Amaimouni",
@@ -1653,18 +1654,19 @@
      "news": "",
      "reihe": "mf",
      "prozent": 16
-    },
-    {
-     "name": "Ansgar Knauff",
-     "nr": 7,
-     "ampel": "gruen",
-     "grund": "Muskelverletzung - fällt wohl rund 2 Wochen aus",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 16
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Farès Chaïbi",
+     "nr": 8,
+     "ampel": "gelb",
+     "grund": "Krank - verpasst M05 (A)",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 24
+    }
+   ],
    "ausfall": [
     {
      "name": "Jeremiaha Maluze",
@@ -1673,6 +1675,15 @@
      "grund": "verletzt",
      "news": "",
      "reihe": "abw",
+     "prozent": 0
+    },
+    {
+     "name": "Ansgar Knauff",
+     "nr": 7,
+     "ampel": "rot",
+     "grund": "Muskelverletzung - fällt wohl rund 2 Wochen aus",
+     "news": "",
+     "reihe": "mf",
      "prozent": 0
     }
    ]
@@ -1694,15 +1705,6 @@
      }
     ],
     "abw": [
-     {
-      "name": "Vladimír Coufal",
-      "nr": 34,
-      "ampel": "gruen",
-      "grund": "Zusammenprall am Kopf - vorzeitig ausgewechselt worden",
-      "news": "",
-      "reihe": "abw",
-      "prozent": 95
-     },
      {
       "name": "Albian Hajdari",
       "nr": 21,
@@ -1729,6 +1731,15 @@
       "news": "",
       "reihe": "abw",
       "prozent": 55
+     },
+     {
+      "name": "Vladimír Coufal",
+      "nr": 34,
+      "ampel": "gelb",
+      "grund": "Zusammenprall am Kopf - vorzeitig ausgewechselt worden",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 50
      }
     ],
     "mf": [
@@ -1844,18 +1855,19 @@
      "news": "",
      "reihe": "mf",
      "prozent": 33
-    },
+    }
+   ],
+   "fraglich": [
     {
      "name": "Alexander Prass",
      "nr": 22,
-     "ampel": "gruen",
+     "ampel": "gelb",
      "grund": "Adduktorenprobleme - soll nächste Woche voll trainieren",
      "news": "",
      "reihe": "mf",
-     "prozent": 16
+     "prozent": 8
     }
    ],
-   "fraglich": [],
    "ausfall": []
   },
   "1. FC Köln": {
@@ -2398,7 +2410,7 @@
      "name": "Dejan Ljubičić",
      "nr": 21,
      "ampel": "rot",
-     "grund": "Knieverletzung - fällt bis auf Weiteres aus",
+     "grund": "verletzt",
      "news": "",
      "reihe": "mf",
      "prozent": 0
@@ -2678,15 +2690,6 @@
       "prozent": 92
      },
      {
-      "name": "Jordan Torunarigha",
-      "nr": 23,
-      "ampel": "gruen",
-      "grund": "Leichte Oberschenkelprobleme - trägt leichte Blessuren von RBL (A)",
-      "news": "",
-      "reihe": "abw",
-      "prozent": 88
-     },
-     {
       "name": "Zakaria El Ouahdi",
       "nr": 0,
       "ampel": "gruen",
@@ -2703,6 +2706,15 @@
       "news": "",
       "reihe": "abw",
       "prozent": 46
+     },
+     {
+      "name": "Jordan Torunarigha",
+      "nr": 23,
+      "ampel": "gelb",
+      "grund": "Leichte Oberschenkelprobleme - trägt leichte Blessuren von RBL (A)",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 44
      }
     ],
     "mf": [
@@ -2861,10 +2873,19 @@
      "name": "Alexander Røssing-Lelesiit",
      "nr": 38,
      "ampel": "gelb",
-     "grund": "Nach Syndesmose-Schaden - trainiert teilintegriert, verpasst KOE (H)",
+     "grund": "Nach Syndesmose-Schaden - absolviert Teile des Teamtrainings",
      "news": "",
      "reihe": "st",
      "prozent": 3
+    },
+    {
+     "name": "Otto Stange",
+     "nr": 19,
+     "ampel": "gelb",
+     "grund": "Rippenprobleme - trägt leichte Blessuren von RBL (A)",
+     "news": "",
+     "reihe": "st",
+     "prozent": 1
     }
    ],
    "ausfall": []
@@ -3056,6 +3077,15 @@
      "news": "",
      "reihe": "abw",
      "prozent": 1
+    },
+    {
+     "name": "Oskar Wójcik",
+     "nr": 3,
+     "ampel": "gelb",
+     "grund": "Muskuläre Probleme - trainiert individuell, verpasst SCF (A)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 1
     }
    ],
    "ausfall": [
@@ -3203,15 +3233,6 @@
      "prozent": 37
     },
     {
-     "name": "Felix Götze",
-     "nr": 20,
-     "ampel": "gruen",
-     "grund": "Nach Zusammenprall - verpasst SCF (H)",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 36
-    },
-    {
      "name": "Oliver Batista Meier",
      "nr": 7,
      "ampel": "gruen",
@@ -3219,15 +3240,6 @@
      "news": "",
      "reihe": "mf",
      "prozent": 35
-    },
-    {
-     "name": "Sebastian Klaas",
-     "nr": 26,
-     "ampel": "gruen",
-     "grund": "Nach Adduktorenverletzung - absolviert Teile des Teamtrainings",
-     "news": "",
-     "reihe": "mf",
-     "prozent": 23
     },
     {
      "name": "Steffen Tigges",
@@ -3258,6 +3270,24 @@
     }
    ],
    "fraglich": [
+    {
+     "name": "Felix Götze",
+     "nr": 20,
+     "ampel": "gelb",
+     "grund": "Nach Zusammenprall - verpasst SCF (H)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 18
+    },
+    {
+     "name": "Sebastian Klaas",
+     "nr": 26,
+     "ampel": "gelb",
+     "grund": "Nach Adduktorenverletzung - absolviert Teile des Teamtrainings",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 11
+    },
     {
      "name": "Sven Michel",
      "nr": 11,
@@ -3633,15 +3663,6 @@
    ],
    "fraglich": [
     {
-     "name": "Josip Juranović",
-     "nr": 18,
-     "ampel": "gelb",
-     "grund": "Krank - verpasst FCB (A)",
-     "news": "",
-     "reihe": "abw",
-     "prozent": 32
-    },
-    {
      "name": "Andrej Ilic",
      "nr": 23,
      "ampel": "gelb",
@@ -3669,6 +3690,15 @@
      "prozent": 7
     },
     {
+     "name": "Kastriot Imeri",
+     "nr": 0,
+     "ampel": "gelb",
+     "grund": "Nach Oberschenkelverletzung - Hoffnung auf Rückkehr nächste Woche",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 1
+    },
+    {
      "name": "Marvin Friedrich",
      "nr": 5,
      "ampel": "gelb",
@@ -3678,7 +3708,17 @@
      "prozent": 1
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Josip Juranović",
+     "nr": 18,
+     "ampel": "rot",
+     "grund": "Krank - verpasst FCB (A)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 0
+    }
+   ]
   }
  }
 }
