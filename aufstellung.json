@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-17T12:57:06.511496+00:00",
+ "updated": "2026-09-17T13:50:09.769202+00:00",
  "spieltag": 4,
  "partien": [
   {
@@ -327,8 +327,8 @@
       "name": "Ibrahim Maza",
       "nr": 30,
       "ampel": "gelb",
-      "grund": "Grippaler Infekt - fehlt im AbschlusZerrunging vor Europa-League-Auftakt",
-      "news": "",
+      "grund": "nach Infektion, fehlte im Training",
+      "news": "artikel/878082823d.html",
       "reihe": "mf",
       "sicher": false
      }
@@ -420,24 +420,7 @@
      "reihe": "st"
     }
    ],
-   "fraglich": [
-    {
-     "name": "Nathan Tella",
-     "nr": 23,
-     "ampel": "gelb",
-     "grund": "Rückenprobleme - verpasst auch FCA (A)",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Montrell Culbreath",
-     "nr": 42,
-     "ampel": "gelb",
-     "grund": "Nach Fußverletzung - Rückkehr um Länderspielpause möglich",
-     "news": "",
-     "reihe": "mf"
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Guéla Doué",
@@ -448,11 +431,27 @@
      "reihe": "abw"
     },
     {
+     "name": "Nathan Tella",
+     "nr": 23,
+     "ampel": "rot",
+     "grund": "verletzungsbedingt",
+     "news": "artikel/878082823d.html",
+     "reihe": "mf"
+    },
+    {
      "name": "Kennet Eichhorn",
      "nr": 18,
      "ampel": "rot",
-     "grund": "Stoffwechselerkrankung - fällt vorerst aus",
-     "news": "",
+     "grund": "verletzungsbedingt",
+     "news": "artikel/878082823d.html",
+     "reihe": "mf"
+    },
+    {
+     "name": "Montrell Culbreath",
+     "nr": 42,
+     "ampel": "rot",
+     "grund": "verletzungsbedingt",
+     "news": "artikel/878082823d.html",
      "reihe": "mf"
     }
    ]
@@ -467,10 +466,10 @@
       "name": "Alexander Schwolow",
       "nr": 1,
       "ampel": "gruen",
-      "grund": "1/3 Startelf · Ø 93 min",
-      "news": "",
+      "grund": "Vertritt verletzten Zentner im Tor",
+      "news": "artikel/04ce130836.html",
       "reihe": "tw",
-      "sicher": false
+      "sicher": true
      }
     ],
     "abw": [
@@ -620,14 +619,23 @@
      "reihe": "abw"
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Paul Nebel",
+     "nr": 8,
+     "ampel": "gelb",
+     "grund": "Adduktorenverletzung - Hoffnung auf Trainingseinstieg vor der LSP",
+     "news": "",
+     "reihe": "mf"
+    }
+   ],
    "ausfall": [
     {
      "name": "Robin Zentner",
      "nr": 27,
      "ampel": "rot",
-     "grund": "Handverletzung - Hoffnung auf Rückkehr gegen B04 (H)",
-     "news": "",
+     "grund": "Handverletzung, Dauer vom Heilungsverlauf abhängig",
+     "news": "artikel/04ce130836.html",
      "reihe": "tw"
     },
     {
@@ -637,14 +645,6 @@
      "grund": "Syndesmosebandverletzung am Knöchel - erfolgreich operiert",
      "news": "",
      "reihe": "abw"
-    },
-    {
-     "name": "Paul Nebel",
-     "nr": 8,
-     "ampel": "rot",
-     "grund": "Adduktorenverletzung - Hoffnung auf Trainingseinstieg vor der LSP",
-     "news": "",
-     "reihe": "mf"
     },
     {
      "name": "Silvan Widmer",
@@ -682,6 +682,15 @@
     ],
     "abw": [
      {
+      "name": "Nico Schlotterbeck",
+      "nr": 4,
+      "ampel": "gruen",
+      "grund": "Comeback nach zwölf Wochen Verletzungspause",
+      "news": "artikel/f68b98a2cf.html",
+      "reihe": "abw",
+      "sicher": true
+     },
+     {
       "name": "Waldemar Anton",
       "nr": 3,
       "ampel": "gruen",
@@ -704,15 +713,6 @@
       "nr": 26,
       "ampel": "gruen",
       "grund": "3/3 Startelf · Ø 84 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
-     },
-     {
-      "name": "Joane Gadou",
-      "nr": 22,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "abw",
       "sicher": true
@@ -779,10 +779,10 @@
    },
    "bank": [
     {
-     "name": "Nico Schlotterbeck",
-     "nr": 4,
+     "name": "Joane Gadou",
+     "nr": 22,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 79 min",
+     "grund": "3/3 Startelf · Ø 86 min",
      "news": "",
      "reihe": "abw"
     },
@@ -961,19 +961,19 @@
       "sicher": true
      },
      {
-      "name": "Angelo Stiller",
-      "nr": 6,
-      "ampel": "gelb",
-      "grund": "Knieprellung - absolviert Laufprogramm, Rückkehr gegen BVB (H) möglich",
+      "name": "Bilal El Khannouss",
+      "nr": 11,
+      "ampel": "gruen",
+      "grund": "1/3 Startelf · Ø 43 min",
       "news": "",
       "reihe": "mf",
       "sicher": false
      },
      {
-      "name": "Bilal El Khannouss",
-      "nr": 11,
+      "name": "Jamie Leweling",
+      "nr": 18,
       "ampel": "gruen",
-      "grund": "1/3 Startelf · Ø 43 min",
+      "grund": "0/3 Startelf · Ø 24 min",
       "news": "",
       "reihe": "mf",
       "sicher": false
@@ -1016,14 +1016,6 @@
      "grund": "1/3 Startelf · Ø 42 min",
      "news": "",
      "reihe": "st"
-    },
-    {
-     "name": "Jamie Leweling",
-     "nr": 18,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 24 min",
-     "news": "",
-     "reihe": "mf"
     },
     {
      "name": "Tiago Tomás",
@@ -1079,7 +1071,7 @@
      "name": "Lorenz Assignon",
      "nr": 22,
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Trainingsrückstand - noch keine Option für BVB (H)",
      "news": "",
      "reihe": "abw"
     },
@@ -1101,6 +1093,14 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Angelo Stiller",
+     "nr": 6,
+     "ampel": "rot",
+     "grund": "Knieverletzung nach Zusammenprall mit Kabak",
+     "news": "artikel/82521fb604.html",
+     "reihe": "mf"
+    },
     {
      "name": "Justin Diehl",
      "nr": 31,
@@ -2731,6 +2731,15 @@
       "sicher": true
      },
      {
+      "name": "Jordan Torunarigha",
+      "nr": 23,
+      "ampel": "gruen",
+      "grund": "Leichte Oberschenkelprobleme - trägt leichte Blessuren von RBL (A)",
+      "news": "",
+      "reihe": "abw",
+      "sicher": true
+     },
+     {
       "name": "Zakaria El Ouahdi",
       "nr": 0,
       "ampel": "gruen",
@@ -2744,15 +2753,6 @@
       "nr": 3,
       "ampel": "gruen",
       "grund": "2/3 Startelf · Ø 89 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": false
-     },
-     {
-      "name": "Jordan Torunarigha",
-      "nr": 23,
-      "ampel": "gelb",
-      "grund": "Leichte Oberschenkelprobleme - trägt leichte Blessuren von RBL (A)",
       "news": "",
       "reihe": "abw",
       "sicher": false
@@ -2809,8 +2809,8 @@
      {
       "name": "Patson Daka",
       "nr": 27,
-      "ampel": "gelb",
-      "grund": "angeschlagen",
+      "ampel": "gruen",
+      "grund": "2/3 Startelf · Ø 64 min",
       "news": "",
       "reihe": "st",
       "sicher": false

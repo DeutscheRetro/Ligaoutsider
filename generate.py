@@ -1051,7 +1051,8 @@ Erstelle:
    - Geht es zentral um einen Klub außerhalb dieser Liste (z. B. Real Madrid,
      Nationalmannschaft, 2. Liga) oder um keinen Klub: "keiner".
 5. Spielerstatus: Nur wenn der Quelltext ausdrücklich sagt, ob ein Bundesliga-Spieler
-   am nächsten Spiel teilnehmen kann. Pro Spieler ein Eintrag:
+   am nächsten BUNDESLIGA-Spiel teilnehmen kann (Europapokal, DFB-Pokal und
+   Länderspiele zählen nicht). Pro Spieler ein Eintrag:
    - "spieler": Nachname wie im Text, "klub": einer der Werte aus Punkt 4
    - "status": "faellt_aus" | "fraglich" | "spielt" | "startelf"
      ("spielt" = wieder fit/einsatzbereit, "startelf" = Startelfeinsatz angekündigt)

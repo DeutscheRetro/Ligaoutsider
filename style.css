@@ -471,3 +471,18 @@ ul { list-style: none; }
 .au-prob{display:flex;align-items:center;margin-right:8px}
 @media (max-width:560px){.au-prob{display:none}}
 @media (max-width:560px){.au-chip b{display:none}.au-chip{padding:2px 5px 2px 3px}.au-reihe{gap:2px}.au-feld{padding:12px 3px}}
+
+/* Beta-Hinweis: bewusst als Etikett abgesetzt, nicht Teil des Schriftzugs */
+.logo { display: inline-flex; align-items: baseline; }
+.logo::after {
+  content: "beta";
+  align-self: center;
+  margin-left: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  text-transform: uppercase; line-height: 1.2;
+}
+@media (max-width: 720px) { .logo::after { font-size: 9px; margin-left: 8px; padding: 1px 5px; } }
