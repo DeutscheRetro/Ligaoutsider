@@ -2214,7 +2214,9 @@ POS_REIHE = {"Torwart": "tw", "Abwehr": "abw", "Mittelfeld": "mf", "Sturm": "st"
 
 
 def _nachname(name):
-    return (name or "").split()[-1].lower() if name else ""
+    import unicodedata
+    teil = (name or "").split()[-1] if (name or "").split() else ""
+    return "".join(c for c in unicodedata.normalize("NFKD", teil.lower()) if not unicodedata.combining(c))
 
 
 def _news_hinweise(tage=6):
