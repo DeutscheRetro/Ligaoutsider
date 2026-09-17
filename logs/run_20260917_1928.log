@@ -1,0 +1,292 @@
+2026-09-17 19:29:42,940 INFO URL-Cache geladen: 17459 bekannte URLs (letzte 30 Tage)
+2026-09-17 19:29:42,940 INFO === Ligaoutsider Generator startet – max. 50 Artikel ===
+2026-09-17 19:29:42,940 INFO Feed: https://newsfeed.kicker.de/news/bundesliga
+2026-09-17 19:29:45,800 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:45,838 INFO S5 fetch fulltext: Schröder zur Trainersuche: "Haben auch mit null Punkten was 
+2026-09-17 19:29:46,514 ERROR lxml parsing failed: Document is empty
+2026-09-17 19:29:46,514 ERROR lxml parser bytestring Document is empty
+2026-09-17 19:29:46,514 ERROR empty HTML tree: None
+2026-09-17 19:29:46,514 WARNING discarding data: None
+2026-09-17 19:29:46,515 INFO S5 fulltext fail (trafilatura_returned_empty): Schröder zur Trainersuche: "Haben auch mit null Punkten was 
+2026-09-17 19:29:46,516 INFO S5 fulltext fallback auf RSS-Beschreibung (43 Wörter): Schröder zur Trainersuche: "Haben auch mit null Pu
+2026-09-17 19:29:47,027 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:49,424 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:49,429 INFO S7 generate: Schröder zur Trainersuche: "Haben auch mit null Punkten was 
+2026-09-17 19:29:53,341 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:53,344 INFO   Kandidat: Schröder: "Haben auch mit null Punkten was zu bieten"
+2026-09-17 19:29:53,344 INFO Feed: https://www.sportschau.de/fussball/bundesliga/index~rss2.xml
+2026-09-17 19:29:55,796 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:55,801 INFO S4 update-bypass (Folgeartikel): Fußball-Bundesligist HSV und Trainer Polzin kurz vor Vertrag
+2026-09-17 19:29:55,802 INFO S5 fetch fulltext: Fußball-Bundesligist HSV und Trainer Polzin kurz vor Vertrag
+2026-09-17 19:29:56,937 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:58,370 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:29:58,375 INFO S7 generate: Fußball-Bundesligist HSV und Trainer Polzin kurz vor Vertrag
+2026-09-17 19:30:08,008 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:08,011 INFO   Kandidat: HSV: Polzin vor Vertragsverlängerung – grundsätzliche Einigu
+2026-09-17 19:30:08,011 INFO Feed: https://sportbild.bild.de/feed/sportbild-home.xml
+2026-09-17 19:30:09,289 INFO S3 keyword miss: Es  ging um 35 Millionen Dollar - Mega-Haft für Betrüger, de
+2026-09-17 19:30:10,750 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:10,755 INFO S5 fetch fulltext: Gegner hat Marktwert von nur 18 Millionen Euro - Hoffenheim-
+2026-09-17 19:30:11,996 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:13,829 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:13,834 INFO S7 generate: Gegner hat Marktwert von nur 18 Millionen Euro - Hoffenheim-
+2026-09-17 19:30:22,351 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:22,358 INFO   Kandidat: Hoffenheim verliert 0:2 bei OFI Kreta zum Europa-League-Auft
+2026-09-17 19:30:22,358 INFO S3 keyword miss: Fans wollen Namensänderung - Benennt sich dieser Verein bald
+2026-09-17 19:30:22,359 INFO S3 keyword miss: Arroganz trotz Rot? - United-Legende kritisiert Foden nach D
+2026-09-17 19:30:22,360 INFO S3 keyword miss: Über 50.000 Euro - Ticketpreise bei NBA-Champion explodieren
+2026-09-17 19:30:24,290 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:24,296 INFO S5 fetch fulltext: Wichtiger Schritt - Bayern-Legende bereit für Trainer-Job
+2026-09-17 19:30:25,554 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:27,880 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:27,886 INFO S7 generate: Wichtiger Schritt - Bayern-Legende bereit für Trainer-Job
+2026-09-17 19:30:48,040 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:48,041 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 436 (char 486)
+2026-09-17 19:30:48,042 INFO S3 keyword miss: Klopp wählt Eintracht- und DFB-Star aus - Diese Nominierung 
+2026-09-17 19:30:48,042 INFO S2 blacklist: Nach fast 19 Jahren - Ex-BVB-Star verkündet Nationalmannscha
+2026-09-17 19:30:48,043 INFO Feed: https://www.bild.de/rss-feeds/rss-16725492,feed=fussball-mix.bild.html
+2026-09-17 19:30:50,728 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:50,733 INFO S4 fingerprint dup: Pleite gegen No-Name-Klub  - Europa-Blamage für Hoffenheim
+2026-09-17 19:30:52,539 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:52,547 INFO S5 fetch fulltext: Skhiri war Tunesien-Kapitän - Köln-Star tritt aus Nationalel
+2026-09-17 19:30:53,396 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:53,397 INFO S5.5 not relevant (fulltext): Skhiri war Tunesien-Kapitän - Köln-Star tritt aus Nationalel
+2026-09-17 19:30:55,139 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:55,140 INFO S4 fingerprint dup: Verlängerung statt Abschied - Vertrags-Wende bei diesem BVB-
+2026-09-17 19:30:56,823 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:30:56,826 INFO S4 fingerprint dup: Beim Söder-Empfang - Neuer Seltsam-Auftritt von Bayerns Olis
+2026-09-17 19:30:56,827 INFO S3 keyword miss: Was Klopp über sie sagt - Das sind die 11 neuen DFB-Stars!
+2026-09-17 19:30:56,827 INFO S3 keyword miss: Jahr für DFB-Juwel gelaufen - Klopp-Zweifel wegen Ouédraogo-
+2026-09-17 19:30:56,828 INFO S3 keyword miss: Was jetzt nicht geändert werden darf - Irrer Uhrzeit-Tick vo
+2026-09-17 19:30:56,828 INFO Feed: https://www.11freunde.de/feed
+2026-09-17 19:30:58,290 INFO Feed: https://www.bundesliga.com/de/bundesliga/news.rss
+2026-09-17 19:31:00,710 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:00,716 INFO S4 fingerprint dup: Schalke bindet Top-Talent: Luca Vozar unterschreibt bis 2029
+2026-09-17 19:31:02,355 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:02,361 INFO S4 fingerprint dup: Er wird sicher irgendwann die Nummer eins
+2026-09-17 19:31:04,649 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:04,655 INFO S5 fetch fulltext: Stuttgart gegen Dortmund: Das Duell der starken Stürmer
+2026-09-17 19:31:05,351 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:07,236 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:07,241 INFO S7 generate: Stuttgart gegen Dortmund: Das Duell der starken Stürmer
+2026-09-17 19:31:19,702 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:19,703 INFO S7.5 kein BL-Hauptklub: Stuttgart vs. Dortmund: Guirassy und Silva gegen VfB-Ladehem
+2026-09-17 19:31:19,703 INFO Feed: https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtUmxHZ0pFUlNnQVAB?hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:22,433 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:22,438 INFO S4 fingerprint dup: Europa-League-Blamage: Kreta versenkt harmlose Hoffenheimer 
+2026-09-17 19:31:22,438 INFO S2 blacklist: Nationalmannschaft | Ter Stegen statt Baumann: Klopp klärt a
+2026-09-17 19:31:22,439 INFO S2 blacklist: Schalker Talent El-Faouzi entscheidet sich gegen den DFB - W
+2026-09-17 19:31:24,071 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:24,076 INFO S5 fetch fulltext: FC Bayern: Díaz hätte sich Backup gewünscht - SPORT1
+2026-09-17 19:31:24,578 INFO S5 fulltext fail (google_redirect_unresolved): FC Bayern: Díaz hätte sich Backup gewünscht - SPORT1
+2026-09-17 19:31:24,580 INFO S3 keyword miss: Francesco Bagnaia dementiert Streit mit Ducati um Abstimmung
+2026-09-17 19:31:24,581 INFO S2 blacklist: Nagelsmann bei England-Gigant ins Spiel gebracht - sport.de
+2026-09-17 19:31:24,581 INFO S2 blacklist: Wer ist Klopps größte Kaderüberraschung Mika Baur? - sportsc
+2026-09-17 19:31:26,308 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:26,313 INFO S5 fetch fulltext: 0:12 Tore, Tabellenletzter – der HSV verlängert offenbar tro
+2026-09-17 19:31:26,846 INFO S5 fulltext fail (google_redirect_unresolved): 0:12 Tore, Tabellenletzter – der HSV verlängert offenbar tro
+2026-09-17 19:31:26,847 INFO S2 blacklist: Neue Ansetzungen bis Ende November: RWE zweimal freitags - R
+2026-09-17 19:31:26,850 INFO S3 keyword miss: Bemerkenswert: Gegner Plock lädt MT-Melsungen-Fans ein - hes
+2026-09-17 19:31:28,527 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:28,532 INFO S5 fetch fulltext: Haben Sie es bemerkt? Kapitän von Lok Leipzig traf mit dem f
+2026-09-17 19:31:29,055 INFO S5 fulltext fail (google_redirect_unresolved): Haben Sie es bemerkt? Kapitän von Lok Leipzig traf mit dem f
+2026-09-17 19:31:29,058 INFO S3 keyword miss: Alex Zverev und Sophia Thomalla: Kurze Pärchenauszeit nach U
+2026-09-17 19:31:29,059 INFO S2 blacklist: B-Elf besiegt Stammmannschaft des FCN: Klose sieht trotzdem 
+2026-09-17 19:31:31,081 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:31,086 INFO S5 fetch fulltext: 3. Liga: Dietze erlöst Hansa! Rostock siegt im ersten Spiel 
+2026-09-17 19:31:31,585 INFO S5 fulltext fail (google_redirect_unresolved): 3. Liga: Dietze erlöst Hansa! Rostock siegt im ersten Spiel 
+2026-09-17 19:31:31,588 INFO S3 keyword miss: Sie gibt sogar den Sieg zurück: Athletin entschuldigt sich f
+2026-09-17 19:31:31,591 INFO S3 keyword miss: Ministerpräsident eingeschaltet: Rätsel um Millionärin – Sel
+2026-09-17 19:31:31,591 INFO S2 blacklist: Zehn Millionen Euro für Sport-Großevent: Nürnberg will die „
+2026-09-17 19:31:31,593 INFO S3 keyword miss: 3. Liga: Waldhof kann Essens Lauf nicht stoppen - sportschau
+2026-09-17 19:31:33,453 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:33,456 INFO S4 fingerprint dup: Wichtiger Schritt für BVB-Youngster Karetsas - SPORT1
+2026-09-17 19:31:33,457 INFO S3 keyword miss: Schwere Vorwürfe nach tödlichem Ski-Unfall - SPORT1
+2026-09-17 19:31:33,460 INFO S3 keyword miss: World Series of Darts Finals: Heute live im Free-TV & Stream
+2026-09-17 19:31:35,184 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:35,190 INFO S5 fetch fulltext: Auch Löwen-Spiele gegen Illertissen und Bayern II live im TV
+2026-09-17 19:31:35,823 INFO S5 fulltext fail (google_redirect_unresolved): Auch Löwen-Spiele gegen Illertissen und Bayern II live im TV
+2026-09-17 19:31:35,826 INFO S3 keyword miss: Boehly verkauft Chelsea-Anteil – Seit 2022 3,4 Milliarden fü
+2026-09-17 19:31:38,211 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:38,216 INFO S5 fetch fulltext: Rückschlag im Kampf um Sturmtalent? Darum fehlt Tresoldi in 
+2026-09-17 19:31:38,852 INFO S5 fulltext fail (google_redirect_unresolved): Rückschlag im Kampf um Sturmtalent? Darum fehlt Tresoldi in 
+2026-09-17 19:31:38,853 INFO S2 blacklist: Darum dauert die Länderspielpause fast drei Wochen - sportsc
+2026-09-17 19:31:38,854 INFO S3 keyword miss: Ankermann-Leihe? Kiels Handball-Boss Szilagyi äußert sich - 
+2026-09-17 19:31:40,792 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:40,797 INFO S5 fetch fulltext: Teilerfolg: DFB-Nominierung für Paris Brunner - FussballTran
+2026-09-17 19:31:41,375 INFO S5 fulltext fail (google_redirect_unresolved): Teilerfolg: DFB-Nominierung für Paris Brunner - FussballTran
+2026-09-17 19:31:43,329 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:43,332 INFO S4 fingerprint dup: Bayern und Real im Transfer-Rennen – Mourinho will ihn - fus
+2026-09-17 19:31:43,335 INFO S3 keyword miss: Neuer Rennkalender: Formel 1 fährt wieder in Portugal und de
+2026-09-17 19:31:43,336 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Testspiel+Ergebnis&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:43,767 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vorbereitung+Sommertour&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:44,050 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Verletzung+Ausfall+gesperrt&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:44,470 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Transfer+Wechsel+verpflichtet&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:44,887 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Gerücht+Interesse+Angebot&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:45,347 INFO Feed: https://news.google.com/rss/search?q=Bundesliga+Vertrag+verlängert+ablösefrei&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:45,757 INFO Feed: https://news.google.com/rss/search?q=FC+Bayern+München+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:47,794 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:47,799 INFO S4 fingerprint dup: FC Bayern: Die Wahrheit über das Interesse an Wunderkind JJ 
+2026-09-17 19:31:47,800 INFO S3 keyword miss: Offiziell: Holger Seitz übernimmt die SpVgg Unterhaching - n
+2026-09-17 19:31:49,333 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:31:49,338 INFO S5 fetch fulltext: Bayern-Hammer: Top-Teams jagen Lennart Karl - weekend.at
+2026-09-17 19:31:49,868 INFO S5 fulltext fail (google_redirect_unresolved): Bayern-Hammer: Top-Teams jagen Lennart Karl - weekend.at
+2026-09-17 19:31:49,870 INFO Feed: https://news.google.com/rss/search?q=Borussia+Dortmund+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:50,454 INFO Feed: https://news.google.com/rss/search?q=Bayer+04+Leverkusen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:51,115 INFO Feed: https://news.google.com/rss/search?q=RB+Leipzig+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:51,689 INFO Feed: https://news.google.com/rss/search?q=VfB+Stuttgart+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:52,294 INFO Feed: https://news.google.com/rss/search?q=Eintracht+Frankfurt+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:52,815 INFO Feed: https://news.google.com/rss/search?q=Borussia+Mönchengladbach+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:53,367 INFO Feed: https://news.google.com/rss/search?q=SC+Freiburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:53,876 INFO Feed: https://news.google.com/rss/search?q=TSG+Hoffenheim+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:54,418 INFO Feed: https://news.google.com/rss/search?q=FSV+Mainz+05+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:54,913 INFO Feed: https://news.google.com/rss/search?q=FC+Augsburg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:55,434 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Union+Berlin+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:56,031 INFO Feed: https://news.google.com/rss/search?q=SV+Werder+Bremen+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:56,555 INFO Feed: https://news.google.com/rss/search?q=Hamburger+SV+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:57,079 INFO Feed: https://news.google.com/rss/search?q=1.+FC+Köln+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:57,603 INFO Feed: https://news.google.com/rss/search?q=FC+Schalke+04+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:58,222 INFO Feed: https://news.google.com/rss/search?q=SV+Elversberg+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:58,681 INFO Feed: https://news.google.com/rss/search?q=SC+Paderborn+Transfer+News&hl=de&gl=DE&ceid=DE:de
+2026-09-17 19:31:59,174 INFO Feed: https://www.transfermarkt.de/rss/news
+2026-09-17 19:31:59,298 INFO Feed: https://www.waz.de/sport/fussball/rss
+2026-09-17 19:31:59,803 INFO Feed: https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/
+2026-09-17 19:32:00,194 INFO Feed: https://bulinews.com/rss.xml
+2026-09-17 19:32:02,267 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:02,272 INFO S5 fetch fulltext: Bayern Munich vs. Union Berlin preview: Reigning champions a
+2026-09-17 19:32:04,178 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:06,599 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:06,604 INFO S6 refined dup: Bayern Munich vs. Union Berlin preview: Reigning champions a
+2026-09-17 19:32:08,300 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:08,305 INFO S5 fetch fulltext: OFI Crete outclass toothless Hoffenheim in Europa League ope
+2026-09-17 19:32:09,692 INFO S5 fulltext fail (likely_paywall): OFI Crete outclass toothless Hoffenheim in Europa League ope
+2026-09-17 19:32:09,693 INFO S3 keyword miss: “That's who he is!”: Luis Díaz on Michael Olise’s persona
+2026-09-17 19:32:09,694 INFO S3 keyword miss: Luis Díaz backs “special” teammate Harry Kane for Ballon d’O
+2026-09-17 19:32:09,695 INFO S3 keyword miss: Bundesliga Fantasy Show – Matchday 4: Must-haves, differenti
+2026-09-17 19:32:12,040 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:12,045 INFO S5 fetch fulltext: Gladbach chief reveals head coach hunt is down to "two or th
+2026-09-17 19:32:13,939 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:16,322 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:16,327 INFO S7 generate: Gladbach chief reveals head coach hunt is down to "two or th
+2026-09-17 19:32:22,821 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:22,822 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 214 (char 296)
+2026-09-17 19:32:22,822 INFO Feed: https://www.abendblatt.de/sport/rss
+2026-09-17 19:32:23,331 INFO S3 keyword miss: Sponsorin abgetaucht: Jetzt spricht Hamburgs Chef des Spring
+2026-09-17 19:32:25,268 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:25,273 INFO S4 fingerprint dup: Hilft Vuskovic dem HSV schneller als gedacht? Was diese Polz
+2026-09-17 19:32:25,273 INFO S2 blacklist: Ruderer teilen bei Olympia 2032 in Australien ihre Strecke m
+2026-09-17 19:32:25,274 INFO S3 keyword miss: „Er sollte weg”: Auch Watzke fordert Infantino-Aus
+2026-09-17 19:32:25,275 INFO Feed: https://www.merkur.de/sport/fc-bayern/rssfeed.rdf
+2026-09-17 19:32:26,075 INFO S2 blacklist: Bayern-Juwel wird offenbar für die deutsche Nationalmannscha
+2026-09-17 19:32:26,075 INFO Feed: https://www.eyefootball.com/rss_news_main.xml
+2026-09-17 19:32:26,715 INFO S3 keyword miss: Chelsea striker out for three weeks with knee problem
+2026-09-17 19:32:26,716 INFO S3 keyword miss: Man Utd weighing up move for Everton defender?
+2026-09-17 19:32:26,716 INFO S3 keyword miss: Man Utd to make two defensive signings in January?
+2026-09-17 19:32:26,717 INFO S3 keyword miss: Arsenal defender set for first start of the season vs Bright
+2026-09-17 19:32:26,718 INFO S3 keyword miss: Howe leading contender to replace Carrick at Man Utd?
+2026-09-17 19:32:26,719 INFO S3 keyword miss: Man Utd manager Michael Carrick faces sack risk vs Fulham
+2026-09-17 19:32:26,719 INFO S3 keyword miss: Xabi Alonso provides fresh Moises Caicedo update ahead of Br
+2026-09-17 19:32:26,720 INFO Feed: https://www.ligaportal.at/international/deutsche-bundesliga?format=feed&type=rss
+2026-09-17 19:32:29,502 INFO S2 blacklist: 1. FC Köln-Profi Skhiri tritt aus Tunesiens Nationalmannscha
+2026-09-17 19:32:29,502 INFO S2 blacklist: SV Elversberg-Profi Campbell und BVB-Youngster Albert erstma
+2026-09-17 19:32:29,503 INFO Feed: https://www.reddit.com/r/soccer/new.rss?limit=100
+2026-09-17 19:32:30,482 INFO S3 keyword miss: Juventus [2]-0 NEC Nijmegen - Kerim Alajbegovic 24'
+2026-09-17 19:32:30,483 INFO S3 keyword miss: Match Thread: Málaga vs Villarreal | LaLiga
+2026-09-17 19:32:30,484 INFO S3 keyword miss: Crystal Palace [1]-0 Lech Poznan - Yeremy Pino 10'
+2026-09-17 19:32:30,485 INFO S3 keyword miss: Half of the Beşiktaş fans in the stands are wearing black je
+2026-09-17 19:32:30,485 INFO S3 keyword miss: Juventus [1]-0 NEC Nijmegen - Nicolas Gonzalez 9'
+2026-09-17 19:32:30,486 INFO S3 keyword miss: Manchester City [2]-0 Norwich City - Rayan Cherki 32'
+2026-09-17 19:32:30,487 INFO S3 keyword miss: Manchester City [1]-0 Norwich City - Floyd Samba 29'
+2026-09-17 19:32:30,488 INFO S3 keyword miss: Match Thread: Besiktas vs Marseille | UEFA Europa League
+2026-09-17 19:32:30,489 INFO S3 keyword miss: Match Thread: Real Sociedad vs AFC Bournemouth | UEFA Europa
+2026-09-17 19:32:30,490 INFO S3 keyword miss: Match Thread: Juventus vs NEC Nijmegen | UEFA Europa League
+2026-09-17 19:32:30,491 INFO S3 keyword miss: Match Thread: Celtic vs Ferencvaros | UEFA Europa League
+2026-09-17 19:32:32,101 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:32,107 INFO S5 fetch fulltext: Match Thread: Viktoria Plzen vs Union St.-Gilloise | UEFA Eu
+2026-09-17 19:32:32,387 INFO S5 fulltext fail (too_short_36_words): Match Thread: Viktoria Plzen vs Union St.-Gilloise | UEFA Eu
+2026-09-17 19:32:32,388 INFO S3 keyword miss: Match Thread: Lillestrom vs Torreense | UEFA Europa League
+2026-09-17 19:32:32,390 INFO S3 keyword miss: Match Thread: Crystal Palace vs Lech Poznan | UEFA Europa Le
+2026-09-17 19:32:32,390 INFO S2 blacklist: Post Match Thread: OFI Crete 2-0 TSG Hoffenheim | UEFA Europ
+2026-09-17 19:32:34,451 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:34,456 INFO S5 fetch fulltext: OFI Crete has beaten Hoffenheim in their Europa League opene
+2026-09-17 19:32:34,588 INFO S5 fulltext fail (too_short_36_words): OFI Crete has beaten Hoffenheim in their Europa League opene
+2026-09-17 19:32:34,589 INFO S3 keyword miss: [Fabrice Hawkins]: Zidane’s first France squad could include
+2026-09-17 19:32:34,590 INFO S3 keyword miss: Match Thread: Poland U20 W vs Colombia U20 W | World Cup - U
+2026-09-17 19:32:34,591 INFO S3 keyword miss: Match Thread: Manchester City vs Norwich City | English Cara
+2026-09-17 19:32:34,592 INFO S3 keyword miss: After suffering their worst ever defeat (8-1 to AEK in the G
+2026-09-17 19:32:34,593 INFO S3 keyword miss: OFI Crete [1] - 0 Hoffenhein - Aitor Cantalapiedra 30'
+2026-09-17 19:32:34,596 INFO S3 keyword miss: Belgian side KAS Eupen officially taken over by Qatari PSG o
+2026-09-17 19:32:34,597 INFO S3 keyword miss: Match Thread: Real Betis vs Getafe | LaLiga
+2026-09-17 19:32:34,598 INFO S3 keyword miss: Man City's 115 charges: two years on, still no verdict in ex
+2026-09-17 19:32:34,599 INFO S3 keyword miss: Republic of Ireland head coach Heimir Hallgrimsson on facing
+2026-09-17 19:32:36,374 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:36,379 INFO S4 fingerprint dup: Match Thread: OFI Crete vs TSG Hoffenheim | UEFA Europa Leag
+2026-09-17 19:32:36,380 INFO S3 keyword miss: Match Thread: Levski Sofia vs RB Salzburg | UEFA Europa Leag
+2026-09-17 19:32:36,381 INFO S3 keyword miss: [Telegraph] Michael Carrick is on the cusp of the next Manch
+2026-09-17 19:32:36,382 INFO Feed: https://newsfeed.kicker.de/team/fc-bayern-muenchen
+2026-09-17 19:32:36,733 INFO Feed: https://newsfeed.kicker.de/team/borussia-dortmund
+2026-09-17 19:32:38,937 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:38,943 INFO S5 fetch fulltext: Pochettino setzt auf 16-jährigen Sullivan - Hat sich Albert 
+2026-09-17 19:32:39,228 ERROR lxml parsing failed: Document is empty
+2026-09-17 19:32:39,228 ERROR lxml parser bytestring Document is empty
+2026-09-17 19:32:39,228 ERROR empty HTML tree: None
+2026-09-17 19:32:39,229 WARNING discarding data: None
+2026-09-17 19:32:39,230 INFO S5 fulltext fail (trafilatura_returned_empty): Pochettino setzt auf 16-jährigen Sullivan - Hat sich Albert 
+2026-09-17 19:32:39,230 INFO S5 fulltext fallback auf RSS-Beschreibung (42 Wörter): Pochettino setzt auf 16-jährigen Sullivan - Hat si
+2026-09-17 19:32:39,659 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:39,660 INFO S5.5 not relevant (fulltext): Pochettino setzt auf 16-jährigen Sullivan - Hat sich Albert 
+2026-09-17 19:32:39,661 INFO Feed: https://newsfeed.kicker.de/team/rb-leipzig
+2026-09-17 19:32:39,906 INFO Feed: https://newsfeed.kicker.de/team/bayer-04-leverkusen
+2026-09-17 19:32:42,049 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:42,055 INFO S5 fetch fulltext: Das alte Problem: Leverkusen macht sich das Leben selbst sch
+2026-09-17 19:32:42,134 ERROR lxml parsing failed: Document is empty
+2026-09-17 19:32:42,134 ERROR lxml parser bytestring Document is empty
+2026-09-17 19:32:42,134 ERROR empty HTML tree: None
+2026-09-17 19:32:42,134 WARNING discarding data: None
+2026-09-17 19:32:42,135 INFO S5 fulltext fail (trafilatura_returned_empty): Das alte Problem: Leverkusen macht sich das Leben selbst sch
+2026-09-17 19:32:42,136 INFO S5 fulltext fallback auf RSS-Beschreibung (36 Wörter): Das alte Problem: Leverkusen macht sich das Leben 
+2026-09-17 19:32:42,578 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:44,603 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:44,609 INFO S7 generate: Das alte Problem: Leverkusen macht sich das Leben selbst sch
+2026-09-17 19:32:48,866 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:48,868 INFO   Kandidat: Leverkusen siegt gegen Celje, aber Steigerung gegen Leipzig 
+2026-09-17 19:32:48,868 INFO Feed: https://newsfeed.kicker.de/team/vfb-stuttgart
+2026-09-17 19:32:49,093 INFO Feed: https://newsfeed.kicker.de/team/eintracht-frankfurt
+2026-09-17 19:32:49,416 INFO Feed: https://newsfeed.kicker.de/team/bor-moenchengladbach
+2026-09-17 19:32:49,644 INFO Feed: https://newsfeed.kicker.de/team/sc-freiburg
+2026-09-17 19:32:49,881 INFO Feed: https://newsfeed.kicker.de/team/tsg-hoffenheim
+2026-09-17 19:32:50,103 INFO S1 Medienseite ohne Artikeltext: Conté lacht wegen Klopp: "Weiß nicht, wo er die tiefe Stimme
+2026-09-17 19:32:50,103 INFO Feed: https://newsfeed.kicker.de/team/1-fsv-mainz-05
+2026-09-17 19:32:50,344 INFO Feed: https://newsfeed.kicker.de/team/fc-augsburg
+2026-09-17 19:32:50,576 INFO Feed: https://newsfeed.kicker.de/team/1-fc-union-berlin
+2026-09-17 19:32:50,912 INFO Feed: https://newsfeed.kicker.de/team/werder-bremen
+2026-09-17 19:32:51,149 INFO Feed: https://newsfeed.kicker.de/team/hamburger-sv
+2026-09-17 19:32:51,397 INFO Feed: https://newsfeed.kicker.de/team/1-fc-koeln
+2026-09-17 19:32:51,633 INFO S2 blacklist: Nach drei WM-Teilnahmen: Skhiri läuft nicht mehr für Tunesie
+2026-09-17 19:32:51,634 INFO Feed: https://newsfeed.kicker.de/team/fc-schalke-04
+2026-09-17 19:32:51,861 INFO Feed: https://newsfeed.kicker.de/team/sv-elversberg
+2026-09-17 19:32:54,558 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:54,564 INFO S5 fetch fulltext: USA berufen 16-jährigen Sullivan - Hat sich BVB-Talent Alber
+2026-09-17 19:32:54,640 ERROR lxml parsing failed: Document is empty
+2026-09-17 19:32:54,640 ERROR lxml parser bytestring Document is empty
+2026-09-17 19:32:54,640 ERROR empty HTML tree: None
+2026-09-17 19:32:54,640 WARNING discarding data: None
+2026-09-17 19:32:54,641 INFO S5 fulltext fail (trafilatura_returned_empty): USA berufen 16-jährigen Sullivan - Hat sich BVB-Talent Alber
+2026-09-17 19:32:54,641 INFO S5 fulltext fallback auf RSS-Beschreibung (42 Wörter): USA berufen 16-jährigen Sullivan - Hat sich BVB-Ta
+2026-09-17 19:32:55,148 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:55,149 INFO S5.5 not relevant (fulltext): USA berufen 16-jährigen Sullivan - Hat sich BVB-Talent Alber
+2026-09-17 19:32:55,150 INFO Feed: https://newsfeed.kicker.de/team/sc-paderborn-07
+2026-09-17 19:32:55,386 INFO Feed: https://newsfeed.kicker.de/news/champions-league
+2026-09-17 19:32:55,609 INFO S8 QA: 4 Kandidaten …
+2026-09-17 19:32:59,754 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-17 19:32:59,755 INFO QA REJECT [0]: Text bricht mitten im Satz ab und ist unvollständig.
+2026-09-17 19:32:59,755 INFO QA REJECT [1]: Text bricht mitten im Satz ab und ist unvollständig.
+2026-09-17 19:32:59,755 INFO QA APPROVE [2]: Hoffenheim verliert 0:2 bei OFI Kreta zum Europa-League-Auft
+2026-09-17 19:32:59,755 INFO QA REJECT [3]: Inhaltsarm und generisch – 'Mehr als Pflichterfüllung war es nicht' ist eine Floskel ohne konkrete Fakten, Torschützen oder Spieldetails.
+2026-09-17 19:32:59,755 INFO S8 approved: 1 / 4
+2026-09-17 19:32:59,761 INFO S9.5 FinalCheck: 1/1 durch
+2026-09-17 19:32:59,869 INFO Veröffentlicht: Hoffenheim verliert 0:2 bei OFI Kreta zum Europa-League-Auft
+2026-09-17 19:33:00,178 INFO Reddit: Keine Credentials – übersprungen
+2026-09-17 19:33:00,210 INFO URL-Cache gespeichert: 17599 URLs
+2026-09-17 19:33:00,210 INFO === Fertig. 1 neue Artikel. feed.json: 896 ===
+2026-09-17 19:33:00,210 INFO Stats: {"ts": "20260917_1928", "ingested": 139, "s2_pre_filter": 15, "s3_relevance": 59, "s4_dedup_early": 11, "s5_fulltext_fail": 15, "s6_dedup_refined": 1, "s7_generated": 4, "s8_qa_rejected": 3, "published": 1, "s7_5_kein_hauptklub": 1}
