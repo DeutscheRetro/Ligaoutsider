@@ -2290,16 +2290,15 @@ def aufstellung_fetch():
             roh_text = p.get("statusText") or ""
             text = roh_text.lower()
             naechster = ((p.get("match_data") or {}).get("next_abbr") or "").upper()
-            # "verpasst KOE (H)" nennt ein konkretes Spiel: nur beim nächsten Gegner ein Ausfall
-            genannt = re.findall(r"verpasst (?:auch |wohl |voraussichtlich )*([A-Z0-9]{2,4}) \((?:H|A)\)", roh_text)
-            if genannt:
-                if naechster and naechster in genannt:
-                    ampel = "rot"
-                elif status == 0:
-                    ampel = "gelb"
-            # Kickbase lässt den Status oft auf 0, obwohl der Text eine Blessur meldet
+            # "verpasst" zählt nur, wenn damit ausdrücklich das nächste Spiel gemeint ist
+            # ("verpasst KOE (H)" bei nächstem Gegner KOE). Alles andere ist veraltet
+            # oder betrifft spätere Spiele – dann entscheidet der Statuscode.
+            genannt = re.findall(r"verpasst\b[^,;.]*?\b([A-Z0-9]{2,4}) \((?:H|A)\)", roh_text)
+            if naechster and naechster in genannt:
+                ampel = "rot"
             elif status == 0 and text:
-                if re.search(r"verpasst|fällt .*aus|fehlt (?!im (team)?training)", text):
+                # Kickbase lässt den Status oft auf 0, obwohl der Text eine Blessur meldet
+                if re.search(r"fällt .*aus", text):
                     ampel = "rot"
                 elif not re.search(r"soll morgen|wieder (voll )?im training|zurück im", text):
                     ampel = "gelb"
