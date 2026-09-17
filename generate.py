@@ -2302,14 +2302,17 @@ def aufstellung_fetch():
             })
 
         def wert(p):
-            jetzt = p["starts"] / spiele_team if spiele_team else 0
-            vor = min(1, p["starts_vor"] / 30)
-            w = (0.6 * jetzt + 0.25 * vor + 0.15 * p["minuten"] / 90) if spiele_team else (0.7 * vor + 0.3 * min(1, p["mw"] / 3e7))
+            """Startelf-Wahrscheinlichkeit 0..1: Startquote dieser Saison, mit der
+            Vorsaison als Vorwissen geglättet (zählt wie zwei Spiele)."""
+            if p["ampel"] == "rot":
+                return 0.0
             if p["angekuendigt"]:
-                w += 1
+                return 0.95
+            vor = min(1, p["starts_vor"] / 30) if p["starts_vor"] else min(0.5, p["mw"] / 4e7)
+            w = (p["starts"] + 2 * vor) / (spiele_team + 2)
             if p["ampel"] == "gelb":
-                w *= 0.6
-            return w
+                w *= 0.5
+            return max(0.0, min(0.95, w))
 
         verfuegbar = sorted([p for p in kader if p["ampel"] != "rot"], key=wert, reverse=True)
         anz = _formation_aus_statistik(kader)
@@ -2334,18 +2337,19 @@ def aufstellung_fetch():
 
         def sauber(p, sicher=None):
             q = {k: p[k] for k in ("name", "nr", "ampel", "grund", "news", "reihe")}
+            q["prozent"] = round(wert(p) * 100)
             if not q["grund"] and p["ampel"] == "gruen":
                 q["grund"] = f"{p['starts']}/{spiele_team} Startelf · Ø {p['minuten']} min" if spiele_team else ""
             if sicher is not None:
                 q["sicher"] = sicher
             return q
 
-        grenze = sorted((wert(p) for p in verfuegbar if id(p) in in_elf))
         ergebnis_teams[team] = {
-            "logo": logo, "formation": form_txt,
+            "logo": logo, "formation": form_txt if news_form else "",
             "formation_quelle": news_form["pfad"] if news_form else "",
-            "elf": {k: [sauber(p, wert(p) >= 0.55 and p["ampel"] == "gruen") for p in v] for k, v in elf.items()},
-            "bank": [sauber(p) for p in verfuegbar if id(p) not in in_elf and p["spiele"] > 0][:9],
+            "elf": {k: [sauber(p) for p in sorted(v, key=wert, reverse=True)] for k, v in elf.items()},
+            "bank": [sauber(p) for p in verfuegbar
+                     if id(p) not in in_elf and p["ampel"] == "gruen" and wert(p) >= 0.1][:9],
             "fraglich": [sauber(p) for p in verfuegbar if p["ampel"] == "gelb" and id(p) not in in_elf],
             "ausfall": [sauber(p) for p in sorted(kader, key=lambda p: -p["mw"]) if p["ampel"] == "rot"],
         }

@@ -4,11 +4,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aufstellungs-Check – Ligaoutsider.de</title>
-  <meta name="description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf, Taktik, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
+  <meta name="description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf mit Einsatzwahrscheinlichkeit, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
   <link rel="canonical" href="https://ligaoutsider.de/aufstellung.html"/>
   <meta property="og:type" content="website"/>
   <meta property="og:title" content="Aufstellungs-Check – Ligaoutsider.de"/>
-  <meta property="og:description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf, Taktik, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
+  <meta property="og:description" content="Voraussichtliche Aufstellungen aller Bundesliga-Spiele: Startelf mit Einsatzwahrscheinlichkeit, fragliche Spieler und Ausfälle – mehrmals täglich aktualisiert."/>
   <meta property="og:url" content="https://ligaoutsider.de/aufstellung.html"/>
   <meta property="og:site_name" content="Ligaoutsider.de"/>
   <meta property="og:locale" content="de_DE"/>
@@ -66,7 +66,7 @@
       <h2 class="au-h">Aufstellungs-Check</h2>
       <span id="au-stand" class="au-stand"></span>
     </div>
-    <p class="au-intro">Voraussichtliche Startelf und Grundordnung für jedes Spiel – errechnet aus Einsatzdaten, gemeldeten Verletzungen und unseren News. Keine offiziellen Aufstellungen.</p>
+    <p class="au-intro">Voraussichtliche Startelf für jedes Spiel mit Einsatzwahrscheinlichkeit. Keine offiziellen Aufstellungen.</p>
     <div class="au-filter">
       <select id="au-team" aria-label="Verein wählen"><option value="">Alle Spiele</option></select>
       <label><input type="checkbox" id="au-nurprobleme"> Nur Spiele mit Ausfällen oder Fragezeichen</label>
@@ -75,7 +75,7 @@
       <span><i class="au-dot gruen"></i> spielt</span>
       <span><i class="au-dot gelb"></i> fraglich</span>
       <span><i class="au-dot rot"></i> fällt aus</span>
-      <span><i class="au-dot offen"></i> Startplatz offen</span>
+      <span>% = Wahrscheinlichkeit für einen Startelf-Einsatz</span>
       <span>📰 &nbsp;Hinweis aus unseren News</span>
     </div>
     <div id="au-partien"><p class="kb-loading">Lade Aufstellungen…</p></div>
@@ -132,22 +132,22 @@
     let AU = null;
 
     function spieler(p, klasse) {
-      const dot = p.ampel === 'gruen' && p.sicher === false ? 'offen' : p.ampel;
       const tip = esc(p.name + (p.grund ? ' – ' + p.grund : ''));
       const news = p.news ? ` <a class="au-news" href="${esc(p.news)}" title="Zum Artikel">📰</a>` : '';
-      return `<span class="${klasse}" title="${tip}"><i class="au-dot ${dot}"></i>${p.nr != null ? `<b>${esc(p.nr)}</b>` : ''}${esc(kurz(p.name))}${news}</span>`;
+      return `<span class="${klasse}" title="${tip}"><i class="au-dot ${p.ampel}"></i>${p.nr != null ? `<b>${esc(p.nr)}</b>` : ''}${esc(p.name)}${news}</span>`;
     }
 
-    function feld(t) {
-      const reihe = arr => `<div class="au-reihe">${arr.map(p => spieler(p, 'au-chip')).join('')}</div>`;
-      // Bei z. B. 4-2-3-1 das Mittelfeld auf mehrere Reihen verteilen (hinten zuerst)
-      const teile = String(t.formation).split('-').map(Number);
-      const mf = [...(t.elf.mf || [])];
-      const mfReihen = [];
-      teile.slice(1, -1).forEach(n => mfReihen.push(mf.splice(0, n)));
-      if (mf.length) mfReihen.push(mf);
-      const reihen = [reihe(t.elf.st || []), ...mfReihen.reverse().map(reihe), reihe(t.elf.abw || []), reihe(t.elf.tw || [])];
-      return `<div class="au-feld">${reihen.join('')}</div>`;
+    function prozent(p) {
+      const stufe = p.prozent >= 75 ? 'hoch' : p.prozent >= 45 ? 'mittel' : 'niedrig';
+      return `<span class="au-proz ${stufe}"><span class="au-balken"><i style="width:${p.prozent}%"></i></span>${p.prozent}%</span>`;
+    }
+
+    const REIHEN = [['tw', 'Tor'], ['abw', 'Abwehr'], ['mf', 'Mittelfeld'], ['st', 'Sturm']];
+
+    function elf(t) {
+      return `<div class="au-elf">${REIHEN.map(([k, label]) => (t.elf[k] || []).length ? `
+        <div class="au-gruppe">${label}</div>
+        ${t.elf[k].map(p => `<div class="au-zeile">${spieler(p, 'au-name')}${prozent(p)}</div>`).join('')}` : '').join('')}</div>`;
     }
 
     function liste(titel, arr, leer) {
@@ -160,15 +160,14 @@
     function teamSpalte(name) {
       const t = AU.teams[name];
       if (!t) return `<div class="au-team"><p class="kb-loading">Keine Daten für ${esc(name)}</p></div>`;
-      const form = t.formation_quelle
-        ? `<a href="${esc(t.formation_quelle)}" title="Laut unseren News">${esc(t.formation)} 📰</a>`
-        : `<span title="Geschätzt aus den bisherigen Startelf-Einsätzen">${esc(t.formation)}</span>`;
+      const form = t.formation
+        ? `<span class="au-form"><a href="${esc(t.formation_quelle)}" title="System laut unseren News">${esc(t.formation)} 📰</a></span>` : '';
       return `<div class="au-team">
-        <div class="au-team-kopf"><img src="${esc(t.logo)}" alt="" onerror="this.style.display='none'"><span>${esc(name)}</span><span class="au-form">${form}</span></div>
-        ${feld(t)}
+        <div class="au-team-kopf"><img src="${esc(t.logo)}" alt="" onerror="this.style.display='none'"><span>${esc(name)}</span>${form}</div>
+        ${elf(t)}
         ${liste('🚑 Fällt aus', t.ausfall, 'Keine Ausfälle gemeldet')}
         ${liste('❓ Fraglich', t.fraglich)}
-        ${liste('🪑 Bank', t.bank)}
+        ${t.bank.length ? `<div class="au-liste"><div class="au-liste-t">🪑 Weitere Kandidaten</div>${t.bank.map(p => `<div class="au-zeile">${spieler(p, 'au-name')}${prozent(p)}</div>`).join('')}</div>` : ''}
       </div>`;
     }
 

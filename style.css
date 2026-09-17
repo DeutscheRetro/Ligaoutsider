@@ -486,3 +486,10 @@ ul { list-style: none; }
   text-transform: uppercase; line-height: 1.2;
 }
 @media (max-width: 720px) { .logo::after { font-size: 9px; margin-left: 8px; padding: 1px 5px; } }
+.au-elf{border:1px solid var(--border);border-radius:6px;padding:4px 12px 8px;background:var(--bg3)}
+.au-gruppe{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin:8px 0 0}
+.au-proz{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;white-space:nowrap;min-width:92px;justify-content:flex-end}
+.au-balken{width:44px;height:5px;border-radius:3px;background:var(--bg4);overflow:hidden}
+.au-balken i{display:block;height:100%;background:currentColor}
+.au-proz.hoch{color:#3fae4a}.au-proz.mittel{color:#e8a800}.au-proz.niedrig{color:var(--text3)}
+.au-zeile .au-name{min-width:0;overflow:hidden;text-overflow:ellipsis}

@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-17T13:50:24.258500+00:00",
+ "updated": "2026-09-17T14:14:19.823137+00:00",
  "spieltag": 4,
  "partien": [
   {
@@ -69,7 +69,7 @@
  "teams": {
   "FC Bayern München": {
    "logo": "logos/bayern.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -80,7 +80,7 @@
       "grund": "2/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 69
      }
     ],
     "abw": [
@@ -91,7 +91,7 @@
       "grund": "3/3 Startelf · Ø 59 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Dayot Upamecano",
@@ -100,7 +100,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 88
      },
      {
       "name": "Konrad Laimer",
@@ -109,7 +109,7 @@
       "grund": "2/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 69
      },
      {
       "name": "Kim Minjae",
@@ -118,7 +118,7 @@
       "grund": "2/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 65
      }
     ],
     "mf": [
@@ -129,7 +129,7 @@
       "grund": "3/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 81
      },
      {
       "name": "Joshua Kimmich",
@@ -138,7 +138,7 @@
       "grund": "2/3 Startelf · Ø 73 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 72
      },
      {
       "name": "Michael Olise",
@@ -147,7 +147,7 @@
       "grund": "2/3 Startelf · Ø 77 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 71
      },
      {
       "name": "Lennart Karl",
@@ -156,7 +156,7 @@
       "grund": "2/3 Startelf · Ø 46 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 61
      }
     ],
     "st": [
@@ -167,7 +167,7 @@
       "grund": "2/3 Startelf · Ø 73 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 76
      },
      {
       "name": "Harry Kane",
@@ -176,26 +176,19 @@
       "grund": "2/3 Startelf · Ø 77 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 73
      }
     ]
    },
    "bank": [
-    {
-     "name": "Alphonso Davies",
-     "nr": 19,
-     "ampel": "gruen",
-     "grund": "2/3 Startelf · Ø 66 min",
-     "news": "",
-     "reihe": "abw"
-    },
     {
      "name": "Ismael Saibari",
      "nr": 34,
      "ampel": "gruen",
      "grund": "2/3 Startelf · Ø 54 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 60
     },
     {
      "name": "Jonathan Tah",
@@ -203,7 +196,17 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 53 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 51
+    },
+    {
+     "name": "Alphonso Davies",
+     "nr": 19,
+     "ampel": "gruen",
+     "grund": "2/3 Startelf · Ø 66 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 48
     },
     {
      "name": "Josip Stanišić",
@@ -211,15 +214,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 59 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Jonas Urbig",
-     "nr": 40,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 98 min",
-     "news": "",
-     "reihe": "tw"
+     "reihe": "abw",
+     "prozent": 45
     },
     {
      "name": "Tom Bischof",
@@ -227,15 +223,35 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 33 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 39
     },
     {
-     "name": "Jamal Musiala",
-     "nr": 10,
+     "name": "Jonas Urbig",
+     "nr": 40,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 33 min",
+     "grund": "1/3 Startelf · Ø 98 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "tw",
+     "prozent": 35
+    },
+    {
+     "name": "Serge Gnabry",
+     "nr": 7,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 21
+    },
+    {
+     "name": "Hiroki Ito",
+     "nr": 21,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 13
     }
    ],
    "fraglich": [],
@@ -243,7 +259,7 @@
   },
   "Bayer 04 Leverkusen": {
    "logo": "logos/leverkusen.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -254,7 +270,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 92
      }
     ],
     "abw": [
@@ -265,7 +281,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Miguel Gutiérrez",
@@ -274,7 +290,7 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 80
      },
      {
       "name": "Jarell Quansah",
@@ -283,7 +299,7 @@
       "grund": "2/3 Startelf · Ø 66 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 73
      },
      {
       "name": "Facundo Medina",
@@ -292,7 +308,7 @@
       "grund": "2/3 Startelf · Ø 66 min",
       "news": "",
       "reihe": "abw",
-      "sicher": false
+      "prozent": 52
      }
     ],
     "mf": [
@@ -303,7 +319,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Ezequiél Fernández",
@@ -312,7 +328,7 @@
       "grund": "3/3 Startelf · Ø 68 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 76
      },
      {
       "name": "Malik Tillman",
@@ -321,7 +337,7 @@
       "grund": "2/3 Startelf · Ø 51 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 64
      },
      {
       "name": "Ibrahim Maza",
@@ -330,7 +346,7 @@
       "grund": "nach Infektion, fehlte im Training",
       "news": "artikel/878082823d.html",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 43
      }
     ],
     "st": [
@@ -341,7 +357,7 @@
       "grund": "3/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 80
      },
      {
       "name": "Patrik Schick",
@@ -350,7 +366,7 @@
       "grund": "2/3 Startelf · Ø 66 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 71
      }
     ]
    },
@@ -361,15 +377,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 39 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Christian Kofane",
-     "nr": 35,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 43 min",
-     "news": "",
-     "reihe": "st"
+     "reihe": "abw",
+     "prozent": 45
     },
     {
      "name": "Moussa Diaby",
@@ -377,15 +386,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 61 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Lucas Vázquez",
-     "nr": 17,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 26 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "st",
+     "prozent": 40
     },
     {
      "name": "Robert Andrich",
@@ -393,7 +395,26 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 22 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 39
+    },
+    {
+     "name": "Christian Kofane",
+     "nr": 35,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 43 min",
+     "news": "",
+     "reihe": "st",
+     "prozent": 36
+    },
+    {
+     "name": "Lucas Vázquez",
+     "nr": 17,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 26 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 28
     },
     {
      "name": "Jonas Hofmann",
@@ -401,23 +422,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 31 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 15
     },
     {
-     "name": "Martin Terrier",
-     "nr": 11,
+     "name": "Janis Blaswich",
+     "nr": 28,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 20 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Victor Boniface",
-     "nr": 22,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 11 min",
-     "news": "",
-     "reihe": "st"
+     "reihe": "tw",
+     "prozent": 13
     }
    ],
    "fraglich": [],
@@ -428,7 +443,8 @@
      "ampel": "rot",
      "grund": "verletzt",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     },
     {
      "name": "Nathan Tella",
@@ -436,7 +452,8 @@
      "ampel": "rot",
      "grund": "verletzungsbedingt",
      "news": "artikel/878082823d.html",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Kennet Eichhorn",
@@ -444,7 +461,8 @@
      "ampel": "rot",
      "grund": "verletzungsbedingt",
      "news": "artikel/878082823d.html",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Montrell Culbreath",
@@ -452,13 +470,14 @@
      "ampel": "rot",
      "grund": "verletzungsbedingt",
      "news": "artikel/878082823d.html",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     }
    ]
   },
   "1. FSV Mainz 05": {
    "logo": "logos/mainz.png",
-   "formation": "5-3-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -469,7 +488,7 @@
       "grund": "Vertritt verletzten Zentner im Tor",
       "news": "artikel/04ce130836.html",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -480,7 +499,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Philipp Mwene",
@@ -489,7 +508,7 @@
       "grund": "3/3 Startelf · Ø 88 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 92
      },
      {
       "name": "Anthony Caci",
@@ -498,7 +517,7 @@
       "grund": "3/3 Startelf · Ø 73 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 68
      },
      {
       "name": "Stefan Posch",
@@ -507,16 +526,16 @@
       "grund": "2/3 Startelf · Ø 92 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 61
      },
      {
-      "name": "Kacper Potulski",
-      "nr": 48,
+      "name": "Danny Da Costa",
+      "nr": 21,
       "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 68 min",
+      "grund": "1/3 Startelf · Ø 46 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 60
      }
     ],
     "mf": [
@@ -527,16 +546,7 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
-     },
-     {
-      "name": "Nadiem Amiri",
-      "nr": 10,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 92 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Jae-Sung Lee",
@@ -545,7 +555,16 @@
       "grund": "3/3 Startelf · Ø 68 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Nadiem Amiri",
+      "nr": 10,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 92 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 92
      }
     ],
     "st": [
@@ -556,7 +575,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 85
      },
      {
       "name": "Sheraldo Becker",
@@ -565,18 +584,28 @@
       "grund": "3/3 Startelf · Ø 71 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 75
      }
     ]
    },
    "bank": [
     {
-     "name": "Danny Da Costa",
-     "nr": 21,
+     "name": "Kacper Potulski",
+     "nr": 48,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 46 min",
+     "grund": "2/3 Startelf · Ø 68 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 52
+    },
+    {
+     "name": "Eric Martel",
+     "nr": 5,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 40
     },
     {
      "name": "Ransford Königsdörffer",
@@ -584,7 +613,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 33 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 39
+    },
+    {
+     "name": "Stefan Bell",
+     "nr": 16,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 17
     },
     {
      "name": "Benedict Hollerbach",
@@ -592,31 +631,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 19 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Lennard Maloney",
-     "nr": 15,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 5 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Otto Ruoppi",
-     "nr": 20,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 13 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Rael-Tshimbela Nakuzola",
-     "nr": 47,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 12 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "st",
+     "prozent": 17
     }
    ],
    "fraglich": [
@@ -626,7 +642,8 @@
      "ampel": "gelb",
      "grund": "Adduktorenverletzung - Hoffnung auf Trainingseinstieg vor der LSP",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 16
     }
    ],
    "ausfall": [
@@ -636,7 +653,8 @@
      "ampel": "rot",
      "grund": "Handverletzung, Dauer vom Heilungsverlauf abhängig",
      "news": "artikel/04ce130836.html",
-     "reihe": "tw"
+     "reihe": "tw",
+     "prozent": 0
     },
     {
      "name": "Dominik Kohr",
@@ -644,7 +662,8 @@
      "ampel": "rot",
      "grund": "Syndesmosebandverletzung am Knöchel - erfolgreich operiert",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     },
     {
      "name": "Silvan Widmer",
@@ -652,7 +671,8 @@
      "ampel": "rot",
      "grund": "Patellasehnenverletzung am Knie - fällt mehrere Wochen aus",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     },
     {
      "name": "Silas",
@@ -660,13 +680,14 @@
      "ampel": "rot",
      "grund": "Schien- und Wadenbeinbruch - verpasst voraussichtlich auch den Saisonstart",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 0
     }
    ]
   },
   "Borussia Dortmund": {
    "logo": "logos/dortmund.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -677,19 +698,10 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
-     {
-      "name": "Nico Schlotterbeck",
-      "nr": 4,
-      "ampel": "gruen",
-      "grund": "Comeback nach zwölf Wochen Verletzungspause",
-      "news": "artikel/f68b98a2cf.html",
-      "reihe": "abw",
-      "sicher": true
-     },
      {
       "name": "Waldemar Anton",
       "nr": 3,
@@ -697,7 +709,16 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Nico Schlotterbeck",
+      "nr": 4,
+      "ampel": "gruen",
+      "grund": "Comeback nach zwölf Wochen Verletzungspause",
+      "news": "artikel/f68b98a2cf.html",
+      "reihe": "abw",
+      "prozent": 95
      },
      {
       "name": "Daniel Svensson",
@@ -706,7 +727,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Julian Ryerson",
@@ -715,7 +736,7 @@
       "grund": "3/3 Startelf · Ø 84 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "mf": [
@@ -726,7 +747,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 87
      },
      {
       "name": "Felix Nmecha",
@@ -735,7 +756,7 @@
       "grund": "2/3 Startelf · Ø 51 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 73
      },
      {
       "name": "Konstantinos Karetsas",
@@ -744,7 +765,7 @@
       "grund": "2/3 Startelf · Ø 70 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 60
      },
      {
       "name": "Ethan Nwaneri",
@@ -753,7 +774,7 @@
       "grund": "1/3 Startelf · Ø 67 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 39
      }
     ],
     "st": [
@@ -764,7 +785,7 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Maximilian Beier",
@@ -773,7 +794,7 @@
       "grund": "2/3 Startelf · Ø 67 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 72
      }
     ]
    },
@@ -784,15 +805,8 @@
      "ampel": "gruen",
      "grund": "3/3 Startelf · Ø 86 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Fábio Silva",
-     "nr": 21,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 50 min",
-     "news": "",
-     "reihe": "st"
+     "reihe": "abw",
+     "prozent": 80
     },
     {
      "name": "Joey Veerman",
@@ -800,7 +814,17 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 46 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 36
+    },
+    {
+     "name": "Fábio Silva",
+     "nr": 21,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 50 min",
+     "news": "",
+     "reihe": "st",
+     "prozent": 29
     },
     {
      "name": "Marcel Sabitzer",
@@ -808,7 +832,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 26 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 28
     },
     {
      "name": "Ramy Bensebaini",
@@ -816,7 +841,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 16 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 20
     },
     {
      "name": "Carney Chukwuemeka",
@@ -824,31 +850,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 29 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Luca Reggiani",
-     "nr": 49,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 33 min",
-     "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Samuele Inácio",
-     "nr": 40,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 2 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Kauã Prates",
-     "nr": 36,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 10 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 11
     }
    ],
    "fraglich": [],
@@ -859,7 +862,8 @@
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt mehrere Monate aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Filippo Mane",
@@ -867,7 +871,8 @@
      "ampel": "rot",
      "grund": "Muskelverletzung - Rückkehr vor LSP unwahrscheinlich",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     },
     {
      "name": "Justin Lerma",
@@ -875,7 +880,8 @@
      "ampel": "rot",
      "grund": "verletzt",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Emre Can",
@@ -883,13 +889,14 @@
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt lange aus",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     }
    ]
   },
   "VfB Stuttgart": {
    "logo": "logos/stuttgart.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -900,7 +907,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 73
      }
     ],
     "abw": [
@@ -911,7 +918,7 @@
       "grund": "3/3 Startelf · Ø 90 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Maximilian Mittelstädt",
@@ -920,16 +927,7 @@
       "grund": "3/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
-     },
-     {
-      "name": "Finn Jeltsch",
-      "nr": 29,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
+      "prozent": 92
      },
      {
       "name": "Josha Vagnoman",
@@ -938,7 +936,16 @@
       "grund": "3/3 Startelf · Ø 92 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 84
+     },
+     {
+      "name": "Finn Jeltsch",
+      "nr": 29,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 97 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 83
      }
     ],
     "mf": [
@@ -949,7 +956,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 81
      },
      {
       "name": "Chris Führich",
@@ -958,7 +965,7 @@
       "grund": "2/3 Startelf · Ø 70 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 67
      },
      {
       "name": "Bilal El Khannouss",
@@ -967,7 +974,7 @@
       "grund": "1/3 Startelf · Ø 43 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 45
      },
      {
       "name": "Jamie Leweling",
@@ -976,7 +983,7 @@
       "grund": "0/3 Startelf · Ø 24 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 35
      }
     ],
     "st": [
@@ -987,7 +994,7 @@
       "grund": "3/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 81
      },
      {
       "name": "Deniz Undav",
@@ -996,7 +1003,7 @@
       "grund": "2/3 Startelf · Ø 58 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 73
      }
     ]
    },
@@ -1007,7 +1014,8 @@
      "ampel": "gruen",
      "grund": "2/3 Startelf · Ø 66 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 69
     },
     {
      "name": "Ermedin Demirović",
@@ -1015,57 +1023,46 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 42 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 43
     },
     {
-     "name": "Tiago Tomás",
-     "nr": 8,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - absolviert Laufprogramm",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Yanik Spalt",
-     "nr": 47,
+     "name": "Atakan Karazor",
+     "nr": 16,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 34 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 29
     },
     {
-     "name": "Leonidas Stergiou",
-     "nr": 20,
+     "name": "Nikolas Nartey",
+     "nr": 28,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 21 min",
+     "grund": "Nach Muskelverletzung im Oberschenkel - kurz vor Rückkehr ins Teamtraining",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Leo Sauer",
-     "nr": 44,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 15 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 19
     }
    ],
    "fraglich": [
-    {
-     "name": "Tiago Tomás",
-     "nr": 8,
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - absolviert Laufprogramm",
-     "news": "",
-     "reihe": "st"
-    },
     {
      "name": "Dennis Seimen",
      "nr": 41,
      "ampel": "gelb",
      "grund": "Nach Muskelverletzung - teilintegriert im Teamtraining",
      "news": "",
-     "reihe": "tw"
+     "reihe": "tw",
+     "prozent": 20
+    },
+    {
+     "name": "Tiago Tomás",
+     "nr": 8,
+     "ampel": "gelb",
+     "grund": "Nach Muskelverletzung - absolviert Laufprogramm",
+     "news": "",
+     "reihe": "st",
+     "prozent": 17
     },
     {
      "name": "Lorenz Assignon",
@@ -1073,7 +1070,8 @@
      "ampel": "gelb",
      "grund": "Trainingsrückstand - noch keine Option für BVB (H)",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 8
     },
     {
      "name": "Luca Jaquez",
@@ -1081,7 +1079,8 @@
      "ampel": "gelb",
      "grund": "Nach muskulären Problemen -  trainiert individuell mit Ball",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 7
     },
     {
      "name": "Dan-Axel Zagadou",
@@ -1089,7 +1088,8 @@
      "ampel": "gelb",
      "grund": "Oberschenkelverletzung - fällt mehrere Wochen aus",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 2
     }
    ],
    "ausfall": [
@@ -1099,7 +1099,8 @@
      "ampel": "rot",
      "grund": "Knieverletzung nach Zusammenprall mit Kabak",
      "news": "artikel/82521fb604.html",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Justin Diehl",
@@ -1107,13 +1108,14 @@
      "ampel": "rot",
      "grund": "Muskelverletzung im Oberschenkel - fällt mindestens bis zur Länderspielpause aus",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 0
     }
    ]
   },
   "RB Leipzig": {
    "logo": "logos/leipzig.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1124,19 +1126,10 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 75
      }
     ],
     "abw": [
-     {
-      "name": "Willi Orban",
-      "nr": 4,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
-     },
      {
       "name": "David Raum",
       "nr": 22,
@@ -1144,16 +1137,16 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
-      "name": "Lukeba Castello Jr.",
-      "nr": 23,
+      "name": "Willi Orban",
+      "nr": 4,
       "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 86 min",
+      "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Ridle  Baku",
@@ -1162,7 +1155,16 @@
       "grund": "2/3 Startelf · Ø 64 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 77
+     },
+     {
+      "name": "Lukeba Castello Jr.",
+      "nr": 23,
+      "ampel": "gruen",
+      "grund": "2/3 Startelf · Ø 86 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 72
      }
     ],
     "mf": [
@@ -1173,7 +1175,7 @@
       "grund": "3/3 Startelf · Ø 87 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 92
      },
      {
       "name": "Nicolas Seiwald",
@@ -1182,7 +1184,7 @@
       "grund": "2/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 80
      },
      {
       "name": "Ezechiel Banzuzi",
@@ -1191,7 +1193,7 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 63
      },
      {
       "name": "Brajan Gruda",
@@ -1200,7 +1202,7 @@
       "grund": "2/3 Startelf · Ø 84 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 51
      },
      {
       "name": "Neil El Aynaoui",
@@ -1209,7 +1211,7 @@
       "grund": "2/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 50
      }
     ],
     "st": [
@@ -1220,42 +1222,19 @@
       "grund": "2/3 Startelf · Ø 58 min",
       "news": "",
       "reihe": "st",
-      "sicher": false
+      "prozent": 43
      }
     ]
    },
    "bank": [
-    {
-     "name": "Johan Bakayoko",
-     "nr": 11,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 44 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Benjamin Henrichs",
-     "nr": 39,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 49 min",
-     "news": "",
-     "reihe": "abw"
-    },
     {
      "name": "Christopher Nkunku",
      "nr": 28,
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 59 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Maxime Estève",
-     "nr": 3,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 59 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "st",
+     "prozent": 40
     },
     {
      "name": "Rômulo",
@@ -1263,31 +1242,35 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 20 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 36
     },
     {
-     "name": "Max Finkgräfe",
-     "nr": 35,
+     "name": "Johan Bakayoko",
+     "nr": 11,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 15 min",
+     "grund": "1/3 Startelf · Ø 44 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "st",
+     "prozent": 31
     },
     {
-     "name": "Marc Guiu",
-     "nr": 9,
+     "name": "Maxime Estève",
+     "nr": 3,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 22 min",
+     "grund": "1/3 Startelf · Ø 59 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "abw",
+     "prozent": 30
     },
     {
-     "name": "Andrija Maksimovic",
-     "nr": 30,
+     "name": "Benjamin Henrichs",
+     "nr": 39,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 13 min",
+     "grund": "1/3 Startelf · Ø 49 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 24
     }
    ],
    "fraglich": [
@@ -1297,7 +1280,8 @@
      "ampel": "gelb",
      "grund": "Nach Muskelverletzung Oberschenkel - trainiert individuell mit Ball",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 20
     }
    ],
    "ausfall": [
@@ -1307,7 +1291,8 @@
      "ampel": "rot",
      "grund": "Schulterverletzung, Operation notwendig, längere Pause",
      "news": "artikel/fc280fc2b8.html",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Rocco Reitz",
@@ -1315,13 +1300,14 @@
      "ampel": "rot",
      "grund": "Sehnenriss im Oberschenkel - fällt mehrere Wochen aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     }
    ]
   },
   "SC Freiburg": {
    "logo": "logos/freiburg.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1332,7 +1318,7 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1343,7 +1329,7 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Philipp Lienhart",
@@ -1352,7 +1338,7 @@
       "grund": "3/3 Startelf · Ø 86 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 79
      },
      {
       "name": "Jordy Makengo",
@@ -1361,7 +1347,7 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 76
      },
      {
       "name": "Philipp Treu",
@@ -1370,7 +1356,7 @@
       "grund": "2/3 Startelf · Ø 67 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 72
      }
     ],
     "mf": [
@@ -1381,7 +1367,7 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Yannik Engelhardt",
@@ -1390,16 +1376,7 @@
       "grund": "3/3 Startelf · Ø 90 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
-     },
-     {
-      "name": "Yuito Suzuki",
-      "nr": 14,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 80 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Jan-Niklas Beste",
@@ -1408,7 +1385,16 @@
       "grund": "3/3 Startelf · Ø 67 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 87
+     },
+     {
+      "name": "Yuito Suzuki",
+      "nr": 14,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 80 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 84
      },
      {
       "name": "Derry Scherhant",
@@ -1417,7 +1403,7 @@
       "grund": "3/3 Startelf · Ø 79 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 76
      }
     ],
     "st": [
@@ -1428,7 +1414,7 @@
       "grund": "3/3 Startelf · Ø 82 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 79
      }
     ]
    },
@@ -1439,7 +1425,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 34 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 45
     },
     {
      "name": "Berkay Yilmaz",
@@ -1447,7 +1434,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 13 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 40
     },
     {
      "name": "Lucas Höler",
@@ -1455,7 +1443,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 18 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 33
     },
     {
      "name": "Vincenzo Grifo",
@@ -1463,31 +1452,35 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 23 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 28
     },
     {
-     "name": "Max Rosenfelder",
-     "nr": 37,
+     "name": "Christian Günter",
+     "nr": 30,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 24 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 24
     },
     {
-     "name": "Cyriaque Irié",
-     "nr": 22,
+     "name": "Bruno Ogbus",
+     "nr": 43,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 30 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 19
     },
     {
-     "name": "Keisuke Goto",
-     "nr": 42,
+     "name": "Patrick Osterhage",
+     "nr": 6,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 14 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "mf",
+     "prozent": 17
     }
    ],
    "fraglich": [],
@@ -1495,7 +1488,7 @@
   },
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1506,7 +1499,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1517,16 +1510,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
-     },
-     {
-      "name": "Keita Kosugi",
-      "nr": 26,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Elias Baum",
@@ -1535,7 +1519,16 @@
       "grund": "3/3 Startelf · Ø 87 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 74
+     },
+     {
+      "name": "Keita Kosugi",
+      "nr": 26,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 97 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 69
      },
      {
       "name": "Lilian Brassier",
@@ -1544,7 +1537,7 @@
       "grund": "2/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 53
      }
     ],
     "mf": [
@@ -1555,7 +1548,7 @@
       "grund": "3/3 Startelf · Ø 82 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 80
      },
      {
       "name": "Ritsu Dōan",
@@ -1564,7 +1557,7 @@
       "grund": "Krank - fehlt im Teamtraining, soll morgen wieder einsteigen",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 77
      },
      {
       "name": "Raphael Onyedika",
@@ -1573,7 +1566,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 70
      },
      {
       "name": "Noël Aséko",
@@ -1582,7 +1575,7 @@
       "grund": "1/3 Startelf · Ø 61 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 60
      },
      {
       "name": "Farès Chaïbi",
@@ -1591,7 +1584,7 @@
       "grund": "Krank - verpasst M05 (A)",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 48
      }
     ],
     "st": [
@@ -1602,7 +1595,7 @@
       "grund": "3/3 Startelf · Ø 81 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 80
      }
     ]
    },
@@ -1613,7 +1606,8 @@
      "ampel": "gruen",
      "grund": "2/3 Startelf · Ø 68 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 57
     },
     {
      "name": "Mario Götze",
@@ -1621,7 +1615,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 52 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 31
     },
     {
      "name": "Ayoube Amaimouni",
@@ -1629,7 +1624,26 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 39 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 28
+    },
+    {
+     "name": "Nnamdi Collins",
+     "nr": 34,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 21
+    },
+    {
+     "name": "Kauã Santos",
+     "nr": 40,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "tw",
+     "prozent": 17
     },
     {
      "name": "Oscar Højlund",
@@ -1637,39 +1651,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 15 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 16
     },
     {
-     "name": "Love Arrhov",
-     "nr": 31,
+     "name": "Ansgar Knauff",
+     "nr": 7,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 15 min",
+     "grund": "Muskelverletzung - fällt wohl rund 2 Wochen aus",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Malik Pimpong",
-     "nr": 35,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 17 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Timothy Chandler",
-     "nr": 22,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 15 min",
-     "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Otávio",
-     "nr": 5,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 10 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 16
     }
    ],
    "fraglich": [],
@@ -1680,13 +1672,14 @@
      "ampel": "rot",
      "grund": "verletzt",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     }
    ]
   },
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
-   "formation": "4-3-3",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1697,7 +1690,7 @@
       "grund": "3/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1708,7 +1701,7 @@
       "grund": "Zusammenprall am Kopf - vorzeitig ausgewechselt worden",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Albian Hajdari",
@@ -1717,7 +1710,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Ozan Kabak",
@@ -1726,7 +1719,7 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 84
      },
      {
       "name": "Bernardo",
@@ -1735,19 +1728,10 @@
       "grund": "1/3 Startelf · Ø 54 min",
       "news": "",
       "reihe": "abw",
-      "sicher": false
+      "prozent": 55
      }
     ],
     "mf": [
-     {
-      "name": "Leon Avdullahu",
-      "nr": 7,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 98 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
-     },
      {
       "name": "Wouter Burger",
       "nr": 18,
@@ -1755,7 +1739,16 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Leon Avdullahu",
+      "nr": 7,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 98 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 95
      },
      {
       "name": "Patrick Wimmer",
@@ -1764,7 +1757,7 @@
       "grund": "2/3 Startelf · Ø 62 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 68
      }
     ],
     "st": [
@@ -1775,7 +1768,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 76
      },
      {
       "name": "Tim Lemperle",
@@ -1784,27 +1777,28 @@
       "grund": "2/3 Startelf · Ø 87 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 72
      },
      {
-      "name": "Adam Hložek",
-      "nr": 10,
+      "name": "Bambasé Conté",
+      "nr": 20,
       "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 72 min",
+      "grund": "2/3 Startelf · Ø 59 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 69
      }
     ]
    },
    "bank": [
     {
-     "name": "Bambasé Conté",
-     "nr": 20,
+     "name": "Adam Hložek",
+     "nr": 10,
      "ampel": "gruen",
-     "grund": "2/3 Startelf · Ø 59 min",
+     "grund": "3/3 Startelf · Ø 72 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 69
     },
     {
      "name": "Mats Rots",
@@ -1812,7 +1806,8 @@
      "ampel": "gruen",
      "grund": "2/3 Startelf · Ø 60 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 50
     },
     {
      "name": "Fisnik Asllani",
@@ -1820,15 +1815,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 13 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Robin Hranác",
-     "nr": 2,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 29 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "st",
+     "prozent": 40
     },
     {
      "name": "Andrej Kramarić",
@@ -1836,39 +1824,35 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 14 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 35
     },
     {
-     "name": "Max Moerstedt",
-     "nr": 9,
+     "name": "Robin Hranác",
+     "nr": 2,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 27 min",
+     "grund": "0/3 Startelf · Ø 29 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "abw",
+     "prozent": 35
     },
     {
-     "name": "Koki Machida",
-     "nr": 28,
+     "name": "Cajetan Lenz",
+     "nr": 32,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 26 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 33
     },
     {
-     "name": "Valentin Gendrey",
-     "nr": 15,
+     "name": "Alexander Prass",
+     "nr": 22,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 26 min",
+     "grund": "Adduktorenprobleme - soll nächste Woche voll trainieren",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Nathan De Cat",
-     "nr": 17,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 20 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 16
     }
    ],
    "fraglich": [],
@@ -1876,7 +1860,7 @@
   },
   "1. FC Köln": {
    "logo": "logos/koeln.png",
-   "formation": "3-5-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1887,7 +1871,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1898,7 +1882,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Jahmai Simpson-Pusey",
@@ -1907,7 +1891,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 73
      },
      {
       "name": "Gideon Mensah",
@@ -1916,7 +1900,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 71
      }
     ],
     "mf": [
@@ -1927,7 +1911,7 @@
       "grund": "3/3 Startelf · Ø 90 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 85
      },
      {
       "name": "Alessio Castro-Montes",
@@ -1936,7 +1920,7 @@
       "grund": "3/3 Startelf · Ø 85 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 69
      },
      {
       "name": "Ísak Jóhannesson",
@@ -1945,7 +1929,7 @@
       "grund": "2/3 Startelf · Ø 74 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 68
      },
      {
       "name": "Jan Thielmann",
@@ -1954,16 +1938,16 @@
       "grund": "2/3 Startelf · Ø 71 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 67
      },
      {
-      "name": "Paul Okon-Engstler",
-      "nr": 23,
+      "name": "Said El Mala",
+      "nr": 10,
       "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 39 min",
+      "grund": "1/3 Startelf · Ø 43 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 47
      }
     ],
     "st": [
@@ -1974,7 +1958,7 @@
       "grund": "2/3 Startelf · Ø 57 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 64
      },
      {
       "name": "Linton Maina",
@@ -1983,18 +1967,28 @@
       "grund": "2/3 Startelf · Ø 57 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 52
      }
     ]
    },
    "bank": [
     {
-     "name": "Said El Mala",
-     "nr": 10,
+     "name": "Marius Bülter",
+     "nr": 30,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 43 min",
+     "grund": "1/3 Startelf · Ø 40 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "st",
+     "prozent": 44
+    },
+    {
+     "name": "Paul Okon-Engstler",
+     "nr": 23,
+     "ampel": "gruen",
+     "grund": "2/3 Startelf · Ø 39 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 44
     },
     {
      "name": "Ellyes Skhiri",
@@ -2002,23 +1996,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 58 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Marius Bülter",
-     "nr": 30,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 40 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Mikey Moore",
-     "nr": 47,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 62 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 41
     },
     {
      "name": "Sebastian Sebulonsen",
@@ -2026,7 +2005,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 30 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 37
+    },
+    {
+     "name": "Mikey Moore",
+     "nr": 47,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 62 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 32
     },
     {
      "name": "Thijs Dallinga",
@@ -2034,7 +2023,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 47 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 30
     },
     {
      "name": "Joël Schmied",
@@ -2042,15 +2032,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 3 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 17
     },
     {
-     "name": "Reigan Heskey",
-     "nr": 11,
+     "name": "Rav van den Berg",
+     "nr": 33,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 19 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 16
     }
    ],
    "fraglich": [],
@@ -2061,13 +2053,14 @@
      "ampel": "rot",
      "grund": "Nach schwerer Knieverletzung - arbeitet in der Reha am Comeback",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     }
    ]
   },
   "FC Augsburg": {
    "logo": "logos/augsburg.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2078,7 +2071,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2089,7 +2082,7 @@
       "grund": "3/3 Startelf · Ø 90 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 91
      },
      {
       "name": "Noahkai Banks",
@@ -2098,7 +2091,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 87
      },
      {
       "name": "Chrislain Matsima",
@@ -2107,7 +2100,7 @@
       "grund": "Angeschlagen - fehlt im Teamtraining, soll morgen zurückkehren",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 83
      },
      {
       "name": "Hennes Behrens",
@@ -2116,19 +2109,10 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 80
      }
     ],
     "mf": [
-     {
-      "name": "Han-Noah Massengo",
-      "nr": 4,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 91 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
-     },
      {
       "name": "Fabian Rieder",
       "nr": 32,
@@ -2136,7 +2120,16 @@
       "grund": "3/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Han-Noah Massengo",
+      "nr": 4,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 91 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 95
      },
      {
       "name": "Robin Fellhauer",
@@ -2145,7 +2138,7 @@
       "grund": "3/3 Startelf · Ø 72 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Marius Wolf",
@@ -2154,7 +2147,7 @@
       "grund": "3/3 Startelf · Ø 80 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 76
      },
      {
       "name": "Arijon Ibrahimović",
@@ -2163,7 +2156,7 @@
       "grund": "2/3 Startelf · Ø 60 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 73
      }
     ],
     "st": [
@@ -2174,26 +2167,19 @@
       "grund": "3/3 Startelf · Ø 80 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 75
      }
     ]
    },
    "bank": [
-    {
-     "name": "Anton Kade",
-     "nr": 30,
-     "ampel": "gelb",
-     "grund": "Nach Muskelbündelriss - trainiert individuell",
-     "news": "",
-     "reihe": "st"
-    },
     {
      "name": "Alexis Claude-Maurice",
      "nr": 20,
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 35 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 33
     },
     {
      "name": "Mert Kömür",
@@ -2201,7 +2187,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 22 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 23
     },
     {
      "name": "Jeffrey Gouweleeuw",
@@ -2209,31 +2196,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 6 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Rodrigo Ribeiro",
-     "nr": 9,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 14 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Yannik Keitel",
-     "nr": 14,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 10 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Young-Woo Seol",
-     "nr": 7,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 14 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 13
     }
    ],
    "fraglich": [
@@ -2243,7 +2207,8 @@
      "ampel": "gelb",
      "grund": "Nach Muskelbündelriss - trainiert individuell",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 22
     },
     {
      "name": "Faik Sakar",
@@ -2251,7 +2216,8 @@
      "ampel": "gelb",
      "grund": "angeschlagen",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 1
     }
    ],
    "ausfall": [
@@ -2261,13 +2227,14 @@
      "ampel": "rot",
      "grund": "Adduktorenverletzung - fällt vorerst aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     }
    ]
   },
   "FC Schalke 04": {
    "logo": "logos/schalke.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2278,7 +2245,7 @@
       "grund": "3/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2289,16 +2256,7 @@
       "grund": "3/3 Startelf · Ø 81 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
-     },
-     {
-      "name": "Timo Becker",
-      "nr": 5,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 98 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Nikola Katic",
@@ -2307,7 +2265,16 @@
       "grund": "3/3 Startelf · Ø 92 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 93
+     },
+     {
+      "name": "Timo Becker",
+      "nr": 5,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 98 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 92
      },
      {
       "name": "Robin Gosens",
@@ -2316,7 +2283,7 @@
       "grund": "2/3 Startelf · Ø 60 min",
       "news": "",
       "reihe": "abw",
-      "sicher": false
+      "prozent": 50
      }
     ],
     "mf": [
@@ -2327,7 +2294,7 @@
       "grund": "3/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Adil Aouchiche",
@@ -2336,16 +2303,7 @@
       "grund": "3/3 Startelf · Ø 89 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
-     },
-     {
-      "name": "Satoshi Tanaka",
-      "nr": 13,
-      "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 100 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
+      "prozent": 77
      },
      {
       "name": "Ron Schallenberg",
@@ -2354,7 +2312,16 @@
       "grund": "1/3 Startelf · Ø 62 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 60
+     },
+     {
+      "name": "Satoshi Tanaka",
+      "nr": 13,
+      "ampel": "gruen",
+      "grund": "2/3 Startelf · Ø 100 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 56
      }
     ],
     "st": [
@@ -2365,27 +2332,28 @@
       "grund": "2/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 73
      },
      {
-      "name": "Junior Adamu",
-      "nr": 20,
+      "name": "Kenan Karaman",
+      "nr": 19,
       "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 71 min",
+      "grund": "1/3 Startelf · Ø 45 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 60
      }
     ]
    },
    "bank": [
     {
-     "name": "Kenan Karaman",
-     "nr": 19,
+     "name": "Junior Adamu",
+     "nr": 20,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 45 min",
+     "grund": "2/3 Startelf · Ø 71 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 49
     },
     {
      "name": "Vitalie Becker",
@@ -2393,15 +2361,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 45 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Éric Dina Ebimbe",
-     "nr": 29,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 61 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 44
     },
     {
      "name": "Mert Can Ayhan",
@@ -2409,47 +2370,26 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 18 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 27
     },
     {
-     "name": "Edin Džeko",
-     "nr": 10,
+     "name": "Éric Dina Ebimbe",
+     "nr": 29,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 20 min",
+     "grund": "1/3 Startelf · Ø 61 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "mf",
+     "prozent": 26
     },
     {
-     "name": "Maximilian Wöber",
-     "nr": 39,
+     "name": "Adrian Gantenbein",
+     "nr": 17,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 25 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Hee-Chan Hwang",
-     "nr": 7,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 23 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Janik Bachmann",
-     "nr": 14,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 10 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Luca Vozar",
-     "nr": 38,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 19 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 13
     }
    ],
    "fraglich": [],
@@ -2460,7 +2400,8 @@
      "ampel": "rot",
      "grund": "Knieverletzung - fällt bis auf Weiteres aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Johannes Simon Siebeking",
@@ -2468,13 +2409,14 @@
      "ampel": "rot",
      "grund": "verletzt",
      "news": "",
-     "reihe": "tw"
+     "reihe": "tw",
+     "prozent": 0
     }
    ]
   },
   "Borussia Mönchengladbach": {
    "logo": "logos/gladbach.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2485,7 +2427,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2496,16 +2438,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
-     },
-     {
-      "name": "Ko Itakura",
-      "nr": 6,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 96 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Joseph Scally",
@@ -2514,16 +2447,25 @@
       "grund": "2/3 Startelf · Ø 64 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 79
      },
      {
-      "name": "Lukas Ullrich",
-      "nr": 26,
+      "name": "Ko Itakura",
+      "nr": 6,
       "ampel": "gruen",
-      "grund": "2/3 Startelf · Ø 73 min",
+      "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 68
+     },
+     {
+      "name": "David Herold",
+      "nr": 20,
+      "ampel": "gruen",
+      "grund": "1/3 Startelf · Ø 47 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 60
      }
     ],
     "mf": [
@@ -2534,7 +2476,7 @@
       "grund": "3/3 Startelf · Ø 96 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Franck Honorat",
@@ -2543,7 +2485,7 @@
       "grund": "2/3 Startelf · Ø 57 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 72
      },
      {
       "name": "Kevin Stöger",
@@ -2552,7 +2494,7 @@
       "grund": "2/3 Startelf · Ø 74 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 60
      },
      {
       "name": "Wael Mohya",
@@ -2561,7 +2503,7 @@
       "grund": "2/3 Startelf · Ø 54 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 48
      },
      {
       "name": "Robin Hack",
@@ -2570,7 +2512,7 @@
       "grund": "2/3 Startelf · Ø 52 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 44
      }
     ],
     "st": [
@@ -2581,26 +2523,28 @@
       "grund": "0/3 Startelf · Ø 25 min",
       "news": "",
       "reihe": "st",
-      "sicher": false
+      "prozent": 40
      }
     ]
    },
    "bank": [
     {
-     "name": "David Herold",
-     "nr": 20,
+     "name": "Lukas Ullrich",
+     "nr": 26,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 47 min",
+     "grund": "2/3 Startelf · Ø 73 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 59
     },
     {
-     "name": "Hugo Bolin",
-     "nr": 38,
-     "ampel": "gelb",
-     "grund": "Muskuläre Probleme - trainiert individuell",
+     "name": "Daniel Batz",
+     "nr": 33,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "tw",
+     "prozent": 28
     },
     {
      "name": "Mathieu Nguefack",
@@ -2608,15 +2552,17 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 46 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 23
     },
     {
-     "name": "Daiki Hashioka",
-     "nr": 14,
-     "ampel": "gelb",
-     "grund": "angeschlagen",
+     "name": "Florian Neuhaus",
+     "nr": 10,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 15
     },
     {
      "name": "Shuto Machino",
@@ -2624,23 +2570,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 48 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 12
     },
     {
-     "name": "Jan Leszczynski",
-     "nr": 5,
+     "name": "Fabio Chiarodia",
+     "nr": 2,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 18 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Nicolas Kühn",
-     "nr": 19,
-     "ampel": "gelb",
-     "grund": "im Aufbautraining",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 11
     }
    ],
    "fraglich": [
@@ -2650,15 +2590,8 @@
      "ampel": "gelb",
      "grund": "Muskuläre Probleme - trainiert individuell",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Daiki Hashioka",
-     "nr": 14,
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 33
     },
     {
      "name": "Jens Castrop",
@@ -2666,7 +2599,17 @@
      "ampel": "gelb",
      "grund": "Schulterverletzung - nach Operation, fällt mehrere Monate aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 13
+    },
+    {
+     "name": "Daiki Hashioka",
+     "nr": 14,
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 12
     },
     {
      "name": "Nicolas Kühn",
@@ -2674,7 +2617,8 @@
      "ampel": "gelb",
      "grund": "im Aufbautraining",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 2
     },
     {
      "name": "Yukhym Konoplia",
@@ -2682,7 +2626,8 @@
      "ampel": "gelb",
      "grund": "Nach Innenbandanriss im Knie - teilintegriert im Teamtraining",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 1
     }
    ],
    "ausfall": [
@@ -2692,7 +2637,8 @@
      "ampel": "rot",
      "grund": "fehlt laut Kickbase",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 0
     },
     {
      "name": "Enzo Leopold",
@@ -2700,13 +2646,14 @@
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt lange aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     }
    ]
   },
   "Hamburger SV": {
    "logo": "logos/hsv.png",
-   "formation": "4-5-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2717,7 +2664,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2728,7 +2675,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 92
      },
      {
       "name": "Jordan Torunarigha",
@@ -2737,7 +2684,7 @@
       "grund": "Leichte Oberschenkelprobleme - trägt leichte Blessuren von RBL (A)",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 88
      },
      {
       "name": "Zakaria El Ouahdi",
@@ -2746,7 +2693,7 @@
       "grund": "2/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 47
      },
      {
       "name": "David Møller Wolfe",
@@ -2755,7 +2702,7 @@
       "grund": "2/3 Startelf · Ø 89 min",
       "news": "",
       "reihe": "abw",
-      "sicher": false
+      "prozent": 46
      }
     ],
     "mf": [
@@ -2766,7 +2713,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Albert Grønbæk",
@@ -2775,7 +2722,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 68
      },
      {
       "name": "Albert Sambi Lokonga",
@@ -2784,7 +2731,7 @@
       "grund": "2/3 Startelf · Ø 88 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 67
      },
      {
       "name": "Martin Adeline",
@@ -2793,16 +2740,16 @@
       "grund": "2/3 Startelf · Ø 57 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 44
      },
      {
-      "name": "Bakery Jatta",
-      "nr": 18,
+      "name": "Kofi Amoako",
+      "nr": 22,
       "ampel": "gruen",
-      "grund": "1/3 Startelf · Ø 44 min",
+      "grund": "0/3 Startelf · Ø 0 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 39
      }
     ],
     "st": [
@@ -2813,26 +2760,28 @@
       "grund": "2/3 Startelf · Ø 64 min",
       "news": "",
       "reihe": "st",
-      "sicher": false
+      "prozent": 46
      }
     ]
    },
    "bank": [
     {
-     "name": "Sebastiaan Bornauw",
-     "nr": 33,
-     "ampel": "gelb",
-     "grund": "angeschlagen",
+     "name": "Bakery Jatta",
+     "nr": 18,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 44 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 36
     },
     {
-     "name": "Shafiq Nandja",
-     "nr": 43,
+     "name": "Miro Muheim",
+     "nr": 28,
      "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 61 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 36
     },
     {
      "name": "Louis Lemke",
@@ -2840,7 +2789,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 50 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 24
     },
     {
      "name": "Terem Moffi",
@@ -2848,23 +2798,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 47 min",
      "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Yussuf Poulsen",
-     "nr": 15,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 29 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Bilal Nadir",
-     "nr": 4,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 29 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "st",
+     "prozent": 24
     },
     {
      "name": "Warmed Omari",
@@ -2872,7 +2807,35 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 21 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 23
+    },
+    {
+     "name": "Shafiq Nandja",
+     "nr": 43,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 61 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 21
+    },
+    {
+     "name": "Yussuf Poulsen",
+     "nr": 15,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 29 min",
+     "news": "",
+     "reihe": "st",
+     "prozent": 21
+    },
+    {
+     "name": "Bilal Nadir",
+     "nr": 4,
+     "ampel": "gruen",
+     "grund": "1/3 Startelf · Ø 29 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 21
     },
     {
      "name": "Fábio Vieira",
@@ -2880,15 +2843,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 34 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Otto Stange",
-     "nr": 19,
-     "ampel": "gruen",
-     "grund": "Rippenprobleme - trägt leichte Blessuren von RBL (A)",
-     "news": "",
-     "reihe": "st"
+     "reihe": "mf",
+     "prozent": 16
     }
    ],
    "fraglich": [
@@ -2898,7 +2854,8 @@
      "ampel": "gelb",
      "grund": "angeschlagen",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 23
     },
     {
      "name": "Alexander Røssing-Lelesiit",
@@ -2906,14 +2863,15 @@
      "ampel": "gelb",
      "grund": "Nach Syndesmose-Schaden - trainiert teilintegriert, verpasst KOE (H)",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 3
     }
    ],
    "ausfall": []
   },
   "SV Werder Bremen": {
    "logo": "logos/werder.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2924,7 +2882,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 63
      }
     ],
     "abw": [
@@ -2935,7 +2893,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Amos Pieper",
@@ -2944,7 +2902,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 85
      },
      {
       "name": "Olivier Deman",
@@ -2953,7 +2911,7 @@
       "grund": "3/3 Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 79
      },
      {
       "name": "Arthur",
@@ -2962,7 +2920,7 @@
       "grund": "2/3 Startelf · Ø 76 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 57
      }
     ],
     "mf": [
@@ -2973,7 +2931,7 @@
       "grund": "3/3 Startelf · Ø 93 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 91
      },
      {
       "name": "Chuki",
@@ -2982,7 +2940,7 @@
       "grund": "3/3 Startelf · Ø 92 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 70
      },
      {
       "name": "Ludovit Reis",
@@ -2991,7 +2949,7 @@
       "grund": "3/3 Startelf · Ø 85 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 69
      },
      {
       "name": "Eren Sami Dinkçi",
@@ -3000,7 +2958,7 @@
       "grund": "2/3 Startelf · Ø 54 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 61
      }
     ],
     "st": [
@@ -3011,7 +2969,7 @@
       "grund": "3/3 Startelf · Ø 74 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 74
      },
      {
       "name": "Cédric Itten",
@@ -3020,26 +2978,28 @@
       "grund": "0/3 Startelf · Ø 22 min",
       "news": "",
       "reihe": "st",
-      "sicher": false
+      "prozent": 40
      }
     ]
    },
    "bank": [
-    {
-     "name": "Youri Regeer",
-     "nr": 44,
-     "ampel": "gruen",
-     "grund": "2/3 Startelf · Ø 85 min",
-     "news": "",
-     "reihe": "mf"
-    },
     {
      "name": "Senne Lynen",
      "nr": 14,
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 46 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 60
+    },
+    {
+     "name": "Youri Regeer",
+     "nr": 44,
+     "ampel": "gruen",
+     "grund": "2/3 Startelf · Ø 85 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 48
     },
     {
      "name": "Mick Schmetgens",
@@ -3047,7 +3007,17 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 46 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 24
+    },
+    {
+     "name": "Niklas Stark",
+     "nr": 4,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 12
     },
     {
      "name": "Dariusz Stalmach",
@@ -3055,31 +3025,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 29 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Salim Amani Musah",
-     "nr": 29,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 23 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Paul Erevbenagie",
-     "nr": 38,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 20 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Mitchell Weiser",
-     "nr": 8,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 12 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 11
     }
    ],
    "fraglich": [
@@ -3089,7 +3036,8 @@
      "ampel": "gelb",
      "grund": "Nach Muskelverletzung - befindet sich im Aufbautraining",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 6
     },
     {
      "name": "Keke Topp",
@@ -3097,7 +3045,8 @@
      "ampel": "gelb",
      "grund": "Kreuzbandriss - Rückkehr wohl erst 2027",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 5
     },
     {
      "name": "Moussa Ndiaye",
@@ -3105,7 +3054,8 @@
      "ampel": "gelb",
      "grund": "angeschlagen",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 1
     }
    ],
    "ausfall": [
@@ -3115,7 +3065,8 @@
      "ampel": "rot",
      "grund": "Schwere Muskelverletzung - fällt mehrere Monate aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     },
     {
      "name": "Justin Njinmah",
@@ -3123,13 +3074,14 @@
      "ampel": "rot",
      "grund": "Muskelverletzung im Oberschenkel  - fällt monatelang aus",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 0
     }
    ]
   },
   "SC Paderborn 07": {
    "logo": "logos/paderborn.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -3140,7 +3092,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
@@ -3151,7 +3103,7 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Jano ter Horst",
@@ -3160,7 +3112,7 @@
       "grund": "3/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Mattes Hansen",
@@ -3169,7 +3121,7 @@
       "grund": "3/3 Startelf · Ø 83 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 85
      },
      {
       "name": "Laurin Curda",
@@ -3178,19 +3130,10 @@
       "grund": "angeschlagen",
       "news": "",
       "reihe": "abw",
-      "sicher": false
+      "prozent": 50
      }
     ],
     "mf": [
-     {
-      "name": "Raphael Obermair",
-      "nr": 23,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 95 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
-     },
      {
       "name": "Santiago Castañeda",
       "nr": 5,
@@ -3198,16 +3141,16 @@
       "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
-      "name": "Gabriel Vidović",
-      "nr": 40,
+      "name": "Raphael Obermair",
+      "nr": 23,
       "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 86 min",
+      "grund": "3/3 Startelf · Ø 95 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Laurin Ulrich",
@@ -3216,7 +3159,16 @@
       "grund": "3/3 Startelf · Ø 76 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 65
+     },
+     {
+      "name": "Gabriel Vidović",
+      "nr": 40,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 86 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 65
      }
     ],
     "st": [
@@ -3227,7 +3179,7 @@
       "grund": "3/3 Startelf · Ø 90 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 64
      },
      {
       "name": "Stefano Marino",
@@ -3236,7 +3188,7 @@
       "grund": "2/3 Startelf · Ø 50 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 59
      }
     ]
    },
@@ -3247,7 +3199,17 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 21 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 37
+    },
+    {
+     "name": "Felix Götze",
+     "nr": 20,
+     "ampel": "gruen",
+     "grund": "Nach Zusammenprall - verpasst SCF (H)",
+     "news": "",
+     "reihe": "abw",
+     "prozent": 36
     },
     {
      "name": "Oliver Batista Meier",
@@ -3255,7 +3217,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 23 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 35
+    },
+    {
+     "name": "Sebastian Klaas",
+     "nr": 26,
+     "ampel": "gruen",
+     "grund": "Nach Adduktorenverletzung - absolviert Teile des Teamtrainings",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 23
     },
     {
      "name": "Steffen Tigges",
@@ -3263,7 +3235,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 34 min",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 19
+    },
+    {
+     "name": "Ruben Müller",
+     "nr": 2,
+     "ampel": "gruen",
+     "grund": "0/3 Startelf · Ø 0 min",
+     "news": "",
+     "reihe": "mf",
+     "prozent": 17
     },
     {
      "name": "Tom Baack",
@@ -3271,31 +3253,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 19 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Jonah Sticker",
-     "nr": 3,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 16 min",
-     "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Luka Duric",
-     "nr": 8,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 16 min",
-     "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Clemens Lippmann",
-     "nr": 29,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 14 min",
-     "news": "",
-     "reihe": "abw"
+     "reihe": "mf",
+     "prozent": 13
     }
    ],
    "fraglich": [
@@ -3305,7 +3264,8 @@
      "ampel": "gelb",
      "grund": "Nach Muskelbündelriss - trainiert individuell",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 4
     },
     {
      "name": "Nyamekye Awortwie-Grant",
@@ -3313,7 +3273,8 @@
      "ampel": "gelb",
      "grund": "Außenbandverletzung - fällt rund 6 Wochen aus",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 0
     }
    ],
    "ausfall": [
@@ -3323,13 +3284,14 @@
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt lange aus",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 0
     }
    ]
   },
   "SV Elversberg": {
    "logo": "logos/elversberg.png",
-   "formation": "5-4-1",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -3340,19 +3302,10 @@
       "grund": "3/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 95
      }
     ],
     "abw": [
-     {
-      "name": "Maximilian Rohr",
-      "nr": 31,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 93 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
-     },
      {
       "name": "Lukas Pinckert",
       "nr": 19,
@@ -3360,7 +3313,16 @@
       "grund": "3/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Maximilian Rohr",
+      "nr": 31,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 93 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 95
      },
      {
       "name": "Jan Gyamerah",
@@ -3369,7 +3331,7 @@
       "grund": "3/3 Startelf · Ø 88 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 93
      },
      {
       "name": "Lasse Günther",
@@ -3378,7 +3340,7 @@
       "grund": "3/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 88
      },
      {
       "name": "Felix Keidel",
@@ -3387,19 +3349,10 @@
       "grund": "3/3 Startelf · Ø 91 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 77
      }
     ],
     "mf": [
-     {
-      "name": "Lukasz Poreba",
-      "nr": 8,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 98 min",
-      "news": "",
-      "reihe": "mf",
-      "sicher": true
-     },
      {
       "name": "Lukas Emanuel Petkov",
       "nr": 25,
@@ -3407,7 +3360,16 @@
       "grund": "3/3 Startelf · Ø 94 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
+     },
+     {
+      "name": "Lukasz Poreba",
+      "nr": 8,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 98 min",
+      "news": "",
+      "reihe": "mf",
+      "prozent": 95
      },
      {
       "name": "Cole Campbell",
@@ -3416,7 +3378,7 @@
       "grund": "3/3 Startelf · Ø 60 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 69
      },
      {
       "name": "Francis Onyeka",
@@ -3425,7 +3387,7 @@
       "grund": "Angeschlagen - gegen FCB (H) früh angeschlagen ausgewechselt",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 47
      }
     ],
     "st": [
@@ -3436,7 +3398,7 @@
       "grund": "3/3 Startelf · Ø 81 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 79
      }
     ]
    },
@@ -3447,7 +3409,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 14 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 40
     },
     {
      "name": "Amara Condé",
@@ -3455,7 +3418,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 14 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 33
     },
     {
      "name": "Florian Le Joncour",
@@ -3463,15 +3427,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 14 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Maurice Krattenmacher",
-     "nr": 7,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 37 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 15
     },
     {
      "name": "Nicholas Mickelson",
@@ -3479,31 +3436,17 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 20 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 12
     },
     {
-     "name": "Noah Darvich",
-     "nr": 10,
+     "name": "Frederik Schmahl",
+     "nr": 17,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 59 min",
+     "grund": "0/3 Startelf · Ø 0 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Luca Schnellbacher",
-     "nr": 24,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 15 min",
-     "news": "",
-     "reihe": "st"
-    },
-    {
-     "name": "Noel Futkeu",
-     "nr": 9,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 20 min",
-     "news": "",
-     "reihe": "st"
+     "reihe": "mf",
+     "prozent": 12
     }
    ],
    "fraglich": [
@@ -3513,14 +3456,15 @@
      "ampel": "gelb",
      "grund": "Rückenprobleme - teilintegriertes Teamtraining, verpasst FCB (H)",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 20
     }
    ],
    "ausfall": []
   },
   "1. FC Union Berlin": {
    "logo": "logos/union.png",
-   "formation": "4-4-2",
+   "formation": "",
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -3531,19 +3475,10 @@
       "grund": "2/3 Startelf · Ø 99 min",
       "news": "",
       "reihe": "tw",
-      "sicher": true
+      "prozent": 80
      }
     ],
     "abw": [
-     {
-      "name": "Tom Rothe",
-      "nr": 15,
-      "ampel": "gruen",
-      "grund": "3/3 Startelf · Ø 100 min",
-      "news": "",
-      "reihe": "abw",
-      "sicher": true
-     },
      {
       "name": "Leopold Querfeld",
       "nr": 14,
@@ -3551,7 +3486,16 @@
       "grund": "2/3 Startelf · Ø 104 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 80
+     },
+     {
+      "name": "Tom Rothe",
+      "nr": 15,
+      "ampel": "gruen",
+      "grund": "3/3 Startelf · Ø 100 min",
+      "news": "",
+      "reihe": "abw",
+      "prozent": 73
      },
      {
       "name": "Felix Uduokhai",
@@ -3560,7 +3504,7 @@
       "grund": "2/3 Startelf · Ø 99 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 48
      },
      {
       "name": "Zeno Van den Bosch",
@@ -3569,7 +3513,7 @@
       "grund": "2/3 Startelf · Ø 98 min",
       "news": "",
       "reihe": "abw",
-      "sicher": true
+      "prozent": 47
      }
     ],
     "mf": [
@@ -3580,7 +3524,7 @@
       "grund": "3/3 Startelf · Ø 100 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 95
      },
      {
       "name": "Aljoscha Kemlein",
@@ -3589,7 +3533,7 @@
       "grund": "3/3 Startelf · Ø 64 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 91
      },
      {
       "name": "Michel Aebischer",
@@ -3598,7 +3542,7 @@
       "grund": "3/3 Startelf · Ø 72 min",
       "news": "",
       "reihe": "mf",
-      "sicher": true
+      "prozent": 64
      },
      {
       "name": "Livan Burcu",
@@ -3607,7 +3551,7 @@
       "grund": "2/3 Startelf · Ø 53 min",
       "news": "",
       "reihe": "mf",
-      "sicher": false
+      "prozent": 48
      }
     ],
     "st": [
@@ -3618,7 +3562,7 @@
       "grund": "3/3 Startelf · Ø 69 min",
       "news": "",
       "reihe": "st",
-      "sicher": true
+      "prozent": 67
      },
      {
       "name": "Marin Ljubičić",
@@ -3627,26 +3571,19 @@
       "grund": "2/3 Startelf · Ø 80 min",
       "news": "",
       "reihe": "st",
-      "sicher": false
+      "prozent": 44
      }
     ]
    },
    "bank": [
-    {
-     "name": "Josip Juranović",
-     "nr": 18,
-     "ampel": "gelb",
-     "grund": "Krank - verpasst FCB (A)",
-     "news": "",
-     "reihe": "abw"
-    },
     {
      "name": "András Schäfer",
      "nr": 13,
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 47 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 41
     },
     {
      "name": "Woo-Yeong Jeong",
@@ -3654,15 +3591,8 @@
      "ampel": "gruen",
      "grund": "1/3 Startelf · Ø 52 min",
      "news": "",
-     "reihe": "mf"
-    },
-    {
-     "name": "Matheo Raab",
-     "nr": 31,
-     "ampel": "gruen",
-     "grund": "1/3 Startelf · Ø 102 min",
-     "news": "",
-     "reihe": "tw"
+     "reihe": "mf",
+     "prozent": 37
     },
     {
      "name": "Christopher Trimmel",
@@ -3670,15 +3600,8 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 19 min",
      "news": "",
-     "reihe": "abw"
-    },
-    {
-     "name": "Janik Haberer",
-     "nr": 19,
-     "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 22 min",
-     "news": "",
-     "reihe": "mf"
+     "reihe": "abw",
+     "prozent": 29
     },
     {
      "name": "Derrick Köhn",
@@ -3686,23 +3609,26 @@
      "ampel": "gruen",
      "grund": "0/3 Startelf · Ø 13 min",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 28
     },
     {
-     "name": "Tim Skarke",
-     "nr": 21,
+     "name": "Janik Haberer",
+     "nr": 19,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 30 min",
+     "grund": "0/3 Startelf · Ø 22 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "mf",
+     "prozent": 27
     },
     {
-     "name": "Robert Skov",
-     "nr": 24,
+     "name": "Matheo Raab",
+     "nr": 31,
      "ampel": "gruen",
-     "grund": "0/3 Startelf · Ø 12 min",
+     "grund": "1/3 Startelf · Ø 102 min",
      "news": "",
-     "reihe": "mf"
+     "reihe": "tw",
+     "prozent": 21
     }
    ],
    "fraglich": [
@@ -3712,7 +3638,8 @@
      "ampel": "gelb",
      "grund": "Krank - verpasst FCB (A)",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 32
     },
     {
      "name": "Andrej Ilic",
@@ -3720,7 +3647,8 @@
      "ampel": "gelb",
      "grund": "Nach Lebensmittelvergiftung - längerfristiger Ausfall zeichnet sich ab",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 16
     },
     {
      "name": "Oliver Burke",
@@ -3728,7 +3656,8 @@
      "ampel": "gelb",
      "grund": "AchKrankessehnenprobleme - verpasst auch S04 (H)",
      "news": "",
-     "reihe": "st"
+     "reihe": "st",
+     "prozent": 14
     },
     {
      "name": "Stanley Nsoki",
@@ -3736,7 +3665,8 @@
      "ampel": "gelb",
      "grund": "Muskelverletzung an der Wade - arbeitet individuell",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 7
     },
     {
      "name": "Marvin Friedrich",
@@ -3744,7 +3674,8 @@
      "ampel": "gelb",
      "grund": "Angeschlagen - verpasst S04 (H)",
      "news": "",
-     "reihe": "abw"
+     "reihe": "abw",
+     "prozent": 1
     }
    ],
    "ausfall": []
