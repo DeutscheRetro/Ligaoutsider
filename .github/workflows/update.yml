@@ -12,6 +12,17 @@ on:
         description: 'Manueller oder externer Trigger'
         required: false
         default: 'manuell'
+      veroeffentlichen:
+        description: 'Danach auf Netlify veröffentlichen (kostet ein Deploy-Guthaben)'
+        type: boolean
+        required: false
+        default: true
+
+# Netlify berechnet jede Veröffentlichung. Deshalb speichert jeder Lauf seinen
+# Stand mit "[skip netlify]" (kostenlos), und nur die Läufe hier veröffentlichen –
+# und auch nur, wenn seit der letzten Veröffentlichung etwas dazugekommen ist.
+env:
+  VEROEFFENTLICHEN_BEI: '0 8 * * *|0 16 * * *'   # 10:00 und 18:00 (UTC+2)
 
 jobs:
   generate:
@@ -50,9 +61,19 @@ jobs:
         run: python generate.py
 
       - name: Änderungen committen & pushen
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          MANUELL_VEROEFFENTLICHEN: ${{ github.event.inputs.veroeffentlichen }}
         run: |
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
+
+          # Soll dieser Lauf veröffentlichen?
+          VEROEFFENTLICHEN=false
+          case "|$VEROEFFENTLICHEN_BEI|" in *"|$SCHEDULE|"*) [ -n "$SCHEDULE" ] && VEROEFFENTLICHEN=true ;; esac
+          [ "$MANUELL_VEROEFFENTLICHEN" = "true" ] && VEROEFFENTLICHEN=true
+          echo "Veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
+
           git add feed.json artikel/ data/ logs/ sitemap.xml rss.xml og/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -f comunio.json ] && git add comunio.json || true
@@ -60,12 +81,22 @@ jobs:
           [ -f spieler_db.json ] && git add spieler_db.json || true
           [ -f spieler_news.json ] && git add spieler_news.json || true
           [ -d spieler ] && git add spieler/ || true
-          if git diff --staged --quiet; then
-            echo "Keine neuen Artikel – kein Commit nötig"
+
+          if ! git diff --staged --quiet; then
+            if [ "$VEROEFFENTLICHEN" = "true" ]; then
+              git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
+            else
+              git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M') [skip netlify]"
+            fi
+          elif [ "$VEROEFFENTLICHEN" = "true" ] && git log -1 --format=%s | grep -q '\[skip netlify\]'; then
+            # Nichts Neues in diesem Lauf, aber gesammelte Änderungen warten noch
+            git commit --allow-empty -m "🚀 Veröffentlichung $(date +'%d.%m.%Y %H:%M')"
           else
-            git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
-            git stash -u 2>/dev/null || true
-            git pull --rebase origin main
-            git stash pop 2>/dev/null || true
-            git push
+            echo "Nichts zu speichern oder zu veröffentlichen"
+            exit 0
           fi
+
+          git stash -u 2>/dev/null || true
+          git pull --rebase origin main
+          git stash pop 2>/dev/null || true
+          git push
