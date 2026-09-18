@@ -57,6 +57,12 @@
   to = "/og/:splat"
   status = 200
 
+# Nutzerprofile: /profil/<profilname> zeigt profil.html, die Seite liest den Namen aus dem Pfad
+[[redirects]]
+  from = "/profil/*"
+  to = "/profil.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/404.html"

@@ -174,7 +174,7 @@
   async function oeffne(partner) {
     aktiv = gespraeche.find(g => g.partner === partner) || { partner, partner_name: partner, nachrichten: [] };
     document.getElementById('pf-titel').innerHTML = aktiv.partner_handle
-      ? `<a href="/profil.html?u=${encodeURIComponent(aktiv.partner_handle)}" style="color:inherit">${escape(aktiv.partner_name || aktiv.partner_handle)}</a>`
+      ? `<a href="/profil/${encodeURIComponent(aktiv.partner_handle)}" style="color:inherit">${escape(aktiv.partner_name || aktiv.partner_handle)}</a>`
       : escape(aktiv.partner_name || partner);
     document.getElementById('pf-senden').style.display = 'flex';
 

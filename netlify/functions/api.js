@@ -110,13 +110,23 @@ async function profilSicher(email, name) {
       const versuch = i ? `${basis.slice(0, 26)}-${i + 1}` : basis;
       const belegt = await hole(`profile?handle=eq.${encodeURIComponent(versuch)}&select=handle`);
       if (belegt && belegt.length) continue;
-      const [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: sauber(name, 60) || versuch });
+      // Anzeigename muss einmalig sein: bei Gleichstand eine Zahl anhängen
+      let anzeige = sauber(name && name !== email ? name : versuch, 56) || versuch;
+      for (let n = 2; await nameVergeben(anzeige, email) && n < 50; n++) anzeige = `${sauber(name, 52) || versuch} ${n}`;
+      const [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: anzeige });
       return { handle: neu.handle, anzeigename: neu.anzeigename };
     }
   } catch (e) {
     console.error("Profil nicht verfügbar:", e.message);
   }
   return null;
+}
+
+// ilike ohne Platzhalter: prüft Gleichheit ohne Rücksicht auf Groß-/Kleinschreibung
+const ilikeGenau = t => encodeURIComponent(String(t).replace(/[\\%_]/g, m => "\\" + m));
+async function nameVergeben(anzeigename, ausserEmail) {
+  const t = await hole(`profile?anzeigename=ilike.${ilikeGenau(anzeigename)}&select=email`);
+  return (t || []).some(p => p.email !== ausserEmail);
 }
 
 async function emailVonHandle(handle) {
@@ -616,6 +626,9 @@ exports.handler = async (event, context) => {
           const belegt = await hole(`profile?handle=eq.${encodeURIComponent(handle)}&select=email`);
           if (belegt && belegt.length) return json(409, { fehler: "Dieser Profilname ist schon vergeben" });
         }
+        const anzeigename = sauber(body.anzeigename, 60) || handle;
+        if (await nameVergeben(anzeigename, email))
+          return json(409, { fehler: "Dieser Anzeigename ist schon vergeben" });
         const lieblings = {};
         for (const k of LIEBLINGS_FELDER) {
           const v = sauber((body.lieblings || {})[k], 120);
@@ -623,7 +636,7 @@ exports.handler = async (event, context) => {
         }
         await aendere("profile", `email=eq.${encodeURIComponent(email)}`, {
           handle,
-          anzeigename: sauber(body.anzeigename, 60) || handle,
+          anzeigename,
           ueber_mich: sauber(body.ueber_mich, 1500),
           wohnort: sauber(body.wohnort, 80),
           lieblings,

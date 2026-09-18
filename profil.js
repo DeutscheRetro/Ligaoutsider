@@ -26,7 +26,11 @@
   };
 
   let ich = window._loIch;          // { handle, email } sobald angemeldet
-  let handle = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
+  // Adresse: /profil/<name> (alt: /profil.html?u=<name>)
+  const ausPfad = (location.pathname.match(/^\/profil\/([a-z0-9-]{3,30})\/?$/i) || [])[1];
+  let handle = (ausPfad || new URLSearchParams(location.search).get('u') || '').toLowerCase();
+  const profilUrl = h => '/profil/' + encodeURIComponent(h);
+  const adresseSetzen = h => history.replaceState(null, '', profilUrl(h));
   let profil = null, status = null, meins = null;
 
   function meldung(text, fehler) {
@@ -45,7 +49,7 @@
   // ─── Laden ───────────────────────────────────────────────────────────────────
   async function laden() {
     if (!handle) {
-      if (ich && ich.handle) { handle = ich.handle; history.replaceState(null, '', '?u=' + encodeURIComponent(handle)); }
+      if (ich && ich.handle) { handle = ich.handle; adresseSetzen(handle); }
       else if (ich === null || ich === undefined) {
         box.innerHTML = `<div class="pr-leer"><h1>Dein Profil</h1><p>Melde dich an, um dein Profil anzulegen und andere Fans zu finden.</p>
           <button class="pr-btn pr-btn--gelb" onclick="netlifyIdentity.open('login')">Anmelden</button></div>`;
@@ -77,7 +81,7 @@
     const bloecke = LIEBLINGS.map(([gruppe, felder]) => {
       const zeilen = felder.filter(([k]) => l[k]).map(([k, label]) => {
         let wert = esc(l[k]);
-        if (k === 'verein' && VEREINE[l[k]]) wert = `<img src="logos/${VEREINE[l[k]]}.png" alt="">${wert}`;
+        if (k === 'verein' && VEREINE[l[k]]) wert = `<img src="/logos/${VEREINE[l[k]]}.png" alt="">${wert}`;
         return `<div class="pr-lieb"><span>${label}</span><b>${wert}</b></div>`;
       }).join('');
       return zeilen ? `<div class="pr-lieb-gruppe"><h3>${gruppe}</h3>${zeilen}</div>` : '';
@@ -98,7 +102,7 @@
       ok: `<button class="pr-btn" data-a="entfernen" title="Freundschaft beenden">✓ Befreundet</button>`,
     }[status.freund];
     return `${freund}
-      <a class="pr-btn" href="nachrichten.html?u=${encodeURIComponent(handle)}">✉ Nachricht</a>
+      <a class="pr-btn" href="/nachrichten.html?u=${encodeURIComponent(handle)}">✉ Nachricht</a>
       <button class="pr-btn pr-btn--rot" data-a="blockieren">Blockieren</button>`;
   }
 
@@ -111,7 +115,7 @@
 
     box.innerHTML = `
       <div class="pr-kopf">
-        <div class="pr-avatar">${vereinLogo ? `<img src="logos/${vereinLogo}.png" alt="">` : esc(initial)}</div>
+        <div class="pr-avatar">${vereinLogo ? `<img src="/logos/${vereinLogo}.png" alt="">` : esc(initial)}</div>
         <div class="pr-kopf-text">
           <h1>${esc(p.anzeigename)}</h1>
           <p>@${esc(p.handle)}${p.wohnort ? ' · ' + esc(p.wohnort) : ''} · dabei seit ${seit}</p>
@@ -126,7 +130,7 @@
 
       <section class="pr-sektion"><h2>Freunde <small>${p.freunde.length}</small></h2>
         ${p.freunde.length ? `<div class="pr-freunde">${p.freunde.map(f =>
-          `<a href="?u=${encodeURIComponent(f.freund_handle)}"><span>${esc((f.freund_name || f.freund_handle).charAt(0).toUpperCase())}</span>${esc(f.freund_name)}</a>`).join('')}</div>`
+          `<a href="${profilUrl(f.freund_handle)}"><span>${esc((f.freund_name || f.freund_handle).charAt(0).toUpperCase())}</span>${esc(f.freund_name)}</a>`).join('')}</div>`
           : '<p class="pr-grau">Noch keine Freunde.</p>'}
       </section>
 
@@ -139,7 +143,7 @@
         <div class="pr-gb">${p.gaestebuch.map(g => `
           <div class="pr-gb-eintrag">
             <div class="pr-gb-kopf">
-              ${g.autor_handle ? `<a href="?u=${encodeURIComponent(g.autor_handle)}">${esc(g.autor_name)}</a>` : `<b>${esc(g.autor_name)}</b>`}
+              ${g.autor_handle ? `<a href="${profilUrl(g.autor_handle)}">${esc(g.autor_name)}</a>` : `<b>${esc(g.autor_name)}</b>`}
               <span>${new Date(g.erstellt_am).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
               ${ich && (status?.selbst || g.autor_handle === ich.handle) ? `<button class="pr-gb-weg" data-a="gb-loeschen" data-id="${g.id}" title="Eintrag löschen">🗑</button>` : ''}
             </div>
@@ -149,7 +153,7 @@
       </section>
 
       ${meins && meins.blockiert.length ? `<section class="pr-sektion"><h2>Blockiert</h2>${meins.blockiert.map(b =>
-        `<div class="pr-zeile"><a href="?u=${encodeURIComponent(b.handle)}">${esc(b.name)}</a>
+        `<div class="pr-zeile"><a href="${profilUrl(b.handle)}">${esc(b.name)}</a>
           <button class="pr-btn" data-a="entblocken" data-h="${esc(b.handle)}">Aufheben</button></div>`).join('')}</section>` : ''}`;
 
     document.getElementById('pr-gb-form')?.addEventListener('submit', async e => {
@@ -163,10 +167,10 @@
     const ein = meins.anfragen_ein, aus = meins.anfragen_aus;
     if (!ein.length && !aus.length) return '';
     return `<section class="pr-sektion pr-anfragen"><h2>Freundschaftsanfragen</h2>
-      ${ein.map(a => `<div class="pr-zeile"><a href="?u=${encodeURIComponent(a.handle)}">${esc(a.name)}</a>
+      ${ein.map(a => `<div class="pr-zeile"><a href="${profilUrl(a.handle)}">${esc(a.name)}</a>
         <span><button class="pr-btn pr-btn--gelb" data-a="annehmen" data-h="${esc(a.handle)}">Annehmen</button>
         <button class="pr-btn" data-a="entfernen" data-h="${esc(a.handle)}">Ablehnen</button></span></div>`).join('')}
-      ${aus.map(a => `<div class="pr-zeile"><span><a href="?u=${encodeURIComponent(a.handle)}">${esc(a.name)}</a> <small class="pr-grau">wartet auf Antwort</small></span>
+      ${aus.map(a => `<div class="pr-zeile"><span><a href="${profilUrl(a.handle)}">${esc(a.name)}</a> <small class="pr-grau">wartet auf Antwort</small></span>
         <button class="pr-btn" data-a="entfernen" data-h="${esc(a.handle)}">Zurückziehen</button></div>`).join('')}
     </section>`;
   }
@@ -184,7 +188,7 @@
       <form id="pr-form" class="pr-form">
         <div class="pr-form-raster">
           <label><span>Anzeigename</span><input name="anzeigename" maxlength="60" value="${esc(p.anzeigename)}" required></label>
-          <label><span>Profilname (Adresse: /profil.html?u=…)</span><input name="handle" maxlength="30" pattern="[a-z0-9-]{3,30}" value="${esc(p.handle)}" required></label>
+          <label><span>Profilname (deine Adresse: ligaoutsider.de/profil/…)</span><input name="handle" maxlength="30" pattern="[a-z0-9-]{3,30}" value="${esc(p.handle)}" required></label>
           <label><span>Wohnort</span><input name="wohnort" maxlength="80" value="${esc(p.wohnort)}"></label>
         </div>
         <label><span>Über mich</span><textarea name="ueber_mich" maxlength="1500" rows="4">${esc(p.ueber_mich)}</textarea></label>
@@ -208,7 +212,7 @@
         });
         handle = r.handle;
         if (ich) ich.handle = r.handle;
-        history.replaceState(null, '', '?u=' + encodeURIComponent(handle));
+        adresseSetzen(handle);
         await laden();
         meldung('Gespeichert');
       } catch (err) { meldung(err.message, true); }

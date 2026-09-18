@@ -65,7 +65,7 @@
       el.textContent = name;
       el.style.cursor = 'pointer';
       el.title = 'Mein Profil';
-      el.onclick = () => wer.handle ? (location.href = '/profil.html?u=' + encodeURIComponent(wer.handle))
+      el.onclick = () => wer.handle ? (location.href = '/profil/' + encodeURIComponent(wer.handle))
                                     : window._zeigeProfil(name, user.email);
       el.querySelector('.post-zahl')?.remove();
       if (wer.anfragen) {
@@ -405,7 +405,7 @@
       return `<div class="kommentar-item" id="k-${k.id}">
         <div class="kommentar-kopf">
           ${k.autor_handle
-            ? `<a class="kommentar-name" href="/profil.html?u=${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
+            ? `<a class="kommentar-name" href="/profil/${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
             : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}
           <span class="kommentar-datum">${datum}${editTag}</span>
         </div>

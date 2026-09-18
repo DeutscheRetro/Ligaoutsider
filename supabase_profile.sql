@@ -20,6 +20,9 @@ create table if not exists profile (
   aktualisiert_am   timestamptz default now()
 );
 
+-- Anzeigenamen sind einmalig, egal ob groß oder klein geschrieben
+create unique index if not exists profile_anzeigename_uni on profile (lower(anzeigename));
+
 -- ─── Gästebuch ───────────────────────────────────────────────────────────────
 create table if not exists gaestebuch (
   id            uuid primary key default gen_random_uuid(),
