@@ -80,7 +80,7 @@
     </div>
 
     <div class="me-schritt">
-      <div class="me-schritt-t"><b>3</b> Spieler aufstellen <span class="me-tipp">Ziehen oder antippen: erst Spieler, dann Position</span></div>
+      <div class="me-schritt-t"><b>3</b> Spieler aufstellen <span class="me-tipp">Ziehen oder antippen: erst Spieler, dann Position. Leeren Platz antippen filtert die Liste.</span></div>
       <div class="me-bau">
         <div class="me-feld-wrap">
           <div class="me-feld" id="me-feld"></div>
@@ -163,7 +163,7 @@
     };
     const KURZ = { Torwart: 'TW', Abwehr: 'ABW', Mittelfeld: 'MF', Sturm: 'ST' };
 
-    let DB = null, alle = [], modus = 'kickbase', formation = '4-4-2', team = '', gewaehlt = null;
+    let DB = null, alle = [], modus = 'kickbase', formation = '4-4-2', team = '', gewaehlt = null, posFilter = '';
     let slots = [];   // [{gruppe, spieler|null}]
 
     // Positionsgruppe je Modus: Kickbase nach Kickbase, sonst nach Transfermarkt
@@ -240,7 +240,7 @@
       const nummern = Object.keys(reihen).map(Number).sort((a, b) => b - a);   // Sturm oben
       document.getElementById('me-feld').innerHTML = nummern.map(r => `<div class="me-reihe">${reihen[r].map(i => {
         const x = slots[i], sp = x.spieler;
-        const ziel = gewaehlt && !sp && passt(x, gewaehlt) ? ' ziel' : '';
+        const ziel = (gewaehlt && !sp && passt(x, gewaehlt)) || (!gewaehlt && !sp && posFilter === x.gruppe) ? ' ziel' : '';
         return `<div class="me-slot${sp ? ' voll' : ''}${ziel}" data-i="${i}">
           ${sp ? `<img src="${esc(sp.logo)}" alt="">${(() => { const nm = sp.name.split(' ').length > 1 ? sp.name.split(' ').slice(1).join(' ') : sp.name;
                     return `<span class="me-slot-name${nm.length > 10 ? ' lang' : ''}">${esc(nm)}</span>`; })()}
@@ -262,16 +262,16 @@
       const q = falte(document.getElementById('me-suche').value.trim());
       const imFeld = new Set(slots.filter(x => x.spieler).map(x => x.spieler.tm_id));
       const reihenfolge = { Torwart: 0, Abwehr: 1, Mittelfeld: 2, Sturm: 3 };
-      const liste = alle.filter(s => (!team || s.verein === team) && (!q || falte(s.name).includes(q)))
+      const liste = alle.filter(s => (!team || s.verein === team) && (!q || falte(s.name).includes(q)) && (!posFilter || gruppeVon(s) === posFilter))
         .sort((a, b) => (reihenfolge[gruppeVon(a)] ?? 9) - (reihenfolge[gruppeVon(b)] ?? 9) || a.name.localeCompare(b.name, 'de'))
-        .slice(0, team || q ? 200 : 60);
+;
       document.getElementById('me-liste').innerHTML = liste.length ? liste.map(s => `
         <div class="me-sp${imFeld.has(s.tm_id) ? ' drin' : ''}${imSpiel(s) ? '' : ' fehlt'}${gewaehlt && gewaehlt.tm_id === s.tm_id ? ' gewaehlt' : ''}" draggable="${imSpiel(s)}" data-id="${s.tm_id}">
           <img src="${esc(s.logo)}" alt="">
           <span class="me-sp-name">${esc(s.name)}<small>${esc(s.position || gruppeVon(s))}${imSpiel(s) ? '' : ' · nicht bei ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')}</small></span>
           <span class="me-sp-mw">${mwVon(s) ? mio(mwVon(s)).replace(' Mio. €', ' M') : ''}</span>
           <span class="me-sp-pos">${esc(KURZ[gruppeVon(s)] || '–')}</span>
-        </div>`).join('') + (!team && !q ? '<p class="me-mehr">Verein wählen oder suchen, um alle Spieler zu sehen</p>' : '')
+        </div>`).join('')
         : '<p class="kb-loading">Kein Spieler gefunden</p>';
     }
 
@@ -344,10 +344,12 @@
       const weg = e.target.closest('[data-weg]');
       if (weg) { slots[+weg.dataset.weg].spieler = null; speichern(); renderFeld(); renderListe(); return; }
       const slot = e.target.closest('.me-slot'); if (!slot) return;
-      if (gewaehlt) setzen(+slot.dataset.i, gewaehlt);
-      else {
-        // Leeren Platz angetippt: Liste auf passende Position eingrenzen
-        document.getElementById('me-suche').focus();
+      if (gewaehlt) { posFilter = ''; setzen(+slot.dataset.i, gewaehlt); }
+      else if (!slots[+slot.dataset.i].spieler) {
+        // Leeren Platz angetippt: Liste auf diese Position eingrenzen (nochmal tippen hebt es auf)
+        const g = slots[+slot.dataset.i].gruppe;
+        posFilter = posFilter === g ? '' : g;
+        renderListe(); renderFeld();
       }
     });
     const budgetIn = document.getElementById('me-budget-in');
@@ -368,69 +370,106 @@
 
     // ─── Als Bild (Canvas, 1080×1350 für Instagram/WhatsApp) ────────────────────
     const bildLaden = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; });
+    // Wappen im Seitenverhältnis einpassen (wie object-fit: contain)
+    function einpassen(g, img, cx, cy, max) {
+      const f = Math.min(max / img.naturalWidth, max / img.naturalHeight);
+      const w = img.naturalWidth * f, h = img.naturalHeight * f;
+      g.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+    }
+    function rundRechteck(g, x, y, w, h, r) {
+      g.beginPath();
+      g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+      g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+    }
+    function kuerzen(g, text, max) {
+      if (g.measureText(text).width <= max) return text;
+      while (text.length > 3 && g.measureText(text + '…').width > max) text = text.slice(0, -1);
+      return text + '…';
+    }
+
+    // Gleicher Look wie das Feld auf der Seite, nur größer (1080×1350)
     async function bildErzeugen() {
       const W = 1080, H = 1350, c = document.createElement('canvas');
       c.width = W; c.height = H;
       const g = c.getContext('2d');
+      const SCHRIFT = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
       g.fillStyle = '#0d0d0d'; g.fillRect(0, 0, W, H);
-      g.fillStyle = '#e8c000'; g.fillRect(0, 0, W, 10);
-      g.font = '800 54px Inter, -apple-system, Segoe UI, sans-serif';
-      g.fillStyle = '#fff'; g.textBaseline = 'alphabetic';
-      g.fillText('Meine Elf', 60, 105);
-      g.font = '600 30px Inter, -apple-system, Segoe UI, sans-serif'; g.fillStyle = '#e8c000';
-      g.fillText(formation + (modus === 'frei' ? '' : ' · ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')), 60, 150);
+      g.fillStyle = '#e8c000'; g.fillRect(0, 0, W, 8);
 
-      // Spielfeld
-      const fx = 60, fy = 190, fw = W - 120, fh = 960;
-      g.fillStyle = '#1f5a2c'; g.fillRect(fx, fy, fw, fh);
-      g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 3;
-      g.strokeRect(fx + 3, fy + 3, fw - 6, fh - 6);
+      // Kopf wie Seitenlogo + Überschrift
+      g.textBaseline = 'alphabetic';
+      g.font = `900 46px ${SCHRIFT}`;
+      g.fillStyle = '#e8c000'; g.fillText('Liga', 60, 86);
+      let x = 60 + g.measureText('Liga').width;
+      g.fillStyle = '#fff'; g.fillText('outsider', x, 86);
+      x += g.measureText('outsider').width;
+      g.font = `900 30px ${SCHRIFT}`; g.fillStyle = '#666'; g.fillText('.de', x, 86);
+      g.font = `800 28px ${SCHRIFT}`; g.fillStyle = '#e8c000';
+      g.fillText('MEINE ELF', 60, 140);
+      const unter = formation + (modus === 'frei' ? '' : ' · ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio'));
+      g.font = `600 26px ${SCHRIFT}`; g.fillStyle = '#ccc';
+      g.fillText(unter, 60 + g.measureText('MEINE ELF  ').width + 30, 140);
+
+      // Spielfeld (Farben wie .me-feld)
+      const fx = 60, fy = 170, fw = W - 120, fh = 1010;
+      rundRechteck(g, fx, fy, fw, fh, 14);
+      g.fillStyle = '#1f5a2c'; g.fill();
+      g.lineWidth = 4; g.strokeStyle = '#2c7a3c'; g.stroke();
+      g.strokeStyle = 'rgba(255,255,255,.25)'; g.lineWidth = 2;
       g.beginPath(); g.moveTo(fx, fy + fh / 2); g.lineTo(fx + fw, fy + fh / 2); g.stroke();
-      g.beginPath(); g.arc(fx + fw / 2, fy + fh / 2, 90, 0, Math.PI * 2); g.stroke();
-      g.strokeRect(fx + fw / 2 - 200, fy + fh - 160, 400, 157);
-      g.strokeRect(fx + fw / 2 - 200, fy + 3, 400, 157);
+      g.beginPath(); g.arc(fx + fw / 2, fy + fh / 2, 110, 0, Math.PI * 2); g.stroke();
 
       const reihen = {};
       slots.forEach(x => (reihen[x.reihe] = reihen[x.reihe] || []).push(x));
       const nummern = Object.keys(reihen).map(Number).sort((a, b) => b - a);
       const logos = {};
       await Promise.all([...new Set(slots.filter(x => x.spieler).map(x => x.spieler.logo))].map(async l => { logos[l] = await bildLaden(l); }));
+
+      const BW = 168, BH = 132;   // Box wie .me-slot (92×72), skaliert
+      const abstand = fh / nummern.length;
       nummern.forEach((r, ri) => {
-        const y = fy + 95 + ri * ((fh - 190) / Math.max(1, nummern.length - 1));
-        reihen[r].forEach((x, i) => {
-          const px = fx + fw * (i + 1) / (reihen[r].length + 1);
-          g.beginPath(); g.arc(px, y, 46, 0, Math.PI * 2);
-          g.fillStyle = x.spieler ? 'rgba(0,0,0,.72)' : 'rgba(0,0,0,.2)'; g.fill();
-          g.strokeStyle = x.spieler ? '#fff' : 'rgba(255,255,255,.4)'; g.lineWidth = 3; g.stroke();
+        const cy = fy + abstand * (ri + 0.5);
+        const n = reihen[r].length;
+        reihen[r].forEach((sl, i) => {
+          const cx = fx + fw * (i + 0.5) / n;                       // wie justify-content: space-around
+          const bx = cx - BW / 2, by = cy - BH / 2;
+          rundRechteck(g, bx, by, BW, BH, 18);
           g.textAlign = 'center';
-          if (x.spieler) {
-            const l = logos[x.spieler.logo];
-            if (l) g.drawImage(l, px - 28, y - 28, 56, 56);
-            const teile = x.spieler.name.split(' ');
-            const nm = teile.length > 1 ? teile.slice(1).join(' ') : x.spieler.name;
-            g.font = '700 26px Inter, -apple-system, Segoe UI, sans-serif';
-            const bw = Math.min(220, g.measureText(nm).width + 24);
-            g.fillStyle = 'rgba(0,0,0,.78)';
-            g.fillRect(px - bw / 2, y + 54, bw, 38);
-            g.fillStyle = '#fff'; g.fillText(nm, px, y + 82, 200);
+          if (sl.spieler) {
+            g.fillStyle = 'rgba(0,0,0,.6)'; g.fill();
+            g.setLineDash([]); g.lineWidth = 3; g.strokeStyle = 'rgba(255,255,255,.8)'; g.stroke();
+            const l = logos[sl.spieler.logo];
+            if (l) einpassen(g, l, cx, by + 34, 44);
+            const teile = sl.spieler.name.split(' ');
+            const nm = teile.length > 1 ? teile.slice(1).join(' ') : sl.spieler.name;
+            g.fillStyle = '#fff';
+            g.font = `700 ${nm.length > 10 ? 19 : 22}px ${SCHRIFT}`;
+            g.fillText(kuerzen(g, nm, BW - 16), cx, by + 88);
+            const mw = mwVon(sl.spieler);
+            if (mw) {
+              g.font = `400 16px ${SCHRIFT}`; g.fillStyle = 'rgba(255,255,255,.75)';
+              g.fillText(mio(mw).replace(' Mio. €', ' Mio.'), cx, by + 114);
+            }
           } else {
-            g.fillStyle = 'rgba(255,255,255,.6)'; g.font = '700 22px Inter, sans-serif';
-            g.fillText(KURZ[x.gruppe], px, y + 8);
+            g.fillStyle = 'rgba(0,0,0,.18)'; g.fill();
+            g.setLineDash([10, 7]); g.lineWidth = 3; g.strokeStyle = 'rgba(255,255,255,.45)'; g.stroke();
+            g.setLineDash([]);
+            g.fillStyle = 'rgba(255,255,255,.8)'; g.font = `400 40px ${SCHRIFT}`;
+            g.fillText('+', cx, by + 66);
+            g.font = `700 18px ${SCHRIFT}`; g.fillStyle = 'rgba(255,255,255,.7)';
+            g.fillText(KURZ[sl.gruppe], cx, by + 100);
           }
           g.textAlign = 'left';
         });
       });
 
-      // Fuß: Kaderwert + Marke
+      // Fuß: Kaderwert + Adresse
       const wert = slots.reduce((a, x) => a + (x.spieler ? mwVon(x.spieler) : 0), 0);
-      g.font = '600 30px Inter, -apple-system, Segoe UI, sans-serif'; g.fillStyle = '#bbb';
-      if (wert) g.fillText('Kaderwert ' + mio(wert), 60, 1215);
-      g.font = '800 40px Inter, -apple-system, Segoe UI, sans-serif';
-      g.fillStyle = '#e8c000'; g.fillText('Liga', 60, 1285);
-      const lw = g.measureText('Liga').width;
-      g.fillStyle = '#fff'; g.fillText('outsider', 60 + lw, 1285);
-      const ow = g.measureText('outsider').width;
-      g.font = '600 26px Inter, sans-serif'; g.fillStyle = '#888'; g.fillText('.de/elf', 60 + lw + ow, 1285);
+      g.font = `600 28px ${SCHRIFT}`; g.fillStyle = '#ccc';
+      if (wert) g.fillText('Kaderwert ' + mio(wert), 60, 1250);
+      g.textAlign = 'right'; g.fillStyle = '#888'; g.font = `600 26px ${SCHRIFT}`;
+      g.fillText('ligaoutsider.de/elf', W - 60, 1250);
+      g.textAlign = 'left';
       return new Promise(ok => c.toBlob(ok, 'image/png'));
     }
     document.getElementById('me-bild').addEventListener('click', async () => {
