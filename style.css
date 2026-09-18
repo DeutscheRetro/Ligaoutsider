@@ -515,3 +515,52 @@ ul { list-style: none; }
 .lo-sp-tabelle span:first-child{color:var(--text3)}
 .lo-sp-tabelle span:last-child{color:var(--text1);text-align:right}
 .lo-sp-mehr{display:inline-block;margin-top:14px;font-size:13px;color:var(--accent)}
+
+/* ─── Meine Elf ─── */
+.me-schritt{margin:14px 0 18px}
+.me-schritt-t{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.me-schritt-t b{display:inline-flex;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#000;align-items:center;justify-content:center;font-size:11px}
+.me-tipp{font-weight:400;text-transform:none;letter-spacing:0;color:var(--text4)}
+.me-chips{display:flex;gap:6px;flex-wrap:wrap}
+.me-chips button,.me-aktionen button{background:var(--bg2);color:var(--text2);border:1px solid var(--border2);border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.me-chips button.aktiv{background:var(--accent);color:#000;border-color:var(--accent)}
+.me-bau{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.me-feld{background:#1f5a2c;border:2px solid #2c7a3c;border-radius:8px;padding:16px 6px;display:flex;flex-direction:column;gap:18px;min-height:460px;justify-content:space-around;position:relative}
+.me-feld::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid rgba(255,255,255,.25)}
+.me-feld::after{content:"";position:absolute;left:50%;top:50%;width:90px;height:90px;margin:-45px 0 0 -45px;border:1px solid rgba(255,255,255,.25);border-radius:50%}
+.me-reihe{display:flex;justify-content:space-around;gap:4px;position:relative;z-index:1}
+.me-slot{width:74px;min-height:62px;border:2px dashed rgba(255,255,255,.45);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;position:relative;background:rgba(0,0,0,.18);padding:4px 2px}
+.me-slot.voll{border-style:solid;border-color:rgba(255,255,255,.8);background:rgba(0,0,0,.6)}
+.me-slot.ziel{border-color:var(--accent);background:rgba(232,192,0,.18)}
+.me-slot img{width:22px;height:22px;object-fit:contain}
+.me-slot-name{font-size:11px;font-weight:700;margin-top:3px;max-width:70px;text-align:center;line-height:1.2;word-break:break-word}
+.me-slot-plus{font-size:20px;line-height:1;opacity:.8}
+.me-slot-pos{font-size:10px;opacity:.7;font-weight:700}
+.me-weg{position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;border:none;background:#e04848;color:#fff;font-size:13px;line-height:20px;cursor:pointer;padding:0}
+.me-aktionen{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+#me-zaehler{font-size:13px;font-weight:700;color:var(--text2);margin-right:auto}
+#me-zaehler.fehler{color:#e06060;font-weight:400}
+.me-auswahl{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.me-auswahl input{width:100%;background:var(--bg3);color:var(--text);border:none;border-bottom:1px solid var(--border);padding:11px 14px;font-size:14px}
+.me-auswahl-body{display:flex;height:520px}
+.me-teams{display:flex;flex-direction:column;gap:2px;padding:6px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0}
+.me-teams button{background:none;border:1px solid transparent;border-radius:6px;padding:4px;cursor:pointer;color:var(--text3);font-size:11px;font-weight:700;min-height:34px}
+.me-teams button img{width:26px;height:26px;object-fit:contain;display:block}
+.me-teams button.aktiv{border-color:var(--accent);background:var(--bg4)}
+.me-liste{flex:1;overflow-y:auto}
+.me-sp{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--item-border);cursor:grab;user-select:none}
+.me-sp:hover{background:var(--item-hover)}
+.me-sp.gewaehlt{background:rgba(232,192,0,.15);outline:1px solid var(--accent)}
+.me-sp.drin{opacity:.4}
+.me-sp img{width:20px;height:20px;object-fit:contain}
+.me-sp-name{flex:1;min-width:0;font-size:13px;display:flex;flex-direction:column;line-height:1.25}
+.me-sp-name small{font-size:10px;color:var(--text4)}
+.me-sp-pos{font-size:10px;font-weight:800;color:var(--text3)}
+.me-mehr{font-size:12px;color:var(--text4);padding:10px 12px}
+@media (max-width:760px){
+  .me-bau{grid-template-columns:1fr}
+  .me-feld{min-height:380px;padding:12px 2px}
+  .me-slot{width:58px;min-height:54px}
+  .me-slot-name{font-size:10px;max-width:56px}
+  .me-auswahl-body{height:420px}
+}

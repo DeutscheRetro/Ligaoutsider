@@ -1320,6 +1320,7 @@ def artikel_html(
       <a href="../kickbase.html" class="section-nav-link">Kickbase-Stats</a>
       <a href="../comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="../aufstellung.html" class="section-nav-link">Aufstellungen</a>
+      <a href="../elf.html" class="section-nav-link">Meine Elf</a>
       <a href="../forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>
@@ -2009,6 +2010,7 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/kickbase.html", "0.6", "weekly"),
         (f"{base}/comunio.html", "0.6", "weekly"),
         (f"{base}/aufstellung.html", "0.7", "daily"),
+        (f"{base}/elf.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
     ]
     for a in artikel_liste:

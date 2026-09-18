@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meine Elf – Ligaoutsider.de</title>
+  <meta name="description" content="Stell deine eigene Bundesliga-Elf zusammen – für Kickbase, Comunio oder frei, mit allen Spielern der 18 Kader."/>
+  <link rel="canonical" href="https://ligaoutsider.de/elf.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Meine Elf – Ligaoutsider.de"/>
+  <meta property="og:description" content="Stell deine eigene Bundesliga-Elf zusammen – für Kickbase, Comunio oder frei, mit allen Spielern der 18 Kader."/>
+  <meta property="og:url" content="https://ligaoutsider.de/elf.html"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SP8DWFL2SE');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <a href="nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="aufstellung.html" class="section-nav-link">Aufstellungen</a>
+      <a href="elf.html" class="section-nav-link active">Meine Elf</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <div class="kb-wrap">
+    <div class="au-kopf"><h2 class="au-h">Meine Elf</h2></div>
+
+    <div class="me-schritt">
+      <div class="me-schritt-t"><b>1</b> Spiel wählen</div>
+      <div class="me-chips" id="me-modus">
+        <button data-modus="kickbase">Kickbase</button>
+        <button data-modus="comunio">Comunio</button>
+        <button data-modus="frei">Frei</button>
+      </div>
+    </div>
+
+    <div class="me-schritt">
+      <div class="me-schritt-t"><b>2</b> Formation</div>
+      <div class="me-chips" id="me-formation"></div>
+    </div>
+
+    <div class="me-schritt">
+      <div class="me-schritt-t"><b>3</b> Spieler aufstellen <span class="me-tipp">Ziehen oder antippen: erst Spieler, dann Position</span></div>
+      <div class="me-bau">
+        <div class="me-feld-wrap">
+          <div class="me-feld" id="me-feld"></div>
+          <div class="me-aktionen">
+            <span id="me-zaehler">0/11</span>
+            <button id="me-teilen">🔗 Link kopieren</button>
+            <button id="me-leeren">Leeren</button>
+          </div>
+        </div>
+        <div class="me-auswahl">
+          <input type="search" id="me-suche" placeholder="Spieler suchen…" aria-label="Spieler suchen"/>
+          <div class="me-auswahl-body">
+            <div class="me-teams" id="me-teams"></div>
+            <div class="me-liste" id="me-liste"><p class="kb-loading">Lade Spieler…</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Theme
+    function applyTheme(t) {
+      document.body.classList.toggle('light', t === 'light');
+      document.documentElement.classList.toggle('light', t === 'light');
+      document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
+    }
+    applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const t = document.body.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('theme', t); applyTheme(t);
+    });
+
+    // Auth
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on('init', u => { if (u) showUser(u); });
+      netlifyIdentity.on('login', u => { showUser(u); netlifyIdentity.close(); });
+      netlifyIdentity.on('logout', () => {
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('login-btn').style.display = '';
+        document.getElementById('signup-btn').style.display = '';
+      });
+    }
+    function showUser(u) {
+      document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+      document.getElementById('user-info').style.display = 'flex';
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('signup-btn').style.display = 'none';
+    }
+    document.getElementById('login-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('login'); });
+    document.getElementById('signup-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.open('signup'); });
+    document.getElementById('logout-btn')?.addEventListener('click', e => { e.preventDefault(); netlifyIdentity.logout(); });
+
+    // Meine Elf: Spieler aus spieler_db.json
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const falte = t => String(t || '').normalize('NFD').replace(/\p{M}/gu, '').replace(/ø/g, 'o').replace(/ł/g, 'l').toLowerCase();
+
+    // Erlaubte Formationen je Spiel (Abwehr-Mittelfeld-Sturm)
+    const FORMATIONEN = {
+      kickbase: ['3-4-3', '3-5-2', '3-6-1', '4-2-4', '4-3-3', '4-4-2', '4-5-1', '5-2-3', '5-3-2', '5-4-1'],
+      comunio:  ['3-4-3', '3-5-2', '4-3-3', '4-4-2', '4-5-1', '5-3-2', '5-4-1'],
+      frei:     ['4-2-3-1', '4-3-3', '4-4-2', '4-1-4-1', '4-3-2-1', '4-4-1-1', '3-4-3', '3-5-2', '3-4-2-1', '5-3-2', '5-4-1'],
+    };
+    const KURZ = { Torwart: 'TW', Abwehr: 'ABW', Mittelfeld: 'MF', Sturm: 'ST' };
+
+    let DB = null, alle = [], modus = 'kickbase', formation = '4-4-2', team = '', gewaehlt = null;
+    let slots = [];   // [{gruppe, spieler|null}]
+
+    // Positionsgruppe je Modus: Kickbase nach Kickbase, sonst nach Transfermarkt
+    function gruppeVon(s) {
+      if (modus === 'kickbase' && s.kickbase) return s.kickbase.position;
+      return s.gruppe || (s.kickbase && s.kickbase.position) || '';
+    }
+
+    function slotsBauen(behalten = true) {
+      const alt = behalten ? slots.map(x => x.spieler).filter(Boolean) : [];
+      const teile = formation.split('-').map(Number);
+      const neu = [{ gruppe: 'Torwart', reihe: 0 }];
+      teile.forEach((n, i) => {
+        const g = i === 0 ? 'Abwehr' : i === teile.length - 1 ? 'Sturm' : 'Mittelfeld';
+        for (let k = 0; k < n; k++) neu.push({ gruppe: g, reihe: i + 1 });
+      });
+      neu.forEach(x => x.spieler = null);
+      // Bereits gewählte Spieler auf passende freie Plätze übernehmen
+      alt.forEach(sp => {
+        const frei = neu.find(x => !x.spieler && (modus === 'frei' || x.gruppe === gruppeVon(sp)));
+        if (frei) frei.spieler = sp;
+      });
+      slots = neu;
+    }
+
+    function passt(slot, sp) {
+      return modus === 'frei' || slot.gruppe === gruppeVon(sp);
+    }
+
+    function setzen(i, sp) {
+      const slot = slots[i];
+      if (!passt(slot, sp)) { hinweis(`${sp.name} ist ${gruppeVon(sp) || 'ohne Position'} – passt nicht auf ${slot.gruppe}`); return; }
+      const vorher = slots.findIndex(x => x.spieler && x.spieler.tm_id === sp.tm_id);
+      if (vorher >= 0) slots[vorher].spieler = slot.spieler && passt(slots[vorher], slot.spieler) ? slot.spieler : null;
+      slot.spieler = sp;
+      gewaehlt = null;
+      speichern(); renderFeld(); renderListe();
+    }
+
+    function hinweis(t) {
+      const z = document.getElementById('me-zaehler');
+      z.textContent = t; z.classList.add('fehler');
+      clearTimeout(hinweis.t);
+      hinweis.t = setTimeout(() => { z.classList.remove('fehler'); zaehler(); }, 2500);
+    }
+    function zaehler() {
+      document.getElementById('me-zaehler').textContent = slots.filter(x => x.spieler).length + '/11';
+    }
+
+    function renderFeld() {
+      const reihen = {};
+      slots.forEach((x, i) => (reihen[x.reihe] = reihen[x.reihe] || []).push(i));
+      const nummern = Object.keys(reihen).map(Number).sort((a, b) => b - a);   // Sturm oben
+      document.getElementById('me-feld').innerHTML = nummern.map(r => `<div class="me-reihe">${reihen[r].map(i => {
+        const x = slots[i], sp = x.spieler;
+        const ziel = gewaehlt && !sp && passt(x, gewaehlt) ? ' ziel' : '';
+        return `<div class="me-slot${sp ? ' voll' : ''}${ziel}" data-i="${i}">
+          ${sp ? `<img src="${esc(sp.logo)}" alt=""><span class="me-slot-name">${esc(sp.name.split(' ').slice(-1)[0])}</span>
+                  <button class="me-weg" data-weg="${i}" aria-label="Entfernen">×</button>`
+               : `<span class="me-slot-plus">+</span><span class="me-slot-pos">${KURZ[x.gruppe] || ''}</span>`}
+        </div>`; }).join('')}</div>`).join('');
+      zaehler();
+    }
+
+    function renderTeams() {
+      document.getElementById('me-teams').innerHTML =
+        `<button class="${team ? '' : 'aktiv'}" data-team="">Alle</button>` +
+        Object.entries(DB.teams).sort((a, b) => a[0].localeCompare(b[0], 'de')).map(([tn, t]) =>
+          `<button class="${team === tn ? 'aktiv' : ''}" data-team="${esc(tn)}" title="${esc(tn)}"><img src="${esc(t.logo)}" alt="${esc(tn)}"></button>`).join('');
+    }
+
+    function renderListe() {
+      const q = falte(document.getElementById('me-suche').value.trim());
+      const imFeld = new Set(slots.filter(x => x.spieler).map(x => x.spieler.tm_id));
+      const reihenfolge = { Torwart: 0, Abwehr: 1, Mittelfeld: 2, Sturm: 3 };
+      const liste = alle.filter(s => (!team || s.verein === team) && (!q || falte(s.name).includes(q)))
+        .sort((a, b) => (reihenfolge[gruppeVon(a)] ?? 9) - (reihenfolge[gruppeVon(b)] ?? 9) || a.name.localeCompare(b.name, 'de'))
+        .slice(0, team || q ? 200 : 60);
+      document.getElementById('me-liste').innerHTML = liste.length ? liste.map(s => `
+        <div class="me-sp${imFeld.has(s.tm_id) ? ' drin' : ''}${gewaehlt && gewaehlt.tm_id === s.tm_id ? ' gewaehlt' : ''}" draggable="true" data-id="${s.tm_id}">
+          <img src="${esc(s.logo)}" alt="">
+          <span class="me-sp-name">${esc(s.name)}<small>${esc(s.position || gruppeVon(s))}</small></span>
+          <span class="me-sp-pos">${esc(KURZ[gruppeVon(s)] || '–')}</span>
+        </div>`).join('') + (!team && !q ? '<p class="me-mehr">Verein wählen oder suchen, um alle Spieler zu sehen</p>' : '')
+        : '<p class="kb-loading">Kein Spieler gefunden</p>';
+    }
+
+    // ─── Speichern / Teilen ────────────────────────────────────────────────────
+    function kodiert() {
+      return `${modus}|${formation}|${slots.map(x => x.spieler ? x.spieler.tm_id : '').join('.')}`;
+    }
+    function speichern() {
+      try { localStorage.setItem('meine-elf', kodiert()); } catch (e) {}
+      history.replaceState(null, '', '#' + kodiert());
+    }
+    function laden(code) {
+      const [m, f, ids] = (code || '').split('|');
+      if (!FORMATIONEN[m] || !FORMATIONEN[m].includes(f)) return false;
+      modus = m; formation = f; slotsBauen(false);
+      (ids || '').split('.').forEach((id, i) => {
+        const sp = id && alle.find(s => String(s.tm_id) === id);
+        if (sp && slots[i]) slots[i].spieler = sp;
+      });
+      return true;
+    }
+
+    function renderAlles() {
+      document.querySelectorAll('#me-modus button').forEach(b => b.classList.toggle('aktiv', b.dataset.modus === modus));
+      document.getElementById('me-formation').innerHTML = FORMATIONEN[modus].map(f =>
+        `<button class="${f === formation ? 'aktiv' : ''}" data-f="${f}">${f}</button>`).join('');
+      renderFeld(); renderTeams(); renderListe();
+    }
+
+    // ─── Ereignisse ────────────────────────────────────────────────────────────
+    document.getElementById('me-modus').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      modus = b.dataset.modus;
+      if (!FORMATIONEN[modus].includes(formation)) formation = FORMATIONEN[modus].includes('4-4-2') ? '4-4-2' : FORMATIONEN[modus][0];
+      slotsBauen(); speichern(); renderAlles();
+    });
+    document.getElementById('me-formation').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      formation = b.dataset.f; slotsBauen(); speichern(); renderAlles();
+    });
+    document.getElementById('me-teams').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      team = b.dataset.team; renderTeams(); renderListe();
+    });
+    document.getElementById('me-suche').addEventListener('input', renderListe);
+
+    const spielerVon = el => alle.find(s => String(s.tm_id) === el.dataset.id);
+    document.getElementById('me-liste').addEventListener('click', e => {
+      const el = e.target.closest('.me-sp'); if (!el) return;
+      const sp = spielerVon(el);
+      // Freier passender Platz vorhanden? Dann direkt setzen, sonst zum Antippen vormerken
+      gewaehlt = gewaehlt && gewaehlt.tm_id === sp.tm_id ? null : sp;
+      renderFeld(); renderListe();
+    });
+    document.getElementById('me-liste').addEventListener('dragstart', e => {
+      const el = e.target.closest('.me-sp'); if (!el) return;
+      e.dataTransfer.setData('text/plain', el.dataset.id);
+      gewaehlt = spielerVon(el); renderFeld();
+    });
+    const feld = document.getElementById('me-feld');
+    feld.addEventListener('dragover', e => { if (e.target.closest('.me-slot')) e.preventDefault(); });
+    feld.addEventListener('drop', e => {
+      const slot = e.target.closest('.me-slot'); if (!slot) return;
+      e.preventDefault();
+      const sp = alle.find(s => String(s.tm_id) === e.dataTransfer.getData('text/plain'));
+      if (sp) setzen(+slot.dataset.i, sp);
+    });
+    feld.addEventListener('click', e => {
+      const weg = e.target.closest('[data-weg]');
+      if (weg) { slots[+weg.dataset.weg].spieler = null; speichern(); renderFeld(); renderListe(); return; }
+      const slot = e.target.closest('.me-slot'); if (!slot) return;
+      if (gewaehlt) setzen(+slot.dataset.i, gewaehlt);
+      else {
+        // Leeren Platz angetippt: Liste auf passende Position eingrenzen
+        document.getElementById('me-suche').focus();
+      }
+    });
+    document.getElementById('me-leeren').addEventListener('click', () => { slotsBauen(false); speichern(); renderAlles(); });
+    document.getElementById('me-teilen').addEventListener('click', async () => {
+      const url = location.origin + location.pathname + '#' + kodiert();
+      try { await navigator.clipboard.writeText(url); hinweis('Link kopiert'); }
+      catch (e) { prompt('Link zum Teilen:', url); }
+    });
+
+    fetch('spieler_db.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => {
+        DB = d;
+        for (const [tn, t] of Object.entries(d.teams)) for (const s of t.spieler) alle.push({ ...s, verein: tn, logo: t.logo });
+        let code = decodeURIComponent(location.hash.slice(1));
+        if (!code) { try { code = localStorage.getItem('meine-elf') || ''; } catch (e) {} }
+        if (!laden(code)) slotsBauen(false);
+        renderAlles();
+      })
+      .catch(() => { document.getElementById('me-liste').innerHTML = '<p class="kb-loading">Spieler konnten nicht geladen werden</p>'; });
+  </script>
+
+</body>
+</html>
