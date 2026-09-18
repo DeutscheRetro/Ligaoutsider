@@ -588,3 +588,31 @@ ul { list-style: none; }
 .lo-sp-news a{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text1);text-decoration:none}
 .lo-sp-news a:hover span{color:var(--accent)}
 .lo-sp-news small{color:var(--text4);font-size:11px;white-space:nowrap;padding-top:2px}
+
+/* ─── Spielerseiten ─── */
+.sp-wrap{max-width:820px;margin:0 auto;padding:20px 16px 40px}
+.sp-titel{font-size:22px;font-weight:800;color:var(--text1);margin:6px 0 16px}
+.sp-kopf{display:flex;gap:16px;align-items:center;margin:14px 0 16px}
+.sp-kopf img{width:64px;height:64px;object-fit:contain;flex-shrink:0}
+.sp-kopf h1{font-size:26px;font-weight:800;color:var(--text1);line-height:1.2}
+.sp-kopf h1 span{font-size:15px;color:var(--accent)}
+.sp-kopf p{color:var(--text3);font-size:14px;margin-top:2px}
+.sp-hinweis{margin-bottom:14px;padding:10px 12px;border-radius:6px;background:rgba(224,72,72,.12);color:#e06060;font-size:13px}
+.sp-tabelle{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:4px 16px}
+.sp-tabelle div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}
+.sp-tabelle div:last-child{border-bottom:none}
+.sp-tabelle span:first-child{color:var(--text3)}
+.sp-tabelle span:last-child{color:var(--text1);text-align:right;font-weight:600}
+.sp-h2{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin:26px 0 8px}
+.sp-news a{font-size:14px}
+.sp-leer{color:var(--text4);font-size:13px}
+.sp-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:14px}
+.sp-links a{color:var(--accent)}
+.sp-mitspieler{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:4px 16px}
+.sp-mitspieler a{padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);display:flex;flex-direction:column}
+.sp-mitspieler a:hover{color:var(--accent)}
+.sp-mitspieler small{font-size:11px;color:var(--text4)}
+.sp-team h2{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;color:var(--text1);margin:26px 0 8px}
+.sp-team h2 img{width:28px;height:28px;object-fit:contain}
+.sp-wrap .kommentare{margin-top:32px}
+.lo-sp-mehr{margin-right:16px}

@@ -54,6 +54,7 @@
       ${(s.tm_hinweise || []).length ? `<div class="lo-sp-hinweis">${s.tm_hinweise.map(esc).join('<br>')}</div>` : ''}
       <div class="lo-sp-tabelle">${zeilen.map(([k, v]) => `<div><span>${k}</span><span>${esc(v)}</span></div>`).join('')}</div>
       <div class="lo-sp-news"></div>
+      <a class="lo-sp-mehr" href="${esc(s.seite)}">Zum Spielerprofil →</a>
       <a class="lo-sp-mehr" href="/aufstellung.html?team=${encodeURIComponent(s.verein)}">Voraussichtliche Elf fürs nächste Bundesliga-Spiel →</a>`;
     m.style.display = 'block';
     document.body.style.overflow = 'hidden';
@@ -86,6 +87,11 @@
 
     const alle = [];
     for (const [tn, t] of Object.entries(db.teams)) for (const s of t.spieler) alle.push({ ...s, verein: tn, logo: t.logo });
+    const slugBasis = n => n.replace(/ø/g, 'o').replace(/Ø/g, 'O').replace(/ß/g, 'ss').replace(/ł/g, 'l').replace(/æ/g, 'ae').replace(/đ/g, 'd')
+      .normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'spieler';
+    const slugZahl = {};
+    alle.forEach(s => { const b = slugBasis(s.name); slugZahl[b] = (slugZahl[b] || 0) + 1; });
+    alle.forEach(s => { const b = slugBasis(s.name); s.seite = '/spieler/' + b + (slugZahl[b] > 1 ? '-' + s.tm_id : '') + '.html'; });
 
     // Nachnamen, die im Artikelkontext eindeutig sind
     // Wer mit vollem Namen genannt wird, ist auch später per Nachname gemeint
@@ -138,7 +144,7 @@
         if (!s) continue;
         frag.appendChild(document.createTextNode(inhalt.slice(pos, m.index)));
         const a = document.createElement('a');
-        a.href = '#';
+        a.href = s.seite;
         a.className = 'spieler-link';
         a.textContent = m[1];
         a.addEventListener('click', e => { e.preventDefault(); zeige(s); });

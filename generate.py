@@ -2015,6 +2015,13 @@ def sitemap_generieren(artikel_liste: list):
     ]
     for a in artikel_liste:
         urls.append((f"{base}/{a['pfad']}", "0.9", "monthly"))
+    try:
+        _db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+        urls.append((f"{base}/spieler/index.html", "0.7", "weekly"))
+        for _slug in spieler_slugs(_db).values():
+            urls.append((f"{base}/spieler/{_slug}.html", "0.7", "weekly"))
+    except Exception:
+        pass
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
@@ -2496,6 +2503,252 @@ def spieler_news_index(max_je_spieler=8):
 
     Path("spieler_news.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"✅ spieler_news.json geschrieben ({len(index)} Spieler mit News)")
+
+
+# ─── Spielerseiten (eine statische Seite je Spieler, für Google) ─────────────
+SPIELER_SEITEN_ORDNER = Path("spieler")
+
+
+def spieler_slugs(db):
+    """tm_id → URL-Slug ("harry-kane"); bei gleichen Namen wird die ID angehängt."""
+    import unicodedata
+
+    def basis(name):
+        n = unicodedata.normalize("NFKD", name.replace("ø", "o").replace("Ø", "O").replace("ß", "ss")
+                                  .replace("ł", "l").replace("æ", "ae").replace("đ", "d"))
+        n = "".join(c for c in n if not unicodedata.combining(c)).lower()
+        return re.sub(r"[^a-z0-9]+", "-", n).strip("-") or "spieler"
+
+    alle = [sp for t in db["teams"].values() for sp in t["spieler"]]
+    zaehler = {}
+    for sp in alle:
+        zaehler[basis(sp["name"])] = zaehler.get(basis(sp["name"]), 0) + 1
+    return {sp["tm_id"]: basis(sp["name"]) + (f"-{sp['tm_id']}" if zaehler[basis(sp["name"])] > 1 else "")
+            for sp in alle}
+
+
+def _mio(v):
+    return f"{v / 1e6:.1f}".replace(".", ",") + " Mio. €" if v else ""
+
+
+def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", kommentar_id=None):
+    """Gemeinsamer Seitenrahmen (Kopf, Menü, Fuß) für generierte Seiten."""
+    e = _html_esc
+    kommentare = ""
+    if kommentar_id:
+        kommentare = f"""
+    <section class="kommentare">
+      <h2>Kommentare</h2>
+      <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
+      <p id="k-gasthinweis" style="font-size:13px;color:var(--text4);margin-top:16px">
+        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent)">anmelden</a>, um Kommentare zu schreiben.
+      </p>
+      <form id="kommentar-form" style="display:none">
+        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent)"></strong></p>
+        <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
+        <button type="submit" class="kommentar-btn">Kommentar absenden</button>
+        <p id="kommentar-status"></p>
+      </form>
+    </section>"""
+    return f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{e(titel)}</title>
+  <link rel="canonical" href="{url}"/>
+  <meta name="description" content="{e(beschreibung)}"/>
+  <meta property="og:type" content="profile"/>
+  <meta property="og:title" content="{e(titel)}"/>
+  <meta property="og:description" content="{e(beschreibung)}"/>
+  <meta property="og:url" content="{url}"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
+  <link rel="stylesheet" href="{tiefe}style.css"/>
+  <link rel="icon" href="{tiefe}favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-SP8DWFL2SE');
+  </script>
+{head_extra}</head>
+<body>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{tiefe}index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <span id="user-info" style="display:none">
+            <a href="{tiefe}nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="{tiefe}index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="{tiefe}archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="{tiefe}kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="{tiefe}comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="{tiefe}aufstellung.html" class="section-nav-link">Aufstellungen</a>
+      <a href="{tiefe}elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="{tiefe}forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <div class="sp-wrap">
+{inhalt}
+{kommentare}
+  </div>
+
+  <script>
+    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+{f"    const ARTIKEL_ID    = '{kommentar_id}';" if kommentar_id else ""}
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="{tiefe}kommentare.js"></script>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">© Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="{tiefe}impressum.html">Impressum</a>
+        <a href="{tiefe}datenschutz.html">Datenschutzerklärung</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>"""
+
+
+def _html_esc(t):
+    import html as _h
+    return _h.escape(str(t if t is not None else ""), quote=True)
+
+
+def spieler_seiten():
+    """spieler/<slug>.html für alle Kaderspieler plus spieler/index.html als Übersicht."""
+    e = _html_esc
+    try:
+        db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+    except Exception as ex:
+        print(f"⚠️  spieler_seiten: {ex}")
+        return
+    try:
+        news = json.loads(Path("spieler_news.json").read_text(encoding="utf-8"))
+    except Exception:
+        news = {}
+    slugs = spieler_slugs(db)
+    SPIELER_SEITEN_ORDNER.mkdir(exist_ok=True)
+    base = "https://ligaoutsider.de"
+    geschrieben = 0
+    heute = datetime.date.today()
+
+    def alter(geb):
+        m = re.match(r"(\d\d)\.(\d\d)\.(\d{4})", geb or "")
+        if not m:
+            return None
+        g = datetime.date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        return heute.year - g.year - ((heute.month, heute.day) < (g.month, g.day))
+
+    for team_name, team in db["teams"].items():
+        for sp in team["spieler"]:
+            slug = slugs[sp["tm_id"]]
+            url = f"{base}/spieler/{slug}.html"
+            kb, cm = sp.get("kickbase") or {}, sp.get("comunio") or {}
+            a = alter(sp.get("geboren"))
+            nation = " / ".join(sp.get("nation") or [])
+            pos = sp.get("position") or sp.get("gruppe") or "Spieler"
+
+            beschreibung = (f"{sp['name']} ({team_name}): {pos}"
+                            + (f", {a} Jahre" if a else "") + (f", {nation}" if nation else "")
+                            + (f". Kickbase-Marktwert {_mio(kb.get('mw'))}" if kb.get("mw") else "")
+                            + (f", Comunio {_mio(cm.get('mw'))}" if cm.get("mw") else "")
+                            + ". Aktuelle News, Verletzungen und Aufstellungschancen.")
+            zeilen = [
+                ("Verein", team_name), ("Position", pos), ("Rückennummer", sp.get("nr")),
+                ("Geboren", sp.get("geboren") + (f" ({a} Jahre)" if a else "") if sp.get("geboren") else ""),
+                ("Nationalität", nation), ("Starker Fuß", sp.get("fuss")),
+                ("Vertrag bis", sp.get("vertrag_bis")), ("Marktwert (Transfermarkt)", sp.get("tm_marktwert")),
+                ("Kickbase", " · ".join(x for x in (kb.get("position"), _mio(kb.get("mw"))) if x)),
+                ("Comunio", " · ".join(x for x in (cm.get("position"), _mio(cm.get("mw"))) if x)),
+            ]
+            tabelle = "".join(f"<div><span>{e(k)}</span><span>{e(v)}</span></div>" for k, v in zeilen if v)
+            hinweise = "".join(f"<div>{e(h)}</div>" for h in sp.get("tm_hinweise") or [])
+            news_html = "".join(
+                f'<a href="../{e(n["pfad"])}"><span>{e(n["titel"])}</span><small>{e(n["datum"].split(" ")[0])}</small></a>'
+                for n in news.get(str(sp["tm_id"]), []))
+            mitspieler = "".join(
+                f'<a href="{slugs[m["tm_id"]]}.html">{e(m["name"])}</a>'
+                for m in team["spieler"] if m["tm_id"] != sp["tm_id"])
+
+            person = {
+                "@context": "https://schema.org", "@type": "Person", "name": sp["name"], "url": url,
+                "jobTitle": "Fußballspieler", "memberOf": {"@type": "SportsTeam", "name": team_name, "sport": "Fußball"},
+            }
+            m = re.match(r"(\d\d)\.(\d\d)\.(\d{4})", sp.get("geboren") or "")
+            if m:
+                person["birthDate"] = f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
+            if nation:
+                person["nationality"] = [{"@type": "Country", "name": n} for n in sp.get("nation")]
+            head = f'  <script type="application/ld+json">{json.dumps(person, ensure_ascii=False)}</script>\n'
+
+            inhalt = f"""    <a href="index.html" class="artikel-back">← Alle Spieler</a>
+    <div class="sp-kopf">
+      <img src="../{e(team['logo'])}" alt="{e(team_name)}">
+      <div>
+        <h1>{e(sp['name'])}{' <span title="Kapitän">(C)</span>' if sp.get('kapitaen') else ''}</h1>
+        <p>{e(pos)} · {e(team_name)}</p>
+      </div>
+    </div>
+    {f'<div class="sp-hinweis">{hinweise}</div>' if hinweise else ''}
+    <div class="sp-tabelle">{tabelle}</div>
+    <h2 class="sp-h2">Aktuelle News zu {e(sp['name'])}</h2>
+    <div class="lo-sp-news sp-news">{news_html or '<p class="sp-leer">Noch keine Artikel.</p>'}</div>
+    <p class="sp-links"><a href="../aufstellung.html?team={e(team_name)}">Voraussichtliche Elf fürs nächste Bundesliga-Spiel →</a>
+      <a href="../elf.html">In „Meine Elf“ aufstellen →</a></p>
+    <h2 class="sp-h2">Kader {e(team_name)}</h2>
+    <div class="sp-mitspieler">{mitspieler}</div>"""
+
+            html_neu = _seite(f"{sp['name']} – {team_name}: Profil, Marktwert, News | Ligaoutsider.de",
+                              beschreibung[:300], url, inhalt, head, kommentar_id=f"spieler-{sp['tm_id']}")
+            datei = SPIELER_SEITEN_ORDNER / f"{slug}.html"
+            if not datei.exists() or datei.read_text(encoding="utf-8") != html_neu:
+                datei.write_text(html_neu, encoding="utf-8")
+                geschrieben += 1
+
+    # Übersicht aller Spieler nach Verein (interne Verlinkung für Google)
+    bloecke = "".join(
+        f'<section class="sp-team"><h2><img src="../{e(t["logo"])}" alt="">{e(tn)}</h2><div class="sp-mitspieler">'
+        + "".join(f'<a href="{slugs[x["tm_id"]]}.html">{e(x["name"])}<small>{e(x.get("position") or "")}</small></a>'
+                  for x in t["spieler"]) + "</div></section>"
+        for tn, t in sorted(db["teams"].items()))
+    uebersicht = _seite("Alle Bundesliga-Spieler 2026/27 – Profile, Marktwerte, News | Ligaoutsider.de",
+                        "Alle Spieler der 18 Bundesliga-Kader mit Position, Marktwert bei Kickbase und Comunio, "
+                        "Verletzungen und aktuellen News.",
+                        f"{base}/spieler/index.html",
+                        f'    <h1 class="sp-titel">Alle Bundesliga-Spieler</h1>\n{bloecke}')
+    (SPIELER_SEITEN_ORDNER / "index.html").write_text(uebersicht, encoding="utf-8")
+    print(f"✅ Spielerseiten: {len(slugs)} Spieler, {geschrieben} geändert")
 
 # ─── Aufstellungs-Check ───────────────────────────────────────────────────────
 # Kickbase-Statuscodes: 0 fit, 2 angeschlagen; alles andere
@@ -3177,3 +3430,7 @@ if __name__ == "__main__":
         spieler_news_index()
     except Exception as e:
         print(f"❌ spieler_news_index Fehler: {e}")
+    try:
+        spieler_seiten()
+    except Exception as e:
+        print(f"❌ spieler_seiten Fehler: {e}")
