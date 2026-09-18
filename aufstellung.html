@@ -206,7 +206,10 @@
           'Stand: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
         const sel = document.getElementById('au-team');
         Object.keys(d.teams).sort((a, b) => a.localeCompare(b, 'de')).forEach(n => sel.add(new Option(n, n)));
-        try { sel.value = localStorage.getItem('au-team') || ''; } catch (e) {}
+        // ?team=… (Link aus dem Spielerprofil) hat Vorrang vor der gemerkten Auswahl
+        const perLink = new URLSearchParams(location.search).get('team');
+        if (perLink && d.teams[perLink]) sel.value = perLink;
+        else { try { sel.value = localStorage.getItem('au-team') || ''; } catch (e) {} }
         sel.addEventListener('change', () => { try { localStorage.setItem('au-team', sel.value); } catch (e) {} render(); });
         document.getElementById('au-nurprobleme').addEventListener('change', render);
         render();

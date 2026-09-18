@@ -53,7 +53,7 @@
       </div>
       ${(s.tm_hinweise || []).length ? `<div class="lo-sp-hinweis">${s.tm_hinweise.map(esc).join('<br>')}</div>` : ''}
       <div class="lo-sp-tabelle">${zeilen.map(([k, v]) => `<div><span>${k}</span><span>${esc(v)}</span></div>`).join('')}</div>
-      <a class="lo-sp-mehr" href="/aufstellung.html">Zum Aufstellungs-Check →</a>`;
+      <a class="lo-sp-mehr" href="/aufstellung.html?team=${encodeURIComponent(s.verein)}">Aufstellung ${esc(s.verein)} →</a>`;
     m.style.display = 'block';
     document.body.style.overflow = 'hidden';
   }
