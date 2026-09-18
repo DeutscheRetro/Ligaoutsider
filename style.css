@@ -616,3 +616,64 @@ ul { list-style: none; }
 .sp-team h2 img{width:28px;height:28px;object-fit:contain}
 .sp-wrap .kommentare{margin-top:32px}
 .lo-sp-mehr{margin-right:16px}
+.profil-anfragen{position:static;margin-left:6px;background:#e04848}
+
+/* ─── Nutzerprofil ─── */
+.pr-wrap{max-width:860px;margin:0 auto;padding:22px 16px 48px}
+.pr-meldung{position:sticky;top:8px;z-index:5;margin-bottom:12px;padding:9px 12px;border-radius:6px;background:rgba(63,174,74,.15);border:1px solid #3fae4a;color:#3fae4a;font-size:13px}
+.pr-meldung.fehler{background:rgba(224,72,72,.15);border-color:#e04848;color:#e06060}
+.pr-kopf{display:flex;gap:20px;align-items:center;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px}
+.pr-avatar{width:88px;height:88px;border-radius:50%;background:var(--bg4);border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;color:var(--accent);flex-shrink:0;overflow:hidden}
+.pr-avatar img{width:62px;height:62px;object-fit:contain}
+.pr-kopf-text{min-width:0}
+.pr-kopf h1{font-size:26px;font-weight:800;color:var(--text1);line-height:1.2;word-break:break-word}
+.pr-kopf p{color:var(--text3);font-size:13px;margin:3px 0 12px}
+.pr-knoepfe{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pr-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:6px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none}
+.pr-btn:hover{border-color:var(--accent);color:var(--text1)}
+.pr-btn--gelb{background:var(--accent);color:#000;border-color:var(--accent)}
+.pr-btn--gelb:hover{color:#000;filter:brightness(1.08)}
+.pr-btn--rot{color:#e06060}
+.pr-sektion{margin-top:22px}
+.pr-sektion h2{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--accent);margin-bottom:10px}
+.pr-sektion h2 small{color:var(--text4);font-size:12px;margin-left:4px}
+.pr-text{white-space:pre-line;color:var(--text2);line-height:1.6}
+.pr-grau{color:var(--text4);font-size:13px}
+.pr-lieb-raster{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.pr-lieb-gruppe{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+.pr-lieb-gruppe h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:4px}
+.pr-lieb{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pr-lieb:last-child{border-bottom:none}
+.pr-lieb span{color:var(--text3)}
+.pr-lieb b{color:var(--text1);text-align:right;display:flex;align-items:center;gap:6px}
+.pr-lieb img{width:18px;height:18px;object-fit:contain}
+.pr-freunde{display:flex;flex-wrap:wrap;gap:8px}
+.pr-freunde a{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 12px 4px 4px;font-size:13px;color:var(--text1);text-decoration:none}
+.pr-freunde a:hover{border-color:var(--accent)}
+.pr-freunde span{width:26px;height:26px;border-radius:50%;background:var(--bg4);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
+.pr-gb-form{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.pr-gb-form textarea,.pr-form input,.pr-form select,.pr-form textarea{background:var(--bg2);color:var(--text);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;font:inherit;font-size:14px;width:100%}
+.pr-gb-form textarea{min-height:70px;resize:vertical}
+.pr-gb-form .pr-btn{align-self:flex-start}
+.pr-gb-eintrag{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px}
+.pr-gb-kopf{display:flex;gap:10px;align-items:baseline;font-size:13px;margin-bottom:4px}
+.pr-gb-kopf a,.pr-gb-kopf b{color:var(--accent);font-weight:700;text-decoration:none}
+.pr-gb-kopf span{color:var(--text4);font-size:11px}
+.pr-gb-weg{margin-left:auto;background:none;border:none;cursor:pointer;opacity:.6}
+.pr-gb-weg:hover{opacity:1}
+.pr-gb-eintrag p{color:var(--text2);font-size:14px;white-space:pre-line;word-break:break-word}
+.pr-zeile{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.pr-zeile a{color:var(--text1)}
+.pr-anfragen{background:rgba(232,192,0,.07);border:1px solid var(--accent);border-radius:8px;padding:12px 16px}
+.pr-titel{font-size:22px;font-weight:800;color:var(--text1);margin-bottom:14px}
+.pr-form{display:flex;flex-direction:column;gap:14px}
+.pr-form label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--text3)}
+.pr-form fieldset{border:1px solid var(--border);border-radius:8px;padding:10px 14px 14px}
+.pr-form legend{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);padding:0 6px}
+.pr-form-raster{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px}
+.pr-check{flex-direction:row!important;align-items:center;gap:8px!important;font-size:14px!important;color:var(--text2)!important}
+.pr-check input{width:auto}
+.pr-leer{text-align:center;padding:50px 10px}
+.pr-leer h1{font-size:24px;color:var(--text1);margin-bottom:8px}
+.pr-leer p{color:var(--text3);margin-bottom:16px}
+@media (max-width:560px){.pr-kopf{flex-direction:column;text-align:center}.pr-knoepfe{justify-content:center}.pr-avatar{width:76px;height:76px}}

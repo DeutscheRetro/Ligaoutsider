@@ -124,6 +124,7 @@
     }
     function showUser(u) {
       document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+      { const un = document.getElementById('user-name'); un.style.cursor = 'pointer'; un.title = 'Mein Profil'; un.onclick = () => { location.href = '/profil.html'; }; }
       document.getElementById('user-info').style.display = 'flex';
       document.getElementById('login-btn').style.display = 'none';
       document.getElementById('signup-btn').style.display = 'none';

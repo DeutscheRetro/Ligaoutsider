@@ -85,6 +85,62 @@ async function istGebannt(email) {
   return !bis || new Date(bis) > new Date();
 }
 
+// ─── Profile ─────────────────────────────────────────────────────────────────
+// Öffentlich zeigt sich jeder Nutzer nur unter seinem Profilnamen (handle).
+// Die E-Mail verlässt den Server nie in Richtung fremder Nutzer.
+const HANDLE = /^[a-z0-9-]{3,30}$/;
+const LIEBLINGS_FELDER = ["verein", "spieler", "stadion", "trainer", "film", "serie", "musik", "song",
+  "buch", "game", "essen", "getraenk", "reiseziel", "sport"];
+
+function handleAus(text) {
+  let h = String(text || "").normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/ß/g, "ss").replace(/@.*$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 26);
+  if (h.length < 3) h = ("fan-" + h).replace(/-+$/, "") || "fan";
+  return h.length < 3 ? "fan-" + Math.random().toString(36).slice(2, 6) : h;
+}
+
+// Liefert das Profil, legt es beim ersten Mal an. Gibt null zurück, wenn die
+// Profiltabelle (noch) nicht existiert – dann laufen Kommentare trotzdem.
+async function profilSicher(email, name) {
+  try {
+    const da = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=handle,anzeigename`);
+    if (da && da.length) return da[0];
+    const basis = handleAus(name && name !== email ? name : email);
+    for (let i = 0; i < 20; i++) {
+      const versuch = i ? `${basis.slice(0, 26)}-${i + 1}` : basis;
+      const belegt = await hole(`profile?handle=eq.${encodeURIComponent(versuch)}&select=handle`);
+      if (belegt && belegt.length) continue;
+      const [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: sauber(name, 60) || versuch });
+      return { handle: neu.handle, anzeigename: neu.anzeigename };
+    }
+  } catch (e) {
+    console.error("Profil nicht verfügbar:", e.message);
+  }
+  return null;
+}
+
+async function emailVonHandle(handle) {
+  const h = String(handle || "").toLowerCase();
+  if (!HANDLE.test(h)) return null;
+  const t = await hole(`profile?handle=eq.${encodeURIComponent(h)}&select=email,handle,anzeigename,gaestebuch_offen`);
+  return t && t.length ? t[0] : null;
+}
+
+// Blockiert einer von beiden den anderen?
+async function blockiertZwischen(a, b) {
+  const A = encodeURIComponent(a), B = encodeURIComponent(b);
+  const t = await hole(`blockierungen?or=(and(blocker_email.eq.${A},blockiert_email.eq.${B}),` +
+    `and(blocker_email.eq.${B},blockiert_email.eq.${A}))&select=blocker_email`);
+  return (t || []).map(x => x.blocker_email);
+}
+
+async function handlesVon(emails) {
+  const liste = [...new Set(emails)].filter(Boolean);
+  if (!liste.length) return {};
+  const t = await hole(`profile?email=in.(${liste.map(e => `"${encodeURIComponent(e)}"`).join(",")})&select=email,handle,anzeigename`);
+  return Object.fromEntries((t || []).map(p => [p.email, p]));
+}
+
 exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") return json(405, { fehler: "Nur POST" });
   if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt in den Netlify-Variablen" });
@@ -114,7 +170,9 @@ exports.handler = async (event, context) => {
         const inhalt = sauber(body.inhalt, 1000);
         const artikel_id = sauber(body.artikel_id, 64);
         if (!inhalt || !artikel_id) return json(400, { fehler: "Inhalt oder Artikel fehlt" });
-        const [zeile] = await lege_an("kommentare", { artikel_id, name, email, inhalt });
+        const profil = await profilSicher(email, name);
+        const [zeile] = await lege_an("kommentare", { artikel_id, name, email, inhalt,
+          ...(profil ? { autor_handle: profil.handle } : {}) });
         return json(200, { ok: true, id: zeile.id });
       }
 
@@ -196,11 +254,13 @@ exports.handler = async (event, context) => {
         const inhalt = sauber(body.inhalt, 5000);
         const kategorie = sauber(body.kategorie, 64);
         if (!titel || !inhalt || !kategorie) return json(400, { fehler: "Felder fehlen" });
+        const profil = await profilSicher(email, name);
+        const ah = profil ? { autor_handle: profil.handle } : {};
         const [thread] = await lege_an("forum_threads", {
-          kategorie, titel, autor_name: name, autor_email: email,
+          kategorie, titel, autor_name: name, autor_email: email, ...ah,
         });
         await lege_an("forum_posts", {
-          thread_id: thread.id, inhalt, autor_name: name, autor_email: email,
+          thread_id: thread.id, inhalt, autor_name: name, autor_email: email, ...ah,
         });
         return json(200, { ok: true, thread_id: thread.id });
       }
@@ -209,8 +269,10 @@ exports.handler = async (event, context) => {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const inhalt = sauber(body.inhalt, 5000);
         if (!inhalt || !body.thread_id) return json(400, { fehler: "Felder fehlen" });
+        const profil = await profilSicher(email, name);
         await lege_an("forum_posts", {
           thread_id: body.thread_id, inhalt, autor_name: name, autor_email: email,
+          ...(profil ? { autor_handle: profil.handle } : {}),
         });
         // Zaehler serverseitig fortschreiben, damit ihn niemand frei setzen kann
         const antworten = await hole(`forum_posts?thread_id=eq.${body.thread_id}&select=id`);
@@ -438,9 +500,18 @@ exports.handler = async (event, context) => {
       // ─── Direktnachrichten ─────────────────────────────────────────────────
       case "nachricht_senden": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
-        const an = sauber(body.an, 200).toLowerCase();
+        let an = sauber(body.an, 200).toLowerCase();
+        if (body.an_handle) {
+          const ziel = await emailVonHandle(body.an_handle);
+          if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+          an = ziel.email.toLowerCase();
+        }
         const inhalt = sauber(body.inhalt, 2000);
         if (!an || !inhalt) return json(400, { fehler: "Empfaenger oder Text fehlt" });
+        try {
+          if ((await blockiertZwischen(email, an)).length)
+            return json(403, { fehler: "Nachricht nicht möglich: einer von euch hat den anderen blockiert" });
+        } catch (e) { /* Tabelle fehlt noch: keine Blockierungen */ }
         if (an === email.toLowerCase()) return json(400, { fehler: "Nicht an dich selbst" });
         // Flut bremsen: hoechstens 20 Nachrichten in 10 Minuten
         const grenze = new Date(Date.now() - 10 * 60 * 1000).toISOString();
@@ -476,6 +547,14 @@ exports.handler = async (event, context) => {
         }
         const liste = Object.values(gespraeche);
         liste.forEach(g => g.nachrichten.reverse());
+        // Profilnamen statt E-Mail-Adressen anzeigen
+        try {
+          const profile = await handlesVon(liste.map(g => g.partner));
+          liste.forEach(g => {
+            const pr = profile[g.partner];
+            if (pr) { g.partner_handle = pr.handle; g.partner_name = pr.anzeigename; }
+          });
+        } catch (e) { /* ohne Profile bleibt es beim Namen aus der Nachricht */ }
         liste.sort((a, b) => (b.letzte_am || "").localeCompare(a.letzte_am || ""));
         return json(200, {
           gespraeche: liste,
@@ -507,8 +586,163 @@ exports.handler = async (event, context) => {
         return json(200, { ok: true, betroffen: (betroffen || []).length });
       }
 
-      case "wer_bin_ich":
-        return json(200, { email, name, rollen, istAdmin, darfLoeschen });
+
+      // ─── Profile, Gästebuch, Freunde, Blockieren ──────────────────────────────
+      case "profil_meins": {
+        const profil = await profilSicher(email, name);
+        if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
+        const [voll] = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=handle,anzeigename,ueber_mich,wohnort,lieblings,gaestebuch_offen`);
+        const E = encodeURIComponent(email);
+        const fr = await hole(`freundschaften?or=(von_email.eq.${E},an_email.eq.${E})&select=von_email,an_email,status`) || [];
+        const bl = await hole(`blockierungen?blocker_email=eq.${E}&select=blockiert_email`) || [];
+        const namen = await handlesVon([...fr.flatMap(f => [f.von_email, f.an_email]), ...bl.map(b => b.blockiert_email)]);
+        const aussen = f => namen[f.von_email === email ? f.an_email : f.von_email];
+        const kurz = p => p ? { handle: p.handle, name: p.anzeigename } : null;
+        return json(200, {
+          profil: voll,
+          freunde: fr.filter(f => f.status === "ok").map(aussen).map(kurz).filter(Boolean),
+          anfragen_ein: fr.filter(f => f.status === "offen" && f.an_email === email).map(aussen).map(kurz).filter(Boolean),
+          anfragen_aus: fr.filter(f => f.status === "offen" && f.von_email === email).map(aussen).map(kurz).filter(Boolean),
+          blockiert: bl.map(b => kurz(namen[b.blockiert_email])).filter(Boolean),
+        });
+      }
+
+      case "profil_speichern": {
+        const profil = await profilSicher(email, name);
+        if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
+        const handle = sauber(body.handle, 30).toLowerCase();
+        if (!HANDLE.test(handle)) return json(400, { fehler: "Profilname: 3–30 Zeichen, nur a–z, 0–9 und Bindestrich" });
+        if (handle !== profil.handle) {
+          const belegt = await hole(`profile?handle=eq.${encodeURIComponent(handle)}&select=email`);
+          if (belegt && belegt.length) return json(409, { fehler: "Dieser Profilname ist schon vergeben" });
+        }
+        const lieblings = {};
+        for (const k of LIEBLINGS_FELDER) {
+          const v = sauber((body.lieblings || {})[k], 120);
+          if (v) lieblings[k] = v;
+        }
+        await aendere("profile", `email=eq.${encodeURIComponent(email)}`, {
+          handle,
+          anzeigename: sauber(body.anzeigename, 60) || handle,
+          ueber_mich: sauber(body.ueber_mich, 1500),
+          wohnort: sauber(body.wohnort, 80),
+          lieblings,
+          gaestebuch_offen: body.gaestebuch_offen !== false,
+          aktualisiert_am: new Date().toISOString(),
+        });
+        // Profilnamen in eigenen Beiträgen mitziehen
+        if (handle !== profil.handle) {
+          const E = encodeURIComponent(email);
+          await aendere("kommentare", `email=eq.${E}`, { autor_handle: handle });
+          await aendere("forum_posts", `autor_email=eq.${E}`, { autor_handle: handle });
+          await aendere("forum_threads", `autor_email=eq.${E}`, { autor_handle: handle });
+        }
+        return json(200, { ok: true, handle });
+      }
+
+      case "profil_status": {
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+        if (ziel.email === email) return json(200, { selbst: true });
+        const A = encodeURIComponent(email), B = encodeURIComponent(ziel.email);
+        const fr = await hole(`freundschaften?or=(and(von_email.eq.${A},an_email.eq.${B}),and(von_email.eq.${B},an_email.eq.${A}))&select=von_email,status`) || [];
+        const bl = await blockiertZwischen(email, ziel.email);
+        let freund = "keine";
+        if (fr.length) freund = fr[0].status === "ok" ? "ok" : (fr[0].von_email === email ? "gesendet" : "erhalten");
+        return json(200, { selbst: false, freund, ich_blockiere: bl.includes(email), blockiert_mich: bl.includes(ziel.email) });
+      }
+
+      case "gaestebuch_neu": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        await profilSicher(email, name);
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+        const inhalt = sauber(body.inhalt, 1000);
+        if (!inhalt) return json(400, { fehler: "Text fehlt" });
+        if (!ziel.gaestebuch_offen && ziel.email !== email) return json(403, { fehler: "Das Gästebuch ist geschlossen" });
+        if ((await blockiertZwischen(email, ziel.email)).length) return json(403, { fehler: "Eintrag nicht möglich" });
+        const grenze = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+        const letzte = await hole(`gaestebuch?autor_email=eq.${encodeURIComponent(email)}&erstellt_am=gt.${grenze}&select=id`);
+        if ((letzte || []).length >= 10) return json(429, { fehler: "Zu viele Einträge. Bitte kurz warten." });
+        await lege_an("gaestebuch", { profil_email: ziel.email, autor_email: email, inhalt });
+        return json(200, { ok: true });
+      }
+
+      case "gaestebuch_loeschen": {
+        if (!UUID.test(String(body.id || ""))) return json(400, { fehler: "ID fehlt" });
+        const [eintrag] = await hole(`gaestebuch?id=eq.${body.id}&select=profil_email,autor_email`) || [];
+        if (!eintrag) return json(404, { fehler: "Eintrag nicht gefunden" });
+        if (![eintrag.profil_email, eintrag.autor_email].includes(email) && !darfLoeschen)
+          return json(403, { fehler: "Keine Berechtigung" });
+        await aendere("gaestebuch", `id=eq.${body.id}`, { geloescht: true });
+        return json(200, { ok: true });
+      }
+
+      case "freund_anfrage": {
+        await profilSicher(email, name);
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel || ziel.email === email) return json(400, { fehler: "Ungültiges Profil" });
+        if ((await blockiertZwischen(email, ziel.email)).length) return json(403, { fehler: "Anfrage nicht möglich" });
+        const A = encodeURIComponent(email), B = encodeURIComponent(ziel.email);
+        const da = await hole(`freundschaften?or=(and(von_email.eq.${A},an_email.eq.${B}),and(von_email.eq.${B},an_email.eq.${A}))&select=id,von_email,status`) || [];
+        if (da.length) {
+          // Liegt schon eine Anfrage in Gegenrichtung vor, ist das eine Zusage
+          if (da[0].status === "offen" && da[0].von_email === ziel.email)
+            await aendere("freundschaften", `id=eq.${da[0].id}`, { status: "ok" });
+          return json(200, { ok: true });
+        }
+        await lege_an("freundschaften", { von_email: email, an_email: ziel.email, status: "offen" });
+        return json(200, { ok: true });
+      }
+
+      case "freund_annehmen": {
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+        await aendere("freundschaften",
+          `von_email=eq.${encodeURIComponent(ziel.email)}&an_email=eq.${encodeURIComponent(email)}&status=eq.offen`,
+          { status: "ok" });
+        return json(200, { ok: true });
+      }
+
+      case "freund_entfernen": {
+        // deckt Ablehnen, Zurückziehen und Entfreunden ab
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+        const A = encodeURIComponent(email), B = encodeURIComponent(ziel.email);
+        await loesche("freundschaften", `or=(and(von_email.eq.${A},an_email.eq.${B}),and(von_email.eq.${B},an_email.eq.${A}))`);
+        return json(200, { ok: true });
+      }
+
+      case "blockieren": {
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel || ziel.email === email) return json(400, { fehler: "Ungültiges Profil" });
+        await db("blockierungen", { method: "POST", body: JSON.stringify({ blocker_email: email, blockiert_email: ziel.email }),
+                                    headers: { Prefer: "resolution=ignore-duplicates" } });
+        const A = encodeURIComponent(email), B = encodeURIComponent(ziel.email);
+        await loesche("freundschaften", `or=(and(von_email.eq.${A},an_email.eq.${B}),and(von_email.eq.${B},an_email.eq.${A}))`);
+        return json(200, { ok: true });
+      }
+
+      case "entblocken": {
+        const ziel = await emailVonHandle(body.handle);
+        if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
+        await loesche("blockierungen",
+          `blocker_email=eq.${encodeURIComponent(email)}&blockiert_email=eq.${encodeURIComponent(ziel.email)}`);
+        return json(200, { ok: true });
+      }
+
+      case "wer_bin_ich": {
+        const profil = await profilSicher(email, name);
+        let anfragen = 0;
+        if (profil) {
+          try {
+            const t = await hole(`freundschaften?an_email=eq.${encodeURIComponent(email)}&status=eq.offen&select=id`);
+            anfragen = (t || []).length;
+          } catch (e) { /* ohne Tabelle keine Anfragen */ }
+        }
+        return json(200, { email, name, rollen, istAdmin, darfLoeschen,
+                           handle: profil ? profil.handle : null, anfragen });
+      }
 
       default:
         return json(400, { fehler: `Unbekannte Aktion: ${aktion}` });

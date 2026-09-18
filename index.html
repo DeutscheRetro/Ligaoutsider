@@ -183,6 +183,7 @@
       const rollen = (user.app_metadata && user.app_metadata.roles) || [];
       isAdmin = rollen.some(r => r === 'admin' || r === 'moderator');
       document.getElementById('user-name').textContent = name;
+      { const un = document.getElementById('user-name'); un.style.cursor = 'pointer'; un.title = 'Mein Profil'; un.onclick = () => { location.href = '/profil.html'; }; }
       document.getElementById('user-info').style.display = 'flex';
       document.getElementById('login-btn').style.display = 'none';
       document.getElementById('signup-btn').style.display = 'none';

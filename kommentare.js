@@ -49,19 +49,32 @@
     aktuellerUser = user;
     // Rollen liegen in der Datenbank; der Server ist die Wahrheit. Das Token
     // dient nur noch dem Nachweis, wer man ist.
+    let wer = {};
     try {
-      const wer = await api('wer_bin_ich');
+      wer = await api('wer_bin_ich');
       isAdmin = !!wer.istAdmin;
       darfLoeschen = !!wer.darfLoeschen;
     } catch {
       isAdmin = false; darfLoeschen = false;
     }
+    window._loIch = { handle: wer.handle || null, email: user.email };
+    document.dispatchEvent(new CustomEvent('lo-ich', { detail: window._loIch }));
     const name = anzeigeName(user);
     const el = document.getElementById('user-name');
     if (el) {
       el.textContent = name;
       el.style.cursor = 'pointer';
-      el.onclick = () => window._zeigeProfil(name, user.email);
+      el.title = 'Mein Profil';
+      el.onclick = () => wer.handle ? (location.href = '/profil.html?u=' + encodeURIComponent(wer.handle))
+                                    : window._zeigeProfil(name, user.email);
+      el.querySelector('.post-zahl')?.remove();
+      if (wer.anfragen) {
+        const b = document.createElement('span');
+        b.className = 'post-zahl profil-anfragen';
+        b.title = wer.anfragen + ' offene Freundschaftsanfrage(n)';
+        b.textContent = wer.anfragen;
+        el.appendChild(b);
+      }
     }
     document.getElementById('user-info')?.style && (document.getElementById('user-info').style.display = 'flex');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = 'none');
@@ -75,6 +88,8 @@
 
   function clearUser() {
     aktuellerUser = null; isAdmin = false; darfLoeschen = false;
+    window._loIch = null;
+    document.dispatchEvent(new CustomEvent('lo-ich', { detail: null }));
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');
@@ -224,7 +239,7 @@
         <button onclick="document.getElementById('profil-modal').remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">✕</button>
         ${istGebannt ? `<div style="background:#c62828;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;margin-bottom:12px;display:inline-block">🚫 ${banText}</div>` : ''}
         <div style="font-size:17px;font-weight:800;color:var(--accent);margin-bottom:2px">${name}</div>
-        <div style="font-size:11px;color:var(--text4);margin-bottom:16px">${email}</div>
+        <div style="margin-bottom:16px"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
           <div style="background:var(--bg4);border-radius:6px;padding:10px;text-align:center">
             <div style="font-size:18px;font-weight:800;color:var(--text)">${anzahl}</div>
@@ -322,7 +337,7 @@
     if (!liste || typeof ARTIKEL_ID === 'undefined') return;
 
     const { data, error } = await sb.from('kommentare')
-      .select('id, name, email, inhalt, erstellt_am, geaendert_am, geloescht')
+      .select('*')
       .eq('artikel_id', ARTIKEL_ID)
       .neq('geloescht', true)
       .order('erstellt_am', { ascending: true });
@@ -389,7 +404,9 @@
 
       return `<div class="kommentar-item" id="k-${k.id}">
         <div class="kommentar-kopf">
-          <span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>
+          ${k.autor_handle
+            ? `<a class="kommentar-name" href="/profil.html?u=${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
+            : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}
           <span class="kommentar-datum">${datum}${editTag}</span>
         </div>
         <div class="kommentar-text" id="kt-${k.id}">${k.inhalt.replace(/</g,'&lt;')}</div>

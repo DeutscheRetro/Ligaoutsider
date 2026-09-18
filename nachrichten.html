@@ -173,7 +173,9 @@
 
   async function oeffne(partner) {
     aktiv = gespraeche.find(g => g.partner === partner) || { partner, partner_name: partner, nachrichten: [] };
-    document.getElementById('pf-titel').textContent = aktiv.partner_name || partner;
+    document.getElementById('pf-titel').innerHTML = aktiv.partner_handle
+      ? `<a href="/profil.html?u=${encodeURIComponent(aktiv.partner_handle)}" style="color:inherit">${escape(aktiv.partner_name || aktiv.partner_handle)}</a>`
+      : escape(aktiv.partner_name || partner);
     document.getElementById('pf-senden').style.display = 'flex';
 
     const v = document.getElementById('pf-verlauf');
@@ -196,8 +198,16 @@
     if (!text || !aktiv) return;
     ta.disabled = true;
     try {
-      await api('nachricht_senden', { an: aktiv.partner, inhalt: text });
+      // Neues Gespräch aus einem Profil: Empfänger nur als Profilname bekannt
+      await api('nachricht_senden', aktiv.partner ? { an: aktiv.partner, inhalt: text }
+                                                  : { an_handle: aktiv.partner_handle, inhalt: text });
       ta.value = '';
+      if (!aktiv.partner) {
+        await laden(null);
+        const neu = gespraeche.find(g => g.partner_handle === aktiv.partner_handle);
+        if (neu) oeffne(neu.partner);
+        return;
+      }
       await laden(aktiv.partner);
     } catch (e) {
       alert(e.message);
@@ -213,16 +223,29 @@
   function angemeldet(u) {
     meineMail = u.email;
     document.getElementById('user-name').textContent = u.user_metadata?.full_name || u.email;
+    { const un = document.getElementById('user-name'); un.style.cursor = 'pointer'; un.title = 'Mein Profil'; un.onclick = () => { location.href = '/profil.html'; }; }
     document.getElementById('user-info').style.display = 'flex';
     document.getElementById('login-btn').style.display = 'none';
     document.getElementById('signup-btn').style.display = 'none';
-    // ?an=mail öffnet direkt ein Gespräch, etwa aus dem Profil eines Kommentars
-    const ziel = new URLSearchParams(location.search).get('an');
-    laden(ziel || null);
-    if (ziel && !gespraeche.some(g => g.partner === ziel)) {
-      aktiv = { partner: ziel.toLowerCase(), partner_name: ziel, nachrichten: [] };
-      setTimeout(() => oeffne(aktiv.partner), 300);
-    }
+    // ?u=profilname öffnet direkt ein Gespräch (aus einem Profil)
+    const handle = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
+    const altAn = (new URLSearchParams(location.search).get('an') || '').toLowerCase();
+    laden(null).then(() => {
+      if (altAn && !handle) {
+        // älterer Weg (Profil-Popup bei Kommentaren ohne Profilnamen)
+        const da = gespraeche.find(g => g.partner === altAn);
+        if (da) return oeffne(da.partner);
+        aktiv = { partner: altAn, partner_name: 'Neues Gespräch', nachrichten: [] };
+        return oeffne(altAn);
+      }
+      if (!handle) return;
+      const da = gespraeche.find(g => g.partner_handle === handle);
+      if (da) return oeffne(da.partner);
+      aktiv = { partner: null, partner_handle: handle, partner_name: handle, nachrichten: [] };
+      document.getElementById('pf-titel').textContent = handle;
+      document.getElementById('pf-senden').style.display = 'flex';
+      document.getElementById('pf-verlauf').innerHTML = '<p class="pf-leer">Schreib die erste Nachricht.</p>';
+    });
   }
 
   if (window.netlifyIdentity) {
