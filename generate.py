@@ -1950,6 +1950,18 @@ def main():
                 log.warning(f"S7.5 unbekannter Hauptklub {hauptklub!r} – Fallback auf Scoring")
                 wappen_url = verein_wappen_url(ergebnis["text"][:1200], title=ergebnis["titel"])
 
+            # ── Stage 7.6: fertigen Artikel noch einmal auf Doppel prüfen ─────────
+            # Die Quelle kann anders heißen als das, was im Artikel steht
+            # ("Aufstellung gegen Union da!" wurde zum Laimer-Ausfall).
+            _fertig_kern = " ".join(ergebnis["text"].split()[:70])
+            _treffer = schon_berichtet(ergebnis["titel"], _fertig_kern, _vorhanden, _zus)
+            if _treffer:
+                log.info(f"S7.6 fertiger Artikel doppelt ({_treffer[:50]}): {ergebnis['titel'][:50]}")
+                _log_skip(aid, ergebnis["titel"], "stage7.6", "fertiger_artikel_doppelt")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s6_dedup_refined"] += 1
+                continue
+
             if fp:
                 batch_fingerprints.append((fp, datetime.datetime.now().isoformat()))
             batch_titles.append(titel)
