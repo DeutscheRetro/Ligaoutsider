@@ -65,24 +65,26 @@ RSS_FEEDS = [
     "https://news.google.com/rss/search?q=Bundesliga+Gerücht+Interesse+Angebot&hl=de&gl=DE&ceid=DE:de",
     "https://news.google.com/rss/search?q=Bundesliga+Vertrag+verlängert+ablösefrei&hl=de&gl=DE&ceid=DE:de",
     # Google News – alle 18 Teams
-    "https://news.google.com/rss/search?q=FC+Bayern+München+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=Borussia+Dortmund+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=Bayer+04+Leverkusen+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=RB+Leipzig+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=VfB+Stuttgart+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=Eintracht+Frankfurt+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=Borussia+Mönchengladbach+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=SC+Freiburg+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=TSG+Hoffenheim+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=FSV+Mainz+05+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=FC+Augsburg+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=1.+FC+Union+Berlin+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=SV+Werder+Bremen+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=Hamburger+SV+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=1.+FC+Köln+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=FC+Schalke+04+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=SV+Elversberg+Transfer+News&hl=de&gl=DE&ceid=DE:de",
-    "https://news.google.com/rss/search?q=SC+Paderborn+Transfer+News&hl=de&gl=DE&ceid=DE:de",
+    # Pro Verein alles aus den letzten 24 Stunden (nicht nur Transfers):
+    # Training, Verletzungen, Pressekonferenzen, Aufstellungsfragen
+    "https://news.google.com/rss/search?q=%22FC+Bayern%22+OR+%22Bayern+M%C3%BCnchen%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=BVB+OR+%22Borussia+Dortmund%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22Bayer+Leverkusen%22+OR+%22Bayer+04%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22RB+Leipzig%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22VfB+Stuttgart%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22Eintracht+Frankfurt%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=Gladbach+OR+%22Borussia+M%C3%B6nchengladbach%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22SC+Freiburg%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=Hoffenheim+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22Mainz+05%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22FC+Augsburg%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22Union+Berlin%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22Werder+Bremen%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=HSV+OR+%22Hamburger+SV%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%221.+FC+K%C3%B6ln%22+OR+%22FC+K%C3%B6ln%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=Schalke+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=Elversberg+when%3A1d&hl=de&gl=DE&ceid=DE:de",
+    "https://news.google.com/rss/search?q=%22SC+Paderborn%22+when%3A1d&hl=de&gl=DE&ceid=DE:de",
     "https://www.transfermarkt.de/rss/news",
     "https://www.waz.de/sport/fussball/rss",
     "https://www.faz.net/rss/aktuell/sport/fussball/bundesliga/",
@@ -119,6 +121,8 @@ RSS_FEEDS = [
     "https://newsfeed.kicker.de/team/sv-elversberg",
     "https://newsfeed.kicker.de/team/sc-paderborn-07",
     "https://newsfeed.kicker.de/news/champions-league",
+    # LigaInsider nur als Themenfinder – Quelle ist immer der dort verlinkte Originalartikel
+    "ligainsider:themen",
 ]
 
 # Artikel bis zu X Tage alt akzeptieren
@@ -156,6 +160,10 @@ BL1_KLUBS = [
     "FC Schalke 04", "Schalke",
     "SC Paderborn", "Paderborn",
     "SV Elversberg", "Elversberg",
+    # Kurz- und Spitznamen, wie sie in Überschriften stehen ("Eintrachts neues Schnäppchen")
+    "Eintracht", "Bayer 04", "Werkself", "Fohlen", "Borussia", "Königsblau", "Knappen", "S04",
+    "Geißböcke", "Eisernen", "Rothosen", "Nullfünfer", "Kraichgauer", "Breisgauer",
+    "Fuggerstädter", "Roten Bullen", "Hanseaten",
 ]
 
 # ─── Wappen-URLs für die Feed-Anzeige ─────────────────────────────────────────
@@ -700,6 +708,52 @@ def _ist_innerhalb_tage(published_at_str: str, days: int = 14) -> bool:
         return False
 
 
+def schon_berichtet(titel: str, kern: str, vorhandene: list[str]) -> str | None:
+    """Stage 6.5: Haiku prüft vor dem Schreiben, ob dasselbe Ereignis schon berichtet
+    wurde (letzte Tage oder in diesem Lauf). Gibt den passenden Titel zurück oder None.
+    Fängt, was Fingerprints übersehen: dieselbe Nachricht aus anderer Quelle oder als
+    Einordnung/Kommentar ("Warum X trotz Y der richtige Trainer bleibt")."""
+    if not vorhandene:
+        return None
+    liste = "\n".join(f"[{i}] {t}" for i, t in enumerate(vorhandene[-250:]))
+    try:
+        antwort = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=20,
+            messages=[{"role": "user", "content": (
+                "Ist die NEUE Meldung dieselbe Nachricht wie eine der VORHANDENEN?\n"
+                "Dieselbe Nachricht heißt: dieselben Personen/derselbe Verein und dasselbe Ereignis "
+                "(z. B. dieselbe Vertragsverlängerung, derselbe Ausfall, dieselbe Rückkehr, dasselbe Spiel), "
+                "auch wenn Quelle, Formulierung, Zahlen oder Blickwinkel (Analyse, Kommentar, Reaktion) anders sind.\n"
+                "KEINE Doppelmeldung ist nur eine echte neue Entwicklung: z. B. Gerücht → offiziell, "
+                "fraglich → fällt definitiv aus, Verletzung → Rückkehr ins Training, oder ein anderes Spiel.\n\n"
+                f"NEUE Meldung: {titel}\nKern: {kern[:400]}\n\n"
+                f"VORHANDENE:\n{liste}\n\n"
+                "Antworte nur mit der Nummer der passenden vorhandenen Meldung oder mit NEIN."
+            )}],
+        )
+        roh = antwort.content[0].text.strip()
+        m = re.match(r"\[?(\d+)\]?", roh)
+        if not (m and int(m.group(1)) < len(vorhandene[-250:])):
+            return None
+        kandidat = vorhandene[-250:][int(m.group(1))]
+        # Gegenprobe nur für dieses Paar: die Listenauswahl greift gelegentlich daneben
+        # (zwei verschiedene HSV-Meldungen am selben Tag)
+        pruef = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=5,
+            messages=[{"role": "user", "content": (
+                "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
+                "Andere Person oder anderes Ereignis = NEIN.\n\n"
+                f"A: {titel}\nKern A: {kern[:300]}\n\nB: {kandidat}\n\nAntworte nur JA oder NEIN."
+            )}],
+        )
+        return kandidat if "JA" in pruef.content[0].text.upper() else None
+    except Exception as e:
+        log.warning(f"S6.5 Duplikatprüfung fehlgeschlagen: {e}")
+    return None
+
+
 def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
     """Prüft ob Meldung inhaltlich schon vorhanden oder echte neue Entwicklung.
     bestehende: Liste von Artikel-Dicts (mit 'id' und 'titel').
@@ -780,33 +834,33 @@ _BL_SPIELER_CACHE: list[str] = []
 _BL_SPIELER_LOADED = False
 
 def _lade_bl_spieler() -> list[str]:
-    """Lädt aktuelle BL-Spielernamen von OpenLigaDB (gecacht pro Run)."""
+    """Namen aller Bundesliga-Spieler für den Vorfilter (gecacht pro Lauf).
+
+    Quelle ist spieler_db.json (Transfermarkt-Kader). OpenLigaDB liefert für
+    2026 keine Spielerliste mehr – dadurch fielen Überschriften ohne Vereinsnamen
+    ("Kane findet Ballon-d'Or-Debatte kompliziert") früher komplett durch.
+    """
     global _BL_SPIELER_CACHE, _BL_SPIELER_LOADED
     if _BL_SPIELER_LOADED:
         return _BL_SPIELER_CACHE
     _BL_SPIELER_LOADED = True
+    namen = set()
     try:
-        import requests as _req
-        r = _req.get(
-            "https://api.openligadb.de/getplayers/bl1/2026",
-            timeout=10,
-            headers={"Accept": "application/json"},
-        )
-        if r.status_code == 200:
-            players = r.json()
-            names = []
-            for p in players:
-                n = p.get("playerName", "")
-                if n and len(n) > 3:
-                    names.append(n)
-                    # Nachname allein (letztes Wort) als Extra-Token
-                    parts = n.split()
-                    if len(parts) > 1:
-                        names.append(parts[-1])
-            _BL_SPIELER_CACHE = list(set(names))
-            log.info(f"BL-Spielerliste geladen: {len(_BL_SPIELER_CACHE)} Namen")
+        db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+        for team in db["teams"].values():
+            for sp in team["spieler"]:
+                for n in (sp.get("name"), (sp.get("kickbase") or {}).get("name")):
+                    if not n:
+                        continue
+                    namen.add(n)
+                    teile = n.split()
+                    # Nachname allein nur, wenn er lang genug ist, um nicht ständig zu treffen
+                    if len(teile) > 1 and len(teile[-1]) >= 5:
+                        namen.add(teile[-1])
     except Exception as e:
-        log.warning(f"OpenLigaDB Spieler-Load fehlgeschlagen: {e}")
+        log.warning(f"Spielerliste nicht verfügbar: {e}")
+    _BL_SPIELER_CACHE = sorted(namen)
+    log.info(f"BL-Spielerliste geladen: {len(_BL_SPIELER_CACHE)} Namen")
     return _BL_SPIELER_CACHE
 
 
@@ -862,7 +916,8 @@ def ist_relevant(titel: str, volltext: str) -> bool:
                 f"Ist das eine relevante Fußball-News über einen der folgenden Klubs oder deren Spieler?\n"
                 f"Klubs: {klubs}.\n"
                 f"Antworte NUR mit JA wenn:\n"
-                f"- Es direkt um mindestens einen dieser Klubs oder einen ihrer Spieler geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel)\n"
+                f"- Es direkt um mindestens einen dieser Klubs oder einen ihrer Spieler geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel, "
+                f"Training, Pressekonferenz, Aufstellung, Startelf-Chancen, Rückkehr nach Verletzung, Aussagen von Spielern oder Trainern)\n"
                 f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
                 f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
                 f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
@@ -871,6 +926,8 @@ def ist_relevant(titel: str, volltext: str) -> bool:
                 f"- Es um ein AKTUELLES Geschehen geht. Historische Rückblicke auf vergangene Spielzeiten, Jubiläums- und Archivstücke sind NEIN, auch wenn der Klub stimmt. Nenne der Artikel eine zurückliegende Saison als Schauplatz (etwa 2009/10), ist das ein klares NEIN.\n"
                 f"- Wenn ein Spieler eines dieser Klubs im Ausland spielt (Leihe, Auslandsklub): NUR JA wenn Transfer zurück, Vertragsende, oder direkter Bezug zu diesen Klubs. Ein Tor in der Ligue 1/Premier League/Serie A ist KEIN Grund für JA.\n\n"
                 f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
+                f"Geht es um einen Spieler oder Trainer eines dieser Klubs und das aktuelle Geschehen dort, ist die Antwort JA. "
+                f"Im Zweifel JA.\n"
                 f"Antworte nur mit JA oder NEIN."
             )
         }]
@@ -919,7 +976,10 @@ def _decode_google_news_url(google_url: str) -> str | None:
     try:
         s = _req.Session()
         s.headers.update({"User-Agent": _GN_UA})
-        s.cookies.set("CONSENT", "YES+cb", domain=".google.com")
+        # Ohne Einwilligungs-Cookie leitet Google (EU) auf consent.google.com um.
+        # "CONSENT=YES+cb" wird nicht mehr akzeptiert, maßgeblich ist heute SOCS.
+        s.cookies.set("SOCS", "CAESEwgDEgk0ODE3Nzk3MjQaAmRlIAEaBgiA_LyaBg", domain=".google.com")
+        s.cookies.set("CONSENT", "PENDING+987", domain=".google.com")
         seite = s.get(f"https://news.google.com/rss/articles/{artikel_id}", timeout=10)
         sig = re.search(r'data-n-a-sg="([^"]+)"', seite.text)
         ts = re.search(r'data-n-a-ts="([^"]+)"', seite.text)
@@ -940,11 +1000,63 @@ def _decode_google_news_url(google_url: str) -> str | None:
             headers={"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
             timeout=10,
         )
-        ziel = re.search(r'"(https?://(?:(?!news\.google\.com)[^"\\])+)"', antwort.text)
+        # Die Ziel-URL steht als escaptes JSON in der Antwort: ...["garturlres","https://…"]
+        ziel = re.search(r'garturlres\\?",\\?"(https?://[^"\\]+)', antwort.text)
+        if not ziel:
+            log.debug(f"Google-News-Antwort ohne URL: {antwort.status_code} {antwort.text[:120]}")
         return ziel.group(1) if ziel else None
     except Exception as e:
         log.debug(f"Google-News-Aufloesung fehlgeschlagen: {e}")
         return None
+
+
+def _ligainsider_eintraege() -> list[dict]:
+    """Themenfinder: News der letzten Tage von den 18 LigaInsider-Vereinsseiten im
+    Format eines RSS-Eintrags. LigaInsider selbst wird nie Quelle – die Pipeline
+    folgt nur dem dort verlinkten Originalartikel (siehe main)."""
+    import requests as _req
+    import html as _html
+    s = _req.Session()
+    s.headers.update({"User-Agent": _GN_UA, "Accept-Language": "de-DE,de;q=0.9"})
+    try:
+        start = s.get("https://www.ligainsider.de/bundesliga/spieltage/", timeout=15).text
+    except Exception as e:
+        log.warning(f"LigaInsider nicht erreichbar: {e}")
+        return []
+    teams = sorted(set(re.findall(r'href="/(?!bundesliga)([a-z0-9-]+)/(\d+)/verein/news/"', start)))
+    jetzt = datetime.datetime.now()
+    eintraege, gesehen = [], set()
+    for slug, tid in teams:
+        try:
+            h = s.get(f"https://www.ligainsider.de/{slug}/{tid}/verein/news/", timeout=15).text
+        except Exception:
+            continue
+        for m in re.finditer(r'<h3>(.*?)</h3>', h, re.S):
+            titel = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", m.group(1)))).replace("\xad", "").strip()
+            link = re.search(r'href="(/[^"]+-\d+/)"[^>]*>\s*$', h[max(0, m.start() - 300):m.start()])
+            zeit = re.search(r'<small class="float-start">([^<]+)</small>', h[m.end():m.end() + 2500])
+            if not (titel and link and zeit):
+                continue
+            url = "https://www.ligainsider.de" + link.group(1)
+            if url in gesehen:
+                continue
+            gesehen.add(url)
+            z = zeit.group(1).strip()
+            if (mm := re.match(r"Vor (\d+) (Min|Std)", z)):
+                dt = jetzt - datetime.timedelta(minutes=int(mm.group(1)) * (1 if mm.group(2) == "Min" else 60))
+            elif z == "Gestern":
+                dt = jetzt - datetime.timedelta(days=1)
+            elif (mm := re.match(r"Vor (\d+) Tagen", z)):
+                dt = jetzt - datetime.timedelta(days=int(mm.group(1)))
+            elif (mm := re.match(r"(\d\d)\.(\d\d)\.(\d{4})", z)):
+                dt = datetime.datetime(int(mm.group(3)), int(mm.group(2)), int(mm.group(1)))
+            else:
+                continue
+            eintraege.append({"link": url, "title": titel, "summary": titel,
+                              "published_parsed": dt.timetuple()})
+        time.sleep(1)
+    log.info(f"LigaInsider (Themenfinder): {len(eintraege)} Meldungen von {len(teams)} Vereinsseiten")
+    return eintraege
 
 
 def fetch_fulltext(url: str) -> tuple[str | None, str]:
@@ -1400,22 +1512,26 @@ def qualitaets_check(kandidaten: list) -> list:
     if not kandidaten:
         return []
 
+    # Vollständiger Text: mit nur 300 Zeichen hielt die Prüfung fast jeden Artikel
+    # für "mitten im Satz abgebrochen" und lehnte zwei Drittel ab.
     liste = ""
     for i, k in enumerate(kandidaten):
-        text_preview = k["ergebnis"]["text"][:300].replace("\n", " ")
-        liste += f"\n[{i}] Titel: {k['ergebnis']['titel']}\n    Text: {text_preview}\n"
+        text_voll = k["ergebnis"]["text"][:2500].replace("\n", " ")
+        liste += f"\n[{i}] Titel: {k['ergebnis']['titel']}\n    Text: {text_voll}\n"
 
     antwort = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=800,
+        max_tokens=200 + 80 * len(kandidaten),
         messages=[{
             "role": "user",
             "content": (
                 f"Du bist leitender QS-Redakteur von ligaoutsider.de.\n"
-                f"Reviewe {len(kandidaten)} Kandidaten. Für JEDEN prüfe:\n"
-                f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt'\n"
+                f"Reviewe {len(kandidaten)} Kandidaten. Die Texte sind vollständig abgedruckt. Für JEDEN prüfe:\n"
+                f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke\n"
                 f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
                 f"3. Qualität: Substanz, lesbar, nicht leer/generisch\n\n"
+                f"Kurze Meldungen sind ausdrücklich erwünscht, wenn sie eine konkrete Information enthalten "
+                f"(Ausfall, Rückkehr ins Training, Startelf-Chance, Aussage eines Trainers). Kürze allein ist KEIN Ablehnungsgrund.\n\n"
                 f"KANDIDATEN:\n{liste}\n\n"
                 f"Output NUR als valides JSON-Array:\n"
                 f'[{{"id":0,"decision":"APPROVE"|"REJECT","reason":"1 Satz"}},...]'
@@ -1480,6 +1596,12 @@ def main():
     batch_titles: list[str] = []  # für Intra-Batch rapidfuzz Titel-Dedup (Stage 2)
 
     url_cache = URLCache("data/seen_urls.json", max_age_days=30)
+    # Zähler für erneute Abrufversuche bei vorübergehenden Fehlern
+    _versuche_datei = Path("data/abruf_versuche.json")
+    try:
+        _abruf_versuche = json.loads(_versuche_datei.read_text(encoding="utf-8"))
+    except Exception:
+        _abruf_versuche = {}
     log.info(f"URL-Cache geladen: {url_cache.get_seen_count()} bekannte URLs (letzte 30 Tage)")
 
     _SKIP_KEYWORDS = (
@@ -1529,14 +1651,27 @@ def main():
         log.warning(f"Supabase submitted_urls Fehler: {_e2}")
 
     _all_feeds = RSS_FEEDS + _submitted_urls
+    # Zeitbudget: GitHub bricht den Lauf nach 20 Minuten ab. Was bis dahin nicht
+    # verarbeitet ist, bleibt ungesehen und kommt im nächsten Lauf dran.
+    _start = time.time()
+    ZEITBUDGET_SEK = 13 * 60
 
     for feed_url in _all_feeds:
-        if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
+        # Limit zählt geschriebene Kandidaten – veröffentlicht wird erst nach der QA,
+        # sonst schreibt der Lauf bis zum Zeitbudget immer weiter
+        if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF:
+            break
+        if time.time() - _start > ZEITBUDGET_SEK:
+            log.warning("Zeitbudget erreicht – restliche Feeds im nächsten Lauf")
             break
 
         log.info(f"Feed: {feed_url}")
         try:
-            feed = feedparser.parse(feed_url)
+            if feed_url == "ligainsider:themen":
+                from types import SimpleNamespace
+                feed = SimpleNamespace(entries=_ligainsider_eintraege(), feed={"title": "LigaInsider"})
+            else:
+                feed = feedparser.parse(feed_url)
         except Exception as e:
             log.error(f"Feed-Parse-Fehler: {e}")
             continue
@@ -1545,7 +1680,7 @@ def main():
         feed_quelle = feed.feed.get("title", feed_url)
 
         for eintrag in feed.entries:
-            if neu_generiert >= MAX_ARTIKEL_PRO_LAUF:
+            if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF or time.time() - _start > ZEITBUDGET_SEK:
                 break
 
             url    = eintrag.get("link", "")
@@ -1594,18 +1729,25 @@ def main():
                     quelle_name = _up(echte_url).netloc.replace("www.", "")
                     url = echte_url
 
-            # Ligainsider: Originalquelle extrahieren
+            # LigaInsider dient nur zum Finden von Themen. Verarbeitet und als Quelle
+            # genannt wird ausschließlich der dort verlinkte Originalartikel.
+            # Ohne echten Link (z. B. nur "Pressekonferenz") wird die Meldung übersprungen.
             if "ligainsider.de" in url:
+                url_cache.mark_seen(url)
                 try:
                     import urllib.request as _ureq
-                    _rq = _ureq.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                    from urllib.parse import urlparse as _up
+                    _rq = _ureq.Request(url, headers={"User-Agent": _GN_UA})
                     _html = _ureq.urlopen(_rq, timeout=8).read().decode("utf-8", errors="ignore")
-                    _m = re.search(r'<strong>Quelle:</strong>\s*<a[^>]+href="([^"]+)"', _html)
-                    if _m:
-                        url = _m.group(1)
-                        from urllib.parse import urlparse as _up
-                        quelle_name = _up(url).netloc.replace("www.", "")
-                    else:
+                    _m = re.search(r'<strong>Quelle:</strong>\s*<a[^>]+href="(https?://[^"]+)"', _html)
+                    _ziel = _m.group(1) if _m else ""
+                    _host = _up(_ziel).netloc.lower() if _ziel else ""
+                    if not (_ziel and "." in _host and "ligainsider" not in _host) or any(
+                            x in _host for x in ("instagram.", "x.com", "twitter.", "facebook.", "tiktok.", "youtube.")):
+                        continue
+                    url = _ziel
+                    quelle_name = _up(url).netloc.replace("www.", "")
+                    if url_cache.is_seen(url):
                         continue
                 except Exception:
                     continue
@@ -1719,6 +1861,11 @@ def main():
                     log.info(f"S5 fulltext fallback auf RSS-Beschreibung ({len(beschr_clean.split())} Wörter): {titel[:50]}")
                 else:
                     _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}_rss_too_short")
+                    # Seite war evtl. nur kurz nicht erreichbar: bis zu drei Läufe erneut versuchen
+                    versuche = _abruf_versuche.get(aid, 0) + 1
+                    _abruf_versuche[aid] = versuche
+                    if versuche < 3:
+                        url_cache.forget(url)
                     continue
 
             # ── Stage 5.5: Relevanz-Check mit echtem Volltext (Haiku) ────────
@@ -1752,6 +1899,20 @@ def main():
                     continue
 
             # ── Stage 7: Article Generation (Sonnet) ─────────────────────────
+            # ── Stage 6.5: gleiche Nachricht schon berichtet? (vor dem teuren Schreiben) ──
+            _grenze = datetime.datetime.now() - datetime.timedelta(days=4)
+            _vorhanden = [e["titel"] for e in bestehende
+                          if datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M") >= _grenze]
+            _vorhanden += [k["ergebnis"]["titel"] for k in kandidaten]
+            _kern = (fp or {}).get("one_sentence_summary") or re.sub(r"\s+", " ", volltext[:400])
+            _treffer = schon_berichtet(titel, _kern, _vorhanden)
+            if _treffer:
+                log.info(f"S6.5 schon berichtet ({_treffer[:50]}): {titel[:50]}")
+                _log_skip(aid, titel, "stage6.5", "schon_berichtet")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
+                stats["s6_dedup_refined"] += 1
+                continue
+
             log.info(f"S7 generate: {titel[:60]}")
             try:
                 ergebnis = artikel_generieren(titel, volltext, quelle_name, url)
@@ -1947,6 +2108,8 @@ def main():
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
 
     url_cache.cleanup_and_save()
+    # nur Zähler von URLs behalten, die noch im Cache-Zeitraum liegen
+    _versuche_datei.write_text(json.dumps(dict(list(_abruf_versuche.items())[-2000:])), encoding="utf-8")
     log.info(f"URL-Cache gespeichert: {url_cache.get_seen_count()} URLs")
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")

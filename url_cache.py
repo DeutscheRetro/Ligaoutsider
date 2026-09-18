@@ -35,6 +35,10 @@ class URLCache:
     def mark_seen(self, url: str):
         self.seen_urls[url] = datetime.now().isoformat()
 
+    def forget(self, url: str):
+        """Gibt eine URL für den nächsten Lauf frei (vorübergehender Abruffehler)."""
+        self.seen_urls.pop(url, None)
+
     def save(self):
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.cache_path, "w", encoding="utf-8") as f:
