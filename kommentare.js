@@ -455,3 +455,12 @@
 
   ladeKommentare();
 })();
+
+// Spielernamen in Artikeln verlinken (spieler.js lädt spieler_db.json)
+if (document.querySelector('.artikel-text') && !document.getElementById('lo-spieler-js')) {
+  const s = document.createElement('script');
+  s.id = 'lo-spieler-js';
+  s.src = '/spieler.js';
+  s.defer = true;
+  document.head.appendChild(s);
+}

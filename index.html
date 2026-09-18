@@ -491,7 +491,8 @@
         }
 
         function playerLi(p, valueHtml) {
-          return `<li data-playerid="${p.goalGetterId}" style="cursor:pointer" title="Profil anzeigen">
+          const tid = playerTeam[p.goalGetterId];
+          return `<li data-playerid="${p.goalGetterId}" data-name="${p.goalGetterName}" data-team="${tid ? (teamNames[tid] || '') : ''}" style="cursor:pointer" title="Profil anzeigen">
             ${playerIcon(p)}
             <span class="scorer-name">${p.goalGetterName}</span>
             ${valueHtml}
@@ -508,7 +509,7 @@
         // Klick-Handler
         document.getElementById('torjaeger-list').addEventListener('click', e => {
           const li = e.target.closest('li[data-playerid]');
-          if (li) oeffneSpielerModal(li.dataset.playerid);
+          if (li) oeffneSpielerModal(li.dataset.playerid, li.dataset.name, li.dataset.team);
         });
       } catch(e) {
         document.getElementById('torjaeger-list').innerHTML = '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Saison noch nicht gestartet</li>';
@@ -517,22 +518,57 @@
     ladeScorer();
 
     // ─── Spieler-Modal ────────────────────────────────────────────────────────
-    async function oeffneSpielerModal(goalGetterId) {
+    // Spieler-Datenbank (Transfermarkt-Kader) als Grundlage für jedes Profil
+    let spielerDbPromise = null;
+    const nameKey = n => String(n || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+      .replace(/ø/g, 'o').replace(/ß/g, 'ss').replace(/ł/g, 'l').replace(/[^a-z ]/g, ' ').trim().split(/\s+/);
+    function findeInDb(db, name, team) {
+      const k = nameKey(name.replace(/^([A-ZÄÖÜ])\.\s*/, '$1 '));
+      const nach = k[k.length - 1], init = k.length > 1 && k[0].length === 1 ? k[0] : null;
+      const alle = [];
+      for (const [tn, t] of Object.entries(db.teams)) for (const s of t.spieler) alle.push({ ...s, verein: tn, logo: t.logo });
+      let treffer = alle.filter(s => { const sk = nameKey(s.name); return sk[sk.length - 1] === nach && (!init || sk[0][0] === init); });
+      if (treffer.length > 1 && team) {
+        const tk = nameKey(team).filter(w => w.length > 3);
+        const eng = treffer.filter(s => nameKey(s.verein).some(w => tk.includes(w)));
+        if (eng.length) treffer = eng;
+      }
+      return treffer.length === 1 ? treffer[0] : null;
+    }
+    function alterAus(geb) {
+      const m = /(\d\d)\.(\d\d)\.(\d{4})/.exec(geb || '');
+      if (!m) return '';
+      const g = new Date(+m[3], +m[2] - 1, +m[1]), h = new Date();
+      return h.getFullYear() - g.getFullYear() - (h < new Date(h.getFullYear(), g.getMonth(), g.getDate()) ? 1 : 0);
+    }
+
+    async function oeffneSpielerModal(goalGetterId, name, team) {
       const modal = document.getElementById('spieler-modal');
       const inhalt = document.getElementById('spieler-modal-inhalt');
       inhalt.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px 0">Lädt…</p>';
       modal.style.display = 'block';
       document.body.style.overflow = 'hidden';
 
-      let d;
-      try {
-        const r = await fetch(`spieler/${goalGetterId}.json`);
-        if (!r.ok) throw new Error('nicht gefunden');
-        d = await r.json();
-      } catch(e) {
+      spielerDbPromise = spielerDbPromise || fetch('spieler_db.json').then(r => r.ok ? r.json() : null).catch(() => null);
+      const [profil, db] = await Promise.all([
+        fetch(`spieler/${goalGetterId}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+        spielerDbPromise,
+      ]);
+      const s = db && name ? findeInDb(db, name, team) : null;
+      if (!profil && !s) {
         inhalt.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px 0">Keine Daten verfügbar</p>';
         return;
       }
+      const d = { ...(profil || {}) };
+      if (s) {
+        d.name = s.name;
+        d.position = s.position || d.position;
+        d.nation = (s.nation || []).join(' / ') || d.nation;
+        d.alter = alterAus(s.geboren) || d.alter;
+        d.marktwert = s.tm_marktwert || d.marktwert;
+        d.verein = s.verein;
+      }
+      d.name = d.name || name;
 
       const infos = [
         d.position && `<span>${d.position}</span>`,
@@ -600,11 +636,22 @@
           ${rows}`;
       }
 
+      const detail = s ? [
+        ['Rückennummer', s.nr], ['Geboren', s.geboren], ['Starker Fuß', s.fuss],
+        ['Vertrag bis', s.vertrag_bis], ['Kickbase-Position', s.kickbase && s.kickbase.position],
+      ].filter(([, v]) => v).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+          <span style="color:var(--text3)">${k}</span><span style="color:var(--text1)">${v}</span></div>`).join('') : '';
+      const hinweise = s && (s.tm_hinweise || []).length
+        ? `<div style="margin-top:12px;padding:8px 10px;border-radius:6px;background:rgba(224,72,72,.12);color:#e06060;font-size:12px">${s.tm_hinweise.join('<br>')}</div>` : '';
+
       inhalt.innerHTML = `
         <div style="margin-bottom:14px">
-          <div style="font-size:20px;font-weight:700;color:var(--text1)">${d.name}</div>
+          ${s && s.logo ? `<img src="${s.logo}" alt="" style="width:36px;height:36px;object-fit:contain;float:right;margin-right:28px">` : ''}
+          <div style="font-size:20px;font-weight:700;color:var(--text1)">${d.name}${s && s.kapitaen ? ' <span title="Kapitän" style="font-size:13px;color:var(--gold)">(C)</span>' : ''}</div>
           <div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.8">${infos}</div>
         </div>
+        ${hinweise}
+        ${detail ? `<div style="margin-top:14px">${detail}</div>` : ''}
         ${karriereHtml}
         ${historyHtml}
       `;

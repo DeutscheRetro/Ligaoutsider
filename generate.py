@@ -788,7 +788,7 @@ def _lade_bl_spieler() -> list[str]:
     try:
         import requests as _req
         r = _req.get(
-            "https://api.openligadb.de/getplayers/bl1/2025",
+            "https://api.openligadb.de/getplayers/bl1/2026",
             timeout=10,
             headers={"Accept": "application/json"},
         )
@@ -2831,7 +2831,7 @@ def spieler_fetch():
     # 1. Top-Scorer aus OpenLigaDB
     print("📊 Lade Torjäger von OpenLigaDB …")
     try:
-        scorer_data = get_json("https://api.openligadb.de/getgoalgetters/bl1/2025")
+        scorer_data = get_json("https://api.openligadb.de/getgoalgetters/bl1/2026")
     except Exception as e:
         print(f"❌ OpenLigaDB Fehler: {e}")
         return
@@ -2841,7 +2841,7 @@ def spieler_fetch():
     # goalGetterId → teamId via Spieldaten (letzter Spieltag reicht)
     player_team = {}
     try:
-        matches = get_json("https://api.openligadb.de/getmatchdata/bl1/2025")
+        matches = get_json("https://api.openligadb.de/getmatchdata/bl1/2026")
         for m in matches:
             for g in (m.get("goals") or []):
                 if g.get("goalGetterID") and g.get("scoringTeamId") and not g.get("isOwnGoal"):
@@ -2852,7 +2852,7 @@ def spieler_fetch():
     # teamId → Name
     team_names = {}
     try:
-        teams = get_json("https://api.openligadb.de/getavailableteams/bl1/2025")
+        teams = get_json("https://api.openligadb.de/getavailableteams/bl1/2026")
         for t in teams:
             team_names[t["teamId"]] = t["teamName"]
     except Exception:
