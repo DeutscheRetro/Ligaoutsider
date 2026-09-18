@@ -370,19 +370,21 @@
       const editTag = k.geaendert_am ? `<em style="font-size:10px;color:var(--text4)"> · editiert ${new Date(k.geaendert_am).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}</em>` : '';
 
       const v = voteMap[k.id] || { up: 0, down: 0, mine: 0 };
-      const upStyle   = v.mine === 1  ? 'color:#4caf50;font-weight:800' : 'color:var(--text4)';
-      const downStyle = v.mine === -1 ? 'color:#e53935;font-weight:800' : 'color:var(--text4)';
+      const istEigenVote = aktuellerUser?.email === k.email;
+      const voteKnopf = (wert, zahl, aktiv) => `<button data-action="vote" data-id="${k.id}" data-wert="${wert}"
+        class="k-vote${aktiv ? (wert === 1 ? ' k-vote--up' : ' k-vote--down') : ''}"
+        ${istEigenVote ? 'disabled title="Eigene Kommentare kannst du nicht bewerten"' : `title="${wert === 1 ? 'Gefällt mir' : 'Gefällt mir nicht'}"`}
+        aria-label="${wert === 1 ? 'Daumen hoch' : 'Daumen runter'}, ${zahl}">${wert === 1 ? '👍' : '👎'} <span>${zahl}</span></button>`;
 
       const istEigen = aktuellerUser?.email === k.email;
 
       const aktionen = `<div style="display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap">
         ${aktuellerUser ? `
-          <button data-action="vote" data-id="${k.id}" data-wert="1"  style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${upStyle}">▲ ${v.up}</button>
-          <button data-action="vote" data-id="${k.id}" data-wert="-1" style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;${downStyle}">▼ ${v.down}</button>
+          ${voteKnopf(1, v.up, v.mine === 1)}${voteKnopf(-1, v.down, v.mine === -1)}
           ${istEigen ? `<button data-action="edit" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">✏ Bearbeiten</button>` : ''}
           ${istEigen || darfLoeschen ? `<button data-action="loeschen" data-id="${k.id}" data-hard="${darfLoeschen && !istEigen}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">🗑 Löschen</button>` : ''}
           <button data-action="profil" data-id="${k.id}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text4);padding:0">👤</button>
-        ` : `<span style="font-size:13px;color:var(--text4)">▲ ${v.up}</span><span style="font-size:13px;color:var(--text4)">▼ ${v.down}</span>`}
+        ` : `<button data-action="login-vote" class="k-vote" title="Zum Bewerten anmelden">👍 <span>${v.up}</span></button><button data-action="login-vote" class="k-vote" title="Zum Bewerten anmelden">👎 <span>${v.down}</span></button>`}
       </div>`;
 
       return `<div class="kommentar-item" id="k-${k.id}">
@@ -404,6 +406,7 @@
       const meta   = id ? kommentarMeta[id] : null;
       if (action === 'profil')      window._zeigeProfil(meta.name, meta.email);
       if (action === 'vote')        vote(id, parseInt(el.dataset.wert));
+      if (action === 'login-vote' && window.netlifyIdentity) netlifyIdentity.open('login');
       if (action === 'edit')        window._editKommentar(id);
       if (action === 'loeschen')    window._loescheKommentar(id, el.dataset.hard === 'true');
       if (action === 'entignoriere') window._entIgnoriereUser(el.dataset.email);

@@ -53,10 +53,24 @@
       </div>
       ${(s.tm_hinweise || []).length ? `<div class="lo-sp-hinweis">${s.tm_hinweise.map(esc).join('<br>')}</div>` : ''}
       <div class="lo-sp-tabelle">${zeilen.map(([k, v]) => `<div><span>${k}</span><span>${esc(v)}</span></div>`).join('')}</div>
+      <div class="lo-sp-news"></div>
       <a class="lo-sp-mehr" href="/aufstellung.html?team=${encodeURIComponent(s.verein)}">Voraussichtliche Elf fürs nächste Bundesliga-Spiel →</a>`;
     m.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    zeigeNews(m.querySelector('.lo-sp-news'), s.tm_id);
   }
+
+  // Letzte Artikel zum Spieler (spieler_news.json, vom Generator erzeugt)
+  let newsIndex = null;
+  async function zeigeNews(ziel, tmId) {
+    newsIndex = newsIndex || fetch('/spieler_news.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    const hier = location.pathname.replace(/^\//, '');
+    const liste = ((await newsIndex)[String(tmId)] || []).filter(n => n.pfad !== hier);
+    if (!liste.length) return;
+    ziel.innerHTML = `<div class="lo-sp-news-t">Letzte News</div>` + liste.map(n =>
+      `<a href="/${esc(n.pfad)}"><span>${esc(n.titel)}</span><small>${esc(n.datum.split(' ')[0])}</small></a>`).join('');
+  }
+  window.loSpielerNews = zeigeNews;
 
   // ─── Namen im Artikel finden ─────────────────────────────────────────────────
   fetch('/spieler_db.json').then(r => r.ok ? r.json() : null).then(db => {

@@ -12,6 +12,7 @@
 
 const SUPABASE_URL = "https://rsodjlglzwlscamdlwev.supabase.co";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const UUID = /^[0-9a-f-]{36}$/i;
 
 // Die Konten selbst liegen bei Netlify Identity, nicht bei uns. Ohne Token
 // faellt die Nutzerliste auf das zurueck, was wir aus eigenen Daten kennen.
@@ -146,7 +147,10 @@ exports.handler = async (event, context) => {
 
       case "vote": {
         const wert = Number(body.wert);
-        if (![1, -1].includes(wert) || !body.kommentar_id) return json(400, { fehler: "Ungueltiger Vote" });
+        if (![1, -1].includes(wert) || !body.kommentar_id || !UUID.test(String(body.kommentar_id))) return json(400, { fehler: "Ungueltiger Vote" });
+        const ziel = await hole(`kommentare?id=eq.${body.kommentar_id}&select=email`);
+        if (!ziel || !ziel.length) return json(404, { fehler: "Kommentar nicht gefunden" });
+        if (ziel[0].email === email) return json(403, { fehler: "Eigene Kommentare kannst du nicht bewerten" });
         const vorhanden = await hole(
           `kommentar_votes?kommentar_id=eq.${body.kommentar_id}&voter_email=eq.${encodeURIComponent(email)}&select=id,vote`
         );

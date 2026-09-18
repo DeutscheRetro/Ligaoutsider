@@ -543,6 +543,16 @@
       return h.getFullYear() - g.getFullYear() - (h < new Date(h.getFullYear(), g.getMonth(), g.getDate()) ? 1 : 0);
     }
 
+    let spielerNewsPromise = null;
+    async function zeigeSpielerNews(ziel, tmId) {
+      spielerNewsPromise = spielerNewsPromise || fetch('spieler_news.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+      const liste = (await spielerNewsPromise)[String(tmId)] || [];
+      if (!liste.length) return;
+      const e = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      ziel.innerHTML = '<div class="lo-sp-news-t">Letzte News</div>' + liste.map(n =>
+        `<a href="${e(n.pfad)}"><span>${e(n.titel)}</span><small>${e(n.datum.split(' ')[0])}</small></a>`).join('');
+    }
+
     async function oeffneSpielerModal(goalGetterId, name, team) {
       const modal = document.getElementById('spieler-modal');
       const inhalt = document.getElementById('spieler-modal-inhalt');
@@ -653,9 +663,11 @@
         </div>
         ${hinweise}
         ${detail ? `<div style="margin-top:14px">${detail}</div>` : ''}
+        <div class="lo-sp-news" id="modal-news"></div>
         ${karriereHtml}
         ${historyHtml}
       `;
+      if (s) zeigeSpielerNews(document.getElementById('modal-news'), s.tm_id);
     }
 
     document.getElementById('spieler-modal').addEventListener('click', function(e) {

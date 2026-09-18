@@ -2435,6 +2435,68 @@ def _finde_spieler(name, kader):
     return None
 
 
+
+# ─── Spieler → Artikel (für die News-Liste im Spielerprofil) ──────────────────
+def spieler_news_index(max_je_spieler=8):
+    """spieler_news.json: je Transfermarkt-ID die neuesten Artikel, in denen der Spieler vorkommt.
+    Gleiche Regeln wie die Verlinkung in spieler.js: voller Name immer, Nachname nur beim
+    Verein des Artikels (akzentunabhängig, Groß-/Kleinschreibung zählt)."""
+    import unicodedata
+    import html as _html
+
+    def falte(t):
+        t = unicodedata.normalize("NFD", t)
+        t = "".join(c for c in t if not unicodedata.combining(c))
+        return t.replace("ø", "o").replace("Ø", "O").replace("ł", "l").replace("đ", "d")
+
+    try:
+        db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+        feed = json.loads(FEED_JSON.read_text(encoding="utf-8"))
+    except Exception as ex:
+        print(f"⚠️  spieler_news_index: {ex}")
+        return
+
+    spieler = []
+    for team in db["teams"].values():
+        for sp in team["spieler"]:
+            teile = sp["name"].split()
+            nach = " ".join(teile[1:]) if len(teile) > 1 else sp["name"]
+            grenze = r"(?<![\w-]){}(?![\w-])"
+            spieler.append({
+                "id": sp["tm_id"], "logo": team["logo"],
+                "voll": re.compile(grenze.format(re.escape(falte(sp["name"])))) if len(teile) > 1 else None,
+                "nach": re.compile(grenze.format(re.escape(falte(nach)))) if len(nach) >= 4 else None,
+                "nach_txt": nach,
+            })
+    # Nachnamen, die innerhalb eines Vereins mehrfach vorkommen, sind nicht eindeutig
+    doppelt = {}
+    for sp in spieler:
+        doppelt[(sp["logo"], sp["nach_txt"])] = doppelt.get((sp["logo"], sp["nach_txt"]), 0) + 1
+
+    index = {}
+    for e in feed:  # neueste zuerst
+        pfad = Path(e.get("pfad", ""))
+        if not pfad.exists():
+            continue
+        roh = pfad.read_text(encoding="utf-8")
+        body = re.search(r'<div class="artikel-text">(.*?)</div>', roh, re.S)
+        text = falte(e.get("titel", "") + " " + _html.unescape(re.sub(r"<[^>]+>", " ", body.group(1) if body else "")))
+        vereine = {_comunio_logo(KLUB_FILTERNAME.get(v, v)) for v in (e.get("vereine") or [])}
+        if e.get("hauptklub"):
+            vereine.add(_comunio_logo(KLUB_FILTERNAME.get(e["hauptklub"], e["hauptklub"])))
+        vereine.discard("")
+        for sp in spieler:
+            treffer = bool(sp["voll"] and sp["voll"].search(text))
+            if not treffer and sp["nach"] and sp["logo"] in vereine and doppelt[(sp["logo"], sp["nach_txt"])] == 1:
+                treffer = bool(sp["nach"].search(text))
+            if treffer:
+                liste = index.setdefault(str(sp["id"]), [])
+                if len(liste) < max_je_spieler:
+                    liste.append({"titel": e["titel"], "datum": e["datum"], "pfad": e["pfad"]})
+
+    Path("spieler_news.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"✅ spieler_news.json geschrieben ({len(index)} Spieler mit News)")
+
 # ─── Aufstellungs-Check ───────────────────────────────────────────────────────
 # Kickbase-Statuscodes: 0 fit, 2 angeschlagen; alles andere
 # (1 verletzt, 8/16/32 Sperren, 256 nicht im Kader …) heißt Ausfall.
@@ -3111,3 +3173,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"❌ spieler_fetch Fehler: {e}")
     main()
+    try:
+        spieler_news_index()
+    except Exception as e:
+        print(f"❌ spieler_news_index Fehler: {e}")

@@ -58,6 +58,7 @@ jobs:
           [ -f comunio.json ] && git add comunio.json || true
           [ -f aufstellung.json ] && git add aufstellung.json || true
           [ -f spieler_db.json ] && git add spieler_db.json || true
+          [ -f spieler_news.json ] && git add spieler_news.json || true
           [ -d spieler ] && git add spieler/ || true
           if git diff --staged --quiet; then
             echo "Keine neuen Artikel – kein Commit nötig"
