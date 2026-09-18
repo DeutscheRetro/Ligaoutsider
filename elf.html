@@ -84,9 +84,15 @@
       <div class="me-bau">
         <div class="me-feld-wrap">
           <div class="me-feld" id="me-feld"></div>
+          <div class="me-budget" id="me-budget">
+            <div><span>Kaderwert</span><b id="me-wert">0 €</b></div>
+            <label><span>Budget</span><input type="number" id="me-budget-in" min="0" step="0.5" placeholder="Mio. €" inputmode="decimal"/></label>
+            <div><span>Rest</span><b id="me-rest">–</b></div>
+          </div>
           <div class="me-aktionen">
             <span id="me-zaehler">0/11</span>
-            <button id="me-teilen">🔗 Link kopieren</button>
+            <button id="me-bild">🖼 Als Bild</button>
+            <button id="me-teilen">🔗 Teilen</button>
             <button id="me-leeren">Leeren</button>
           </div>
         </div>
@@ -163,8 +169,19 @@
     // Positionsgruppe je Modus: Kickbase nach Kickbase, sonst nach Transfermarkt
     function gruppeVon(s) {
       if (modus === 'kickbase' && s.kickbase) return s.kickbase.position;
+      if (modus === 'comunio' && s.comunio && s.comunio.position) return s.comunio.position;
       return s.gruppe || (s.kickbase && s.kickbase.position) || '';
     }
+    // Marktwert im gewählten Spiel (frei: Transfermarkt)
+    function mwVon(s) {
+      if (modus === 'kickbase') return (s.kickbase && s.kickbase.mw) || 0;
+      if (modus === 'comunio') return (s.comunio && s.comunio.mw) || 0;
+      const m = /([\d,]+)\s*(Mio|Tsd)/.exec(s.tm_marktwert || '');
+      return m ? parseFloat(m[1].replace(',', '.')) * (m[2] === 'Mio' ? 1e6 : 1e3) : 0;
+    }
+    const mio = v => (v / 1e6).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' Mio. €';
+    // Kickbase-Spieler ohne Kickbase-Eintrag (bzw. Comunio) können dort nicht aufgestellt werden
+    const imSpiel = s => modus === 'frei' || (modus === 'kickbase' ? !!s.kickbase : !!s.comunio);
 
     function slotsBauen(behalten = true) {
       const alt = behalten ? slots.map(x => x.spieler).filter(Boolean) : [];
@@ -184,11 +201,12 @@
     }
 
     function passt(slot, sp) {
-      return modus === 'frei' || slot.gruppe === gruppeVon(sp);
+      return imSpiel(sp) && (modus === 'frei' || slot.gruppe === gruppeVon(sp));
     }
 
     function setzen(i, sp) {
       const slot = slots[i];
+      if (!imSpiel(sp)) { hinweis(`${sp.name} gibt es bei ${modus === 'kickbase' ? 'Kickbase' : 'Comunio'} nicht`); return; }
       if (!passt(slot, sp)) { hinweis(`${sp.name} ist ${gruppeVon(sp) || 'ohne Position'} – passt nicht auf ${slot.gruppe}`); return; }
       const vorher = slots.findIndex(x => x.spieler && x.spieler.tm_id === sp.tm_id);
       if (vorher >= 0) slots[vorher].spieler = slot.spieler && passt(slots[vorher], slot.spieler) ? slot.spieler : null;
@@ -205,6 +223,15 @@
     }
     function zaehler() {
       document.getElementById('me-zaehler').textContent = slots.filter(x => x.spieler).length + '/11';
+      const wert = slots.reduce((a, x) => a + (x.spieler ? mwVon(x.spieler) : 0), 0);
+      document.getElementById('me-wert').textContent = mio(wert);
+      const budget = parseFloat(document.getElementById('me-budget-in').value.replace(',', '.'));
+      const rest = document.getElementById('me-rest');
+      if (budget > 0) {
+        const r = budget * 1e6 - wert;
+        rest.textContent = mio(r);
+        rest.className = r < 0 ? 'minus' : 'plus';
+      } else { rest.textContent = '–'; rest.className = ''; }
     }
 
     function renderFeld() {
@@ -215,7 +242,9 @@
         const x = slots[i], sp = x.spieler;
         const ziel = gewaehlt && !sp && passt(x, gewaehlt) ? ' ziel' : '';
         return `<div class="me-slot${sp ? ' voll' : ''}${ziel}" data-i="${i}">
-          ${sp ? `<img src="${esc(sp.logo)}" alt=""><span class="me-slot-name">${esc(sp.name.split(' ').slice(-1)[0])}</span>
+          ${sp ? `<img src="${esc(sp.logo)}" alt="">${(() => { const nm = sp.name.split(' ').length > 1 ? sp.name.split(' ').slice(1).join(' ') : sp.name;
+                    return `<span class="me-slot-name${nm.length > 10 ? ' lang' : ''}">${esc(nm)}</span>`; })()}
+                  <span class="me-slot-mw">${mwVon(sp) ? mio(mwVon(sp)).replace(' Mio. €', ' Mio.') : ''}</span>
                   <button class="me-weg" data-weg="${i}" aria-label="Entfernen">×</button>`
                : `<span class="me-slot-plus">+</span><span class="me-slot-pos">${KURZ[x.gruppe] || ''}</span>`}
         </div>`; }).join('')}</div>`).join('');
@@ -224,7 +253,7 @@
 
     function renderTeams() {
       document.getElementById('me-teams').innerHTML =
-        `<button class="${team ? '' : 'aktiv'}" data-team="">Alle</button>` +
+        `<button class="${team ? '' : 'aktiv'}" data-team="" title="Alle Vereine"><img src="logos/bundesliga.png" alt="Alle Vereine"></button>` +
         Object.entries(DB.teams).sort((a, b) => a[0].localeCompare(b[0], 'de')).map(([tn, t]) =>
           `<button class="${team === tn ? 'aktiv' : ''}" data-team="${esc(tn)}" title="${esc(tn)}"><img src="${esc(t.logo)}" alt="${esc(tn)}"></button>`).join('');
     }
@@ -237,9 +266,10 @@
         .sort((a, b) => (reihenfolge[gruppeVon(a)] ?? 9) - (reihenfolge[gruppeVon(b)] ?? 9) || a.name.localeCompare(b.name, 'de'))
         .slice(0, team || q ? 200 : 60);
       document.getElementById('me-liste').innerHTML = liste.length ? liste.map(s => `
-        <div class="me-sp${imFeld.has(s.tm_id) ? ' drin' : ''}${gewaehlt && gewaehlt.tm_id === s.tm_id ? ' gewaehlt' : ''}" draggable="true" data-id="${s.tm_id}">
+        <div class="me-sp${imFeld.has(s.tm_id) ? ' drin' : ''}${imSpiel(s) ? '' : ' fehlt'}${gewaehlt && gewaehlt.tm_id === s.tm_id ? ' gewaehlt' : ''}" draggable="${imSpiel(s)}" data-id="${s.tm_id}">
           <img src="${esc(s.logo)}" alt="">
-          <span class="me-sp-name">${esc(s.name)}<small>${esc(s.position || gruppeVon(s))}</small></span>
+          <span class="me-sp-name">${esc(s.name)}<small>${esc(s.position || gruppeVon(s))}${imSpiel(s) ? '' : ' · nicht bei ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')}</small></span>
+          <span class="me-sp-mw">${mwVon(s) ? mio(mwVon(s)).replace(' Mio. €', ' M') : ''}</span>
           <span class="me-sp-pos">${esc(KURZ[gruppeVon(s)] || '–')}</span>
         </div>`).join('') + (!team && !q ? '<p class="me-mehr">Verein wählen oder suchen, um alle Spieler zu sehen</p>' : '')
         : '<p class="kb-loading">Kein Spieler gefunden</p>';
@@ -265,6 +295,7 @@
     }
 
     function renderAlles() {
+      budgetLaden();
       document.querySelectorAll('#me-modus button').forEach(b => b.classList.toggle('aktiv', b.dataset.modus === modus));
       document.getElementById('me-formation').innerHTML = FORMATIONEN[modus].map(f =>
         `<button class="${f === formation ? 'aktiv' : ''}" data-f="${f}">${f}</button>`).join('');
@@ -319,14 +350,103 @@
         document.getElementById('me-suche').focus();
       }
     });
+    const budgetIn = document.getElementById('me-budget-in');
+    budgetIn.addEventListener('input', () => { try { localStorage.setItem('meine-elf-budget-' + modus, budgetIn.value); } catch (e) {} zaehler(); });
+    function budgetLaden() { try { budgetIn.value = localStorage.getItem('meine-elf-budget-' + modus) || ''; } catch (e) {} }
+
     document.getElementById('me-leeren').addEventListener('click', () => { slotsBauen(false); speichern(); renderAlles(); });
+    const TITEL = () => `Meine Elf (${formation}${modus === 'frei' ? '' : ', ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')})`;
     document.getElementById('me-teilen').addEventListener('click', async () => {
-      const url = location.origin + location.pathname + '#' + kodiert();
+      const url = location.origin + location.pathname + '#' + encodeURIComponent(kodiert());
+      if (navigator.share) {
+        try { await navigator.share({ title: TITEL(), text: TITEL() + ' auf Ligaoutsider.de', url }); return; }
+        catch (e) { if (e.name === 'AbortError') return; }
+      }
       try { await navigator.clipboard.writeText(url); hinweis('Link kopiert'); }
       catch (e) { prompt('Link zum Teilen:', url); }
     });
 
-    fetch('spieler_db.json')
+    // ─── Als Bild (Canvas, 1080×1350 für Instagram/WhatsApp) ────────────────────
+    const bildLaden = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; });
+    async function bildErzeugen() {
+      const W = 1080, H = 1350, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const g = c.getContext('2d');
+      g.fillStyle = '#0d0d0d'; g.fillRect(0, 0, W, H);
+      g.fillStyle = '#e8c000'; g.fillRect(0, 0, W, 10);
+      g.font = '800 54px Inter, -apple-system, Segoe UI, sans-serif';
+      g.fillStyle = '#fff'; g.textBaseline = 'alphabetic';
+      g.fillText('Meine Elf', 60, 105);
+      g.font = '600 30px Inter, -apple-system, Segoe UI, sans-serif'; g.fillStyle = '#e8c000';
+      g.fillText(formation + (modus === 'frei' ? '' : ' · ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')), 60, 150);
+
+      // Spielfeld
+      const fx = 60, fy = 190, fw = W - 120, fh = 960;
+      g.fillStyle = '#1f5a2c'; g.fillRect(fx, fy, fw, fh);
+      g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 3;
+      g.strokeRect(fx + 3, fy + 3, fw - 6, fh - 6);
+      g.beginPath(); g.moveTo(fx, fy + fh / 2); g.lineTo(fx + fw, fy + fh / 2); g.stroke();
+      g.beginPath(); g.arc(fx + fw / 2, fy + fh / 2, 90, 0, Math.PI * 2); g.stroke();
+      g.strokeRect(fx + fw / 2 - 200, fy + fh - 160, 400, 157);
+      g.strokeRect(fx + fw / 2 - 200, fy + 3, 400, 157);
+
+      const reihen = {};
+      slots.forEach(x => (reihen[x.reihe] = reihen[x.reihe] || []).push(x));
+      const nummern = Object.keys(reihen).map(Number).sort((a, b) => b - a);
+      const logos = {};
+      await Promise.all([...new Set(slots.filter(x => x.spieler).map(x => x.spieler.logo))].map(async l => { logos[l] = await bildLaden(l); }));
+      nummern.forEach((r, ri) => {
+        const y = fy + 95 + ri * ((fh - 190) / Math.max(1, nummern.length - 1));
+        reihen[r].forEach((x, i) => {
+          const px = fx + fw * (i + 1) / (reihen[r].length + 1);
+          g.beginPath(); g.arc(px, y, 46, 0, Math.PI * 2);
+          g.fillStyle = x.spieler ? 'rgba(0,0,0,.72)' : 'rgba(0,0,0,.2)'; g.fill();
+          g.strokeStyle = x.spieler ? '#fff' : 'rgba(255,255,255,.4)'; g.lineWidth = 3; g.stroke();
+          g.textAlign = 'center';
+          if (x.spieler) {
+            const l = logos[x.spieler.logo];
+            if (l) g.drawImage(l, px - 28, y - 28, 56, 56);
+            const teile = x.spieler.name.split(' ');
+            const nm = teile.length > 1 ? teile.slice(1).join(' ') : x.spieler.name;
+            g.font = '700 26px Inter, -apple-system, Segoe UI, sans-serif';
+            const bw = Math.min(220, g.measureText(nm).width + 24);
+            g.fillStyle = 'rgba(0,0,0,.78)';
+            g.fillRect(px - bw / 2, y + 54, bw, 38);
+            g.fillStyle = '#fff'; g.fillText(nm, px, y + 82, 200);
+          } else {
+            g.fillStyle = 'rgba(255,255,255,.6)'; g.font = '700 22px Inter, sans-serif';
+            g.fillText(KURZ[x.gruppe], px, y + 8);
+          }
+          g.textAlign = 'left';
+        });
+      });
+
+      // Fuß: Kaderwert + Marke
+      const wert = slots.reduce((a, x) => a + (x.spieler ? mwVon(x.spieler) : 0), 0);
+      g.font = '600 30px Inter, -apple-system, Segoe UI, sans-serif'; g.fillStyle = '#bbb';
+      if (wert) g.fillText('Kaderwert ' + mio(wert), 60, 1215);
+      g.font = '800 40px Inter, -apple-system, Segoe UI, sans-serif';
+      g.fillStyle = '#e8c000'; g.fillText('Liga', 60, 1285);
+      const lw = g.measureText('Liga').width;
+      g.fillStyle = '#fff'; g.fillText('outsider', 60 + lw, 1285);
+      const ow = g.measureText('outsider').width;
+      g.font = '600 26px Inter, sans-serif'; g.fillStyle = '#888'; g.fillText('.de/elf', 60 + lw + ow, 1285);
+      return new Promise(ok => c.toBlob(ok, 'image/png'));
+    }
+    document.getElementById('me-bild').addEventListener('click', async () => {
+      const blob = await bildErzeugen();
+      const datei = new File([blob], 'meine-elf.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [datei] })) {
+        try { await navigator.share({ files: [datei], title: TITEL() }); return; }
+        catch (e) { if (e.name === 'AbortError') return; }
+      }
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'meine-elf.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    });
+
+    fetch('spieler_db.json?v=' + new Date().toISOString().slice(0, 13))
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(d => {
         DB = d;

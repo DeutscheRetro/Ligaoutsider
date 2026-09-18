@@ -2110,7 +2110,9 @@ def _comunio_tabellen(pfad, session):
     r = session.get(COMUNIO_BASE + pfad, timeout=20)
     r.raise_for_status()
     tabellen = []
-    for tb in re.findall(r"<table class='(?:playersTable|rangliste)[^']*'>(.*?)</table>", r.text, re.S):
+    bloecke = re.findall(r"<table class='(?:playersTable|rangliste)[^']*'>(.*?)</table>", r.text, re.S)
+    # Kaderseiten haben keine eigene Tabellenklasse → ganze Seite als eine Tabelle lesen
+    for tb in bloecke or [r.text]:
         zeilen = []
         for tr in re.findall(r"<tr>(.*?)</tr>", tb, re.S):
             name = re.search(r"<a class='playerName[^>]*>(.*?)</a>", tr)
@@ -2318,7 +2320,8 @@ def spieler_db_fetch():
             if treffer:
                 frei.remove(treffer)
                 s_["kickbase"] = {"id": treffer.get("id"), "name": treffer.get("name"),
-                                  "position": treffer.get("position"), "nr": treffer.get("shirtNumber")}
+                                  "position": treffer.get("position"), "nr": treffer.get("shirtNumber"),
+                                  "mw": treffer.get("marketValue") or 0}
             else:
                 s_["kickbase"] = None
         teams[team_name] = {
@@ -2326,6 +2329,31 @@ def spieler_db_fetch():
             "nur_kickbase": [{"id": k.get("id"), "name": k.get("name"), "position": k.get("position"),
                               "nr": k.get("shirtNumber")} for k in frei],
         }
+
+    # Comunio: Marktwert und Position je Spieler von den Comstats-Kaderseiten
+    import urllib.parse
+    try:
+        cs = _req.Session()
+        cs.headers.update({"User-Agent": "Mozilla/5.0 (Ligaoutsider.de)"})
+        start = cs.get(f"{COMUNIO_BASE}/squad/1-FC+Bayern+M%C3%BCnchen", timeout=20).text
+        kader_links = sorted(set(re.findall(r'href="(/squad/\d+-[^"]+)"', start)))
+        cs_treffer = 0
+        for link in kader_links:
+            logo = _comunio_logo(urllib.parse.unquote_plus(link.split("-", 1)[1]))
+            team = next((t for t in teams.values() if t["logo"] == logo), None) if logo else None
+            if not team:
+                continue
+            for tb in _comunio_tabellen(link, cs):
+                for z in tb:
+                    zahlen = [w for w in z["werte"] if re.fullmatch(r"\d{1,3}(\.\d{3})+", w)]
+                    eintrag = _finde_spieler(z["name"], team["spieler"])
+                    if eintrag is not None and zahlen:
+                        eintrag["comunio"] = {"mw": int(zahlen[-1].replace(".", "")), "position": z["pos"]}
+                        cs_treffer += 1
+            time.sleep(1)
+        print(f"  → Comunio-Marktwerte für {cs_treffer} Spieler")
+    except Exception as ex:
+        print(f"  ⚠️ Comunio-Kader nicht verfügbar: {ex}")
 
     Path("spieler_db.json").write_text(json.dumps({
         "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
