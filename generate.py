@@ -633,7 +633,7 @@ def fingerprint_generieren(titel: str, summary: str) -> dict | None:
                 f'Extrahiere einen Story-Fingerprint als reines JSON (kein Markdown):\n'
                 f'{{"event_type":"transfer|verletzung|trainerwechsel|spielergebnis|testspiel|geruecht|vereinsnews|analyse|sonstiges",'
                 f'"main_club":"der primäre Bundesliga-Verein des Artikels (vollständiger Name)",'
-                f'"event_stage":"geruecht|angebot|einigung|vollzogen|verletzung|kader|vertrag|trainer|sonstiges",'
+                f'"event_stage":"geruecht|angebot|einigung|vollzogen|geplatzt|verletzung|fraglich|ausfall|reha|rueckkehr|kader|vertrag|trainer_kandidat|trainer_neu|entlassung|spielbericht|sonstiges",'
                 f'"main_teams":["max 3 Teams"],'
                 f'"main_players":["max 3 Spieler"],'
                 f'"summary":"2-3 Sätze faktische Zusammenfassung (max 60 Wörter)",'
@@ -642,7 +642,11 @@ def fingerprint_generieren(titel: str, summary: str) -> dict | None:
                 f'- event_stage=geruecht: nur Interesse/Spekulationen\n'
                 f'- event_stage=angebot: konkretes Angebot liegt vor\n'
                 f'- event_stage=einigung: Einigung erzielt, Transfer noch nicht vollzogen\n'
-                f'- event_stage=vollzogen: Transfer/Vertrag offiziell bestätigt/unterschrieben\n\n'
+                f'- event_stage=vollzogen: Transfer/Vertrag offiziell bestätigt/unterschrieben\n'
+                f'- event_stage=geplatzt: Absage, Dementi oder gescheiterter Deal\n'
+                f'- Verletzungen nach Stand: verletzung (neu passiert/Diagnose), fraglich (Einsatz offen), '
+                f'ausfall (fehlt sicher im nächsten Spiel), reha (Aufbautraining/individuell), rueckkehr (zurück im Mannschaftstraining oder Kader)\n'
+                f'- Trainer: trainer_kandidat (Suche/Kandidaten), trainer_neu (offiziell vorgestellt), entlassung\n\n'
                 f'Titel: {titel}\nZusammenfassung: {summary[:800]}'
             )}]
         )
@@ -708,7 +712,7 @@ def _ist_innerhalb_tage(published_at_str: str, days: int = 14) -> bool:
         return False
 
 
-def schon_berichtet(titel: str, kern: str, vorhandene: list[str]) -> str | None:
+def schon_berichtet(titel: str, kern: str, vorhandene: list[str], zusammenfassungen: dict | None = None) -> str | None:
     """Stage 6.5: Haiku prüft vor dem Schreiben, ob dasselbe Ereignis schon berichtet
     wurde (letzte Tage oder in diesem Lauf). Gibt den passenden Titel zurück oder None.
     Fängt, was Fingerprints übersehen: dieselbe Nachricht aus anderer Quelle oder als
@@ -727,7 +731,7 @@ def schon_berichtet(titel: str, kern: str, vorhandene: list[str]) -> str | None:
                 "auch wenn Quelle, Formulierung, Zahlen oder Blickwinkel (Analyse, Kommentar, Reaktion) anders sind.\n"
                 "KEINE Doppelmeldung ist nur eine echte neue Entwicklung: z. B. Gerücht → offiziell, "
                 "fraglich → fällt definitiv aus, Verletzung → Rückkehr ins Training, oder ein anderes Spiel.\n\n"
-                f"NEUE Meldung: {titel}\nKern: {kern[:400]}\n\n"
+                f"NEUE Meldung: {titel}\nKern: {kern[:600]}\n\n"
                 f"VORHANDENE:\n{liste}\n\n"
                 "Antworte nur mit der Nummer der passenden vorhandenen Meldung oder mit NEIN."
             )}],
@@ -745,7 +749,10 @@ def schon_berichtet(titel: str, kern: str, vorhandene: list[str]) -> str | None:
             messages=[{"role": "user", "content": (
                 "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
                 "Andere Person oder anderes Ereignis = NEIN.\n\n"
-                f"A: {titel}\nKern A: {kern[:300]}\n\nB: {kandidat}\n\nAntworte nur JA oder NEIN."
+                "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
+                "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
+                f"A: {titel}\nKern A: {kern[:600]}\n\nB: {kandidat}\n"
+                f"Kern B: {((zusammenfassungen or {}).get(kandidat) or '(nur Titel)')[:600]}\n\nAntworte nur JA oder NEIN."
             )}],
         )
         return kandidat if "JA" in pruef.content[0].text.upper() else None
@@ -1651,6 +1658,7 @@ def main():
         log.warning(f"Supabase submitted_urls Fehler: {_e2}")
 
     _all_feeds = RSS_FEEDS + _submitted_urls
+    _archiv_fuer_dup = [e for e in lade_news_archive() if _ist_innerhalb_tage(e.get("published_at", ""), days=5)]
     # Zeitbudget: GitHub bricht den Lauf nach 20 Minuten ab. Was bis dahin nicht
     # verarbeitet ist, bleibt ungesehen und kommt im nächsten Lauf dran.
     _start = time.time()
@@ -1904,8 +1912,12 @@ def main():
             _vorhanden = [e["titel"] for e in bestehende
                           if datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M") >= _grenze]
             _vorhanden += [k["ergebnis"]["titel"] for k in kandidaten]
-            _kern = (fp or {}).get("one_sentence_summary") or re.sub(r"\s+", " ", volltext[:400])
-            _treffer = schon_berichtet(titel, _kern, _vorhanden)
+            # Kern: 2–3 Sätze aus dem Fingerabdruck, sonst Textanfang
+            _kern = (fp or {}).get("summary") or (fp or {}).get("one_sentence_summary") or re.sub(r"\s+", " ", volltext[:500])
+            # Zusammenfassungen der vorhandenen Artikel für die Gegenprobe (aus dem News-Archiv)
+            _zus = {e.get("title", ""): e.get("summary", "") for e in _archiv_fuer_dup if e.get("summary")}
+            _zus.update({k["ergebnis"]["titel"]: (k.get("fingerprint") or {}).get("summary", "") for k in kandidaten})
+            _treffer = schon_berichtet(titel, _kern, _vorhanden, _zus)
             if _treffer:
                 log.info(f"S6.5 schon berichtet ({_treffer[:50]}): {titel[:50]}")
                 _log_skip(aid, titel, "stage6.5", "schon_berichtet")
