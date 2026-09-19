@@ -1143,7 +1143,8 @@ def artikel_generieren(titel: str, volltext: str, quelle_name: str, quelle_url: 
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
 - Nur Fakten, Namen, Zahlen aus dem QUELLTEXT verwenden.
-- Steht eine Information nicht im Quelltext → weglassen oder "laut Quelle nicht spezifiziert".
+- Steht eine Information nicht im Quelltext → einfach weglassen. Niemals Sätze wie "laut Quelle nicht spezifiziert",
+  "Details nennt die Quelle nicht" oder Verweise auf Bezahlschranken/Pressekonferenzen ohne Inhalt schreiben.
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
 - VERBOTEN: „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex", alle Plattitüden.
 - Spielernamen korrekt inkl. Akzente (João, Raphaël, Øyvind).
@@ -1532,7 +1533,8 @@ def qualitaets_check(kandidaten: list) -> list:
         messages=[{
             "role": "user",
             "content": (
-                f"Du bist leitender QS-Redakteur von ligaoutsider.de.\n"
+                f"Du bist leitender QS-Redakteur von ligaoutsider.de. Heute ist der {datetime.date.today().strftime('%d.%m.%Y')} – "
+                f"Daten aus dieser Saison 2026/27 sind aktuell und nicht erfunden.\n"
                 f"Reviewe {len(kandidaten)} Kandidaten. Die Texte sind vollständig abgedruckt. Für JEDEN prüfe:\n"
                 f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke\n"
                 f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
@@ -1657,12 +1659,21 @@ def main():
     except Exception as _e2:
         log.warning(f"Supabase submitted_urls Fehler: {_e2}")
 
-    _all_feeds = RSS_FEEDS + _submitted_urls
+    # Reihum: jeder Lauf beginnt dort, wo der letzte wegen des Zeitbudgets aufgehört hat.
+    # Sonst kämen die hinteren Quellen (14 Vereinssuchen, kicker-Vereinsfeeds) nie dran.
+    _pos_datei = Path("data/feed_position.json")
+    try:
+        _start_pos = int(json.loads(_pos_datei.read_text(encoding="utf-8")).get("naechste", 0)) % len(RSS_FEEDS)
+    except Exception:
+        _start_pos = 0
+    _rotiert = RSS_FEEDS[_start_pos:] + RSS_FEEDS[:_start_pos]
+    _all_feeds = _submitted_urls + _rotiert
+    _feeds_fertig = 0
     _archiv_fuer_dup = [e for e in lade_news_archive() if _ist_innerhalb_tage(e.get("published_at", ""), days=5)]
     # Zeitbudget: GitHub bricht den Lauf nach 20 Minuten ab. Was bis dahin nicht
     # verarbeitet ist, bleibt ungesehen und kommt im nächsten Lauf dran.
     _start = time.time()
-    ZEITBUDGET_SEK = 13 * 60
+    ZEITBUDGET_SEK = 16 * 60
 
     for feed_url in _all_feeds:
         # Limit zählt geschriebene Kandidaten – veröffentlicht wird erst nach der QA,
@@ -1684,6 +1695,8 @@ def main():
             log.error(f"Feed-Parse-Fehler: {e}")
             continue
 
+        if feed_url in RSS_FEEDS:
+            _feeds_fertig += 1   # zählt als begonnen; bei Abbruch wird er im nächsten Lauf wiederholt
         ist_google_news = "news.google.com" in feed_url
         feed_quelle = feed.feed.get("title", feed_url)
 
@@ -2132,6 +2145,10 @@ def main():
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
 
     url_cache.cleanup_and_save()
+    # Nächster Lauf startet beim zuletzt begonnenen Feed (der evtl. nicht fertig wurde)
+    _naechste = (_start_pos + max(0, _feeds_fertig - 1)) % len(RSS_FEEDS) if _feeds_fertig < len(RSS_FEEDS) else 0
+    _pos_datei.write_text(json.dumps({"naechste": _naechste, "stand": datetime.datetime.now().isoformat()}), encoding="utf-8")
+    log.info(f"Feeds: {_feeds_fertig}/{len(RSS_FEEDS)} begonnen, nächster Lauf startet bei Nr. {_naechste}")
     # nur Zähler von URLs behalten, die noch im Cache-Zeitraum liegen
     _versuche_datei.write_text(json.dumps(dict(list(_abruf_versuche.items())[-2000:])), encoding="utf-8")
     log.info(f"URL-Cache gespeichert: {url_cache.get_seen_count()} URLs")

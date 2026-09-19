@@ -27,7 +27,7 @@ env:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     concurrency:
       group: generate-pipeline
       cancel-in-progress: true
