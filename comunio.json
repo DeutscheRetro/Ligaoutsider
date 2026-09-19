@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-19T15:04:02.518881+00:00",
+  "updated": "2026-09-19T18:20:09.518078+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -122,6 +122,30 @@
       "eff": 3.0
     },
     {
+      "name": "Tietz",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Sturm",
+      "mw": 9270000,
+      "spiele": 4,
+      "tore": 4,
+      "pts": 37,
+      "ap": 9.25,
+      "eff": 4.0
+    },
+    {
+      "name": "Mittelstädt",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "mw": 9710000,
+      "spiele": 4,
+      "tore": 1,
+      "pts": 37,
+      "ap": 9.25,
+      "eff": 3.8
+    },
+    {
       "name": "Kane",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -134,16 +158,16 @@
       "eff": 1.4
     },
     {
-      "name": "Tietz",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
+      "name": "Grüll",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
       "pos": "Sturm",
-      "mw": 9270000,
+      "mw": 6270000,
       "spiele": 4,
-      "tore": 4,
-      "pts": 36,
-      "ap": 9.0,
-      "eff": 3.9
+      "tore": 2,
+      "pts": 35,
+      "ap": 8.75,
+      "eff": 5.6
     },
     {
       "name": "Rieder",
@@ -158,40 +182,16 @@
       "eff": 4.4
     },
     {
-      "name": "Ginter",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "mw": 8140000,
-      "spiele": 4,
-      "tore": 0,
-      "pts": 34,
-      "ap": 8.5,
-      "eff": 4.2
-    },
-    {
-      "name": "Davies",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Abwehr",
-      "mw": 8250000,
-      "spiele": 4,
-      "tore": 0,
-      "pts": 34,
-      "ap": 8.5,
-      "eff": 4.1
-    },
-    {
-      "name": "Kimmich",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
+      "name": "F. Nmecha",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
       "pos": "Mittelfeld",
-      "mw": 15530000,
+      "mw": 9730000,
       "spiele": 4,
-      "tore": 0,
-      "pts": 34,
-      "ap": 8.5,
-      "eff": 2.2
+      "tore": 2,
+      "pts": 35,
+      "ap": 8.75,
+      "eff": 3.6
     }
   ],
   "schnitt": [
@@ -256,30 +256,6 @@
       "eff": 2.0
     },
     {
-      "name": "Vagnoman",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "mw": 6810000,
-      "spiele": 3,
-      "tore": 2,
-      "pts": 29,
-      "ap": 9.67,
-      "eff": 4.3
-    },
-    {
-      "name": "Guirassy",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Sturm",
-      "mw": 15340000,
-      "spiele": 3,
-      "tore": 2,
-      "pts": 29,
-      "ap": 9.67,
-      "eff": 1.9
-    },
-    {
       "name": "Pavlović",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -304,19 +280,67 @@
       "eff": 4.5
     },
     {
+      "name": "Tietz",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Sturm",
+      "mw": 9270000,
+      "spiele": 4,
+      "tore": 4,
+      "pts": 37,
+      "ap": 9.25,
+      "eff": 4.0
+    },
+    {
       "name": "Mittelstädt",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
       "pos": "Abwehr",
       "mw": 9710000,
-      "spiele": 3,
+      "spiele": 4,
       "tore": 1,
-      "pts": 28,
-      "ap": 9.33,
-      "eff": 2.9
+      "pts": 37,
+      "ap": 9.25,
+      "eff": 3.8
+    },
+    {
+      "name": "Kane",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "mw": 26480000,
+      "spiele": 4,
+      "tore": 3,
+      "pts": 36,
+      "ap": 9.0,
+      "eff": 1.4
     }
   ],
   "effizienz": [
+    {
+      "name": "da Costa",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Abwehr",
+      "mw": 2000000,
+      "spiele": 4,
+      "tore": 1,
+      "pts": 20,
+      "ap": 5.0,
+      "eff": 10.0
+    },
+    {
+      "name": "Bredlow",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Torwart",
+      "mw": 2430000,
+      "spiele": 4,
+      "tore": 0,
+      "pts": 19,
+      "ap": 4.75,
+      "eff": 7.8
+    },
     {
       "name": "Neuer",
       "klub": "FC Bayern München",
@@ -354,6 +378,18 @@
       "eff": 6.9
     },
     {
+      "name": "Hein",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Torwart",
+      "mw": 2640000,
+      "spiele": 4,
+      "tore": 0,
+      "pts": 18,
+      "ap": 4.5,
+      "eff": 6.8
+    },
+    {
       "name": "Skarke",
       "klub": "1. FC Union Berlin",
       "logo": "logos/union.png",
@@ -364,6 +400,18 @@
       "pts": 24,
       "ap": 6.0,
       "eff": 6.7
+    },
+    {
+      "name": "Kobel",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Torwart",
+      "mw": 3170000,
+      "spiele": 4,
+      "tore": 0,
+      "pts": 21,
+      "ap": 5.25,
+      "eff": 6.6
     },
     {
       "name": "Brackelmann",
@@ -378,30 +426,6 @@
       "eff": 6.5
     },
     {
-      "name": "Hein",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Torwart",
-      "mw": 2640000,
-      "spiele": 4,
-      "tore": 0,
-      "pts": 17,
-      "ap": 4.25,
-      "eff": 6.4
-    },
-    {
-      "name": "Bredlow",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Torwart",
-      "mw": 2430000,
-      "spiele": 3,
-      "tore": 0,
-      "pts": 15,
-      "ap": 5.0,
-      "eff": 6.2
-    },
-    {
       "name": "Vandevoordt",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
@@ -411,30 +435,6 @@
       "tore": 0,
       "pts": 17,
       "ap": 5.67,
-      "eff": 5.9
-    },
-    {
-      "name": "Stalmach",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Mittelfeld",
-      "mw": 2700000,
-      "spiele": 3,
-      "tore": 1,
-      "pts": 16,
-      "ap": 5.33,
-      "eff": 5.9
-    },
-    {
-      "name": "Scally",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Abwehr",
-      "mw": 2540000,
-      "spiele": 4,
-      "tore": 1,
-      "pts": 15,
-      "ap": 3.75,
       "eff": 5.9
     }
   ],
@@ -471,9 +471,9 @@
       "mw": 9270000,
       "spiele": 4,
       "tore": 4,
-      "pts": 36,
-      "ap": 9.0,
-      "eff": 3.9
+      "pts": 37,
+      "ap": 9.25,
+      "eff": 4.0
     },
     {
       "name": "Ebnoutalib",
@@ -548,16 +548,16 @@
       "eff": 2.0
     },
     {
-      "name": "Krattenmacher",
-      "klub": "SV Elversberg",
-      "logo": "logos/elversberg.png",
-      "pos": "Mittelfeld",
-      "mw": 6170000,
-      "spiele": 3,
+      "name": "Füllkrug",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Sturm",
+      "mw": 10450000,
+      "spiele": 4,
       "tore": 3,
-      "pts": 28,
-      "ap": 9.33,
-      "eff": 4.5
+      "pts": 29,
+      "ap": 7.25,
+      "eff": 2.8
     }
   ],
   "torwart": [
@@ -617,15 +617,26 @@
       "ap": 5.33
     },
     {
+      "name": "Kobel",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Torwart",
+      "mw": 3170000,
+      "spiele": 4,
+      "tore": 0,
+      "pts": 21,
+      "ap": 5.25
+    },
+    {
       "name": "Bredlow",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
       "pos": "Torwart",
       "mw": 2430000,
-      "spiele": 3,
+      "spiele": 4,
       "tore": 0,
-      "pts": 15,
-      "ap": 5.0
+      "pts": 19,
+      "ap": 4.75
     },
     {
       "name": "Atubolu",
@@ -637,41 +648,19 @@
       "tore": 0,
       "pts": 19,
       "ap": 4.75
-    },
-    {
-      "name": "Kobel",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Torwart",
-      "mw": 3170000,
-      "spiele": 3,
-      "tore": 0,
-      "pts": 14,
-      "ap": 4.67
     }
   ],
   "abwehr": [
-    {
-      "name": "Vagnoman",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "mw": 6810000,
-      "spiele": 3,
-      "tore": 2,
-      "pts": 29,
-      "ap": 9.67
-    },
     {
       "name": "Mittelstädt",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
       "pos": "Abwehr",
       "mw": 9710000,
-      "spiele": 3,
+      "spiele": 4,
       "tore": 1,
-      "pts": 28,
-      "ap": 9.33
+      "pts": 37,
+      "ap": 9.25
     },
     {
       "name": "Baku",
@@ -685,22 +674,22 @@
       "ap": 9.0
     },
     {
-      "name": "Davies",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
+      "name": "Ginter",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
       "pos": "Abwehr",
-      "mw": 8250000,
+      "mw": 8140000,
       "spiele": 4,
       "tore": 0,
       "pts": 34,
       "ap": 8.5
     },
     {
-      "name": "Ginter",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
+      "name": "Davies",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
       "pos": "Abwehr",
-      "mw": 8140000,
+      "mw": 8250000,
       "spiele": 4,
       "tore": 0,
       "pts": 34,
@@ -716,6 +705,17 @@
       "tore": 1,
       "pts": 25,
       "ap": 8.33
+    },
+    {
+      "name": "Vagnoman",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "mw": 6810000,
+      "spiele": 4,
+      "tore": 2,
+      "pts": 33,
+      "ap": 8.25
     },
     {
       "name": "Upamecano",
@@ -786,6 +786,17 @@
       "ap": 8.75
     },
     {
+      "name": "F. Nmecha",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Mittelfeld",
+      "mw": 9730000,
+      "spiele": 4,
+      "tore": 2,
+      "pts": 35,
+      "ap": 8.75
+    },
+    {
       "name": "Kimmich",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -795,17 +806,6 @@
       "tore": 0,
       "pts": 34,
       "ap": 8.5
-    },
-    {
-      "name": "F. Nmecha",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "mw": 9730000,
-      "spiele": 3,
-      "tore": 2,
-      "pts": 25,
-      "ap": 8.33
     },
     {
       "name": "García",
@@ -819,15 +819,15 @@
       "ap": 8.33
     },
     {
-      "name": "Maza",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
+      "name": "M. Eggestein",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
       "pos": "Mittelfeld",
-      "mw": 10310000,
-      "spiele": 3,
-      "tore": 1,
-      "pts": 23,
-      "ap": 7.67
+      "mw": 7380000,
+      "spiele": 4,
+      "tore": 2,
+      "pts": 32,
+      "ap": 8.0
     }
   ],
   "sturm": [
@@ -876,15 +876,15 @@
       "ap": 10.0
     },
     {
-      "name": "Guirassy",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
+      "name": "Tietz",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
       "pos": "Sturm",
-      "mw": 15340000,
-      "spiele": 3,
-      "tore": 2,
-      "pts": 29,
-      "ap": 9.67
+      "mw": 9270000,
+      "spiele": 4,
+      "tore": 4,
+      "pts": 37,
+      "ap": 9.25
     },
     {
       "name": "Kane",
@@ -898,15 +898,15 @@
       "ap": 9.0
     },
     {
-      "name": "Tietz",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
+      "name": "Grüll",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
       "pos": "Sturm",
-      "mw": 9270000,
+      "mw": 6270000,
       "spiele": 4,
-      "tore": 4,
-      "pts": 36,
-      "ap": 9.0
+      "tore": 2,
+      "pts": 35,
+      "ap": 8.75
     },
     {
       "name": "Ebnoutalib",
@@ -916,8 +916,8 @@
       "mw": 7430000,
       "spiele": 4,
       "tore": 4,
-      "pts": 34,
-      "ap": 8.5
+      "pts": 33,
+      "ap": 8.25
     }
   ],
   "raketen": [
@@ -1290,6 +1290,14 @@
   ],
   "trend": [
     {
+      "name": "Ache",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Sturm",
+      "pts": 10,
+      "mw": 4600000
+    },
+    {
       "name": "Olise",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -1298,44 +1306,20 @@
       "mw": 22060000
     },
     {
-      "name": "Pavlović",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
+      "name": "Suzuki",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
       "pos": "Mittelfeld",
-      "pts": 31,
-      "mw": 12800000
+      "pts": 30,
+      "mw": 7740000
     },
     {
-      "name": "Lemperle",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
+      "name": "Grüll",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
       "pos": "Sturm",
-      "pts": 11,
-      "mw": 9160000
-    },
-    {
-      "name": "Musiala",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "pts": 2,
-      "mw": 14730000
-    },
-    {
-      "name": "Kane",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 24,
-      "mw": 26480000
-    },
-    {
-      "name": "Luis Díaz",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 14,
-      "mw": 15510000
+      "pts": 22,
+      "mw": 6270000
     },
     {
       "name": "Ebnoutalib",
@@ -1346,12 +1330,12 @@
       "mw": 7430000
     },
     {
-      "name": "Davies",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Abwehr",
-      "pts": 23,
-      "mw": 8250000
+      "name": "Füllkrug",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Sturm",
+      "pts": 18,
+      "mw": 10450000
     },
     {
       "name": "Tietz",
@@ -1362,30 +1346,46 @@
       "mw": 9270000
     },
     {
-      "name": "Kimmich",
+      "name": "Musiala",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
       "pos": "Mittelfeld",
-      "pts": 27,
-      "mw": 15530000
+      "pts": 2,
+      "mw": 14730000
+    },
+    {
+      "name": "Capaldo",
+      "klub": "Hamburger SV",
+      "logo": "logos/hsv.png",
+      "pos": "Abwehr",
+      "pts": -8,
+      "mw": 2140000
+    },
+    {
+      "name": "Amiri",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Mittelfeld",
+      "pts": 12,
+      "mw": 10870000
     }
   ],
   "aufsteigend": [
     {
-      "name": "Götze",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Mittelfeld",
-      "pts": 6,
-      "mw": 2540000
+      "name": "Mwene",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Abwehr",
+      "pts": 20,
+      "mw": 4270000
     },
     {
-      "name": "Chuki ",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
+      "name": "Grønbæk",
+      "klub": "Hamburger SV",
+      "logo": "logos/hsv.png",
       "pos": "Mittelfeld",
-      "pts": 11,
-      "mw": 4550000
+      "pts": 7,
+      "mw": 4680000
     },
     {
       "name": "Bellingham",
@@ -1396,28 +1396,44 @@
       "mw": 8550000
     },
     {
-      "name": "Matsima",
+      "name": "Fellhauer",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
+      "pos": "Mittelfeld",
+      "pts": 11,
+      "mw": 4080000
+    },
+    {
+      "name": "N. Banks",
       "klub": "FC Augsburg",
       "logo": "logos/augsburg.png",
       "pos": "Abwehr",
-      "pts": 21,
-      "mw": 5380000
+      "pts": 18,
+      "mw": 4610000
     },
     {
-      "name": "Pieringer",
-      "klub": "SC Paderborn",
-      "logo": "logos/paderborn.png",
-      "pos": "Sturm",
-      "pts": 0,
-      "mw": 2600000
+      "name": "Sano",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Mittelfeld",
+      "pts": 22,
+      "mw": 8740000
     },
     {
-      "name": "Asllani",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
+      "name": "Machino",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
       "pos": "Sturm",
-      "pts": 4,
-      "mw": 9190000
+      "pts": 1,
+      "mw": 1460000
+    },
+    {
+      "name": "Remberg",
+      "klub": "Hamburger SV",
+      "logo": "logos/hsv.png",
+      "pos": "Mittelfeld",
+      "pts": 5,
+      "mw": 3350000
     },
     {
       "name": "Raum",
@@ -1428,28 +1444,12 @@
       "mw": 8700000
     },
     {
-      "name": "S. Becker",
+      "name": "Martel",
       "klub": "1. FSV Mainz 05",
       "logo": "logos/mainz.png",
-      "pos": "Sturm",
-      "pts": 16,
-      "mw": 6560000
-    },
-    {
-      "name": "Burkardt",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Sturm",
-      "pts": 24,
-      "mw": 11630000
-    },
-    {
-      "name": "Neuhaus",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
       "pos": "Mittelfeld",
       "pts": 0,
-      "mw": 970000
+      "mw": 2630000
     }
   ],
   "rekorde": [
@@ -1535,13 +1535,13 @@
       "gegner": "Hamburger SV"
     },
     {
-      "name": "Tietz",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Sturm",
+      "name": "Upamecano",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Abwehr",
       "pts": 16,
-      "tore": 2,
-      "gegner": "Hamburger SV"
+      "tore": 1,
+      "gegner": "VfB Stuttgart"
     }
   ]
 }

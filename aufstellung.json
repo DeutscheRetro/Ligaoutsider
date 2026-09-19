@@ -1,42 +1,7 @@
 {
- "updated": "2026-09-19T15:04:44.017740+00:00",
+ "updated": "2026-09-19T18:20:53.204163+00:00",
  "spieltag": 4,
  "partien": [
-  {
-   "heim": "Borussia Mönchengladbach",
-   "gast": "1. FSV Mainz 05",
-   "anstoss": "2026-09-19T14:30:00",
-   "anstoss_text": "Sa 19.09. 15:30",
-   "spieltag": 4
-  },
-  {
-   "heim": "Eintracht Frankfurt",
-   "gast": "SC Freiburg",
-   "anstoss": "2026-09-19T14:30:00",
-   "anstoss_text": "Sa 19.09. 15:30",
-   "spieltag": 4
-  },
-  {
-   "heim": "Hamburger SV",
-   "gast": "1. FC Köln",
-   "anstoss": "2026-09-19T14:30:00",
-   "anstoss_text": "Sa 19.09. 15:30",
-   "spieltag": 4
-  },
-  {
-   "heim": "SV Werder Bremen",
-   "gast": "FC Augsburg",
-   "anstoss": "2026-09-19T14:30:00",
-   "anstoss_text": "Sa 19.09. 15:30",
-   "spieltag": 4
-  },
-  {
-   "heim": "VfB Stuttgart",
-   "gast": "Borussia Dortmund",
-   "anstoss": "2026-09-19T17:30:00",
-   "anstoss_text": "Sa 19.09. 18:30",
-   "spieltag": 4
-  },
   {
    "heim": "Bayer 04 Leverkusen",
    "gast": "RB Leipzig",
@@ -59,8 +24,36 @@
    "spieltag": 4
   },
   {
+   "heim": "Borussia Dortmund",
+   "gast": "SV Werder Bremen",
+   "anstoss": "2026-10-09T19:30:00",
+   "anstoss_text": "Fr 09.10. 20:30",
+   "spieltag": 5
+  },
+  {
    "heim": "FC Augsburg",
    "gast": "FC Bayern München",
+   "anstoss": "2026-10-10T14:30:00",
+   "anstoss_text": "Sa 10.10. 15:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "1. FSV Mainz 05",
+   "gast": "Bayer 04 Leverkusen",
+   "anstoss": "2026-10-10T14:30:00",
+   "anstoss_text": "Sa 10.10. 15:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "SC Paderborn 07",
+   "gast": "VfB Stuttgart",
+   "anstoss": "2026-10-10T14:30:00",
+   "anstoss_text": "Sa 10.10. 15:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "TSG Hoffenheim",
+   "gast": "Hamburger SV",
    "anstoss": "2026-10-10T14:30:00",
    "anstoss_text": "Sa 10.10. 15:30",
    "spieltag": 5
@@ -70,6 +63,27 @@
    "gast": "SV Elversberg",
    "anstoss": "2026-10-10T14:30:00",
    "anstoss_text": "Sa 10.10. 15:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "RB Leipzig",
+   "gast": "Eintracht Frankfurt",
+   "anstoss": "2026-10-10T17:30:00",
+   "anstoss_text": "Sa 10.10. 18:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "1. FC Köln",
+   "gast": "Borussia Mönchengladbach",
+   "anstoss": "2026-10-11T14:30:00",
+   "anstoss_text": "So 11.10. 15:30",
+   "spieltag": 5
+  },
+  {
+   "heim": "SC Freiburg",
+   "gast": "FC Schalke 04",
+   "anstoss": "2026-10-11T16:30:00",
+   "anstoss_text": "So 11.10. 17:30",
    "spieltag": 5
   }
  ],
@@ -502,10 +516,7 @@
   "Borussia Dortmund": {
    "logo": "logos/dortmund.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -517,7 +528,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -529,7 +540,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Nico Schlotterbeck",
@@ -539,7 +550,7 @@
       "news": "artikel/f68b98a2cf.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Daniel Svensson",
@@ -549,16 +560,6 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 97
-     },
-     {
-      "name": "Joane Gadou",
-      "nr": "22",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 86 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
       "prozent": 95
      },
      {
@@ -569,20 +570,20 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 83
+      "prozent": 95
+     },
+     {
+      "name": "Joane Gadou",
+      "nr": "22",
+      "ampel": "gruen",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 86 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 80
      }
     ],
     "mf": [
-     {
-      "name": "Felix Nmecha",
-      "nr": "8",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 51 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 93
-     },
      {
       "name": "Jobe Bellingham",
       "nr": "7",
@@ -591,17 +592,27 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 81
+      "prozent": 87
      },
      {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
+      "name": "Konstantinos Karetsas",
+      "nr": "19",
       "ampel": "gruen",
-      "grund": "1 von 2 Einsätzen in der Startelf · Ø 67 min · 1 Spiel ohne Einsatz",
-      "news": "",
+      "grund": "Rückkehr ins Training nach Kreislaufkollaps",
+      "news": "artikel/a90a35a305.html",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 69
+      "prozent": 75
+     },
+     {
+      "name": "Felix Nmecha",
+      "nr": "8",
+      "ampel": "gruen",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 51 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 73
      }
     ],
     "st": [
@@ -613,40 +624,30 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 97
+      "prozent": 95
      },
      {
-      "name": "Fábio Silva",
-      "nr": "21",
+      "name": "Maximilian Beier",
+      "nr": "14",
       "ampel": "gruen",
-      "grund": "1 von 2 Einsätzen in der Startelf · Ø 50 min · 1 Spiel ohne Einsatz",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 67 min",
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 82
+      "prozent": 72
      }
     ]
    },
    "bank": [
     {
-     "name": "Konstantinos Karetsas",
-     "nr": "19",
+     "name": "Ethan Nwaneri",
+     "nr": "18",
      "ampel": "gruen",
-     "grund": "Rückkehr ins Training nach Kreislaufkollaps",
-     "news": "artikel/a90a35a305.html",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 67 min · 1 Spiel ohne Einsatz",
+     "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 34
-    },
-    {
-     "name": "Maximilian Beier",
-     "nr": "14",
-     "ampel": "gruen",
-     "grund": "2 von 3 Einsätzen in der Startelf · Ø 67 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 33
+     "prozent": 38
     },
     {
      "name": "Joey Veerman",
@@ -656,7 +657,47 @@
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 24
+     "prozent": 36
+    },
+    {
+     "name": "Fábio Silva",
+     "nr": "21",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 50 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 29
+    },
+    {
+     "name": "Marcel Sabitzer",
+     "nr": "20",
+     "ampel": "gruen",
+     "grund": "0 von 3 Einsätzen in der Startelf · Ø 26 min",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 28
+    },
+    {
+     "name": "Ramy Bensebaini",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "0 von 1 Einsätzen in der Startelf · Ø 16 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 20
+    },
+    {
+     "name": "Carney Chukwuemeka",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "0 von 1 Einsätzen in der Startelf · Ø 29 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 11
     }
    ],
    "fraglich": [],
@@ -1142,10 +1183,7 @@
   "VfB Stuttgart": {
    "logo": "logos/stuttgart.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1157,20 +1195,10 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 93
+      "prozent": 73
      }
     ],
     "abw": [
-     {
-      "name": "Maximilian Mittelstädt",
-      "nr": "7",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 91 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 97
-     },
      {
       "name": "Jeff Chabot",
       "nr": "24",
@@ -1179,7 +1207,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
+     },
+     {
+      "name": "Maximilian Mittelstädt",
+      "nr": "7",
+      "ampel": "gruen",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 91 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 92
      },
      {
       "name": "Josha Vagnoman",
@@ -1189,7 +1227,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 96
+      "prozent": 84
      },
      {
       "name": "Finn Jeltsch",
@@ -1199,7 +1237,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 96
+      "prozent": 83
      },
      {
       "name": "Ramon Hendriks",
@@ -1209,7 +1247,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 66
+      "prozent": 69
      }
     ],
     "mf": [
@@ -1221,7 +1259,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 79
+      "prozent": 81
+     },
+     {
+      "name": "Bilal El Khannouss",
+      "nr": "11",
+      "ampel": "gruen",
+      "grund": "1 von 3 Einsätzen in der Startelf · Ø 43 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 45
      }
     ],
     "st": [
@@ -1233,27 +1281,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 96
-     },
-     {
-      "name": "Deniz Undav",
-      "nr": "26",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 58 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 93
-     },
-     {
-      "name": "Ermedin Demirovic",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "1 von 3 Einsätzen in der Startelf · Ø 42 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 70
+      "prozent": 83
      },
      {
       "name": "Dzenan Pejcinovic",
@@ -1263,11 +1291,31 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 35
+      "prozent": 81
+     },
+     {
+      "name": "Deniz Undav",
+      "nr": "26",
+      "ampel": "gruen",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 58 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 73
      }
     ]
    },
    "bank": [
+    {
+     "name": "Ermedin Demirovic",
+     "nr": "9",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 42 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 43
+    },
     {
      "name": "Jamie Leweling",
      "nr": "18",
@@ -1276,17 +1324,7 @@
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 34
-    },
-    {
-     "name": "Bilal El Khannouss",
-     "nr": "11",
-     "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 43 min",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 26
+     "prozent": 35
     },
     {
      "name": "Atakan Karazor",
@@ -1296,17 +1334,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
-     "prozent": 19
-    },
-    {
-     "name": "Yanik Spalt",
-     "nr": "47",
-     "ampel": "gruen",
-     "grund": "0 von 2 Einsätzen in der Startelf · Ø 34 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 16
+     "prozent": 15
     }
    ],
    "fraglich": [
@@ -1318,7 +1346,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 2
+     "prozent": 1
     }
    ],
    "ausfall": [
@@ -1336,7 +1364,7 @@
      "name": "Dennis Seimen",
      "nr": "41",
      "ampel": "rot",
-     "grund": "Oberschenkelverletzung - Rückkehr vsl. am 30.09.2026",
+     "grund": "Nach Muskelverletzung - teilintegriert im Teamtraining, Rückkehr nach der LSP",
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
@@ -1356,7 +1384,7 @@
      "name": "Lorenz Assignon",
      "nr": "22",
      "ampel": "rot",
-     "grund": "Trainingsrückstand - Rückkehr vsl. am 21.09.2026",
+     "grund": "Trainingsrückstand - noch keine Option für BVB (H)",
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
@@ -1376,7 +1404,7 @@
      "name": "Justin Diehl",
      "nr": "31",
      "ampel": "rot",
-     "grund": "Oberschenkelverletzung - Rückkehr vsl. am 30.09.2026",
+     "grund": "Muskelverletzung im Oberschenkel - fällt mindestens bis zur Länderspielpause aus",
      "news": "",
      "reihe": "st",
      "pos": "Linksaußen",
@@ -1966,19 +1994,18 @@
      "prozent": 11
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Bernardo",
      "nr": "13",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
+     "ampel": "rot",
+     "grund": "Probleme an der Achillessehne",
+     "news": "artikel/cf3e438b53.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 14
-    }
-   ],
-   "ausfall": [
+     "prozent": 0
+    },
     {
      "name": "Alexander Prass",
      "nr": "22",
@@ -2668,16 +2695,6 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 75
-     },
-     {
-      "name": "Wael Mohya",
-      "nr": "36",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 54 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 48
      }
     ],
     "st": [
@@ -2689,6 +2706,16 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
+      "prozent": 72
+     },
+     {
+      "name": "Tim Kleindienst",
+      "nr": "11",
+      "ampel": "gruen",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 76 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
       "prozent": 72
      },
      {
@@ -2704,6 +2731,16 @@
     ]
    },
    "bank": [
+    {
+     "name": "Wael Mohya",
+     "nr": "36",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 54 min",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 48
+    },
     {
      "name": "Robin Hack",
      "nr": "25",
@@ -2768,16 +2805,6 @@
     }
    ],
    "ausfall": [
-    {
-     "name": "Tim Kleindienst",
-     "nr": "11",
-     "ampel": "rot",
-     "grund": "Gelbrotsperre bis 20.09.",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
     {
      "name": "Daiki Hashioka",
      "nr": "14",
@@ -3049,6 +3076,16 @@
      "prozent": 28
     },
     {
+     "name": "Alexander Røssing-Lelesiit",
+     "nr": "38",
+     "ampel": "gelb",
+     "grund": "Nach Syndesmose-Schaden - trainiert teilintegriert",
+     "news": "",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 2
+    },
+    {
      "name": "Otto Stange",
      "nr": "19",
      "ampel": "gelb",
@@ -3059,18 +3096,7 @@
      "prozent": 1
     }
    ],
-   "ausfall": [
-    {
-     "name": "Alexander Røssing-Lelesiit",
-     "nr": "38",
-     "ampel": "rot",
-     "grund": "Nach Syndesmose-Schaden - trainiert teilintegriert, verpasst KOE (H)",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 0
-    }
-   ]
+   "ausfall": []
   },
   "SV Werder Bremen": {
    "logo": "logos/werder.png",
