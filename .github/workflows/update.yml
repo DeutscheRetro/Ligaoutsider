@@ -6,6 +6,7 @@ on:
   # nur nach Zeitabstand (siehe ABSTAND_STUNDEN), nicht bei jedem Lauf.
   schedule:
     - cron: '0 5 * * *'     # 07:00 (UTC+2)
+    - cron: '0 6 * * *'     # 08:00 – erste Veroeffentlichung des Tages
     - cron: '0 7 * * *'     # 09:00
     - cron: '0 9 * * *'     # 11:00
     - cron: '0 11 * * *'    # 13:00
@@ -31,9 +32,12 @@ on:
 # zwei Deploys am Tag und funktioniert auch, wenn GitHub die Läufe Stunden zu
 # spät startet (fester Zeitplan hatte dann den falschen Lauf erwischt).
 env:
+  # Zwei Veroeffentlichungen am Tag: die erste ab 8 Uhr, die zweite ab 15 Uhr.
+  # Als Regel formuliert (fruehestens 8 Uhr + 6 Stunden Abstand), damit sie auch
+  # greift, wenn GitHub einen Lauf erst Stunden spaeter startet.
   # 1.000 Credits/Monat aus dem Tarif reichen fuer rund 60-65 Veroeffentlichungen.
-  # 10 Stunden Abstand = etwa zwei am Tag; das gekaufte Polster bleibt unberuehrt.
-  ABSTAND_STUNDEN: '10'
+  AB_STUNDE: '8'
+  ABSTAND_STUNDEN: '6'
   # Ausnahme: der Lauf nach den Abendspielen veroeffentlicht immer
   IMMER_VEROEFFENTLICHEN_BEI: '0 20 * * 5,6,0'
 
@@ -86,11 +90,12 @@ jobs:
           LETZTE=$(git log -200 --format='%H %ct %s' | grep -v '\[skip netlify\]' | head -1 | cut -d' ' -f2)
           JETZT=$(date +%s)
           STUNDEN=$(( (JETZT - ${LETZTE:-0}) / 3600 ))
+          STUNDE=$(TZ=Europe/Berlin date +%-H)
           VEROEFFENTLICHEN=false
-          [ "$STUNDEN" -ge "$ABSTAND_STUNDEN" ] && VEROEFFENTLICHEN=true
+          [ "$STUNDEN" -ge "$ABSTAND_STUNDEN" ] && [ "$STUNDE" -ge "$AB_STUNDE" ] && VEROEFFENTLICHEN=true
           [ "$SCHEDULE" = "$IMMER_VEROEFFENTLICHEN_BEI" ] && VEROEFFENTLICHEN=true
           [ "$MANUELL_VEROEFFENTLICHEN" = "true" ] && VEROEFFENTLICHEN=true
-          echo "Letzte Veröffentlichung vor ${STUNDEN}h → veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
+          echo "Letzte Veröffentlichung vor ${STUNDEN}h, jetzt ${STUNDE} Uhr → veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
 
           git add feed.json artikel/ data/ logs/ sitemap.xml rss.xml og/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
