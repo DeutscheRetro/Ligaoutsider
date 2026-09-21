@@ -31,7 +31,7 @@ on:
 # zwei Deploys am Tag und funktioniert auch, wenn GitHub die Läufe Stunden zu
 # spät startet (fester Zeitplan hatte dann den falschen Lauf erwischt).
 env:
-  ABSTAND_STUNDEN: '5' 
+  ABSTAND_STUNDEN: '3' 
 
 jobs:
   generate:
