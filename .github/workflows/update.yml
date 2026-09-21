@@ -1,11 +1,17 @@
 name: Neue Artikel generieren
 
 on:
+  # GitHub startet geplante Laeufe oft Stunden zu spaet und laesst einzelne ganz
+  # ausfallen. Deshalb mehr Startzeiten als noetig – veroeffentlicht wird ohnehin
+  # nur nach Zeitabstand (siehe ABSTAND_STUNDEN), nicht bei jedem Lauf.
   schedule:
     - cron: '0 5 * * *'     # 07:00 (UTC+2)
-    - cron: '0 8 * * *'     # 10:00 (UTC+2)
-    - cron: '0 12 * * *'    # 14:00 (UTC+2)
-    - cron: '0 16 * * *'    # 18:00 (UTC+2)
+    - cron: '0 7 * * *'     # 09:00
+    - cron: '0 9 * * *'     # 11:00
+    - cron: '0 11 * * *'    # 13:00
+    - cron: '0 13 * * *'    # 15:00
+    - cron: '0 16 * * *'    # 18:00
+    - cron: '0 18 * * *'    # 20:00
   workflow_dispatch:
     inputs:
       reason:
