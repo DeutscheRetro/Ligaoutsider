@@ -19,10 +19,12 @@ on:
         default: true
 
 # Netlify berechnet jede Veröffentlichung. Deshalb speichert jeder Lauf seinen
-# Stand mit "[skip netlify]" (kostenlos), und nur die Läufe hier veröffentlichen –
-# und auch nur, wenn seit der letzten Veröffentlichung etwas dazugekommen ist.
+# Stand mit "[skip netlify]" (kostenlos). Veröffentlicht wird erst, wenn die
+# letzte Veröffentlichung mindestens ABSTAND_STUNDEN her ist – das ergibt rund
+# zwei Deploys am Tag und funktioniert auch, wenn GitHub die Läufe Stunden zu
+# spät startet (fester Zeitplan hatte dann den falschen Lauf erwischt).
 env:
-  VEROEFFENTLICHEN_BEI: '0 8 * * *|0 16 * * *'   # 10:00 und 18:00 (UTC+2)
+  ABSTAND_STUNDEN: '5' 
 
 jobs:
   generate:
@@ -68,11 +70,15 @@ jobs:
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
 
-          # Soll dieser Lauf veröffentlichen?
+          # Soll dieser Lauf veröffentlichen? Maßstab ist der Abstand zur letzten
+          # Veröffentlichung (= letzter Commit ohne [skip netlify]).
+          LETZTE=$(git log -200 --format='%H %ct %s' | grep -v '\[skip netlify\]' | head -1 | cut -d' ' -f2)
+          JETZT=$(date +%s)
+          STUNDEN=$(( (JETZT - ${LETZTE:-0}) / 3600 ))
           VEROEFFENTLICHEN=false
-          case "|$VEROEFFENTLICHEN_BEI|" in *"|$SCHEDULE|"*) [ -n "$SCHEDULE" ] && VEROEFFENTLICHEN=true ;; esac
+          [ "$STUNDEN" -ge "$ABSTAND_STUNDEN" ] && VEROEFFENTLICHEN=true
           [ "$MANUELL_VEROEFFENTLICHEN" = "true" ] && VEROEFFENTLICHEN=true
-          echo "Veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
+          echo "Letzte Veröffentlichung vor ${STUNDEN}h → veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
 
           git add feed.json artikel/ data/ logs/ sitemap.xml rss.xml og/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
