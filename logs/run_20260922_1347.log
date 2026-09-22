@@ -1,0 +1,838 @@
+2026-09-22 13:48:56,655 INFO URL-Cache geladen: 19124 bekannte URLs (letzte 30 Tage)
+2026-09-22 13:48:56,655 INFO === Ligaoutsider Generator startet – max. 50 Artikel ===
+2026-09-22 13:48:56,660 INFO Feed: https://news.google.com/rss/search?q=%22FC+Bayern%22+OR+%22Bayern+M%C3%BCnchen%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 13:48:58,577 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:48:58,610 INFO S5 fetch fulltext: FC Bayern Legends feiern mit Paulaner auf der Wiesn - fcbaye
+2026-09-22 13:49:11,738 INFO S5 fulltext fail (fetch_failed_ReadTimeout): FC Bayern Legends feiern mit Paulaner auf der Wiesn - fcbaye
+2026-09-22 13:49:13,392 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:13,397 INFO S5 fetch fulltext: Topspiel zum Auftakt: FC Bayern gegen Manchester City - WEB.
+2026-09-22 13:49:14,954 INFO S5 fulltext fail (too_short_34_words): Topspiel zum Auftakt: FC Bayern gegen Manchester City - WEB.
+2026-09-22 13:49:16,260 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:16,265 INFO S5 fetch fulltext: Wildes Gerücht: FC Bayern plant Haaland-Hammer - sport.de
+2026-09-22 13:49:19,059 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:20,950 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:20,954 INFO S6 refined dup: Wildes Gerücht: FC Bayern plant Haaland-Hammer - sport.de
+2026-09-22 13:49:31,175 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:31,180 INFO S5 fetch fulltext: FC Bayern München: Liebesbekundungen auf der Wiesn - Joyn
+2026-09-22 13:49:32,895 INFO S5 fulltext fail (too_short_28_words): FC Bayern München: Liebesbekundungen auf der Wiesn - Joyn
+2026-09-22 13:49:34,137 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:34,142 INFO S5 fetch fulltext: Wagner holt ihn vom FC Bayern München: Das ist der neue Co-T
+2026-09-22 13:49:35,446 INFO S5 fulltext fail (too_short_8_words): Wagner holt ihn vom FC Bayern München: Das ist der neue Co-T
+2026-09-22 13:49:36,718 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:36,723 INFO S5 fetch fulltext: Termin für Jahreshauptversammlung des FC Bayern fix - Onetz
+2026-09-22 13:49:39,554 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:41,092 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:41,548 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:41,548 INFO S7 generate: Termin für Jahreshauptversammlung des FC Bayern fix - Onetz
+2026-09-22 13:49:46,152 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:46,726 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:46,727 INFO   Kandidat: FC Bayern: Jahreshauptversammlung am 21. November im BMW Par
+2026-09-22 13:49:47,988 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:49:47,989 INFO S5 fetch fulltext: Video: Kino-Event des FC Bayern für „Das gewisse Etwas“ - fc
+2026-09-22 13:50:00,453 INFO S5 fulltext fail (fetch_failed_ReadTimeout): Video: Kino-Event des FC Bayern für „Das gewisse Etwas“ - fc
+2026-09-22 13:50:00,454 INFO S2 blacklist: Frauen-CL: FC Bayern heute live im Gratis-Stream - SPORT1
+2026-09-22 13:50:01,886 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:01,891 INFO S5 fetch fulltext: Video: FC Bayern unterstützt bayerische Demenzwoche - fcbaye
+2026-09-22 13:50:14,305 INFO S5 fulltext fail (fetch_failed_ReadTimeout): Video: FC Bayern unterstützt bayerische Demenzwoche - fcbaye
+2026-09-22 13:50:14,318 INFO BL-Spielerliste geladen: 1002 Namen
+2026-09-22 13:50:14,346 INFO S3 keyword miss: Bilder vom FCBB Wiesn-Besuch - fcbayern.com
+2026-09-22 13:50:15,781 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:15,785 INFO S5 fetch fulltext: Tuschel-Thema rund um DFB-Star vom FC Bayern - sport.de
+2026-09-22 13:50:18,013 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:18,014 INFO S5.5 not relevant (fulltext): Tuschel-Thema rund um DFB-Star vom FC Bayern - sport.de
+2026-09-22 13:50:19,661 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:19,666 INFO S4 fingerprint dup: FC Bayern: Spektakuläre Rückkehr? Alaba vor Entscheidung - s
+2026-09-22 13:50:19,695 INFO S3 keyword miss: Sportpark Unterhaching - fcbayern.com
+2026-09-22 13:50:21,008 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:21,010 INFO S4 fingerprint dup: FC Bayern | Neue Transfer-Spekulationen um Harry Kane - spor
+2026-09-22 13:50:22,909 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:22,914 INFO S5 fetch fulltext: Transfer-Ticker: Geht der FC Bayern leer aus? - sport.de
+2026-09-22 13:50:27,426 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:29,165 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:29,169 INFO S6 refined dup: Transfer-Ticker: Geht der FC Bayern leer aus? - sport.de
+2026-09-22 13:50:30,565 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:30,570 INFO S5 fetch fulltext: Räumt der FC Bayern ab? Hier läuft der Ballon d'Or 2026 live
+2026-09-22 13:50:34,620 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:36,106 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:36,109 INFO S6 refined dup: Räumt der FC Bayern ab? Hier läuft der Ballon d'Or 2026 live
+2026-09-22 13:50:37,924 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:37,927 INFO S4 fingerprint dup: Update zum Kane-Poker beim FC Bayern lässt aufhorchen - spor
+2026-09-22 13:50:39,174 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:39,178 INFO S4 fingerprint dup: Insider behauptet: Wirtz würde sofort zu Bayern wechseln - s
+2026-09-22 13:50:40,882 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:40,885 INFO S4 fingerprint dup: FC Bayern: Beim Wiesn-Besuch im Käfer! Update von Hainer und
+2026-09-22 13:50:42,616 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:42,623 INFO S5 fetch fulltext: Plant der FC Bayern überraschenden Transfer-Coup mit Defensi
+2026-09-22 13:50:44,582 INFO S5 fulltext fail (likely_paywall): Plant der FC Bayern überraschenden Transfer-Coup mit Defensi
+2026-09-22 13:50:46,268 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:46,272 INFO S5 fetch fulltext: FC Bayern: Heynckes betrauert Tod von Weggefährte - sport.de
+2026-09-22 13:50:50,517 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:50,518 INFO S5.5 not relevant (fulltext): FC Bayern: Heynckes betrauert Tod von Weggefährte - sport.de
+2026-09-22 13:50:52,173 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:52,177 INFO S5 fetch fulltext: (S+) Meinung: Mysteriöse Auftritte von Bayern-Profi Olise: D
+2026-09-22 13:50:54,144 INFO S5 fulltext fail (likely_paywall): (S+) Meinung: Mysteriöse Auftritte von Bayern-Profi Olise: D
+2026-09-22 13:50:55,822 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:55,826 INFO S5 fetch fulltext: Auftakt der Champions League: Hier sehen Bayerns Topspiel li
+2026-09-22 13:50:57,432 INFO S5 fulltext fail (likely_paywall): Auftakt der Champions League: Hier sehen Bayerns Topspiel li
+2026-09-22 13:50:59,210 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:50:59,214 INFO S5 fetch fulltext: Videos & Highlights: Bayern vs. Man City - Champions League 
+2026-09-22 13:51:12,042 INFO S5 fulltext fail (fetch_failed_ReadTimeout): Videos & Highlights: Bayern vs. Man City - Champions League 
+2026-09-22 13:51:15,084 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:15,089 INFO S5 fetch fulltext: Bayern München W vs Manchester City W - Prognose, Übertragun
+2026-09-22 13:51:16,827 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:16,829 INFO S5.5 not relevant (fulltext): Bayern München W vs Manchester City W - Prognose, Übertragun
+2026-09-22 13:51:18,348 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:18,350 INFO S4 fingerprint dup: Bayern-Boss verrät auf der Wiesn Plan für Kane-Einigung: „Da
+2026-09-22 13:51:20,055 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:20,060 INFO S5 fetch fulltext: Sein Vater bestätigt es! Vereinsloser Ex-Bayern-Star unmitte
+2026-09-22 13:51:21,833 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:23,660 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:23,662 INFO S6 refined dup: Sein Vater bestätigt es! Vereinsloser Ex-Bayern-Star unmitte
+2026-09-22 13:51:25,279 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:25,283 INFO S5 fetch fulltext: Vergangenheit mit FC Bayern! Berüchtigter Star-Berater misch
+2026-09-22 13:51:27,505 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:29,186 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:29,190 INFO S6 refined dup: Vergangenheit mit FC Bayern! Berüchtigter Star-Berater misch
+2026-09-22 13:51:31,027 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:31,032 INFO S5 fetch fulltext: „Hier kann ich die meisten Titel gewinnen“ Klara Bühl nimmt 
+2026-09-22 13:51:32,636 INFO S5 fulltext fail (likely_paywall): „Hier kann ich die meisten Titel gewinnen“ Klara Bühl nimmt 
+2026-09-22 13:51:32,666 INFO S3 keyword miss: Armani Olimpia Milan - BasketNews.com
+2026-09-22 13:51:34,137 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:34,140 INFO S4 fingerprint dup: 17:30 SAT.1 Bayern - FC Bayern auf der Wiesn: Lederhosen, Co
+2026-09-22 13:51:34,140 INFO S2 blacklist: Bayern München gegen Man City Frauen heute live: Wer überträ
+2026-09-22 13:51:34,171 INFO S3 keyword miss: Kane-Verlängerung nimmt konkrete Formen an - LigaInsider
+2026-09-22 13:51:35,363 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:35,368 INFO S5 fetch fulltext: FC Bayern München - Manchester City - Eurosport
+2026-09-22 13:51:36,201 INFO S5 fulltext fail (too_short_15_words): FC Bayern München - Manchester City - Eurosport
+2026-09-22 13:51:37,718 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:37,723 INFO S5 fetch fulltext: FC Bayern München UEFA U19 - Transfermarkt
+2026-09-22 13:51:38,273 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:51:38,273 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:51:38,273 ERROR empty HTML tree: None
+2026-09-22 13:51:38,273 WARNING discarding data: None
+2026-09-22 13:51:38,274 INFO S5 fulltext fail (trafilatura_returned_empty): FC Bayern München UEFA U19 - Transfermarkt
+2026-09-22 13:51:39,720 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:39,724 INFO S5 fetch fulltext: Klopp-Debüt als Bundestrainer: Matthäus setzt auf eine stark
+2026-09-22 13:51:41,988 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:41,989 INFO S5.5 not relevant (fulltext): Klopp-Debüt als Bundestrainer: Matthäus setzt auf eine stark
+2026-09-22 13:51:42,021 INFO S3 keyword miss: Heynckes trauert mit bewegenden Worten um seinen langjährige
+2026-09-22 13:51:42,053 INFO S3 keyword miss: Veronica Ferres: Erste Solo-Wiesn nach dem Ehe-Aus mit Carst
+2026-09-22 13:51:43,491 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:43,496 INFO S5 fetch fulltext: TSV Buchbach – FC Bayern München II, 2:0 - Bayerischer Fussb
+2026-09-22 13:51:44,924 WARNING discarding data: None
+2026-09-22 13:51:44,925 INFO S5 fulltext fail (trafilatura_returned_empty): TSV Buchbach – FC Bayern München II, 2:0 - Bayerischer Fussb
+2026-09-22 13:51:46,812 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:46,817 INFO S5 fetch fulltext: Vierter Bayern-Profi in zehn Jahren: Olise erhält Auszeichnu
+2026-09-22 13:51:47,642 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:51:47,642 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:51:47,642 ERROR empty HTML tree: None
+2026-09-22 13:51:47,642 WARNING discarding data: None
+2026-09-22 13:51:47,643 INFO S5 fulltext fail (trafilatura_returned_empty): Vierter Bayern-Profi in zehn Jahren: Olise erhält Auszeichnu
+2026-09-22 13:51:49,179 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:49,183 INFO S5 fetch fulltext: Hannover 96: Wagner holt Co-Trainer vom FC Bayern - BILD
+2026-09-22 13:51:50,224 INFO S5 fulltext fail (too_short_54_words): Hannover 96: Wagner holt Co-Trainer vom FC Bayern - BILD
+2026-09-22 13:51:51,768 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:51,773 INFO S5 fetch fulltext: Überraschende Aussage - Transfer-Wirbel: Bayern-Kicker wider
+2026-09-22 13:51:56,189 INFO S5 fulltext fail (likely_paywall): Überraschende Aussage - Transfer-Wirbel: Bayern-Kicker wider
+2026-09-22 13:51:56,220 INFO S3 keyword miss: Deine Datenschutzeinstellungen - Disney+ - Disney Plus
+2026-09-22 13:51:57,997 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:51:58,002 INFO S5 fetch fulltext: FC Bayern München - Manchester City Statistiken: Fußball Erg
+2026-09-22 13:51:58,994 INFO S5 fulltext fail (too_short_15_words): FC Bayern München - Manchester City Statistiken: Fußball Erg
+2026-09-22 13:51:58,994 INFO S2 blacklist: Bayern-Frauen auf dem Oktoberfest: Dirndl, Brezel und gute L
+2026-09-22 13:52:00,387 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:00,392 INFO S5 fetch fulltext: FC Bayern München - Manchester City | Weitere Spiele: Fußbal
+2026-09-22 13:52:01,000 INFO S5 fulltext fail (too_short_15_words): FC Bayern München - Manchester City | Weitere Spiele: Fußbal
+2026-09-22 13:52:02,497 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:02,502 INFO S5 fetch fulltext: Darum ging Klopp nicht zu Bayern - SPORT1
+2026-09-22 13:52:04,898 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:04,900 INFO S5.5 not relevant (fulltext): Darum ging Klopp nicht zu Bayern - SPORT1
+2026-09-22 13:52:06,624 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:06,629 INFO S5 fetch fulltext: Deutscher Meister Wetten: So steht die Bayern Meister Quote 
+2026-09-22 13:52:08,077 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:08,078 INFO S5.5 not relevant (fulltext): Deutscher Meister Wetten: So steht die Bayern Meister Quote 
+2026-09-22 13:52:09,697 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:09,702 INFO S5 fetch fulltext: FC Bayern Talk 🎙️ Unverantwortlich - Eric Dier Am Ende Der S
+2026-09-22 13:52:10,424 WARNING discarding data: None
+2026-09-22 13:52:10,425 INFO S5 fulltext fail (trafilatura_returned_empty): FC Bayern Talk 🎙️ Unverantwortlich - Eric Dier Am Ende Der S
+2026-09-22 13:52:11,849 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:11,853 INFO S4 fingerprint dup: "Es macht richtig Bock in der Kabine": FC Bayern in Stimmung
+2026-09-22 13:52:13,487 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:13,491 INFO S5 fetch fulltext: Das ewige Trauma: Warum der BVB trotz Superstart am FC Bayer
+2026-09-22 13:52:14,873 WARNING discarding data: None
+2026-09-22 13:52:14,874 INFO S5 fulltext fail (trafilatura_returned_empty): Das ewige Trauma: Warum der BVB trotz Superstart am FC Bayer
+2026-09-22 13:52:16,841 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:16,846 INFO S5 fetch fulltext: 6 PUNKTE, 7 TORE – JETZT KOMMEN DIE BAYERN! 🔥 | SVE Vs. FC B
+2026-09-22 13:52:17,279 WARNING discarding data: None
+2026-09-22 13:52:17,280 INFO S5 fulltext fail (trafilatura_returned_empty): 6 PUNKTE, 7 TORE – JETZT KOMMEN DIE BAYERN! 🔥 | SVE Vs. FC B
+2026-09-22 13:52:19,666 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:19,671 INFO S5 fetch fulltext: NFL In München: Wie Aus Der FC Bayern Arena Ein Football-Sta
+2026-09-22 13:52:20,214 WARNING discarding data: None
+2026-09-22 13:52:20,215 INFO S5 fulltext fail (trafilatura_returned_empty): NFL In München: Wie Aus Der FC Bayern Arena Ein Football-Sta
+2026-09-22 13:52:21,870 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:21,875 INFO S5 fetch fulltext: Oktoberfest 2026: O'zapft is! Die besten Bilder der Münchner
+2026-09-22 13:52:23,815 INFO S5 fulltext fail (too_short_11_words): Oktoberfest 2026: O'zapft is! Die besten Bilder der Münchner
+2026-09-22 13:52:25,242 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:25,252 INFO S5 fetch fulltext: 🔴 Irankunda Transfer Ist Fix! Kommt Max Eberl Zum FC Bayern?
+2026-09-22 13:52:25,692 WARNING discarding data: None
+2026-09-22 13:52:25,693 INFO S5 fulltext fail (trafilatura_returned_empty): 🔴 Irankunda Transfer Ist Fix! Kommt Max Eberl Zum FC Bayern?
+2026-09-22 13:52:27,174 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:27,178 INFO S5 fetch fulltext: FC Bayern Live Talk 🎙️ Das Missverständnis Palinha Und Wie K
+2026-09-22 13:52:27,650 WARNING discarding data: None
+2026-09-22 13:52:27,651 INFO S5 fulltext fail (trafilatura_returned_empty): FC Bayern Live Talk 🎙️ Das Missverständnis Palinha Und Wie K
+2026-09-22 13:52:29,242 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:29,247 INFO S5 fetch fulltext: Der FC Bayern könnte das Projekt Nick Woltemade 2.0 starten 
+2026-09-22 13:52:31,164 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:32,795 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:32,797 INFO S6 refined dup: Der FC Bayern könnte das Projekt Nick Woltemade 2.0 starten 
+2026-09-22 13:52:34,134 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:34,138 INFO S5 fetch fulltext: Dem FC Bayern droht bei Supertalent JJ Gabriel eine Schlappe
+2026-09-22 13:52:36,363 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:38,249 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:38,251 INFO S6 refined dup: Dem FC Bayern droht bei Supertalent JJ Gabriel eine Schlappe
+2026-09-22 13:52:38,251 INFO Feed: https://news.google.com/rss/search?q=BVB+OR+%22Borussia+Dortmund%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 13:52:40,571 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:40,576 INFO S5 fetch fulltext: Italien: 5 Spiele, 6 Tore! Ex-BVB-Stürmer überragt, Marktwer
+2026-09-22 13:52:42,154 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:42,155 INFO S5.5 not relevant (fulltext): Italien: 5 Spiele, 6 Tore! Ex-BVB-Stürmer überragt, Marktwer
+2026-09-22 13:52:43,305 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:43,314 INFO S4 fingerprint dup: BVB steckt deutschen WM-Fahrer Maximilian Beier in zweite Ma
+2026-09-22 13:52:45,141 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:45,146 INFO S5 fetch fulltext: Zwei Volltreffer: So läuft es bei den BVB-Leihgaben - fussba
+2026-09-22 13:52:46,723 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:48,411 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:48,414 INFO S6 refined dup: Zwei Volltreffer: So läuft es bei den BVB-Leihgaben - fussba
+2026-09-22 13:52:49,835 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:49,839 INFO S5 fetch fulltext: Supercomputer berechnet Bundesliga-Sieger - BVB deutlich bes
+2026-09-22 13:52:50,573 WARNING discarding data: None
+2026-09-22 13:52:50,574 INFO S5 fulltext fail (trafilatura_returned_empty): Supercomputer berechnet Bundesliga-Sieger - BVB deutlich bes
+2026-09-22 13:52:52,094 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:52,099 INFO S5 fetch fulltext: Transfer-Coup? BVB jagt nächstes Super-Talent - sport.de
+2026-09-22 13:52:55,370 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:57,058 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:57,062 INFO S6 refined dup: Transfer-Coup? BVB jagt nächstes Super-Talent - sport.de
+2026-09-22 13:52:58,898 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:52:58,902 INFO S5 fetch fulltext: BVB-Unzufriedenheit nach 4:0-Sieg: „Sicher Meckern auf hohem
+2026-09-22 13:53:00,131 INFO S5 fulltext fail (too_short_52_words): BVB-Unzufriedenheit nach 4:0-Sieg: „Sicher Meckern auf hohem
+2026-09-22 13:53:02,027 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:02,031 INFO S5 fetch fulltext: Ex-BVB-Star fehlt gegen Deutschland: Bitterer Ausfall für Or
+2026-09-22 13:53:03,909 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:03,910 INFO S5.5 not relevant (fulltext): Ex-BVB-Star fehlt gegen Deutschland: Bitterer Ausfall für Or
+2026-09-22 13:53:05,350 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:05,355 INFO S5 fetch fulltext: Homeoffice und Laufpläne für zwei: Wie der BVB die Ausnahmes
+2026-09-22 13:53:06,447 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:53:06,447 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:53:06,447 ERROR empty HTML tree: None
+2026-09-22 13:53:06,447 WARNING discarding data: None
+2026-09-22 13:53:06,447 INFO S5 fulltext fail (trafilatura_returned_empty): Homeoffice und Laufpläne für zwei: Wie der BVB die Ausnahmes
+2026-09-22 13:53:08,319 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:08,320 INFO S4 fingerprint dup: BVB-Star Serhou Guirassy im Visier von Premier-League-Gigant
+2026-09-22 13:53:08,349 INFO S3 keyword miss: Klare Sache: Dortmunds Königstransfer des Sommers - fussball
+2026-09-22 13:53:10,037 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:10,041 INFO S5 fetch fulltext: Überraschende Basler-Spitze gegen Tabellenführer BVB - sport
+2026-09-22 13:53:12,781 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:14,528 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:14,531 INFO S6 refined dup: Überraschende Basler-Spitze gegen Tabellenführer BVB - sport
+2026-09-22 13:53:15,781 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:15,786 INFO S5 fetch fulltext: Borussia Dortmund: Deshalb trainieren zwei BVB-Stars bei der
+2026-09-22 13:53:16,341 WARNING discarding data: None
+2026-09-22 13:53:16,342 INFO S5 fulltext fail (trafilatura_returned_empty): Borussia Dortmund: Deshalb trainieren zwei BVB-Stars bei der
+2026-09-22 13:53:16,374 INFO S3 keyword miss: (k+) Super-Joker und eine bombenfeste Abwehr: Dortmund im St
+2026-09-22 13:53:17,834 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:17,839 INFO S5 fetch fulltext: Spielschema | Preußen Münster - Borussia Dortmund 2:3 | 7. S
+2026-09-22 13:53:18,478 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:53:18,478 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:53:18,478 ERROR empty HTML tree: None
+2026-09-22 13:53:18,478 WARNING discarding data: None
+2026-09-22 13:53:18,478 INFO S5 fulltext fail (trafilatura_returned_empty): Spielschema | Preußen Münster - Borussia Dortmund 2:3 | 7. S
+2026-09-22 13:53:19,869 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:19,874 INFO S5 fetch fulltext: Europaweit begehrt: BVB hinter dänischem Supertalent her - F
+2026-09-22 13:53:21,696 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:23,706 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:23,710 INFO S6 refined dup: Europaweit begehrt: BVB hinter dänischem Supertalent her - F
+2026-09-22 13:53:23,711 INFO S2 blacklist: In XXL-Länderspielpause: BVB schickt deutschen WM-Fahrer in 
+2026-09-22 13:53:25,280 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:25,284 INFO S5 fetch fulltext: Toptransfer mit Makel: Der BVB-Plan mit Gadou - fussballtran
+2026-09-22 13:53:26,640 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:28,451 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:28,901 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:28,902 INFO S7 generate: Toptransfer mit Makel: Der BVB-Plan mit Gadou - fussballtran
+2026-09-22 13:53:42,917 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:42,917 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 546 (char 619)
+2026-09-22 13:53:44,436 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:44,440 INFO S5 fetch fulltext: Dortmund – Sabah live im TV und Stream: Übertragung der Cham
+2026-09-22 13:53:46,282 INFO S5 fulltext fail (likely_paywall): Dortmund – Sabah live im TV und Stream: Übertragung der Cham
+2026-09-22 13:53:47,847 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:47,852 INFO S5 fetch fulltext: Äußerst ungewöhnliche Maßnahme: Duo des BVB in die U23 verse
+2026-09-22 13:53:49,921 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:51,999 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:52,007 INFO S6 refined dup: Äußerst ungewöhnliche Maßnahme: Duo des BVB in die U23 verse
+2026-09-22 13:53:53,414 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:53,419 INFO S5 fetch fulltext: Zwei BVB-Stars in die Zweite - fussballtransfers.com
+2026-09-22 13:53:54,780 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:54,781 INFO S5.5 not relevant (fulltext): Zwei BVB-Stars in die Zweite - fussballtransfers.com
+2026-09-22 13:53:56,434 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:56,438 INFO S5 fetch fulltext: Luft nach oben: In diesem Bereich muss BVB-Youngster Gadou z
+2026-09-22 13:53:57,870 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:53:59,982 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:00,429 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:00,430 INFO S7 generate: Luft nach oben: In diesem Bereich muss BVB-Youngster Gadou z
+2026-09-22 13:54:11,682 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:12,459 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:12,460 INFO   Kandidat: BVB-Youngster Gadou: Stärken und Baustelle im Überblick
+2026-09-22 13:54:14,179 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:14,180 INFO S4 fingerprint dup: Premier-League-Gerücht um BVB-Stürmer Serhou Guirassy - Fuss
+2026-09-22 13:54:15,578 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:15,582 INFO S5 fetch fulltext: Starke Frühform: Ex-Dortmunder treffen in Europas Top-Ligen 
+2026-09-22 13:54:25,912 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:25,913 INFO S5.5 not relevant (fulltext): Starke Frühform: Ex-Dortmunder treffen in Europas Top-Ligen 
+2026-09-22 13:54:27,654 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:27,659 INFO S5 fetch fulltext: Englands jüngste Nationalspieler - Ex-BVB-Star Bellingham in
+2026-09-22 13:54:28,198 WARNING discarding data: None
+2026-09-22 13:54:28,199 INFO S5 fulltext fail (trafilatura_returned_empty): Englands jüngste Nationalspieler - Ex-BVB-Star Bellingham in
+2026-09-22 13:54:29,702 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:29,706 INFO S5 fetch fulltext: Niko Kovac [Trainer] - Borussia Dortmund - Forum | Seite 743
+2026-09-22 13:54:30,337 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:54:30,337 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:54:30,338 ERROR empty HTML tree: None
+2026-09-22 13:54:30,338 WARNING discarding data: None
+2026-09-22 13:54:30,338 INFO S5 fulltext fail (trafilatura_returned_empty): Niko Kovac [Trainer] - Borussia Dortmund - Forum | Seite 743
+2026-09-22 13:54:31,858 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:31,864 INFO S5 fetch fulltext: Spannender Dreikampf um Top-Talent Mathis Albert vom BVB - S
+2026-09-22 13:54:34,348 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:36,158 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:54:36,163 INFO S6 refined dup: Spannender Dreikampf um Top-Talent Mathis Albert vom BVB - S
+2026-09-22 13:55:02,043 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:02,048 INFO S5 fetch fulltext: FK Bodø/Glimt – Borussia Dortmund live im TV und Stream: Übe
+2026-09-22 13:55:03,068 INFO S5 fulltext fail (likely_paywall): FK Bodø/Glimt – Borussia Dortmund live im TV und Stream: Übe
+2026-09-22 13:55:04,726 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:04,730 INFO S5 fetch fulltext: Fulda-Maberzell gewinnt spannenden Krimi gegen Borussia Dort
+2026-09-22 13:55:07,390 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:07,391 INFO S5.5 not relevant (fulltext): Fulda-Maberzell gewinnt spannenden Krimi gegen Borussia Dort
+2026-09-22 13:55:09,312 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:09,313 INFO S4 fingerprint dup: Joane Gadou zeigt enormes Potenzial: In diesem Bereich arbei
+2026-09-22 13:55:11,287 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:11,291 INFO S5 fetch fulltext: Enger Dreikampf um BVB-Juwel: Kassiert der DFB eine böse Sch
+2026-09-22 13:55:16,028 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:16,028 INFO S5.5 not relevant (fulltext): Enger Dreikampf um BVB-Juwel: Kassiert der DFB eine böse Sch
+2026-09-22 13:55:17,498 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:17,502 INFO S5 fetch fulltext: Borussia Dortmund-Aktie über 20-Tage-Linie - boerse.de
+2026-09-22 13:55:19,540 INFO S5 fulltext fail (too_short_44_words): Borussia Dortmund-Aktie über 20-Tage-Linie - boerse.de
+2026-09-22 13:55:20,911 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:20,915 INFO S5 fetch fulltext: "Schon ungewöhnlich" – Fuss lobt BVB-Neuzugang - Sky.de
+2026-09-22 13:55:21,797 INFO S5 fulltext fail (too_short_15_words): "Schon ungewöhnlich" – Fuss lobt BVB-Neuzugang - Sky.de
+2026-09-22 13:55:23,182 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:23,186 INFO S4 fingerprint dup: BVB: Marcel Sabitzer muss bei der U23 mittrainieren - LAOLA1
+2026-09-22 13:55:24,453 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:24,456 INFO S4 fingerprint dup: 4. Spieltag: VfB Stuttgart - Borussia Dortmund - Borussia Do
+2026-09-22 13:55:26,579 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:26,583 INFO S4 fingerprint dup: Fußball-Transfergerüchte heute: Plant Wirtz die Bayern-Fluch
+2026-09-22 13:55:28,125 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:28,126 INFO S4 fingerprint dup: Transfer-Gerücht: Serhou Guirassy von Borussia Dortmund zu M
+2026-09-22 13:55:28,126 INFO S2 blacklist: Spannende Bundesliga-Kandidaten: Diese Spieler kann Fortuna 
+2026-09-22 13:55:28,157 INFO S3 keyword miss: Sammer zu Kovac: ''Das Unglaublichste geleistet'' - Sky.de
+2026-09-22 13:55:29,745 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:29,750 INFO S5 fetch fulltext: Dortmunds Führung hält nur kurz: BVB muss mit Remis leben | 
+2026-09-22 13:55:30,460 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:55:30,460 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:55:30,460 ERROR empty HTML tree: None
+2026-09-22 13:55:30,460 WARNING discarding data: None
+2026-09-22 13:55:30,461 INFO S5 fulltext fail (trafilatura_returned_empty): Dortmunds Führung hält nur kurz: BVB muss mit Remis leben | 
+2026-09-22 13:55:30,462 INFO S2 blacklist: Champions League Frauen - Handball-World
+2026-09-22 13:55:32,047 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:32,052 INFO S5 fetch fulltext: SC Paderborn 07 II vs. Borussia Dortmund II | Regionalliga W
+2026-09-22 13:55:33,030 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:55:33,030 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:55:33,030 ERROR empty HTML tree: None
+2026-09-22 13:55:33,030 WARNING discarding data: None
+2026-09-22 13:55:33,031 INFO S5 fulltext fail (trafilatura_returned_empty): SC Paderborn 07 II vs. Borussia Dortmund II | Regionalliga W
+2026-09-22 13:55:34,343 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:34,348 INFO S5 fetch fulltext: Marwin Hitz | Borussia Dortmund - bundesliga.com
+2026-09-22 13:55:35,480 INFO S5 fulltext fail (too_short_54_words): Marwin Hitz | Borussia Dortmund - bundesliga.com
+2026-09-22 13:55:35,481 INFO S2 blacklist: DFB-Team: Warum fehlt Florian Wirtz gegen die Niederlande? -
+2026-09-22 13:55:37,552 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:37,556 INFO S5 fetch fulltext: BVB-U23 scheitert in Paderborn an sich selbst: Rios lobt, Fu
+2026-09-22 13:55:39,826 INFO S5 fulltext fail (too_short_26_words): BVB-U23 scheitert in Paderborn an sich selbst: Rios lobt, Fu
+2026-09-22 13:55:41,509 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:41,514 INFO S5 fetch fulltext: Wirtz zu schlau für die Mitspieler | Winter-Transferangriff 
+2026-09-22 13:55:42,808 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:42,809 INFO S5.5 not relevant (fulltext): Wirtz zu schlau für die Mitspieler | Winter-Transferangriff 
+2026-09-22 13:55:44,640 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:44,644 INFO S5 fetch fulltext: Watzke macht sich für Rhein-Ruhr stark - SPORT1
+2026-09-22 13:55:46,515 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:46,516 INFO S5.5 not relevant (fulltext): Watzke macht sich für Rhein-Ruhr stark - SPORT1
+2026-09-22 13:55:47,848 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:47,852 INFO S5 fetch fulltext: BVB-Aktie geht nach einem Minus von 0,8 Prozent vor Börsenst
+2026-09-22 13:55:52,892 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:52,893 INFO S5.5 not relevant (fulltext): BVB-Aktie geht nach einem Minus von 0,8 Prozent vor Börsenst
+2026-09-22 13:55:52,894 INFO S2 blacklist: Deutschland - Niederlande: Matthäus nennt seine DFB-Startelf
+2026-09-22 13:55:54,394 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:54,398 INFO S5 fetch fulltext: Kurioser BVB-Seitenhieb: So macht sich Schalke über Dortmund
+2026-09-22 13:55:54,963 WARNING discarding data: None
+2026-09-22 13:55:54,964 INFO S5 fulltext fail (trafilatura_returned_empty): Kurioser BVB-Seitenhieb: So macht sich Schalke über Dortmund
+2026-09-22 13:55:56,785 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:56,789 INFO S4 fingerprint dup: Die BVB-Aktie legt nach dem Sieg in Stuttgart zu - AD HOC NE
+2026-09-22 13:55:58,760 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:55:58,764 INFO S5 fetch fulltext: „Kein Leader“: Kruse schießt gegen DFB-Kapitän Kimmich - fus
+2026-09-22 13:55:59,432 WARNING discarding data: None
+2026-09-22 13:55:59,433 INFO S5 fulltext fail (trafilatura_returned_empty): „Kein Leader“: Kruse schießt gegen DFB-Kapitän Kimmich - fus
+2026-09-22 13:55:59,453 INFO S3 keyword miss: Diese Stars sind immer noch vereinslos - 90min.de
+2026-09-22 13:56:02,457 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:02,462 INFO S5 fetch fulltext: Neue Adeyemi-Chance unter Klopp: Ein großer Gewinner nach de
+2026-09-22 13:56:03,490 INFO S5 fulltext fail (too_short_52_words): Neue Adeyemi-Chance unter Klopp: Ein großer Gewinner nach de
+2026-09-22 13:56:03,523 INFO S3 keyword miss: DFB-Nationalspieler lobt Ex-Salzburger: "Das ist höchste Kla
+2026-09-22 13:56:05,005 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:05,010 INFO S5 fetch fulltext: Nach Wessels-Treffer: Borussia Dortmund II punktet in Paderb
+2026-09-22 13:56:05,555 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:56:05,555 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:56:05,555 ERROR empty HTML tree: None
+2026-09-22 13:56:05,555 WARNING discarding data: None
+2026-09-22 13:56:05,556 INFO S5 fulltext fail (trafilatura_returned_empty): Nach Wessels-Treffer: Borussia Dortmund II punktet in Paderb
+2026-09-22 13:56:07,058 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:07,062 INFO S5 fetch fulltext: Nach Wessels-Treffer: Borussia Dortmund II punktet in Paderb
+2026-09-22 13:56:07,623 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:56:07,623 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:56:07,623 ERROR empty HTML tree: None
+2026-09-22 13:56:07,623 WARNING discarding data: None
+2026-09-22 13:56:07,624 INFO S5 fulltext fail (trafilatura_returned_empty): Nach Wessels-Treffer: Borussia Dortmund II punktet in Paderb
+2026-09-22 13:56:07,657 INFO S3 keyword miss: DFB-Debüt von Klopp:: So würde Matthäus gegen Holland spiele
+2026-09-22 13:56:09,507 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:09,512 INFO S5 fetch fulltext: Liverpool-Legende vergleicht Wirtz mit Ex-Bayern-Star und se
+2026-09-22 13:56:15,558 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:15,559 INFO S5.5 not relevant (fulltext): Liverpool-Legende vergleicht Wirtz mit Ex-Bayern-Star und se
+2026-09-22 13:56:17,089 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:17,094 INFO S5 fetch fulltext: „Willkommen in der Brutalität“ – Sammer äußert sich zu Undav
+2026-09-22 13:56:19,725 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:19,726 INFO S5.5 not relevant (fulltext): „Willkommen in der Brutalität“ – Sammer äußert sich zu Undav
+2026-09-22 13:56:21,067 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:21,072 INFO S5 fetch fulltext: Ungewöhnliche Situation für Sabitzer in Dortmund - fan.at
+2026-09-22 13:56:21,614 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:56:21,615 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:56:21,615 ERROR empty HTML tree: None
+2026-09-22 13:56:21,615 WARNING discarding data: None
+2026-09-22 13:56:21,615 INFO S5 fulltext fail (trafilatura_returned_empty): Ungewöhnliche Situation für Sabitzer in Dortmund - fan.at
+2026-09-22 13:56:21,645 INFO S3 keyword miss: Liveticker - Transfermarkt
+2026-09-22 13:56:23,468 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:23,473 INFO S5 fetch fulltext: Marktwerte Serie A: Malen überholt Woltemade – Como-Kader we
+2026-09-22 13:56:24,159 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:56:24,159 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:56:24,160 ERROR empty HTML tree: None
+2026-09-22 13:56:24,160 WARNING discarding data: None
+2026-09-22 13:56:24,160 INFO S5 fulltext fail (trafilatura_returned_empty): Marktwerte Serie A: Malen überholt Woltemade – Como-Kader we
+2026-09-22 13:56:25,437 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:25,443 INFO S5 fetch fulltext: SV Werder Bremen 0:0 Borussia Dortmund - LigaInsider
+2026-09-22 13:56:26,908 INFO S5 fulltext fail (too_short_32_words): SV Werder Bremen 0:0 Borussia Dortmund - LigaInsider
+2026-09-22 13:56:26,908 INFO S2 blacklist: Nationalmannschaft | XXL-Kader als heimliches Klopp-Signal a
+2026-09-22 13:56:26,908 INFO S2 blacklist: ÖFB-Teamspieler Marcel Sabitzer trainiert in Länderspielpaus
+2026-09-22 13:56:28,616 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:28,619 INFO S4 fingerprint dup: Das ewige Trauma: Warum der BVB trotz Superstart am FC Bayer
+2026-09-22 13:56:30,240 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:30,245 INFO S5 fetch fulltext: Historischer Bayern-Abend: Lewandowski-Rekord ist bis heute 
+2026-09-22 13:56:32,167 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:56:32,168 INFO S5.5 not relevant (fulltext): Historischer Bayern-Abend: Lewandowski-Rekord ist bis heute 
+2026-09-22 13:57:05,789 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:05,793 INFO S4 fingerprint dup: Dortmund-Knall: Sabitzer muss mit der U23 trainieren - oe24
+2026-09-22 13:57:05,794 INFO Feed: https://news.google.com/rss/search?q=%22Bayer+Leverkusen%22+OR+%22Bayer+04%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 13:57:07,933 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:07,938 INFO S5 fetch fulltext: Bayer Leverkusen: Moussa Diaby: „Leverkusen hat seine Mental
+2026-09-22 13:57:09,784 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:11,622 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:11,625 INFO S6 refined dup: Bayer Leverkusen: Moussa Diaby: „Leverkusen hat seine Mental
+2026-09-22 13:57:11,658 INFO S3 keyword miss: (k+) Stärker als das Original? Wo Miguel schon besser ist al
+2026-09-22 13:57:11,690 INFO S3 keyword miss: (k+) Stärker als das Original? Wo Miguel schon besser ist al
+2026-09-22 13:57:13,044 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:13,049 INFO S4 fingerprint dup: Bayer 04 Leverkusen 2:0 RB Leipzig - LigaInsider
+2026-09-22 13:57:15,040 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:15,045 INFO S5 fetch fulltext: Bayer 04: Nächster Rückschlag? Entwarnung bei Ben Seghir - k
+2026-09-22 13:57:15,719 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:57:15,719 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:57:15,719 ERROR empty HTML tree: None
+2026-09-22 13:57:15,719 WARNING discarding data: None
+2026-09-22 13:57:15,720 INFO S5 fulltext fail (trafilatura_returned_empty): Bayer 04: Nächster Rückschlag? Entwarnung bei Ben Seghir - k
+2026-09-22 13:57:17,317 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:17,321 INFO S5 fetch fulltext: Diaby sieht sich erst bei „70 Prozent“ - LigaInsider
+2026-09-22 13:57:18,914 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:20,598 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:21,148 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:21,149 INFO S7 generate: Diaby sieht sich erst bei „70 Prozent“ - LigaInsider
+2026-09-22 13:57:33,830 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:34,637 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:34,638 INFO   Kandidat: Diaby: "Gegen Leipzig erst bei 70 Prozent"
+2026-09-22 13:57:36,106 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:36,111 INFO S5 fetch fulltext: Wer punktet besser | Nathan De Cat VS Leon Avdullahu - LigaI
+2026-09-22 13:57:37,555 INFO S5 fulltext fail (too_short_30_words): Wer punktet besser | Nathan De Cat VS Leon Avdullahu - LigaI
+2026-09-22 13:57:37,582 INFO S3 keyword miss: Peter Hermann tot: Jupp Heynckes trauert um seinen Freund - 
+2026-09-22 13:57:37,613 INFO S3 keyword miss: Heynckes weint um seinen Freund Peter Hermann - goslarsche.d
+2026-09-22 13:57:39,097 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:39,102 INFO S5 fetch fulltext: Spielschema | Bayer 04 Leverkusen - FC Viktoria Köln 3:2 | 5
+2026-09-22 13:57:39,720 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:57:39,720 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:57:39,720 ERROR empty HTML tree: None
+2026-09-22 13:57:39,720 WARNING discarding data: None
+2026-09-22 13:57:39,721 INFO S5 fulltext fail (trafilatura_returned_empty): Spielschema | Bayer 04 Leverkusen - FC Viktoria Köln 3:2 | 5
+2026-09-22 13:57:41,209 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:41,213 INFO S5 fetch fulltext: Wer punktet besser | Noahkai Banks VS Jordy Makengo - LigaIn
+2026-09-22 13:57:42,682 INFO S5 fulltext fail (too_short_30_words): Wer punktet besser | Noahkai Banks VS Jordy Makengo - LigaIn
+2026-09-22 13:57:44,279 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:44,284 INFO S5 fetch fulltext: Handball: erstes Sachsenderby nach Leipzigs Abstieg - mdr.de
+2026-09-22 13:57:46,782 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:46,782 INFO S5.5 not relevant (fulltext): Handball: erstes Sachsenderby nach Leipzigs Abstieg - mdr.de
+2026-09-22 13:57:48,278 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:48,283 INFO S5 fetch fulltext: Peter Hermann: Abschied vom besten Talenteschmied - Aachener
+2026-09-22 13:57:48,886 WARNING discarding data: None
+2026-09-22 13:57:48,887 INFO S5 fulltext fail (trafilatura_returned_empty): Peter Hermann: Abschied vom besten Talenteschmied - Aachener
+2026-09-22 13:57:48,887 INFO S2 blacklist: Länderspiele abgesagt: Kein Grund zur Sorge bei Mainz-Profi 
+2026-09-22 13:57:48,916 INFO S3 keyword miss: Am Wochenende in Langenfeld: Handwerkermarkt und Mädelsflohm
+2026-09-22 13:57:50,401 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:50,405 INFO S5 fetch fulltext: Offiziell: Neuer Trainer für Kevin Stöger bei Gladbach - LAO
+2026-09-22 13:57:51,865 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:53,482 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:55,741 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:56,250 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:57:56,251 INFO S7 generate: Offiziell: Neuer Trainer für Kevin Stöger bei Gladbach - LAO
+2026-09-22 13:58:04,085 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:04,637 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:05,087 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:05,087 INFO S7.6 fertiger Artikel doppelt (Gladbach einigt sich mündlich auf neuen Trainer): Blessin wird neuer Cheftrainer bei Borussia Mönche
+2026-09-22 13:58:06,650 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:06,654 INFO S5 fetch fulltext: Gladbach-Ikone Heynckes erzählt vom letzten Augenblick mit P
+2026-09-22 13:58:08,116 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:08,119 INFO S5.5 not relevant (fulltext): Gladbach-Ikone Heynckes erzählt vom letzten Augenblick mit P
+2026-09-22 13:58:09,219 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:09,223 INFO S5 fetch fulltext: Eilmeldung: Mönchengladbach verpflichtet Blessin als neuen T
+2026-09-22 13:58:11,717 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:12,802 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:13,489 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:13,928 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:13,928 INFO S7 generate: Eilmeldung: Mönchengladbach verpflichtet Blessin als neuen T
+2026-09-22 13:58:19,481 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:20,236 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:20,714 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:20,715 INFO   Kandidat: Blessin wird neuer Trainer bei Borussia Mönchengladbach
+2026-09-22 13:58:20,715 INFO Feed: https://news.google.com/rss/search?q=%22RB+Leipzig%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 13:58:22,511 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:22,515 INFO S5 fetch fulltext: RB Leipzig: Zehn Spieler auf internationaler Mission - News 
+2026-09-22 13:58:23,464 INFO S5 fulltext fail (too_short_8_words): RB Leipzig: Zehn Spieler auf internationaler Mission - News 
+2026-09-22 13:58:23,496 INFO S3 keyword miss: Nach XXL-Pause: Entscheiden diese vier Gegner Demichelis’ Zu
+2026-09-22 13:58:25,145 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:25,150 INFO S5 fetch fulltext: „Neuer Lamine Yamal“ – RB Leipzig und Man United im Rennen -
+2026-09-22 13:58:25,752 WARNING discarding data: None
+2026-09-22 13:58:25,752 INFO S5 fulltext fail (trafilatura_returned_empty): „Neuer Lamine Yamal“ – RB Leipzig und Man United im Rennen -
+2026-09-22 13:58:25,753 INFO S2 blacklist: Leipzigs Brajan Gruda sagt Bundestrainer Jürgen Klopp für DF
+2026-09-22 13:58:27,313 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:27,318 INFO S5 fetch fulltext: RB Leipzig U 17, DFB-Pokal der Juniorinnen 2026/27 - datence
+2026-09-22 13:58:28,597 INFO S5 fulltext fail (too_short_5_words): RB Leipzig U 17, DFB-Pokal der Juniorinnen 2026/27 - datence
+2026-09-22 13:58:30,256 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:30,261 INFO S5 fetch fulltext: RB Leipzig: Wo steht das Team gerade? Verletztenmisere überl
+2026-09-22 13:58:30,705 INFO S5 fulltext fail (too_short_8_words): RB Leipzig: Wo steht das Team gerade? Verletztenmisere überl
+2026-09-22 13:58:32,262 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:32,266 INFO S5 fetch fulltext: Bauchmuskelzerrung: Leipzigs Gruda nicht zur DFB-Auswahl - V
+2026-09-22 13:58:41,174 INFO S5 fulltext fail (too_short_37_words): Bauchmuskelzerrung: Leipzigs Gruda nicht zur DFB-Auswahl - V
+2026-09-22 13:58:42,983 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:42,988 INFO S5 fetch fulltext: Spielschema | Hallescher FC - RB Leipzig 1:3 | 7. Spieltag |
+2026-09-22 13:58:43,511 ERROR lxml parsing failed: Document is empty
+2026-09-22 13:58:43,512 ERROR lxml parser bytestring Document is empty
+2026-09-22 13:58:43,512 ERROR empty HTML tree: None
+2026-09-22 13:58:43,512 WARNING discarding data: None
+2026-09-22 13:58:43,512 INFO S5 fulltext fail (trafilatura_returned_empty): Spielschema | Hallescher FC - RB Leipzig 1:3 | 7. Spieltag |
+2026-09-22 13:58:45,139 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:45,144 INFO S5 fetch fulltext: Bauchmuskelzerrung: Leipzigs Gruda nicht zur DFB-Auswahl - D
+2026-09-22 13:58:47,141 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:47,167 INFO S5.5 not relevant (fulltext): Bauchmuskelzerrung: Leipzigs Gruda nicht zur DFB-Auswahl - D
+2026-09-22 13:58:47,198 INFO S3 keyword miss: Injury Ahead of DFB Debut: Offensive Player Out - Die Sachse
+2026-09-22 13:58:47,198 INFO S2 blacklist: Bittere Verletzung! Bundesliga-Star muss Jürgen Klopp für Lä
+2026-09-22 13:58:49,244 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:49,249 INFO S4 fingerprint dup: Leipzigs Ridle Baku nach 0:2 gegen Leverkusen: 'Wir haben in
+2026-09-22 13:58:50,906 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:50,910 INFO S5 fetch fulltext: Bitterer Rückschlag vor DFB-Debüt: Jürgen Klopp muss auf Bra
+2026-09-22 13:58:51,362 WARNING discarding data: None
+2026-09-22 13:58:51,363 INFO S5 fulltext fail (trafilatura_returned_empty): Bitterer Rückschlag vor DFB-Debüt: Jürgen Klopp muss auf Bra
+2026-09-22 13:58:51,363 INFO Feed: https://news.google.com/rss/search?q=%22VfB+Stuttgart%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 13:58:53,294 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:53,299 INFO S5 fetch fulltext: VfB Stuttgart: Viele Nationalspieler außer Form: Der VfB Stu
+2026-09-22 13:58:54,633 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:54,634 INFO S5.5 not relevant (fulltext): VfB Stuttgart: Viele Nationalspieler außer Form: Der VfB Stu
+2026-09-22 13:58:55,941 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:55,946 INFO S5 fetch fulltext: Öffentliches VfB-Training: Undav pausiert, Seimen arbeitet w
+2026-09-22 13:58:57,381 INFO S5 fulltext fail (likely_paywall): Öffentliches VfB-Training: Undav pausiert, Seimen arbeitet w
+2026-09-22 13:58:58,971 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:58:58,976 INFO S5 fetch fulltext: VfB Stuttgart: Millionen-Regen für Gladbach? Neues VfB-Gerüc
+2026-09-22 13:59:01,527 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:03,174 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:03,624 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:03,625 INFO S7 generate: VfB Stuttgart: Millionen-Regen für Gladbach? Neues VfB-Gerüc
+2026-09-22 13:59:13,911 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:14,463 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:14,465 INFO   Kandidat: Boteli im Fokus: VfB Stuttgart scouted Sion-Stürmer
+2026-09-22 13:59:15,874 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:15,879 INFO S5 fetch fulltext: „Wenn du Kredite willst, geh zur Bank“: Experte zerlegt die 
+2026-09-22 13:59:17,641 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:19,660 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:19,665 INFO S6 refined dup: „Wenn du Kredite willst, geh zur Bank“: Experte zerlegt die 
+2026-09-22 13:59:21,353 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:21,358 INFO S5 fetch fulltext: VfB Stuttgart: Sebastian Hoeneß über XXL-Pause: „Aus Vereins
+2026-09-22 13:59:22,812 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:24,443 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:24,983 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:24,984 INFO S7 generate: VfB Stuttgart: Sebastian Hoeneß über XXL-Pause: „Aus Vereins
+2026-09-22 13:59:38,228 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:38,229 WARNING S7 generation error: Expecting ',' delimiter: line 2 column 80 (char 81)
+2026-09-22 13:59:39,300 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:39,305 INFO S5 fetch fulltext: VfB Stuttgart – Atlético Madrid live im TV und Stream: alle 
+2026-09-22 13:59:41,027 INFO S5 fulltext fail (likely_paywall): VfB Stuttgart – Atlético Madrid live im TV und Stream: alle 
+2026-09-22 13:59:41,060 INFO S3 keyword miss: Reichlich Nachschlag für den Ex-Klub! Welcher Transfer dem F
+2026-09-22 13:59:42,700 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:42,704 INFO S5 fetch fulltext: DFB-Klausel: Finn Jeltsch sorgt für unverhofften Geldregen b
+2026-09-22 13:59:43,143 WARNING discarding data: None
+2026-09-22 13:59:43,144 INFO S5 fulltext fail (trafilatura_returned_empty): DFB-Klausel: Finn Jeltsch sorgt für unverhofften Geldregen b
+2026-09-22 13:59:44,933 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:44,940 INFO S5 fetch fulltext: "Die Mädels sind sehr hart mit sich selbst" - werder.de
+2026-09-22 13:59:45,855 INFO S5 fulltext fail (too_short_4_words): "Die Mädels sind sehr hart mit sich selbst" - werder.de
+2026-09-22 13:59:47,405 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:47,409 INFO S5 fetch fulltext: Arouna antwortet Shimada: Kein Sieger am Montagabend - werde
+2026-09-22 13:59:47,892 INFO S5 fulltext fail (too_short_4_words): Arouna antwortet Shimada: Kein Sieger am Montagabend - werde
+2026-09-22 13:59:49,294 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:49,299 INFO S5 fetch fulltext: Undav setzt wegen muskulärer Probleme aus - LigaInsider
+2026-09-22 13:59:51,269 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:52,778 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:53,445 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 13:59:53,446 INFO S7 generate: Undav setzt wegen muskulärer Probleme aus - LigaInsider
+2026-09-22 14:00:00,773 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:01,378 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:01,379 INFO   Kandidat: Undav fehlt im Mannschaftstraining: Muskuläre Probleme
+2026-09-22 14:00:03,338 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:03,352 INFO S5 fetch fulltext: Sammer gefällt Klopps Nein für Undav: "Ich liebe das" - kick
+2026-09-22 14:00:03,930 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:00:03,931 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:00:03,931 ERROR empty HTML tree: None
+2026-09-22 14:00:03,931 WARNING discarding data: None
+2026-09-22 14:00:03,931 INFO S5 fulltext fail (trafilatura_returned_empty): Sammer gefällt Klopps Nein für Undav: "Ich liebe das" - kick
+2026-09-22 14:00:05,783 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:05,816 INFO S5 fetch fulltext: Bei DFB-Debüt von Jeltsch: Nachzahlung für Ex-Klub Nürnberg 
+2026-09-22 14:00:06,250 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:00:06,250 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:00:06,250 ERROR empty HTML tree: None
+2026-09-22 14:00:06,250 WARNING discarding data: None
+2026-09-22 14:00:06,251 INFO S5 fulltext fail (trafilatura_returned_empty): Bei DFB-Debüt von Jeltsch: Nachzahlung für Ex-Klub Nürnberg 
+2026-09-22 14:00:09,514 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:09,519 INFO S5 fetch fulltext: LIVE! Gelingt Werder gegen freche Stuttgarterinnen der viert
+2026-09-22 14:00:09,925 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:00:09,926 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:00:09,926 ERROR empty HTML tree: None
+2026-09-22 14:00:09,926 WARNING discarding data: None
+2026-09-22 14:00:09,926 INFO S5 fulltext fail (trafilatura_returned_empty): LIVE! Gelingt Werder gegen freche Stuttgarterinnen der viert
+2026-09-22 14:00:09,949 INFO S3 keyword miss: (k+) Super-Joker und eine bombenfeste Abwehr: Dortmund im St
+2026-09-22 14:00:12,651 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:12,655 INFO S5 fetch fulltext: LIVE! Gelingt Werder gegen freche Stuttgarterinnen der viert
+2026-09-22 14:00:13,280 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:00:13,280 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:00:13,280 ERROR empty HTML tree: None
+2026-09-22 14:00:13,280 WARNING discarding data: None
+2026-09-22 14:00:13,281 INFO S5 fulltext fail (trafilatura_returned_empty): LIVE! Gelingt Werder gegen freche Stuttgarterinnen der viert
+2026-09-22 14:00:15,117 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:15,121 INFO S5 fetch fulltext: SC Paderborn 07 0:0 VfB Stuttgart - LigaInsider
+2026-09-22 14:00:17,008 INFO S5 fulltext fail (too_short_32_words): SC Paderborn 07 0:0 VfB Stuttgart - LigaInsider
+2026-09-22 14:00:19,435 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:19,439 INFO S5 fetch fulltext: VfB Stuttgart nach vier Spieltagen auf Platz 15: Lothar Matt
+2026-09-22 14:00:19,921 WARNING discarding data: None
+2026-09-22 14:00:19,922 INFO S5 fulltext fail (trafilatura_returned_empty): VfB Stuttgart nach vier Spieltagen auf Platz 15: Lothar Matt
+2026-09-22 14:00:21,305 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:21,310 INFO S5 fetch fulltext: SC Paderborn vs. VfB Stuttgart Tipp vom Profi - Wettformat
+2026-09-22 14:00:23,434 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:23,435 INFO S5.5 not relevant (fulltext): SC Paderborn vs. VfB Stuttgart Tipp vom Profi - Wettformat
+2026-09-22 14:00:25,425 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:25,435 INFO S5 fetch fulltext: Geheime DFB-Klausel enthüllt: So profitiert Nürnberg von der
+2026-09-22 14:00:25,898 WARNING discarding data: None
+2026-09-22 14:00:25,899 INFO S5 fulltext fail (trafilatura_returned_empty): Geheime DFB-Klausel enthüllt: So profitiert Nürnberg von der
+2026-09-22 14:00:28,121 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:28,126 INFO S5 fetch fulltext: "Holen wir ihn im Winter!": Real-Madrid-Fans diskutieren hit
+2026-09-22 14:00:28,568 WARNING discarding data: None
+2026-09-22 14:00:28,569 INFO S5 fulltext fail (trafilatura_returned_empty): "Holen wir ihn im Winter!": Real-Madrid-Fans diskutieren hit
+2026-09-22 14:00:28,569 INFO Feed: https://news.google.com/rss/search?q=%22Eintracht+Frankfurt%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 14:00:31,135 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:31,140 INFO S5 fetch fulltext: Eintracht Frankfurt hat Nachholbedarf: Das ist Adi Hütters P
+2026-09-22 14:00:31,940 INFO S5 fulltext fail (too_short_59_words): Eintracht Frankfurt hat Nachholbedarf: Das ist Adi Hütters P
+2026-09-22 14:00:33,373 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:33,378 INFO S5 fetch fulltext: Fourteen players on international duty - Eintracht Frankfurt
+2026-09-22 14:00:34,722 WARNING discarding data: None
+2026-09-22 14:00:34,723 INFO S5 fulltext fail (trafilatura_returned_empty): Fourteen players on international duty - Eintracht Frankfurt
+2026-09-22 14:00:34,724 INFO S2 blacklist: „So viele bleiben gar nicht hier“: Eintracht durch zahlreich
+2026-09-22 14:00:34,724 INFO S2 blacklist: Auf internationalen Wegen: Das Europatrikot der Eintracht Fr
+2026-09-22 14:00:36,469 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:36,473 INFO S4 fingerprint dup: „Fühle mich sehr wohl bei der Eintracht“: SGE will mit Leist
+2026-09-22 14:00:36,499 INFO S3 keyword miss: DFB-Zusage dank "intensiver" Klopp-Gespräche - sport.de
+2026-09-22 14:00:37,666 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:37,671 INFO S5 fetch fulltext: Nach 20 Monaten Verletzungspause: Nationaltorhüterin feiert 
+2026-09-22 14:00:38,930 INFO S5 fulltext fail (likely_paywall): Nach 20 Monaten Verletzungspause: Nationaltorhüterin feiert 
+2026-09-22 14:00:41,381 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:41,386 INFO S5 fetch fulltext: Von Top-Transfer bis Bankdrücker: So schlagen sich die Eintr
+2026-09-22 14:00:43,349 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:48,341 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:48,344 INFO S6 refined dup: Von Top-Transfer bis Bankdrücker: So schlagen sich die Eintr
+2026-09-22 14:00:51,224 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:51,229 INFO S5 fetch fulltext: FUSSBALL 2000: Erkenntnisse, Emotionen und offene Fragen zu 
+2026-09-22 14:00:52,005 INFO S5 fulltext fail (too_short_40_words): FUSSBALL 2000: Erkenntnisse, Emotionen und offene Fragen zu 
+2026-09-22 14:00:55,026 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:55,031 INFO S5 fetch fulltext: Nicht viel los beim Eintracht-Training - hessenschau.de
+2026-09-22 14:00:56,838 INFO S5 fulltext fail (too_short_3_words): Nicht viel los beim Eintracht-Training - hessenschau.de
+2026-09-22 14:00:58,273 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:00:58,277 INFO S5 fetch fulltext: „Ritterschlag“: TV-Kommentator lobt Eintracht-Auftritt und s
+2026-09-22 14:00:59,711 INFO S5 fulltext fail (likely_paywall): „Ritterschlag“: TV-Kommentator lobt Eintracht-Auftritt und s
+2026-09-22 14:01:02,939 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:02,943 INFO S4 fingerprint dup: Auch ohne Tor gegen den Ex-Klub: Igor Matanovic zeigt nach E
+2026-09-22 14:01:04,617 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:04,621 INFO S5 fetch fulltext: Klopp ruft an – und Ebnoutalib kommen die Tränen - Absolut F
+2026-09-22 14:01:05,835 INFO S5 fulltext fail (likely_paywall): Klopp ruft an – und Ebnoutalib kommen die Tränen - Absolut F
+2026-09-22 14:01:07,955 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:07,962 INFO S5 fetch fulltext: Brown-Lücke nach Bayern-Wechsel geschlossen? Eintracht-Winte
+2026-09-22 14:01:09,568 INFO S5 fulltext fail (likely_paywall): Brown-Lücke nach Bayern-Wechsel geschlossen? Eintracht-Winte
+2026-09-22 14:01:09,568 INFO S2 blacklist: Trostpflaster Europa Cup: Eintracht-Frauen mit hohen Zielen 
+2026-09-22 14:01:12,525 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:12,529 INFO S5 fetch fulltext: Bundestrainer großer Faktor für Ebnoutalibs DFB-Entscheidung
+2026-09-22 14:01:14,531 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:16,331 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:18,673 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:18,674 INFO S7 generate: Bundestrainer großer Faktor für Ebnoutalibs DFB-Entscheidung
+2026-09-22 14:01:31,722 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:31,723 INFO S7.5 kein BL-Hauptklub: Ebnoutalib: "Wenn Kloppo dich anruft, muss man hingehen"
+2026-09-22 14:01:34,275 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:34,279 INFO S5 fetch fulltext: Gedanken über eine Leihe im Winter: Warum Eintracht-Megatale
+2026-09-22 14:01:35,669 INFO S5 fulltext fail (likely_paywall): Gedanken über eine Leihe im Winter: Warum Eintracht-Megatale
+2026-09-22 14:01:37,339 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:37,344 INFO S5 fetch fulltext: Die größten Transfer-Fehler der Eintracht unter Markus Krösc
+2026-09-22 14:01:39,114 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:40,791 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:41,256 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:41,257 INFO S7 generate: Die größten Transfer-Fehler der Eintracht unter Markus Krösc
+2026-09-22 14:01:51,597 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:52,107 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:52,107 INFO   Kandidat: Krösches größte Transfer-Flops bei Eintracht Frankfurt
+2026-09-22 14:01:53,564 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:53,568 INFO S5 fetch fulltext: "Wenn Kloppo anruft, muss man hingehen": Frankfurter vor DFB
+2026-09-22 14:01:55,261 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:57,043 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:57,543 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:01:57,544 INFO S7 generate: "Wenn Kloppo anruft, muss man hingehen": Frankfurter vor DFB
+2026-09-22 14:02:06,101 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:02:06,102 WARNING S7 generation error: Expecting property name enclosed in double quotes: line 3 column 400 (char 491)
+2026-09-22 14:03:06,119 INFO Retrying request to /v1/messages in 0.382199 seconds
+2026-09-22 14:03:09,100 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:09,104 INFO S5 fetch fulltext: Nach 20 Monaten Leidenszeit: Winkler feiert "unbeschreiblich
+2026-09-22 14:03:11,275 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:11,276 INFO S5.5 not relevant (fulltext): Nach 20 Monaten Leidenszeit: Winkler feiert "unbeschreiblich
+2026-09-22 14:03:15,890 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:15,895 INFO S5 fetch fulltext: Erneut Licht und Schatten: Eintracht-Trainer sauer wegen Lei
+2026-09-22 14:03:17,035 INFO S5 fulltext fail (likely_paywall): Erneut Licht und Schatten: Eintracht-Trainer sauer wegen Lei
+2026-09-22 14:03:18,918 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:18,923 INFO S5 fetch fulltext: Eintracht Frankfurt: Dieser Star soll verlängern - BILD
+2026-09-22 14:03:19,661 INFO S5 fulltext fail (too_short_22_words): Eintracht Frankfurt: Dieser Star soll verlängern - BILD
+2026-09-22 14:03:19,687 INFO S3 keyword miss: „Wenn Klopp anruft, kannst du nicht nein sagen“ - FussballTr
+2026-09-22 14:03:21,425 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:21,430 INFO S5 fetch fulltext: Younes Ebnoutalib: Klopp gibt Ausschlag für DFB-Entscheidung
+2026-09-22 14:03:24,245 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:24,246 INFO S5.5 not relevant (fulltext): Younes Ebnoutalib: Klopp gibt Ausschlag für DFB-Entscheidung
+2026-09-22 14:03:26,247 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:26,253 INFO S5 fetch fulltext: Nicht mal mehr im Kader – Eintracht-Talent könnte im Winter 
+2026-09-22 14:03:27,031 WARNING discarding data: None
+2026-09-22 14:03:27,032 INFO S5 fulltext fail (trafilatura_returned_empty): Nicht mal mehr im Kader – Eintracht-Talent könnte im Winter 
+2026-09-22 14:03:31,988 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:32,983 INFO S5 fetch fulltext: Klopp nominiert Noah Atubolu: Doch der Eintracht-Star sprich
+2026-09-22 14:03:36,089 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:37,979 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:38,803 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:38,805 INFO S7 generate: Klopp nominiert Noah Atubolu: Doch der Eintracht-Star sprich
+2026-09-22 14:03:48,100 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:48,103 WARNING S7 generation error: Expecting ',' delimiter: line 3 column 486 (char 558)
+2026-09-22 14:03:50,139 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:50,145 INFO S5 fetch fulltext: Nach Gesprächen mit Marokko: Ebnoutalib erklärt Entscheidung
+2026-09-22 14:03:50,700 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:03:50,700 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:03:50,700 ERROR empty HTML tree: None
+2026-09-22 14:03:50,700 WARNING discarding data: None
+2026-09-22 14:03:50,701 INFO S5 fulltext fail (trafilatura_returned_empty): Nach Gesprächen mit Marokko: Ebnoutalib erklärt Entscheidung
+2026-09-22 14:03:50,727 INFO S3 keyword miss: Hamit: Bruderduell „Nebensache“ - SPORT1
+2026-09-22 14:03:52,291 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:52,296 INFO S5 fetch fulltext: Wer punktet besser | Tim Lemperle VS Yuito Suzuki - LigaInsi
+2026-09-22 14:03:53,759 INFO S5 fulltext fail (too_short_25_words): Wer punktet besser | Tim Lemperle VS Yuito Suzuki - LigaInsi
+2026-09-22 14:03:53,760 INFO Feed: https://news.google.com/rss/search?q=Gladbach+OR+%22Borussia+M%C3%B6nchengladbach%22+when%3A1d&hl=de&gl=DE&ceid=DE:de
+2026-09-22 14:03:59,914 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:03:59,921 INFO S4 fingerprint dup: Alexander Blessin wird neuer Trainer von Borussia Mönchengla
+2026-09-22 14:04:02,818 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:02,822 INFO S4 fingerprint dup: Fußball-Bundesliga: Borussia Mönchengladbach verpflichtet Al
+2026-09-22 14:04:04,507 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:04,513 INFO S4 fingerprint dup: Soll Borussia retten: Blessin ist neuer Trainer in Mönchengl
+2026-09-22 14:04:06,427 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:06,433 INFO S5 fetch fulltext: Debüt im Derby: Blessin ist neuer Gladbach-Trainer - kicker.
+2026-09-22 14:04:06,991 ERROR lxml parsing failed: Document is empty
+2026-09-22 14:04:06,991 ERROR lxml parser bytestring Document is empty
+2026-09-22 14:04:06,991 ERROR empty HTML tree: None
+2026-09-22 14:04:06,991 WARNING discarding data: None
+2026-09-22 14:04:06,992 INFO S5 fulltext fail (trafilatura_returned_empty): Debüt im Derby: Blessin ist neuer Gladbach-Trainer - kicker.
+2026-09-22 14:04:09,815 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:09,820 INFO S4 fingerprint dup: Fußball: Alexander Blessin wird neuer Trainer bei Borussia M
+2026-09-22 14:04:11,367 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:11,373 INFO S5 fetch fulltext: Neuer Trainer: Borussia Mönchengladbach verpflichtet Alexand
+2026-09-22 14:04:13,885 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:15,819 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:15,824 INFO S6 refined dup: Neuer Trainer: Borussia Mönchengladbach verpflichtet Alexand
+2026-09-22 14:04:17,595 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:17,600 INFO S5 fetch fulltext: Bundesliga: Fix! 16 Gegentore, null Punkte - dieser Trainer 
+2026-09-22 14:04:19,156 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:21,613 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:23,510 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:24,219 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:24,221 INFO S6.5 schon berichtet (Blessin wird neuer Trainer bei Borussia Mönchengla): Bundesliga: Fix! 16 Gegentore, null Punkte - diese
+2026-09-22 14:04:31,200 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:31,206 INFO S5 fetch fulltext: Entscheidung offiziell: Alexander Blessin ist Gladbachs neue
+2026-09-22 14:04:32,759 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:35,565 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:35,572 INFO S6 update-bypass (Folgeartikel): Entscheidung offiziell: Alexander Blessin ist Gladbachs neue
+2026-09-22 14:04:36,468 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:37,268 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:37,269 INFO S7 generate: Entscheidung offiziell: Alexander Blessin ist Gladbachs neue
+2026-09-22 14:04:46,832 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:49,048 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:49,842 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:49,844 INFO S7.6 fertiger Artikel doppelt (Blessin wird neuer Trainer bei Borussia Mönchengla): Blessin übernimmt: Gladbach verpflichtet neuen Che
+2026-09-22 14:04:51,498 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:51,504 INFO S5 fetch fulltext: Offiziell: Borussia Mönchengladbach verpflichtet Blessin – V
+2026-09-22 14:04:53,124 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:54,726 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:55,643 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:56,429 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:56,431 INFO S6.5 schon berichtet (Blessin wird neuer Trainer bei Borussia Mönchengla): Offiziell: Borussia Mönchengladbach verpflichtet B
+2026-09-22 14:04:58,428 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:04:58,433 INFO S5 fetch fulltext: Vertrag bis 2028: Neuer Trainer fix: Blessin soll Gladbach v
+2026-09-22 14:05:02,028 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:05:03,775 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:05:03,787 INFO S6 update-bypass (Folgeartikel): Vertrag bis 2028: Neuer Trainer fix: Blessin soll Gladbach v
+2026-09-22 14:05:04,653 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:05:05,362 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:05:05,363 INFO S6.5 schon berichtet (Blessin wird neuer Trainer bei Borussia Mönchengla): Vertrag bis 2028: Neuer Trainer fix: Blessin soll 
+2026-09-22 14:05:05,364 WARNING Zeitbudget erreicht – restliche Feeds im nächsten Lauf
+2026-09-22 14:05:05,364 INFO S8 QA: 7 Kandidaten …
+2026-09-22 14:05:14,951 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 14:05:14,954 INFO QA APPROVE [0]: FC Bayern: Jahreshauptversammlung am 21. November im BMW Par
+2026-09-22 14:05:14,954 INFO QA APPROVE [1]: BVB-Youngster Gadou: Stärken und Baustelle im Überblick
+2026-09-22 14:05:14,954 INFO QA APPROVE [2]: Diaby: "Gegen Leipzig erst bei 70 Prozent"
+2026-09-22 14:05:14,954 INFO QA REJECT [3]: Text enthält kaum Substanz – kein Vertragsdatum, keine Hintergründe, keine Einordnung; zu nah an einer leeren Pressemitteilungs-Paraphrase.
+2026-09-22 14:05:14,954 INFO QA APPROVE [4]: Boteli im Fokus: VfB Stuttgart scouted Sion-Stürmer
+2026-09-22 14:05:14,954 INFO QA APPROVE [5]: Undav fehlt im Mannschaftstraining: Muskuläre Probleme
+2026-09-22 14:05:14,954 INFO QA APPROVE [6]: Krösches größte Transfer-Flops bei Eintracht Frankfurt
+2026-09-22 14:05:14,954 INFO S8 approved: 6 / 7
+2026-09-22 14:05:14,974 INFO S9.5 FinalCheck: 6/6 durch
+2026-09-22 14:05:15,113 INFO Veröffentlicht: FC Bayern: Jahreshauptversammlung am 21. November im BMW Par
+2026-09-22 14:05:15,163 INFO Veröffentlicht: BVB-Youngster Gadou: Stärken und Baustelle im Überblick
+2026-09-22 14:05:15,212 INFO Veröffentlicht: Diaby: "Gegen Leipzig erst bei 70 Prozent"
+2026-09-22 14:05:15,262 INFO Veröffentlicht: Boteli im Fokus: VfB Stuttgart scouted Sion-Stürmer
+2026-09-22 14:05:15,313 INFO Veröffentlicht: Undav fehlt im Mannschaftstraining: Muskuläre Probleme
+2026-09-22 14:05:15,363 INFO Veröffentlicht: Krösches größte Transfer-Flops bei Eintracht Frankfurt
+2026-09-22 14:05:15,560 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,560 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,560 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,560 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,561 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,561 INFO Reddit: Keine Credentials – übersprungen
+2026-09-22 14:05:15,591 INFO Feeds: 7/60 begonnen, nächster Lauf startet bei Nr. 19
+2026-09-22 14:05:15,591 INFO URL-Cache gespeichert: 19279 URLs
+2026-09-22 14:05:15,591 INFO === Fertig. 6 neue Artikel. feed.json: 1018 ===
+2026-09-22 14:05:15,591 INFO Stats: {"ts": "20260922_1347", "ingested": 218, "s2_pre_filter": 17, "s3_relevance": 51, "s4_dedup_early": 27, "s5_fulltext_fail": 89, "s6_dedup_refined": 22, "s7_generated": 7, "s8_qa_rejected": 1, "published": 6, "s7_5_kein_hauptklub": 1}
