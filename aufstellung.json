@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-24T17:46:10.643204+00:00",
+ "updated": "2026-09-24T19:43:12.502432+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -81,8 +81,8 @@
       "name": "Manuel Neuer",
       "nr": "1",
       "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 95 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "tw",
       "pos": "Torwart",
       "prozent": 97
@@ -103,44 +103,34 @@
       "name": "Jonathan Tah",
       "nr": "4",
       "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 67 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 90
+      "prozent": 74
      },
      {
       "name": "Alphonso Davies",
       "nr": "19",
       "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 71 min",
+      "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 90
+      "prozent": 73
      },
      {
       "name": "Josip Stanisic",
       "nr": "44",
       "ampel": "gruen",
-      "grund": "Ersatz für Laimer als Rechtsverteidiger",
-      "news": "artikel/27e5fd3fad.html",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 72 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 90
+      "prozent": 73
      }
     ],
     "mf": [
-     {
-      "name": "Joshua Kimmich",
-      "nr": "6",
-      "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 97
-     },
      {
       "name": "Aleksandar Pavlovic",
       "nr": "45",
@@ -152,14 +142,24 @@
       "prozent": 96
      },
      {
+      "name": "Joshua Kimmich",
+      "nr": "6",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 79 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 94
+     },
+     {
       "name": "Jamal Musiala",
       "nr": "10",
-      "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 90
+      "prozent": 60
      }
     ],
     "st": [
@@ -167,11 +167,11 @@
       "name": "Luis Díaz",
       "nr": "14",
       "ampel": "gruen",
-      "grund": "Rückkehr in die Startelf",
-      "news": "artikel/5006d54417.html",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 71 min",
+      "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Harry Kane",
@@ -584,8 +584,8 @@
       "name": "Konstantinos Karetsas",
       "nr": "19",
       "ampel": "gruen",
-      "grund": "Rückkehr ins Training nach Kreislaufkollaps",
-      "news": "artikel/a90a35a305.html",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 57 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 88
@@ -1034,12 +1034,12 @@
      {
       "name": "Rômulo",
       "nr": "40",
-      "ampel": "gelb",
-      "grund": "Startelfentscheidung fällt nach Trainingstagen",
-      "news": "artikel/5c9386ae5b.html",
+      "ampel": "gruen",
+      "grund": "1 von 2 Einsätzen in der Startelf · Ø 45 min · 2 Spiele ohne Einsatz",
+      "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 42
+      "prozent": 48
      }
     ]
    },
@@ -1097,6 +1097,16 @@
    ],
    "fraglich": [
     {
+     "name": "Rocco Reitz",
+     "nr": "20",
+     "ampel": "gelb",
+     "grund": "Schrittweise Rückkehr nach Länderspielpause geplant",
+     "news": "artikel/950aa13f24.html",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 28
+    },
+    {
      "name": "Johan Bakayoko",
      "nr": "11",
      "ampel": "gelb",
@@ -1105,29 +1115,19 @@
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 5
-    }
-   ],
-   "ausfall": [
+    },
     {
      "name": "Christoph Baumgartner",
      "nr": "14",
-     "ampel": "rot",
-     "grund": "Nicht näher bezeichnete Verletzung",
-     "news": "artikel/7ce4019953.html",
+     "ampel": "gelb",
+     "grund": "Schrittweise Rückkehr nach Länderspielpause geplant",
+     "news": "artikel/950aa13f24.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 0
-    },
-    {
-     "name": "Rocco Reitz",
-     "nr": "20",
-     "ampel": "rot",
-     "grund": "Nicht näher bezeichnete Verletzung",
-     "news": "artikel/7ce4019953.html",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 0
-    },
+     "prozent": 4
+    }
+   ],
+   "ausfall": [
     {
      "name": "Assan Ouédraogo",
      "nr": "8",
@@ -1784,19 +1784,19 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 74
+     },
+     {
+      "name": "Albian Hajdari",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 84 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 35
      }
     ],
     "mf": [
-     {
-      "name": "Wouter Burger",
-      "nr": "18",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 93 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 97
-     },
      {
       "name": "Leon Avdullahu",
       "nr": "7",
@@ -1853,16 +1853,6 @@
    },
    "bank": [
     {
-     "name": "Albian Hajdari",
-     "nr": "21",
-     "ampel": "gruen",
-     "grund": "3 von 4 Einsätzen in der Startelf · Ø 84 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 35
-    },
-    {
      "name": "Fisnik Asllani",
      "nr": "11",
      "ampel": "gruen",
@@ -1905,6 +1895,16 @@
    ],
    "fraglich": [],
    "ausfall": [
+    {
+     "name": "Wouter Burger",
+     "nr": "18",
+     "ampel": "rot",
+     "grund": "Gelbe Karte, gesperrt für nächstes Spiel",
+     "news": "artikel/81b36d0ccb.html",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 0
+    },
     {
      "name": "Bernardo",
      "nr": "13",
@@ -3038,16 +3038,6 @@
       "prozent": 93
      },
      {
-      "name": "Tim Kleindienst",
-      "nr": "11",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 76 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 92
-     },
-     {
       "name": "Franck Honorat",
       "nr": "9",
       "ampel": "gruen",
@@ -3056,6 +3046,16 @@
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 78
+     },
+     {
+      "name": "Tim Kleindienst",
+      "nr": "11",
+      "ampel": "gelb",
+      "grund": "Erkältung - verpasst Testspiel",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 60
      }
     ]
    },
