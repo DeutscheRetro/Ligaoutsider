@@ -1093,6 +1093,17 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
         except Exception as e:
             return None, f"fetch_failed_{type(e).__name__}"
 
+        # Seitendatum prüfen: alte Archivseiten (z. B. Liveticker) nicht als News verwerten
+        try:
+            _meta = trafilatura.extract_metadata(html_content)
+            _d = getattr(_meta, "date", None) if _meta else None
+            if _d:
+                _dt = datetime.datetime.strptime(_d[:10], "%Y-%m-%d")
+                if (datetime.datetime.now() - _dt).days > MAX_ALTER_TAGE:
+                    return None, "seite_zu_alt"
+        except Exception:
+            pass
+
         text = trafilatura.extract(
             html_content,
             include_comments=False,
@@ -1781,6 +1792,12 @@ def main():
             # Exact: schon verarbeitet (lokale .html/.skip oder published_stories)
             if schon_verarbeitet(url) or url in pub_urls:
                 log.debug(f"S2 skip (already processed): {titel[:60]}")
+                continue
+
+            # Liveticker-Seiten sind Archiv/Dauerseiten, oft von alten Spielen
+            if re.search(r'liveticker|live-ticker', (titel + " " + url).lower()):
+                log.info(f"S2 Liveticker übersprungen: {titel[:60]}")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 continue
 
             # Alters-Check
