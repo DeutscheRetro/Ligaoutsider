@@ -1116,12 +1116,12 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
 
         words = text.split()
         word_count = len(words)
-        MIN_WORDS = 60
+        MIN_WORDS = 150
         if word_count < MIN_WORDS:
             # Kurze Transfermeldungen erlauben wenn Key-Indicators vorhanden
             _KEY = ["wechselt", "transfer", "verpflichtet", "verletzt",
                     "verlängert", "ablöse", "testspiel", "trainiert", "abgang", "zugang"]
-            if word_count >= 40 and any(k in text.lower() for k in _KEY):
+            if word_count >= 110 and any(k in text.lower() for k in _KEY):
                 pass  # short but relevant
             else:
                 return None, f"too_short_{word_count}_words"
@@ -1169,7 +1169,11 @@ Quelle: {quelle_name} ({quelle_url})
 
 Erstelle:
 1. Präzisen Titel im Kicker-Stil (max. 80 Zeichen)
-2. Zwei bis vier Absätze – so viele wie Quellinfos rechtfertigen, nicht mehr
+2. Einen vollwertigen Nachrichtenartikel: 4 bis 6 Absätze, 200 bis 350 Wörter.
+   Schöpfe den Quelltext vollständig aus: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
+   Hintergründe, Vorgeschichte, Einordnung und Ausblick, soweit sie im Quelltext stehen.
+   Aufbau: Kernnachricht im ersten Absatz, dann Details, Zitate, Hintergrund, Ausblick.
+   Keine Füllsätze, keine Wiederholungen – Länge nur durch Inhalt aus dem Quelltext.
 3. Kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 4. Hauptklub: Der EINE Klub, um den es im Artikel zentral geht.
    Erlaubt ist ausschließlich einer dieser Werte:
@@ -1204,7 +1208,7 @@ Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
 
     antwort = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=1200,
+        max_tokens=2000,
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -1550,8 +1554,8 @@ def qualitaets_check(kandidaten: list) -> list:
                 f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke\n"
                 f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
                 f"3. Qualität: Substanz, lesbar, nicht leer/generisch\n\n"
-                f"Kurze Meldungen sind ausdrücklich erwünscht, wenn sie eine konkrete Information enthalten "
-                f"(Ausfall, Rückkehr ins Training, Startelf-Chance, Aussage eines Trainers). Kürze allein ist KEIN Ablehnungsgrund.\n\n"
+                f"Artikel sollen vollwertige Nachrichten sein (ca. 200-350 Wörter) mit konkreten Informationen "
+                f"(Ausfall, Rückkehr ins Training, Startelf-Chance, Aussage eines Trainers). Lehne Texte mit Füllsätzen oder Wiederholungen ab.\n\n"
                 f"KANDIDATEN:\n{liste}\n\n"
                 f"Output NUR als valides JSON-Array:\n"
                 f'[{{"id":0,"decision":"APPROVE"|"REJECT","reason":"1 Satz"}},...]'
@@ -1894,7 +1898,7 @@ def main():
                 # Temporärer Fehler (trafilatura_returned_empty, too_short, fetch_failed):
                 # Fallback auf RSS-Beschreibung wenn ausreichend lang
                 beschr_clean = re.sub(r'<[^>]+>', ' ', beschr).strip()
-                if len(beschr_clean.split()) >= 30:
+                if len(beschr_clean.split()) >= 150:
                     volltext = beschr_clean
                     log.info(f"S5 fulltext fallback auf RSS-Beschreibung ({len(beschr_clean.split())} Wörter): {titel[:50]}")
                 else:
@@ -1960,6 +1964,15 @@ def main():
                 ergebnis = artikel_generieren(titel, volltext, quelle_name, url)
             except Exception as e:
                 log.warning(f"S7 generation error: {e}")
+                continue
+
+            # Keine Kurzmeldungen: fertiger Artikel braucht Substanz
+            _woerter = len(str(ergebnis.get("text", "")).split())
+            if _woerter < 150:
+                _log_skip(aid, titel, "S7", f"zu_kurz_{_woerter}_woerter")
+                stats["s7_zu_kurz"] = stats.get("s7_zu_kurz", 0) + 1
+                log.info(f"S7 zu kurz ({_woerter} Wörter): {ergebnis.get('titel', titel)[:60]}")
+                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                 continue
 
             # Sonnet hat den Volltext gelesen und nennt den Hauptklub. Sagt es
