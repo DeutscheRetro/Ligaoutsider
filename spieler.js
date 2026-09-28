@@ -113,7 +113,7 @@
 
     // Akzentunabhängig: "Pavlovic" (Datenbank) trifft auch "Pavlović" (Artikel)
     const falte = t => t.normalize('NFD').replace(/\p{M}/gu, '').replace(/ø/g, 'o').replace(/Ø/g, 'O')
-      .replace(/ł/g, 'l').replace(/đ/g, 'd').toLowerCase();
+      .replace(/ł/g, 'l').replace(/đ/g, 'd').replace(/æ/g, 'ae').replace(/Æ/g, 'Ae').toLowerCase();
     // Groß-/Kleinschreibung bleibt erhalten: "Neuer" ja, "neuer Trainer" nein
     const ohneAkzent = t => t.normalize('NFD').replace(/\p{M}/gu, '');
     const buchstabe = c => {
@@ -124,7 +124,11 @@
       if (/\p{L}/u.test(c)) return `(?:${c}\\p{M}*)`;
       return c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     };
-    const suchmuster = muster.map(([n]) => [...ohneAkzent(n)].map(buchstabe).join(''));
+    // "ae" und "æ" gelten als gleich (Grønbaek / Grønbæk)
+    const muster1 = n => ohneAkzent(n).replace(/æ/g, 'ae').replace(/Æ/g, 'Ae');
+    const suchmuster = muster.map(([n]) => [...muster1(n)].map(buchstabe).join('')
+      .replace(/\(\?:a\\p\{M\}\*\)\(\?:e\\p\{M\}\*\)/g, '(?:ae|æ)')
+      .replace(/\(\?:A\\p\{M\}\*\)\(\?:e\\p\{M\}\*\)/g, '(?:Ae|Æ)'));
     const re = new RegExp(`(?<![\\p{L}\\p{N}-])(${suchmuster.join('|')})(?![\\p{L}\\p{N}-])`, 'gu');
     const nachText = new Map(muster.map(([n, sp]) => [falte(n), sp]));
 
