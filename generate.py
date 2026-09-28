@@ -1402,6 +1402,7 @@ def artikel_html(
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{titel} – Ligaoutsider.de</title>
   <link rel="canonical" href="{artikel_url}"/>
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
   <meta name="description" content="{meta_desc}"/>
   <meta property="og:type" content="article"/>
   <meta property="og:title" content="{titel_attr}"/>
@@ -1432,17 +1433,26 @@ def artikel_html(
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "headline": {titel_json},
+    "image": ["{og_image}"],
     "datePublished": "{datum_iso}",
     "dateModified": "{datum_iso}",
     "author": {{
       "@type": "Organization",
-      "name": "Ligaoutsider.de"
+      "name": "Ligaoutsider.de",
+      "url": "https://ligaoutsider.de"
     }},
     "publisher": {{
       "@type": "Organization",
       "name": "Ligaoutsider.de",
-      "url": "https://ligaoutsider.de"
+      "url": "https://ligaoutsider.de",
+      "logo": {{
+        "@type": "ImageObject",
+        "url": "https://ligaoutsider.de/logos/publisher-logo.png",
+        "width": 600,
+        "height": 60
+      }}
     }},
+    "mainEntityOfPage": "{artikel_url}",
     "url": "{artikel_url}",
     "description": {desc_json},
     "inLanguage": "de",
