@@ -1,0 +1,27 @@
+name: Social Media posten
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  posten:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Posten
+        env:
+          TZ: Europe/Berlin
+          BLUESKY_HANDLE:       ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          TELEGRAM_BOT_TOKEN:   ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL:     ${{ secrets.TELEGRAM_CHANNEL }}
+        run: |
+          python social.py
+          git config user.name  "Ligaoutsider Bot"
+          git config user.email "bot@ligaoutsider.de"
+          git add data/social_queue.json
+          git diff --staged --quiet || { git commit -m "📣 Social-Warteschlange [skip netlify]"; git pull --rebase -X theirs origin main; git push; }
