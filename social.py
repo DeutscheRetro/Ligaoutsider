@@ -24,6 +24,25 @@ MAX_ALTER_STUNDEN = 48          # ältere Einträge nicht mehr posten
 MAX_POSTS_PRO_LAUF = 15         # nicht die Timeline fluten
 
 
+# Vereinsnamen aus feed.json -> gängige Hashtags
+HASHTAGS = {
+    "bayern": "FCBayern", "dortmund": "BVB", "leverkusen": "Bayer04", "leipzig": "RBLeipzig",
+    "stuttgart": "VfB", "frankfurt": "SGE", "gladbach": "Gladbach", "freiburg": "SCFreiburg",
+    "hoffenheim": "TSG", "mainz": "Mainz05", "augsburg": "FCA", "union": "FCUnion",
+    "werder": "Werder", "hamburger": "HSV", "hsv": "HSV", "köln": "effzeh", "koeln": "effzeh",
+    "schalke": "S04", "elversberg": "SVE", "paderborn": "SCP07",
+}
+
+
+def hashtags(e: dict) -> list:
+    tags = ["Bundesliga"]
+    for v in [e.get("hauptklub", "")] + list(e.get("vereine") or []):
+        for teil, tag in HASHTAGS.items():
+            if teil in str(v).lower() and tag not in tags:
+                tags.append(tag)
+    return tags[:4]
+
+
 def lade_queue() -> list:
     try:
         return json.loads(QUEUE.read_text(encoding="utf-8"))
@@ -64,7 +83,16 @@ def bluesky_post(e: dict):
                           data=og.read_bytes(), timeout=30)
         r.raise_for_status()
         thumb = r.json()["blob"]
-    text = e["titel"][:280]
+    tags = hashtags(e)
+    tag_text = " ".join("#" + t for t in tags)
+    text = e["titel"][:300 - len(tag_text) - 2] + "\n\n" + tag_text
+    facets = []
+    roh = text.encode("utf-8")
+    for t in tags:
+        start = roh.find(("#" + t).encode("utf-8"))
+        if start >= 0:
+            facets.append({"index": {"byteStart": start, "byteEnd": start + len(("#" + t).encode("utf-8"))},
+                           "features": [{"$type": "app.bsky.richtext.facet#tag", "tag": t}]})
     karte = {"uri": e["url"], "title": e["titel"], "description": e.get("anriss", "")[:300]}
     if thumb:
         karte["thumb"] = thumb
@@ -74,6 +102,7 @@ def bluesky_post(e: dict):
         "record": {
             "$type": "app.bsky.feed.post",
             "text": text,
+            "facets": facets,
             "langs": ["de"],
             "createdAt": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
             "embed": {"$type": "app.bsky.embed.external", "external": karte},
@@ -87,7 +116,8 @@ def telegram_post(e: dict):
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     kanal = os.environ["TELEGRAM_CHANNEL"]
     text = (f"<b>{html.escape(e['titel'])}</b>\n\n{html.escape(e.get('anriss', ''))}\n\n"
-            f'<a href="{html.escape(e["url"])}">Weiterlesen auf Ligaoutsider.de</a>')
+            f'<a href="{html.escape(e["url"])}">Weiterlesen auf Ligaoutsider.de</a>\n\n'
+            + " ".join("#" + t for t in hashtags(e)))
     og = Path(e.get("og", ""))
     if og.exists() and len(text) <= 1024:
         r = requests.post(f"https://api.telegram.org/bot{token}/sendPhoto",

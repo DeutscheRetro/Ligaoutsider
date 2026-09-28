@@ -2254,6 +2254,7 @@ def main():
             _queue.append({
                 "id": aid, "titel": ergebnis["titel"], "url": artikel_url,
                 "anriss": " ".join(_saetze[:2])[:280], "og": f"og/{aid}.jpg",
+                "vereine": list(k.get("vereine") or []), "hauptklub": ergebnis.get("hauptklub", ""),
                 "zeit": datetime.datetime.now().isoformat(timespec="seconds"),
             })
             _q.write_text(json.dumps(_queue, ensure_ascii=False, indent=1), encoding="utf-8")
