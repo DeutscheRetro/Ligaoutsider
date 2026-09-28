@@ -373,6 +373,36 @@ def artikel_id(url: str) -> str:
     return hashlib.md5(url.encode()).hexdigest()[:10]
 
 
+def artikel_slug(titel: str) -> str:
+    """Lesbarer URL-Teil aus der Überschrift, z. B. 'hsv-groenbaek-erleidet-faserriss'."""
+    t = str(titel or "").lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss"), ("ø", "oe"), ("æ", "ae"),
+                 ("å", "a"), ("ł", "l"), ("đ", "d"), ("ı", "i")):
+        t = t.replace(a, b)
+    import unicodedata
+    t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
+    t = re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+    if len(t) > 70:
+        t = t[:70].rsplit("-", 1)[0]
+    return t or "artikel"
+
+
+def _zeitzone() -> str:
+    """Offset der lokalen Zeit (Workflow läuft mit TZ=Europe/Berlin), z. B. '+02:00'."""
+    z = time.strftime("%z")
+    return f"{z[:3]}:{z[3:]}"
+
+
+_ARTIKEL_DATEIEN: dict = {}
+
+def artikel_datei(aid: str) -> Path:
+    """Echte Datei eines Artikels: artikel/<slug>-<id>.html (neu) oder artikel/<id>.html (alt)."""
+    if not _ARTIKEL_DATEIEN:
+        for f in ARTIKEL_ORDNER.glob("*.html"):
+            _ARTIKEL_DATEIEN[f.stem[-10:]] = f
+    return _ARTIKEL_DATEIEN.get(aid, ARTIKEL_ORDNER / f"{aid}.html")
+
+
 def lade_deleted_ids() -> set:
     p = Path("deleted_ids.json")
     if not p.exists():
@@ -388,7 +418,7 @@ def schon_verarbeitet(url: str) -> bool:
     aid = artikel_id(url)
     if aid in DELETED_IDS:
         return True
-    html_file = ARTIKEL_ORDNER / f"{aid}.html"
+    html_file = artikel_datei(aid)
     if html_file.exists():
         # Regenerate if SEO tags missing
         if 'rel="canonical"' not in html_file.read_text(encoding='utf-8', errors='ignore'):
@@ -525,7 +555,7 @@ def _schluesselwoerter(t: str) -> set:
 
 def _artikel_text_laden(artikel_id_str: str) -> str:
     """Lädt Plaintext eines bestehenden Artikels aus dem HTML (max 800 Zeichen)."""
-    pfad = ARTIKEL_ORDNER / f"{artikel_id_str}.html"
+    pfad = artikel_datei(artikel_id_str)
     if not pfad.exists():
         return ""
     try:
@@ -1322,6 +1352,7 @@ def artikel_html(
     wappen_url: str,
     vereine: list = None,
     og_image_url: str = None,
+    dateiname: str = None,
 ) -> str:
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
@@ -1338,14 +1369,14 @@ def artikel_html(
         )
         vereine_tags_html = f'<div class="verein-tags">{tags}</div>'
 
-    artikel_url = f"https://ligaoutsider.de/artikel/{datei_id}.html"
+    artikel_url = f"https://ligaoutsider.de/artikel/{dateiname or datei_id + '.html'}"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
     meta_desc = ersten_absatz[:155].replace('"', '&quot;').replace('\n', ' ')
     titel_attr = titel.replace('"', '&quot;')
     # schema.org verlangt ISO 8601, sonst ignoriert Google das Datum
     _dm = re.match(r"(\d{2})\.(\d{2})\.(\d{4})[ T](\d{2}):(\d{2})", datum or "")
     datum_iso = (f"{_dm.group(3)}-{_dm.group(2)}-{_dm.group(1)}"
-                 f"T{_dm.group(4)}:{_dm.group(5)}:00+02:00") if _dm else datum
+                 f"T{_dm.group(4)}:{_dm.group(5)}:00{_zeitzone()}") if _dm else datum
     # JSON-LD-Werte muessen JSON-escaped sein, sonst zerlegen Anfuehrungszeichen den Block
     titel_json = json.dumps(titel, ensure_ascii=False)
     desc_json = json.dumps(ersten_absatz[:200], ensure_ascii=False)
@@ -2106,8 +2137,11 @@ def main():
             wappen_url  = _artikel_wu,
             vereine     = k["vereine"],
             og_image_url = _og_url,
+            dateiname   = f"{artikel_slug(ergebnis['titel'])}-{aid}.html",
         )
-        (ARTIKEL_ORDNER / f"{aid}.html").write_text(html, encoding="utf-8")
+        _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
+        _datei.write_text(html, encoding="utf-8")
+        _ARTIKEL_DATEIEN[aid] = _datei
         badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
         feed_entry = {
             "id":         aid,
@@ -2124,7 +2158,7 @@ def main():
                               if isinstance(x, dict) and x.get("spieler") and x.get("status")],
             "formation":  (ergebnis.get("formation") or "").strip(),
             "hauptklub":  ergebnis.get("hauptklub", ""),
-            "pfad":       f"artikel/{aid}.html",
+            "pfad":       f"artikel/{_datei.name}",
         }
         bestehende.append(feed_entry)
         feed_speichern(bestehende)
@@ -2166,7 +2200,7 @@ def main():
     for k in approved:
         ergebnis = k["ergebnis"]
         aid = k["aid"]
-        artikel_url = f"https://ligaoutsider.de/artikel/{aid}.html"
+        artikel_url = f"https://ligaoutsider.de/{artikel_datei(aid).as_posix()}"
         facebook_post(ergebnis["titel"], artikel_url)
         reddit_post(ergebnis["titel"], ergebnis["text"], artikel_url)
 
@@ -2247,8 +2281,12 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/elf.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
     ]
+    def _iso(datum):
+        m = re.match(r"(\d{2})\.(\d{2})\.(\d{4})", datum or "")
+        return f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else heute
     for a in artikel_liste:
-        urls.append((f"{base}/{a['pfad']}", "0.9", "monthly"))
+        if Path(a["pfad"]).exists():
+            urls.append((f"{base}/{a['pfad']}", "0.9", "monthly", _iso(a.get("datum"))))
     try:
         _db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
         urls.append((f"{base}/spieler/index.html", "0.7", "weekly"))
@@ -2259,11 +2297,11 @@ def sitemap_generieren(artikel_liste: list):
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for loc, prio, freq in urls:
+    for loc, prio, freq, *mod in urls:
         lines += [
             "  <url>",
             f"    <loc>{loc}</loc>",
-            f"    <lastmod>{heute}</lastmod>",
+            f"    <lastmod>{mod[0] if mod else heute}</lastmod>",
             f"    <changefreq>{freq}</changefreq>",
             f"    <priority>{prio}</priority>",
             "  </url>",
@@ -2271,12 +2309,38 @@ def sitemap_generieren(artikel_liste: list):
     lines.append("</urlset>")
     Path("sitemap.xml").write_text("\n".join(lines), encoding="utf-8")
     print(f"✅ sitemap.xml generiert ({len(urls)} URLs)")
-    try:
-        import urllib.request as _ur
-        _ur.urlopen("https://www.google.com/ping?sitemap=https://ligaoutsider.de/sitemap.xml", timeout=5)
-        print("✅ Google Sitemap-Ping gesendet")
-    except Exception as _e:
-        print(f"⚠️ Google Sitemap-Ping fehlgeschlagen: {_e}")
+    news_sitemap_generieren(artikel_liste)
+
+
+def news_sitemap_generieren(artikel_liste: list):
+    """Google-News-Sitemap: nur Artikel der letzten 48 Stunden (Vorgabe von Google)."""
+    from xml.sax.saxutils import escape
+    grenze = datetime.datetime.now() - datetime.timedelta(hours=48)
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+             'xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">']
+    n = 0
+    for a in artikel_liste:
+        try:
+            dt = datetime.datetime.strptime(a["datum"], "%d.%m.%Y %H:%M")
+        except Exception:
+            continue
+        if dt < grenze or not Path(a["pfad"]).exists():
+            continue
+        n += 1
+        lines += [
+            "  <url>",
+            f"    <loc>https://ligaoutsider.de/{a['pfad']}</loc>",
+            "    <news:news>",
+            "      <news:publication><news:name>Ligaoutsider</news:name><news:language>de</news:language></news:publication>",
+            f"      <news:publication_date>{dt.strftime('%Y-%m-%dT%H:%M:00')}{_zeitzone()}</news:publication_date>",
+            f"      <news:title>{escape(a['titel'])}</news:title>",
+            "    </news:news>",
+            "  </url>",
+        ]
+    lines.append("</urlset>")
+    Path("news-sitemap.xml").write_text("\n".join(lines), encoding="utf-8")
+    print(f"✅ news-sitemap.xml generiert ({n} Artikel)")
 
 
 

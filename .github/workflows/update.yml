@@ -32,6 +32,7 @@ on:
 # zwei Deploys am Tag und funktioniert auch, wenn GitHub die Läufe Stunden zu
 # spät startet (fester Zeitplan hatte dann den falschen Lauf erwischt).
 env:
+  TZ: Europe/Berlin
   # Zwei Veroeffentlichungen am Tag: die erste ab 8 Uhr, die zweite ab 15 Uhr.
   # Als Regel formuliert (fruehestens 8 Uhr + 6 Stunden Abstand), damit sie auch
   # greift, wenn GitHub einen Lauf erst Stunden spaeter startet.
@@ -97,7 +98,7 @@ jobs:
           [ "$MANUELL_VEROEFFENTLICHEN" = "true" ] && VEROEFFENTLICHEN=true
           echo "Letzte Veröffentlichung vor ${STUNDEN}h, jetzt ${STUNDE} Uhr → veröffentlichen: $VEROEFFENTLICHEN (schedule='$SCHEDULE')"
 
-          git add feed.json artikel/ data/ logs/ sitemap.xml rss.xml og/ || true
+          git add feed.json artikel/ data/ logs/ sitemap.xml news-sitemap.xml rss.xml og/ || true
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -f comunio.json ] && git add comunio.json || true
           [ -f aufstellung.json ] && git add aufstellung.json || true
