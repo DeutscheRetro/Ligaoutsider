@@ -34,7 +34,25 @@ HASHTAGS = {
 }
 
 
+_FEED = None
+
+def _aus_feed(aid: str) -> dict:
+    global _FEED
+    if _FEED is None:
+        try:
+            _FEED = {x["id"]: x for x in json.loads(Path("feed.json").read_text(encoding="utf-8"))}
+        except Exception:
+            _FEED = {}
+    return _FEED.get(aid, {})
+
+
 def hashtags(e: dict) -> list:
+    if not e.get("vereine") and not e.get("hauptklub"):
+        f = _aus_feed(e.get("id", ""))
+        v = f.get("vereine") or []
+        if isinstance(v, str):
+            v = re.findall(r"'([^']+)'", v)
+        e = {**e, "vereine": v, "hauptklub": f.get("hauptklub", "")}
     tags = ["Bundesliga"]
     for v in [e.get("hauptklub", "")] + list(e.get("vereine") or []):
         for teil, tag in HASHTAGS.items():
