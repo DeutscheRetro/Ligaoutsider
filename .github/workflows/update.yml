@@ -45,7 +45,7 @@ env:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     concurrency:
       group: generate-pipeline
       cancel-in-progress: true
@@ -124,3 +124,40 @@ jobs:
           git pull --rebase origin main
           git stash pop 2>/dev/null || true
           git push
+          [ "$VEROEFFENTLICHEN" = "true" ] && echo "veroeffentlicht=true" >> "$GITHUB_ENV" || true
+
+      # Prüft nach jedem Lauf, ob die Seite erreichbar ist. Am 28.09. hat Netlify
+      # einen Deploy ohne Weiterleitungsregeln ausgeliefert -> jede Seite gab 500.
+      # Ein erneuter Build desselben Stands hat das behoben. Deshalb: bei 500
+      # einmal neu bauen lassen; hilft das nicht, schlägt der Lauf fehl (GitHub
+      # schickt dann eine Mail).
+      - name: Seite erreichbar?
+        if: always()
+        run: |
+          pruefe() {
+            for u in / /robots.txt /archiv.html; do
+              c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://ligaoutsider.de$u")
+              [ "$c" = "200" ] || { echo "$u -> $c"; return 1; }
+            done
+            return 0
+          }
+          stabil_kaputt() {
+            for i in 1 2 3; do pruefe && return 1; sleep 30; done
+            return 0
+          }
+          # Nach einer Veröffentlichung erst den neuen Deploy abwarten
+          [ "${veroeffentlicht:-}" = "true" ] && sleep 120
+          if ! stabil_kaputt; then echo "✅ Seite erreichbar"; exit 0; fi
+
+          echo "⚠️ Seite liefert Fehler – stoße neuen Deploy an"
+          git config user.name  "Ligaoutsider Bot"
+          git config user.email "bot@ligaoutsider.de"
+          git pull --rebase origin main
+          git commit --allow-empty -m "🔁 Neu-Deploy: Seite lieferte Fehler"
+          git push
+          sleep 150
+          if stabil_kaputt; then
+            echo "::error::ligaoutsider.de liefert auch nach Neu-Deploy Fehler – bitte in Netlify prüfen"
+            exit 1
+          fi
+          echo "✅ Seite nach Neu-Deploy wieder erreichbar"
