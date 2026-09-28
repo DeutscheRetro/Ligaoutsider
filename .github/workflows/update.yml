@@ -161,3 +161,21 @@ jobs:
             exit 1
           fi
           echo "✅ Seite nach Neu-Deploy wieder erreichbar"
+
+      # Neue Artikel auf Bluesky/Telegram posten – erst wenn ihre Seite live ist
+      - name: Social Media
+        if: always()
+        env:
+          BLUESKY_HANDLE:       ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          TELEGRAM_BOT_TOKEN:   ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL:     ${{ secrets.TELEGRAM_CHANNEL }}
+        run: |
+          python social.py || true
+          git config user.name  "Ligaoutsider Bot"
+          git config user.email "bot@ligaoutsider.de"
+          git add data/social_queue.json 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "📣 Social-Warteschlange [skip netlify]"
+            git pull --rebase -X theirs origin main && git push || true
+          fi

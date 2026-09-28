@@ -2246,6 +2246,19 @@ def main():
         artikel_url = f"https://ligaoutsider.de/{artikel_datei(aid).as_posix()}"
         facebook_post(ergebnis["titel"], artikel_url)
         reddit_post(ergebnis["titel"], ergebnis["text"], artikel_url)
+        # Für social.py: gepostet wird erst, wenn die Seite live ist
+        try:
+            _q = Path("data/social_queue.json")
+            _queue = json.loads(_q.read_text(encoding="utf-8")) if _q.exists() else []
+            _saetze = re.split(r"(?<=[.!?])\s+", ergebnis["text"].split("\n\n")[0].strip())
+            _queue.append({
+                "id": aid, "titel": ergebnis["titel"], "url": artikel_url,
+                "anriss": " ".join(_saetze[:2])[:280], "og": f"og/{aid}.jpg",
+                "zeit": datetime.datetime.now().isoformat(timespec="seconds"),
+            })
+            _q.write_text(json.dumps(_queue, ensure_ascii=False, indent=1), encoding="utf-8")
+        except Exception as _e:
+            log.warning(f"Social-Warteschlange: {_e}")
 
     # Run-Stats speichern
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
