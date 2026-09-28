@@ -132,6 +132,7 @@
     const knoten = [];
     while (walker.nextNode()) if (!walker.currentNode.parentElement.closest('a')) knoten.push(walker.currentNode);
 
+    const verlinkt = new Set();  // jeder Spieler nur beim ersten Vorkommen
     knoten.forEach(k => {
       const inhalt = k.nodeValue.normalize('NFD');
       re.lastIndex = 0;
@@ -141,7 +142,8 @@
       let pos = 0, m;
       while ((m = re.exec(inhalt))) {
         const s = nachText.get(falte(m[1]));
-        if (!s) continue;
+        if (!s || verlinkt.has(s.tm_id)) continue;
+        verlinkt.add(s.tm_id);
         frag.appendChild(document.createTextNode(inhalt.slice(pos, m.index)));
         const a = document.createElement('a');
         a.href = s.seite;
