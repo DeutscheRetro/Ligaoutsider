@@ -3389,7 +3389,8 @@ def kickbase_fetch():
         stammspieler = spiele >= min_spiele and starts >= min_starts
         players.append({
             "name":   p.get("name", ""),
-            "logo":   p.get("image") or p.get("fallbackImage") or "",
+            # Spielerfotos von Kickbase sind urheberrechtlich geschützt -> nur Klubwappen
+            "logo":   _comunio_logo(p.get("teamName", "")),
             "team":   p.get("teamName", ""),
             "pos":    p.get("position", ""),
             "mw":     mw,
