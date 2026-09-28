@@ -1266,6 +1266,32 @@ def _og_wrap(draw, text, font, max_w):
     return lines
 
 
+_OG_HG = {}
+
+def _og_hintergrund(W: int, H: int):
+    if (W, H) not in _OG_HG:
+        _OG_HG[(W, H)] = _og_hintergrund_malen(W, H)
+    return _OG_HG[(W, H)].copy()
+
+
+def _og_hintergrund_malen(W: int, H: int):
+    """Diagonaler Verlauf Nachtblau -> Petrol mit weichem Lichtfleck oben rechts.
+    Bleibt dunkel genug für weiße Schrift."""
+    from PIL import Image, ImageDraw, ImageFilter
+    a, b = (12, 22, 45), (16, 78, 96)          # #0c162d -> #104e60
+    verlauf = Image.new("RGB", (W, H))
+    px = verlauf.load()
+    for x in range(W):
+        for y in range(0, H, 1):
+            t = (x / W) * 0.7 + (y / H) * 0.3
+            px[x, y] = tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
+    licht = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(licht).ellipse([W - 520, -260, W + 180, 360], fill=(90, 200, 210, 60))
+    licht = licht.filter(ImageFilter.GaussianBlur(120))
+    verlauf.paste(licht, (0, 0), licht)
+    return verlauf
+
+
 def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
     """1200x630-Karte für Social-Previews. Gibt die oeffentliche URL zurueck
     oder None, wenn die Karte nicht erzeugt werden konnte."""
@@ -1278,7 +1304,7 @@ def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
     try:
         OG_ORDNER.mkdir(parents=True, exist_ok=True)
         W, H = 1200, 630
-        img = Image.new("RGB", (W, H), "#0d0d0d")
+        img = _og_hintergrund(W, H)
         d = ImageDraw.Draw(img)
         d.rectangle([0, 0, W, 10], fill="#e8c000")
 
@@ -1302,14 +1328,21 @@ def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
         top = max(90, (H - 70 - block_h) // 2)
 
         ty = max(60, min(top + (block_h - tile) // 2, H - 150 - tile))
-        d.rounded_rectangle([tile_x, ty, tile_x + tile, ty + tile], radius=20, fill="#17171a")
+        # Wappen auf weißer Scheibe mit weichem Schatten – funktioniert für helle und dunkle Wappen
+        from PIL import ImageFilter
+        schatten = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(schatten).ellipse([tile_x + 4, ty + 12, tile_x + tile + 4, ty + tile + 12], fill=(0, 0, 0, 110))
+        schatten = schatten.filter(ImageFilter.GaussianBlur(14))
+        img.paste(schatten, (0, 0), schatten)
+        d = ImageDraw.Draw(img)
+        d.ellipse([tile_x, ty, tile_x + tile, ty + tile], fill="#ffffff")
 
         logo_datei = None
         if wappen_url:
             logo_datei = Path(wappen_url.lstrip("./"))
         if logo_datei and logo_datei.exists():
             logo = Image.open(logo_datei).convert("RGBA")
-            scale = min(150 / logo.width, 150 / logo.height)
+            scale = min(140 / logo.width, 140 / logo.height)
             logo = logo.resize((max(1, round(logo.width * scale)),
                                 max(1, round(logo.height * scale))), Image.LANCZOS)
             img.paste(logo, (tile_x + (tile - logo.width) // 2,
@@ -1327,7 +1360,7 @@ def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
 
         f_mark = ImageFont.truetype(fett, 32)
         x, my = 80, H - 68
-        for teil, farbe in (("Liga", "#e8c000"), ("outsider", "#ffffff"), (".de", "#777777")):
+        for teil, farbe in (("Liga", "#e8c000"), ("outsider", "#ffffff"), (".de", "#9fb3c8")):
             d.text((x, my), teil, font=f_mark, fill=farbe)
             x += d.textlength(teil, font=f_mark)
 
