@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-29T12:07:25.654041+00:00",
+ "updated": "2026-09-29T13:42:37.579292+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -734,16 +734,6 @@
       "prozent": 95
      },
      {
-      "name": "Anthony Caci",
-      "nr": "19",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 72 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 93
-     },
-     {
       "name": "Kacper Potulski",
       "nr": "48",
       "ampel": "gruen",
@@ -762,6 +752,26 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 60
+     },
+     {
+      "name": "Anthony Caci",
+      "nr": "19",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 60
+     },
+     {
+      "name": "Danny da Costa",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "1 von 4 Einsätzen in der Startelf · Ø 43 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 15
      }
     ],
     "mf": [
@@ -788,12 +798,12 @@
      {
       "name": "Eric Martel",
       "nr": "5",
-      "ampel": "gruen",
-      "grund": "0 von 1 Einsätzen in der Startelf · Ø 33 min · 3 Spiele ohne Einsatz",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 67
+      "prozent": 60
      },
      {
       "name": "Jae-sung Lee",
@@ -808,16 +818,6 @@
     ],
     "st": [
      {
-      "name": "Phillip Tietz",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 97
-     },
-     {
       "name": "Sheraldo Becker",
       "nr": "23",
       "ampel": "gruen",
@@ -830,16 +830,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Danny da Costa",
-     "nr": "21",
-     "ampel": "gruen",
-     "grund": "1 von 4 Einsätzen in der Startelf · Ø 43 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 15
-    },
     {
      "name": "Ransford Königsdörffer",
      "nr": "11",
@@ -864,6 +854,16 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Phillip Tietz",
+     "nr": "9",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 0
+    },
     {
      "name": "Phillipp Mwene",
      "nr": "2",
@@ -1899,7 +1899,7 @@
      "nr": "17",
      "ampel": "rot",
      "grund": "Muskelverletzung",
-     "news": "artikel/sebulonsen-topfit-fc-norweger-bereit-fuers-derby-gegen-gladbach-4575ed7168.html",
+     "news": "artikel/koeln-vor-derby-nur-zwoelf-feldspieler-im-training-3640836177.html",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 0
@@ -2411,14 +2411,14 @@
       "prozent": 93
      },
      {
-      "name": "Senne Lynen",
-      "nr": "14",
-      "ampel": "gelb",
-      "grund": "angeschlagen",
+      "name": "Ludovit Reis",
+      "nr": "15",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 84 min",
       "news": "",
       "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 60
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 43
      }
     ],
     "st": [
@@ -2446,8 +2446,8 @@
       "name": "Eren Dinkçi",
       "nr": "18",
       "ampel": "gelb",
-      "grund": "Krankheit - fehlt im Teamtraining",
-      "news": "",
+      "grund": "Krankheit, individuelles Training im Stadion",
+      "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 60
@@ -2455,16 +2455,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Ludovit Reis",
-     "nr": "15",
-     "ampel": "gruen",
-     "grund": "4 von 4 Einsätzen in der Startelf · Ø 84 min",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 43
-    },
     {
      "name": "Cedric Itten",
      "nr": "26",
@@ -2476,34 +2466,45 @@
      "prozent": 11
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Justin Njinmah",
+     "nr": "11",
+     "ampel": "gelb",
+     "grund": "Oberschenkelverletzung, Rückkehr im Oktober möglich",
+     "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 12
+    }
+   ],
    "ausfall": [
+    {
+     "name": "Senne Lynen",
+     "nr": "14",
+     "ampel": "rot",
+     "grund": "Beckenprobleme",
+     "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 0
+    },
     {
      "name": "Jens Stage",
      "nr": "6",
      "ampel": "rot",
-     "grund": "Schwere Muskelverletzung - fällt mehrere Monate aus",
-     "news": "",
+     "grund": "Muskelverletzung im Oberschenkel",
+     "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 0
-    },
-    {
-     "name": "Justin Njinmah",
-     "nr": "11",
-     "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel  - fällt monatelang aus",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
      "prozent": 0
     },
     {
      "name": "Moussa Ndiaye",
      "nr": "16",
      "ampel": "rot",
-     "grund": "Leistenprobleme - trainiert individuell",
-     "news": "",
+     "grund": "Leistenprobleme",
+     "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 0
@@ -2512,8 +2513,8 @@
      "name": "Keke Topp",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Kreuzbandriss mit Meniskusbeteiligung",
-     "news": "artikel/topp-spricht-erstmals-ueber-kreuzbandriss-es-knallte-im-knie-f03961200e.html",
+     "grund": "Kreuzbandriss",
+     "news": "artikel/werder-in-der-laenderspielpause-njinmah-und-dinkci-fehlen-im-training-140352eef6.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2571,6 +2572,16 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 89
+     },
+     {
+      "name": "Timo Becker",
+      "nr": "5",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 60
      }
     ],
     "mf": [
@@ -2623,16 +2634,6 @@
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 78
-     },
-     {
-      "name": "Ron Schallenberg",
-      "nr": "6",
-      "ampel": "gruen",
-      "grund": "1 von 2 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 28
      }
     ],
     "st": [
@@ -2649,6 +2650,16 @@
     ]
    },
    "bank": [
+    {
+     "name": "Ron Schallenberg",
+     "nr": "6",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 28
+    },
     {
      "name": "Edin Dzeko",
      "nr": "10",
@@ -2668,6 +2679,16 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 18
+    },
+    {
+     "name": "Vitalie Becker",
+     "nr": "33",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 37 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 11
     }
    ],
    "fraglich": [
@@ -2675,24 +2696,14 @@
      "name": "Kevin Müller",
      "nr": "22",
      "ampel": "gelb",
-     "grund": "Atemwegsinfekt",
-     "news": "artikel/schalke-becker-mit-sprunggelenkverletzung-ausser-gefecht-bbd5ed8b9b.html",
+     "grund": "angeschlagen",
+     "news": "",
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 2
     }
    ],
    "ausfall": [
-    {
-     "name": "Timo Becker",
-     "nr": "5",
-     "ampel": "rot",
-     "grund": "genähte Wunde am Sprunggelenk",
-     "news": "artikel/schalke-becker-mit-sprunggelenkverletzung-ausser-gefecht-bbd5ed8b9b.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
     {
      "name": "Dejan Ljubicic",
      "nr": "21",
@@ -2701,16 +2712,6 @@
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
-     "prozent": 0
-    },
-    {
-     "name": "Vitalie Becker",
-     "nr": "33",
-     "ampel": "rot",
-     "grund": "genähte Wunde am Sprunggelenk",
-     "news": "artikel/schalke-becker-mit-sprunggelenkverletzung-ausser-gefecht-bbd5ed8b9b.html",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
      "prozent": 0
     },
     {
@@ -3097,8 +3098,8 @@
      "name": "Albert Grønbaek",
      "nr": "11",
      "ampel": "rot",
-     "grund": "Muskelfaserriss",
-     "news": "artikel/oedegaard-troestet-gesperrten-hsv-profi-moeller-wolfe-327f33e051.html",
+     "grund": "Faserriss im rechten Oberschenkel",
+     "news": "artikel/hsv-gisdol-vor-unterschrift-bei-zska-sofia-groenbaek-wochenlang-out-82ef2572fb.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
