@@ -79,11 +79,56 @@
     document.getElementById('user-info')?.style && (document.getElementById('user-info').style.display = 'flex');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = 'none');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = 'none');
-    if (document.getElementById('k-gasthinweis')) document.getElementById('k-gasthinweis').style.display = 'none';
-    if (document.getElementById('kommentar-form')) document.getElementById('kommentar-form').style.display = 'block';
+    gastModus(false);
     if (document.getElementById('k-username'))     document.getElementById('k-username').textContent = name;
-    if (typeof ARTIKEL_ID !== 'undefined') ladeKommentare();
+    if (typeof ARTIKEL_ID !== 'undefined') {
+      ladeKommentare();
+      const entwurf = entwurfLesen();
+      if (entwurf) { entwurfLoeschen(); absenden(entwurf); }
+    }
     ungeleseneAnzeigen();
+  }
+
+  // ─── Entwurf fuer nicht angemeldete Besucher ─────────────────────────────────
+  // Wer ohne Konto lostippt, soll seinen Text nicht verlieren: Entwurf merken,
+  // Anmeldedialog oeffnen, nach dem Login automatisch absenden.
+  const ENTWURF_TTL = 24 * 60 * 60 * 1000;
+
+  function entwurfKey() {
+    return typeof ARTIKEL_ID === 'undefined' ? null : 'lo_entwurf_' + ARTIKEL_ID;
+  }
+  function entwurfLesen() {
+    const k = entwurfKey(); if (!k) return null;
+    try {
+      const e = JSON.parse(localStorage.getItem(k) || 'null');
+      if (!e || !e.inhalt) return null;
+      if (Date.now() - (e.ts || 0) > ENTWURF_TTL) { localStorage.removeItem(k); return null; }
+      return e.inhalt;
+    } catch { return null; }
+  }
+  function entwurfSchreiben(inhalt) {
+    const k = entwurfKey(); if (!k) return;
+    try { localStorage.setItem(k, JSON.stringify({ inhalt, ts: Date.now() })); } catch {}
+  }
+  function entwurfLoeschen() {
+    const k = entwurfKey(); if (!k) return;
+    try { localStorage.removeItem(k); } catch {}
+  }
+
+  // Gaeste sehen das Feld jetzt auch. Der Knopf sagt, was als Naechstes passiert.
+  function gastModus(an) {
+    const form = document.getElementById('kommentar-form');
+    if (!form) return;
+    const hint = document.getElementById('k-gasthinweis');
+    const wer  = document.getElementById('k-eingeloggt');
+    const btn  = form.querySelector('button[type="submit"]');
+    form.style.display = 'block';
+    if (wer) wer.style.display = an ? 'none' : '';
+    if (btn) btn.textContent = an ? 'Anmelden & absenden' : 'Kommentar absenden';
+    if (hint) {
+      hint.style.display = an ? 'block' : 'none';
+      if (an) hint.textContent = 'Schreib einfach los. Zum Absenden legst du in einem Schritt ein Konto an, dein Text bleibt dabei erhalten.';
+    }
   }
 
   function clearUser() {
@@ -94,8 +139,7 @@
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = '');
-    if (document.getElementById('k-gasthinweis')) document.getElementById('k-gasthinweis').style.display = 'block';
-    if (document.getElementById('kommentar-form')) document.getElementById('kommentar-form').style.display = 'none';
+    gastModus(true);
     if (typeof ARTIKEL_ID !== 'undefined') ladeKommentare();
   }
 
@@ -442,37 +486,65 @@
   }
 
   // ─── Neuer Kommentar ─────────────────────────────────────────────────────────
-  document.getElementById('kommentar-form')?.addEventListener('submit', async e => {
-    e.preventDefault();
+  // Gemeinsamer Absendeweg fuer das Formular und fuer den Entwurf, der nach dem
+  // Login automatisch rausgeht.
+  async function absenden(inhalt) {
     if (!aktuellerUser) return;
+    const status = document.getElementById('kommentar-status');
+    const melde = t => { if (status) status.textContent = t; };
 
     const ban = await pruefeBan(aktuellerUser.email);
     if (ban) { ladeKommentare(); return; }
 
-    const status  = document.getElementById('kommentar-status');
-    const inhalt  = document.getElementById('k-text').value.trim();
-    if (!inhalt) return;
-
-    const name         = anzeigeName(aktuellerUser);
-    const sauberName   = bereinigen(name).slice(0, 60);
+    const sauberName   = bereinigen(anzeigeName(aktuellerUser)).slice(0, 60);
     const sauberInhalt = bereinigen(inhalt).slice(0, 1000);
-    if (!sauberName || !sauberInhalt) { status.textContent = 'Kein HTML oder Links erlaubt.'; return; }
+    if (!sauberName || !sauberInhalt) { melde('Kein HTML oder Links erlaubt.'); return; }
 
-    status.textContent = 'Wird gesendet…';
+    melde('Wird gesendet…');
     let error = null;
     try { await api('kommentar_neu', { artikel_id: ARTIKEL_ID, inhalt: sauberInhalt }); }
     catch (e) { error = e; }
 
     if (error) {
-      status.textContent = 'Fehler: ' + error.message;
+      // Der Text bleibt stehen und gemerkt, damit nichts verloren geht.
+      entwurfSchreiben(inhalt);
+      const feld = document.getElementById('k-text');
+      if (feld && !feld.value) feld.value = inhalt;
+      melde('Fehler: ' + error.message);
     } else {
-      status.textContent = '✓ Gespeichert!';
-      document.getElementById('k-text').value = '';
-      setTimeout(() => { status.textContent = ''; }, 3000);
+      entwurfLoeschen();
+      melde('✓ Gespeichert!');
+      const feld = document.getElementById('k-text');
+      if (feld) feld.value = '';
+      setTimeout(() => melde(''), 3000);
       ladeKommentare();
     }
+  }
+
+  document.getElementById('kommentar-form')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const status = document.getElementById('kommentar-status');
+    const inhalt = document.getElementById('k-text').value.trim();
+    if (!inhalt) return;
+
+    // Gast: Text merken, Anmeldung oeffnen. Der Rest passiert nach dem Login.
+    if (!aktuellerUser) {
+      entwurfSchreiben(inhalt);
+      if (status) status.textContent = 'Dein Text ist gemerkt und geht nach der Anmeldung automatisch raus.';
+      if (window.netlifyIdentity) netlifyIdentity.open('signup');
+      return;
+    }
+    await absenden(inhalt);
   });
 
+  // Nach Reload oder Rueckkehr vom Anmeldedialog den Entwurf wieder einsetzen.
+  (function entwurfWiederherstellen() {
+    const feld = document.getElementById('k-text');
+    const entwurf = entwurfLesen();
+    if (feld && entwurf && !feld.value) feld.value = entwurf;
+  })();
+
+  gastModus(!aktuellerUser);
   ladeKommentare();
 })();
 
