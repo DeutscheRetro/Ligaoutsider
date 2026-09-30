@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-30T13:17:59.851525+00:00",
+ "updated": "2026-09-30T15:29:49.777846+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -552,8 +552,8 @@
       "name": "Nico Schlotterbeck",
       "nr": "4",
       "ampel": "gelb",
-      "grund": "Angeschlagen - bricht Training vorzeitig ab, weitere Untersuchungen folgen",
-      "news": "",
+      "grund": "Verletzung am rechten Fuß im Training",
+      "news": "artikel/schock-im-dfb-training-grosse-sorgen-um-schlotterbeck-380044d5d3.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 60
@@ -2610,16 +2610,6 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 89
-     },
-     {
-      "name": "Timo Becker",
-      "nr": "5",
-      "ampel": "gelb",
-      "grund": "angeschlagen",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 60
      }
     ],
     "mf": [
@@ -2672,6 +2662,16 @@
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 78
+     },
+     {
+      "name": "Ron Schallenberg",
+      "nr": "6",
+      "ampel": "gruen",
+      "grund": "1 von 2 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 28
      }
     ],
     "st": [
@@ -2688,16 +2688,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Ron Schallenberg",
-     "nr": "6",
-     "ampel": "gruen",
-     "grund": "1 von 2 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 28
-    },
     {
      "name": "Edin Dzeko",
      "nr": "10",
@@ -2717,28 +2707,38 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 18
-    },
-    {
-     "name": "Vitalie Becker",
-     "nr": "33",
-     "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 37 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 11
     }
    ],
    "fraglich": [],
    "ausfall": [
     {
+     "name": "Timo Becker",
+     "nr": "5",
+     "ampel": "rot",
+     "grund": "Sprunggelenksverletzung, individuelles Programm",
+     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 0
+    },
+    {
      "name": "Dejan Ljubicic",
      "nr": "21",
      "ampel": "rot",
-     "grund": "Knieverletzung - fällt bis auf Weiteres aus",
-     "news": "",
+     "grund": "Knieverletzung, Reha-Training",
+     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Vitalie Becker",
+     "nr": "33",
+     "ampel": "rot",
+     "grund": "Sprunggelenksverletzung, individuelles Programm",
+     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
      "prozent": 0
     },
     {
@@ -3574,16 +3574,6 @@
       "prozent": 97
      },
      {
-      "name": "Ko Itakura",
-      "nr": "6",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 94 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 93
-     },
-     {
       "name": "Lukas Ullrich",
       "nr": "26",
       "ampel": "gruen",
@@ -3612,6 +3602,16 @@
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 64
+     },
+     {
+      "name": "Ko Itakura",
+      "nr": "6",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 60
      }
     ],
     "mf": [
