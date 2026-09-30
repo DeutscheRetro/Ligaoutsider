@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-30T15:29:49.777846+00:00",
+ "updated": "2026-09-30T16:45:06.519825+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -1340,16 +1340,6 @@
      "prozent": 20
     },
     {
-     "name": "Rocco Reitz",
-     "nr": "20",
-     "ampel": "gelb",
-     "grund": "Schrittweise Rückkehr nach Länderspielpause geplant",
-     "news": "artikel/rb-leipzig-reitz-baumgartner-und-lukeba-trainieren-in-marbella-950aa13f24.html",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 15
-    },
-    {
      "name": "Johan Bakayoko",
      "nr": "11",
      "ampel": "gelb",
@@ -1358,19 +1348,29 @@
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 5
-    },
-    {
-     "name": "Christoph Baumgartner",
-     "nr": "14",
-     "ampel": "gelb",
-     "grund": "Schrittweise Rückkehr nach Länderspielpause geplant",
-     "news": "artikel/rb-leipzig-reitz-baumgartner-und-lukeba-trainieren-in-marbella-950aa13f24.html",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 4
     }
    ],
    "ausfall": [
+    {
+     "name": "Christoph Baumgartner",
+     "nr": "14",
+     "ampel": "rot",
+     "grund": "Oberschenkelverletzung - Rückkehr vsl. am 31.10.2026",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Rocco Reitz",
+     "nr": "20",
+     "ampel": "rot",
+     "grund": "Nach Sehnenriss - trainiert individuell, steht vor Rückkehr ins Teamtraining",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 0
+    },
     {
      "name": "Assan Ouédraogo",
      "nr": "8",
@@ -3543,12 +3543,12 @@
   },
   "Borussia Mönchengladbach": {
    "logo": "logos/gladbach.png",
-   "formation": "",
+   "formation": "3-4-1-2",
    "quellen": [
     "ligainsider",
     "rotowire"
    ],
-   "formation_quelle": "",
+   "formation_quelle": "artikel/gladbach-uno-verlaesst-training-mit-bandagiertem-oberschenkel-41bb4a82ff.html",
    "elf": {
     "tw": [
      {
@@ -3572,6 +3572,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 97
+     },
+     {
+      "name": "Ko Itakura",
+      "nr": "6",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 94 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 93
      },
      {
       "name": "Lukas Ullrich",
@@ -3602,16 +3612,6 @@
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 64
-     },
-     {
-      "name": "Ko Itakura",
-      "nr": "6",
-      "ampel": "gelb",
-      "grund": "angeschlagen",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 60
      }
     ],
     "mf": [
@@ -3756,8 +3756,8 @@
      "name": "Zento Uno",
      "nr": "47",
      "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
+     "grund": "Oberschenkelproblem, Diagnose ausstehend",
+     "news": "artikel/gladbach-uno-verlaesst-training-mit-bandagiertem-oberschenkel-41bb4a82ff.html",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 2
