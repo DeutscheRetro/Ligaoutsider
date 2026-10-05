@@ -656,7 +656,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
 
 
 def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str, b_artikel: bool = False) -> bool:
-    """Gegenprobe für ein einzelnes Paar (Haiku, wenige Hundert Tokens).
+    """Gegenprobe für ein einzelnes Paar (Opus – genauer als Haiku bei Sammelartikeln).
     b_artikel: B ist ein fertiger Artikel von uns, der A auch nur als Teil enthalten kann."""
     frage = ("Steht das Ereignis aus Meldung A bereits in unserem Artikel B – als Hauptthema oder als Teil "
              "eines größeren Artikels (z. B. Personal-Update mit mehreren Spielern)? Ist A nur eine Wiederholung "
@@ -665,7 +665,7 @@ def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str, b_ar
              "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
              "Andere Person oder anderes Ereignis = NEIN.")
     laenge = 2500 if b_artikel else 600
-    antwort = ki_budget.aufruf("dublette", model=HAIKU, max_tokens=5, messages=[{"role": "user", "content": (
+    antwort = ki_budget.aufruf("dublette", model=OPUS, max_tokens=5, messages=[{"role": "user", "content": (
         frage + "\n\n"
         "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
         "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
