@@ -72,13 +72,26 @@
     }
   }
 
+  // Nur über Google angemeldet und noch kein eigener Benutzername gewählt?
+  function nameOffen(u) {
+    if (!u || (u.user_metadata || {}).benutzername) return false;
+    const am = u.app_metadata || {};
+    const p = am.providers || [am.provider];
+    return p.includes('google') && !p.includes('email');
+  }
+
   function nutzer() {
     if (!sitzung || !sitzung.user) return null;
     const u = sitzung.user;
+    // Seiten zeigen user_metadata.full_name an – dort steht der gewählte
+    // Benutzername, nie der echte Name aus dem Google-Konto
+    const meta = { ...(u.user_metadata || {}) };
+    if (meta.benutzername) meta.full_name = meta.benutzername;
+    else if (nameOffen(u)) meta.full_name = 'Neuer Fan';
     return {
       id: u.id,
       email: u.email,
-      user_metadata: u.user_metadata || {},
+      user_metadata: meta,
       app_metadata: { roles: (u.app_metadata && u.app_metadata.roles) || [] },
       jwt: async () => {
         const t = await frischesToken();
@@ -143,6 +156,13 @@
       felder: [['email', 'E-Mail', 'email', 'email']],
       knopf: 'Link schicken',
       links: [['anmelden', 'Zurück zur Anmeldung']],
+    },
+    name_waehlen: {
+      titel: 'Wähle deinen Benutzernamen',
+      felder: [['benutzername', 'Benutzername (3–30 Zeichen)', 'text', 'nickname']],
+      knopf: 'Speichern',
+      links: [],
+      hinweis: 'Unter diesem Namen erscheinen deine Kommentare und Forenbeiträge. Jeden Namen gibt es nur einmal. Dein Name aus dem Google-Konto wird nicht angezeigt.',
     },
     neues_passwort: {
       titel: 'Neues Passwort festlegen',
@@ -225,6 +245,19 @@
       } else if (ansicht === 'vergessen') {
         await auth(`recover?redirect_to=${zurueck}`, { email: wert('email') });
         zeigeMeldung('Wenn es ein Konto mit dieser Adresse gibt, ist jetzt eine E-Mail mit einem Link unterwegs.', 'ok');
+      } else if (ansicht === 'name_waehlen') {
+        const t = await frischesToken();
+        const r = await fetch('/api', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
+          body: JSON.stringify({ aktion: 'name_waehlen', name: wert('benutzername') }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d.fehler || 'Speichern fehlgeschlagen');
+        const u = await auth('user', null, t, 'GET');
+        speichern({ ...sitzung, user: u });
+        schliessen();
+        feuern('login', nutzer());
       } else if (ansicht === 'neues_passwort') {
         if (form.elements.passwort.value.length < 8) throw new Error('Das Passwort braucht mindestens 8 Zeichen.');
         const t = await frischesToken();
@@ -285,6 +318,7 @@
     const start = () => {
       feuern('init', nutzer());
       if (ausMail && ausMail.typ === 'recovery') oeffnen('neues_passwort');
+      else if (sitzung && nameOffen(sitzung.user)) oeffnen('name_waehlen');
       else if (ausMail && ausMail.typ && sitzung) feuern('login', nutzer());
       else if (ausMail && ausMail.fehler) oeffnen('anmelden', ['Der Link ist ungültig oder abgelaufen. Bitte melde dich an oder fordere einen neuen an.', 'fehler']);
     };

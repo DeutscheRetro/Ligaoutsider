@@ -115,6 +115,15 @@ async function profilSicher(email, name) {
   return null;
 }
 
+const BENUTZERNAME = /^[\p{L}\p{N}][\p{L}\p{N} ._-]{1,28}[\p{L}\p{N}]$/u;
+
+// Nur über Google angemeldet (kein E-Mail-Konto mit selbst gewähltem Namen)?
+function nurGoogle(user) {
+  const am = user.app_metadata || {};
+  const p = am.providers || [am.provider];
+  return p.includes("google") && !p.includes("email");
+}
+
 // ilike ohne Platzhalter: prüft Gleichheit ohne Rücksicht auf Groß-/Kleinschreibung
 const ilikeGenau = t => encodeURIComponent(String(t).replace(/[\\%_]/g, m => "\\" + m));
 async function nameVergeben(anzeigename, ausserEmail) {
@@ -159,7 +168,11 @@ export async function onRequest({ request, env }) {
   if (!user || !user.email) return json(401, { fehler: "Nicht angemeldet" });
 
   const email = user.email;
-  const name = (user.user_metadata && user.user_metadata.full_name) || email;
+  const meta = user.user_metadata || {};
+  // Wer nur über Google angemeldet ist, wählt zuerst einen Benutzernamen –
+  // der echte Name aus dem Google-Konto wird nie angezeigt
+  const nameOffen = nurGoogle(user) && !meta.benutzername;
+  const name = meta.benutzername || (nameOffen ? null : meta.full_name) || email;
   const rollen = await rollenVon(email, (user.app_metadata || {}).roles);
   const istAdmin = rollen.includes("admin");
   const darfLoeschen = istAdmin || rollen.includes("moderator");
@@ -171,6 +184,8 @@ export async function onRequest({ request, env }) {
     return json(400, { fehler: "Ungueltiges JSON" });
   }
   const { aktion } = body;
+  if (nameOffen && !["wer_bin_ich", "name_waehlen"].includes(aktion))
+    return json(403, { fehler: "Bitte wähle zuerst deinen Benutzernamen" });
 
   try {
     switch (aktion) {
@@ -638,6 +653,15 @@ export async function onRequest({ request, env }) {
           gaestebuch_offen: body.gaestebuch_offen !== false,
           aktualisiert_am: new Date().toISOString(),
         });
+        // Anzeigename ist zugleich der Benutzername bei Kommentaren und im Forum
+        if (anzeigename !== name) {
+          await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+            method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, benutzername: anzeigename } }) });
+          const E = encodeURIComponent(email);
+          await aendere("kommentare", `email=eq.${E}`, { name: anzeigename });
+          await aendere("forum_posts", `autor_email=eq.${E}`, { autor_name: anzeigename });
+          await aendere("forum_threads", `autor_email=eq.${E}`, { autor_name: anzeigename });
+        }
         // Profilnamen in eigenen Beiträgen mitziehen
         if (handle !== profil.handle) {
           const E = encodeURIComponent(email);
@@ -739,7 +763,35 @@ export async function onRequest({ request, env }) {
         return json(200, { ok: true });
       }
 
+      case "name_waehlen": {
+        const neu = sauber(body.name, 30).replace(/\s+/g, " ");
+        if (!BENUTZERNAME.test(neu))
+          return json(400, { fehler: "Benutzername: 3–30 Zeichen, nur Buchstaben, Zahlen, Leerzeichen, Punkt, Binde- und Unterstrich" });
+        if (await nameVergeben(neu, email)) return json(409, { fehler: "Dieser Benutzername ist schon vergeben" });
+        // Profilname (Adresse /profil/<handle>) aus dem Benutzernamen ableiten
+        const basis = handleAus(neu);
+        let handle = null;
+        for (let i = 0; i < 20 && !handle; i++) {
+          const versuch = i ? `${basis.slice(0, 26)}-${i + 1}` : basis;
+          const belegt = await hole(`profile?handle=eq.${encodeURIComponent(versuch)}&select=email`);
+          if (!belegt || !belegt.length || belegt[0].email === email) handle = versuch;
+        }
+        if (!handle) return json(409, { fehler: "Dieser Benutzername ist schon vergeben" });
+        const E = encodeURIComponent(email);
+        const da = await hole(`profile?email=eq.${E}&select=handle`);
+        if (da && da.length) await aendere("profile", `email=eq.${E}`, { handle, anzeigename: neu });
+        else await lege_an("profile", { email, handle, anzeigename: neu });
+        await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+          method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, benutzername: neu } }) });
+        // Bisherige Beiträge auf den neuen Namen umstellen
+        await aendere("kommentare", `email=eq.${E}`, { name: neu, autor_handle: handle });
+        await aendere("forum_posts", `autor_email=eq.${E}`, { autor_name: neu, autor_handle: handle });
+        await aendere("forum_threads", `autor_email=eq.${E}`, { autor_name: neu, autor_handle: handle });
+        return json(200, { ok: true, name: neu, handle });
+      }
+
       case "wer_bin_ich": {
+        if (nameOffen) return json(200, { email, name: null, name_offen: true, rollen, istAdmin, darfLoeschen, handle: null, anfragen: 0 });
         const profil = await profilSicher(email, name);
         let anfragen = 0;
         if (profil) {
