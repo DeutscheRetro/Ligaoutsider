@@ -9,7 +9,9 @@
     "directory": "./",
     "binding": "ASSETS",
     "html_handling": "none",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Browser-Aufrufe ("/", "/spieler/") sonst direkt als 404 beantwortet, ohne den Worker
+    "run_worker_first": ["/api", "/", "/spieler/"]
   },
   "observability": { "enabled": true }
 }
