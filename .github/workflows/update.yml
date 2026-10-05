@@ -3,16 +3,16 @@ name: Neue Artikel generieren
 on:
   # Jeder Lauf mit neuen Inhalten wird veröffentlicht: Cloudflare baut bei
   # jedem Push auf main neu (kostenlos, anders als früher bei Netlify).
+  # Zeiten in UTC (Berlin Sommerzeit +2, Winterzeit +1). Müssen zu
+  # ki_budget.LAUFPLAN_UTC passen, danach verteilt sich das Budget.
   schedule:
-    - cron: '0 5 * * *'     # 07:00 (UTC+2)
-    - cron: '0 6 * * *'     # 08:00
-    - cron: '0 7 * * *'     # 09:00
-    - cron: '0 9 * * *'     # 11:00
-    - cron: '0 11 * * *'    # 13:00
-    - cron: '0 13 * * *'    # 15:00
-    - cron: '0 16 * * *'    # 18:00
-    - cron: '0 18 * * *'    # 20:00
-    - cron: '0 20 * * 5,6,0'  # 22:00, Fr/Sa/So – nach den Abendspielen
+    - cron: '0 5,8,11,14,17 * * 1-4'       # Mo–Do: 7, 10, 13, 16, 19 Uhr
+    - cron: '0 5,8,11,14 * * 5'            # Fr tagsüber
+    - cron: '30 17,20 * * 5'               # Fr vor und nach dem Abendspiel
+    - cron: '0 6,8,10,11,18 * * 6'         # Sa
+    - cron: '30 12,15,16,20 * * 6'         # Sa: Aufstellungen, nach 15:30, Topspiel
+    - cron: '0 7,9,11,21 * * 0'            # So
+    - cron: '30 12,15,16,17,19 * * 0'      # So: rund um die drei Spielslots
   workflow_dispatch:
     inputs:
       reason:
@@ -53,8 +53,9 @@ jobs:
       - name: Artikel generieren
         env:
           # Fester Deckel für Claude-Kosten pro Kalendermonat (siehe ki_budget.py).
-          # Die Lauf-Zeiten oben stehen auch in ki_budget.LAUF_STUNDEN_UTC.
-          MONATSBUDGET_USD:     '20'
+          # Die Lauf-Zeiten oben stehen auch in ki_budget.LAUFPLAN_UTC.
+          # 23 USD ≈ 20 EUR, das ganze Monatsbudget (Hosting kostet nichts mehr)
+          MONATSBUDGET_USD:     '23'
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
           KICKBASE_EMAIL:       ${{ secrets.KICKBASE_EMAIL }}
           KICKBASE_PASSWORD:    ${{ secrets.KICKBASE_PASSWORD }}

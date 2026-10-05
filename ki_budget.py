@@ -6,12 +6,12 @@ dadurch kann das Monatsbudget nie überschritten werden. Hinterher werden die
 echten Kosten aus response.usage verbucht und in data/api_kosten.json
 gespeichert, das der Workflow mit committet.
 
-Budget: MONATSBUDGET_USD (Standard 20) pro Kalendermonat. Das Tagesbudget ist
-der Monatsrest geteilt durch die verbleibenden Tage, was ein Tag nicht braucht,
-steht also den folgenden zur Verfügung. Jeder Lauf bekommt den Tagesrest geteilt
-durch die heute noch geplanten Läufe, damit der erste Lauf nicht alles aufbraucht.
+Budget: MONATSBUDGET_USD (Standard 20) pro Kalendermonat. Jeder Lauf bekommt
+seinen Anteil am Monatsrest, gemessen an allen noch geplanten Läufen des Monats
+(LAUFPLAN_UTC). Läufe von Freitag bis Sonntag zählen 1,5-fach, weil an
+Spieltagen mehr passiert. Was ein Lauf nicht braucht, verteilt sich auf die
+folgenden.
 """
-import calendar
 import datetime
 import json
 import os
@@ -29,9 +29,19 @@ PREISE = {
 }
 PREIS_UNBEKANNT = (5.00, 25.00)   # lieber zu teuer schätzen
 
-# Geplante Läufe in UTC, wie in .github/workflows/update.yml
-LAUF_STUNDEN_UTC = [5, 6, 7, 9, 11, 13, 16, 18]
-WOCHENENDE_EXTRA_UTC = [20]        # Fr, Sa, So nach den Abendspielen
+# Geplante Läufe in UTC je Wochentag (0 = Montag), wie in .github/workflows/update.yml.
+# Berliner Sommerzeit = UTC+2, Winterzeit = UTC+1.
+_WERKTAG = ["05:00", "08:00", "11:00", "14:00", "17:00"]
+LAUFPLAN_UTC = {
+    0: _WERKTAG, 1: _WERKTAG, 2: _WERKTAG, 3: _WERKTAG,
+    # Freitag: vor und nach dem Abendspiel
+    4: ["05:00", "08:00", "11:00", "14:00", "17:30", "20:30"],
+    # Samstag: Aufstellungen vor 15:30, Ergebnisse danach, Topspiel 18:30
+    5: ["06:00", "08:00", "10:00", "11:00", "12:30", "15:30", "16:30", "18:00", "20:30"],
+    # Sonntag: drei Spielslots
+    6: ["07:00", "09:00", "11:00", "12:30", "15:30", "16:30", "17:30", "19:30", "21:00"],
+}
+GEWICHT = {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.5, 5: 1.5, 6: 1.5}
 
 
 class BudgetErschoepft(Exception):
@@ -48,12 +58,18 @@ _zwecke: dict = {}
 _guthaben_leer = False
 
 
-def _laeufe_rest() -> int:
-    jetzt = datetime.datetime.now(datetime.timezone.utc)
-    stunden = list(LAUF_STUNDEN_UTC)
-    if jetzt.weekday() in (4, 5, 6):
-        stunden += WOCHENENDE_EXTRA_UTC
-    return max(1, sum(1 for h in stunden if h >= jetzt.hour))
+def _gewicht_rest(jetzt: datetime.datetime) -> float:
+    """Summe der Gewichte aller nach jetzt noch geplanten Läufe dieses Monats."""
+    summe = 0.0
+    tag = jetzt.date()
+    while tag.month == jetzt.month:
+        for hhmm in LAUFPLAN_UTC[tag.weekday()]:
+            h, m = map(int, hhmm.split(":"))
+            zeit = datetime.datetime(tag.year, tag.month, tag.day, h, m, tzinfo=datetime.timezone.utc)
+            if zeit > jetzt:
+                summe += GEWICHT[tag.weekday()]
+        tag += datetime.timedelta(days=1)
+    return summe
 
 
 def init(client) -> None:
@@ -73,10 +89,9 @@ def init(client) -> None:
     heute["laeufe"] += 1
 
     rest_monat = max(0.0, _monatsbudget - _stand["monat_usd"])
-    rest_tage = calendar.monthrange(jetzt.year, jetzt.month)[1] - jetzt.day + 1
-    tagesbudget = (rest_monat + heute["usd"]) / rest_tage
-    rest_heute = max(0.0, min(tagesbudget - heute["usd"], rest_monat))
-    _lauf_budget = rest_heute / _laeufe_rest()
+    utc = datetime.datetime.now(datetime.timezone.utc)
+    w = GEWICHT[utc.weekday()]            # dieser Lauf (oft verspätet gestartet) + alle folgenden
+    _lauf_budget = rest_monat * w / (w + _gewicht_rest(utc))
     _lauf_usd = 0.0
     _speichern()
 
