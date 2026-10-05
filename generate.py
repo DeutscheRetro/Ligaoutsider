@@ -597,6 +597,12 @@ SAMMELARTIKEL = re.compile(
     r"|alle news|\bkompakt\b|presseschau|gerüchteküche|überblick|zusammenfassung|was heute wichtig|am morgen|am abend"
 )
 
+# Nie schreiben, auch mit Spielerbezug: Fan-Wahlen und Nachwuchs-/U23-Themen
+NICHT_FUER_UNS = re.compile(
+    r"spieler des monats|tor des monats|spieler der saison|fan-?wahl|wahl zum|gewählt|voting"
+    r"|\bu ?23\b|\bu ?19\b|\bu ?17\b|zweite mannschaft|regionalliga|nachwuchs|knappenschmiede|jugend"
+)
+
 # Randthemen, die wir ohne Spielerbezug nicht schreiben (Entscheidung 10/2026: Fokus auf
 # das, was Fans und Manager brauchen – Personal, Transfers, Trainer, Spiele)
 RANDTHEMEN = re.compile(
@@ -643,6 +649,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
             "Länderspiele: 2, wenn ein Bundesliga-Spieler konkret betroffen ist (Debüt, Tor, Vorlage, Verletzung, "
             "Platzverweis, Kapitän, Abreise), sonst 0.\n"
             "Sammelartikel mit mehreren Themen (News-Update, Ticker, Überblick): 0.\n"
+            "Fan-Wahlen (Spieler/Tor des Monats) und U23-, Nachwuchs- oder Talent-Themen ohne Profi-Einsatz: 0.\n"
             "Testspiele: nur Ergebnisse (2). Vorschauen auf Testspiele: 0.\n\n"
             "und einem Status:\n"
             "n = neu\n"
@@ -1258,6 +1265,9 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict
         frueher = ("\n\nUNSERE FRÜHEREN BERICHTE ZUM THEMA (nur zur Einordnung, nicht nacherzählen):\n"
                    + "\n".join(f"- {a['datum']}: {a['titel']}" + (f" ({a['summary'][:220]})" if a.get("summary") else "")
                                for a in g["archiv"][:3]))
+    wie_berichtet = ('Bei einer neuen Entwicklung zu UNSEREN FRÜHEREN BERICHTEN kurz einordnen ("Wie berichtet, ...").'
+                     if frueher else
+                     'Schreibe NIE "Wie berichtet" oder "wie bereits berichtet" – wir hatten zu diesem Thema noch keinen Artikel.')
     prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret.
 Heute ist der {datetime.date.today().strftime('%d.%m.%Y')}.
 
@@ -1283,7 +1293,7 @@ QUELLEN ({len(texte)}):
 Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
   Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Ranking oder Liste, Werbung, Sammelartikel mit mehreren
-  unverbundenen Themen). Länderspiele sind relevant, wenn ein Bundesliga-Spieler konkret betroffen ist (Debüt,
+  unverbundenen Themen, Fan-Wahlen wie Spieler des Monats, U23-/Nachwuchsthemen). Länderspiele sind relevant, wenn ein Bundesliga-Spieler konkret betroffen ist (Debüt,
   Tor, Vorlage, Verletzung, Platzverweis, Kapitän); dann aus Sicht dieses Spielers und seines Klubs schreiben.
   Dann alle Textfelder leer lassen und Listen leer.
 - genug_stoff: false, wenn die Quellen nicht einmal für eine runde Kurzmeldung (Intro, Mittelteil, Schluss) reichen.
@@ -1301,7 +1311,7 @@ Fülle diese Felder:
      z. B. "Werders Stammtorhüter Karl Hein"), was, wann, für welches Spiel. Wer nur das Intro liest, weiß Bescheid.
   2. Mittelteil (ein bis drei Absätze): Details, Hintergründe und Zitate aus den Quellen (wörtlich, mit Sprecher),
      danach die Einordnung, soweit die Quellen sie hergeben (Rolle des Spielers, bisherige Saison, Vorgeschichte).
-     Widersprechen sich Quellen, nenne beide Angaben. Bei einer neuen Entwicklung kurz einordnen ("Wie berichtet, ...").
+     Widersprechen sich Quellen, nenne beide Angaben. {wie_berichtet}
   3. Schluss (letzter Absatz, mindestens zwei Sätze): rundet die Meldung ab. Am besten ein Ausblick aus den Quellen
      (nächstes Spiel, Rückkehrtermin, wer ersetzen könnte, nächster Schritt im Transfer). Gibt es keinen, fasse
      zusammen, was die Nachricht für Spieler und Klub bedeutet – ebenfalls nur mit Fakten aus den Quellen.
@@ -2002,6 +2012,11 @@ def main():
             _geschichte_verwerfen(g, "stage5", "kein_bl_bezug")
             stats["s5_ohne_bezug"] = stats.get("s5_ohne_bezug", 0) + 1
             continue
+        if NICHT_FUER_UNS.search(g["titel"].lower()):
+            log.info(f"S5 Fan-Wahl/Nachwuchs: {g['titel'][:70]}")
+            _geschichte_verwerfen(g, "stage5", "nicht_fuer_uns")
+            stats["s5_randthema"] = stats.get("s5_randthema", 0) + 1
+            continue
         if SAMMELARTIKEL.search(g["titel"].lower()):
             log.info(f"S5 Sammelartikel: {g['titel'][:70]}")
             _geschichte_verwerfen(g, "stage5", "sammelartikel")
@@ -2077,7 +2092,7 @@ def main():
         if ki_budget.abo_aktiv() and len(kandidaten) >= ABO_MAX_ARTIKEL_PRO_LAUF:
             log.info(f"S7 Abo-Deckel ({ABO_MAX_ARTIKEL_PRO_LAUF} Artikel) erreicht – Rest wartet auf den nächsten Lauf")
             break
-        if SAMMELARTIKEL.search(g["titel"].lower()):
+        if SAMMELARTIKEL.search(g["titel"].lower()) or NICHT_FUER_UNS.search(g["titel"].lower()):
             # auch Geschichten, die schon vor dem Filter in der Warteschlange lagen
             log.info(f"S7 Sammelartikel: {g['titel'][:60]}")
             _geschichte_verwerfen(g, "stage7", "sammelartikel")
@@ -2132,6 +2147,10 @@ def main():
         aid = texte[0]["aid"]
 
         ergebnis["text"] = floskeln_entfernen(str(ergebnis.get("text", "")))
+        if not g.get("archiv"):
+            t = re.sub(r",\s*wie (?:bereits |zuvor |zuletzt )?berichtet,", "", ergebnis["text"])
+            ergebnis["text"] = re.sub(r"(^|(?<=[.!?]\s)|(?<=\n))Wie (?:bereits |zuvor |zuletzt )?berichtet,\s*(\w)",
+                                      lambda m: m.group(1) + m.group(2).upper(), t)
         grund = None
         woerter = len(ergebnis["text"].split())
         hauptklub = str(ergebnis.get("hauptklub", "")).strip()
