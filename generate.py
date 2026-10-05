@@ -2077,6 +2077,12 @@ def main():
         if ki_budget.abo_aktiv() and len(kandidaten) >= ABO_MAX_ARTIKEL_PRO_LAUF:
             log.info(f"S7 Abo-Deckel ({ABO_MAX_ARTIKEL_PRO_LAUF} Artikel) erreicht – Rest wartet auf den nächsten Lauf")
             break
+        if SAMMELARTIKEL.search(g["titel"].lower()):
+            # auch Geschichten, die schon vor dem Filter in der Warteschlange lagen
+            log.info(f"S7 Sammelartikel: {g['titel'][:60]}")
+            _geschichte_verwerfen(g, "stage7", "sammelartikel")
+            schlange.remove(g)
+            continue
         reserve = _qa_reserve(len(kandidaten) + 1)
         if ki_budget.rest() < ki_budget.schaetzung(OPUS, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
             log.info(f"S7 Budget dieses Laufs reicht für keinen weiteren Artikel – "
