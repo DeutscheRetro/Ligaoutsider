@@ -1,0 +1,15 @@
+// Cloudflare Worker: liefert die statischen Seiten aus und beantwortet /api.
+// html_handling "none": Adressen behalten ihr ".html" (so stehen sie bei Google);
+// Cloudflare Pages würde sie abschneiden und umleiten.
+{
+  "name": "ligaoutsider",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}

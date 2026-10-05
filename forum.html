@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" href="favicon.png" type="image/png"/>
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/auth.js"></script>
   <style>
     .forum-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; display: flex; gap: 20px; }
     .forum-sidebar { width: 200px; flex-shrink: 0; }
@@ -202,7 +202,7 @@
       const user = window.netlifyIdentity && netlifyIdentity.currentUser();
       if (!user) throw new Error('Nicht angemeldet');
       const token = await user.jwt();
-      const res = await fetch('/.netlify/functions/api', {
+      const res = await fetch('/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ aktion, ...daten })

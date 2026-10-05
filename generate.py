@@ -1549,7 +1549,7 @@ def artikel_html(
 </head>
 <body>
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/auth.js"></script>
 
   <header class="site-header">
     <div class="header-inner">
@@ -2968,7 +2968,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
 {head_extra}</head>
 <body>
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/auth.js"></script>
 
   <header class="site-header">
     <div class="header-inner">

@@ -6,7 +6,7 @@
   <title>Chefred – Ligaoutsider</title>
   <link rel="icon" href="favicon.png" type="image/png"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/auth.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,sans-serif;background:#0d0d0d;color:#e0e0e0;font-size:14px}
@@ -237,7 +237,7 @@ async function loApi(aktion, daten = {}) {
   const user = window.netlifyIdentity && netlifyIdentity.currentUser();
   if (!user) throw new Error('Nicht angemeldet');
   const token = await user.jwt();
-  const res = await fetch('/.netlify/functions/api', {
+  const res = await fetch('/api', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ aktion, ...daten })
