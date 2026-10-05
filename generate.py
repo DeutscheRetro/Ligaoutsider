@@ -560,7 +560,11 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60
 
 HAIKU  = "claude-haiku-4-5-20251001"
 SONNET = "claude-sonnet-4-6"
-OPUS   = "claude-opus-5-5"      # schreibt die Artikel
+OPUS   = "claude-opus-5-5"
+# Schreibt die Artikel und prüft Dubletten. Modellvergleich 05.10.2026: Sonnet 5.5 mit
+# effort low schreibt fast so gut wie Opus medium, bei ~40 % des Verbrauchs.
+SCHREIBER = "claude-sonnet-5-5"
+SCHREIBER_EFFORT = "low"
 
 
 def _text_aus(antwort) -> str:
@@ -581,7 +585,14 @@ _FLOSKELN = re.compile(
     re.IGNORECASE)
 
 
+def anfuehrungszeichen(text: str) -> str:
+    """Deutsche Anführungszeichen: „…" und "…" werden zu „…“."""
+    text = re.sub(r'„([^“"\n]*)"', "„\\1“", text)
+    return re.sub(r'"([^"\n]+)"', "„\\1“", text)
+
+
 def floskeln_entfernen(text: str) -> str:
+    text = anfuehrungszeichen(text)
     absaetze = []
     for absatz in text.split("\n\n"):
         saetze = re.split(r"(?<=[.!?…])\s+", absatz.strip())
@@ -673,7 +684,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
 
 
 def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str, b_artikel: bool = False) -> bool:
-    """Gegenprobe für ein einzelnes Paar (Opus – genauer als Haiku bei Sammelartikeln).
+    """Gegenprobe für ein einzelnes Paar (Sonnet – genauer als Haiku bei Sammelartikeln).
     b_artikel: B ist ein fertiger Artikel von uns, der A auch nur als Teil enthalten kann."""
     frage = ("Steht das Ereignis aus Meldung A bereits in unserem Artikel B – als Hauptthema oder als Teil "
              "eines größeren Artikels (z. B. Personal-Update mit mehreren Spielern)? Ist A nur eine Wiederholung "
@@ -682,7 +693,7 @@ def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str, b_ar
              "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
              "Andere Person oder anderes Ereignis = NEIN.")
     laenge = 2500 if b_artikel else 600
-    antwort = ki_budget.aufruf("dublette", model=OPUS, max_tokens=5, messages=[{"role": "user", "content": (
+    antwort = ki_budget.aufruf("dublette", model=SCHREIBER, effort=SCHREIBER_EFFORT, max_tokens=5, messages=[{"role": "user", "content": (
         frage + "\n\n"
         "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
         "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
@@ -1255,8 +1266,8 @@ SCHREIB_ZEICHEN = 18000          # Prompt mit bis zu drei Quellen, für die Budg
 
 
 def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0,
-                       model: str = OPUS, effort: str | None = None) -> dict:
-    """Opus schreibt aus bis zu drei Quellen einen Artikel und liefert die Angaben
+                       model: str = SCHREIBER, effort: str | None = SCHREIBER_EFFORT) -> dict:
+    """Sonnet schreibt aus bis zu drei Quellen einen Artikel und liefert die Angaben
     fürs Archiv (Ereignis, Spieler, Kurzfassung) gleich mit – kein Extra-Aufruf."""
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
@@ -1279,6 +1290,7 @@ ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
 - VERBOTEN: „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex", alle Plattitüden.
 - Spielernamen korrekt inkl. Akzente (João, Raphaël, Øyvind).
+- Alter, Zahlen, Daten und Rekorde nur, wenn sie in den Quellen stehen – nie aus eigenem Wissen.
 - Personen beim ersten Nennen IMMER mit Vor- und Nachnamen (Oliver Burke, Trainer Sebastian Hoeneß), danach
   Nachname. Steht der Vorname nicht in den Quellen und ist die Person ein bekannter Bundesliga-Spieler oder
   -Trainer, darfst du den Vornamen ergänzen – sonst nur Funktion + Nachname.
@@ -2100,7 +2112,7 @@ def main():
             schlange.remove(g)
             continue
         reserve = _qa_reserve(len(kandidaten) + 1)
-        if ki_budget.rest() < ki_budget.schaetzung(OPUS, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
+        if ki_budget.rest() < ki_budget.schaetzung(SCHREIBER, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
             log.info(f"S7 Budget dieses Laufs reicht für keinen weiteren Artikel – "
                      f"{len(reihenfolge) - reihenfolge.index(g)} Geschichten warten auf den nächsten Lauf")
             break
@@ -2148,6 +2160,7 @@ def main():
         aid = texte[0]["aid"]
 
         ergebnis["text"] = floskeln_entfernen(str(ergebnis.get("text", "")))
+        ergebnis["titel"] = anfuehrungszeichen(str(ergebnis.get("titel", "")))
         if not g.get("archiv"):
             t = re.sub(r",\s*wie (?:bereits |zuvor |zuletzt )?berichtet,", "", ergebnis["text"])
             # Satzanfang: Ersatz statt Streichen, sonst kippt die Wortstellung ("Soll Tottenham …")

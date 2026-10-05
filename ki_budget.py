@@ -8,7 +8,7 @@ gespeichert, das der Workflow mit committet.
 
 Budget: MONATSBUDGET_USD (Standard 20) pro Kalendermonat. Jeder Lauf bekommt
 seinen Anteil am Monatsrest, gemessen an allen noch geplanten Läufen des Monats
-(LAUFPLAN_UTC). Läufe von Freitag bis Sonntag zählen 1,5-fach, weil an
+(LAUFPLAN_BERLIN). Läufe von Freitag bis Sonntag zählen 1,5-fach, weil an
 Spieltagen mehr passiert. Was ein Lauf nicht braucht, verteilt sich auf die
 folgenden.
 
@@ -23,6 +23,7 @@ import json
 import os
 import shutil
 import subprocess
+from zoneinfo import ZoneInfo
 from types import SimpleNamespace
 from pathlib import Path
 
@@ -36,21 +37,15 @@ PREISE = {
     "claude-haiku-4-5":          (1.00, 5.00),
     "claude-sonnet-4-6":         (3.00, 15.00),
     "claude-opus-5-5":           (5.00, 25.00),
+    "claude-sonnet-5-5":         (3.00, 15.00),
 }
 PREIS_UNBEKANNT = (5.00, 25.00)   # lieber zu teuer schätzen
 
-# Geplante Läufe in UTC je Wochentag (0 = Montag), wie in .github/workflows/update.yml.
-# Berliner Sommerzeit = UTC+2, Winterzeit = UTC+1.
-_WERKTAG = ["05:00", "08:00", "11:00", "14:00", "17:00"]
-LAUFPLAN_UTC = {
-    0: _WERKTAG, 1: _WERKTAG, 2: _WERKTAG, 3: _WERKTAG,
-    # Freitag: vor und nach dem Abendspiel
-    4: ["05:00", "08:00", "11:00", "14:00", "17:30", "20:30"],
-    # Samstag: Aufstellungen vor 15:30, Ergebnisse danach, Topspiel 18:30
-    5: ["06:00", "08:00", "10:00", "11:00", "12:30", "15:30", "16:30", "18:00", "20:30"],
-    # Sonntag: drei Spielslots
-    6: ["07:00", "09:00", "11:00", "12:30", "15:30", "16:30", "17:30", "19:30", "21:00"],
-}
+# Geplante Läufe in Berliner Zeit, jeden Tag gleich – wie in .github/workflows/update.yml.
+# Der 01:00-Lauf gehört zum Kalendertag, an dem er startet.
+LAUFPLAN_BERLIN = ["01:00", "06:00", "08:00", "10:00", "12:00", "13:30", "15:00",
+                   "16:30", "18:00", "19:30", "21:00", "23:00"]
+BERLIN = ZoneInfo("Europe/Berlin")
 GEWICHT = {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.5, 5: 1.5, 6: 1.5}
 
 
@@ -117,14 +112,14 @@ def _per_abo(model: str, messages: list, output_config: dict | None, effort: str
 
 
 def _gewicht_rest(jetzt: datetime.datetime) -> float:
-    """Summe der Gewichte aller nach jetzt noch geplanten Läufe dieses Monats."""
+    """Summe der Gewichte aller nach jetzt noch geplanten Läufe dieses Monats (Berliner Kalender)."""
     summe = 0.0
-    tag = jetzt.date()
-    while tag.month == jetzt.month:
-        for hhmm in LAUFPLAN_UTC[tag.weekday()]:
+    lokal = jetzt.astimezone(BERLIN)
+    tag = lokal.date()
+    while tag.month == lokal.month:
+        for hhmm in LAUFPLAN_BERLIN:
             h, m = map(int, hhmm.split(":"))
-            zeit = datetime.datetime(tag.year, tag.month, tag.day, h, m, tzinfo=datetime.timezone.utc)
-            if zeit > jetzt:
+            if datetime.datetime(tag.year, tag.month, tag.day, h, m, tzinfo=BERLIN) > jetzt:
                 summe += GEWICHT[tag.weekday()]
         tag += datetime.timedelta(days=1)
     return summe
@@ -148,7 +143,7 @@ def init(client) -> None:
 
     rest_monat = max(0.0, _monatsbudget - _stand["monat_usd"])
     utc = datetime.datetime.now(datetime.timezone.utc)
-    w = GEWICHT[utc.weekday()]            # dieser Lauf (oft verspätet gestartet) + alle folgenden
+    w = GEWICHT[utc.astimezone(BERLIN).weekday()]   # dieser Lauf (oft verspätet gestartet) + alle folgenden
     _lauf_budget = rest_monat * w / (w + _gewicht_rest(utc))
     _lauf_usd = 0.0
     _speichern()
