@@ -3781,7 +3781,12 @@ if __name__ == "__main__":
         spieler_fetch()
     except Exception as e:
         print(f"❌ spieler_fetch Fehler: {e}")
-    main()
+    # Ein Fehler im News-Teil (z. B. leeres Claude-Guthaben) darf die Daten-Updates
+    # nicht blockieren: sonst wird nichts committet und Kickbase/Aufstellungen veralten
+    try:
+        main()
+    except Exception as e:
+        print(f"❌ main (News) Fehler: {e}")
     try:
         spieler_news_index()
     except Exception as e:
