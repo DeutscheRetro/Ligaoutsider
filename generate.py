@@ -1254,7 +1254,8 @@ SCHREIB_MAX_TOKENS = 2000
 SCHREIB_ZEICHEN = 18000          # Prompt mit bis zu drei Quellen, für die Budgetschätzung
 
 
-def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict:
+def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0,
+                       model: str = OPUS, effort: str | None = None) -> dict:
     """Opus schreibt aus bis zu drei Quellen einen Artikel und liefert die Angaben
     fürs Archiv (Ereignis, Spieler, Kurzfassung) gleich mit – kein Extra-Aufruf."""
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
@@ -1342,7 +1343,7 @@ Fülle diese Felder:
   (z. B. "4-2-3-1"). Sonst ""."""
 
     antwort = ki_budget.aufruf(
-        "schreiben", model=OPUS, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve,
+        "schreiben", model=model, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve, effort=effort,
         messages=[{"role": "user", "content": prompt}],
         output_config={"format": {"type": "json_schema", "schema": _schema_artikel()}},
     )

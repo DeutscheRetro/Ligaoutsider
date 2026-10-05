@@ -75,7 +75,7 @@ def abo_aktiv() -> bool:
     return _abo
 
 
-def _per_abo(model: str, messages: list, output_config: dict | None):
+def _per_abo(model: str, messages: list, output_config: dict | None, effort: str | None = None):
     """Ein Aufruf über die Claude-Code-CLI (Abo). Gibt ein Objekt zurück, das wie
     eine API-Antwort aussieht (content[0].text, stop_reason, usage)."""
     prompt = "\n\n".join(m["content"] if isinstance(m["content"], str)
@@ -84,8 +84,9 @@ def _per_abo(model: str, messages: list, output_config: dict | None):
               "--no-session-persistence", "--setting-sources", "",
               "--system-prompt", "Du arbeitest für die Redaktion von ligaoutsider.de. "
                                  "Halte dich genau an die Anweisungen und das verlangte Antwortformat."]
-    if "opus" in model:
-        befehl += ["--effort", "medium"]
+    effort = effort or ("medium" if "opus" in model else None)
+    if effort:
+        befehl += ["--effort", effort]
     schema = ((output_config or {}).get("format") or {}).get("schema")
     if schema:
         befehl += ["--json-schema", json.dumps(schema, ensure_ascii=False)]
@@ -173,7 +174,7 @@ def schaetzung(model: str, max_tokens: int, zeichen: int) -> float:
 
 
 def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
-           reserve: float = 0.0, **kw):
+           reserve: float = 0.0, effort: str | None = None, **kw):
     """messages.create mit Budgetprüfung. reserve = Geld, das danach noch frei
     bleiben muss (z. B. für die Qualitätsprüfung am Ende des Laufs)."""
     global _lauf_usd, _guthaben_leer, _abo
@@ -181,7 +182,7 @@ def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
         raise RuntimeError("ki_budget.init() fehlt")
     if _abo:
         try:
-            antwort = _per_abo(model, messages, kw.get("output_config"))
+            antwort = _per_abo(model, messages, kw.get("output_config"), effort)
             anzahl, summe = _zwecke.get(zweck + " (abo)", (0, 0.0))
             _zwecke[zweck + " (abo)"] = (anzahl + 1, summe)
             # Echter Verbrauch im Abo (Tokens und was er über die API gekostet hätte)
@@ -196,6 +197,8 @@ def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
             t["api_wert_usd"] = round(t["api_wert_usd"] + antwort.api_wert_usd, 4)
             return antwort
         except Exception as e:
+            if os.environ.get("KI_NUR_ABO"):
+                raise                        # z. B. Modellvergleich: nie über die API ausweichen
             # Kontingent erschöpft oder CLI-Problem: Rest des Laufs über die API
             print(f"⚠️ Abo-Aufruf fehlgeschlagen ({zweck}): {e} – ab jetzt API")
             _abo = False
