@@ -581,6 +581,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
     Ohne Antwort bleibt prio None; die Geschichte wird im nächsten Lauf bewertet."""
     heute = datetime.date.today().strftime("%d.%m.%Y")
     unsere = "\n".join(f"- {t[:100]}" for t in unsere_titel[:40]) or "- (keine)"
+    plan = "\n".join(spielplan_kontext()) or "(keine Bundesligaspiele in diesen Tagen – z. B. Länderspielpause)"
     for start in range(0, len(geschichten), 80):
         teil = geschichten[start:start + 80]
         zeilen = []
@@ -603,13 +604,17 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
             "1 = Randthema: Tickets, Fans, Sponsoren, Stadion, Trikots, Nachwuchs ohne Profibezug, Ehrungen, Kurioses\n"
             "0 = Nicht für uns: kein Bundesligaklub im Mittelpunkt, 2. Liga oder tiefer, Frauen, Jugend, "
             "Nationalmannschaft ohne Klubbezug, Rückblick oder Jubiläum, Ranking, Liste, Statistik- oder "
-            "Kaderseite, Werbung, Quiz, Liveticker\n\n"
+            "Kaderseite, Werbung, Quiz, Liveticker\n"
+            "Spielberichte zählen als 3 nur bei Partien aus dem BUNDESLIGA-SPIELPLAN unten oder Pokal- und "
+            "Europapokalspielen der Bundesligaklubs. Andere Ergebnisse (oft Frauen-, Jugend- oder "
+            "Unterhausteams mit gleichem Vereinsnamen) bekommen 0, Testspiele der Profis höchstens 2.\n\n"
             "und einem Status:\n"
             "n = neu\n"
             "u = Update: echte neue Entwicklung zu einer unserer Meldungen (Gerücht → Angebot → offiziell, "
             "verletzt → fraglich → fällt aus → zurück im Training, neues Spiel)\n"
             "d = doppelt: dasselbe Ereignis wie eine unserer Meldungen (Archiv oder UNSERE LETZTEN MELDUNGEN) "
             "oder wie eine frühere Geschichte in dieser Liste, ohne neue Entwicklung\n\n"
+            f"BUNDESLIGA-SPIELPLAN (±4 Tage, Männer):\n{plan}\n\n"
             f"UNSERE LETZTEN MELDUNGEN (24 Stunden):\n{unsere}\n\n"
             "GESCHICHTEN (darunter jeweils weitere Schlagzeilen und passende Archivmeldungen):\n"
             + "\n".join(zeilen)
@@ -637,11 +642,59 @@ def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str) -> b
     return "JA" in _text_aus(antwort).upper()
 
 
-def quellen_laden(g: dict, max_texte: int = 2) -> list[dict]:
-    """Volltexte der besten Quellen einer Geschichte (höchstens vier Abrufe)."""
+def vorpruefung(g: dict, kern: str, vergleich: list[dict]) -> str | None:
+    """Stage 6.5: Gibt es zur selben Person in den letzten drei Tagen schon einen
+    Artikel (Archiv oder dieser Lauf)? Dann vergleicht Haiku vor dem teuren Schreiben
+    beide Meldungen. Gibt den Titel der Doppelmeldung zurück oder None."""
+    if not g.get("person"):
+        return None
+    person = storys.falten(g["person"])
+    jetzt = datetime.datetime.now()
+    nahe = sorted((e for e in vergleich if person in e["spieler"] and (jetzt - e["zeit"]).days <= 3),
+                  key=lambda e: e["zeit"], reverse=True)
+    titel = " / ".join(q["titel"] for q in g["quellen"][:2])
+    for e in nahe[:2]:
+        if gleiches_ereignis(titel, kern, e["titel"], e.get("summary", "")):
+            return e["titel"]
+    return None
+
+
+_SPIELPLAN: list[str] | None = None
+
+def spielplan_kontext(tage: int = 4) -> list[str]:
+    """Bundesliga-Partien der letzten und nächsten Tage (OpenLigaDB, kostenlos).
+    Damit erkennt die Redaktionskonferenz Spielberichte aus Frauen-, Jugend- oder
+    Unterhausligen, die in der Schlagzeile nicht als solche erkennbar sind."""
+    global _SPIELPLAN
+    if _SPIELPLAN is not None:
+        return _SPIELPLAN
+    _SPIELPLAN = []
+    try:
+        import requests as _req
+        spiele = _req.get("https://api.openligadb.de/getmatchdata/bl1/2026", timeout=15).json()
+    except Exception as e:
+        log.warning(f"Spielplan nicht verfügbar: {e}")
+        return _SPIELPLAN
+    jetzt = datetime.datetime.now()
+    for m in spiele:
+        try:
+            t = datetime.datetime.fromisoformat(m["matchDateTime"])
+        except Exception:
+            continue
+        if abs((t - jetzt).total_seconds()) > tage * 86400:
+            continue
+        erg = next((f" {x['pointsTeam1']}:{x['pointsTeam2']}" for x in m.get("matchResults") or []
+                    if x.get("resultTypeID") == 2), "")
+        _SPIELPLAN.append(f"{t:%d.%m.} {m['team1']['teamName']} – {m['team2']['teamName']}{erg}")
+    return _SPIELPLAN
+
+
+def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list[dict]:
+    """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
+    genug Stoff für einen vollwertigen Artikel beisammen ist."""
     texte = []
-    for q in g["quellen"][:4]:
-        if len(texte) >= max_texte:
+    for q in g["quellen"][:5]:
+        if len(texte) >= max_texte or sum(len(t["text"].split()) for t in texte) >= genug_woerter:
             break
         # Google-Links auflösen: verlinkt wird das Original, LigaInsider nie
         original = q["url"]
@@ -1093,6 +1146,7 @@ def _schema_artikel() -> dict:
         "type": "object",
         "properties": {
             "relevant": {"type": "boolean"},
+            "genug_stoff": {"type": "boolean"},
             "titel": {"type": "string"},
             "text": {"type": "string"},
             "kategorie": {"type": "string", "enum": KATEGORIEN},
@@ -1113,14 +1167,14 @@ def _schema_artikel() -> dict:
             }},
             "formation": {"type": "string"},
         },
-        "required": ["relevant", "titel", "text", "kategorie", "hauptklub", "ereignis",
+        "required": ["relevant", "genug_stoff", "titel", "text", "kategorie", "hauptklub", "ereignis",
                      "spieler", "kurzfassung", "spielerstatus", "formation"],
         "additionalProperties": False,
     }
 
 
 SCHREIB_MAX_TOKENS = 1600
-SCHREIB_ZEICHEN = 12000          # Prompt mit zwei Quellen, für die Budgetschätzung
+SCHREIB_ZEICHEN = 15000          # Prompt mit bis zu drei Quellen, für die Budgetschätzung
 
 
 def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict:
@@ -1154,6 +1208,8 @@ Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
   Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
   Dann alle Textfelder leer lassen und Listen leer.
+- genug_stoff: false, wenn die Quellen zu diesem Thema nicht genug Inhalt für mindestens 180 Wörter ohne Füllsätze
+  hergeben (z. B. nur eine Randnotiz in einem Sammelartikel). Dann ebenfalls alle Textfelder leer lassen.
 - titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
 - text: ein vollwertiger Nachrichtenartikel, 4 bis 6 Absätze, 200 bis 350 Wörter, Absätze durch eine Leerzeile getrennt.
   Führe alle Quellen zu EINEM Artikel zusammen: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
@@ -1578,9 +1634,13 @@ def qualitaets_check(kandidaten: list) -> list:
                 f"Du bist leitender QS-Redakteur von ligaoutsider.de. Heute ist der {datetime.date.today().strftime('%d.%m.%Y')} – "
                 f"Daten aus dieser Saison 2026/27 sind aktuell und nicht erfunden.\n"
                 f"Reviewe {len(kandidaten)} Kandidaten. Die Texte sind vollständig abgedruckt. Für JEDEN prüfe:\n"
-                f"1. Faktentreue: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke\n"
+                f"1. Handwerk: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke, "
+                f"keine Widersprüche innerhalb des Textes\n"
                 f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
                 f"3. Qualität: Substanz, lesbar, nicht leer/generisch\n\n"
+                f"WICHTIG: Prüfe NICHT, ob Namen, Trainer, Kader, Transfers oder Ergebnisse stimmen. Du kennst die Quellen nicht "
+                f"und dein Wissen ist veraltet – Trainer und Kader haben sich seitdem geändert. Lehne nie ab, weil etwas "
+                f"deinem Wissensstand widerspricht.\n\n"
                 f"Artikel sollen vollwertige Nachrichten sein (ca. 200-350 Wörter) mit konkreten Informationen "
                 f"(Ausfall, Rückkehr ins Training, Startelf-Chance, Aussage eines Trainers). Lehne Texte mit Füllsätzen oder Wiederholungen ab.\n\n"
                 f"KANDIDATEN:\n{liste}\n\n"
@@ -1993,6 +2053,20 @@ def main():
                 _geschichte_verwerfen(g, "stage7", "kein_volltext")
                 schlange.remove(g)
             continue
+        try:
+            doppel = vorpruefung(g, texte[0]["text"][:600], archiv + dieser_lauf)
+        except BudgetErschoepft as e:
+            log.info(f"S6.5 {e}")
+            break
+        except Exception as e:
+            log.warning(f"S6.5 Vorprüfung nicht möglich: {e}")
+            doppel = None
+        if doppel:
+            log.info(f"S6.5 schon berichtet ({doppel[:45]}): {g['titel'][:60]}")
+            _geschichte_verwerfen(g, "stage6.5", "schon_berichtet")
+            schlange.remove(g)
+            stats["s7_verworfen"] += 1
+            continue
         log.info(f"S7 schreiben (Prio {g['prio']}, {len(texte)} Quellen): {g['titel'][:60]}")
         try:
             ergebnis = artikel_generieren(g, texte, reserve=reserve)
@@ -2015,6 +2089,8 @@ def main():
         hauptklub = str(ergebnis.get("hauptklub", "")).strip()
         if not ergebnis.get("relevant", True):
             grund = "nicht_relevant"
+        elif not ergebnis.get("genug_stoff", True):
+            grund = "zu_wenig_stoff"
         elif woerter < 150:
             grund = f"zu_kurz_{woerter}_woerter"
         elif hauptklub not in KLUB_LOGO:

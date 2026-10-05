@@ -425,13 +425,26 @@ def warteschlange_speichern(liste: list[dict]) -> None:
     WARTESCHLANGE.write_text(json.dumps(liste, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
 
 
+# Stufen, die eine neue Entwicklung abschließen – sie bekommen eine eigene Geschichte
+ENDSTUFEN = {"vollzogen", "geplatzt", "rueckkehr", "entlassung", "trainer_neu"}
+
+
 def einreihen(schlange: list[dict], g: dict) -> bool:
-    """Gleiche Geschichte (Schlüssel + Stufe) schon in der Warteschlange? Dann nur
-    die neuen Quellen anhängen und True zurückgeben."""
+    """Gleiche Geschichte schon in der Warteschlange? Dann nur die neuen Quellen
+    anhängen und True zurückgeben. Gleich heißt: gleicher Schlüssel (Person/Klub +
+    Ereignisart), und nicht die eine abgeschlossen, die andere offen
+    ("Hein verletzt" + "Hein fehlt gegen Estland" ja, "… zurück im Training" nein)."""
     for w in schlange:
-        if g["schluessel"] and w["schluessel"] == g["schluessel"] and w["stufe"] == g["stufe"]:
-            bekannt = {q["url"] for q in w["quellen"]}
-            w["quellen"] += [q for q in g["quellen"] if q["url"] not in bekannt]
-            w["quellen"].sort(key=quellen_rang)
-            return True
+        if not g["schluessel"] or w["schluessel"] != g["schluessel"]:
+            continue
+        if (w["stufe"] in ENDSTUFEN) != (g["stufe"] in ENDSTUFEN):
+            continue
+        if g["klasse"] in ("sonstiges", "kader"):
+            # Vermischtes nur bei derselben Person und ähnlicher Schlagzeile
+            if not g["person"] or fuzz.token_sort_ratio(falten(g["titel"]), falten(w["titel"])) < 50:
+                continue
+        bekannt = {q["url"] for q in w["quellen"]}
+        w["quellen"] += [q for q in g["quellen"] if q["url"] not in bekannt]
+        w["quellen"].sort(key=quellen_rang)
+        return True
     return False
