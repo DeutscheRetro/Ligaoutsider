@@ -138,7 +138,7 @@ MAX_ALTER_TAGE = 3
 MAX_ARTIKEL_PRO_LAUF = 50
 # Läuft die KI über das Claude-Abo, teilt sich die Pipeline das Kontingent mit
 # der eigenen Nutzung – deshalb höchstens so viele Artikel pro Lauf
-ABO_MAX_ARTIKEL_PRO_LAUF = int(os.environ.get("ABO_MAX_ARTIKEL_PRO_LAUF", "8"))
+ABO_MAX_ARTIKEL_PRO_LAUF = int(os.environ.get("ABO_MAX_ARTIKEL_PRO_LAUF", "12"))
 
 # Wo Artikel gespeichert werden
 ARTIKEL_ORDNER = Path("artikel")
@@ -716,7 +716,7 @@ _GOOGLE_FEHLER_IN_FOLGE = 0
 MIN_QUELL_WOERTER = 120          # weniger Stoff ergibt keinen richtigen Artikel
 
 
-def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list[dict]:
+def quellen_laden(g: dict, max_texte: int = 4, genug_woerter: int = 1000) -> list[dict]:
     """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
     genug Stoff für einen vollwertigen Artikel beisammen ist."""
     global _GOOGLE_FEHLER_IN_FOLGE
@@ -745,7 +745,7 @@ def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list
         if grund != "ok":
             log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
             continue
-        texte.append({**q, "text": text[:2800], "link": original})
+        texte.append({**q, "text": text[:5000], "link": original})
     return texte
 
 
@@ -1214,12 +1214,12 @@ def _schema_artikel() -> dict:
     }
 
 
-SCHREIB_MAX_TOKENS = 1600
-SCHREIB_ZEICHEN = 15000          # Prompt mit bis zu drei Quellen, für die Budgetschätzung
+SCHREIB_MAX_TOKENS = 2000
+SCHREIB_ZEICHEN = 25000          # Prompt mit bis zu vier Quellen, für die Budgetschätzung
 
 
 def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict:
-    """Sonnet schreibt aus bis zu zwei Quellen einen Artikel und liefert die Angaben
+    """Opus schreibt aus bis zu vier Quellen einen Artikel und liefert die Angaben
     fürs Archiv (Ereignis, Spieler, Kurzfassung) gleich mit – kein Extra-Aufruf."""
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
@@ -1252,16 +1252,21 @@ Fülle diese Felder:
 - genug_stoff: false, wenn die Quellen zu diesem Thema nicht einmal für eine runde Meldung von 120 Wörtern reichen.
   Dann ebenfalls alle Textfelder leer lassen. Ist genug_stoff true, MUSS der Text mindestens 120 Wörter haben.
 - titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
-- text: eine runde Nachrichtenmeldung wie bei LigaInsider oder kicker, 120 bis 300 Wörter, 3 bis 5 Absätze,
-  Absätze durch eine Leerzeile getrennt. Kein Stichpunkt-Telegramm – jeder Absatz hat mindestens zwei ganze Sätze.
-  Aufbau, immer in dieser Reihenfolge:
-  1. Einstieg: die Nachricht in ein bis zwei vollständigen Sätzen – wer (mit Klub und Rolle, z. B. "Werders
-     Stammtorhüter Karl Hein"), was, wann, für welches Spiel.
-  2. Details: Hintergründe und Zitate aus den Quellen (wörtlich, mit Sprecher). Widersprechen sich Quellen,
-     nenne beide Angaben. Bei einer neuen Entwicklung kurz einordnen ("Wie berichtet, ...").
-  3. Einordnung, soweit die Quellen sie hergeben: Rolle des Spielers, bisherige Saison, Vorgeschichte.
-  4. Abschluss: was das für das nächste Spiel oder die nächsten Wochen bedeutet (z. B. wer ersetzen könnte,
-     wann der nächste Gegner wartet) – nur wenn es in den Quellen steht.
+- text: ein vollständiger Nachrichtenartikel wie bei kicker oder LigaInsider, Absätze durch eine Leerzeile getrennt.
+  Länge nach Stoff: in der Regel 150 bis 300 Wörter in 3 bis 5 Absätzen (mindestens 120 Wörter). Bei viel
+  Stoff eher 300, bei wenig eher 150 – nie mit Füllsätzen strecken. Nutze die relevanten Details, Zahlen,
+  Zitate und Hintergründe aus allen Quellen.
+  Kein Stichpunkt-Telegramm – jeder Absatz hat mindestens zwei ganze Sätze.
+  Aufbau – jeder Artikel hat IMMER Intro, Mittelteil und Schluss, wie ein echter Zeitungsartikel:
+  1. Intro (erster Absatz): die Nachricht in zwei bis drei vollständigen Sätzen – wer (mit Klub und Rolle,
+     z. B. "Werders Stammtorhüter Karl Hein"), was, wann, für welches Spiel. Wer nur das Intro liest, weiß Bescheid.
+  2. Mittelteil (ein bis drei Absätze): Details, Hintergründe und Zitate aus den Quellen (wörtlich, mit Sprecher),
+     danach die Einordnung, soweit die Quellen sie hergeben (Rolle des Spielers, bisherige Saison, Vorgeschichte).
+     Widersprechen sich Quellen, nenne beide Angaben. Bei einer neuen Entwicklung kurz einordnen ("Wie berichtet, ...").
+  3. Schluss (letzter Absatz, mindestens zwei Sätze): rundet die Meldung ab. Am besten ein Ausblick aus den Quellen
+     (nächstes Spiel, Rückkehrtermin, wer ersetzen könnte, nächster Schritt im Transfer). Gibt es keinen, fasse
+     zusammen, was die Nachricht für Spieler und Klub bedeutet – ebenfalls nur mit Fakten aus den Quellen.
+     Der Artikel darf nie mitten in den Details enden.
   Keine Füllsätze, keine Wiederholungen.
 - kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 - hauptklub: der EINE Klub, um den es zentral geht. Erlaubt: {klub_liste}
