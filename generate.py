@@ -716,7 +716,7 @@ def spielplan_kontext(tage: int = 4) -> list[str]:
 
 
 _GOOGLE_FEHLER_IN_FOLGE = 0
-MIN_QUELL_WOERTER = 120          # weniger Stoff ergibt keinen richtigen Artikel
+MIN_QUELL_WOERTER = 80           # weniger Stoff ergibt keine runde Meldung
 
 
 def quellen_laden(g: dict, max_texte: int = 4, genug_woerter: int = 1000) -> list[dict]:
@@ -1148,7 +1148,7 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
 
         words = text.split()
         word_count = len(words)
-        MIN_WORDS = 150
+        MIN_WORDS = 80                  # darunter meist Teaser oder Bezahlschranke
         if word_count < MIN_WORDS:
             # Kurze Transfermeldungen erlauben wenn Key-Indicators vorhanden
             _KEY = ["wechselt", "transfer", "verpflichtet", "verletzt",
@@ -1252,13 +1252,15 @@ Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
   Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
   Dann alle Textfelder leer lassen und Listen leer.
-- genug_stoff: false, wenn die Quellen zu diesem Thema nicht einmal für eine runde Meldung von 120 Wörtern reichen.
-  Dann ebenfalls alle Textfelder leer lassen. Ist genug_stoff true, MUSS der Text mindestens 120 Wörter haben.
+- genug_stoff: false, wenn die Quellen nicht einmal für eine runde Kurzmeldung (Intro, Mittelteil, Schluss) reichen.
+  Dann ebenfalls alle Textfelder leer lassen.
 - titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
 - text: ein vollständiger Nachrichtenartikel wie bei kicker oder LigaInsider, Absätze durch eine Leerzeile getrennt.
-  Länge nach Stoff: in der Regel 150 bis 300 Wörter in 3 bis 5 Absätzen (mindestens 120 Wörter). Bei viel
-  Stoff eher 300, bei wenig eher 150 – nie mit Füllsätzen strecken. Nutze die relevanten Details, Zahlen,
-  Zitate und Hintergründe aus allen Quellen.
+  Länge nach Gewicht und Stoff – das schätzt du selbst ein: im Schnitt 150 bis 300 Wörter in 3 bis 5 Absätzen.
+  Einfache Meldungen (z. B. ein Spieler fällt wegen einer Erkältung aus, eine kurze Personalie) dürfen kürzer
+  sein, 70 bis 150 Wörter in 3 kurzen Absätzen – aber auch dann mit Intro, Mittelteil und Schluss. Große Themen
+  mit viel Stoff (Transfer mit Details, Trainerwechsel, Spielbericht) eher 250 bis 300. Nie mit Füllsätzen
+  strecken. Nutze die relevanten Details, Zahlen, Zitate und Hintergründe aus allen Quellen.
   Kein Stichpunkt-Telegramm – jeder Absatz hat mindestens zwei ganze Sätze.
   Aufbau – jeder Artikel hat IMMER Intro, Mittelteil und Schluss, wie ein echter Zeitungsartikel:
   1. Intro (erster Absatz): die Nachricht in zwei bis drei vollständigen Sätzen – wer (mit Klub und Rolle,
@@ -2088,7 +2090,7 @@ def main():
             grund = "nicht_relevant"
         elif not ergebnis.get("genug_stoff", True):
             grund = "zu_wenig_stoff"
-        elif woerter < 100:
+        elif woerter < 60:
             grund = f"zu_kurz_{woerter}_woerter"
         elif hauptklub not in KLUB_LOGO:
             grund = "kein_bl_hauptklub"
