@@ -527,7 +527,10 @@ def feed_laden() -> list:
     live = []
     try:
         import urllib.request as _ureq
-        r = _ureq.urlopen("https://ligaoutsider.de/feed.json", timeout=8)
+        # Cloudflare blockt den Standard-User-Agent von urllib (403)
+        r = _ureq.urlopen(_ureq.Request("https://ligaoutsider.de/feed.json",
+                                        headers={"User-Agent": "Ligaoutsider-Bot/1.0 (+https://ligaoutsider.de)"}),
+                          timeout=8)
         live = json.loads(r.read().decode("utf-8"))
         print(f"  Live feed.json geladen: {len(live)} Artikel")
     except Exception as e:
