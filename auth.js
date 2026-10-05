@@ -115,6 +115,8 @@
       .lo-auth-meldung{margin-top:12px;font-size:13px;line-height:1.5}
       .lo-auth-meldung.fehler{color:#ff6b6b}
       .lo-auth-meldung.ok{color:#5fd38d}
+      .lo-auth-google{width:100%;margin-top:4px;margin-bottom:6px;padding:10px;border:1px solid var(--border2,#333);border-radius:8px;background:#fff;color:#1f1f1f;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+      .lo-auth-oder{text-align:center;font-size:12px;color:var(--text4,#888);margin:10px 0 0}
       .lo-auth-hinweis{font-size:12px;color:var(--text4,#888);margin-top:10px;line-height:1.5}`;
     document.head.appendChild(s);
   }
@@ -124,6 +126,7 @@
       titel: 'Anmelden',
       felder: [['email', 'E-Mail', 'email', 'email'], ['passwort', 'Passwort', 'password', 'current-password']],
       knopf: 'Anmelden',
+      google: 'anmelden',
       links: [['registrieren', 'Noch kein Konto? Registrieren'], ['vergessen', 'Passwort vergessen?']],
     },
     registrieren: {
@@ -131,6 +134,7 @@
       felder: [['name', 'Name (wird bei Kommentaren angezeigt)', 'text', 'nickname'],
                ['email', 'E-Mail', 'email', 'email'], ['passwort', 'Passwort (mind. 8 Zeichen)', 'password', 'new-password']],
       knopf: 'Registrieren',
+      google: 'registrieren',
       links: [['anmelden', 'Schon ein Konto? Anmelden']],
       hinweis: 'Nach der Registrierung bekommst du eine E-Mail mit einem Bestätigungslink.',
     },
@@ -158,6 +162,8 @@
       <form class="lo-auth-box" novalidate>
         <button type="button" class="lo-auth-zu" aria-label="Schließen">×</button>
         <h2>${esc(a.titel)}</h2>
+        ${a.google ? `<button type="button" class="lo-auth-google"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Mit Google ${a.google}</button>
+        <div class="lo-auth-oder">oder mit E-Mail</div>` : ''}
         ${a.felder.map(([n, l, t, ac]) => `<label for="lo-auth-${n}">${esc(l)}</label>
           <input id="lo-auth-${n}" name="${n}" type="${t}" autocomplete="${ac}" required>`).join('')}
         <button type="submit" class="lo-auth-los">${esc(a.knopf)}</button>
@@ -173,6 +179,11 @@
       if (z) oeffnen(z);
     });
     form.addEventListener('submit', e => { e.preventDefault(); absenden(ansicht, form); });
+    const google = form.querySelector('.lo-auth-google');
+    if (google) google.addEventListener('click', () => {
+      // Google-Anmeldung läuft über Supabase; zurück kommt man mit #access_token
+      location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.href.split('#')[0])}`;
+    });
     if (meldung) zeigeMeldung(meldung[0], meldung[1]);
     const erstes = form.querySelector('input');
     if (erstes) erstes.focus();
