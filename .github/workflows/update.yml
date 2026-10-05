@@ -46,9 +46,11 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    # Nie einen laufenden Lauf abbrechen: er hat womöglich schon für Artikel bezahlt,
+    # und ohne Commit fehlen die Kosten in data/api_kosten.json
     concurrency:
       group: generate-pipeline
-      cancel-in-progress: true
+      cancel-in-progress: false
 
     steps:
       - name: Code holen
@@ -69,6 +71,9 @@ jobs:
 
       - name: Artikel generieren
         env:
+          # Fester Deckel für Claude-Kosten pro Kalendermonat (siehe ki_budget.py).
+          # Die Lauf-Zeiten oben stehen auch in ki_budget.LAUF_STUNDEN_UTC.
+          MONATSBUDGET_USD:     '20'
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
           KICKBASE_EMAIL:       ${{ secrets.KICKBASE_EMAIL }}
           KICKBASE_PASSWORD:    ${{ secrets.KICKBASE_PASSWORD }}

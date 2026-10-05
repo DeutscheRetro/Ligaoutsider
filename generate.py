@@ -1,12 +1,15 @@
 """
 Ligaoutsider – Artikel-Generator
-Ablauf: RSS holen → KI filtert → KI schreibt → HTML speichern → feed.json aktualisieren
+Ablauf: Schlagzeilen sammeln → zu Geschichten bündeln und mit dem Archiv abgleichen
+(ohne KI) → Redaktionskonferenz (ein günstiger KI-Aufruf) → wichtigste Geschichten
+schreiben, solange das Budget reicht → prüfen → HTML speichern → feed.json
 
 Starten mit:  python generate.py
 """
 
 import os
 import json
+import functools
 import hashlib
 import datetime
 import re
@@ -18,6 +21,9 @@ import feedparser
 import anthropic
 from slugify import slugify
 from url_cache import URLCache
+import ki_budget
+import storys
+from ki_budget import BudgetErschoepft
 
 load_dotenv()
 
@@ -546,33 +552,159 @@ def feed_speichern(artikel_liste: list):
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60.0)
 
 
-def _schluesselwoerter(t: str) -> set:
-    stopwords = {"der", "die", "das", "ein", "eine", "und", "mit", "bei", "vor",
-                 "nach", "von", "an", "im", "am", "auf", "für", "zu", "in", "ist",
-                 "aus", "fc", "sv", "rb", "vfb", "sc", "bsc", "tsg"}
-    return {w.lower() for w in re.split(r'\W+', t) if len(w) > 3 and w.lower() not in stopwords}
+HAIKU  = "claude-haiku-4-5-20251001"
+SONNET = "claude-sonnet-4-6"
 
 
-def _artikel_text_laden(artikel_id_str: str) -> str:
-    """Lädt Plaintext eines bestehenden Artikels aus dem HTML (max 800 Zeichen)."""
-    pfad = artikel_datei(artikel_id_str)
-    if not pfad.exists():
-        return ""
-    try:
-        html = pfad.read_text(encoding="utf-8")
-        # Nur artikel-text div
-        m = re.search(r'<div class="artikel-text">(.*?)</div>', html, re.DOTALL)
-        block = m.group(1) if m else html
-        text = re.sub(r'<[^>]+>', ' ', block)
-        text = re.sub(r'\s+', ' ', text).strip()
-        return text[:800]
-    except Exception:
-        return ""
+def _text_aus(antwort) -> str:
+    return next((b.text for b in antwort.content if getattr(b, "type", "") == "text"), "").strip()
 
 
-def _eigennamen(t: str) -> set:
-    """Extrahiert großgeschriebene Wörter (Spieler-/Clubnamen) aus einem Titel."""
-    return {w for w in re.split(r'\W+', t) if len(w) > 3 and w[0].isupper()}
+def _qa_reserve(anzahl: int) -> float:
+    """Geld, das für Qualitätsprüfung und Doppel-Gegenprobe am Laufende frei bleiben muss."""
+    return ki_budget.schaetzung(SONNET, 200 + 80 * anzahl, 1500 + 2600 * anzahl) + 0.002
+
+
+# Randthemen, die wir ohne Spielerbezug nicht schreiben (Entscheidung 10/2026: Fokus auf
+# das, was Fans und Manager brauchen – Personal, Transfers, Trainer, Spiele)
+RANDTHEMEN = re.compile(
+    r"ticket|trikot|fan-?(?:shop|aktion|artikel|club)|sponsor|merch|gewinnspiel|quiz|podcast|tippspiel"
+    r"|kalender|jubiläum|mitglieder(?:versammlung|zahl)|stadion(?:umbau|ausbau|erweiterung|name)"
+    r"|catering|bratwurst|maskottchen|charity|benefiz|weihnacht|hauptversammlung|bilanz|umsatz"
+)
+
+
+def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> None:
+    """Stage 6: Haiku bewertet die neuen Geschichten – ein Aufruf je 40 Stück.
+
+    Setzt g["prio"] (0–3) und g["status"] (n = neu, u = Update, d = doppelt).
+    Ohne Antwort bleibt prio None; die Geschichte wird im nächsten Lauf bewertet."""
+    heute = datetime.date.today().strftime("%d.%m.%Y")
+    unsere = "\n".join(f"- {t[:100]}" for t in unsere_titel[:40]) or "- (keine)"
+    for start in range(0, len(geschichten), 80):
+        teil = geschichten[start:start + 80]
+        zeilen = []
+        for i, g in enumerate(teil):
+            n = len(g["quellen"])
+            zeilen.append(f"[{i}] {g['titel'][:120]}" + (f" ({n} Quellen)" if n > 1 else ""))
+            for q in g["quellen"][1:2]:
+                if storys.falten(q["titel"]) != storys.falten(g["titel"]):
+                    zeilen.append(f"  auch: {q['titel'][:90]}")
+            for a in g.get("archiv", [])[:2]:
+                zeilen.append(f"  Archiv {a['datum']}: {a['titel'][:90]}")
+        prompt = (
+            f"Du bist Nachrichtenchef von Ligaoutsider.de, einer Seite für Bundesliga-Fans und "
+            f"Kickbase-/Comunio-Manager. Heute ist der {heute}.\n\n"
+            "Bewerte jede Geschichte mit einer Priorität:\n"
+            "3 = Muss: Verletzung, Ausfall, Sperre, Rückkehr ins Training, Startelf oder Aufstellung, "
+            "Transfer oder Vertrag mit konkretem Stand, Trainerwechsel, Ergebnis eines Bundesligaspiels\n"
+            "2 = Gut: Aussagen von Trainern, Spielern oder Verantwortlichen zum aktuellen Geschehen "
+            "(Personal, Form, nächstes Spiel), konkrete Transfergerüchte\n"
+            "1 = Randthema: Tickets, Fans, Sponsoren, Stadion, Trikots, Nachwuchs ohne Profibezug, Ehrungen, Kurioses\n"
+            "0 = Nicht für uns: kein Bundesligaklub im Mittelpunkt, 2. Liga oder tiefer, Frauen, Jugend, "
+            "Nationalmannschaft ohne Klubbezug, Rückblick oder Jubiläum, Ranking, Liste, Statistik- oder "
+            "Kaderseite, Werbung, Quiz, Liveticker\n\n"
+            "und einem Status:\n"
+            "n = neu\n"
+            "u = Update: echte neue Entwicklung zu einer unserer Meldungen (Gerücht → Angebot → offiziell, "
+            "verletzt → fraglich → fällt aus → zurück im Training, neues Spiel)\n"
+            "d = doppelt: dasselbe Ereignis wie eine unserer Meldungen (Archiv oder UNSERE LETZTEN MELDUNGEN) "
+            "oder wie eine frühere Geschichte in dieser Liste, ohne neue Entwicklung\n\n"
+            f"UNSERE LETZTEN MELDUNGEN (24 Stunden):\n{unsere}\n\n"
+            "GESCHICHTEN (darunter jeweils weitere Schlagzeilen und passende Archivmeldungen):\n"
+            + "\n".join(zeilen)
+            + "\n\nAntworte nur mit einer Zeile pro Geschichte: Nummer Priorität Status, z. B. \"0 3 n\"."
+        )
+        antwort = ki_budget.aufruf("konferenz", model=HAIKU, max_tokens=10 * len(teil) + 30,
+                                   messages=[{"role": "user", "content": prompt}])
+        for m in re.finditer(r"^\s*\[?(\d+)\]?\s*[:.\-]?\s*([0-3])\s*[,;]?\s*([nud])\b", _text_aus(antwort), re.M):
+            i = int(m.group(1))
+            if 0 <= i < len(teil):
+                teil[i]["prio"] = int(m.group(2))
+                teil[i]["status"] = m.group(3)
+
+
+def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str) -> bool:
+    """Gegenprobe für ein einzelnes Paar (Haiku, wenige Hundert Tokens)."""
+    antwort = ki_budget.aufruf("dublette", model=HAIKU, max_tokens=5, messages=[{"role": "user", "content": (
+        "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
+        "Andere Person oder anderes Ereignis = NEIN.\n\n"
+        "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
+        "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
+        f"A: {a_titel}\nKern A: {a_kern[:600]}\n\nB: {b_titel}\nKern B: {(b_kern or '(nur Titel)')[:600]}\n\n"
+        "Antworte nur JA oder NEIN."
+    )}])
+    return "JA" in _text_aus(antwort).upper()
+
+
+def quellen_laden(g: dict, max_texte: int = 2) -> list[dict]:
+    """Volltexte der besten Quellen einer Geschichte (höchstens vier Abrufe)."""
+    texte = []
+    for q in g["quellen"][:4]:
+        if len(texte) >= max_texte:
+            break
+        # Google-Links auflösen: verlinkt wird das Original, LigaInsider nie
+        original = q["url"]
+        if "news.google.com" in original:
+            original = _decode_google_news_url(original) or original
+        if "ligainsider" in original.lower():
+            continue
+        text, grund = fetch_fulltext(q["url"])
+        if grund != "ok":
+            log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
+            continue
+        texte.append({**q, "text": text[:2800], "link": original})
+    return texte
+
+
+def _als_archiv_eintrag(ergebnis: dict, aid: str) -> dict:
+    """Fertigen Artikel so aufbereiten wie storys.archiv_vorbereiten() das Archiv."""
+    a = storys.analysiere(ergebnis["titel"])
+    stufe = ergebnis.get("ereignis") if ergebnis.get("ereignis") in storys.STUFEN_KLASSE else a["stufe"]
+    spieler = [s for s in (ergebnis.get("spieler") or []) if s] or a["spieler"]
+    hauptklub = KLUB_FILTERNAME.get(ergebnis.get("hauptklub", ""), ergebnis.get("hauptklub", ""))
+    klubs = set(a["klubs"]) | ({hauptklub} if hauptklub in VEREIN_FILTER.values() else set())
+    person = a["person"] or (spieler[0] if spieler else "")
+    return {
+        "id": aid, "titel": ergebnis["titel"], "zeit": datetime.datetime.now(),
+        "person": storys.falten(person), "summary": ergebnis.get("kurzfassung", ""),
+        "stufe": stufe, "klasse": storys.STUFEN_KLASSE[stufe],
+        "spieler": {storys.falten(s) for s in spieler}, "klubs": klubs,
+        # für archiv_abgleich() als "Geschichte" lesbar:
+        "klub": a["klub"] or (hauptklub if hauptklub in VEREIN_FILTER.values() else ""),
+        "person_name": person, "spieler_namen": spieler,
+    }
+
+
+def nachpruefung(eintrag: dict, archiv: list[dict]) -> str | None:
+    """Stage 7.6: fertigen Artikel gegen Archiv und Artikel dieses Laufs prüfen.
+    Gibt den Titel der Doppelmeldung zurück oder None."""
+    g = {"titel": eintrag["titel"], "person": eintrag["person_name"], "spieler": eintrag["spieler_namen"],
+         "klub": eintrag["klub"], "klubs": list(eintrag["klubs"]), "stufe": eintrag["stufe"],
+         "klasse": eintrag["klasse"]}
+    status, treffer = storys.archiv_abgleich(g, archiv)
+    if status == "doppelt":
+        return treffer[0]["titel"]
+    # Unklar: gleiche Ereignisart und Stufe – dann vergleicht Haiku die Kurzfassungen
+    fenster = datetime.timedelta(days=storys.FENSTER_TAGE[g["klasse"]])
+    for e in treffer:
+        if (e["klasse"] == g["klasse"] != "sonstiges" and e["stufe"] == g["stufe"]
+                and datetime.datetime.now() - e["zeit"] <= fenster):
+            try:
+                if gleiches_ereignis(g["titel"], eintrag["summary"], e["titel"], e.get("summary", "")):
+                    return e["titel"]
+            except Exception as ex:
+                log.warning(f"S7.6 Gegenprobe nicht möglich: {ex}")
+            break
+    return None
+
+
+def _geschichte_verwerfen(g: dict, stufe: str, grund: str, ausser: str = "") -> None:
+    """Alle Quellen einer Geschichte als erledigt markieren (kommen nicht wieder)."""
+    for q in g["quellen"]:
+        if q.get("aid") and q["aid"] != ausser:
+            _log_skip(q["aid"], q["titel"], stufe, grund)
+            (ARTIKEL_ORDNER / f"{q['aid']}.skip").touch()
 
 
 # ─── Published Stories (persistenter State) ───────────────────────────────────
@@ -622,7 +754,7 @@ def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
 
         old_club = (entry.get("main_club") or "").lower().strip()
         old_stage = entry.get("event_stage", "sonstiges")
-        old_players = {p.lower() for p in entry.get("main_players", [])}
+        old_players = {p.lower() for p in storys._liste(entry.get("main_players"))}
 
         # Gleicher Verein?
         if new_club and old_club and new_club != old_club:
@@ -650,86 +782,6 @@ def speichere_published_stories(stories: list[dict]):
     )
 
 
-# ─── Content Fingerprint (Stage 4) ────────────────────────────────────────────
-
-def fingerprint_generieren(titel: str, summary: str) -> dict | None:
-    """Haiku extrahiert strukturierten Story-Fingerprint als JSON.
-    Enthält jetzt auch main_club, event_stage, summary für news_archive."""
-    try:
-        antwort = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=500,
-            messages=[{"role": "user", "content": (
-                f'Extrahiere einen Story-Fingerprint als reines JSON (kein Markdown):\n'
-                f'{{"event_type":"transfer|verletzung|trainerwechsel|spielergebnis|testspiel|geruecht|vereinsnews|analyse|sonstiges",'
-                f'"main_club":"der primäre Bundesliga-Verein des Artikels (vollständiger Name)",'
-                f'"event_stage":"geruecht|angebot|einigung|vollzogen|geplatzt|verletzung|fraglich|ausfall|reha|rueckkehr|kader|vertrag|trainer_kandidat|trainer_neu|entlassung|spielbericht|sonstiges",'
-                f'"main_teams":["max 3 Teams"],'
-                f'"main_players":["max 3 Spieler"],'
-                f'"summary":"2-3 Sätze faktische Zusammenfassung (max 60 Wörter)",'
-                f'"one_sentence_summary":"1 Satz Kern-Ereignis"}}\n\n'
-                f'Regeln:\n'
-                f'- event_stage=geruecht: nur Interesse/Spekulationen\n'
-                f'- event_stage=angebot: konkretes Angebot liegt vor\n'
-                f'- event_stage=einigung: Einigung erzielt, Transfer noch nicht vollzogen\n'
-                f'- event_stage=vollzogen: Transfer/Vertrag offiziell bestätigt/unterschrieben\n'
-                f'- event_stage=geplatzt: Absage, Dementi oder gescheiterter Deal\n'
-                f'- Verletzungen nach Stand: verletzung (neu passiert/Diagnose), fraglich (Einsatz offen), '
-                f'ausfall (fehlt sicher im nächsten Spiel), reha (Aufbautraining/individuell), rueckkehr (zurück im Mannschaftstraining oder Kader)\n'
-                f'- Trainer: trainer_kandidat (Suche/Kandidaten), trainer_neu (offiziell vorgestellt), entlassung\n\n'
-                f'Titel: {titel}\nZusammenfassung: {summary[:800]}'
-            )}]
-        )
-        roh = antwort.content[0].text.strip()
-        m = re.search(r'\{.*\}', roh, re.DOTALL)
-        if m:
-            return json.loads(m.group())
-    except Exception:
-        pass
-    return None
-
-
-def _fingerprint_similarity(fp1: dict, fp2: dict) -> float:
-    """Jaccard-Similarity zweier Fingerprints: Teams (60%) + Spieler (40%)."""
-    t1 = {t.lower() for t in fp1.get("main_teams", [])}
-    t2 = {t.lower() for t in fp2.get("main_teams", [])}
-    p1 = {p.lower() for p in fp1.get("main_players", [])}
-    p2 = {p.lower() for p in fp2.get("main_players", [])}
-    team_score = len(t1 & t2) / len(t1 | t2) if (t1 | t2) else 0.0
-    player_score = len(p1 & p2) / len(p1 | p2) if (p1 | p2) else 0.0
-    return round(team_score * 0.6 + player_score * 0.4, 3)
-
-
-def _is_update_artikel(title: str, text: str) -> bool:
-    """Erkennt ob Artikel eine offizielle Bestätigung/Update ist (kein Gerücht)."""
-    combined = (title + " " + text).lower()
-    update_signals = [
-        "offiziell", "bestätigt", "unterschrieben", "vollzogen",
-        "wechselt zu", "ablöse", "fix", "perfekt", "beschlossene sache",
-        "offiziell bestätigt", "transfer ist perfekt",
-    ]
-    return any(signal in combined for signal in update_signals)
-
-
-def _fingerprints_aehnlich(fp1: dict, fp2: dict) -> bool:
-    """True wenn zwei Fingerprints dieselbe Story beschreiben."""
-    from rapidfuzz import fuzz
-    # Jaccard-Similarity ≥ 0.85 auf Teams + Spieler
-    if _fingerprint_similarity(fp1, fp2) >= 0.85:
-        return True
-    # Gleicher Event-Typ + mind. 2 gemeinsame Entitäten (Fallback)
-    if fp1.get("event_type") == fp2.get("event_type"):
-        e1 = set(fp1.get("main_teams", []) + fp1.get("main_players", []))
-        e2 = set(fp2.get("main_teams", []) + fp2.get("main_players", []))
-        if len(e1 & e2) >= 2:
-            return True
-    # Fuzzy auf one_sentence_summary
-    s1 = fp1.get("one_sentence_summary", "")
-    s2 = fp2.get("one_sentence_summary", "")
-    if s1 and s2 and fuzz.ratio(s1, s2) >= 85:
-        return True
-    return False
-
 
 def _ist_innerhalb_tage(published_at_str: str, days: int = 14) -> bool:
     """True wenn published_at innerhalb der letzten N Tage."""
@@ -740,131 +792,6 @@ def _ist_innerhalb_tage(published_at_str: str, days: int = 14) -> bool:
         return (datetime.datetime.now() - ts).days <= days
     except Exception:
         return False
-
-
-def schon_berichtet(titel: str, kern: str, vorhandene: list[str], zusammenfassungen: dict | None = None) -> str | None:
-    """Stage 6.5: Haiku prüft vor dem Schreiben, ob dasselbe Ereignis schon berichtet
-    wurde (letzte Tage oder in diesem Lauf). Gibt den passenden Titel zurück oder None.
-    Fängt, was Fingerprints übersehen: dieselbe Nachricht aus anderer Quelle oder als
-    Einordnung/Kommentar ("Warum X trotz Y der richtige Trainer bleibt")."""
-    if not vorhandene:
-        return None
-    liste = "\n".join(f"[{i}] {t}" for i, t in enumerate(vorhandene[-250:]))
-    try:
-        antwort = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=20,
-            messages=[{"role": "user", "content": (
-                "Ist die NEUE Meldung dieselbe Nachricht wie eine der VORHANDENEN?\n"
-                "Dieselbe Nachricht heißt: dieselben Personen/derselbe Verein und dasselbe Ereignis "
-                "(z. B. dieselbe Vertragsverlängerung, derselbe Ausfall, dieselbe Rückkehr, dasselbe Spiel), "
-                "auch wenn Quelle, Formulierung, Zahlen oder Blickwinkel (Analyse, Kommentar, Reaktion) anders sind.\n"
-                "KEINE Doppelmeldung ist nur eine echte neue Entwicklung: z. B. Gerücht → offiziell, "
-                "fraglich → fällt definitiv aus, Verletzung → Rückkehr ins Training, oder ein anderes Spiel.\n\n"
-                f"NEUE Meldung: {titel}\nKern: {kern[:600]}\n\n"
-                f"VORHANDENE:\n{liste}\n\n"
-                "Antworte nur mit der Nummer der passenden vorhandenen Meldung oder mit NEIN."
-            )}],
-        )
-        roh = antwort.content[0].text.strip()
-        m = re.match(r"\[?(\d+)\]?", roh)
-        if not (m and int(m.group(1)) < len(vorhandene[-250:])):
-            return None
-        kandidat = vorhandene[-250:][int(m.group(1))]
-        # Gegenprobe nur für dieses Paar: die Listenauswahl greift gelegentlich daneben
-        # (zwei verschiedene HSV-Meldungen am selben Tag)
-        pruef = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=5,
-            messages=[{"role": "user", "content": (
-                "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
-                "Andere Person oder anderes Ereignis = NEIN.\n\n"
-                "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
-                "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
-                f"A: {titel}\nKern A: {kern[:600]}\n\nB: {kandidat}\n"
-                f"Kern B: {((zusammenfassungen or {}).get(kandidat) or '(nur Titel)')[:600]}\n\nAntworte nur JA oder NEIN."
-            )}],
-        )
-        return kandidat if "JA" in pruef.content[0].text.upper() else None
-    except Exception as e:
-        log.warning(f"S6.5 Duplikatprüfung fehlgeschlagen: {e}")
-    return None
-
-
-def ist_duplikat(neuer_titel: str, beschreibung: str, bestehende: list) -> bool:
-    """Prüft ob Meldung inhaltlich schon vorhanden oder echte neue Entwicklung.
-    bestehende: Liste von Artikel-Dicts (mit 'id' und 'titel').
-    """
-    if not bestehende:
-        return False
-
-    bestehende_titel = [a["titel"] if isinstance(a, dict) else a for a in bestehende]
-
-    neu_woerter = _schluesselwoerter(neuer_titel + " " + beschreibung)
-    neu_namen = _eigennamen(neuer_titel)
-
-    # Ähnliche Artikel finden
-    aehnliche = []
-    for a in bestehende[-100:]:
-        titel = a["titel"] if isinstance(a, dict) else a
-        alt_woerter = _schluesselwoerter(titel)
-        alt_namen = _eigennamen(titel)
-
-        if neu_woerter and alt_woerter:
-            overlap = len(neu_woerter & alt_woerter) / min(len(neu_woerter), len(alt_woerter))
-            if overlap >= 0.6:
-                return True  # Sehr hoher Keyword-Overlap → sofort Duplikat
-
-        # Eigennamen-Check: ≥2 gleiche Eigennamen = sehr wahrscheinlich selbes Thema → KI-Check
-        gemeinsame_namen = neu_namen & alt_namen
-        if len(gemeinsame_namen) >= 2:
-            aehnliche.append(a)
-            continue
-
-        if neu_woerter and alt_woerter and overlap >= 0.4:
-            aehnliche.append(a)
-
-    # KI-Check mit Volltexten ähnlicher Artikel
-    titel_liste = "\n".join(f"- {t}" for t in bestehende_titel[-100:])
-    beschr_kurz = beschreibung[:400] if beschreibung else "(keine Beschreibung)"
-
-    verwandte_texte = ""
-    for a in aehnliche[:3]:  # max 3 ähnliche Artikel vollständig laden
-        if isinstance(a, dict) and "id" in a:
-            txt = _artikel_text_laden(a["id"])
-            if txt:
-                verwandte_texte += f"\n---\nTitel: {a['titel']}\nText: {txt}\n"
-
-    verwandte_section = (
-        f"\nBESONDERS ÄHNLICHE BEREITS VERÖFFENTLICHTE ARTIKEL (Volltext):\n{verwandte_texte}"
-        if verwandte_texte else ""
-    )
-
-    antwort = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=10,
-        messages=[{
-            "role": "user",
-            "content": (
-                f"Du prüfst ob eine neue Fußball-Meldung ein Duplikat ist oder eine echte neue Entwicklung.\n\n"
-                f"NEUE MELDUNG:\n"
-                f"Titel: {neuer_titel}\n"
-                f"Inhalt: {beschr_kurz}\n\n"
-                f"BEREITS VERÖFFENTLICHTE ARTIKEL (Titel):\n{titel_liste}"
-                f"{verwandte_section}\n\n"
-                f"Antworte JA (Duplikat) wenn:\n"
-                f"- Derselbe Spieler + derselbe Zielclub bereits vorhanden – EGAL ob andere Quelle, andere Ablösesumme oder andere Formulierung\n"
-                f"- Derselbe Spieler + dieselbe Verletzung/Sperre bereits vorhanden\n"
-                f"- Gleicher Sachverhalt aus anderer Perspektive (z.B. 'Rekordabgang für Club X' vs 'Spieler wechselt zu Club Y')\n\n"
-                f"Antworte NEIN nur wenn:\n"
-                f"- Komplett neue Entwicklung: Einigung nach Gerücht, Dementi, Platzen des Deals, medizinischer Check bestanden\n"
-                f"- Komplett andere Personen oder Vereine\n\n"
-                f"Im Zweifel: JA.\n"
-                f"Antworte nur mit JA oder NEIN."
-            )
-        }]
-    )
-    return "JA" in antwort.content[0].text.upper()
 
 
 _BL_SPIELER_CACHE: list[str] = []
@@ -936,46 +863,19 @@ def keyword_pre_filter(titel: str, beschreibung: str) -> bool:
     combined = (titel + " " + beschreibung).lower()
     if any(_count_key(k.lower(), combined) for k in BL1_KLUBS):
         return True
+    # Spielerdatenbank mit Klubbezug: findet auch kurze Namen (Agu, Tah, Kim)
+    a = storys.analysiere(titel, beschreibung)
+    if a["spieler"] or a["klubs"]:
+        return True
     spieler = _lade_bl_spieler()
     return any(_count_key(s.lower(), combined) for s in spieler if len(s) > 4)
-
-
-def ist_relevant(titel: str, volltext: str) -> bool:
-    """Stage 5.5: Haiku beurteilt Relevanz anhand des ECHTEN Artikeltexts (nicht RSS-Snippet).
-    Volltext wird auf 1500 Zeichen gekürzt — enthält Kern-Infos."""
-    klubs = ", ".join(BL1_KLUBS)
-    antwort = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=10,
-        messages=[{
-            "role": "user",
-            "content": (
-                f"Ist das eine relevante Fußball-News über einen der folgenden Klubs oder deren Spieler?\n"
-                f"Klubs: {klubs}.\n"
-                f"Antworte NUR mit JA wenn:\n"
-                f"- Es direkt um mindestens einen dieser Klubs oder einen ihrer Spieler geht (Transfer, Spiel, Trainer, Verletzung, Vertrag, Testspiel, "
-                f"Training, Pressekonferenz, Aufstellung, Startelf-Chancen, Rückkehr nach Verletzung, Aussagen von Spielern oder Trainern)\n"
-                f"- Es eine echte redaktionelle News ist (kein Social-Media-Post, kein Werbeartikel, kein Quiz, keine Trauerbekundung)\n"
-                f"- Es KEIN WM-, EM-, Nationalmannschafts-, Frauenfußball- oder 2.-Bundesliga-Thema ist\n"
-                f"- Es KEINE reine Champions-League/Europa-League-News ohne Bezug zu diesen Klubs ist\n"
-                f"- Der Fokus auf dem Klub/Spieler liegt, nicht nur eine Randerwähnung\n"
-                f"- Es KEIN Ranking, keine Liste und keine Statistik-Übersicht ist, in der einer dieser Klubs lediglich als ein Eintrag unter vielen auftaucht (z. B. Markenwert-Rankings, Follower-Zahlen, Europa-Tabellen). Geht es zentral um einen Klub außerhalb der Liste: NEIN.\n"
-                f"- Es um ein AKTUELLES Geschehen geht. Historische Rückblicke auf vergangene Spielzeiten, Jubiläums- und Archivstücke sind NEIN, auch wenn der Klub stimmt. Nenne der Artikel eine zurückliegende Saison als Schauplatz (etwa 2009/10), ist das ein klares NEIN.\n"
-                f"- Wenn ein Spieler eines dieser Klubs im Ausland spielt (Leihe, Auslandsklub): NUR JA wenn Transfer zurück, Vertragsende, oder direkter Bezug zu diesen Klubs. Ein Tor in der Ligue 1/Premier League/Serie A ist KEIN Grund für JA.\n\n"
-                f"Titel: {titel}\nArtikeltext: {volltext[:1500]}\n\n"
-                f"Geht es um einen Spieler oder Trainer eines dieser Klubs und das aktuelle Geschehen dort, ist die Antwort JA. "
-                f"Im Zweifel JA.\n"
-                f"Antworte nur mit JA oder NEIN."
-            )
-        }]
-    )
-    return "JA" in antwort.content[0].text.upper()
 
 
 _GN_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
           "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
 
 
+@functools.lru_cache(maxsize=2048)   # wird für Volltext und Quellen-Link gebraucht
 def _decode_google_news_url(google_url: str) -> str | None:
     """Loest einen Google-News-Link zur echten Artikel-URL auf.
 
@@ -1089,7 +989,12 @@ def _ligainsider_eintraege() -> list[dict]:
                 dt = datetime.datetime(int(mm.group(3)), int(mm.group(2)), int(mm.group(1)))
             else:
                 continue
-            eintraege.append({"link": url, "title": titel, "summary": titel,
+            # Vereinsname aus der Adresse ("sv-werder-bremen"), damit kurze Namen
+            # wie "Hein" oder "Agu" dem richtigen Klub zugeordnet werden
+            verein = slug.replace("-", " ")
+            for a, b in (("ae", "ä"), ("oe", "ö"), ("ue", "ü")):
+                verein = verein.replace(a, b)
+            eintraege.append({"link": url, "title": titel, "summary": f"{titel} ({verein})",
                               "published_parsed": dt.timetuple()})
         time.sleep(1)
     log.info(f"LigaInsider (Themenfinder): {len(eintraege)} Meldungen von {len(teams)} Vereinsseiten")
@@ -1177,76 +1082,113 @@ def quellartikel_laden(url: str) -> str:
     return text or ""
 
 
-def artikel_generieren(titel: str, volltext: str, quelle_name: str, quelle_url: str) -> dict:
-    """Lässt Sonnet Artikel schreiben. Bekommt validierten Volltext (Stage 5 Survivor)."""
+KATEGORIEN = ["transfer", "verletzung", "aufstellung", "interview", "analyse", "news"]
+
+
+def _schema_artikel() -> dict:
+    """Feste Antwortstruktur: das Modell kann kein kaputtes JSON mehr liefern
+    (früher scheiterte fast jeder dritte Artikel an Anführungszeichen in Zitaten)."""
+    klubs = list(KLUB_LOGO)
+    return {
+        "type": "object",
+        "properties": {
+            "relevant": {"type": "boolean"},
+            "titel": {"type": "string"},
+            "text": {"type": "string"},
+            "kategorie": {"type": "string", "enum": KATEGORIEN},
+            "hauptklub": {"type": "string", "enum": klubs + ["keiner"]},
+            "ereignis": {"type": "string", "enum": storys.STUFEN},
+            "spieler": {"type": "array", "items": {"type": "string"}},
+            "kurzfassung": {"type": "string"},
+            "spielerstatus": {"type": "array", "items": {
+                "type": "object",
+                "properties": {
+                    "spieler": {"type": "string"},
+                    "klub": {"type": "string", "enum": klubs},
+                    "status": {"type": "string", "enum": ["faellt_aus", "fraglich", "spielt", "startelf"]},
+                    "grund": {"type": "string"},
+                },
+                "required": ["spieler", "klub", "status", "grund"],
+                "additionalProperties": False,
+            }},
+            "formation": {"type": "string"},
+        },
+        "required": ["relevant", "titel", "text", "kategorie", "hauptklub", "ereignis",
+                     "spieler", "kurzfassung", "spielerstatus", "formation"],
+        "additionalProperties": False,
+    }
+
+
+SCHREIB_MAX_TOKENS = 1600
+SCHREIB_ZEICHEN = 12000          # Prompt mit zwei Quellen, für die Budgetschätzung
+
+
+def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict:
+    """Sonnet schreibt aus bis zu zwei Quellen einen Artikel und liefert die Angaben
+    fürs Archiv (Ereignis, Spieler, Kurzfassung) gleich mit – kein Extra-Aufruf."""
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
+    quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
+                          for i, t in enumerate(texte))
+    frueher = ""
+    if g.get("archiv"):
+        frueher = ("\n\nUNSERE FRÜHEREN BERICHTE ZUM THEMA (nur zur Einordnung, nicht nacherzählen):\n"
+                   + "\n".join(f"- {a['datum']}: {a['titel']}" + (f" ({a['summary'][:220]})" if a.get("summary") else "")
+                               for a in g["archiv"][:3]))
     prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret.
+Heute ist der {datetime.date.today().strftime('%d.%m.%Y')}.
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
-- Nur Fakten, Namen, Zahlen aus dem QUELLTEXT verwenden.
-- Steht eine Information nicht im Quelltext → einfach weglassen. Niemals Sätze wie "laut Quelle nicht spezifiziert",
+- Nur Fakten, Namen, Zahlen aus den QUELLEN verwenden.
+- Steht eine Information nicht in den Quellen → einfach weglassen. Niemals Sätze wie "laut Quelle nicht spezifiziert",
   "Details nennt die Quelle nicht" oder Verweise auf Bezahlschranken/Pressekonferenzen ohne Inhalt schreiben.
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
 - VERBOTEN: „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex", alle Plattitüden.
 - Spielernamen korrekt inkl. Akzente (João, Raphaël, Øyvind).
 - Keine Gedankenstriche als Satzzeichen. Klare Sätze, max. 25 Wörter. Keine Ausrufezeichen.
+- Zitate in deutschen Anführungszeichen „…“.
 
-QUELLTEXT (vollständig):
-{volltext}
+QUELLEN ({len(texte)}):
+{quellen}{frueher}
 
-Originaltitel: {titel}
-Quelle: {quelle_name} ({quelle_url})
+Fülle diese Felder:
+- relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
+  Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
+  Dann alle Textfelder leer lassen und Listen leer.
+- titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
+- text: ein vollwertiger Nachrichtenartikel, 4 bis 6 Absätze, 200 bis 350 Wörter, Absätze durch eine Leerzeile getrennt.
+  Führe alle Quellen zu EINEM Artikel zusammen: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
+  Hintergründe, Vorgeschichte und Ausblick, soweit sie in den Quellen stehen. Widersprechen sich die Quellen,
+  nenne beide Angaben. Ist es eine neue Entwicklung zu einem früheren Bericht, ordne sie kurz ein ("Wie berichtet, ...").
+  Aufbau: Kernnachricht im ersten Absatz, dann Details, Zitate, Hintergrund, Ausblick.
+  Keine Füllsätze, keine Wiederholungen – Länge nur durch Inhalt aus den Quellen.
+- kategorie: transfer | verletzung | aufstellung | interview | analyse | news
+- hauptklub: der EINE Klub, um den es zentral geht. Erlaubt: {klub_liste}
+  Der Klub, dessen Perspektive der Artikel einnimmt – nicht der Gegner.
+  "Schalke gewinnt bei Union" → Schalke. "Bayern verpflichtet Brown von Frankfurt" → Bayern.
+  Wird ein Klub nur als Gegner, in einer Rangliste oder Aufzählung erwähnt, ist er NICHT der Hauptklub.
+  Geht es zentral um einen Klub außerhalb der Liste oder um keinen Klub: "keiner".
+- ereignis: Stand der Nachricht. Transfer: geruecht (Interesse, Spekulation) | angebot | einigung |
+  vollzogen (offiziell/unterschrieben) | geplatzt. Verletzung: verletzung (neu/Diagnose) | fraglich | ausfall
+  (fehlt sicher im nächsten Spiel, auch Sperre) | reha | rueckkehr (zurück im Mannschaftstraining/Kader).
+  Trainer: trainer_kandidat | trainer_neu | entlassung. Sonst: vertrag | spielbericht | kader (Startelf,
+  Aufstellung, Personal) | sonstiges.
+- spieler: die bis zu drei Bundesliga-Spieler oder Trainer, um die es zentral geht (voller Name). Nebenfiguren nicht.
+- kurzfassung: zwei Sätze mit dem Kern der Nachricht (für unser Archiv).
+- spielerstatus: nur wenn die Quellen ausdrücklich sagen, ob ein Bundesliga-Spieler am nächsten BUNDESLIGA-Spiel
+  teilnehmen kann (Europapokal, DFB-Pokal und Länderspiele zählen nicht). Pro Spieler: spieler (Nachname wie im
+  Text), klub, status (faellt_aus | fraglich | spielt = wieder fit | startelf = Startelfeinsatz angekündigt),
+  grund (max. 8 Wörter). Keine Transfers, keine Gerüchte, keine Vermutungen. Sonst leere Liste.
+- formation: nur wenn die Quellen die Grundordnung für das nächste Spiel des Hauptklubs mit Zahlen nennen
+  (z. B. "4-2-3-1"). Sonst ""."""
 
-Erstelle:
-1. Präzisen Titel im Kicker-Stil (max. 80 Zeichen)
-2. Einen vollwertigen Nachrichtenartikel: 4 bis 6 Absätze, 200 bis 350 Wörter.
-   Schöpfe den Quelltext vollständig aus: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
-   Hintergründe, Vorgeschichte, Einordnung und Ausblick, soweit sie im Quelltext stehen.
-   Aufbau: Kernnachricht im ersten Absatz, dann Details, Zitate, Hintergrund, Ausblick.
-   Keine Füllsätze, keine Wiederholungen – Länge nur durch Inhalt aus dem Quelltext.
-3. Kategorie: transfer | verletzung | aufstellung | interview | analyse | news
-4. Hauptklub: Der EINE Klub, um den es im Artikel zentral geht.
-   Erlaubt ist ausschließlich einer dieser Werte:
-   {klub_liste}
-   Regeln dafür:
-   - Der Klub, dessen Perspektive der Artikel einnimmt – nicht der Gegner.
-     "Schalke gewinnt bei Union" → Schalke. "Bayern verpflichtet Brown von Frankfurt" → Bayern.
-   - Wird ein Klub nur als Gegner, in einer Rangliste, Tabelle oder Aufzählung
-     erwähnt, ist er NICHT der Hauptklub.
-   - Geht es zentral um einen Klub außerhalb dieser Liste (z. B. Real Madrid,
-     Nationalmannschaft, 2. Liga) oder um keinen Klub: "keiner".
-5. Spielerstatus: Nur wenn der Quelltext ausdrücklich sagt, ob ein Bundesliga-Spieler
-   am nächsten BUNDESLIGA-Spiel teilnehmen kann (Europapokal, DFB-Pokal und
-   Länderspiele zählen nicht). Pro Spieler ein Eintrag:
-   - "spieler": Nachname wie im Text, "klub": einer der Werte aus Punkt 4
-   - "status": "faellt_aus" | "fraglich" | "spielt" | "startelf"
-     ("spielt" = wieder fit/einsatzbereit, "startelf" = Startelfeinsatz angekündigt)
-   - "grund": max. 8 Wörter, z. B. "Muskelfaserriss" oder "Rückkehr ins Mannschaftstraining"
-   Keine Transfers, keine Gerüchte, keine Vermutungen. Sonst leere Liste.
-6. Formation: Nur wenn der Quelltext die Grundordnung für das nächste Spiel des Hauptklubs
-   nennt (z. B. "4-2-3-1", "Dreierkette" → "3-4-3" nur wenn die Zahlen genannt sind). Sonst "".
-
-Antworte ausschließlich im JSON-Format (kein Markdown drumherum):
-{{
-  "titel": "...",
-  "text": "Absatz 1.\\n\\nAbsatz 2.\\n\\nAbsatz 3.",
-  "kategorie": "...",
-  "hauptklub": "...",
-  "spielerstatus": [{{"spieler": "...", "klub": "...", "status": "...", "grund": "..."}}],
-  "formation": ""
-}}"""
-
-    antwort = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=2000,
-        messages=[{"role": "user", "content": prompt}]
+    antwort = ki_budget.aufruf(
+        "schreiben", model=SONNET, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve,
+        messages=[{"role": "user", "content": prompt}],
+        output_config={"format": {"type": "json_schema", "schema": _schema_artikel()}},
     )
-
-    roh = antwort.content[0].text.strip()
-    match = re.search(r'\{.*\}', roh, re.DOTALL)
-    if not match:
-        raise ValueError(f"Kein JSON in Antwort: {roh}")
-    return json.loads(match.group())
+    if antwort.stop_reason == "max_tokens":
+        raise ValueError("Antwort abgeschnitten (max_tokens)")
+    return json.loads(_text_aus(antwort))
 
 
 # ─── og:image-Karten ──────────────────────────────────────────────────────────
@@ -1386,8 +1328,19 @@ def artikel_html(
     vereine: list = None,
     og_image_url: str = None,
     dateiname: str = None,
+    quelle2_url: str = "",
+    verwandte: list = None,
 ) -> str:
+    from html import escape as _esc
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
+    quelle2_html = (f' · <a href="{_esc(quelle2_url)}" target="_blank" rel="noopener noreferrer">Quelle 2</a>'
+                    if quelle2_url else "")
+    # Frühere Artikel zum selben Thema: hilft Lesern und Google (interne Verlinkung)
+    verwandte_html = ""
+    if verwandte:
+        links = "".join(f'<a href="{_esc(pfad)}">{_esc(t)}</a>' for t, pfad in verwandte)
+        verwandte_html = ('<div class="artikel-mehr"><div class="artikel-mehr-t">Mehr zum Thema</div>'
+                          + links + '</div>')
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
     wappen_html = (
         f'<img src="{wappen_url}" class="artikel-wappen" alt="Wappen" onerror="this.style.display=\'none\'"/>'
@@ -1551,10 +1504,12 @@ def artikel_html(
         {absaetze}
       </div>
 
+      {verwandte_html}
+
       {vereine_tags_html}
 
       <div class="artikel-quelle">
-        <a href="{quelle_url}" target="_blank" rel="noopener noreferrer">Quelle</a>
+        <a href="{quelle_url}" target="_blank" rel="noopener noreferrer">Quelle</a>{quelle2_html}
       </div>
 
     </article>
@@ -1616,10 +1571,8 @@ def qualitaets_check(kandidaten: list) -> list:
         text_voll = k["ergebnis"]["text"][:2500].replace("\n", " ")
         liste += f"\n[{i}] Titel: {k['ergebnis']['titel']}\n    Text: {text_voll}\n"
 
-    antwort = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=200 + 80 * len(kandidaten),
-        messages=[{
+    try:
+        antwort = ki_budget.aufruf("qualitaet", model=SONNET, max_tokens=200 + 80 * len(kandidaten), messages=[{
             "role": "user",
             "content": (
                 f"Du bist leitender QS-Redakteur von ligaoutsider.de. Heute ist der {datetime.date.today().strftime('%d.%m.%Y')} – "
@@ -1634,21 +1587,21 @@ def qualitaets_check(kandidaten: list) -> list:
                 f"Output NUR als valides JSON-Array:\n"
                 f'[{{"id":0,"decision":"APPROVE"|"REJECT","reason":"1 Satz"}},...]'
             )
-        }]
-    )
+        }])
+    except Exception as e:
+        # Die Artikel haben Länge, Relevanz und Doppel-Prüfung schon bestanden und sind bezahlt
+        log.warning(f"QA nicht möglich ({e}) – {len(kandidaten)} Kandidaten ungeprüft freigegeben")
+        return list(kandidaten)
 
-    roh = antwort.content[0].text.strip()
+    roh = _text_aus(antwort)
     m = re.search(r'\[.*\]', roh, re.DOTALL)
-    if not m:
-        log.warning(f"QA: Kein JSON-Array in Antwort: {roh[:200]}")
-        # Fallback: alle ablehnen
-        return []
-
     try:
-        ergebnisse = json.loads(m.group())
+        ergebnisse = json.loads(m.group()) if m else None
     except json.JSONDecodeError:
-        log.warning("QA: JSON-Parse-Fehler, alle abgelehnt")
-        return []
+        ergebnisse = None
+    if not isinstance(ergebnisse, list):
+        log.warning(f"QA: Antwort nicht lesbar – Kandidaten ungeprüft freigegeben: {roh[:200]}")
+        return list(kandidaten)
 
     approved = []
     for item in ergebnisse:
@@ -1670,36 +1623,30 @@ def main():
     global DELETED_IDS
     DELETED_IDS = lade_deleted_ids()
     ARTIKEL_ORDNER.mkdir(exist_ok=True)
+    ki_budget.init(client)
+    storys.init(Path("spieler_db.json"), VEREIN_FILTER)
+    _k = ki_budget.bericht()
+    log.info(f"💶 Budget: dieser Lauf {_k['lauf_budget_usd']:.3f} $ | heute {_k['heute_usd']:.2f} $ | "
+             f"Monat {_k['monat_usd']:.2f} / {_k['monatsbudget_usd']:g} $")
     bestehende = feed_laden()
     published_stories = lade_published_stories()
-
-    # Fingerprints aus published_stories für Dedup (mit Timestamp für Zeitfenster-Check)
-    pub_fingerprints: list[tuple[dict, str]] = [
-        (s["fingerprint"], s.get("published_at", ""))
-        for s in published_stories if s.get("fingerprint")
-    ]
     pub_urls: set[str] = {s.get("original_url", "") for s in published_stories}
 
     # Run-Stats
     stats = {
         "ts": _run_ts, "ingested": 0,
         "s2_pre_filter": 0, "s3_relevance": 0, "s4_dedup_early": 0,
-        "s5_fulltext_fail": 0, "s6_dedup_refined": 0,
-        "s7_generated": 0, "s8_qa_rejected": 0, "published": 0,
+        "gesammelt": 0, "geschichten_neu": 0, "s5_archiv_doppelt": 0, "s5_zusammengefuehrt": 0,
+        "s6_aussortiert": 0, "s7_geschrieben": 0, "s7_verworfen": 0, "s5_fulltext_fail": 0,
+        "s8_qa_rejected": 0, "published": 0,
     }
 
     neu_generiert = 0
     kandidaten: list[dict] = []
-    batch_fingerprints: list[tuple[dict, str]] = []  # (fingerprint, published_at) für Intra-Batch-Dedup
+    gesammelt: list[dict] = []   # Schlagzeilen, die alle Gratis-Filter überstanden haben
     batch_titles: list[str] = []  # für Intra-Batch rapidfuzz Titel-Dedup (Stage 2)
 
     url_cache = URLCache("data/seen_urls.json", max_age_days=30)
-    # Zähler für erneute Abrufversuche bei vorübergehenden Fehlern
-    _versuche_datei = Path("data/abruf_versuche.json")
-    try:
-        _abruf_versuche = json.loads(_versuche_datei.read_text(encoding="utf-8"))
-    except Exception:
-        _abruf_versuche = {}
     log.info(f"URL-Cache geladen: {url_cache.get_seen_count()} bekannte URLs (letzte 30 Tage)")
 
     _SKIP_KEYWORDS = (
@@ -1712,6 +1659,11 @@ def main():
         # raus, etwa das Retro-Trikot, das Frankfurts Vereinswebsite lahmlegte.
         "heute vor", "vor x jahren", "rückblick auf die saison",
         "in den 70ern", "in den 80ern", "in den 90ern", "jahrestag",
+        # Jugend, Reserve, Unterhaus und Statistik-/Galerieseiten (v. a. aus der Google-Suche)
+        "u19", "u17", "u16", "u15", "u23", "regionalliga", "3. liga", "oberliga", "futsal",
+        "e-sport", "esport", "(galerie)", "| seite", "spielereignisse", "detailansicht",
+        "live im stream", "live im tv", "im free-tv", "wo läuft", "tv-übertragung", "so sehen sie",
+        "ea fc", "fc 26", "fc 27", "beliebtheitsrangliste", "marktwertentwicklung",
     )
 
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
@@ -1758,19 +1710,16 @@ def main():
     _rotiert = RSS_FEEDS[_start_pos:] + RSS_FEEDS[:_start_pos]
     _all_feeds = _submitted_urls + _rotiert
     _feeds_fertig = 0
-    _archiv_fuer_dup = [e for e in lade_news_archive() if _ist_innerhalb_tage(e.get("published_at", ""), days=5)]
-    # Zeitbudget: GitHub bricht den Lauf nach 20 Minuten ab. Was bis dahin nicht
-    # verarbeitet ist, bleibt ungesehen und kommt im nächsten Lauf dran.
+    # Zeitbudget: GitHub bricht den Lauf nach 35 Minuten ab. Einlesen bekommt
+    # höchstens 9 Minuten, der Rest bleibt fürs Schreiben. Was nicht mehr gelesen
+    # wird, bleibt ungesehen und kommt im nächsten Lauf dran.
     _start = time.time()
-    ZEITBUDGET_SEK = 16 * 60
+    SAMMEL_SEK = 9 * 60
+    ZEITBUDGET_SEK = 20 * 60
 
     for feed_url in _all_feeds:
-        # Limit zählt geschriebene Kandidaten – veröffentlicht wird erst nach der QA,
-        # sonst schreibt der Lauf bis zum Zeitbudget immer weiter
-        if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF:
-            break
-        if time.time() - _start > ZEITBUDGET_SEK:
-            log.warning("Zeitbudget erreicht – restliche Feeds im nächsten Lauf")
+        if time.time() - _start > SAMMEL_SEK:
+            log.warning("Zeitbudget fürs Einlesen erreicht – restliche Feeds im nächsten Lauf")
             break
 
         log.info(f"Feed: {feed_url}")
@@ -1790,7 +1739,7 @@ def main():
         feed_quelle = feed.feed.get("title", feed_url)
 
         for eintrag in feed.entries:
-            if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF or time.time() - _start > ZEITBUDGET_SEK:
+            if time.time() - _start > SAMMEL_SEK:
                 break
 
             url    = eintrag.get("link", "")
@@ -1827,6 +1776,14 @@ def main():
                     _netloc = _up(url).netloc.replace("www.", "")
                     if _netloc and "google" not in _netloc:
                         quelle_name = _netloc
+                # Google hängt " - Quelle" an die Schlagzeile
+                if quelle_name and titel.endswith(" - " + str(quelle_name)):
+                    titel = titel[: -len(" - " + str(quelle_name))].strip()
+                # LigaInsider ist nie Quelle: deren Themen kommen über den eigenen
+                # Themen-Feed, der auf den Originalartikel verweist
+                if "ligainsider" in str(quelle_name).lower() or titel.lower().endswith("ligainsider"):
+                    url_cache.mark_seen(url)
+                    continue
 
             # Reddit: echte URL extrahieren
             if "reddit.com" in feed_url:
@@ -1923,178 +1880,195 @@ def main():
                 stats["s3_relevance"] += 1
                 continue
 
-            # ── Stage 4: Fingerprint + Early Dedup ───────────────────────────
-            fp = fingerprint_generieren(titel, beschr)
-            if fp:
-                is_update = _is_update_artikel(titel, beschr)
-                for existing_fp, existing_ts in pub_fingerprints + batch_fingerprints:
-                    if not _fingerprints_aehnlich(fp, existing_fp):
-                        continue
-                    # Ähnlicher Fingerprint gefunden — Update-Bypass prüfen
-                    if is_update and _ist_innerhalb_tage(existing_ts, days=14):
-                        log.info(f"S4 update-bypass (Folgeartikel): {titel[:60]}")
-                        break  # durchlassen
-                    log.info(f"S4 fingerprint dup: {titel[:60]}")
-                    _log_skip(aid, titel, "stage4", "fingerprint_duplicate")
-                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                    stats["s4_dedup_early"] += 1
-                    fp = None
-                    break
-            if fp is None and (ARTIKEL_ORDNER / f"{aid}.skip").exists():
-                continue  # wurde als Dup markiert
-
-            # Rapidfuzz-Titel-Check gegen published_stories (fängt null-Fingerprint-Einträge)
-            if not (ARTIKEL_ORDNER / f"{aid}.skip").exists():
-                from rapidfuzz import fuzz as _fuzz
-                pub_titles = [s.get("generated_title") or s.get("title", "") for s in published_stories[-150:]]
-                for pt in pub_titles:
-                    if pt and _fuzz.ratio(titel.lower(), pt.lower()) >= 88:
-                        log.info(f"S4 title-fuzz dup ({pt[:50]}): {titel[:50]}")
-                        _log_skip(aid, titel, "stage4", "title_fuzzy_duplicate")
-                        (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                        stats["s4_dedup_early"] += 1
-                        break
-            if (ARTIKEL_ORDNER / f"{aid}.skip").exists():
-                continue
-
-            # ── Stage 5: Fulltext Fetch & Validation (CRITICAL GATE) ─────────
-            log.info(f"S5 fetch fulltext: {titel[:60]}")
-            volltext, reason = fetch_fulltext(url)
-            if reason != "ok":
-                log.info(f"S5 fulltext fail ({reason}): {titel[:60]}")
-                stats["s5_fulltext_fail"] += 1
-                # Dauerhafte Fehler: .skip setzen (paywall, google-Redirect, Exception)
-                _PERMANENT_SKIP = {"likely_paywall", "google_redirect_unresolved", "low_unique_content_ratio"}
-                if reason in _PERMANENT_SKIP or reason.startswith("exception_"):
-                    _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}")
-                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                    continue
-                # Temporärer Fehler (trafilatura_returned_empty, too_short, fetch_failed):
-                # Fallback auf RSS-Beschreibung wenn ausreichend lang
-                beschr_clean = re.sub(r'<[^>]+>', ' ', beschr).strip()
-                if len(beschr_clean.split()) >= 150:
-                    volltext = beschr_clean
-                    log.info(f"S5 fulltext fallback auf RSS-Beschreibung ({len(beschr_clean.split())} Wörter): {titel[:50]}")
-                else:
-                    _log_skip(aid, titel, "stage5", f"fulltext_failed_{reason}_rss_too_short")
-                    # Seite war evtl. nur kurz nicht erreichbar: bis zu drei Läufe erneut versuchen
-                    versuche = _abruf_versuche.get(aid, 0) + 1
-                    _abruf_versuche[aid] = versuche
-                    if versuche < 3:
-                        url_cache.forget(url)
-                    continue
-
-            # ── Stage 5.5: Relevanz-Check mit echtem Volltext (Haiku) ────────
-            if not _ist_kicker_team and not ist_relevant(titel, volltext):
-                log.info(f"S5.5 not relevant (fulltext): {titel[:60]}")
-                _log_skip(aid, titel, "stage5.5", "not_relevant_fulltext")
+            # ── Stage 4: Titel-Abgleich mit Veröffentlichtem (ohne KI) ────────
+            from rapidfuzz import fuzz as _fuzz
+            _pub_titel = [s.get("generated_title") or s.get("title", "") for s in published_stories[-150:]]
+            if any(pt and _fuzz.ratio(titel.lower(), pt.lower()) >= 88 for pt in _pub_titel):
+                log.info(f"S4 title-fuzz dup: {titel[:60]}")
+                _log_skip(aid, titel, "stage4", "title_fuzzy_duplicate")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                stats["s3_relevance"] += 1
+                stats["s4_dedup_early"] += 1
                 continue
 
-            # ── Stage 6: Refined Dedup mit Fulltext ──────────────────────────
-            if fp:
-                # Fingerprint mit Volltext updaten (besserer Kontext)
-                fp_refined = fingerprint_generieren(titel, volltext[:600])
-                if fp_refined:
-                    fp = fp_refined
-                is_update = _is_update_artikel(titel, volltext[:400])
-                for existing_fp, existing_ts in pub_fingerprints + batch_fingerprints:
-                    if not _fingerprints_aehnlich(fp, existing_fp):
-                        continue
-                    if is_update and _ist_innerhalb_tage(existing_ts, days=14):
-                        log.info(f"S6 update-bypass (Folgeartikel): {titel[:60]}")
-                        break
-                    log.info(f"S6 refined dup: {titel[:60]}")
-                    _log_skip(aid, titel, "stage6", "refined_fingerprint_duplicate")
-                    (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                    stats["s6_dedup_refined"] += 1
-                    fp = None
-                    break
-                if fp is None:
-                    continue
-
-            # ── Stage 7: Article Generation (Sonnet) ─────────────────────────
-            # ── Stage 6.5: gleiche Nachricht schon berichtet? (vor dem teuren Schreiben) ──
-            _grenze = datetime.datetime.now() - datetime.timedelta(days=4)
-            _vorhanden = [e["titel"] for e in bestehende
-                          if datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M") >= _grenze]
-            _vorhanden += [k["ergebnis"]["titel"] for k in kandidaten]
-            # Kern: 2–3 Sätze aus dem Fingerabdruck, sonst Textanfang
-            _kern = (fp or {}).get("summary") or (fp or {}).get("one_sentence_summary") or re.sub(r"\s+", " ", volltext[:500])
-            # Zusammenfassungen der vorhandenen Artikel für die Gegenprobe (aus dem News-Archiv)
-            _zus = {e.get("title", ""): e.get("summary", "") for e in _archiv_fuer_dup if e.get("summary")}
-            _zus.update({k["ergebnis"]["titel"]: (k.get("fingerprint") or {}).get("summary", "") for k in kandidaten})
-            _treffer = schon_berichtet(titel, _kern, _vorhanden, _zus)
-            if _treffer:
-                log.info(f"S6.5 schon berichtet ({_treffer[:50]}): {titel[:50]}")
-                _log_skip(aid, titel, "stage6.5", "schon_berichtet")
-                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                stats["s6_dedup_refined"] += 1
-                continue
-
-            log.info(f"S7 generate: {titel[:60]}")
-            try:
-                ergebnis = artikel_generieren(titel, volltext, quelle_name, url)
-            except Exception as e:
-                log.warning(f"S7 generation error: {e}")
-                continue
-
-            # Keine Kurzmeldungen: fertiger Artikel braucht Substanz
-            _woerter = len(str(ergebnis.get("text", "")).split())
-            if _woerter < 150:
-                _log_skip(aid, titel, "S7", f"zu_kurz_{_woerter}_woerter")
-                stats["s7_zu_kurz"] = stats.get("s7_zu_kurz", 0) + 1
-                log.info(f"S7 zu kurz ({_woerter} Wörter): {ergebnis.get('titel', titel)[:60]}")
-                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                continue
-
-            # Sonnet hat den Volltext gelesen und nennt den Hauptklub. Sagt es
-            # "keiner", geht es zentral um einen Klub ausserhalb der Liga.
-            hauptklub = str(ergebnis.get("hauptklub", "")).strip()
-            if hauptklub.lower() in ("keiner", "keine", "none", ""):
-                _log_skip(aid, titel, "S7.5", "kein_bl_hauptklub")
-                stats["s7_5_kein_hauptklub"] = stats.get("s7_5_kein_hauptklub", 0) + 1
-                log.info(f"S7.5 kein BL-Hauptklub: {ergebnis['titel'][:60]}")
-                continue
-
-            datum      = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
-            vereine    = vereine_im_text(ergebnis["titel"], ergebnis["text"])
-            if hauptklub in KLUB_LOGO:
-                wappen_url = KLUB_LOGO[hauptklub]
-                vereine = sorted(set(vereine) | {KLUB_FILTERNAME.get(hauptklub, hauptklub)})
-            else:
-                log.warning(f"S7.5 unbekannter Hauptklub {hauptklub!r} – Fallback auf Scoring")
-                wappen_url = verein_wappen_url(ergebnis["text"][:1200], title=ergebnis["titel"])
-
-            # ── Stage 7.6: fertigen Artikel noch einmal auf Doppel prüfen ─────────
-            # Die Quelle kann anders heißen als das, was im Artikel steht
-            # ("Aufstellung gegen Union da!" wurde zum Laimer-Ausfall).
-            _fertig_kern = " ".join(ergebnis["text"].split()[:70])
-            _treffer = schon_berichtet(ergebnis["titel"], _fertig_kern, _vorhanden, _zus)
-            if _treffer:
-                log.info(f"S7.6 fertiger Artikel doppelt ({_treffer[:50]}): {ergebnis['titel'][:50]}")
-                _log_skip(aid, ergebnis["titel"], "stage7.6", "fertiger_artikel_doppelt")
-                (ARTIKEL_ORDNER / f"{aid}.skip").touch()
-                stats["s6_dedup_refined"] += 1
-                continue
-
-            if fp:
-                batch_fingerprints.append((fp, datetime.datetime.now().isoformat()))
+            # Gesammelt – gebündelt, bewertet und geschrieben wird nach dem Einlesen
             batch_titles.append(titel)
-
-            kandidaten.append({
-                "aid":         aid,
-                "datum":       datum,
-                "ergebnis":    ergebnis,
-                "quelle_name": quelle_name,
-                "url":         url,
-                "wappen_url":  wappen_url,
-                "vereine":     vereine,
-                "fingerprint": fp,
+            _zeit = datetime.datetime(*veroeffentlicht[:6]) if veroeffentlicht else datetime.datetime.now()
+            gesammelt.append({
+                "url": url, "aid": aid, "titel": titel, "quelle": quelle_name,
+                "beschr": re.sub(r"<[^>]+>", " ", beschr or "")[:600],
+                "zeit": _zeit.isoformat(timespec="minutes"),
             })
-            stats["s7_generated"] += 1
-            log.info(f"  Kandidat: {ergebnis['titel'][:60]}")
+
+    stats["gesammelt"] = len(gesammelt)
+    log.info(f"Eingelesen: {len(gesammelt)} Schlagzeilen nach den Gratis-Filtern")
+
+    # ── Stage 5: zu Geschichten bündeln + Archivabgleich (ohne KI) ───────────
+    jetzt = datetime.datetime.now()
+    archiv = storys.archiv_vorbereiten(lade_news_archive(), jetzt)
+    schlange = storys.warteschlange_laden(jetzt)
+    neue: list[dict] = []
+    for g in storys.buendeln(gesammelt):
+        if not (g["person"] or g["klub"]):
+            log.info(f"S5 kein Bundesliga-Spieler oder -Klub erkennbar: {g['titel'][:70]}")
+            _geschichte_verwerfen(g, "stage5", "kein_bl_bezug")
+            stats["s5_ohne_bezug"] = stats.get("s5_ohne_bezug", 0) + 1
+            continue
+        # Randthemen ohne Spielerbezug lassen wir weg (Tickets, Trikots, Sponsoren …)
+        if not g["person"] and g["klasse"] == "sonstiges" and RANDTHEMEN.search(g["titel"].lower()):
+            log.info(f"S5 Randthema: {g['titel'][:70]}")
+            _geschichte_verwerfen(g, "stage5", "randthema")
+            stats["s5_randthema"] = stats.get("s5_randthema", 0) + 1
+            continue
+        status, treffer = storys.archiv_abgleich(g, archiv, jetzt)
+        if status == "doppelt":
+            log.info(f"S5 schon berichtet ({treffer[0]['titel'][:45]}): {g['titel'][:60]}")
+            _geschichte_verwerfen(g, "stage5", "archiv_doppelt")
+            stats["s5_archiv_doppelt"] += 1
+            continue
+        if storys.einreihen(schlange, g):
+            stats["s5_zusammengefuehrt"] += 1
+            continue
+        g.update({
+            "archiv_status": status, "prio": None, "status": "",
+            "erstmals": jetzt.isoformat(timespec="minutes"),
+            "archiv": [{"id": e["id"], "titel": e["titel"], "datum": e["zeit"].strftime("%d.%m."),
+                        "stufe": e["stufe"], "summary": e.get("summary", "")} for e in treffer],
+        })
+        neue.append(g)
+    stats["geschichten_neu"] = len(neue)
+    log.info(f"S5: {len(neue)} neue Geschichten, {stats['s5_archiv_doppelt']} schon berichtet, "
+             f"{stats['s5_zusammengefuehrt']} zu wartenden Geschichten ergänzt, {len(schlange)} warten")
+
+    # ── Stage 6: Redaktionskonferenz (ein Haiku-Aufruf je 40 Geschichten) ─────
+    zu_bewerten = neue + [w for w in schlange if w.get("prio") is None]
+    _letzte = [e["titel"] for e in sorted(bestehende, key=lambda e: datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M"), reverse=True)
+               if (jetzt - datetime.datetime.strptime(e["datum"], "%d.%m.%Y %H:%M")).total_seconds() < 24 * 3600]
+    try:
+        redaktionskonferenz(zu_bewerten, _letzte)
+    except BudgetErschoepft as e:
+        log.warning(f"S6 Redaktionskonferenz ausgesetzt: {e}")
+    except Exception as e:
+        log.warning(f"S6 Redaktionskonferenz fehlgeschlagen: {e}")
+    for g in zu_bewerten:
+        im_warten = any(w is g for w in schlange)
+        if g.get("prio") is None:
+            if not im_warten:
+                schlange.append(g)          # wird im nächsten Lauf bewertet
+            continue
+        if g["status"] == "d" or g["prio"] <= 1:
+            grund = "doppelt" if g["status"] == "d" else f"prio_{g['prio']}"
+            log.info(f"S6 aussortiert ({grund}): {g['titel'][:70]}")
+            _geschichte_verwerfen(g, "stage6", grund)
+            if im_warten:
+                schlange.remove(g)
+            stats["s6_aussortiert"] += 1
+            continue
+        if not im_warten:
+            schlange.append(g)
+
+    # ── Stage 7: schreiben – wichtigste Geschichten zuerst, solange das Budget reicht ──
+    def _rang(w):
+        # Priorität, dann Zahl der Quellen (= wie viele Portale berichten), dann Aktualität
+        neueste = max((q.get("zeit", "") for q in w["quellen"]), default="")
+        try:
+            ts = datetime.datetime.fromisoformat(neueste).timestamp()
+        except Exception:
+            ts = 0.0
+        return (-w["prio"], -min(len(w["quellen"]), 5), -ts)
+    reihenfolge = sorted((w for w in schlange if (w.get("prio") or 0) >= 2), key=_rang)
+    dieser_lauf: list[dict] = []     # fertige Artikel, aufbereitet wie das Archiv
+    for g in reihenfolge:
+        if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF or time.time() - _start > ZEITBUDGET_SEK:
+            break
+        reserve = _qa_reserve(len(kandidaten) + 1)
+        if ki_budget.rest() < ki_budget.schaetzung(SONNET, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
+            log.info(f"S7 Budget dieses Laufs reicht für keinen weiteren Artikel – "
+                     f"{len(reihenfolge) - reihenfolge.index(g)} Geschichten warten auf den nächsten Lauf")
+            break
+        texte = quellen_laden(g)
+        if not texte:
+            stats["s5_fulltext_fail"] += 1
+            g["versuche"] = g.get("versuche", 0) + 1
+            if g["versuche"] >= 3:
+                _geschichte_verwerfen(g, "stage7", "kein_volltext")
+                schlange.remove(g)
+            continue
+        log.info(f"S7 schreiben (Prio {g['prio']}, {len(texte)} Quellen): {g['titel'][:60]}")
+        try:
+            ergebnis = artikel_generieren(g, texte, reserve=reserve)
+        except BudgetErschoepft as e:
+            log.info(f"S7 {e}")
+            break
+        except Exception as e:
+            log.warning(f"S7 Schreibfehler: {e}")
+            g["versuche"] = g.get("versuche", 0) + 1
+            if g["versuche"] >= 3:
+                _geschichte_verwerfen(g, "stage7", "schreibfehler")
+                schlange.remove(g)
+            continue
+        schlange.remove(g)
+        stats["s7_geschrieben"] += 1
+        aid = texte[0]["aid"]
+
+        grund = None
+        woerter = len(str(ergebnis.get("text", "")).split())
+        hauptklub = str(ergebnis.get("hauptklub", "")).strip()
+        if not ergebnis.get("relevant", True):
+            grund = "nicht_relevant"
+        elif woerter < 150:
+            grund = f"zu_kurz_{woerter}_woerter"
+        elif hauptklub not in KLUB_LOGO:
+            grund = "kein_bl_hauptklub"
+        if grund:
+            log.info(f"S7 verworfen ({grund}): {ergebnis.get('titel') or g['titel'][:60]}")
+            _geschichte_verwerfen(g, "S7", grund)
+            stats["s7_verworfen"] += 1
+            continue
+
+        # ── Stage 7.6: fertigen Artikel gegen Archiv und diesen Lauf prüfen ──
+        eintrag = _als_archiv_eintrag(ergebnis, aid)
+        doppel = nachpruefung(eintrag, archiv + dieser_lauf)
+        if doppel:
+            log.info(f"S7.6 doppelt ({doppel[:50]}): {ergebnis['titel'][:50]}")
+            _geschichte_verwerfen(g, "stage7.6", "fertiger_artikel_doppelt")
+            stats["s7_verworfen"] += 1
+            continue
+        dieser_lauf.append(eintrag)
+        _geschichte_verwerfen(g, "stage7", "in_artikel_verarbeitet", ausser=aid)
+
+        datum = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+        vereine = vereine_im_text(ergebnis["titel"], ergebnis["text"])
+        wappen_url = KLUB_LOGO[hauptklub]
+        vereine = sorted(set(vereine) | {KLUB_FILTERNAME.get(hauptklub, hauptklub)})
+        kurz = ergebnis.get("kurzfassung", "")
+        fp = {
+            "event_type": ergebnis.get("kategorie", "news"), "main_club": hauptklub,
+            "event_stage": eintrag["stufe"], "main_teams": vereine,
+            "main_players": eintrag["spieler_namen"], "summary": kurz,
+            "one_sentence_summary": re.split(r"(?<=[.!?])\s+", kurz)[0] if kurz else "",
+            "schluessel": f"{storys.falten(eintrag['person_name'] or eintrag['klub'])}|{eintrag['klasse']}",
+        }
+        verwandte = []
+        for a in g.get("archiv", [])[:3]:
+            datei = artikel_datei(a["id"])
+            if datei.exists():
+                verwandte.append((a["titel"], "/" + datei.as_posix()))
+        kandidaten.append({
+            "aid":         aid,
+            "datum":       datum,
+            "ergebnis":    ergebnis,
+            "quelle_name": texte[0]["quelle"],
+            "url":         texte[0]["url"],
+            "quelle_link": texte[0]["link"],
+            "quelle2_url": texte[1]["link"] if len(texte) > 1 else "",
+            "verwandte":   verwandte,
+            "wappen_url":  wappen_url,
+            "vereine":     vereine,
+            "fingerprint": fp,
+        })
+        log.info(f"  Kandidat: {ergebnis['titel'][:60]}")
+
+    storys.warteschlange_speichern(schlange)
 
     # ── Stage 8: Batch Quality Gate (Sonnet) ─────────────────────────────────
     if kandidaten:
@@ -2175,12 +2149,14 @@ def main():
             text        = ergebnis["text"],
             kategorie   = ergebnis["kategorie"],
             quelle_name = k["quelle_name"],
-            quelle_url  = k["url"],
+            quelle_url  = k.get("quelle_link") or k["url"],
             datum       = k["datum"],
             wappen_url  = _artikel_wu,
             vereine     = k["vereine"],
             og_image_url = _og_url,
             dateiname   = f"{artikel_slug(ergebnis['titel'])}-{aid}.html",
+            quelle2_url = k.get("quelle2_url", ""),
+            verwandte   = k.get("verwandte") or [],
         )
         _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
         _datei.write_text(html, encoding="utf-8")
@@ -2227,6 +2203,7 @@ def main():
             "event_stage":  fp.get("event_stage", "sonstiges"),
             "summary":      fp.get("summary") or fp.get("one_sentence_summary", ""),
             "main_players": fp.get("main_players", []),
+            "schluessel":   fp.get("schluessel", ""),
             "source_url":   k["url"],
         }
         news_archive.append(archive_entry)
@@ -2261,7 +2238,12 @@ def main():
         except Exception as _e:
             log.warning(f"Social-Warteschlange: {_e}")
 
-    # Run-Stats speichern
+    # Run-Stats speichern, mit den echten KI-Kosten dieses Laufs
+    stats["kosten"] = ki_budget.bericht()
+    _k = stats["kosten"]
+    log.info(f"💶 Kosten: dieser Lauf {_k['lauf_usd']:.3f} $ (Budget {_k['lauf_budget_usd']:.3f} $) | "
+             f"heute {_k['heute_usd']:.2f} $ | Monat {_k['monat_usd']:.2f} / {_k['monatsbudget_usd']:g} $ | "
+             + ", ".join(f"{z} {v['anzahl']}× {v['usd']:.3f} $" for z, v in _k["aufrufe"].items()))
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -2270,8 +2252,6 @@ def main():
     _naechste = (_start_pos + max(0, _feeds_fertig - 1)) % len(RSS_FEEDS) if _feeds_fertig < len(RSS_FEEDS) else 0
     _pos_datei.write_text(json.dumps({"naechste": _naechste, "stand": datetime.datetime.now().isoformat()}), encoding="utf-8")
     log.info(f"Feeds: {_feeds_fertig}/{len(RSS_FEEDS)} begonnen, nächster Lauf startet bei Nr. {_naechste}")
-    # nur Zähler von URLs behalten, die noch im Cache-Zeitraum liegen
-    _versuche_datei.write_text(json.dumps(dict(list(_abruf_versuche.items())[-2000:])), encoding="utf-8")
     log.info(f"URL-Cache gespeichert: {url_cache.get_seen_count()} URLs")
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
