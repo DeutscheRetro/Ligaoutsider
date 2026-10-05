@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameGuides - Spielelösungen</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f8f8; color: #333; line-height: 1.6; }
+    @media (prefers-color-scheme: dark) { body { background: #1a1a1a; color: #e0e0e0; } }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+    .controls { display: flex; gap: 1rem; margin: 2rem 1rem; flex-wrap: wrap; }
+    @media (max-width: 768px) { .controls { flex-direction: column; } }
+
+    .control-group { flex: 1; min-width: 200px; position: relative; }
+    .control-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #667eea; }
+
+    select, input { width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem; background: white; color: #333; }
+    @media (prefers-color-scheme: dark) { select, input { background: #2a2a2a; color: #e0e0e0; border-color: #444; } }
+
+    .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 6px; max-height: 200px; overflow-y: auto; z-index: 10; margin-top: 0.5rem; display: none; }
+    .suggestions.visible { display: block; }
+    @media (prefers-color-scheme: dark) { .suggestions { background: #2a2a2a; border-color: #444; } }
+
+    .suggestion-item { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #eee; }
+    .suggestion-item:hover { background: #f0f0f0; }
+    @media (prefers-color-scheme: dark) { .suggestion-item:hover { background: #333; } }
+
+    .content { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; margin: 2rem 1rem; }
+    @media (max-width: 1024px) { .content { grid-template-columns: 1fr; } }
+
+    .guide-viewer { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    @media (prefers-color-scheme: dark) { .guide-viewer { background: #2a2a2a; } }
+
+    .guide-header { margin-bottom: 2rem; border-bottom: 2px solid #667eea; padding-bottom: 1.5rem; }
+    .guide-title { font-size: 2rem; font-weight: 700; color: #667eea; margin-bottom: 0.5rem; }
+    .guide-subtitle { font-size: 0.9rem; color: #999; }
+
+    .guide-content h2 { font-size: 1.4rem; font-weight: 600; margin: 1.5rem 0 1rem; color: #333; }
+    @media (prefers-color-scheme: dark) { .guide-content h2 { color: #e0e0e0; } }
+    .guide-content p { margin-bottom: 1rem; line-height: 1.8; }
+
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    @media (max-width: 1024px) { .sidebar { grid-column: 1; } }
+
+    .card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    @media (prefers-color-scheme: dark) { .card { background: #2a2a2a; } }
+
+    .card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #667eea; }
+
+    .character { display: flex; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+    .character:last-child { border-bottom: none; }
+    @media (prefers-color-scheme: dark) { .character { border-bottom-color: #333; } }
+
+    .character-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.2rem; flex-shrink: 0; }
+    .character-info h4 { font-weight: 600; margin-bottom: 0.25rem; }
+    .character-info p { font-size: 0.85rem; color: #999; }
+
+    .favorites-btn { display: flex; align-items: center; gap: 0.5rem; width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; }
+    .favorites-btn.saved { background: #10b981; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #999; grid-column: 1 / -1; }
+    .empty-state p { font-size: 1.1rem; margin-bottom: 1rem; }
+
+    .favorite-item { padding: 0.75rem; background: #f5f5f5; border-radius: 4px; cursor: pointer; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .favorite-item:hover { background: #e0e0e0; }
+    @media (prefers-color-scheme: dark) { .favorite-item { background: #333; } }
+    @media (prefers-color-scheme: dark) { .favorite-item:hover { background: #444; } }
+
+    .search-container { flex: 2; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⭐ GameGuides</h1>
+    <p>Spielelösungen sammelt & einheitlich dargestellt</p>
+  </div>
+
+  <div class="container">
+    <div class="controls">
+      <div class="control-group">
+        <label>Plattform</label>
+        <select id="platformSelect">
+          <option value="SNES">SNES</option>
+          <option value="Genesis">Genesis</option>
+          <option value="Nintendo 64">Nintendo 64</option>
+          <option value="PlayStation 1">PlayStation 1</option>
+          <option value="Game Boy">Game Boy</option>
+        </select>
+      </div>
+
+      <div class="control-group search-container">
+        <label>Spiel suchen</label>
+        <input type="text" id="searchInput" placeholder="Titel eingeben...">
+        <div class="suggestions" id="suggestions"></div>
+      </div>
+    </div>
+
+    <div id="contentArea">
+      <div class="empty-state">
+        <p>👈 Wähle ein Spiel zum Anschauen</p>
+        <p style="font-size: 0.9rem; color: #ccc;">Oder suche nach deinem Lieblingsspiel</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAMES_DB = {
+      'SNES': [
+        { id: 1, title: 'Super Mario World', year: 1990 },
+        { id: 2, title: 'The Legend of Zelda: A Link to the Past', year: 1991 },
+        { id: 3, title: 'Donkey Kong Country', year: 1994 },
+        { id: 4, title: 'Mega Man X', year: 1993 },
+        { id: 5, title: 'Street Fighter II', year: 1992 }
+      ],
+      'Genesis': [
+        { id: 6, title: 'Sonic the Hedgehog', year: 1989 },
+        { id: 7, title: 'Sonic 2', year: 1992 },
+        { id: 8, title: 'Mortal Kombat', year: 1993 },
+        { id: 9, title: 'Ecco the Dolphin', year: 1992 }
+      ],
+      'Nintendo 64': [
+        { id: 10, title: 'Super Mario 64', year: 1996 },
+        { id: 11, title: 'The Legend of Zelda: Ocarina of Time', year: 1998 },
+        { id: 12, title: 'GoldenEye 007', year: 1997 },
+        { id: 13, title: 'Perfect Dark', year: 2000 }
+      ],
+      'PlayStation 1': [
+        { id: 14, title: 'Final Fantasy VII', year: 1997 },
+        { id: 15, title: 'Metal Gear Solid', year: 1998 },
+        { id: 16, title: 'Resident Evil', year: 1996 },
+        { id: 17, title: 'Chrono Trigger', year: 1995 }
+      ],
+      'Game Boy': [
+        { id: 18, title: 'Tetris', year: 1989 },
+        { id: 19, title: 'Pokemon Red', year: 1996 },
+        { id: 20, title: 'The Legend of Zelda: Link\'s Awakening', year: 1993 }
+      ]
+    };
+
+    const GUIDES = {
+      1: {
+        title: 'Super Mario World',
+        platform: 'SNES',
+        characters: [
+          { name: 'Mario', role: 'Protagonist' },
+          { name: 'Luigi', role: 'Secondary Player' },
+          { name: 'Yoshi', role: 'Mount/Companion' },
+          { name: 'Bowser', role: 'Main Antagonist' }
+        ],
+        sections: [
+          { heading: 'Anfänger-Tipps', content: 'Sammle zuerst alle grünen Münzen in jedem Level. Mit der Feder-Power kommst du schneller voran und kannst höher springen. Super-Pilze ermöglichen es dir, feindliche Blöcke zu zerstören. Sammle 99 Münzen für Extra-Leben.' },
+          { heading: 'Versteckte Warp-Röhren', content: 'Im ersten Level: Gehe ganz nach links hinter den Büschen. Springe oben in die Röhre für geheime Punkte. Jeden Level hat versteckte Areas - achte auf ungewöhnliche Busch-Muster.' },
+          { heading: 'Yoshi reiten', content: 'Reite Yoshi um schneller zu laufen und höher zu springen. Wenn du reiterst und Spring-Boost nimmst, kannst du besondere Höhen erreichen. Yoshi kann verschiedene Gegner essen um spezielle Fähigkeiten zu bekommen.' },
+          { heading: 'Boss-Kämpfe', content: 'Alle Boss-Kämpfe folgen einem Muster. Warte bis sie angreifen, dann spring auf ihren Kopf. Manche Bosse brauchen 3-5 Treffer. Bei schweren Bossen: Verwende das Feuer-Power-Up wenn du es hast.' }
+        ]
+      },
+      2: {
+        title: 'The Legend of Zelda: A Link to the Past',
+        platform: 'SNES',
+        characters: [
+          { name: 'Link', role: 'Held der Helden' },
+          { name: 'Zelda', role: 'Prinzessin von Hyrule' },
+          { name: 'Ganon', role: 'Dämonenkönig' },
+          { name: 'Agahnim', role: 'Böser Zauberer' }
+        ],
+        sections: [
+          { heading: 'Spielstart & Anfänger-Tipps', content: 'Dein Abenteuer beginnt im Haus. Stichwörter: Pfeile sind begrenzt - verwende sie weise. Bomben zerstören bunte Risse in Wänden und Boden. Jedes Dungeon hat ein Schlüsselelement (meist Map oder Kompass). Heile dich häufig mit Potionen - Gegner werden aggressiver im späten Spiel. Der Fadenkreuz-Cursor zeigt dein Ziel an. Nutze das Menu (Select) um Items zu verwalten und Ausrüstung zu ändern.' },
+          { heading: 'Eastern Palace (1. Dungeon)', content: 'Ort: östlich von Hyrule Castle. Eingang: bei den Bäumen. Layout: 3 Ebenen mit Stalfos (Skelett-Gegner). Strategie: Schwert + Schild kombinieren. Stalfos springen - warte auf die Landung und schlage zu. Blue Stalfos sind stärker - nutze Pfeile oder Schwertkombo. Boss Pulsating Eye: Ein großes rotes Auge mit Tentakeln. Schlag die Tentakeln weg, dann das Auge. Benötigt 10+ Treffer. Belohnung: Pendant of Courage (notwendig für spätere Dungeons).' },
+          { heading: 'Desert Palace & Dark Palace (2.-3. Dungeon)', content: 'Desert Palace (Westen): Sandsturm-Gegner, Lava-Fallen, Sandblöcke verschieben sich. Boss Lanmolas: Zwei wurmartige Gegner die zusammen angreifen. Separat besiegen - konzentriere dich auf einen. Dark Palace (Norden, braucht Hammer): Dunkle Gegner (Blue Armor), magische Blöcke. Boss Helmasaur King: Gehörnter Gegner mit Panzer. Schlage den Panzer ab mit Hammer, dann das Gesicht mit Schwert. Alternativ: Pfeile zwischen die Hörner schießen.' },
+          { heading: 'Waffen & Items Übersicht', content: 'Master-Schwert: Beste physische Waffe. Nach 3 Dungeons im Lost Woods (rechts oben, Stamina-Test). Pegasus Boots: Schneller rennen. Kaufbar bei Oshus (50 Rubine). Hookshot: Zielwaffe zum Greifen entfernter Plattformen. Lage: Palace of Darkness. Fire Rod: Feuer-Zauber, besiegt kalte Gegner. Nach Desert Palace. Blue Shield: Blockiert einige magische Angriffe. Gilded Sword: Upgrade am Ende. Alle Items mit Schildkröten-Symbol sind essentiell für Progression.' },
+          { heading: 'Flüche & Geheime Orte', content: 'Warp-Punkte: 9 Warp-Fliesen versteckt überall. Finde sie alle für Abkürzungen. Unterirdische Übergänge: Zwischen Light World und Dark World. Karte notwendig. Geheime Shops: Nur nachts zugreifbar (Traum-Welt). Verkaufen exotische Items. Secret Caves: Versteckte Höhlen enthalten Rubine oder Herzteile. Bombiere auffällige Wände. Herzteile: 20 insgesamt versteckt. Sammle alle für maximale Gesundheit (13 statt 10).' },
+          { heading: 'Dark World Abenteuer (Zweite Hälfte)', content: 'Nach Agahnim-Boss: Transformation in Bunny möglich. Finde den Mond Pearl (versteckt in Dark Palace) um Mensch zu bleiben. Dark World ist gespiegeltes Hyrule - böser und gefährlicher. Gegner: Blue Armor Knights, Pigs (böse Dorfbewohner), Dark Stalfos. Dungeons in Dark World: Swamp Palace (SW), Skull Woods (NW), Ice Palace (NW-Ecke). Jedes braucht spezifische Items - plane Route sorgfältig. Magisches Wasser heilt dich wie rote Potionen.' },
+          { heading: 'Boss-Strategien (Zusammenfassung)', content: 'Armos Knight (Swamp): Gepanzerter Ritter. Hakshot zum Greifen nutzen, dann Schwert. Mothula (Skull Woods): Fliegender Schmetterling mit Tentakeln. Pfeile im Flug, Schwert bei Landung. Vitreous (Ice Palace): Großes Auge mit Mini-Augen. Kille die Mini-Augen zuerst, dann das Hauptauge. Ganon (Final): Zwei Phasen. Phase 1: Monster-Form, schlage Schwach-Punkte. Phase 2: Schwarzer Link (dein Doppel), perfekter Kämpfer. Nutze Byrna für Invincibility.' },
+          { heading: 'Tipps für Profis', content: 'Sequenz-Breaking: Mit guter Planung kannst du Dungeons außer Reihe machen. Bomben-Trick: Nutze Bomben um über Lava zu springen. Herzquellen: Lava-Gegenden haben versteckte Hearts. Speed-Run-Route: Wenn du schnell durchspielen willst, folge dieser Reihenfolge: Eastern → Desert → Dark Palace → Swamp → Skull Woods → Ice. Save Points: Regelmäßig in Häusern speichern vor Bossen. Geheime Sequenz: Nach dem Ending kann man mit der Flöte zu neuen Areas gehen.' }
+        ]
+      },
+      6: {
+        title: 'Sonic the Hedgehog',
+        platform: 'Genesis',
+        characters: [
+          { name: 'Sonic', role: 'Main Hero' },
+          { name: 'Dr. Robotnik', role: 'Villain' },
+          { name: 'Tails', role: 'Sidekick' }
+        ],
+        sections: [
+          { heading: 'Bewegung & Speedrun', content: 'Halte rechts um schneller zu werden. Sonic beschleunigt automatisch auf flachen Flächen. In der Luft kannst du dich noch lenken. Nutze Slopes um noch schneller zu werden - Jump am Anfang eines Slopes für maximale Geschwindigkeit.' },
+          { heading: 'Ring-Mechanic', content: 'Sammle Ringe um Schadenstoßfest zu sein. Mit 50+ Ringen kannst du dich in einen Star verwandeln (Unverwundbarkeit). Verlierst du Ringe, streuen sie auf dem Boden - schnell sammeln!' },
+          { heading: 'Green Hill Zone Tips', content: 'Erstes Level - bleibe rechts für die beste Route. Skip the underwater section wenn möglich mit guter Geschwindigkeit. Boss: Robotnik fährt in einem Panzer-ähnlichen Mech. Spring auf ihn 8x. Weiche seinen Angriffen aus und bleibe mobil.' },
+          { heading: 'Chaos Emeralds', content: 'Versteckt in speziellen Levels (Bonus Stages). Sammle alle 6 Emeralds um Good Ending zu bekommen. Special Zones sind schwer - brauchen perfekte Timing.' }
+        ]
+      },
+      10: {
+        title: 'Super Mario 64',
+        platform: 'Nintendo 64',
+        characters: [
+          { name: 'Mario', role: 'Main Character' },
+          { name: 'Peach', role: 'Kidnapped by Bowser' },
+          { name: 'Bowser', role: 'Antagonist' },
+          { name: 'Lakitu', role: 'Camera Assistant' }
+        ],
+        sections: [
+          { heading: 'Movement Techniken', content: 'Analog-Stick: volle Kontrolle. A-Taste: normales Jump. Double Jump: zweimal Jump drücken in der Luft. Triple Jump: 3x Jump für die Höhe. Backflip: C-Up halten + Jump. Long Jump: Z halten dann Jump - beste Fortbewegung.' },
+          { heading: 'Bob-omb Battlefield', content: 'Erstes Level mit 7 Stars. Klettere den Berg hoch für Star 1. Kämpfe gegen König Bobomb (Ground Pound auf dem Rücken). Im Wald gibt es einen Geheimen Star unter der Brücke. Total erkunden für alle Stars.' },
+          { heading: 'Kamera-Kontrolle', content: 'Z-Trigger: Zoom raus für bessere Übersicht. R-Trigger: Behind Camera - beste Position. C-Buttons: Kamera frei bewegen. Lerne die Camera zu kontrollieren bevor du schwierige Platforming-Sektionen versuchst.' },
+          { heading: 'Power-Ups & Items', content: 'Feuer-Blume: Laufe und schieße Feuer. Metallischer Mario: Schutz gegen Lava. Flügel-Cap: Fliegen für begrenzte Zeit. Vanish-Cap: Durch Gitter gehen. Finde alle Caps für geheime Stars.' }
+        ]
+      },
+      14: {
+        title: 'Final Fantasy VII',
+        platform: 'PlayStation 1',
+        characters: [
+          { name: 'Cloud', role: 'Protagonist & Ex-SOLDIER' },
+          { name: 'Aerith', role: 'Magic User & Healer' },
+          { name: 'Barret', role: 'Gunner & Leader' },
+          { name: 'Tifa', role: 'Martial Artist' }
+        ],
+        sections: [
+          { heading: 'Anfang - Midgar Escape', content: 'Du startest als Cloud in Midgar. Schließe dich Barret an. Kämpf dich durch die Fabrik. ATB-System: Warte bis deine Leiste voll ist um zu handeln. Nutze normale Angriffe bis zu Level 5-10, dann lerne Limit Breaks.' },
+          { heading: 'Materia-System (Kern-Mechanic)', content: 'Materia sind Kugeln die Magie geben. Rote Materia = Angriff (Fire, Ice, Bolt). Grüne Materia = Heilung (Cure, Regen). Blaue = Buff/Debuff. Gelbe = Spezial. Equippe Materia an Waffen/Rüstung. Höheres Level = stärkere Zauberei. Verdiene LP (Limit Points) um Zauberei zu leveln.' },
+          { heading: 'Party Aufbau', content: 'Cloud: Bestes Schwert + Physischer Schaden. Aerith: Heilung + White Magic. Barret: Großer Schaden mit Gun-Arm. In Kämpfen: 1-2 Heiler, 1-2 Damage. Tausche nach jedem Dungeon um alle zu leveln. Abilities gibt es durch Limit Breaks - 4 pro Character.' },
+          { heading: 'Gold verdienen & Shopping', content: 'Töte Gegner für Gil (Währung). Nach jedem Major Battle: Gehe in die Stadt zum Shopping. Kaufe bessere Waffen/Rüstung. Rüstung gibt Elemental Resistance wenn man kompatible Materia trägt. Potions sind billig - kaufe sie! Ether/Elixir sind teuer aber mächtig.' }
+        ]
+      }
+    };
+
+    let currentGame = null;
+    let favorites = JSON.parse(localStorage.getItem('gameGuidesFavorites')) || [];
+
+    const platformSelect = document.getElementById('platformSelect');
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsDiv = document.getElementById('suggestions');
+    const contentArea = document.getElementById('contentArea');
+
+    function updateSuggestions() {
+      const query = searchInput.value.toLowerCase();
+
+      if (!query) {
+        suggestionsDiv.classList.remove('visible');
+        return;
+      }
+
+      let allGames = [];
+      for (const games of Object.values(GAMES_DB)) {
+        allGames = allGames.concat(games);
+      }
+
+      const filtered = allGames.filter(g => g.title.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        suggestionsDiv.classList.remove('visible');
+        return;
+      }
+
+      suggestionsDiv.innerHTML = filtered.map(game =>
+        `<div class="suggestion-item" data-id="${game.id}">${game.title} (${game.year})</div>`
+      ).join('');
+      suggestionsDiv.classList.add('visible');
+
+      suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', () => selectGame(parseInt(item.dataset.id)));
+      });
+    }
+
+    function selectGame(gameId) {
+      if (!GUIDES[gameId]) return;
+
+      let game = null;
+      let platform = null;
+
+      for (const [plat, games] of Object.entries(GAMES_DB)) {
+        const found = games.find(g => g.id === gameId);
+        if (found) {
+          game = found;
+          platform = plat;
+          break;
+        }
+      }
+
+      if (!game) return;
+
+      platformSelect.value = platform;
+      currentGame = game;
+      searchInput.value = '';
+      suggestionsDiv.classList.remove('visible');
+      renderGuide(gameId);
+    }
+
+    function renderGuide(gameId) {
+      const guide = GUIDES[gameId];
+      const isFavorited = favorites.some(f => f.id === gameId);
+
+      const charactersList = guide.characters.map(char => `
+        <div class="character">
+          <div class="character-avatar">${char.name.charAt(0)}</div>
+          <div class="character-info">
+            <h4>${char.name}</h4>
+            <p>${char.role}</p>
+          </div>
+        </div>
+      `).join('');
+
+      const sectionsList = guide.sections.map(section => `
+        <h2>${section.heading}</h2>
+        <p>${section.content}</p>
+      `).join('');
+
+      const favoritesHtml = favorites.length > 0 ? `
+        <div class="card">
+          <h3>Gespeicherte Guides</h3>
+          <div style="max-height: 300px; overflow-y: auto;">
+            ${favorites.map(fav => `
+              <div class="favorite-item" onclick="selectGame(${fav.id})" style="cursor: pointer;">${fav.title}</div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      contentArea.innerHTML = `
+        <div class="content">
+          <div class="guide-viewer">
+            <div class="guide-header">
+              <h2 class="guide-title">${guide.title}</h2>
+              <p class="guide-subtitle">${guide.platform} • ${currentGame.year}</p>
+            </div>
+            <div class="guide-content">
+              ${sectionsList}
+            </div>
+          </div>
+
+          <div class="sidebar">
+            <button class="favorites-btn ${isFavorited ? 'saved' : ''}" onclick="toggleFavorite(${gameId})">
+              <span>★</span>
+              ${isFavorited ? 'Gespeichert' : 'Speichern'}
+            </button>
+
+            <div class="card">
+              <h3>Charaktere</h3>
+              ${charactersList}
+            </div>
+
+            ${favoritesHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleFavorite(gameId) {
+      const platform = platformSelect.value;
+      const games = GAMES_DB[platform] || [];
+      const game = games.find(g => g.id === gameId);
+
+      const index = favorites.findIndex(f => f.id === gameId);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push(game);
+      }
+
+      localStorage.setItem('gameGuidesFavorites', JSON.stringify(favorites));
+      renderGuide(gameId);
+    }
+
+    platformSelect.addEventListener('change', () => {
+      currentGame = null;
+      searchInput.value = '';
+      contentArea.innerHTML = `
+        <div class="empty-state">
+          <p>👈 Wähle ein Spiel zum Anschauen</p>
+          <p style="font-size: 0.9rem; color: #ccc;">Oder suche nach deinem Lieblingsspiel</p>
+        </div>
+      `;
+    });
+
+    searchInput.addEventListener('input', updateSuggestions);
+    searchInput.addEventListener('focus', updateSuggestions);
+  </script>
+</body>
+</html>

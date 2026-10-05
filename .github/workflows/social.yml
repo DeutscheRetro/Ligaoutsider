@@ -24,4 +24,4 @@ jobs:
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
           git add data/social_queue.json
-          git diff --staged --quiet || { git commit -m "📣 Social-Warteschlange [skip netlify]"; git pull --rebase -X theirs origin main; git push; }
+          git diff --staged --quiet || { git commit -m "📣 Social-Warteschlange"; git pull --rebase -X theirs origin main; git push; }

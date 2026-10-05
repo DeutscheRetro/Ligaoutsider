@@ -16,7 +16,7 @@
     const user = window.netlifyIdentity && netlifyIdentity.currentUser();
     if (!user) throw new Error('Nicht angemeldet');
     const token = await user.jwt();
-    const res = await fetch('/.netlify/functions/api', {
+    const res = await fetch('/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ aktion, ...daten })

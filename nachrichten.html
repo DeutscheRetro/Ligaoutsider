@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" href="favicon.png" type="image/png"/>
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/auth.js"></script>
   <style>
     .pf-wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; display: flex; gap: 20px; align-items: flex-start; }
     .pf-liste { flex: 0 0 300px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
@@ -116,7 +116,7 @@
     const u = window.netlifyIdentity && netlifyIdentity.currentUser();
     if (!u) throw new Error('Nicht angemeldet');
     const token = await u.jwt();
-    const r = await fetch('/.netlify/functions/api', {
+    const r = await fetch('/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ aktion, ...daten })
