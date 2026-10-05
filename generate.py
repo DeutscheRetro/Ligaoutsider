@@ -561,8 +561,27 @@ def _text_aus(antwort) -> str:
 
 
 def _qa_reserve(anzahl: int) -> float:
-    """Geld, das für Qualitätsprüfung und Doppel-Gegenprobe am Laufende frei bleiben muss."""
-    return ki_budget.schaetzung(SONNET, 200 + 80 * anzahl, 1500 + 2600 * anzahl) + 0.002
+    """Geld, das für die Doppel-Gegenproben nach dem Schreiben frei bleiben muss."""
+    return 0.002
+
+
+# Sätze, die nur Lücken füllen oder auf fehlende Infos verweisen – fliegen raus
+_FLOSKELN = re.compile(
+    r"bleibt abzuwarten|nicht spezifiziert|nennt die quelle nicht|laut (?:der )?quelle nicht|"
+    r"(?:details|einzelheiten) (?:sind|wurden|werden) nicht|bezahlschranke|paywall|"
+    r"liegen (?:noch )?keine (?:weiteren )?informationen vor|keine weiteren (?:details|informationen)|"
+    r"wurde(?:n)? nicht (?:genannt|bekannt(?:gegeben)?)|ist (?:bislang )?nicht bekannt",
+    re.IGNORECASE)
+
+
+def floskeln_entfernen(text: str) -> str:
+    absaetze = []
+    for absatz in text.split("\n\n"):
+        saetze = re.split(r"(?<=[.!?…])\s+", absatz.strip())
+        behalten = [x for x in saetze if x and not _FLOSKELN.search(x)]
+        if behalten:
+            absaetze.append(" ".join(behalten))
+    return "\n\n".join(absaetze)
 
 
 # Randthemen, die wir ohne Spielerbezug nicht schreiben (Entscheidung 10/2026: Fokus auf
@@ -689,17 +708,33 @@ def spielplan_kontext(tage: int = 4) -> list[str]:
     return _SPIELPLAN
 
 
+_GOOGLE_FEHLER_IN_FOLGE = 0
+MIN_QUELL_WOERTER = 280          # weniger Stoff ergibt keinen vollwertigen Artikel
+
+
 def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list[dict]:
     """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
     genug Stoff für einen vollwertigen Artikel beisammen ist."""
+    global _GOOGLE_FEHLER_IN_FOLGE
     texte = []
     for q in g["quellen"][:5]:
         if len(texte) >= max_texte or sum(len(t["text"].split()) for t in texte) >= genug_woerter:
             break
-        # Google-Links auflösen: verlinkt wird das Original, LigaInsider nie
+        # Google-Links auflösen: verlinkt wird das Original, LigaInsider nie.
+        # Sperrt Google die Auflösung (kommt auf GitHub-Servern vor), nach drei
+        # Fehlschlägen in Folge für den Rest des Laufs keine Google-Links mehr.
         original = q["url"]
         if "news.google.com" in original:
-            original = _decode_google_news_url(original) or original
+            if _GOOGLE_FEHLER_IN_FOLGE >= 3:
+                continue
+            aufgeloest = _decode_google_news_url(original)
+            if not aufgeloest:
+                _GOOGLE_FEHLER_IN_FOLGE += 1
+                if _GOOGLE_FEHLER_IN_FOLGE == 3:
+                    log.warning("Google-News-Links in diesem Lauf nicht auflösbar – nur direkte Quellen")
+                continue
+            _GOOGLE_FEHLER_IN_FOLGE = 0
+            original = aufgeloest
         if "ligainsider" in original.lower():
             continue
         text, grund = fetch_fulltext(q["url"])
@@ -974,6 +1009,8 @@ def _decode_google_news_url(google_url: str) -> str | None:
         sig = re.search(r'data-n-a-sg="([^"]+)"', seite.text)
         ts = re.search(r'data-n-a-ts="([^"]+)"', seite.text)
         if not (sig and ts):
+            log.info(f"Google-News-Link nicht auflösbar: HTTP {seite.status_code}, "
+                     f"{'Sperrseite' if 'sorry' in seite.url or 'consent' in seite.url else 'keine Signatur'}")
             return None
 
         nutzlast = json.dumps([
@@ -1208,8 +1245,9 @@ Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
   Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
   Dann alle Textfelder leer lassen und Listen leer.
-- genug_stoff: false, wenn die Quellen zu diesem Thema nicht genug Inhalt für mindestens 180 Wörter ohne Füllsätze
+- genug_stoff: false, wenn die Quellen zu diesem Thema nicht genug Inhalt für mindestens 200 Wörter ohne Füllsätze
   hergeben (z. B. nur eine Randnotiz in einem Sammelartikel). Dann ebenfalls alle Textfelder leer lassen.
+  Ist genug_stoff true, MUSS der Text mindestens 200 Wörter haben.
 - titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
 - text: ein vollwertiger Nachrichtenartikel, 4 bis 6 Absätze, 200 bis 350 Wörter, Absätze durch eine Leerzeile getrennt.
   Führe alle Quellen zu EINEM Artikel zusammen: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
@@ -1614,71 +1652,6 @@ def artikel_html(
 
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
-def qualitaets_check(kandidaten: list) -> list:
-    """Sonnet prüft alle Kandidaten als Batch mit strukturiertem JSON-Output.
-    Gibt nur approved Kandidaten zurück."""
-    if not kandidaten:
-        return []
-
-    # Vollständiger Text: mit nur 300 Zeichen hielt die Prüfung fast jeden Artikel
-    # für "mitten im Satz abgebrochen" und lehnte zwei Drittel ab.
-    liste = ""
-    for i, k in enumerate(kandidaten):
-        text_voll = k["ergebnis"]["text"][:2500].replace("\n", " ")
-        liste += f"\n[{i}] Titel: {k['ergebnis']['titel']}\n    Text: {text_voll}\n"
-
-    try:
-        antwort = ki_budget.aufruf("qualitaet", model=SONNET, max_tokens=200 + 80 * len(kandidaten), messages=[{
-            "role": "user",
-            "content": (
-                f"Du bist leitender QS-Redakteur von ligaoutsider.de. Heute ist der {datetime.date.today().strftime('%d.%m.%Y')} – "
-                f"Daten aus dieser Saison 2026/27 sind aktuell und nicht erfunden.\n"
-                f"Reviewe {len(kandidaten)} Kandidaten. Die Texte sind vollständig abgedruckt. Für JEDEN prüfe:\n"
-                f"1. Handwerk: Kein Lückenfüller, keine Floskeln wie 'Details nicht bekannt', kein Verweis auf eine Bezahlschranke, "
-                f"keine Widersprüche innerhalb des Textes\n"
-                f"2. Einzigartigkeit: Kein Duplikat eines anderen Kandidaten (gleicher Spieler + Situation)\n"
-                f"3. Qualität: Substanz, lesbar, nicht leer/generisch\n\n"
-                f"WICHTIG: Prüfe NICHT, ob Namen, Trainer, Kader, Transfers oder Ergebnisse stimmen. Du kennst die Quellen nicht "
-                f"und dein Wissen ist veraltet – Trainer und Kader haben sich seitdem geändert. Lehne nie ab, weil etwas "
-                f"deinem Wissensstand widerspricht.\n\n"
-                f"Artikel sollen vollwertige Nachrichten sein (ca. 200-350 Wörter) mit konkreten Informationen "
-                f"(Ausfall, Rückkehr ins Training, Startelf-Chance, Aussage eines Trainers). Lehne Texte mit Füllsätzen oder Wiederholungen ab.\n\n"
-                f"KANDIDATEN:\n{liste}\n\n"
-                f"Output NUR als valides JSON-Array:\n"
-                f'[{{"id":0,"decision":"APPROVE"|"REJECT","reason":"1 Satz"}},...]'
-            )
-        }])
-    except Exception as e:
-        # Die Artikel haben Länge, Relevanz und Doppel-Prüfung schon bestanden und sind bezahlt
-        log.warning(f"QA nicht möglich ({e}) – {len(kandidaten)} Kandidaten ungeprüft freigegeben")
-        return list(kandidaten)
-
-    roh = _text_aus(antwort)
-    m = re.search(r'\[.*\]', roh, re.DOTALL)
-    try:
-        ergebnisse = json.loads(m.group()) if m else None
-    except json.JSONDecodeError:
-        ergebnisse = None
-    if not isinstance(ergebnisse, list):
-        log.warning(f"QA: Antwort nicht lesbar – Kandidaten ungeprüft freigegeben: {roh[:200]}")
-        return list(kandidaten)
-
-    approved = []
-    for item in ergebnisse:
-        if isinstance(item, dict) and item.get("decision") == "APPROVE":
-            idx = item.get("id")
-            if isinstance(idx, int) and 0 <= idx < len(kandidaten):
-                approved.append(kandidaten[idx])
-                log.info(f"QA APPROVE [{idx}]: {kandidaten[idx]['ergebnis']['titel'][:60]}")
-            else:
-                log.warning(f"QA: ungültiger Index {idx}")
-        elif isinstance(item, dict):
-            idx = item.get("id", "?")
-            reason = item.get("reason", "")
-            log.info(f"QA REJECT [{idx}]: {reason}")
-    return approved
-
-
 def main():
     global DELETED_IDS
     DELETED_IDS = lade_deleted_ids()
@@ -2046,11 +2019,15 @@ def main():
                      f"{len(reihenfolge) - reihenfolge.index(g)} Geschichten warten auf den nächsten Lauf")
             break
         texte = quellen_laden(g)
-        if not texte:
+        woerter_quellen = sum(len(t["text"].split()) for t in texte)
+        if woerter_quellen < MIN_QUELL_WOERTER:
+            # Zu wenig Stoff für einen vollwertigen Artikel: später neue Quellen abwarten
             stats["s5_fulltext_fail"] += 1
             g["versuche"] = g.get("versuche", 0) + 1
+            log.info(f"S7 zu wenig Stoff ({woerter_quellen} Wörter aus {len(texte)} Quellen, "
+                     f"Versuch {g['versuche']}/3): {g['titel'][:60]}")
             if g["versuche"] >= 3:
-                _geschichte_verwerfen(g, "stage7", "kein_volltext")
+                _geschichte_verwerfen(g, "stage7", "zu_wenig_quelltext")
                 schlange.remove(g)
             continue
         try:
@@ -2084,8 +2061,9 @@ def main():
         stats["s7_geschrieben"] += 1
         aid = texte[0]["aid"]
 
+        ergebnis["text"] = floskeln_entfernen(str(ergebnis.get("text", "")))
         grund = None
-        woerter = len(str(ergebnis.get("text", "")).split())
+        woerter = len(ergebnis["text"].split())
         hauptklub = str(ergebnis.get("hauptklub", "")).strip()
         if not ergebnis.get("relevant", True):
             grund = "nicht_relevant"
@@ -2146,14 +2124,12 @@ def main():
 
     storys.warteschlange_speichern(schlange)
 
-    # ── Stage 8: Batch Quality Gate (Sonnet) ─────────────────────────────────
-    if kandidaten:
-        log.info(f"S8 QA: {len(kandidaten)} Kandidaten …")
-        approved = qualitaets_check(kandidaten)
-        stats["s8_qa_rejected"] = len(kandidaten) - len(approved)
-        log.info(f"S8 approved: {len(approved)} / {len(kandidaten)}")
-    else:
-        approved = []
+    # ── Stage 8: Qualität ────────────────────────────────────────────────────
+    # Die frühere KI-Prüfung kannte die Quellen nicht und lehnte mit veraltetem
+    # Wissen echte Fakten ab ("Baum ist nicht Augsburg-Trainer"). Floskeln werden
+    # jetzt regelbasiert entfernt (floskeln_entfernen), Länge, Relevanz und
+    # Doppel sind vorher geprüft.
+    approved = list(kandidaten)
 
     # ── Stage 9.5: Final Pre-Publish Check ────────────────────────────────────
     news_archive = lade_news_archive()
