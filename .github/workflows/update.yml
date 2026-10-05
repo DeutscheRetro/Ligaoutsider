@@ -54,7 +54,14 @@ jobs:
       # (Secret CLAUDE_CODE_OAUTH_TOKEN, erzeugt mit "claude setup-token").
       # Ohne Secret oder bei erschöpftem Kontingent geht es über die API.
       - name: Claude Code installieren
-        run: npm install -g @anthropic-ai/claude-code && claude --version
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          npm install -g @anthropic-ai/claude-code && claude --version
+          # Diagnose ohne den Wert zu zeigen: Länge und Präfix (sk-ant-oat01-…)
+          T="$CLAUDE_CODE_OAUTH_TOKEN"
+          echo "Abo-Token: ${#T} Zeichen, Präfix ${T:0:13}, Leerzeichen/Umbrüche: $(printf %s "$T" | tr -cd ' \n\r\t' | wc -c)"
+          echo "Antworte nur mit OK" | env -u ANTHROPIC_API_KEY claude -p --model haiku --tools "" --setting-sources "" || true
 
       - name: Artikel generieren
         env:
