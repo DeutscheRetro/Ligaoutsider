@@ -9,9 +9,14 @@ from pathlib import Path
 
 import anthropic
 
-import generate as gen
-import ki_budget
-import storys
+# generate.py legt beim Import einen API-Client an. Der Vergleich läuft nur übers Abo
+# (KI_NUR_ABO), der Schlüssel wird also nie benutzt.
+os.environ.setdefault("ANTHROPIC_API_KEY", "nicht-benutzt")
+os.environ["KI_NUR_ABO"] = "1"
+
+import generate as gen  # noqa: E402
+import ki_budget  # noqa: E402
+import storys  # noqa: E402
 
 VARIANTEN = [
     {"name": "Opus 5.5 · medium", "model": "claude-opus-5-5", "effort": "medium"},
