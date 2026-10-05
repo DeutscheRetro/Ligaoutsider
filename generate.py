@@ -709,7 +709,32 @@ def spielplan_kontext(tage: int = 4) -> list[str]:
 
 
 _GOOGLE_FEHLER_IN_FOLGE = 0
-MIN_QUELL_WOERTER = 280          # weniger Stoff ergibt keinen vollwertigen Artikel
+MIN_QUELL_WOERTER = 120          # weniger Stoff ergibt keinen richtigen Artikel
+
+
+def daten_kontext(g: dict) -> str:
+    """Eigene Daten zur Einordnung (kostenlos): Rolle der Spieler laut Aufstellungs-Check
+    und nächstes Bundesligaspiel des Klubs. Damit bekommt auch eine kurze Meldung
+    einen Rahmen ("stand in allen vier Spielen in der Startelf", "am Samstag in Augsburg")."""
+    try:
+        a = json.loads(Path("aufstellung.json").read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    zeilen = []
+    gesucht = {storys.falten(n) for n in g.get("spieler", [])[:3]}
+    for team, t in a.get("teams", {}).items():
+        eintraege = [x for reihe in (t.get("elf") or {}).values() for x in reihe]
+        eintraege += (t.get("bank") or []) + (t.get("fraglich") or []) + (t.get("ausfall") or [])
+        for x in eintraege:
+            if storys.falten(x.get("name", "")) in gesucht:
+                zeilen.append(f"- {x['name']} ({team}, {x.get('pos', '')}): {x.get('grund', '')}; "
+                              f"Startelf-Chance im nächsten Spiel laut unserem Aufstellungs-Check {x.get('prozent', 0)} %")
+    klubs = set(g.get("klubs") or []) | ({g["klub"]} if g.get("klub") else set())
+    for p in a.get("partien", []):
+        if klubs & (set(storys.klubs_in(p["heim"])) | set(storys.klubs_in(p["gast"]))):
+            zeilen.append(f"- Nächstes Bundesligaspiel: {p['heim']} – {p['gast']}, {p.get('anstoss_text', '')} "
+                          f"({p.get('spieltag', '')}. Spieltag)")
+    return "\n".join(dict.fromkeys(zeilen))
 
 
 def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list[dict]:
@@ -1220,6 +1245,8 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
                           for i, t in enumerate(texte))
+    daten = daten_kontext(g)
+    daten = (f"\n\nUNSERE DATEN (zur Einordnung, darfst du verwenden):\n{daten}" if daten else "")
     frueher = ""
     if g.get("archiv"):
         frueher = ("\n\nUNSERE FRÜHEREN BERICHTE ZUM THEMA (nur zur Einordnung, nicht nacherzählen):\n"
@@ -1229,7 +1256,7 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict
 Heute ist der {datetime.date.today().strftime('%d.%m.%Y')}.
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
-- Nur Fakten, Namen, Zahlen aus den QUELLEN verwenden.
+- Nur Fakten, Namen, Zahlen aus den QUELLEN und UNSEREN DATEN verwenden.
 - Steht eine Information nicht in den Quellen → einfach weglassen. Niemals Sätze wie "laut Quelle nicht spezifiziert",
   "Details nennt die Quelle nicht" oder Verweise auf Bezahlschranken/Pressekonferenzen ohne Inhalt schreiben.
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
@@ -1239,22 +1266,26 @@ ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
 - Zitate in deutschen Anführungszeichen „…“.
 
 QUELLEN ({len(texte)}):
-{quellen}{frueher}
+{quellen}{daten}{frueher}
 
 Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
   Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
   Dann alle Textfelder leer lassen und Listen leer.
-- genug_stoff: false, wenn die Quellen zu diesem Thema nicht genug Inhalt für mindestens 200 Wörter ohne Füllsätze
-  hergeben (z. B. nur eine Randnotiz in einem Sammelartikel). Dann ebenfalls alle Textfelder leer lassen.
-  Ist genug_stoff true, MUSS der Text mindestens 200 Wörter haben.
+- genug_stoff: false, wenn die Quellen zu diesem Thema nicht einmal für eine runde Meldung von 120 Wörtern reichen.
+  Dann ebenfalls alle Textfelder leer lassen. Ist genug_stoff true, MUSS der Text mindestens 120 Wörter haben.
 - titel: präziser Titel im Kicker-Stil (max. 80 Zeichen).
-- text: ein vollwertiger Nachrichtenartikel, 4 bis 6 Absätze, 200 bis 350 Wörter, Absätze durch eine Leerzeile getrennt.
-  Führe alle Quellen zu EINEM Artikel zusammen: alle Fakten, Zahlen, Zitate (wörtlich, mit Sprecher),
-  Hintergründe, Vorgeschichte und Ausblick, soweit sie in den Quellen stehen. Widersprechen sich die Quellen,
-  nenne beide Angaben. Ist es eine neue Entwicklung zu einem früheren Bericht, ordne sie kurz ein ("Wie berichtet, ...").
-  Aufbau: Kernnachricht im ersten Absatz, dann Details, Zitate, Hintergrund, Ausblick.
-  Keine Füllsätze, keine Wiederholungen – Länge nur durch Inhalt aus den Quellen.
+- text: eine runde Nachrichtenmeldung wie bei LigaInsider oder kicker, 120 bis 300 Wörter, 3 bis 5 Absätze,
+  Absätze durch eine Leerzeile getrennt. Kein Stichpunkt-Telegramm – jeder Absatz hat mindestens zwei ganze Sätze.
+  Aufbau, immer in dieser Reihenfolge:
+  1. Einstieg: die Nachricht in ein bis zwei vollständigen Sätzen – wer (mit Klub und Rolle, z. B. "Werders
+     Stammtorhüter Karl Hein"), was, wann, für welches Spiel.
+  2. Details: Hintergründe und Zitate aus den Quellen (wörtlich, mit Sprecher). Widersprechen sich Quellen,
+     nenne beide Angaben. Bei einer neuen Entwicklung kurz einordnen ("Wie berichtet, ...").
+  3. Einordnung mit UNSEREN DATEN, wenn vorhanden: Rolle des Spielers in dieser Saison, Startelf-Chance.
+  4. Abschluss: was das für das nächste Spiel oder die nächsten Wochen bedeutet (z. B. wer ersetzen könnte,
+     wann der nächste Gegner wartet) – nur aus Quellen und unseren Daten.
+  Keine Füllsätze, keine Wiederholungen.
 - kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 - hauptklub: der EINE Klub, um den es zentral geht. Erlaubt: {klub_liste}
   Der Klub, dessen Perspektive der Artikel einnimmt – nicht der Gegner.
@@ -2069,7 +2100,7 @@ def main():
             grund = "nicht_relevant"
         elif not ergebnis.get("genug_stoff", True):
             grund = "zu_wenig_stoff"
-        elif woerter < 150:
+        elif woerter < 100:
             grund = f"zu_kurz_{woerter}_woerter"
         elif hauptklub not in KLUB_LOGO:
             grund = "kein_bl_hauptklub"
