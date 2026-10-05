@@ -537,8 +537,9 @@ def feed_laden() -> list:
         print(f"  Live feed.json nicht erreichbar ({e}) – nur lokale Version")
 
     # Merge: live + lokal, Duplikate per ID entfernen
-    merged = {a["id"]: a for a in live}
-    for a in lokal:
+    # Lokal (= Git-Stand) gewinnt: dort stehen auch Korrekturen der Qualitätsprüfung
+    merged = {a["id"]: a for a in lokal}
+    for a in live:
         merged.setdefault(a["id"], a)
     return list(merged.values())
 

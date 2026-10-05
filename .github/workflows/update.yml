@@ -37,6 +37,11 @@ on:
         description: 'Manueller oder externer Trigger'
         required: false
         default: 'manuell'
+      qualitaet:
+        description: 'Danach Qualitätsprüfung durch Opus (sonst nur um 12 und 18 Uhr)'
+        type: boolean
+        required: false
+        default: false
 
 env:
   TZ: Europe/Berlin
@@ -46,10 +51,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       los: ${{ steps.pruefen.outputs.los }}
+      qualitaet: ${{ steps.pruefen.outputs.qualitaet }}
     steps:
       - id: pruefen
         env:
           SCHEDULE: ${{ github.event.schedule }}
+          QUALITAET_MANUELL: ${{ github.event.inputs.qualitaet }}
         run: |
           # Manuell gestartet: immer. Geplant: nur die Sommer- bzw. Winterzeit-Variante, die gerade gilt.
           SOMMER=('0 23 * * *' '0 4 * * *' '0 6 * * *' '0 8 * * *' '0 10 * * *' '30 11 * * *' '0 13 * * *' '30 14 * * *' '0 16 * * *' '30 17 * * *' '0 19 * * *' '0 21 * * *')
@@ -60,12 +67,17 @@ jobs:
           for c in "${LISTE[@]}"; do [ "$c" = "$SCHEDULE" ] && LOS=true; done
           echo "schedule='$SCHEDULE' → los=$LOS"
           echo "los=$LOS" >> "$GITHUB_OUTPUT"
+          # Qualitätsprüfung durch Opus um 12 und 18 Uhr (Sommer- und Winterzeit-Variante)
+          Q=false
+          case "$SCHEDULE" in '0 10 * * *'|'0 16 * * *'|'0 11 * * *'|'0 17 * * *') Q=$LOS ;; esac
+          [ "$QUALITAET_MANUELL" = "true" ] && Q=true
+          echo "qualitaet=$Q" >> "$GITHUB_OUTPUT"
 
   generate:
     needs: zeitplan
     if: needs.zeitplan.outputs.los == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     # Nie einen laufenden Lauf abbrechen: er hat womöglich schon für Artikel bezahlt,
     # und ohne Commit fehlen die Kosten in data/api_kosten.json
     concurrency:
@@ -117,6 +129,14 @@ jobs:
           REDDIT_USERNAME:      ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD:      ${{ secrets.REDDIT_PASSWORD }}
         run: python generate.py
+
+      # Zweimal am Tag prüft Opus alle Artikel seit der letzten Prüfung gegen ihre Quelle
+      - name: Qualitätsprüfung (Opus)
+        if: needs.zeitplan.outputs.qualitaet == 'true'
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          KI_NUR_ABO: '1'
+        run: python qualitaet.py || echo "Qualitätsprüfung fehlgeschlagen – Artikel bleiben unverändert"
 
       - name: Änderungen committen & pushen
         run: |
