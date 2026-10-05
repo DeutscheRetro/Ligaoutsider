@@ -57,6 +57,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
+          # Die Veröffentlichungsregel sucht im Verlauf den letzten Commit ohne
+          # [skip netlify]. Mit dem Standard (nur 1 Commit) fand sie nach jedem
+          # Social-Commit nichts und hat bei fast jedem zweiten Lauf veröffentlicht.
+          fetch-depth: 100
 
       - name: Python einrichten
         uses: actions/setup-python@v5
