@@ -2149,8 +2149,8 @@ def main():
         ergebnis["text"] = floskeln_entfernen(str(ergebnis.get("text", "")))
         if not g.get("archiv"):
             t = re.sub(r",\s*wie (?:bereits |zuvor |zuletzt )?berichtet,", "", ergebnis["text"])
-            ergebnis["text"] = re.sub(r"(^|(?<=[.!?]\s)|(?<=\n))Wie (?:bereits |zuvor |zuletzt )?berichtet,\s*(\w)",
-                                      lambda m: m.group(1) + m.group(2).upper(), t)
+            # Satzanfang: Ersatz statt Streichen, sonst kippt die Wortstellung ("Soll Tottenham …")
+            ergebnis["text"] = re.sub(r"\bWie (?:bereits |zuvor |zuletzt )?berichtet,\s*", "Laut Berichten ", t)
         grund = None
         woerter = len(ergebnis["text"].split())
         hauptklub = str(ergebnis.get("hauptklub", "")).strip()
