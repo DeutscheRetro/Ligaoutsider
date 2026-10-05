@@ -655,14 +655,21 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
                 teil[i]["status"] = m.group(3)
 
 
-def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str) -> bool:
-    """Gegenprobe für ein einzelnes Paar (Haiku, wenige Hundert Tokens)."""
+def gleiches_ereignis(a_titel: str, a_kern: str, b_titel: str, b_kern: str, b_artikel: bool = False) -> bool:
+    """Gegenprobe für ein einzelnes Paar (Haiku, wenige Hundert Tokens).
+    b_artikel: B ist ein fertiger Artikel von uns, der A auch nur als Teil enthalten kann."""
+    frage = ("Steht das Ereignis aus Meldung A bereits in unserem Artikel B – als Hauptthema oder als Teil "
+             "eines größeren Artikels (z. B. Personal-Update mit mehreren Spielern)? Ist A nur eine Wiederholung "
+             "ohne wesentliche neue Information = JA. Bringt A eine neue Entwicklung oder ein anderes Ereignis = NEIN."
+             if b_artikel else
+             "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
+             "Andere Person oder anderes Ereignis = NEIN.")
+    laenge = 2500 if b_artikel else 600
     antwort = ki_budget.aufruf("dublette", model=HAIKU, max_tokens=5, messages=[{"role": "user", "content": (
-        "Berichten diese zwei Meldungen über dasselbe Ereignis mit denselben Personen? "
-        "Andere Person oder anderes Ereignis = NEIN.\n\n"
+        frage + "\n\n"
         "Eine neue Entwicklung (Gerücht → offiziell, fraglich → fällt aus, Verletzung → zurück im Training, "
         "Kandidat → Absage) ist KEIN gleiches Ereignis.\n\n"
-        f"A: {a_titel}\nKern A: {a_kern[:600]}\n\nB: {b_titel}\nKern B: {(b_kern or '(nur Titel)')[:600]}\n\n"
+        f"A: {a_titel}\nKern A: {a_kern[:600]}\n\nB: {b_titel}\nKern B: {(b_kern or '(nur Titel)')[:laenge]}\n\n"
         "Antworte nur JA oder NEIN."
     )}])
     return "JA" in _text_aus(antwort).upper()
@@ -672,15 +679,23 @@ def vorpruefung(g: dict, kern: str, vergleich: list[dict]) -> str | None:
     """Stage 6.5: Gibt es zur selben Person in den letzten drei Tagen schon einen
     Artikel (Archiv oder dieser Lauf)? Dann vergleicht Haiku vor dem teuren Schreiben
     beide Meldungen. Gibt den Titel der Doppelmeldung zurück oder None."""
-    if not g.get("person"):
-        return None
-    person = storys.falten(g["person"])
     jetzt = datetime.datetime.now()
-    nahe = sorted((e for e in vergleich if person in e["spieler"] and (jetzt - e["zeit"]).days <= 3),
-                  key=lambda e: e["zeit"], reverse=True)
     titel = " / ".join(q["titel"] for q in g["quellen"][:2])
-    for e in nahe[:2]:
-        if gleiches_ereignis(titel, kern, e["titel"], e.get("summary", "")):
+    if g.get("person"):
+        person = storys.falten(g["person"])
+        nahe = sorted((e for e in vergleich if person in e["spieler"] and (jetzt - e["zeit"]).days <= 3),
+                      key=lambda e: e["zeit"], reverse=True)
+        for e in nahe[:2]:
+            if gleiches_ereignis(titel, kern, e["titel"], e.get("summary", "")):
+                return e["titel"]
+    # Sammelartikel (Personal-Update, Trainingsbericht) desselben Klubs aus den letzten
+    # 24 Stunden können die Meldung schon enthalten, auch wenn die Person dort Nebenfigur ist
+    klubs = set(storys.klubs_in(titel)) | ({g["klub"]} if g.get("klub") else set())
+    gleicher_klub = sorted((e for e in vergleich if e.get("text") and klubs & set(e.get("klubs", ()))
+                            and (jetzt - e["zeit"]).total_seconds() < 86400),
+                           key=lambda e: e["zeit"], reverse=True)
+    for e in gleicher_klub[:3]:
+        if gleiches_ereignis(titel, kern, e["titel"], e["text"], b_artikel=True):
             return e["titel"]
     return None
 
@@ -768,6 +783,7 @@ def _als_archiv_eintrag(ergebnis: dict, aid: str) -> dict:
         # für archiv_abgleich() als "Geschichte" lesbar:
         "klub": a["klub"] or (hauptklub if hauptklub in VEREIN_FILTER.values() else ""),
         "person_name": person, "spieler_namen": spieler,
+        "text": ergebnis.get("text", ""),
     }
 
 
@@ -1271,7 +1287,11 @@ Fülle diese Felder:
   3. Schluss (letzter Absatz, mindestens zwei Sätze): rundet die Meldung ab. Am besten ein Ausblick aus den Quellen
      (nächstes Spiel, Rückkehrtermin, wer ersetzen könnte, nächster Schritt im Transfer). Gibt es keinen, fasse
      zusammen, was die Nachricht für Spieler und Klub bedeutet – ebenfalls nur mit Fakten aus den Quellen.
-     Der Artikel darf nie mitten in den Details enden.
+     Der Artikel darf nie mitten in den Details enden. Der Schluss wiederholt nicht einfach das Intro
+     ("Für den Klub bedeutet das den Ausfall von ...") – er bringt einen weiteren Fakt oder Ausblick.
+  Bleib beim Thema dieser Geschichte: Ist eine Quelle ein Sammelartikel (News-Update, Ticker, Personal-Update
+  mit mehreren Themen), nutze nur die Teile zu diesem Thema. Andere Themen aus der Quelle (anderer Spieler,
+  Trainerverträge, Talente) gehören nicht in den Artikel.
   Keine Füllsätze, keine Wiederholungen.
 - kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 - hauptklub: der EINE Klub, um den es zentral geht. Erlaubt: {klub_liste}
