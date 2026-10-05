@@ -11,10 +11,19 @@ seinen Anteil am Monatsrest, gemessen an allen noch geplanten Läufen des Monats
 (LAUFPLAN_UTC). Läufe von Freitag bis Sonntag zählen 1,5-fach, weil an
 Spieltagen mehr passiert. Was ein Lauf nicht braucht, verteilt sich auf die
 folgenden.
+
+Abo statt Guthaben: Ist CLAUDE_CODE_OAUTH_TOKEN gesetzt (claude setup-token),
+laufen die Aufrufe über die Claude-Code-CLI und damit über das Claude-Abo –
+ohne Kosten pro Token. Ist das Abo-Kontingent erschöpft oder schlägt der
+Aufruf fehl, geht dieser und jeder weitere Aufruf des Laufs über die API mit
+dem Budget oben.
 """
 import datetime
 import json
 import os
+import shutil
+import subprocess
+from types import SimpleNamespace
 from pathlib import Path
 
 import anthropic
@@ -26,6 +35,7 @@ PREISE = {
     "claude-haiku-4-5-20251001": (1.00, 5.00),
     "claude-haiku-4-5":          (1.00, 5.00),
     "claude-sonnet-4-6":         (3.00, 15.00),
+    "claude-opus-5-5":           (5.00, 25.00),
 }
 PREIS_UNBEKANNT = (5.00, 25.00)   # lieber zu teuer schätzen
 
@@ -56,6 +66,45 @@ _lauf_budget = 0.0
 _lauf_usd = 0.0
 _zwecke: dict = {}
 _guthaben_leer = False
+_abo = bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) and bool(shutil.which("claude"))
+ABO_TIMEOUT_SEK = 300
+
+
+def abo_aktiv() -> bool:
+    return _abo
+
+
+def _per_abo(model: str, messages: list, output_config: dict | None):
+    """Ein Aufruf über die Claude-Code-CLI (Abo). Gibt ein Objekt zurück, das wie
+    eine API-Antwort aussieht (content[0].text, stop_reason, usage)."""
+    prompt = "\n\n".join(m["content"] if isinstance(m["content"], str)
+                         else json.dumps(m["content"], ensure_ascii=False) for m in messages)
+    befehl = ["claude", "-p", "--model", model, "--tools", "", "--output-format", "json",
+              "--no-session-persistence", "--setting-sources", "",
+              "--system-prompt", "Du arbeitest für die Redaktion von ligaoutsider.de. "
+                                 "Halte dich genau an die Anweisungen und das verlangte Antwortformat."]
+    schema = ((output_config or {}).get("format") or {}).get("schema")
+    if schema:
+        befehl += ["--json-schema", json.dumps(schema, ensure_ascii=False)]
+    # Ohne API-Key in der Umgebung, sonst rechnet die CLI über das Guthaben ab statt übers Abo
+    umgebung = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
+    lauf = subprocess.run(befehl, input=prompt, capture_output=True, text=True,
+                          timeout=ABO_TIMEOUT_SEK, env=umgebung)
+    try:
+        d = json.loads(lauf.stdout)
+    except Exception:
+        raise RuntimeError(f"CLI ohne JSON (exit {lauf.returncode}): {(lauf.stderr or lauf.stdout)[:200]}")
+    if d.get("is_error") or d.get("subtype") != "success":
+        raise RuntimeError(f"CLI-Fehler: {str(d.get('result') or d.get('subtype'))[:200]}")
+    if schema:
+        if d.get("structured_output") is None:
+            raise RuntimeError("CLI ohne strukturierte Ausgabe")
+        text = json.dumps(d["structured_output"], ensure_ascii=False)
+    else:
+        text = d.get("result") or ""
+    return SimpleNamespace(content=[SimpleNamespace(type="text", text=text)],
+                           stop_reason=d.get("stop_reason") or "end_turn",
+                           usage=SimpleNamespace(input_tokens=0, output_tokens=0))
 
 
 def _gewicht_rest(jetzt: datetime.datetime) -> float:
@@ -119,9 +168,19 @@ def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
            reserve: float = 0.0, **kw):
     """messages.create mit Budgetprüfung. reserve = Geld, das danach noch frei
     bleiben muss (z. B. für die Qualitätsprüfung am Ende des Laufs)."""
-    global _lauf_usd, _guthaben_leer
+    global _lauf_usd, _guthaben_leer, _abo
     if _client is None:
         raise RuntimeError("ki_budget.init() fehlt")
+    if _abo:
+        try:
+            antwort = _per_abo(model, messages, kw.get("output_config"))
+            anzahl, summe = _zwecke.get(zweck + " (abo)", (0, 0.0))
+            _zwecke[zweck + " (abo)"] = (anzahl + 1, summe)
+            return antwort
+        except Exception as e:
+            # Kontingent erschöpft oder CLI-Problem: Rest des Laufs über die API
+            print(f"⚠️ Abo-Aufruf fehlgeschlagen ({zweck}): {e} – ab jetzt API")
+            _abo = False
     if _guthaben_leer:
         raise BudgetErschoepft("Claude-Guthaben leer")
     kosten_max = schaetzung(model, max_tokens, _laenge(messages))
@@ -155,6 +214,8 @@ def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
 
 
 def rest() -> float:
+    if _abo:
+        return float("inf")          # Abo: keine Kosten pro Aufruf
     return max(0.0, _lauf_budget - _lauf_usd)
 
 
@@ -168,4 +229,5 @@ def bericht() -> dict:
         "monatsbudget_usd": _monatsbudget,
         "aufrufe": {z: {"anzahl": a, "usd": round(s, 4)} for z, (a, s) in _zwecke.items()},
         "guthaben_leer": _guthaben_leer,
+        "abo": _abo,
     }

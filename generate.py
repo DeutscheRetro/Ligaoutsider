@@ -136,6 +136,9 @@ MAX_ALTER_TAGE = 3
 
 # Wie viele neue Artikel maximal pro Durchlauf generieren
 MAX_ARTIKEL_PRO_LAUF = 50
+# Läuft die KI über das Claude-Abo, teilt sich die Pipeline das Kontingent mit
+# der eigenen Nutzung – deshalb höchstens so viele Artikel pro Lauf
+ABO_MAX_ARTIKEL_PRO_LAUF = int(os.environ.get("ABO_MAX_ARTIKEL_PRO_LAUF", "8"))
 
 # Wo Artikel gespeichert werden
 ARTIKEL_ORDNER = Path("artikel")
@@ -554,6 +557,7 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60
 
 HAIKU  = "claude-haiku-4-5-20251001"
 SONNET = "claude-sonnet-4-6"
+OPUS   = "claude-opus-5-5"      # schreibt die Artikel
 
 
 def _text_aus(antwort) -> str:
@@ -1280,7 +1284,7 @@ Fülle diese Felder:
   (z. B. "4-2-3-1"). Sonst ""."""
 
     antwort = ki_budget.aufruf(
-        "schreiben", model=SONNET, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve,
+        "schreiben", model=OPUS, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve,
         messages=[{"role": "user", "content": prompt}],
         output_config={"format": {"type": "json_schema", "schema": _schema_artikel()}},
     )
@@ -2017,8 +2021,11 @@ def main():
     for g in reihenfolge:
         if len(kandidaten) >= MAX_ARTIKEL_PRO_LAUF or time.time() - _start > ZEITBUDGET_SEK:
             break
+        if ki_budget.abo_aktiv() and len(kandidaten) >= ABO_MAX_ARTIKEL_PRO_LAUF:
+            log.info(f"S7 Abo-Deckel ({ABO_MAX_ARTIKEL_PRO_LAUF} Artikel) erreicht – Rest wartet auf den nächsten Lauf")
+            break
         reserve = _qa_reserve(len(kandidaten) + 1)
-        if ki_budget.rest() < ki_budget.schaetzung(SONNET, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
+        if ki_budget.rest() < ki_budget.schaetzung(OPUS, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
             log.info(f"S7 Budget dieses Laufs reicht für keinen weiteren Artikel – "
                      f"{len(reihenfolge) - reihenfolge.index(g)} Geschichten warten auf den nächsten Lauf")
             break

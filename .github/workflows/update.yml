@@ -50,6 +50,12 @@ jobs:
           pip install -r requirements.txt
           pip list | grep -E 'trafilatura|rapidfuzz|feedparser|anthropic|requests'
 
+      # Claude-Code-CLI: damit laufen die KI-Aufrufe über das Claude-Abo
+      # (Secret CLAUDE_CODE_OAUTH_TOKEN, erzeugt mit "claude setup-token").
+      # Ohne Secret oder bei erschöpftem Kontingent geht es über die API.
+      - name: Claude Code installieren
+        run: npm install -g @anthropic-ai/claude-code && claude --version
+
       - name: Artikel generieren
         env:
           # Fester Deckel für Claude-Kosten pro Kalendermonat (siehe ki_budget.py).
@@ -57,6 +63,7 @@ jobs:
           # 23 USD ≈ 20 EUR, das ganze Monatsbudget (Hosting kostet nichts mehr)
           MONATSBUDGET_USD:     '23'
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           KICKBASE_EMAIL:       ${{ secrets.KICKBASE_EMAIL }}
           KICKBASE_PASSWORD:    ${{ secrets.KICKBASE_PASSWORD }}
           REDDIT_CLIENT_ID:     ${{ secrets.REDDIT_CLIENT_ID }}
