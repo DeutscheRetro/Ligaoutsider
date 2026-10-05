@@ -1,0 +1,20 @@
+name: Abo-Token testen
+
+# Prüft nur, ob CLAUDE_CODE_OAUTH_TOKEN funktioniert – ohne Artikel-Lauf.
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Claude Code mit Abo-Token
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          npm install -g @anthropic-ai/claude-code && claude --version
+          # Länge und Präfix, nie der Wert
+          T="$CLAUDE_CODE_OAUTH_TOKEN"
+          echo "Abo-Token: ${#T} Zeichen, Präfix ${T:0:13}, Leerzeichen/Umbrüche: $(printf %s "$T" | tr -cd ' \n\r\t' | wc -c)"
+          echo "Antworte nur mit OK" | claude -p --model haiku --tools "" --setting-sources ""
