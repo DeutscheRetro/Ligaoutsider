@@ -591,6 +591,12 @@ def floskeln_entfernen(text: str) -> str:
     return "\n\n".join(absaetze)
 
 
+# Sammelartikel (mehrere Themen in einem Text) liefern vermischte Artikel – nie verwenden
+SAMMELARTIKEL = re.compile(
+    r"news-?update|news-?blog|news-?ticker|\bticker\b|liveticker|personal-?update|\bnews\s*:|news\s+(?:am|vom|zum)\b"
+    r"|alle news|\bkompakt\b|presseschau|gerüchteküche|überblick|zusammenfassung|was heute wichtig|am morgen|am abend"
+)
+
 # Randthemen, die wir ohne Spielerbezug nicht schreiben (Entscheidung 10/2026: Fokus auf
 # das, was Fans und Manager brauchen – Personal, Transfers, Trainer, Spiele)
 RANDTHEMEN = re.compile(
@@ -629,11 +635,15 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
             "(Personal, Form, nächstes Spiel), konkrete Transfergerüchte\n"
             "1 = Randthema: Tickets, Fans, Sponsoren, Stadion, Trikots, Nachwuchs ohne Profibezug, Ehrungen, Kurioses\n"
             "0 = Nicht für uns: kein Bundesligaklub im Mittelpunkt, 2. Liga oder tiefer, Frauen, Jugend, "
-            "Nationalmannschaft ohne Klubbezug, Rückblick oder Jubiläum, Ranking, Liste, Statistik- oder "
+            "Nationalmannschaft ohne Bundesliga-Spieler in einer konkreten Rolle, Rückblick oder Jubiläum, Ranking, Liste, Statistik- oder "
             "Kaderseite, Werbung, Quiz, Liveticker\n"
             "Spielberichte zählen als 3 nur bei Partien aus dem BUNDESLIGA-SPIELPLAN unten oder Pokal- und "
             "Europapokalspielen der Bundesligaklubs. Andere Ergebnisse (oft Frauen-, Jugend- oder "
-            "Unterhausteams mit gleichem Vereinsnamen) bekommen 0, Testspiele der Profis höchstens 2.\n\n"
+            "Unterhausteams mit gleichem Vereinsnamen) bekommen 0, Testspiele der Profis höchstens 2.\n"
+            "Länderspiele: 2, wenn ein Bundesliga-Spieler konkret betroffen ist (Debüt, Tor, Vorlage, Verletzung, "
+            "Platzverweis, Kapitän, Abreise), sonst 0.\n"
+            "Sammelartikel mit mehreren Themen (News-Update, Ticker, Überblick): 0.\n"
+            "Testspiele: nur Ergebnisse (2). Vorschauen auf Testspiele: 0.\n\n"
             "und einem Status:\n"
             "n = neu\n"
             "u = Update: echte neue Entwicklung zu einer unserer Meldungen (Gerücht → Angebot → offiziell, "
@@ -757,7 +767,7 @@ def quellen_laden(g: dict, max_texte: int = 4, genug_woerter: int = 1000) -> lis
                 continue
             _GOOGLE_FEHLER_IN_FOLGE = 0
             original = aufgeloest
-        if "ligainsider" in original.lower():
+        if "ligainsider" in original.lower() or SAMMELARTIKEL.search(q["titel"].lower()):
             continue
         text, grund = fetch_fulltext(q["url"])
         if grund != "ok":
@@ -1258,6 +1268,12 @@ ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
 - VERBOTEN: „Die Entwicklung bleibt abzuwarten", „Transfers dieser Art sind komplex", alle Plattitüden.
 - Spielernamen korrekt inkl. Akzente (João, Raphaël, Øyvind).
+- Personen beim ersten Nennen IMMER mit Vor- und Nachnamen (Oliver Burke, Trainer Sebastian Hoeneß), danach
+  Nachname. Steht der Vorname nicht in den Quellen und ist die Person ein bekannter Bundesliga-Spieler oder
+  -Trainer, darfst du den Vornamen ergänzen – sonst nur Funktion + Nachname.
+- Testspiele: nur das Resultat – kurze Meldung (70 bis 120 Wörter) mit Ergebnis, Torschützen und auffälligen
+  Personalien (Verletzung, Startelf-Kandidat). Keine kompletten Aufstellungen, kein Spielverlauf.
+  Vorschauen auf Testspiele (noch nicht gespielt) sind nicht relevant.
 - Keine Gedankenstriche als Satzzeichen. Klare Sätze, max. 25 Wörter. Keine Ausrufezeichen.
 - Zitate in deutschen Anführungszeichen „…“.
 
@@ -1266,7 +1282,9 @@ QUELLEN ({len(texte)}):
 
 Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
-  Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Nationalmannschaft ohne Klubbezug, Ranking oder Liste, Werbung).
+  Spielzeiten, Jubiläum, Frauen, Jugend, 2. Liga, Ranking oder Liste, Werbung, Sammelartikel mit mehreren
+  unverbundenen Themen). Länderspiele sind relevant, wenn ein Bundesliga-Spieler konkret betroffen ist (Debüt,
+  Tor, Vorlage, Verletzung, Platzverweis, Kapitän); dann aus Sicht dieses Spielers und seines Klubs schreiben.
   Dann alle Textfelder leer lassen und Listen leer.
 - genug_stoff: false, wenn die Quellen nicht einmal für eine runde Kurzmeldung (Intro, Mittelteil, Schluss) reichen.
   Dann ebenfalls alle Textfelder leer lassen.
@@ -1983,6 +2001,11 @@ def main():
             log.info(f"S5 kein Bundesliga-Spieler oder -Klub erkennbar: {g['titel'][:70]}")
             _geschichte_verwerfen(g, "stage5", "kein_bl_bezug")
             stats["s5_ohne_bezug"] = stats.get("s5_ohne_bezug", 0) + 1
+            continue
+        if SAMMELARTIKEL.search(g["titel"].lower()):
+            log.info(f"S5 Sammelartikel: {g['titel'][:70]}")
+            _geschichte_verwerfen(g, "stage5", "sammelartikel")
+            stats["s5_randthema"] = stats.get("s5_randthema", 0) + 1
             continue
         # Randthemen ohne Spielerbezug lassen wir weg (Tickets, Trikots, Sponsoren …)
         if not g["person"] and g["klasse"] == "sonstiges" and RANDTHEMEN.search(g["titel"].lower()):
