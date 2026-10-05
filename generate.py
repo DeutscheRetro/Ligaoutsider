@@ -712,31 +712,6 @@ _GOOGLE_FEHLER_IN_FOLGE = 0
 MIN_QUELL_WOERTER = 120          # weniger Stoff ergibt keinen richtigen Artikel
 
 
-def daten_kontext(g: dict) -> str:
-    """Eigene Daten zur Einordnung (kostenlos): Rolle der Spieler laut Aufstellungs-Check
-    und nächstes Bundesligaspiel des Klubs. Damit bekommt auch eine kurze Meldung
-    einen Rahmen ("stand in allen vier Spielen in der Startelf", "am Samstag in Augsburg")."""
-    try:
-        a = json.loads(Path("aufstellung.json").read_text(encoding="utf-8"))
-    except Exception:
-        return ""
-    zeilen = []
-    gesucht = {storys.falten(n) for n in g.get("spieler", [])[:3]}
-    for team, t in a.get("teams", {}).items():
-        eintraege = [x for reihe in (t.get("elf") or {}).values() for x in reihe]
-        eintraege += (t.get("bank") or []) + (t.get("fraglich") or []) + (t.get("ausfall") or [])
-        for x in eintraege:
-            if storys.falten(x.get("name", "")) in gesucht:
-                zeilen.append(f"- {x['name']} ({team}, {x.get('pos', '')}): {x.get('grund', '')}; "
-                              f"Startelf-Chance im nächsten Spiel laut unserem Aufstellungs-Check {x.get('prozent', 0)} %")
-    klubs = set(g.get("klubs") or []) | ({g["klub"]} if g.get("klub") else set())
-    for p in a.get("partien", []):
-        if klubs & (set(storys.klubs_in(p["heim"])) | set(storys.klubs_in(p["gast"]))):
-            zeilen.append(f"- Nächstes Bundesligaspiel: {p['heim']} – {p['gast']}, {p.get('anstoss_text', '')} "
-                          f"({p.get('spieltag', '')}. Spieltag)")
-    return "\n".join(dict.fromkeys(zeilen))
-
-
 def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 450) -> list[dict]:
     """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
     genug Stoff für einen vollwertigen Artikel beisammen ist."""
@@ -1245,8 +1220,6 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
                           for i, t in enumerate(texte))
-    daten = daten_kontext(g)
-    daten = (f"\n\nUNSERE DATEN (zur Einordnung, darfst du verwenden):\n{daten}" if daten else "")
     frueher = ""
     if g.get("archiv"):
         frueher = ("\n\nUNSERE FRÜHEREN BERICHTE ZUM THEMA (nur zur Einordnung, nicht nacherzählen):\n"
@@ -1256,7 +1229,7 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict
 Heute ist der {datetime.date.today().strftime('%d.%m.%Y')}.
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
-- Nur Fakten, Namen, Zahlen aus den QUELLEN und UNSEREN DATEN verwenden.
+- Nur Fakten, Namen, Zahlen aus den QUELLEN verwenden.
 - Steht eine Information nicht in den Quellen → einfach weglassen. Niemals Sätze wie "laut Quelle nicht spezifiziert",
   "Details nennt die Quelle nicht" oder Verweise auf Bezahlschranken/Pressekonferenzen ohne Inhalt schreiben.
 - KEINE Spekulationen, KEINE Ergänzungen aus Trainingswissen.
@@ -1266,7 +1239,7 @@ ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
 - Zitate in deutschen Anführungszeichen „…“.
 
 QUELLEN ({len(texte)}):
-{quellen}{daten}{frueher}
+{quellen}{frueher}
 
 Fülle diese Felder:
 - relevant: false, wenn die Quellen kein aktuelles Thema eines Bundesligaklubs sind (Rückblick auf frühere
@@ -1282,9 +1255,9 @@ Fülle diese Felder:
      Stammtorhüter Karl Hein"), was, wann, für welches Spiel.
   2. Details: Hintergründe und Zitate aus den Quellen (wörtlich, mit Sprecher). Widersprechen sich Quellen,
      nenne beide Angaben. Bei einer neuen Entwicklung kurz einordnen ("Wie berichtet, ...").
-  3. Einordnung mit UNSEREN DATEN, wenn vorhanden: Rolle des Spielers in dieser Saison, Startelf-Chance.
+  3. Einordnung, soweit die Quellen sie hergeben: Rolle des Spielers, bisherige Saison, Vorgeschichte.
   4. Abschluss: was das für das nächste Spiel oder die nächsten Wochen bedeutet (z. B. wer ersetzen könnte,
-     wann der nächste Gegner wartet) – nur aus Quellen und unseren Daten.
+     wann der nächste Gegner wartet) – nur wenn es in den Quellen steht.
   Keine Füllsätze, keine Wiederholungen.
 - kategorie: transfer | verletzung | aufstellung | interview | analyse | news
 - hauptklub: der EINE Klub, um den es zentral geht. Erlaubt: {klub_liste}
