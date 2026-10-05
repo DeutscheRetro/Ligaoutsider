@@ -68,6 +68,7 @@ _zwecke: dict = {}
 _guthaben_leer = False
 _abo = bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) and bool(shutil.which("claude"))
 ABO_TIMEOUT_SEK = 300
+_abo_tokens: dict = {}
 
 
 def abo_aktiv() -> bool:
@@ -83,6 +84,8 @@ def _per_abo(model: str, messages: list, output_config: dict | None):
               "--no-session-persistence", "--setting-sources", "",
               "--system-prompt", "Du arbeitest für die Redaktion von ligaoutsider.de. "
                                  "Halte dich genau an die Anweisungen und das verlangte Antwortformat."]
+    if "opus" in model:
+        befehl += ["--effort", "medium"]
     schema = ((output_config or {}).get("format") or {}).get("schema")
     if schema:
         befehl += ["--json-schema", json.dumps(schema, ensure_ascii=False)]
@@ -102,9 +105,14 @@ def _per_abo(model: str, messages: list, output_config: dict | None):
         text = json.dumps(d["structured_output"], ensure_ascii=False)
     else:
         text = d.get("result") or ""
+    u = d.get("usage") or {}
     return SimpleNamespace(content=[SimpleNamespace(type="text", text=text)],
                            stop_reason=d.get("stop_reason") or "end_turn",
-                           usage=SimpleNamespace(input_tokens=0, output_tokens=0))
+                           usage=SimpleNamespace(input_tokens=u.get("input_tokens", 0) or 0,
+                                                 output_tokens=u.get("output_tokens", 0) or 0,
+                                                 cache_creation_input_tokens=u.get("cache_creation_input_tokens", 0) or 0,
+                                                 cache_read_input_tokens=u.get("cache_read_input_tokens", 0) or 0),
+                           api_wert_usd=float(d.get("total_cost_usd") or 0.0))
 
 
 def _gewicht_rest(jetzt: datetime.datetime) -> float:
@@ -176,6 +184,16 @@ def aufruf(zweck: str, *, model: str, max_tokens: int, messages: list,
             antwort = _per_abo(model, messages, kw.get("output_config"))
             anzahl, summe = _zwecke.get(zweck + " (abo)", (0, 0.0))
             _zwecke[zweck + " (abo)"] = (anzahl + 1, summe)
+            # Echter Verbrauch im Abo (Tokens und was er über die API gekostet hätte)
+            u = antwort.usage
+            t = _abo_tokens.setdefault(zweck, {"aufrufe": 0, "ein": 0, "cache_schreiben": 0,
+                                               "cache_lesen": 0, "aus": 0, "api_wert_usd": 0.0})
+            t["aufrufe"] += 1
+            t["ein"] += u.input_tokens
+            t["cache_schreiben"] += u.cache_creation_input_tokens
+            t["cache_lesen"] += u.cache_read_input_tokens
+            t["aus"] += u.output_tokens
+            t["api_wert_usd"] = round(t["api_wert_usd"] + antwort.api_wert_usd, 4)
             return antwort
         except Exception as e:
             # Kontingent erschöpft oder CLI-Problem: Rest des Laufs über die API
@@ -230,4 +248,5 @@ def bericht() -> dict:
         "aufrufe": {z: {"anzahl": a, "usd": round(s, 4)} for z, (a, s) in _zwecke.items()},
         "guthaben_leer": _guthaben_leer,
         "abo": _abo,
+        "abo_tokens": _abo_tokens,
     }

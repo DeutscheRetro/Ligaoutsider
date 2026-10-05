@@ -751,7 +751,7 @@ _GOOGLE_FEHLER_IN_FOLGE = 0
 MIN_QUELL_WOERTER = 80           # weniger Stoff ergibt keine runde Meldung
 
 
-def quellen_laden(g: dict, max_texte: int = 4, genug_woerter: int = 1000) -> list[dict]:
+def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 900) -> list[dict]:
     """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
     genug Stoff für einen vollwertigen Artikel beisammen ist."""
     global _GOOGLE_FEHLER_IN_FOLGE
@@ -780,7 +780,7 @@ def quellen_laden(g: dict, max_texte: int = 4, genug_woerter: int = 1000) -> lis
         if grund != "ok":
             log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
             continue
-        texte.append({**q, "text": text[:5000], "link": original})
+        texte.append({**q, "text": text[:3500], "link": original})
     return texte
 
 
@@ -1251,11 +1251,11 @@ def _schema_artikel() -> dict:
 
 
 SCHREIB_MAX_TOKENS = 2000
-SCHREIB_ZEICHEN = 25000          # Prompt mit bis zu vier Quellen, für die Budgetschätzung
+SCHREIB_ZEICHEN = 18000          # Prompt mit bis zu drei Quellen, für die Budgetschätzung
 
 
 def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0) -> dict:
-    """Opus schreibt aus bis zu vier Quellen einen Artikel und liefert die Angaben
+    """Opus schreibt aus bis zu drei Quellen einen Artikel und liefert die Angaben
     fürs Archiv (Ereignis, Spieler, Kurzfassung) gleich mit – kein Extra-Aufruf."""
     klub_liste = " | ".join(KLUB_LOGO) + " | keiner"
     quellen = "\n\n".join(f"=== QUELLE {i + 1}: {t['quelle']} ===\nSchlagzeile: {t['titel']}\n{t['text']}"
@@ -2385,6 +2385,14 @@ def main():
     log.info(f"💶 Kosten: dieser Lauf {_k['lauf_usd']:.3f} $ (Budget {_k['lauf_budget_usd']:.3f} $) | "
              f"heute {_k['heute_usd']:.2f} $ | Monat {_k['monat_usd']:.2f} / {_k['monatsbudget_usd']:g} $ | "
              + ", ".join(f"{z} {v['anzahl']}× {v['usd']:.3f} $" for z, v in _k["aufrufe"].items()))
+    if _k.get("abo_tokens"):
+        _t = _k["abo_tokens"]
+        _sum = lambda feld: sum(v[feld] for v in _t.values())
+        log.info(f"🎫 Abo-Verbrauch: {_sum('ein') + _sum('cache_schreiben') + _sum('cache_lesen'):,} Tokens rein "
+                 f"(davon Cache gelesen {_sum('cache_lesen'):,}), {_sum('aus'):,} raus, "
+                 f"API-Gegenwert {sum(v['api_wert_usd'] for v in _t.values()):.2f} $ | "
+                 + ", ".join(f"{z} {v['aufrufe']}×: {v['ein'] + v['cache_schreiben'] + v['cache_lesen']:,}/{v['aus']:,}"
+                             for z, v in _t.items()))
     stats_path = LOG_DIR / f"run_{_run_ts}.json"
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
 
