@@ -359,7 +359,16 @@
 
     document.getElementById('me-leeren').addEventListener('click', () => { slotsBauen(false); speichern(); renderAlles(); });
     const TITEL = () => `Meine Elf (${formation}${modus === 'frei' ? '' : ', ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')})`;
+    // Teilen und „Als Bild“ nur mit Konto (kostenlos, ein Klick mit Google)
+    function nurMitKonto() {
+      if (window.netlifyIdentity && netlifyIdentity.currentUser()) return true;
+      hinweis('Zum Teilen bitte kostenlos registrieren');
+      if (window.gtag) gtag('event', 'registrierung_aufgefordert', { ort: 'elf_teilen' });
+      if (window.netlifyIdentity) netlifyIdentity.open('signup');
+      return false;
+    }
     document.getElementById('me-teilen').addEventListener('click', async () => {
+      if (!nurMitKonto()) return;
       const url = location.origin + location.pathname + '#' + encodeURIComponent(kodiert());
       if (navigator.share) {
         try { await navigator.share({ title: TITEL(), text: TITEL() + ' auf Ligaoutsider.de', url }); return; }
@@ -474,6 +483,7 @@
       return new Promise(ok => c.toBlob(ok, 'image/png'));
     }
     document.getElementById('me-bild').addEventListener('click', async () => {
+      if (!nurMitKonto()) return;
       const blob = await bildErzeugen();
       const datei = new File([blob], 'meine-elf.png', { type: 'image/png' });
       if (navigator.canShare && navigator.canShare({ files: [datei] })) {
