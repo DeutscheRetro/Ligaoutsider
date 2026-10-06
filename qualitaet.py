@@ -170,7 +170,7 @@ def main():
             e["titel"] = neu_titel
             e["anriss"] = " ".join(neu_text.split()[:30])
             if neu_titel != html.unescape(titel):
-                gen.og_karte(e["id"], neu_titel, e.get("kategorie", "news"), e.get("wappen_url", ""))
+                gen.og_karte(e["id"], neu_titel, e.get("kategorie", "news"), e.get("wappen_url", ""), e.get("bild_tm") or None)
             geaendert += 1
         print(f"  {'✏️ ' if ok else '✅'} {neu_titel[:70]}" + (f" | {'; '.join(r.get('gruende', []))[:200]}" if ok else ""))
         log.append({"zeit": datetime.datetime.now().strftime(FORMAT), "id": e["id"], "pfad": e["pfad"],

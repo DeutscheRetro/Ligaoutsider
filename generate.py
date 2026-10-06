@@ -1408,7 +1408,32 @@ def _og_hintergrund_malen(W: int, H: int):
     return verlauf
 
 
-def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
+_BILDPOOL: dict | None = None
+
+def spielerbild(namen: list) -> tuple[str, dict] | None:
+    """Erster zentraler Spieler mit Bild im Pool (bilder/spieler/index.json) -> (tm_id, info)."""
+    global _BILDPOOL
+    if _BILDPOOL is None:
+        try:
+            _BILDPOOL = json.loads(Path("bilder/spieler/index.json").read_text(encoding="utf-8"))
+        except Exception:
+            _BILDPOOL = {}
+    if not _BILDPOOL:
+        return None
+    nach_name = {storys.falten(v["name"]): k for k, v in _BILDPOOL.items()}
+    for n in namen or []:
+        tm = nach_name.get(storys.falten(str(n)))
+        if tm and Path(f"bilder/spieler/{tm}.jpg").exists():
+            return tm, _BILDPOOL[tm]
+    return None
+
+
+def bild_credit(info: dict, bearbeitet: bool = True) -> str:
+    fotograf = re.sub(r",?\s*Wikimedia Commons$", "", info["fotograf"], flags=re.I)
+    return f"Foto: {fotograf} (Wikimedia Commons){', bearbeitet' if bearbeitet else ''} · {info['lizenz']}"
+
+
+def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str, spieler_tm: str | None = None):
     """1200x630-Karte für Social-Previews. Gibt die oeffentliche URL zurueck
     oder None, wenn die Karte nicht erzeugt werden konnte."""
     try:
@@ -1416,6 +1441,23 @@ def og_karte(datei_id: str, titel: str, kategorie: str, wappen_url: str):
     except ImportError:
         log.warning("Pillow fehlt – keine og:image-Karten")
         return None
+
+    # Mit Spielerbild aus dem Pool: Sticker-Stil (freigestellter Kopf, Vereinsstreifen)
+    if spieler_tm and Path(f"bilder/spieler/{spieler_tm}.webp").exists():
+        try:
+            import bildstil
+            from PIL import Image
+            spielerbild([])                       # lädt den Pool-Index, falls noch nicht geschehen
+            info = (_BILDPOOL or {}).get(spieler_tm, {})
+            OG_ORDNER.mkdir(parents=True, exist_ok=True)
+            label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
+            kopf = Image.open(f"bilder/spieler/{spieler_tm}.webp").convert("RGBA")
+            karte = bildstil.og_sticker(titel, label, badge_bg, badge_fg, kopf,
+                                        info.get("logo") or wappen_url, bild_credit(info) if info else None)
+            karte.save(OG_ORDNER / f"{datei_id}.jpg", "JPEG", quality=82, optimize=True, progressive=True)
+            return f"https://ligaoutsider.de/og/{datei_id}.jpg"
+        except Exception as e:
+            log.warning(f"Sticker-Karte fehlgeschlagen ({e}) – Standardkarte")
 
     try:
         OG_ORDNER.mkdir(parents=True, exist_ok=True)
@@ -1504,6 +1546,7 @@ def artikel_html(
     dateiname: str = None,
     quelle2_url: str = "",
     verwandte: list = None,
+    bild: tuple | None = None,
 ) -> str:
     from html import escape as _esc
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
@@ -1516,6 +1559,18 @@ def artikel_html(
         verwandte_html = ('<div class="artikel-mehr"><div class="artikel-mehr-t">Mehr zum Thema</div>'
                           + links + '</div>')
     absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
+    # Spielerbild aus dem Pool, Namensnennung hochkant am rechten Rand (verlinkt, wie CC verlangt)
+    bild_html = ""
+    if bild:
+        _tm, _bi = bild
+        bild_html = (
+            f'<figure class="artikel-bild"><img src="../bilder/spieler/{_tm}.jpg" width="1200" height="500" '
+            f'alt="{_esc(_bi["name"])}" loading="lazy"/>'
+            f'<figcaption class="bild-credit">Foto: <a href="{_esc(_bi["quelle"])}" target="_blank" rel="noopener">'
+            f'{_esc(_bi["fotograf"])}</a>, bearbeitet · '
+            + (f'<a href="{_esc(_bi["lizenz_url"])}" target="_blank" rel="noopener">{_esc(_bi["lizenz"])}</a>'
+               if _bi.get("lizenz_url") else _esc(_bi["lizenz"]))
+            + '</figcaption></figure>')
     wappen_html = (
         f'<img src="{wappen_url}" class="artikel-wappen" alt="Wappen" onerror="this.style.display=\'none\'"/>'
         if wappen_url else
@@ -1673,6 +1728,8 @@ def artikel_html(
           <p class="artikel-meta">{datum}</p>
         </div>
       </div>
+
+      {bild_html}
 
       <div class="artikel-text">
         {absaetze}
@@ -2298,7 +2355,8 @@ def main():
         aid = k["aid"]
         _wu = k["wappen_url"]
         _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
-        _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu)
+        _bild = spielerbild(ergebnis.get("spieler") or [])
+        _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu, _bild[0] if _bild else None)
         html = artikel_html(
             datei_id    = aid,
             titel       = ergebnis["titel"],
@@ -2313,6 +2371,7 @@ def main():
             dateiname   = f"{artikel_slug(ergebnis['titel'])}-{aid}.html",
             quelle2_url = k.get("quelle2_url", ""),
             verwandte   = k.get("verwandte") or [],
+            bild        = _bild,
         )
         _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
         _datei.write_text(html, encoding="utf-8")
@@ -2334,6 +2393,7 @@ def main():
             "formation":  (ergebnis.get("formation") or "").strip(),
             "hauptklub":  ergebnis.get("hauptklub", ""),
             "pfad":       f"artikel/{_datei.name}",
+            "bild_tm":    _bild[0] if _bild else "",
         }
         bestehende.append(feed_entry)
         feed_speichern(bestehende)
@@ -3209,6 +3269,19 @@ def spieler_seiten():
                 person["birthDate"] = f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
             if nation:
                 person["nationality"] = [{"@type": "Country", "name": n} for n in sp.get("nation")]
+            # Spielerbild aus dem Bilderpool (freies Foto, Namensnennung hochkant)
+            bild_html = ""
+            _bi = spielerbild([sp["name"]])
+            if _bi:
+                _tm, _info = _bi
+                person["image"] = f"{base}/bilder/spieler/{_tm}.jpg"
+                bild_html = (
+                    f'<figure class="artikel-bild"><img src="../bilder/spieler/{_tm}.jpg" width="1200" height="500" '
+                    f'alt="{e(sp["name"])}" loading="lazy"/><figcaption class="bild-credit">Foto: '
+                    f'<a href="{e(_info["quelle"])}" target="_blank" rel="noopener">{e(_info["fotograf"])}</a>, bearbeitet · '
+                    + (f'<a href="{e(_info["lizenz_url"])}" target="_blank" rel="noopener">{e(_info["lizenz"])}</a>'
+                       if _info.get("lizenz_url") else e(_info["lizenz"]))
+                    + '</figcaption></figure>')
             head = f'  <script type="application/ld+json">{json.dumps(person, ensure_ascii=False)}</script>\n'
 
             inhalt = f"""    <a href="index.html" class="artikel-back">← Alle Spieler</a>
@@ -3219,6 +3292,7 @@ def spieler_seiten():
         <p>{e(pos)} · {e(team_name)}</p>
       </div>
     </div>
+    {bild_html}
     {f'<div class="sp-hinweis">{hinweise}</div>' if hinweise else ''}
     <div class="sp-tabelle">{tabelle}</div>
     <h2 class="sp-h2">Aktuelle News zu {e(sp['name'])}</h2>

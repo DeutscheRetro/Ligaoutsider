@@ -1,0 +1,191 @@
+"""Bilderpool: pro Bundesliga-Spieler ein freies Foto von Wikimedia Commons.
+
+Ablauf (lokal ausführen, braucht rembg + opencv, siehe unten):
+  1. Spieler über die Transfermarkt-ID (Wikidata P2446) finden, Bild aus P18.
+  2. Lizenz prüfen: nur CC0, gemeinfrei, CC BY, CC BY-SA (keine NC/ND).
+  3. Gesicht erkennen, Kopf + Schultern ausschneiden, freistellen (rembg).
+  4. Speichern: bilder/spieler/<tm_id>.webp (freigestellt), <tm_id>.jpg (Artikelbild
+     im Sticker-Stil), index.json mit Fotograf/Lizenz/Quelle.
+  5. Platzhalter je Verein (Silhouette) in bilder/platzhalter/<verein>.jpg.
+
+    venv/bin/pip install "rembg[cpu]" "opencv-python-headless<5"
+    venv/bin/python bildpool.py            # nur neue Spieler
+    venv/bin/python bildpool.py --alle     # alles neu
+"""
+import io
+import json
+import re
+import sys
+import time
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+import cv2
+import numpy as np
+from PIL import Image
+from rembg import new_session, remove
+
+import bildstil
+
+POOL = Path("bilder/spieler")
+PLATZHALTER = Path("bilder/platzhalter")
+INDEX = POOL / "index.json"
+UA = {"User-Agent": "Ligaoutsider-Bilderpool/1.0 (https://ligaoutsider.de; Kontakt über Impressum)"}
+ERLAUBT = re.compile(r"^(cc0|public domain|pd|cc by(-sa)? \d)", re.I)
+
+
+def holen(url: str, json_antwort=True):
+    for versuch in range(4):
+        try:
+            r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60).read()
+            return json.loads(r) if json_antwort else r
+        except Exception:
+            if versuch == 3:
+                raise
+            time.sleep(3 * (versuch + 1))
+
+
+def wikidata_bilder(tm_ids: list[str]) -> dict:
+    erg = {}
+    for i in range(0, len(tm_ids), 200):
+        werte = " ".join(f'"{x}"' for x in tm_ids[i:i + 200])
+        q = f"SELECT ?tm ?img WHERE {{ VALUES ?tm {{ {werte} }} ?p wdt:P2446 ?tm . ?p wdt:P18 ?img }}"
+        r = holen("https://query.wikidata.org/sparql?format=json&query=" + urllib.parse.quote(q))
+        for b in r["results"]["bindings"]:
+            erg.setdefault(b["tm"]["value"], urllib.parse.unquote(b["img"]["value"].rsplit("/", 1)[1]))
+    return erg
+
+
+def fotograf_name(roh: str) -> str:
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", roh)).strip()
+    t = re.sub(r",?\s*(via |from )?Wikimedia Commons$", "", t, flags=re.I).strip(" ,")
+    return t[:60] or "unbekannt"
+
+
+def commons_info(dateien: list[str]) -> dict:
+    erg = {}
+    for i in range(0, len(dateien), 40):
+        titel = "|".join("File:" + f for f in dateien[i:i + 40])
+        r = holen("https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo"
+                  "&iiprop=url|extmetadata&iiurlwidth=1600&format=json&titles=" + urllib.parse.quote(titel))
+        norm = {n["to"]: n["from"] for n in r["query"].get("normalized", [])}
+        for p in r["query"]["pages"].values():
+            ii = (p.get("imageinfo") or [{}])[0]
+            m = ii.get("extmetadata", {})
+            name = norm.get(p["title"], p["title"]).removeprefix("File:")
+            erg[name] = {
+                "url": ii.get("thumburl") or ii.get("url"),
+                "seite": ii.get("descriptionurl", ""),
+                "fotograf": fotograf_name(m.get("Artist", {}).get("value", "")),
+                "lizenz": m.get("LicenseShortName", {}).get("value", ""),
+                "lizenz_url": m.get("LicenseUrl", {}).get("value", ""),
+            }
+    return erg
+
+
+_GESICHT = [cv2.CascadeClassifier(cv2.data.haarcascades + n)
+            for n in ("haarcascade_frontalface_default.xml", "haarcascade_frontalface_alt2.xml",
+                      "haarcascade_profileface.xml")]
+
+
+def kopf_box(img: Image.Image) -> tuple | None:
+    """Größtes Gesicht finden und daraus einen Kopf-Schulter-Ausschnitt ableiten."""
+    klein = img.copy()
+    klein.thumbnail((900, 900))
+    f = img.width / klein.width
+    grau = cv2.cvtColor(np.array(klein.convert("RGB")), cv2.COLOR_RGB2GRAY)
+    grau = cv2.equalizeHist(grau)
+    for kaskade in _GESICHT:
+        g = kaskade.detectMultiScale(grau, scaleFactor=1.08, minNeighbors=6, minSize=(40, 40))
+        if len(g):
+            x, y, w, h = [int(v * f) for v in max(g, key=lambda r: r[2] * r[3])]
+            cx = x + w / 2
+            breite = w * 3.4
+            links, rechts = max(0, int(cx - breite / 2)), min(img.width, int(cx + breite / 2))
+            oben, unten = max(0, int(y - h * 0.95)), min(img.height, int(y + h * 3.1))
+            return links, oben, rechts, unten
+    return None
+
+
+def main():
+    alle = "--alle" in sys.argv
+    POOL.mkdir(parents=True, exist_ok=True)
+    PLATZHALTER.mkdir(parents=True, exist_ok=True)
+    db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+    spieler = {str(s["tm_id"]): {"name": s["name"], "team": t, "logo": v["logo"]}
+               for t, v in db["teams"].items() for s in v["spieler"] if s.get("tm_id")}
+    index = {} if alle or not INDEX.exists() else json.loads(INDEX.read_text(encoding="utf-8"))
+    pruefen = []
+
+    # Platzhalter je Verein
+    for t, v in db["teams"].items():
+        bildstil.bild_hero(None, v["logo"]).save(PLATZHALTER / f"{Path(v['logo']).stem}.jpg", quality=82)
+
+    bilder = wikidata_bilder(list(spieler))
+    infos = commons_info(sorted(set(bilder.values())))
+    print(f"{len(spieler)} Spieler, {len(bilder)} mit Wikidata-Bild")
+    sess = new_session("u2net_human_seg")
+    for tm, datei in sorted(bilder.items(), key=lambda x: spieler[x[0]]["team"]):
+        sp = spieler[tm]
+        info = infos.get(datei)
+        alt = index.get(tm)
+        if alt and alt.get("datei") == datei and not alle:
+            # Bild unverändert – nur Artikelbild neu, falls der Spieler den Verein gewechselt hat
+            if alt.get("logo") != sp["logo"]:
+                kopf = Image.open(POOL / f"{tm}.webp")
+                bildstil.bild_hero(kopf, sp["logo"]).save(POOL / f"{tm}.jpg", quality=82)
+                alt.update(team=sp["team"], logo=sp["logo"])
+            continue
+        if not info or not info["url"] or not ERLAUBT.match(info["lizenz"]) or re.search(r"\bN[CD]\b", info["lizenz"]):
+            pruefen.append(f"{sp['name']} ({sp['team']}): Lizenz '{info and info['lizenz']}' – übersprungen")
+            continue
+        try:
+            foto = Image.open(io.BytesIO(holen(info["url"], json_antwort=False))).convert("RGB")
+        except Exception as e:
+            pruefen.append(f"{sp['name']}: Download fehlgeschlagen ({e})")
+            continue
+        box = kopf_box(foto)
+        if not box:
+            pruefen.append(f"{sp['name']} ({sp['team']}): kein Gesicht erkannt – {info['seite']}")
+            continue
+        aus = foto.crop(box)
+        aus.thumbnail((900, 1100))
+        kopf = remove(aus, session=sess)
+        bbox = kopf.getchannel("A").point(lambda a: 255 if a > 40 else 0).getbbox()
+        if not bbox:
+            pruefen.append(f"{sp['name']}: Freistellen fehlgeschlagen")
+            continue
+        kopf = kopf.crop(bbox)
+        anteil = np.array(kopf.getchannel("A")).mean() / 255
+        if anteil < 0.25:
+            pruefen.append(f"{sp['name']} ({sp['team']}): Freistellen unsicher ({anteil:.0%} Fläche) – bitte ansehen")
+        kopf.thumbnail((600, 760))
+        kopf.save(POOL / f"{tm}.webp", "WEBP", quality=82, method=6)
+        bildstil.bild_hero(kopf, sp["logo"]).save(POOL / f"{tm}.jpg", quality=82)
+        index[tm] = {"name": sp["name"], "team": sp["team"], "logo": sp["logo"], "datei": datei,
+                     "fotograf": info["fotograf"] or "unbekannt", "lizenz": info["lizenz"],
+                     "lizenz_url": info["lizenz_url"], "quelle": info["seite"]}
+        print(f"  ✓ {sp['name']} ({sp['team']}) – {info['fotograf']}, {info['lizenz']}")
+        INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    Path("bilder/pruefen.txt").write_text("\n".join(pruefen) + "\n", encoding="utf-8")
+    ohne = sorted(f"{v['team']}: {v['name']}" for k, v in spieler.items() if k not in index)
+    Path("bilder/ohne_bild.txt").write_text("\n".join(ohne) + "\n", encoding="utf-8")
+
+    # Kontaktbogen zur Sichtkontrolle (nicht veröffentlicht)
+    kacheln = sorted(index)
+    if kacheln:
+        spalten, kw, kh = 12, 150, 190
+        bogen = Image.new("RGB", (spalten * kw, ((len(kacheln) + spalten - 1) // spalten) * kh), (40, 40, 40))
+        for i, tm in enumerate(kacheln):
+            k = Image.open(POOL / f"{tm}.webp").convert("RGBA")
+            k.thumbnail((kw - 10, kh - 10))
+            bogen.paste(k, ((i % spalten) * kw + 5, (i // spalten) * kh + 5), k)
+        bogen.save("bilder/kontaktbogen.jpg", quality=80)
+    print(f"Fertig: {len(index)} Spieler mit Bild, {len(ohne)} ohne, {len(pruefen)} zum Prüfen")
+
+
+if __name__ == "__main__":
+    main()
