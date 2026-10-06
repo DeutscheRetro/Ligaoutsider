@@ -23,7 +23,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageChops, ImageFilter
 from rembg import new_session, remove
 
 import bildstil
@@ -89,23 +89,120 @@ _GESICHT = [cv2.CascadeClassifier(cv2.data.haarcascades + n)
                       "haarcascade_profileface.xml")]
 
 
-def kopf_box(img: Image.Image) -> tuple | None:
-    """Größtes Gesicht finden und daraus einen Kopf-Schulter-Ausschnitt ableiten."""
+def gesicht(img: Image.Image) -> tuple | None:
+    """Größtes Gesicht (x, y, w, h) in Pixeln des übergebenen Bildes."""
     klein = img.copy()
     klein.thumbnail((900, 900))
     f = img.width / klein.width
-    grau = cv2.cvtColor(np.array(klein.convert("RGB")), cv2.COLOR_RGB2GRAY)
-    grau = cv2.equalizeHist(grau)
+    grau = cv2.equalizeHist(cv2.cvtColor(np.array(klein.convert("RGB")), cv2.COLOR_RGB2GRAY))
     for kaskade in _GESICHT:
         g = kaskade.detectMultiScale(grau, scaleFactor=1.08, minNeighbors=6, minSize=(40, 40))
         if len(g):
-            x, y, w, h = [int(v * f) for v in max(g, key=lambda r: r[2] * r[3])]
-            cx = x + w / 2
-            breite = w * 2.1                       # nur Kopf, kaum Schultern
-            links, rechts = max(0, int(cx - breite / 2)), min(img.width, int(cx + breite / 2))
-            oben, unten = max(0, int(y - h * 0.6)), min(img.height, int(y + h * 1.45))
-            return links, oben, rechts, unten
+            return tuple(int(v * f) for v in max(g, key=lambda r: r[2] * r[3]))
     return None
+
+
+def kopf_box(img: Image.Image) -> tuple | None:
+    """Ausschnitt um das größte Gesicht, nur Kopf (für rembg, spart Rechenzeit)."""
+    g = gesicht(img)
+    if not g:
+        return None
+    x, y, w, h = g
+    cx = x + w / 2
+    return (max(0, int(cx - w * 1.15)), max(0, int(y - h * 0.75)),
+            min(img.width, int(cx + w * 1.15)), min(img.height, int(y + h * 1.75)))
+
+
+MIN_GESICHT = 110       # Pixel Gesichtsbreite im Originalfoto, sonst wird der Kopf beim Skalieren unscharf
+MIN_KOPF_BREITE = 300   # fertiger Kopf mindestens so breit (das Banner zeigt ihn ~500 px groß)
+MIN_SCHAERFE = 80       # Varianz des Laplace-Filters im Gesicht
+
+
+def schaerfe(foto: Image.Image, g: tuple) -> float:
+    x, y, w, h = g
+    ausschnitt = foto.crop((x, y, x + w, y + h)).convert("L").resize((200, int(200 * h / max(w, 1))))
+    return float(cv2.Laplacian(np.array(ausschnitt), cv2.CV_64F).var())
+
+
+def kopf_maske(groesse: tuple, g: tuple, box: tuple) -> Image.Image:
+    """Erlaubte Fläche: Kopf (Ellipse) plus Hals. Alles andere – Hände, Nachbarn, Schultern – wird entfernt."""
+    from PIL import ImageDraw
+    w_img, h_img = groesse
+    x, y, w, h = g
+    cx, cy = x + w / 2 - box[0], y + h / 2 - box[1]
+    m = Image.new("L", groesse, 0)
+    d = ImageDraw.Draw(m)
+    d.ellipse([cx - w * 0.85, cy - h * 0.98, cx + w * 0.85, cy + h * 0.78], fill=255)                  # Kopf mit Haaren und Ohren
+    d.polygon([(cx - w * 0.40, cy + h * 0.2), (cx + w * 0.40, cy + h * 0.2),
+               (cx + w * 0.50, cy + h * 0.98), (cx - w * 0.50, cy + h * 0.98)], fill=255)              # Hals, knapp
+    return m.filter(ImageFilter.GaussianBlur(2))
+
+
+def groesste_flaeche(rgba: Image.Image) -> Image.Image:
+    """Nur die größte zusammenhängende Fläche behalten (entfernt Reste)."""
+    a = np.array(rgba.getchannel("A"))
+    n, lab, stat, _ = cv2.connectedComponentsWithStats((a > 40).astype(np.uint8), connectivity=8)
+    if n <= 2:
+        return rgba
+    groesste = 1 + int(np.argmax(stat[1:, cv2.CC_STAT_AREA]))
+    a2 = np.where(lab == groesste, a, 0).astype(np.uint8)
+    out = rgba.copy()
+    out.putalpha(Image.fromarray(a2))
+    return out
+
+
+def kopf_erzeugen(foto: Image.Image, sess) -> tuple[Image.Image | None, str]:
+    """Foto -> freigestellter Kopf. Gibt (Bild, '') oder (None, Ablehnungsgrund) zurück."""
+    g = gesicht(foto)
+    if not g:
+        return None, "kein Gesicht erkannt"
+    if g[2] < MIN_GESICHT:
+        return None, f"Gesicht zu klein ({g[2]} px)"
+    sch = schaerfe(foto, g)
+    if sch < MIN_SCHAERFE:
+        return None, f"unscharf ({sch:.0f})"
+    box = kopf_box(foto)
+    aus = foto.crop(box)
+    kopf = remove(aus, session=sess)
+    maske = kopf_maske(kopf.size, g, box)
+    kopf.putalpha(ImageChops.multiply(kopf.getchannel("A"), maske))
+    kopf = groesste_flaeche(kopf)
+    # Unterkante weich ausblenden (kein harter Schnitt durch den Hals)
+    al = np.array(kopf.getchannel("A")).astype(np.float32)
+    hoehe = al.shape[0]
+    start = int(hoehe * 0.90)
+    al[start:] *= np.linspace(1.0, 0.0, hoehe - start)[:, None]
+    kopf.putalpha(Image.fromarray(al.astype(np.uint8)))
+    bb = kopf.getchannel("A").point(lambda a: 255 if a > 40 else 0).getbbox()
+    if not bb:
+        return None, "Freistellen fehlgeschlagen"
+    kopf = kopf.crop(bb)
+    if kopf.width < MIN_KOPF_BREITE:
+        return None, f"Kopf nur {kopf.width} px breit"
+    flaeche = np.array(kopf.getchannel("A")).mean() / 255
+    if flaeche < 0.45:
+        return None, f"Freistellen unsicher ({flaeche:.0%})"
+    # Zweites Gesicht im fertigen Kopf? (z. B. Mitspieler direkt dahinter)
+    grau = Image.new("RGB", kopf.size, (128, 128, 128))
+    grau.paste(kopf, mask=kopf.getchannel("A"))
+    if sum(1 for _ in _weitere_gesichter(grau, g[2] * kopf.width / (g[2] * 2.3))) > 0:
+        return None, "mehr als ein Gesicht"
+    return kopf, ""
+
+
+def _weitere_gesichter(img: Image.Image, _):
+    """Gesichter außer dem größten, die mindestens ein Drittel so groß sind."""
+    klein = img.copy(); klein.thumbnail((700, 700))
+    grau = cv2.equalizeHist(cv2.cvtColor(np.array(klein.convert("RGB")), cv2.COLOR_RGB2GRAY))
+    gefunden = []
+    for kaskade in _GESICHT[:2]:
+        gefunden += [tuple(r) for r in kaskade.detectMultiScale(grau, 1.08, 6, minSize=(30, 30))]
+    if len(gefunden) < 2:
+        return []
+    gefunden.sort(key=lambda r: -r[2] * r[3])
+    gr = gefunden[0]
+    return [r for r in gefunden[1:]
+            if r[2] > gr[2] / 3 and abs((r[0] + r[2] / 2) - (gr[0] + gr[2] / 2)) > gr[2] * 0.6]
 
 
 def eng_nachschneiden():
@@ -199,23 +296,15 @@ def main():
         except Exception as e:
             pruefen.append(f"{sp['name']}: Download fehlgeschlagen ({e})")
             continue
-        box = kopf_box(foto)
-        if not box:
-            pruefen.append(f"{sp['name']} ({sp['team']}): kein Gesicht erkannt – {info['seite']}")
+        kopf, grund = kopf_erzeugen(foto, sess)
+        if kopf is None:
+            pruefen.append(f"{sp['name']} ({sp['team']}): {grund} – {info['seite']}")
+            for endung in ("webp", "jpg"):
+                (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
+            index.pop(tm, None)
             continue
-        aus = foto.crop(box)
-        aus.thumbnail((900, 1100))
-        kopf = remove(aus, session=sess)
-        bbox = kopf.getchannel("A").point(lambda a: 255 if a > 40 else 0).getbbox()
-        if not bbox:
-            pruefen.append(f"{sp['name']}: Freistellen fehlgeschlagen")
-            continue
-        kopf = kopf.crop(bbox)
-        anteil = np.array(kopf.getchannel("A")).mean() / 255
-        if anteil < 0.25:
-            pruefen.append(f"{sp['name']} ({sp['team']}): Freistellen unsicher ({anteil:.0%} Fläche) – bitte ansehen")
-        kopf.thumbnail((600, 760))
-        kopf.save(POOL / f"{tm}.webp", "WEBP", quality=82, method=6)
+        kopf.thumbnail((1000, 1200))
+        kopf.save(POOL / f"{tm}.webp", "WEBP", quality=88, method=6)
         bildstil.bild_hero(kopf, sp["logo"], sp["name"], sp["team"], sp.get("position", ""),
                            sp.get("nr", "")).save(POOL / f"{tm}.jpg", quality=82)
         index[tm] = {"eng": True, "name": sp["name"], "team": sp["team"], "logo": sp["logo"], "datei": datei,
