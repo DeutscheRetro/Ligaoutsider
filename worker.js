@@ -4,7 +4,7 @@
 import { onRequest as api } from "./functions/api.js";
 
 // Berliner Zeit, jeden Tag gleich (wie ki_budget.LAUFPLAN_BERLIN)
-const LAUFPLAN = ["11:00", "01:00", "06:00", "08:00", "10:00", "12:00", "13:30", "15:00",
+const LAUFPLAN = ["01:00", "06:00", "08:00", "10:00", "12:00", "13:30", "15:00",
                   "16:30", "18:00", "19:30", "21:00", "23:00"];
 const QUALITAET = ["12:00", "18:00"];   // danach prüft Opus die neuen Artikel
 

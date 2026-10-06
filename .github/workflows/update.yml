@@ -1,36 +1,11 @@
 name: Neue Artikel generieren
 
 on:
-  # 12 Läufe am Tag, Berliner Zeit: 06:00 08:00 10:00 12:00 13:30 15:00 16:30 18:00
-  # 19:30 21:00 23:00 01:00 (wie ki_budget.LAUFPLAN_BERLIN). GitHub plant nur in UTC,
-  # deshalb steht jede Zeit für Sommer- und Winterzeit da; der Job "zeitplan" lässt
-  # nur die zur aktuellen Berliner Zeit passende Variante laufen.
+  # Gestartet wird pünktlich von Cloudflare (Cron-Trigger in worker.js ruft die
+  # GitHub-API auf): 12 Läufe am Tag, Berliner Zeit 06:00 08:00 10:00 12:00 13:30
+  # 15:00 16:30 18:00 19:30 21:00 23:00 01:00, um 12 und 18 Uhr mit Qualitätsprüfung.
+  # GitHubs eigener Zeitplan kam nachts bis zu 4 Stunden zu spät und ist abgeschaltet.
   # Jeder Lauf mit neuen Inhalten wird veröffentlicht (Cloudflare baut bei jedem Push).
-  schedule:
-    - cron: '0 23 * * *'    # 01:00 Sommerzeit
-    - cron: '0 0 * * *'     # 01:00 Winterzeit
-    - cron: '0 4 * * *'     # 06:00 Sommerzeit
-    - cron: '0 5 * * *'     # 06:00 Winterzeit
-    - cron: '0 6 * * *'     # 08:00 Sommerzeit
-    - cron: '0 7 * * *'     # 08:00 Winterzeit
-    - cron: '0 8 * * *'     # 10:00 Sommerzeit
-    - cron: '0 9 * * *'     # 10:00 Winterzeit
-    - cron: '0 10 * * *'    # 12:00 Sommerzeit
-    - cron: '0 11 * * *'    # 12:00 Winterzeit
-    - cron: '30 11 * * *'   # 13:30 Sommerzeit
-    - cron: '30 12 * * *'   # 13:30 Winterzeit
-    - cron: '0 13 * * *'    # 15:00 Sommerzeit
-    - cron: '0 14 * * *'    # 15:00 Winterzeit
-    - cron: '30 14 * * *'   # 16:30 Sommerzeit
-    - cron: '30 15 * * *'   # 16:30 Winterzeit
-    - cron: '0 16 * * *'    # 18:00 Sommerzeit
-    - cron: '0 17 * * *'    # 18:00 Winterzeit
-    - cron: '30 17 * * *'   # 19:30 Sommerzeit
-    - cron: '30 18 * * *'   # 19:30 Winterzeit
-    - cron: '0 19 * * *'    # 21:00 Sommerzeit
-    - cron: '0 20 * * *'    # 21:00 Winterzeit
-    - cron: '0 21 * * *'    # 23:00 Sommerzeit
-    - cron: '0 22 * * *'    # 23:00 Winterzeit
   workflow_dispatch:
     inputs:
       reason:
@@ -55,23 +30,12 @@ jobs:
     steps:
       - id: pruefen
         env:
-          SCHEDULE: ${{ github.event.schedule }}
-          QUALITAET_MANUELL: ${{ github.event.inputs.qualitaet }}
+          QUALITAET: ${{ github.event.inputs.qualitaet }}
+          ANLASS: ${{ github.event.inputs.reason }}
         run: |
-          # Manuell gestartet: immer. Geplant: nur die Sommer- bzw. Winterzeit-Variante, die gerade gilt.
-          SOMMER=('0 23 * * *' '0 4 * * *' '0 6 * * *' '0 8 * * *' '0 10 * * *' '30 11 * * *' '0 13 * * *' '30 14 * * *' '0 16 * * *' '30 17 * * *' '0 19 * * *' '0 21 * * *')
-          WINTER=('0 0 * * *' '0 5 * * *' '0 7 * * *' '0 9 * * *' '0 11 * * *' '30 12 * * *' '0 14 * * *' '30 15 * * *' '0 17 * * *' '30 18 * * *' '0 20 * * *' '0 22 * * *')
-          LOS=false
-          if [ -z "$SCHEDULE" ]; then LOS=true; fi
-          if [ "$(TZ=Europe/Berlin date +%z)" = "+0200" ]; then LISTE=("${SOMMER[@]}"); else LISTE=("${WINTER[@]}"); fi
-          for c in "${LISTE[@]}"; do [ "$c" = "$SCHEDULE" ] && LOS=true; done
-          echo "schedule='$SCHEDULE' → los=$LOS"
-          echo "los=$LOS" >> "$GITHUB_OUTPUT"
-          # Qualitätsprüfung durch Opus um 12 und 18 Uhr (Sommer- und Winterzeit-Variante)
-          Q=false
-          case "$SCHEDULE" in '0 10 * * *'|'0 16 * * *'|'0 11 * * *'|'0 17 * * *') Q=$LOS ;; esac
-          [ "$QUALITAET_MANUELL" = "true" ] && Q=true
-          echo "qualitaet=$Q" >> "$GITHUB_OUTPUT"
+          echo "los=true" >> "$GITHUB_OUTPUT"
+          echo "qualitaet=${QUALITAET:-false}" >> "$GITHUB_OUTPUT"
+          echo "Anlass: $ANLASS | Qualitätsprüfung: ${QUALITAET:-false}"
 
   generate:
     needs: zeitplan
