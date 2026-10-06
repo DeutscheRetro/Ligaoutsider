@@ -675,7 +675,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
             + "\n".join(zeilen)
             + "\n\nAntworte nur mit einer Zeile pro Geschichte: Nummer Priorität Status, z. B. \"0 3 n\"."
         )
-        antwort = ki_budget.aufruf("konferenz", model=HAIKU, max_tokens=10 * len(teil) + 30,
+        antwort = ki_budget.aufruf("konferenz", model=HAIKU, effort="low", max_tokens=10 * len(teil) + 30,
                                    messages=[{"role": "user", "content": prompt}])
         for m in re.finditer(r"^\s*\[?(\d+)\]?\s*[:.\-]?\s*([0-3])\s*[,;]?\s*([nud])\b", _text_aus(antwort), re.M):
             i = int(m.group(1))

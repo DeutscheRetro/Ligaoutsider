@@ -13,5 +13,7 @@
     // Browser-Aufrufe ("/", "/spieler/") sonst direkt als 404 beantwortet, ohne den Worker
     "run_worker_first": ["/api", "/", "/spieler/"]
   },
+  // Zeitplan der News-Pipeline (siehe scheduled() in worker.js)
+  "triggers": { "crons": ["0,30 * * * *"] },
   "observability": { "enabled": true }
 }
