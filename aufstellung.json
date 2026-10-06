@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T02:40:45.811681+00:00",
+ "updated": "2026-10-06T08:05:47.613960+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -1574,7 +1574,7 @@
      "name": "Cyriaque Irié",
      "nr": "22",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Angeschlagen - übersteht Testspiel nicht unbeschadet",
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
@@ -1937,16 +1937,6 @@
    ],
    "fraglich": [
     {
-     "name": "Bernardo",
-     "nr": "13",
-     "ampel": "gelb",
-     "grund": "Achillessehnenprobleme",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 21
-    },
-    {
      "name": "Albian Hajdari",
      "nr": "21",
      "ampel": "gelb",
@@ -1957,7 +1947,18 @@
      "prozent": 19
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Bernardo",
+     "nr": "13",
+     "ampel": "rot",
+     "grund": "Achillessehnenprobleme - trainiert individuell auf dem Rasen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 0
+    }
+   ]
   },
   "1. FC Köln": {
    "logo": "logos/koeln.png",
@@ -2569,16 +2570,6 @@
      "prozent": 0
     },
     {
-     "name": "Salim Musah",
-     "nr": "29",
-     "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel",
-     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
      "name": "Moussa Ndiaye",
      "nr": "16",
      "ampel": "rot",
@@ -2586,6 +2577,16 @@
      "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Salim Musah",
+     "nr": "29",
+     "ampel": "rot",
+     "grund": "Muskelverletzung im Oberschenkel",
+     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     }
    ]
