@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T14:32:50.877577+00:00",
+ "updated": "2026-10-06T16:03:07.100960+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -600,7 +600,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 55
+      "prozent": 65
      }
     ]
    },
@@ -645,7 +645,7 @@
      "news": "artikel/rippenverletzung-bvb-bangt-vor-werder-spiel-um-ryerson-c103fb69eb.html",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 37
+     "prozent": 27
     }
    ],
    "ausfall": [
@@ -709,7 +709,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 73
+      "prozent": 89
      }
     ],
     "abw": [
@@ -860,7 +860,7 @@
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
-     "prozent": 23
+     "prozent": 11
     },
     {
      "name": "Paul Nebel",
@@ -1767,6 +1767,16 @@
       "prozent": 97
      },
      {
+      "name": "Vladimír Coufal",
+      "nr": "34",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 90 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 83
+     },
+     {
       "name": "Koki Machida",
       "nr": "28",
       "ampel": "gruen",
@@ -1785,16 +1795,6 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 73
-     },
-     {
-      "name": "Vladimír Coufal",
-      "nr": "34",
-      "ampel": "gelb",
-      "grund": "Knieprobleme - verpasste Duell mit Spanien",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 60
      }
     ],
     "mf": [
@@ -2116,8 +2116,8 @@
      "name": "Ragnar Ache",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Muskelverletzung, drei bis vier Wochen",
-     "news": "artikel/koeln-verzichtet-vorerst-auf-vereinslosen-stuermer-ab9c2f714b.html",
+     "grund": "Verletzung, Rückkehr wohl im November",
+     "news": "artikel/koeln-verzichtet-auf-free-agent-trotz-ausfaellen-von-dallinga-und-ache-25e2d038d5.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2127,7 +2127,7 @@
      "nr": "27",
      "ampel": "rot",
      "grund": "Kreuzbandriss",
-     "news": "artikel/koeln-verzichtet-vorerst-auf-vereinslosen-stuermer-ab9c2f714b.html",
+     "news": "artikel/koeln-verzichtet-auf-free-agent-trotz-ausfaellen-von-dallinga-und-ache-25e2d038d5.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2382,12 +2382,12 @@
      {
       "name": "Karl Hein",
       "nr": "1",
-      "ampel": "gelb",
-      "grund": "Muskuläre Probleme, Diagnose steht aus",
-      "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+      "ampel": "gruen",
+      "grund": "nur Oberschenkelprellung, Rückkehr ins Training Donnerstag",
+      "news": "artikel/werder-hein-erleidet-nur-oberschenkelprellung-und-plant-dortmund-e7213e55c4.html",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 60
+      "prozent": 76
      }
     ],
     "abw": [
@@ -2583,16 +2583,6 @@
      "prozent": 0
     },
     {
-     "name": "Salim Musah",
-     "nr": "29",
-     "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel",
-     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
      "name": "Moussa Ndiaye",
      "nr": "16",
      "ampel": "rot",
@@ -2600,6 +2590,16 @@
      "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Salim Musah",
+     "nr": "29",
+     "ampel": "rot",
+     "grund": "Muskelverletzung im Oberschenkel",
+     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     }
    ]
@@ -2821,12 +2821,12 @@
   },
   "Hamburger SV": {
    "logo": "logos/hsv.png",
-   "formation": "",
+   "formation": "3-4-3",
    "quellen": [
     "ligainsider",
     "rotowire"
    ],
-   "formation_quelle": "",
+   "formation_quelle": "artikel/hsv-warmed-omari-droht-trotz-spielpraxis-die-bank-in-hoffenheim-dbba0f5c15.html",
    "elf": {
     "tw": [
      {
@@ -2884,12 +2884,12 @@
      {
       "name": "Sebastiaan Bornauw",
       "nr": "33",
-      "ampel": "gelb",
-      "grund": "Startelf gegen Hoffenheim möglich nach Muskelproblemen",
-      "news": "artikel/bornauw-und-dickes-feiern-hsv-comeback-im-test-c504ec141f.html",
+      "ampel": "gruen",
+      "grund": "wieder fit nach Comeback",
+      "news": "artikel/hsv-warmed-omari-droht-trotz-spielpraxis-die-bank-in-hoffenheim-dbba0f5c15.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 60
+      "prozent": 90
      }
     ],
     "mf": [
@@ -2974,8 +2974,8 @@
      "name": "Terem Moffi",
      "nr": "9",
      "ampel": "gelb",
-     "grund": "anhaltende Knieprobleme",
-     "news": "artikel/hsv-polzin-lobt-vieira-nur-vorsichtig-poulsen-denkt-an-barcelona-5870cf9aa0.html",
+     "grund": "Kniebeschwerden",
+     "news": "artikel/hsv-warmed-omari-droht-trotz-spielpraxis-die-bank-in-hoffenheim-dbba0f5c15.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 7
@@ -2986,8 +2986,8 @@
      "name": "Albert Grønbaek",
      "nr": "11",
      "ampel": "rot",
-     "grund": "Nach Faserriss im rechten Oberschenkel - dreht erste Laufrunden auf dem Trainingsplatz",
-     "news": "",
+     "grund": "Ausfall laut Bericht",
+     "news": "artikel/hsv-warmed-omari-droht-trotz-spielpraxis-die-bank-in-hoffenheim-dbba0f5c15.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -3190,12 +3190,12 @@
   },
   "1. FC Union Berlin": {
    "logo": "logos/union.png",
-   "formation": "",
+   "formation": "4-4-2",
    "quellen": [
     "ligainsider",
     "rotowire"
    ],
-   "formation_quelle": "",
+   "formation_quelle": "artikel/querfeld-kaempft-bei-union-um-seinen-stammplatz-0dc2b50954.html",
    "elf": {
     "tw": [
      {
