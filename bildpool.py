@@ -109,8 +109,8 @@ def kopf_box(img: Image.Image) -> tuple | None:
         return None
     x, y, w, h = g
     cx = x + w / 2
-    return (max(0, int(cx - w * 1.15)), max(0, int(y - h * 0.75)),
-            min(img.width, int(cx + w * 1.15)), min(img.height, int(y + h * 1.75)))
+    return (max(0, int(cx - w * 1.35)), max(0, int(y - h * 1.0)),
+            min(img.width, int(cx + w * 1.35)), min(img.height, int(y + h * 1.9)))
 
 
 MIN_GESICHT = 110       # Pixel Gesichtsbreite im Originalfoto, sonst wird der Kopf beim Skalieren unscharf
@@ -125,16 +125,18 @@ def schaerfe(foto: Image.Image, g: tuple) -> float:
 
 
 def kopf_maske(groesse: tuple, g: tuple, box: tuple) -> Image.Image:
-    """Erlaubte Fläche: Kopf (Ellipse) plus Hals. Alles andere – Hände, Nachbarn, Schultern – wird entfernt."""
+    """Erlaubte Fläche: Kopf-Block bis unter das Kinn plus Hals, der zum Kragen hin schmaler wird.
+    Bewusst großzügig (auch bei gedrehten Köpfen, wo das Gesichtsrechteck außermittig sitzt);
+    Hände, Nachbarn und Schultern fängt der Rest ab (größte Fläche, Proportionsregel)."""
     from PIL import ImageDraw
-    w_img, h_img = groesse
     x, y, w, h = g
-    cx, cy = x + w / 2 - box[0], y + h / 2 - box[1]
+    cx, oben = x + w / 2 - box[0], y - box[1]
     m = Image.new("L", groesse, 0)
     d = ImageDraw.Draw(m)
-    d.ellipse([cx - w * 0.85, cy - h * 0.98, cx + w * 0.85, cy + h * 0.78], fill=255)                  # Kopf mit Haaren und Ohren
-    d.polygon([(cx - w * 0.40, cy + h * 0.2), (cx + w * 0.40, cy + h * 0.2),
-               (cx + w * 0.50, cy + h * 0.98), (cx - w * 0.50, cy + h * 0.98)], fill=255)              # Hals, knapp
+    d.ellipse([cx - w * 1.35, oben - h * 0.95, cx + w * 1.35, oben + h * 0.75], fill=255)                # Schädel mit Haaren/Ohren, auch bei gedrehtem Kopf
+    d.rounded_rectangle([cx - w * 0.95, oben - h * 0.2, cx + w * 0.95, oben + h * 0.98], radius=int(w * 0.55), fill=255)  # Gesicht bis Kinn
+    d.polygon([(cx - w * 0.6, oben + h * 0.6), (cx + w * 0.6, oben + h * 0.6),
+               (cx + w * 0.48, oben + h * 1.5), (cx - w * 0.48, oben + h * 1.5)], fill=255)            # nur Hals, keine Schultern
     return m.filter(ImageFilter.GaussianBlur(2))
 
 
@@ -155,7 +157,7 @@ def proportion_ok(kopf: Image.Image) -> str:
     """Leer = in Ordnung, sonst Ablehnungsgrund. Gute Köpfe sind 1,3- bis 1,85-mal so hoch wie breit:
     breiter heißt Nachbar, Mütze oder Arm im Bild, höher heißt ganzer Körper."""
     verhaeltnis = kopf.height / kopf.width
-    if verhaeltnis < 1.30:
+    if verhaeltnis < 1.20:
         return f"zu breit ({verhaeltnis:.2f}) – vermutlich Nachbar, Mütze oder Arm im Bild"
     if verhaeltnis > 1.85:
         return f"zu hoch ({verhaeltnis:.2f}) – vermutlich ganzer Körper"
