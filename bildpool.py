@@ -169,6 +169,47 @@ def proportion_ok(kopf: Image.Image) -> str:
     return ""
 
 
+# Qualitätslatte = Niveau von Kane (Schärfe 662) und Guirassy (471); weiche Köpfe lagen alle unter 120
+Q_MIN_GESICHT = 240        # Gesichtsbreite im fertigen Kopf in Pixeln
+Q_MIN_SCHAERFE = 160       # Laplace-Varianz des auf 200 px normierten Gesichts
+Q_HELLIGKEIT = (85, 200)   # mittlere Helligkeit des Gesichts: nicht zu dunkel, nicht überstrahlt
+Q_MIN_KONTRAST = 26        # Standardabweichung der Helligkeit im Gesicht
+Q_RAND = (0.12, 0.18, 0.04)  # Mindestabstand Gesicht zum Rand: oben (Haare), unten (Kinn+Hals), seitlich
+
+
+def kopf_qualitaet(kopf: Image.Image) -> str:
+    """Leer = gut genug. Sonst Ablehnungsgrund: unscharf, zu klein, zu dunkel, Gesicht am Rand abgeschnitten."""
+    grau = Image.new("RGB", kopf.size, (128, 128, 128))
+    grau.paste(kopf, mask=kopf.getchannel("A"))
+    g = gesicht(grau)
+    if not g:
+        return "kein Gesicht erkannt"
+    x, y, w, h = g
+    if w < Q_MIN_GESICHT:
+        return f"Gesicht zu klein ({w} px)"
+    face = np.array(grau.crop((x, y, x + w, y + h)).convert("L").resize((200, max(1, int(200 * h / w)))))
+    schaerfe_wert = float(cv2.Laplacian(face, cv2.CV_64F).var())
+    if schaerfe_wert < Q_MIN_SCHAERFE:
+        return f"nicht scharf genug ({schaerfe_wert:.0f})"
+    hell, kon = float(face.mean()), float(face.std())
+    if hell < Q_HELLIGKEIT[0] or hell > Q_HELLIGKEIT[1]:
+        return f"Gesicht zu {'dunkel' if hell < Q_HELLIGKEIT[0] else 'hell'} ({hell:.0f})"
+    if kon < Q_MIN_KONTRAST:
+        return f"zu wenig Kontrast ({kon:.0f})"
+    oben, unten = y / kopf.height, (kopf.height - (y + h)) / kopf.height
+    links, rechts = x / kopf.width, (kopf.width - (x + w)) / kopf.width
+    if oben < Q_RAND[0]:
+        return "Stirn/Haare oben abgeschnitten"
+    if unten < Q_RAND[1]:
+        return "Kinn/Hals unten abgeschnitten"
+    if min(links, rechts) < Q_RAND[2]:
+        return "Gesicht reicht bis an den seitlichen Rand (vermutlich abgeschnitten)"
+    a = np.array(kopf.getchannel("A"))[y + int(h * 0.1):y + int(h * 0.95), x + int(w * 0.15):x + int(w * 0.85)]
+    if a.size and a.mean() / 255 < 0.93:
+        return "Gesicht teilweise transparent (Teile weggeschnitten)"
+    return ""
+
+
 def kopf_erzeugen(foto: Image.Image, sess) -> tuple[Image.Image | None, str]:
     """Foto -> freigestellter Kopf. Gibt (Bild, '') oder (None, Ablehnungsgrund) zurück."""
     g = gesicht(foto)
@@ -197,7 +238,7 @@ def kopf_erzeugen(foto: Image.Image, sess) -> tuple[Image.Image | None, str]:
     kopf = kopf.crop(bb)
     if kopf.width < MIN_KOPF_BREITE:
         return None, f"Kopf nur {kopf.width} px breit"
-    grund = proportion_ok(kopf)
+    grund = proportion_ok(kopf) or kopf_qualitaet(kopf)
     if grund:
         return None, grund
     flaeche = np.array(kopf.getchannel("A")).mean() / 255
@@ -279,15 +320,19 @@ def heros_neu():
 
 
 def regeln_anwenden():
-    """Prüft schon fertige Köpfe gegen die Proportionsregeln und nimmt Verstöße aus dem Pool."""
+    """Prüft alle fertigen Köpfe gegen Proportions- und Qualitätsregeln, entfernt Verstöße
+    und schreibt bilder/qualitaet_abgelehnt.txt sowie bilder/ohne_bild.txt neu."""
     index = json.loads(INDEX.read_text(encoding="utf-8"))
+    db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+    alle = {str(sp["tm_id"]): (t, sp["name"]) for t, v in db["teams"].items() for sp in v["spieler"] if sp.get("tm_id")}
     raus = []
     for tm, info in index.items():
         datei = POOL / f"{tm}.webp"
         if not datei.exists():
             raus.append((tm, info["name"], "Datei fehlt"))
             continue
-        grund = proportion_ok(Image.open(datei).convert("RGBA"))
+        kopf = Image.open(datei).convert("RGBA")
+        grund = proportion_ok(kopf) or kopf_qualitaet(kopf)
         if grund:
             raus.append((tm, info["name"], grund))
     for tm, name, grund in raus:
@@ -296,6 +341,8 @@ def regeln_anwenden():
             (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
         index.pop(tm, None)
     INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    Path("bilder/qualitaet_abgelehnt.txt").write_text("\n".join(f"{n}: {g}" for _, n, g in raus) + "\n", encoding="utf-8")
+    Path("bilder/ohne_bild.txt").write_text("\n".join(sorted(f"{t}: {n}" for k, (t, n) in alle.items() if k not in index)) + "\n", encoding="utf-8")
     print(f"{len(index)} Köpfe bleiben, {len(raus)} entfernt")
 
 
