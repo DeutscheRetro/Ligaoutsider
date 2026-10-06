@@ -14,7 +14,6 @@
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" href="favicon.png" type="image/png"/>
-  <script src="avatar.js"></script>
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
   <script src="/auth.js"></script>
   <!-- Google tag (gtag.js) -->
@@ -244,7 +243,7 @@
         const x = slots[i], sp = x.spieler;
         const ziel = (gewaehlt && !sp && passt(x, gewaehlt)) || (!gewaehlt && !sp && posFilter === x.gruppe) ? ' ziel' : '';
         return `<div class="me-slot${sp ? ' voll' : ''}${ziel}" data-i="${i}">
-          ${sp ? `${LoAvatar.html({ name: sp.name, nr: sp.nr, logo: sp.logo, size: 32 })}${(() => { const nm = sp.name.split(' ').length > 1 ? sp.name.split(' ').slice(1).join(' ') : sp.name;
+          ${sp ? `<img src="${esc(sp.logo)}" alt="">${(() => { const nm = sp.name.split(' ').length > 1 ? sp.name.split(' ').slice(1).join(' ') : sp.name;
                     return `<span class="me-slot-name${nm.length > 10 ? ' lang' : ''}">${esc(nm)}</span>`; })()}
                   <span class="me-slot-mw">${mwVon(sp) ? mio(mwVon(sp)).replace(' Mio. €', ' Mio.') : ''}</span>
                   <button class="me-weg" data-weg="${i}" aria-label="Entfernen">×</button>`
@@ -269,7 +268,7 @@
 ;
       document.getElementById('me-liste').innerHTML = liste.length ? liste.map(s => `
         <div class="me-sp${imFeld.has(s.tm_id) ? ' drin' : ''}${imSpiel(s) ? '' : ' fehlt'}${gewaehlt && gewaehlt.tm_id === s.tm_id ? ' gewaehlt' : ''}" draggable="${imSpiel(s)}" data-id="${s.tm_id}">
-          ${LoAvatar.html({ name: s.name, nr: s.nr, logo: s.logo, size: 28 })}
+          <img src="${esc(s.logo)}" alt="">
           <span class="me-sp-name">${esc(s.name)}<small>${esc(s.position || gruppeVon(s))}${imSpiel(s) ? '' : ' · nicht bei ' + (modus === 'kickbase' ? 'Kickbase' : 'Comunio')}</small></span>
           <span class="me-sp-mw">${mwVon(s) ? mio(mwVon(s)).replace(' Mio. €', ' M') : ''}</span>
           <span class="me-sp-pos">${esc(KURZ[gruppeVon(s)] || '–')}</span>
