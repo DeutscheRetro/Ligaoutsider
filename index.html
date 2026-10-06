@@ -508,6 +508,25 @@
           .map(p => playerLi(p, `<span class="scorer-goals">${p.goalCount}</span>`))
           .join('') || '<li style="color:var(--text4);font-size:12px;padding:10px 12px">Keine Daten</li>';
 
+        // Spieler ohne Wappen (kein Tor in den Spieldaten gefunden): Verein aus der Spieler-Datenbank
+        const ohne = [...document.querySelectorAll('#torjaeger-list li[data-playerid]')].filter(li => !li.querySelector('img'));
+        if (ohne.length) {
+          spielerDbPromise = spielerDbPromise || fetch('spieler_db.json').then(r => r.ok ? r.json() : null).catch(() => null);
+          spielerDbPromise.then(db => {
+            if (!db) return;
+            ohne.forEach(li => {
+              const s = findeInDb(db, li.dataset.name, '');
+              if (!s || !s.logo) return;
+              const img = document.createElement('img');
+              img.src = s.logo.replace(/^\.?\//, '');
+              img.style.cssText = 'width:18px;height:18px;object-fit:contain;flex-shrink:0';
+              img.onerror = () => img.remove();
+              li.prepend(img);
+              li.dataset.team = li.dataset.team || s.verein;
+            });
+          });
+        }
+
         // Klick-Handler
         document.getElementById('torjaeger-list').addEventListener('click', e => {
           const li = e.target.closest('li[data-playerid]');
