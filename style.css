@@ -680,14 +680,17 @@ ul { list-style: none; }
 .pr-leer p{color:var(--text3);margin-bottom:16px}
 @media (max-width:560px){.pr-kopf{flex-direction:column;text-align:center}.pr-knoepfe{justify-content:center}.pr-avatar{width:76px;height:76px}}
 
-/* Spielerbild aus dem Bilderpool, Namensnennung hochkant am rechten Rand */
-.artikel-bild { position: relative; margin: 0 0 22px; border-radius: 10px; overflow: hidden; }
-.artikel-bild img { display: block; width: 100%; height: auto; aspect-ratio: 12 / 5; }
+/* Spielerbild aus dem Bilderpool, Namensnennung hochkant neben dem Bild (nie darüber) */
+.artikel-bild { display: flex; align-items: stretch; gap: 6px; margin: 0 0 22px; }
+.artikel-bild img { display: block; flex: 1 1 auto; min-width: 0; width: 100%; height: auto; aspect-ratio: 12 / 5; border-radius: 10px; }
 .bild-credit {
-  position: absolute; right: 4px; bottom: 8px;
-  writing-mode: vertical-rl; transform: rotate(180deg);
-  font-size: 10px; line-height: 1.2; color: rgba(255,255,255,.85);
-  text-shadow: 0 0 3px rgba(0,0,0,.6); max-height: calc(100% - 16px); overflow: hidden;
+  flex: none; writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: 9.5px; line-height: 1.25; color: var(--text4); text-align: left;
 }
 .bild-credit a { color: inherit; text-decoration: none; }
-.bild-credit a:hover { text-decoration: underline; }
+.bild-credit a:hover { text-decoration: underline; color: var(--accent); }
+/* Schmale Bildschirme: klein unter das Bild */
+@media (max-width: 700px) {
+  .artikel-bild { display: block; }
+  .bild-credit { writing-mode: horizontal-tb; transform: none; text-align: right; font-size: 10.5px; margin-top: 4px; }
+}
