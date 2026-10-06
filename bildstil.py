@@ -57,8 +57,9 @@ def silhouette(hoehe: int = 640) -> Image.Image:
 
 def sticker(kopf: Image.Image, max_w: int, max_h: int) -> tuple[Image.Image, Image.Image]:
     """Kopf verkleinern, weiße Kontur und Schatten erzeugen. Gibt (sticker, schatten) zurück."""
-    k = kopf.copy()
-    k.thumbnail((max_w, max_h))
+    # Auf einheitliche Größe bringen – auch kleine Ausgangsbilder hochskalieren
+    f = min(max_w / kopf.width, max_h / kopf.height)
+    k = kopf.resize((max(1, round(kopf.width * f)), max(1, round(kopf.height * f))), Image.LANCZOS)
     alpha = k.getchannel("A").filter(ImageFilter.MaxFilter(25))
     kontur = Image.new("RGBA", k.size, (255, 255, 255, 255))
     kontur.putalpha(alpha)
@@ -85,15 +86,33 @@ def credit_hochkant(img: Image.Image, text: str, groesse: int = 15):
     img.alpha_composite(s, (img.width - s.width - 6, img.height - s.height - 12))
 
 
-def bild_hero(kopf: Image.Image | None, logo: str, w: int = 1200, h: int = 500) -> Image.Image:
-    """Artikelbild ohne Text (Namensnennung kommt als HTML darüber)."""
+def bild_hero(kopf: Image.Image | None, logo: str, name: str = "", team: str = "",
+              position: str = "", nr: str = "", w: int = 1200, h: int = 500) -> Image.Image:
+    """Artikelbild: Vereinsstreifen, Spielerkarte links, Kopf rechts unten angeschnitten.
+    Die Namensnennung des Fotografen kommt als HTML daneben, nicht ins Bild."""
     farbe = farbe_fuer(logo)
     img = streifen(w, h, farbe)
-    k, sch = sticker(kopf if kopf is not None else silhouette(), 560, int(h * 1.15))
-    x, y = w - k.width - 110, h - k.height + int(h * 0.18)
+    k, sch = sticker(kopf if kopf is not None else silhouette(), 540, 560)
+    x, y = w - k.width - 80, h - k.height + int(k.height * 0.16)       # unten vom Rand abgeschnitten
     img.alpha_composite(sch, (x + 12, y + 12))
     img.alpha_composite(k, (x, y))
-    _wappen(img, logo, (60, h - 190), 140)
+    if name:
+        vor, _, nach = name.rpartition(" ") if " " in name and len(name.split()) == 2 else ("", "", name)
+        if len(name.split()) > 2:
+            vor, nach = name.split(" ", 1)
+        img.alpha_composite(Image.new("RGBA", (560, 340), (0, 0, 0, 185)), (50, 80))
+        d = ImageDraw.Draw(img)
+        _wappen(img, logo, (80, 108), 90)
+        d.text((190, 116), team.upper(), font=ImageFont.truetype(FETT, 22), fill=GELB)
+        sub = " · ".join(x for x in (position, f"#{nr}" if nr else "") if x)
+        d.text((190, 148), sub, font=ImageFont.truetype(FETT, 22), fill=(200, 200, 200))
+        d.text((80, 235), vor, font=ImageFont.truetype(FETT, 46), fill="white")
+        gr = 84
+        while gr > 36 and d.textlength(nach, font=ImageFont.truetype(FETT, gr)) > 500:
+            gr -= 4
+        d.text((80, 285), nach, font=ImageFont.truetype(FETT, gr), fill="white")
+    else:
+        _wappen(img, logo, (60, h - 190), 140)
     return img.convert("RGB")
 
 

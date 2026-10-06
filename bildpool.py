@@ -101,14 +101,70 @@ def kopf_box(img: Image.Image) -> tuple | None:
         if len(g):
             x, y, w, h = [int(v * f) for v in max(g, key=lambda r: r[2] * r[3])]
             cx = x + w / 2
-            breite = w * 3.4
+            breite = w * 2.1                       # nur Kopf, kaum Schultern
             links, rechts = max(0, int(cx - breite / 2)), min(img.width, int(cx + breite / 2))
-            oben, unten = max(0, int(y - h * 0.95)), min(img.height, int(y + h * 3.1))
+            oben, unten = max(0, int(y - h * 0.6)), min(img.height, int(y + h * 1.45))
             return links, oben, rechts, unten
     return None
 
 
+def eng_nachschneiden():
+    """Schneidet schon freigestellte Bilder auf den Kopf zu (Gesicht + Haare + etwas Hals)."""
+    index = json.loads(INDEX.read_text(encoding="utf-8"))
+    entfernen = []
+    for tm, info in index.items():
+        datei = POOL / f"{tm}.webp"
+        if not datei.exists():
+            entfernen.append(tm)
+            continue
+        if info.get("eng") and "--alle-pruefen" not in sys.argv:
+            continue
+        kopf = Image.open(datei).convert("RGBA")
+        grau = Image.new("RGB", kopf.size, (128, 128, 128))
+        grau.paste(kopf, mask=kopf.getchannel("A"))
+        box = kopf_box(grau)
+        if not box:
+            print(f"  ✗ {info['name']}: Gesicht nicht erkannt – aus dem Pool genommen")
+            entfernen.append(tm)
+            continue
+        neu = kopf.crop(box)
+        bb = neu.getchannel("A").point(lambda a: 255 if a > 40 else 0).getbbox()
+        if not bb:
+            continue
+        neu = neu.crop(bb)
+        neu.save(datei, "WEBP", quality=85, method=6)
+        info["eng"] = True
+        pass  # Artikelbild danach mit --hero neu erzeugen
+    for tm in entfernen:
+        for endung in ("webp", "jpg"):
+            (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
+        index.pop(tm, None)
+    INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"Fertig: {len(index)} Köpfe im Pool, {len(entfernen)} entfernt")
+
+
+def heros_neu():
+    """Artikelbilder (jpg) aller Spieler aus den freigestellten Köpfen neu erzeugen."""
+    db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+    daten = {str(s["tm_id"]): (t, v["logo"], s) for t, v in db["teams"].items() for s in v["spieler"]}
+    index = json.loads(INDEX.read_text(encoding="utf-8"))
+    for tm, info in index.items():
+        if tm not in daten:
+            continue
+        team, logo, sp = daten[tm]
+        kopf = Image.open(POOL / f"{tm}.webp").convert("RGBA")
+        bildstil.bild_hero(kopf, logo, sp["name"], team, sp.get("position", ""), sp.get("nr", "")
+                           ).save(POOL / f"{tm}.jpg", quality=82)
+        info.update(team=team, logo=logo)
+    INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"{len(index)} Artikelbilder neu erzeugt")
+
+
 def main():
+    if "--hero" in sys.argv:
+        return heros_neu()
+    if "--eng" in sys.argv:
+        return eng_nachschneiden()
     alle = "--alle" in sys.argv
     POOL.mkdir(parents=True, exist_ok=True)
     PLATZHALTER.mkdir(parents=True, exist_ok=True)
@@ -133,9 +189,7 @@ def main():
         if alt and alt.get("datei") == datei and not alle:
             # Bild unverändert – nur Artikelbild neu, falls der Spieler den Verein gewechselt hat
             if alt.get("logo") != sp["logo"]:
-                kopf = Image.open(POOL / f"{tm}.webp")
-                bildstil.bild_hero(kopf, sp["logo"]).save(POOL / f"{tm}.jpg", quality=82)
-                alt.update(team=sp["team"], logo=sp["logo"])
+                alt.update(team=sp["team"], logo=sp["logo"])     # Verein gewechselt: danach --hero
             continue
         if not info or not info["url"] or not ERLAUBT.match(info["lizenz"]) or re.search(r"\bN[CD]\b", info["lizenz"]):
             pruefen.append(f"{sp['name']} ({sp['team']}): Lizenz '{info and info['lizenz']}' – übersprungen")
@@ -162,8 +216,9 @@ def main():
             pruefen.append(f"{sp['name']} ({sp['team']}): Freistellen unsicher ({anteil:.0%} Fläche) – bitte ansehen")
         kopf.thumbnail((600, 760))
         kopf.save(POOL / f"{tm}.webp", "WEBP", quality=82, method=6)
-        bildstil.bild_hero(kopf, sp["logo"]).save(POOL / f"{tm}.jpg", quality=82)
-        index[tm] = {"name": sp["name"], "team": sp["team"], "logo": sp["logo"], "datei": datei,
+        bildstil.bild_hero(kopf, sp["logo"], sp["name"], sp["team"], sp.get("position", ""),
+                           sp.get("nr", "")).save(POOL / f"{tm}.jpg", quality=82)
+        index[tm] = {"eng": True, "name": sp["name"], "team": sp["team"], "logo": sp["logo"], "datei": datei,
                      "fotograf": info["fotograf"] or "unbekannt", "lizenz": info["lizenz"],
                      "lizenz_url": info["lizenz_url"], "quelle": info["seite"]}
         print(f"  ✓ {sp['name']} ({sp['team']}) – {info['fotograf']}, {info['lizenz']}")
