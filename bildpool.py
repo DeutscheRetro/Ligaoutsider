@@ -14,6 +14,8 @@ Ablauf (lokal ausführen, braucht rembg + opencv, siehe unten):
 """
 import io
 import json
+import threading
+from concurrent.futures import ThreadPoolExecutor
 import re
 import sys
 import time
@@ -174,7 +176,7 @@ Q_MIN_GESICHT = 240        # Gesichtsbreite im fertigen Kopf in Pixeln
 Q_MIN_SCHAERFE = 160       # Laplace-Varianz des auf 200 px normierten Gesichts
 Q_HELLIGKEIT = (85, 200)   # mittlere Helligkeit des Gesichts: nicht zu dunkel, nicht überstrahlt
 Q_MIN_KONTRAST = 26        # Standardabweichung der Helligkeit im Gesicht
-Q_RAND = (0.12, 0.18, 0.04)  # Mindestabstand Gesicht zum Rand: oben (Haare), unten (Kinn+Hals), seitlich
+Q_RAND = (0.12, 0.18, 0.03)  # Mindestabstand Gesicht zum Rand: oben (Haare), unten (Kinn+Hals), seitlich
 
 
 def kopf_qualitaet(kopf: Image.Image) -> str:
@@ -205,7 +207,7 @@ def kopf_qualitaet(kopf: Image.Image) -> str:
     if min(links, rechts) < Q_RAND[2]:
         return "Gesicht reicht bis an den seitlichen Rand (vermutlich abgeschnitten)"
     a = np.array(kopf.getchannel("A"))[y + int(h * 0.1):y + int(h * 0.95), x + int(w * 0.15):x + int(w * 0.85)]
-    if a.size and a.mean() / 255 < 0.93:
+    if a.size and a.mean() / 255 < 0.90:
         return "Gesicht teilweise transparent (Teile weggeschnitten)"
     return ""
 
@@ -346,6 +348,60 @@ def regeln_anwenden():
     print(f"{len(index)} Köpfe bleiben, {len(raus)} entfernt")
 
 
+_ERKENNUNG = threading.Lock()
+CSV_KATEGORIEN = Path("data/bundesliga-spieler-bilder.csv")   # Spieler -> Commons-Kategorie (Übersicht vom 06.10.2026)
+MAX_KATEGORIE = 12      # so viele Fotos je Spieler aus seiner Kategorie probieren (neueste Uploads zuerst)
+TOP_N = 2               # so viele der vorsortierten Kandidaten werden aufwendig freigestellt
+
+
+def kategorien() -> dict:
+    """TM-ID -> Commons-Kategorie, aus der CSV."""
+    import csv
+    if not CSV_KATEGORIEN.exists():
+        return {}
+    with CSV_KATEGORIEN.open(encoding="utf-8-sig") as f:
+        return {r["Transfermarkt-ID"].strip(): r["Commons-Kategorie"].strip()
+                for r in csv.DictReader(f, delimiter=";") if (r.get("Commons-Kategorie") or "").strip()}
+
+
+def kategorie_dateien(kat: str, n: int = MAX_KATEGORIE) -> list[str]:
+    url = ("https://commons.wikimedia.org/w/api.php?action=query&list=categorymembers&cmtype=file"
+           f"&cmlimit={n}&cmsort=timestamp&cmdir=desc&format=json&cmtitle=" + urllib.parse.quote("Category:" + kat))
+    try:
+        return [m["title"].removeprefix("File:") for m in holen(url)["query"]["categorymembers"]]
+    except Exception:
+        return []
+
+
+def alle_gesichter(img: Image.Image) -> list[tuple]:
+    klein = img.copy()
+    klein.thumbnail((900, 900))
+    f = img.width / klein.width
+    grau = cv2.equalizeHist(cv2.cvtColor(np.array(klein.convert("RGB")), cv2.COLOR_RGB2GRAY))
+    gef = []
+    for kaskade in _GESICHT[:2]:
+        gef += [tuple(int(v * f) for v in r) for r in kaskade.detectMultiScale(grau, 1.08, 6, minSize=(40, 40))]
+    return gef
+
+
+def vorab(foto: Image.Image) -> tuple[float | None, str]:
+    """Schnelle Vorauswahl ohne Freistellen: ein Gesicht, groß genug, scharf. Gibt (Punktzahl, Grund) zurück."""
+    g = gesicht(foto)
+    if not g:
+        return None, "kein Gesicht"
+    x, y, w, h = g
+    if w < Q_MIN_GESICHT:
+        return None, f"Gesicht zu klein ({w} px)"
+    cx = x + w / 2
+    for a in alle_gesichter(foto):
+        if a[2] >= 0.4 * w and abs((a[0] + a[2] / 2) - cx) > 0.6 * w:
+            return None, "mehrere Personen"
+    sch = schaerfe(foto, g)
+    if sch < MIN_SCHAERFE:
+        return None, f"unscharf ({sch:.0f})"
+    return min(sch, 800) * min(w, 800) / 800, ""
+
+
 def main():
     if "--regeln" in sys.argv:
         return regeln_anwenden()
@@ -370,41 +426,61 @@ def main():
     if Path("bilder/ausschluss.txt").exists():       # TM-IDs, die du nach Sichtkontrolle ausschließt (eine pro Zeile, # = Kommentar)
         ausschluss = {z.split("#")[0].strip() for z in Path("bilder/ausschluss.txt").read_text().splitlines()} - {""}
     bilder = {k: v for k, v in wikidata_bilder(list(spieler)).items() if k not in ausschluss}
-    infos = commons_info(sorted(set(bilder.values())))
-    print(f"{len(spieler)} Spieler, {len(bilder)} mit Wikidata-Bild")
+    kats = kategorien()
+    print(f"{len(spieler)} Spieler, {len(bilder)} mit Wikidata-Bild, {len(kats)} mit Commons-Kategorie")
     sess = new_session("u2net_human_seg")
-    for tm, datei in sorted(bilder.items(), key=lambda x: spieler[x[0]]["team"]):
-        sp = spieler[tm]
-        info = infos.get(datei)
+    for tm, sp in sorted(spieler.items(), key=lambda x: x[1]["team"]):
+        if tm in ausschluss:
+            continue
         alt = index.get(tm)
-        if alt and alt.get("datei") == datei and not alle:
-            # Bild unverändert – nur Artikelbild neu, falls der Spieler den Verein gewechselt hat
+        if alt and not alle:
             if alt.get("logo") != sp["logo"]:
                 alt.update(team=sp["team"], logo=sp["logo"])     # Verein gewechselt: danach --hero
             continue
-        if not info or not info["url"] or not ERLAUBT.match(info["lizenz"]) or re.search(r"\bN[CD]\b", info["lizenz"]):
-            pruefen.append(f"{sp['name']} ({sp['team']}): Lizenz '{info and info['lizenz']}' – übersprungen")
+        hauptbild = bilder.get(tm)
+        namen = [hauptbild] if hauptbild else []
+        if tm in kats:
+            namen += [d for d in kategorie_dateien(kats[tm]) if d != hauptbild]
+        if not namen:
             continue
-        try:
-            foto = Image.open(io.BytesIO(holen(info["url"], json_antwort=False))).convert("RGB")
-        except Exception as e:
-            pruefen.append(f"{sp['name']}: Download fehlgeschlagen ({e})")
+        infos = commons_info(namen)
+        def pruefen_kandidat(datei):
+            info = infos.get(datei)
+            if (not info or not info["url"] or not ERLAUBT.match(info["lizenz"])
+                    or re.search(r"\bN[CD]\b", info["lizenz"]) or info["fotograf"] in ("", "unbekannt")):
+                return None
+            try:
+                foto = Image.open(io.BytesIO(holen(info["url"], json_antwort=False))).convert("RGB")
+            except Exception:
+                return None
+            with _ERKENNUNG:                      # OpenCV-Kaskaden sind nicht thread-sicher
+                punkte, _ = vorab(foto)
+            return (punkte, datei, info, foto) if punkte is not None else None
+
+        with ThreadPoolExecutor(max_workers=6) as pool:        # Download + Vorauswahl parallel
+            kandidaten = [k for k in pool.map(pruefen_kandidat, namen) if k]
+        kandidaten.sort(key=lambda k: -k[0])
+        gewaehlt, gruende = None, []
+        for punkte, datei, info, foto in kandidaten[:TOP_N]:
+            kopf, grund = kopf_erzeugen(foto, sess)
+            if kopf is not None:
+                gewaehlt = (kopf, datei, info)
+                break
+            gruende.append(grund)
+        if not gewaehlt:
+            pruefen.append(f"{sp['name']} ({sp['team']}): {len(namen)} Fotos geprüft, {len(kandidaten)} vorsortiert – "
+                           + ("; ".join(gruende) or "keines brauchbar"))
             continue
-        kopf, grund = kopf_erzeugen(foto, sess)
-        if kopf is None:
-            pruefen.append(f"{sp['name']} ({sp['team']}): {grund} – {info['seite']}")
-            for endung in ("webp", "jpg"):
-                (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
-            index.pop(tm, None)
-            continue
+        kopf, datei, info = gewaehlt
         kopf.thumbnail((1000, 1200))
         kopf.save(POOL / f"{tm}.webp", "WEBP", quality=88, method=6)
         bildstil.bild_hero(kopf, sp["logo"], sp["name"], sp["team"], sp.get("position", ""),
                            sp.get("nr", "")).save(POOL / f"{tm}.jpg", quality=82)
         index[tm] = {"eng": True, "name": sp["name"], "team": sp["team"], "logo": sp["logo"], "datei": datei,
-                     "fotograf": info["fotograf"] or "unbekannt", "lizenz": info["lizenz"],
+                     "fotograf": info["fotograf"], "lizenz": info["lizenz"],
                      "lizenz_url": info["lizenz_url"], "quelle": info["seite"]}
-        print(f"  ✓ {sp['name']} ({sp['team']}) – {info['fotograf']}, {info['lizenz']}")
+        print(f"  ✓ {sp['name']} ({sp['team']}) – {info['fotograf']}, {info['lizenz']}"
+              + ("" if datei == hauptbild else "  [aus Kategorie]"))
         INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
 
     INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
