@@ -151,6 +151,22 @@ def groesste_flaeche(rgba: Image.Image) -> Image.Image:
     return out
 
 
+def proportion_ok(kopf: Image.Image) -> str:
+    """Leer = in Ordnung, sonst Ablehnungsgrund. Gute Köpfe sind 1,3- bis 1,85-mal so hoch wie breit:
+    breiter heißt Nachbar, Mütze oder Arm im Bild, höher heißt ganzer Körper."""
+    verhaeltnis = kopf.height / kopf.width
+    if verhaeltnis < 1.30:
+        return f"zu breit ({verhaeltnis:.2f}) – vermutlich Nachbar, Mütze oder Arm im Bild"
+    if verhaeltnis > 1.85:
+        return f"zu hoch ({verhaeltnis:.2f}) – vermutlich ganzer Körper"
+    grau = Image.new("RGB", kopf.size, (128, 128, 128))
+    grau.paste(kopf, mask=kopf.getchannel("A"))
+    g = gesicht(grau)
+    if g and g[2] / kopf.width < 0.55:
+        return f"Gesicht nur {g[2] / kopf.width:.0%} der Kopfbreite – viel Beiwerk"
+    return ""
+
+
 def kopf_erzeugen(foto: Image.Image, sess) -> tuple[Image.Image | None, str]:
     """Foto -> freigestellter Kopf. Gibt (Bild, '') oder (None, Ablehnungsgrund) zurück."""
     g = gesicht(foto)
@@ -179,6 +195,9 @@ def kopf_erzeugen(foto: Image.Image, sess) -> tuple[Image.Image | None, str]:
     kopf = kopf.crop(bb)
     if kopf.width < MIN_KOPF_BREITE:
         return None, f"Kopf nur {kopf.width} px breit"
+    grund = proportion_ok(kopf)
+    if grund:
+        return None, grund
     flaeche = np.array(kopf.getchannel("A")).mean() / 255
     if flaeche < 0.45:
         return None, f"Freistellen unsicher ({flaeche:.0%})"
@@ -257,7 +276,30 @@ def heros_neu():
     print(f"{len(index)} Artikelbilder neu erzeugt")
 
 
+def regeln_anwenden():
+    """Prüft schon fertige Köpfe gegen die Proportionsregeln und nimmt Verstöße aus dem Pool."""
+    index = json.loads(INDEX.read_text(encoding="utf-8"))
+    raus = []
+    for tm, info in index.items():
+        datei = POOL / f"{tm}.webp"
+        if not datei.exists():
+            raus.append((tm, info["name"], "Datei fehlt"))
+            continue
+        grund = proportion_ok(Image.open(datei).convert("RGBA"))
+        if grund:
+            raus.append((tm, info["name"], grund))
+    for tm, name, grund in raus:
+        print(f"  ✗ {name}: {grund}")
+        for endung in ("webp", "jpg"):
+            (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
+        index.pop(tm, None)
+    INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"{len(index)} Köpfe bleiben, {len(raus)} entfernt")
+
+
 def main():
+    if "--regeln" in sys.argv:
+        return regeln_anwenden()
     if "--hero" in sys.argv:
         return heros_neu()
     if "--eng" in sys.argv:
@@ -275,7 +317,10 @@ def main():
     for t, v in db["teams"].items():
         bildstil.bild_hero(None, v["logo"]).save(PLATZHALTER / f"{Path(v['logo']).stem}.jpg", quality=82)
 
-    bilder = wikidata_bilder(list(spieler))
+    ausschluss = set()
+    if Path("bilder/ausschluss.txt").exists():       # TM-IDs, die du nach Sichtkontrolle ausschließt (eine pro Zeile, # = Kommentar)
+        ausschluss = {z.split("#")[0].strip() for z in Path("bilder/ausschluss.txt").read_text().splitlines()} - {""}
+    bilder = {k: v for k, v in wikidata_bilder(list(spieler)).items() if k not in ausschluss}
     infos = commons_info(sorted(set(bilder.values())))
     print(f"{len(spieler)} Spieler, {len(bilder)} mit Wikidata-Bild")
     sess = new_session("u2net_human_seg")
@@ -316,6 +361,11 @@ def main():
     INDEX.write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
     Path("bilder/pruefen.txt").write_text("\n".join(pruefen) + "\n", encoding="utf-8")
     ohne = sorted(f"{v['team']}: {v['name']}" for k, v in spieler.items() if k not in index)
+    if ausschluss:
+        for tm in ausschluss:
+            for endung in ("webp", "jpg"):
+                (POOL / f"{tm}.{endung}").unlink(missing_ok=True)
+            index.pop(tm, None)
     Path("bilder/ohne_bild.txt").write_text("\n".join(ohne) + "\n", encoding="utf-8")
 
     # Kontaktbogen zur Sichtkontrolle (nicht veröffentlicht)
