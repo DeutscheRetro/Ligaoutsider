@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T13:01:36.180938+00:00",
+ "updated": "2026-10-06T14:32:50.877577+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -263,8 +263,8 @@
      "name": "Jamal Musiala",
      "nr": "10",
      "ampel": "rot",
-     "grund": "Muskelfaserriss im rechten Oberschenkel - fällt drei bis vier Wochen aus",
-     "news": "",
+     "grund": "Muskelfaserriss, Einsatz in Augsburg unwahrscheinlich",
+     "news": "artikel/musiala-trainiert-nach-muskelfaserriss-wieder-individuell-f085fe390d.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -569,16 +569,6 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 71
-     },
-     {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 47
      }
     ],
     "st": [
@@ -601,6 +591,16 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 94
+     },
+     {
+      "name": "Fábio Silva",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "1 von 3 Einsätzen in der Startelf · Ø 40 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 55
      }
     ]
    },
@@ -616,14 +616,14 @@
      "prozent": 33
     },
     {
-     "name": "Fábio Silva",
-     "nr": "21",
+     "name": "Ethan Nwaneri",
+     "nr": "18",
      "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 40 min · 1 Spiel ohne Einsatz",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
      "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 21
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 13
     }
    ],
    "fraglich": [
@@ -2109,25 +2109,25 @@
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 12
-    },
-    {
-     "name": "Ragnar Ache",
-     "nr": "9",
-     "ampel": "gelb",
-     "grund": "Muskuläre Verletzung, Ausfalldauer offen",
-     "news": "artikel/nach-dallinga-schock-koeln-prueft-offenbar-vereinslose-stuermer-13569af5b5.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 9
     }
    ],
    "ausfall": [
     {
+     "name": "Ragnar Ache",
+     "nr": "9",
+     "ampel": "rot",
+     "grund": "Muskelverletzung, drei bis vier Wochen",
+     "news": "artikel/koeln-verzichtet-vorerst-auf-vereinslosen-stuermer-ab9c2f714b.html",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 0
+    },
+    {
      "name": "Thijs Dallinga",
      "nr": "27",
      "ampel": "rot",
-     "grund": "Kreuzbandverletzung",
-     "news": "artikel/nach-dallinga-schock-koeln-prueft-offenbar-vereinslose-stuermer-13569af5b5.html",
+     "grund": "Kreuzbandriss",
+     "news": "artikel/koeln-verzichtet-vorerst-auf-vereinslosen-stuermer-ab9c2f714b.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2772,38 +2772,39 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 18
-    }
-   ],
-   "fraglich": [],
-   "ausfall": [
-    {
-     "name": "Timo Becker",
-     "nr": "5",
-     "ampel": "rot",
-     "grund": "Sprunggelenksverletzung, individuelles Programm",
-     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Dejan Ljubicic",
-     "nr": "21",
-     "ampel": "rot",
-     "grund": "Knieverletzung, Reha-Training",
-     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 0
     },
     {
      "name": "Vitalie Becker",
      "nr": "33",
-     "ampel": "rot",
-     "grund": "Sprunggelenksverletzung, individuelles Programm",
-     "news": "artikel/schalke-mueller-zurueck-im-training-dzeko-beim-letzten-laenderspiel-e95a51e78f.html",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 37 min · 1 Spiel ohne Einsatz",
+     "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
+     "prozent": 11
+    }
+   ],
+   "fraglich": [
+    {
+     "name": "Timo Becker",
+     "nr": "5",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 27
+    }
+   ],
+   "ausfall": [
+    {
+     "name": "Dejan Ljubicic",
+     "nr": "21",
+     "ampel": "rot",
+     "grund": "Knieverletzung - fällt bis auf Weiteres aus",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
      "prozent": 0
     },
     {
@@ -3297,8 +3298,8 @@
       "name": "Emmanuel Latte Lath",
       "nr": "29",
       "ampel": "gelb",
-      "grund": "Training mit muskulären Problemen abgebrochen",
-      "news": "artikel/union-friedrich-vor-kader-comeback-latte-lath-bricht-training-ab-456a08ebee.html",
+      "grund": "brach Training ohne erkennbaren Grund ab",
+      "news": "artikel/union-burke-friedrich-und-imeri-zurueck-sorge-um-latte-lath-5c551c5272.html",
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 60
@@ -3702,16 +3703,6 @@
       "prozent": 93
      },
      {
-      "name": "Tim Kleindienst",
-      "nr": "11",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 76 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 93
-     },
-     {
       "name": "Shuto Machino",
       "nr": "18",
       "ampel": "gruen",
@@ -3720,6 +3711,16 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 62
+     },
+     {
+      "name": "Tim Kleindienst",
+      "nr": "11",
+      "ampel": "gelb",
+      "grund": "Trainingsabbruch wegen muskulärer Beschwerden",
+      "news": "artikel/gladbach-bangt-vor-dem-derby-um-kapitaen-kleindienst-05bb73d7d0.html",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 60
      }
     ]
    },
