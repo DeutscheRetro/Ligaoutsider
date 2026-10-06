@@ -68,6 +68,8 @@ ul { list-style: none; }
   transition: border-color 0.15s, color 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
+  min-width: 96px;           /* "Hell" und "Dunkel" gleich breit, sonst springt die Kopfzeile */
+  justify-content: center;
 }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -231,7 +233,7 @@ ul { list-style: none; }
 .fixture-time  { font-size: 11px; color: var(--accent); font-weight: 700; }
 
 /* ─── Suche ─── */
-.search-form { display: flex; align-items: center; }
+.search-form { display: flex; align-items: center; flex-shrink: 0; }
 .search-input {
   background: var(--bg4); border: 1px solid var(--border2);
   border-radius: 6px; color: var(--text); font-size: 13px;
