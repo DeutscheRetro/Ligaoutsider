@@ -56,17 +56,27 @@ def silhouette(hoehe: int = 640) -> Image.Image:
 
 
 def sticker(kopf: Image.Image, max_w: int, max_h: int) -> tuple[Image.Image, Image.Image]:
-    """Kopf verkleinern, weiße Kontur und Schatten erzeugen. Gibt (sticker, schatten) zurück."""
-    # Auf einheitliche Größe bringen – auch kleine Ausgangsbilder hochskalieren
+    """Kopf auf einheitliche Größe bringen (auch kleine Ausgangsbilder hochskalieren) und weichen
+    Schatten erzeugen. Gibt (kopf, schatten) zurück. Kein weißer Rand (Entwurf C vom 06.10.2026)."""
     f = min(max_w / kopf.width, max_h / kopf.height)
     k = kopf.resize((max(1, round(kopf.width * f)), max(1, round(kopf.height * f))), Image.LANCZOS)
-    alpha = k.getchannel("A").filter(ImageFilter.MaxFilter(25))
-    kontur = Image.new("RGBA", k.size, (255, 255, 255, 255))
-    kontur.putalpha(alpha)
-    kontur.alpha_composite(k)
+    a = k.getchannel("A").filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.55))
     schatten = Image.new("RGBA", k.size, (0, 0, 0, 255))
-    schatten.putalpha(alpha.point(lambda a: int(a * 0.45)))
-    return kontur, schatten
+    schatten.putalpha(a)
+    return k, schatten
+
+
+def platziere(img: Image.Image, k: Image.Image, sch: Image.Image, x: int, y: int, farbe: tuple) -> None:
+    """Dunklere Vereinsfarb-Scheibe mit feinem hellen Ring hinter dem Kopf, dann Schatten und Kopf."""
+    r = int(k.width * 0.62)
+    cx, cy = x + k.width // 2, y + int(k.height * 0.42)
+    scheibe = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(scheibe)
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=_dunkler(farbe, 0.62) + (255,))
+    d.ellipse([cx - r + 10, cy - r + 10, cx + r - 10, cy + r - 10], outline=(255, 255, 255, 70), width=3)
+    img.alpha_composite(scheibe)
+    img.alpha_composite(sch, (x + 6, y + 10))
+    img.alpha_composite(k, (x, y))
 
 
 def _wappen(img, logo, pos, groesse):
@@ -94,8 +104,7 @@ def bild_hero(kopf: Image.Image | None, logo: str, name: str = "", team: str = "
     img = streifen(w, h, farbe)
     k, sch = sticker(kopf if kopf is not None else silhouette(), 540, 560)
     x, y = w - k.width - 80, h - k.height + int(k.height * 0.16)       # unten vom Rand abgeschnitten
-    img.alpha_composite(sch, (x + 12, y + 12))
-    img.alpha_composite(k, (x, y))
+    platziere(img, k, sch, x, y, farbe)
     if name:
         vor, _, nach = name.rpartition(" ") if " " in name and len(name.split()) == 2 else ("", "", name)
         if len(name.split()) > 2:
@@ -136,8 +145,7 @@ def og_sticker(titel: str, label: str, badge_bg, badge_fg, kopf: Image.Image | N
     img = streifen(W, H, farbe_fuer(logo))
     k, sch = sticker(kopf if kopf is not None else silhouette(), 520, 640)
     pos = (W - k.width - 50, H - k.height + 90)
-    img.alpha_composite(sch, (pos[0] + 12, pos[1] + 12))
-    img.alpha_composite(k, pos)
+    platziere(img, k, sch, pos[0], pos[1], farbe_fuer(logo))
     # Dunkles Feld mit Badge, Titel und Wappen – Badge liegt darin, damit es auf jeder Vereinsfarbe lesbar bleibt
     img.alpha_composite(Image.new("RGBA", (640, 500), (0, 0, 0, 185)), (40, 50))
     d = ImageDraw.Draw(img)
