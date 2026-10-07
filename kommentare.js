@@ -76,6 +76,16 @@
         el.appendChild(b);
       }
     }
+    const ui = document.getElementById('user-info');
+    if (ui && !document.getElementById('admin-link')) {
+      ui.querySelector('#admin-link')?.remove();
+      if (darfLoeschen) {
+        const a = document.createElement('a');
+        a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';
+        a.className = 'btn-nav'; a.style.cssText = 'margin-right:8px;text-decoration:none;font-weight:700;color:var(--accent,#e8c000)';
+        ui.prepend(a);
+      }
+    }
     document.getElementById('user-info')?.style && (document.getElementById('user-info').style.display = 'flex');
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = 'none');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = 'none');
@@ -92,6 +102,7 @@
     document.dispatchEvent(new CustomEvent('lo-ich', { detail: null }));
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
+    document.getElementById('admin-link')?.remove();
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');
     document.getElementById('signup-btn') && (document.getElementById('signup-btn').style.display = '');
     if (document.getElementById('k-gasthinweis')) document.getElementById('k-gasthinweis').style.display = 'block';
