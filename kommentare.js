@@ -3,7 +3,8 @@
 // Optional: ARTIKEL_ID (nur auf Artikelseiten)
 
 (function () {
-  let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  const SB_URL = location.origin + '/sb';   // über die eigene Domain (Blocker-sicher)
+  let sb = supabase.createClient(SB_URL, SUPABASE_ANON);
   let aktuellerUser = null;
   let isAdmin = false;
   let darfLoeschen = false;
@@ -100,7 +101,7 @@
     aktuellerUser = null; isAdmin = false; darfLoeschen = false;
     window._loIch = null;
     document.dispatchEvent(new CustomEvent('lo-ich', { detail: null }));
-    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    sb = supabase.createClient(SB_URL, SUPABASE_ANON);
     document.getElementById('user-info')  && (document.getElementById('user-info').style.display = 'none');
     document.getElementById('admin-link')?.remove();
     document.getElementById('login-btn')  && (document.getElementById('login-btn').style.display = '');

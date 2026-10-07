@@ -6,7 +6,7 @@
   const box = document.getElementById('pr');
   const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const api = (aktion, daten) => window._loApi(aktion, daten);
-  const rest = pfad => fetch(`${SUPABASE_URL}/rest/v1/${pfad}`, {
+  const rest = pfad => fetch(`${location.origin}/sb/rest/v1/${pfad}`, {
     headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
   }).then(r => r.ok ? r.json() : Promise.reject(new Error('Laden fehlgeschlagen')));
 

@@ -1763,7 +1763,7 @@ def artikel_html(
   </div>
 
   <script>
-    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_URL  = location.origin + '/sb';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
     const ARTIKEL_ID    = '{datei_id}';
     const ADMIN_EMAIL   = 'twitchpre@gmail.com';
@@ -3178,7 +3178,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
   </div>
 
   <script>
-    const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
+    const SUPABASE_URL  = location.origin + '/sb';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
 {f"    const ARTIKEL_ID    = '{kommentar_id}';" if kommentar_id else ""}
   </script>

@@ -32,10 +32,29 @@ async function laufStarten(env, zeit) {
   if (!res.ok) throw new Error(`GitHub ${res.status}: ${(await res.text()).slice(0, 200)}`);
 }
 
+// Lesezugriffe der Seiten laufen über die eigene Domain. Werbe- und Tracking-Blocker sperren
+// sonst die Anfragen an supabase.co (fremde Domain), und Kommentare, Forum, Profile bleiben leer.
+// Nur GET/HEAD auf die REST-Schnittstelle; Schreiben geht weiterhin über /api.
+async function supabaseLesen(request, url) {
+  if (request.method !== "GET" && request.method !== "HEAD")
+    return new Response("Nur lesen", { status: 405 });
+  const ziel = "https://rsodjlglzwlscamdlwev.supabase.co" + url.pathname.slice(3) + url.search;
+  const kopf = new Headers();
+  for (const k of ["apikey", "authorization", "accept", "range", "accept-profile", "prefer"]) {
+    const v = request.headers.get(k);
+    if (v) kopf.set(k, v);
+  }
+  const res = await fetch(ziel, { method: request.method, headers: kopf });
+  const antwort = new Response(res.body, res);
+  antwort.headers.set("Cache-Control", "no-store");
+  return antwort;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/api") return api({ request, env });
+    if (url.pathname.startsWith("/sb/rest/v1/")) return supabaseLesen(request, url);
     // Ordneradressen ("/", "/spieler/") zeigen ihre index.html – mit html_handling
     // "none" macht Cloudflare das nicht von selbst
     if (url.pathname.endsWith("/")) {
