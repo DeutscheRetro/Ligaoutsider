@@ -434,11 +434,10 @@
       </div>`;
 
       return `<div class="kommentar-item" id="k-${k.id}">
-        <div class="kommentar-kopf" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          ${avatarHtml(k)}
-          ${k.autor_handle
+        <div class="kommentar-kopf">
+          <span style="display:inline-flex;align-items:center;gap:8px">${avatarHtml(k)}${k.autor_handle
             ? `<a class="kommentar-name" href="/profil/${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
-            : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}
+            : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}</span>
           <span class="kommentar-datum">${datum}${editTag}</span>
         </div>
         <div class="kommentar-text" id="kt-${k.id}">${k.inhalt.replace(/</g,'&lt;')}</div>

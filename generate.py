@@ -1635,14 +1635,7 @@ def artikel_html(
   <link rel="stylesheet" href="../artikel.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){{dataLayer.push(arguments);}}
-    gtag('js', new Date());
-    gtag('config', 'G-SP8DWFL2SE');
-  </script>
+<script src="/consent.js"></script>
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
@@ -3127,13 +3120,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
   <link rel="stylesheet" href="{tiefe}style.css"/>
   <link rel="icon" href="{tiefe}favicon.png" type="image/png"/>
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SP8DWFL2SE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){{dataLayer.push(arguments);}}
-    gtag('js', new Date());
-    gtag('config', 'G-SP8DWFL2SE');
-  </script>
+<script src="/consent.js"></script>
 {head_extra}</head>
 <body>
 
