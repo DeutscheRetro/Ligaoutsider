@@ -627,6 +627,20 @@ export async function onRequest({ request, env }) {
         });
       }
 
+      case "avatar_speichern": {
+        const profil = await profilSicher(email, name);
+        if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
+        const bild = body.bild == null ? null : String(body.bild);
+        if (bild !== null && !/^data:image\/(webp|jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(bild))
+          return json(400, { fehler: "Bild nicht lesbar" });
+        if (bild !== null && bild.length > 60000) return json(400, { fehler: "Bild zu groß" });
+        const [alt] = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=lieblings`);
+        const lieb = { ...((alt && alt.lieblings) || {}) };
+        if (bild) lieb.avatar = bild; else delete lieb.avatar;
+        await aendere("profile", `email=eq.${encodeURIComponent(email)}`, { lieblings: lieb });
+        return json(200, { ok: true });
+      }
+
       case "profil_speichern": {
         const profil = await profilSicher(email, name);
         if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
@@ -644,6 +658,8 @@ export async function onRequest({ request, env }) {
           const v = sauber((body.lieblings || {})[k], 120);
           if (v) lieblings[k] = v;
         }
+        const [vorher] = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=lieblings`);
+        if (vorher && vorher.lieblings && vorher.lieblings.avatar) lieblings.avatar = vorher.lieblings.avatar;
         await aendere("profile", `email=eq.${encodeURIComponent(email)}`, {
           handle,
           anzeigename,

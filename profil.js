@@ -115,7 +115,7 @@
 
     box.innerHTML = `
       <div class="pr-kopf">
-        <div class="pr-avatar">${vereinLogo ? `<img src="/logos/${vereinLogo}.png" alt="">` : esc(initial)}</div>
+        <div class="pr-avatar">${(p.lieblings || {}).avatar ? `<img class="pr-avatar-bild" src="${esc(p.lieblings.avatar)}" alt="">` : esc(initial)}</div>
         <div class="pr-kopf-text">
           <h1>${esc(p.anzeigename)}</h1>
           <p>@${esc(p.handle)}${p.wohnort ? ' · ' + esc(p.wohnort) : ''} · dabei seit ${seit}</p>
@@ -185,6 +185,14 @@
       : `<label><span>${label}</span><input name="l_${k}" maxlength="120" value="${esc(l[k] || '')}"></label>`;
     box.innerHTML = `
       <h1 class="pr-titel">Profil bearbeiten</h1>
+      <div class="pr-avatar-edit">
+        <div class="pr-avatar" id="pr-avatar-vorschau">${l.avatar ? `<img class="pr-avatar-bild" src="${esc(l.avatar)}" alt="">` : esc((p.anzeigename || p.handle).trim().charAt(0).toUpperCase())}</div>
+        <div>
+          <label class="pr-btn pr-btn--gelb" style="cursor:pointer;display:inline-block">Bild hochladen<input type="file" id="pr-avatar-datei" accept="image/png,image/jpeg,image/webp" hidden></label>
+          ${l.avatar ? '<button class="pr-btn" type="button" id="pr-avatar-weg">Bild entfernen</button>' : ''}
+          <p class="pr-grau" style="font-size:12px;margin:6px 0 0">Quadratisch zugeschnitten und verkleinert. Bitte nur Bilder, an denen du die Rechte hast.</p>
+        </div>
+      </div>
       <form id="pr-form" class="pr-form">
         <div class="pr-form-raster">
           <label><span>Anzeigename</span><input name="anzeigename" maxlength="60" value="${esc(p.anzeigename)}" required></label>
@@ -200,6 +208,42 @@
           <button class="pr-btn" type="button" data-a="abbrechen">Abbrechen</button>
         </div>
       </form>`;
+    // Avatar: im Browser auf 192 x 192 zuschneiden, dann speichern
+    const kleinMachen = datei => new Promise((ok, fail) => {
+      const url = URL.createObjectURL(datei), img = new Image();
+      img.onload = () => {
+        const s = Math.min(img.width, img.height), c = document.createElement('canvas');
+        c.width = c.height = 192;
+        c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 192, 192);
+        URL.revokeObjectURL(url);
+        let d = c.toDataURL('image/webp', 0.85);
+        if (!d.startsWith('data:image/webp')) d = c.toDataURL('image/jpeg', 0.85);
+        ok(d);
+      };
+      img.onerror = () => fail(new Error('Bild konnte nicht gelesen werden'));
+      img.src = url;
+    });
+    document.getElementById('pr-avatar-datei').addEventListener('change', async e => {
+      const datei = e.target.files[0];
+      if (!datei) return;
+      if (datei.size > 8 * 1024 * 1024) return meldung('Bild ist zu groß (max. 8 MB)', true);
+      try {
+        const bild = await kleinMachen(datei);
+        await api('avatar_speichern', { bild });
+        meins.profil.lieblings = { ...(meins.profil.lieblings || {}), avatar: bild };
+        meldung('Bild gespeichert');
+        bearbeiten();
+      } catch (err) { meldung(err.message, true); }
+    });
+    document.getElementById('pr-avatar-weg')?.addEventListener('click', async () => {
+      try {
+        await api('avatar_speichern', { bild: null });
+        const l2 = { ...(meins.profil.lieblings || {}) }; delete l2.avatar;
+        meins.profil.lieblings = l2;
+        meldung('Bild entfernt');
+        bearbeiten();
+      } catch (err) { meldung(err.message, true); }
+    });
     document.getElementById('pr-form').addEventListener('submit', async e => {
       e.preventDefault();
       const f = new FormData(e.target);
