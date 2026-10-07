@@ -353,8 +353,11 @@
     }
 
     const ids = data.map(k => k.id);
-    const { data: votes } = await sb.from('kommentar_votes')
-      .select('kommentar_id, voter_email, vote').in('kommentar_id', ids);
+    let votes = null;
+    try {
+      ({ data: votes } = await sb.from('kommentar_votes')
+        .select('kommentar_id, voter_email, vote').in('kommentar_id', ids));
+    } catch (e) { console.error('[Kommentare] Votes', e); }
 
     const voteMap = {};
     votes?.forEach(v => {
@@ -365,11 +368,12 @@
 
     // Check ban for current user
     let banStatus = null;
-    if (aktuellerUser) banStatus = await pruefeBan(aktuellerUser.email);
+    if (aktuellerUser) { try { banStatus = await pruefeBan(aktuellerUser.email); } catch (e) { console.error('[Kommentare] Ban-Check', e); } }
 
     // Lookup map für Event Delegation
     const kommentarMeta = {};
 
+    try {
     liste.innerHTML = data.map(k => {
       if (k.geloescht) return `<div class="kommentar-item"><span style="font-size:13px;color:var(--text4);font-style:italic">— Kommentar gelöscht —</span></div>`;
 
@@ -413,6 +417,11 @@
         ${aktionen}
       </div>`;
     }).join('');
+    } catch (e) {
+      console.error('[Kommentare] Anzeige', e);
+      liste.innerHTML = '<p class="kommentar-leer">Kommentare konnten nicht angezeigt werden. Bitte Seite neu laden.</p>';
+      return;
+    }
 
     // Event Delegation — ein Listener für alle Aktionen
     liste.onclick = async e => {
