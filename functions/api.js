@@ -154,8 +154,21 @@ async function handlesVon(emails) {
 }
 
 export async function onRequest({ request, env }) {
-  if (request.method !== "POST") return json(405, { fehler: "Nur POST" });
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
+  // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe
+  if (request.method === "GET") {
+    const roh = new URL(request.url).searchParams.get("avatare") || "";
+    const handles = [...new Set(roh.split(",").map(h => h.trim().toLowerCase()).filter(h => HANDLE.test(h)))].slice(0, 60);
+    if (!SERVICE_KEY || !handles.length) return json(200, {});
+    try {
+      const zeilen = await hole(`profile?handle=in.(${handles.map(h => `"${h}"`).join(",")})&select=handle,lieblings`);
+      const aus = {};
+      (zeilen || []).forEach(z => { if (z.lieblings && z.lieblings.avatar) aus[z.handle] = z.lieblings.avatar; });
+      return new Response(JSON.stringify(aus), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } });
+    } catch (e) { return json(200, {}); }
+  }
+  if (request.method !== "POST") return json(405, { fehler: "Nur POST oder GET" });
   if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt in den Cloudflare-Variablen" });
 
   // Anmeldetoken bei Supabase prüfen – gefälschte oder abgelaufene Tokens fallen hier durch

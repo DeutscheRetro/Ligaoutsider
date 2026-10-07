@@ -1777,6 +1777,7 @@ def artikel_html(
       <nav class="footer-nav">
         <a href="../impressum.html">Impressum</a>
         <a href="../datenschutz.html">Datenschutzerklärung</a>
+        <a href="../nutzungsbedingungen.html">Nutzungsbedingungen</a>
       </nav>
     </div>
   </footer>
@@ -3191,6 +3192,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
       <nav class="footer-nav">
         <a href="{tiefe}impressum.html">Impressum</a>
         <a href="{tiefe}datenschutz.html">Datenschutzerklärung</a>
+        <a href="{tiefe}nutzungsbedingungen.html">Nutzungsbedingungen</a>
       </nav>
     </div>
   </footer>

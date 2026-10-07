@@ -382,6 +382,21 @@
     let banStatus = null;
     if (aktuellerUser) { try { banStatus = await pruefeBan(aktuellerUser.email); } catch (e) { console.error('[Kommentare] Ban-Check', e); } }
 
+    // Profilbilder der Autoren (öffentlich, nur Profilname → Bild)
+    let avatare = {};
+    const handles = [...new Set(data.map(k => k.autor_handle).filter(Boolean))];
+    if (handles.length) {
+      try { avatare = await (await fetch('/api?avatare=' + encodeURIComponent(handles.join(',')))).json(); }
+      catch (e) { console.error('[Kommentare] Avatare', e); }
+    }
+    const avatarHtml = k => {
+      const bild = k.autor_handle && avatare[k.autor_handle];
+      const stil = 'width:28px;height:28px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--accent,#e8c000);';
+      return bild
+        ? `<img src="${bild}" alt="" style="${stil}object-fit:cover">`
+        : `<span style="${stil}display:inline-flex;align-items:center;justify-content:center;background:var(--bg4,#222);color:var(--accent,#e8c000);font-size:13px;font-weight:800">${bereinigen(k.name || '?').charAt(0).toUpperCase()}</span>`;
+    };
+
     // Lookup map für Event Delegation
     const kommentarMeta = {};
 
@@ -419,7 +434,8 @@
       </div>`;
 
       return `<div class="kommentar-item" id="k-${k.id}">
-        <div class="kommentar-kopf">
+        <div class="kommentar-kopf" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          ${avatarHtml(k)}
           ${k.autor_handle
             ? `<a class="kommentar-name" href="/profil/${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
             : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}
