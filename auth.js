@@ -128,6 +128,7 @@
       .lo-auth-meldung{margin-top:12px;font-size:13px;line-height:1.5}
       .lo-auth-meldung.fehler{color:#ff6b6b}
       .lo-auth-meldung.ok{color:#5fd38d}
+      .lo-auth-meldung.info{color:var(--text3,#aaa)}
       .lo-auth-google{width:100%;margin-top:4px;margin-bottom:6px;padding:10px;border:1px solid var(--border2,#333);border-radius:8px;background:#fff;color:#1f1f1f;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
       .lo-auth-oder{text-align:center;font-size:12px;color:var(--text4,#888);margin:10px 0 0}
       .lo-auth-hinweis{font-size:12px;color:var(--text4,#888);margin-top:10px;line-height:1.5}`;
@@ -221,8 +222,10 @@
   async function absenden(ansicht, form) {
     const wert = n => (form.elements[n] ? form.elements[n].value.trim() : '');
     const knopf = form.querySelector('.lo-auth-los');
+    const knopfText = knopf.textContent;
     knopf.disabled = true;
-    zeigeMeldung('', '');
+    knopf.textContent = { anmelden: 'Anmeldung läuft …', registrieren: 'Registrierung läuft …', vergessen: 'Wird gesendet …' }[ansicht] || 'Bitte warten …';
+    zeigeMeldung(ansicht === 'registrieren' || ansicht === 'vergessen' ? 'Einen Moment bitte, die E-Mail wird verschickt. Das kann bis zu 15 Sekunden dauern.' : '', 'info');
     const zurueck = encodeURIComponent(location.origin + '/');
     try {
       if (ansicht === 'anmelden') {
@@ -270,6 +273,7 @@
       zeigeMeldung(e.message, 'fehler');
     } finally {
       knopf.disabled = false;
+      knopf.textContent = knopfText;
     }
   }
 
