@@ -90,7 +90,6 @@
   <p style="font-size:12px;color:#888;margin-bottom:14px">Anmeldung über dein Ligaoutsider-Konto. Es braucht die Rolle <b>admin</b> oder <b>moderator</b>.</p>
   <button class="btn btn-gold" style="margin-bottom:16px" onclick="netlifyIdentity.open('login')">Mit Konto anmelden</button>
   <div class="field"><label>GitHub Token (einmalig)</label><input type="text" id="gh-token" placeholder="ghp_..."/><p style="font-size:11px;color:#555;margin-top:4px">Wird nur in diesem Browser gespeichert</p></div>
-  <div class="field"><label>Netlify Token (einmalig, für User-Stats)</label><input type="text" id="netlify-token" placeholder="nfp_..."/></div>
   <button class="btn btn-gold" onclick="login()">Einloggen</button>
 </div>
 
@@ -249,14 +248,10 @@ async function loApi(aktion, daten = {}) {
 const SUPABASE_URL  = 'https://rsodjlglzwlscamdlwev.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-const NETLIFY_SITE_ID     = 'cb939f1a-0538-4e1d-ad3d-9ca81bed209a';
-const NETLIFY_IDENTITY_ID = '6a467b53e81902b5ccd77424';
 
 let ghToken      = '';
-let netlifyToken = '';
 let feedDaten    = [];
 let feedSha      = '';
-let netlifyUsers = [];
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 // Ohne init() stellt das Widget die Sitzung beim Laden nicht wieder her;
@@ -270,7 +265,6 @@ if (window.netlifyIdentity) {
 
 async function login() {
   const tok = document.getElementById('gh-token').value.trim();
-  const ntok = document.getElementById('netlify-token').value.trim();
   const user = window.netlifyIdentity && netlifyIdentity.currentUser();
   if (!user) { zeigeFehler('login-err', 'Bitte zuerst mit deinem Konto anmelden'); return; }
   // Rechte vom Server bestaetigen lassen; Rollen stehen in der Datenbank
@@ -285,9 +279,7 @@ async function login() {
     return;
   }
   if (tok)  localStorage.setItem('gh_token', tok);
-  if (ntok) localStorage.setItem('netlify_token', ntok);
   ghToken      = localStorage.getItem('gh_token') || '';
-  netlifyToken = localStorage.getItem('netlify_token') || '';
   if (!ghToken) { zeigeFehler('login-err', 'GitHub Token fehlt'); return; }
   sessionStorage.setItem('auth', '1');
   document.getElementById('page-login').style.display = 'none';
@@ -330,21 +322,18 @@ async function ghDelete(path, sha, message) {
   if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
 }
 
-// ─── Netlify Identity API ─────────────────────────────────────────────────────
-async function ladeNetlifyUsers() {
-  if (!netlifyToken) return;
+// ─── Registrierte Konten (Supabase, über die API) ────────────────────────────
+async function ladeNutzerStats() {
   try {
-    const r = await fetch(
-      `https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/identity/${NETLIFY_IDENTITY_ID}/users?per_page=1000`,
-      { headers: { Authorization: `Bearer ${netlifyToken}` } }
-    );
-    if (r.ok) netlifyUsers = await r.json();
-  } catch(e) { /* optional */ }
+    const r = await loApi('nutzer_liste');
+    nutzerListe = r.nutzer || [];
+    kontenQuelle = r.quelle || '';
+  } catch (e) { /* optional */ }
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
-  await Promise.all([ladeArtikel(), ladeNetlifyUsers()]);
+  await Promise.all([ladeArtikel(), ladeNutzerStats()]);
 }
 
 // ─── Tab-Navigation ───────────────────────────────────────────────────────────
@@ -531,7 +520,7 @@ async function speichern() {
     const feedData = await ghGet('feed.json');
     await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
 
-    zeigeMsg('✓ Gespeichert! Netlify deployed in ~1 Minute.', true);
+    zeigeMsg('✓ Gespeichert! Cloudflare baut in ~1 Minute.', true);
     renderListe();
   } catch(e) {
     zeigeMsg('Fehler: ' + e.message, false);
@@ -657,14 +646,15 @@ function renderStats() {
   // Letzten 14 Tage für Balken (lesbar)
   const letzte14 = Object.entries(proTag).slice(-14);
 
-  // User-Stats aus Netlify
-  const totalUser     = netlifyUsers.length;
-  const confirmedUser = netlifyUsers.filter(u => u.confirmed_at).length;
+  // User-Stats aus Supabase
+  const konten = nutzerListe.filter(u => u.registriert);
+  const totalUser     = konten.length;
+  const confirmedUser = konten.filter(u => u.bestaetigt).length;
   const heute7d = new Date(heute); heute7d.setDate(heute.getDate() - 7);
-  const neueUser7d = netlifyUsers.filter(u => u.created_at && new Date(u.created_at) > heute7d).length;
+  const neueUser7d = konten.filter(u => new Date(u.registriert) > heute7d).length;
 
   document.getElementById('stats-inhalt').innerHTML = `
-    <div class="section-title">Nutzer (Netlify Identity)</div>
+    <div class="section-title">Nutzer (registrierte Konten)</div>
     <div class="stats-grid">
       <div class="stat-card"><div class="num">${totalUser}</div><div class="lbl">Registriert gesamt</div></div>
       <div class="stat-card"><div class="num">${confirmedUser}</div><div class="lbl">Bestätigt</div></div>
@@ -888,7 +878,7 @@ function renderNutzer() {
 
   el.innerHTML = `
     <p style="color:#555;font-size:12px;margin-bottom:10px">${liste.length} von ${nutzerListe.length} Nutzern${
-      kontenQuelle && kontenQuelle !== 'Netlify'
+      kontenQuelle && kontenQuelle !== 'Supabase'
         ? ` · <span style="color:#e8a000">Kontoliste unvollständig (${kontenQuelle})</span>` : ''}</p>
     <table class="user-table">
       <thead>
@@ -1023,7 +1013,6 @@ function seiteOeffnenWennAngemeldet() {
   const user = window.netlifyIdentity && netlifyIdentity.currentUser();
   if (!user || sessionStorage.getItem('auth') !== '1') return;
   ghToken      = localStorage.getItem('gh_token') || '';
-  netlifyToken = localStorage.getItem('netlify_token') || '';
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
   init();
