@@ -313,6 +313,29 @@
     },
   };
 
+  // ─── Admin-Link für Redaktion (auf jeder Seite mit Anmeldung) ───────────────
+  async function adminLinkPruefen(u) {
+    const alt = document.getElementById('admin-link');
+    if (!u) { if (alt) alt.remove(); return; }
+    const ui = document.getElementById('user-info');
+    if (!ui || alt) return;
+    try {
+      const t = await u.jwt();
+      const r = await fetch('/api', { method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + t },
+        body: JSON.stringify({ aktion: 'wer_bin_ich' }) });
+      const w = await r.json();
+      if (!w.darfLoeschen || document.getElementById('admin-link')) return;
+      const a = document.createElement('a');
+      a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';
+      a.style.cssText = 'margin-right:8px;text-decoration:none;font-weight:700;color:var(--accent,#e8c000)';
+      ui.prepend(a);
+    } catch (e) { /* ohne Link weiterarbeiten */ }
+  }
+  window.netlifyIdentity.on('init', u => { if (u) adminLinkPruefen(u); });
+  window.netlifyIdentity.on('login', adminLinkPruefen);
+  window.netlifyIdentity.on('logout', () => adminLinkPruefen(null));
+
   sitzung = laden();
   (async () => {
     let ausMail = null;
