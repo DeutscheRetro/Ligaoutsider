@@ -726,6 +726,26 @@ def vorpruefung(g: dict, kern: str, vergleich: list[dict]) -> str | None:
     for e in gleicher_klub[:3]:
         if gleiches_ereignis(titel, kern, e["titel"], e["text"], b_artikel=True):
             return e["titel"]
+    # Themen-Dublette: alle Artikel derselben Klubs der letzten 72 Stunden auf einen Blick
+    # (z. B. drei Vorberichte zum selben Spiel mit wechselnden Überschriften)
+    themen = sorted((e for e in vergleich if klubs & set(e.get("klubs", ()))
+                     and (jetzt - e["zeit"]).total_seconds() < 72 * 3600),
+                    key=lambda e: e["zeit"], reverse=True)[:15]
+    if themen:
+        liste = "\n".join(f"{i + 1}. {e['titel']}" for i, e in enumerate(themen))
+        antwort = ki_budget.aufruf("dublette", model=SCHREIBER, effort=SCHREIBER_EFFORT, max_tokens=5, messages=[{"role": "user", "content": (
+            "Neue Meldung A und unsere Artikel der letzten drei Tage zu denselben Klubs. Hat einer davon schon "
+            "dasselbe Thema, sodass A keine wesentliche neue Information bringt?\n"
+            "Regeln: Mehrere Vorberichte zum selben Spiel sind EIN Thema, auch wenn ein anderer Spieler oder "
+            "Aspekt in der Überschrift steht (Gegner-Analyse, Personallage, Trainerstimmen vor dem Spiel). "
+            "Neu und erlaubt sind: ein neuer Ausfall oder eine neue Verletzung, ein offizieller Vollzug "
+            "(Gerücht → offiziell), ein Spielbericht nach dem Spiel, ein ganz anderes Ereignis.\n\n"
+            f"A: {titel}\nKern A: {kern[:500]}\n\nUnsere Artikel:\n{liste}\n\n"
+            "Antworte nur mit der Nummer des Artikels mit demselben Thema oder 0."
+        )}])
+        m = re.search(r"\d+", _text_aus(antwort))
+        if m and 0 < int(m.group()) <= len(themen):
+            return themen[int(m.group()) - 1]["titel"]
     return None
 
 
