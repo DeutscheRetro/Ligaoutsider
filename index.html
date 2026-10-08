@@ -173,9 +173,21 @@
 
     function showUser(user) {
       const name = user.user_metadata?.full_name || user.email;
-      // Rolle aus dem Identity-Token, nicht per E-Mail-Vergleich
-      const rollen = (user.app_metadata && user.app_metadata.roles) || [];
-      isAdmin = rollen.some(r => r === 'admin' || r === 'moderator');
+      // Rollen stehen in der Datenbank; der Server bestätigt sie
+      isAdmin = false;
+      user.jwt().then(t => fetch('/api', { method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + t },
+        body: JSON.stringify({ aktion: 'wer_bin_ich' }) }))
+        .then(r => r.json()).then(w => {
+          isAdmin = !!w.darfLoeschen;
+          if (isAdmin && !document.getElementById('admin-link')) {
+            const a = document.createElement('a');
+            a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';
+            a.style.cssText = 'margin-right:8px;text-decoration:none;font-weight:700;color:var(--accent,#e8c000)';
+            document.getElementById('user-info').prepend(a);
+          }
+          if (typeof renderFeed === 'function') renderFeed();
+        }).catch(() => {});
       document.getElementById('user-name').textContent = name;
       { const un = document.getElementById('user-name'); un.style.cursor = 'pointer'; un.title = 'Mein Profil'; un.onclick = () => { location.href = '/profil.html'; }; }
       document.getElementById('user-info').style.display = 'flex';
