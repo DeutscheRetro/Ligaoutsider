@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T11:31:33.701457+00:00",
+ "updated": "2026-10-08T13:01:44.673953+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -532,7 +532,7 @@
       "name": "Daniel Svensson",
       "nr": "24",
       "ampel": "gelb",
-      "grund": "angeschlagen",
+      "grund": "Erkältung - kehrt leicht angeschlagen von der Nationalmannschaft zurück",
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
@@ -1196,8 +1196,8 @@
       "name": "David Raum",
       "nr": "22",
       "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 97 min",
-      "news": "",
+      "grund": "Nach Länderspielen wieder im Mannschaftstraining",
+      "news": "artikel/raum-zukunft-leipzig-plant-gespraeche-ueber-vertragsverlaengerung-3d0fd37ec6.html",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 97
@@ -1661,7 +1661,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 60
+      "prozent": 47
      }
     ],
     "st": [
@@ -1739,19 +1739,29 @@
      "prozent": 12
     }
    ],
-   "fraglich": [],
-   "ausfall": [
+   "fraglich": [
     {
      "name": "Jeremiaha Maluze",
      "nr": "37",
-     "ampel": "rot",
+     "ampel": "gelb",
      "grund": "Nach Oberschenkelverletzung - arbeitet wieder mit Ball",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 0
+     "prozent": 9
+    },
+    {
+     "name": "Malik Pimpong",
+     "nr": "35",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 2
     }
-   ]
+   ],
+   "ausfall": []
   },
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
@@ -2333,26 +2343,6 @@
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 11
-    },
-    {
-     "name": "Faik Sakar",
-     "nr": "23",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 2
-    },
-    {
-     "name": "Uchenna Ogundu",
-     "nr": "39",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 2
     }
    ],
    "ausfall": [
@@ -2534,8 +2524,8 @@
      "name": "Felix Agu",
      "nr": "27",
      "ampel": "rot",
-     "grund": "Wadenverletzung",
-     "news": "artikel/fuellkrug-vor-rueckkehr-nach-dortmund-wollen-marschieren-6453ce41ff.html",
+     "grund": "erneute Wadenverletzung",
+     "news": "artikel/werder-will-nach-turbulenter-pause-in-dortmund-zurueck-in-den-flow-ca14e1c672.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 0
@@ -2584,8 +2574,8 @@
      "name": "Salim Musah",
      "nr": "29",
      "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel",
-     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+     "grund": "Riss im Oberschenkel, operiert",
+     "news": "artikel/werder-will-nach-turbulenter-pause-in-dortmund-zurueck-in-den-flow-ca14e1c672.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2850,16 +2840,6 @@
       "prozent": 97
      },
      {
-      "name": "Jordan Torunarigha",
-      "nr": "23",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 80 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 97
-     },
-     {
       "name": "David Møller Wolfe",
       "nr": "3",
       "ampel": "gruen",
@@ -2867,16 +2847,6 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 92
-     },
-     {
-      "name": "Zakaria El Ouahdi",
-      "nr": "7",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
       "prozent": 92
      },
      {
@@ -2888,6 +2858,26 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 90
+     },
+     {
+      "name": "Jordan Torunarigha",
+      "nr": "23",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 80 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 82
+     },
+     {
+      "name": "Zakaria El Ouahdi",
+      "nr": "7",
+      "ampel": "gruen",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 76
      }
     ],
     "mf": [
@@ -2947,6 +2937,26 @@
    },
    "bank": [
     {
+     "name": "Warmed Omari",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 57 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 24
+    },
+    {
+     "name": "Bakery Jatta",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 35 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Rechtes Mittelfeld",
+     "prozent": 22
+    },
+    {
      "name": "Otto Stange",
      "nr": "19",
      "ampel": "gruen",
@@ -2955,16 +2965,6 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 16
-    },
-    {
-     "name": "Warmed Omari",
-     "nr": "17",
-     "ampel": "gruen",
-     "grund": "1 von 2 Einsätzen in der Startelf · Ø 57 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 11
     }
    ],
    "fraglich": [
@@ -2976,7 +2976,7 @@
      "news": "artikel/hsv-vor-hoffenheim-stange-koennte-im-sturm-einspringen-436399fdf9.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 7
+     "prozent": 20
     }
    ],
    "ausfall": [
@@ -3760,14 +3760,14 @@
       "prozent": 95
      },
      {
-      "name": "Francis Onyeka",
-      "nr": "40",
-      "ampel": "gelb",
-      "grund": "Fußverletzung bei der U21",
-      "news": "artikel/onyeka-verletzt-von-der-u21-abgereist-elversberg-bangt-vor-union-spiel-54dfa3ded2.html",
+      "name": "Noah Darvich",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "1 von 3 Einsätzen in der Startelf · Ø 55 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 60
+      "prozent": 54
      }
     ],
     "st": [
@@ -3815,16 +3815,6 @@
      "prozent": 23
     },
     {
-     "name": "Noah Darvich",
-     "nr": "10",
-     "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 55 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 20
-    },
-    {
      "name": "Florian Le Joncour",
      "nr": "3",
      "ampel": "gruen",
@@ -3855,7 +3845,18 @@
      "prozent": 16
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Francis Onyeka",
+     "nr": "40",
+     "ampel": "gelb",
+     "grund": "Fußverletzung bei der U21",
+     "news": "artikel/onyeka-verletzt-von-der-u21-abgereist-elversberg-bangt-vor-union-spiel-54dfa3ded2.html",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 35
+    }
+   ],
    "ausfall": []
   }
  }
