@@ -32,8 +32,18 @@ jobs:
         env:
           QUALITAET: ${{ github.event.inputs.qualitaet }}
           ANLASS: ${{ github.event.inputs.reason }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "los=true" >> "$GITHUB_OUTPUT"
+          # Doppelstart abfangen (Cloudflare hat am 08.10. um 15:00 zweimal ausgelöst): gibt es
+          # in den letzten 15 Minuten schon einen früheren Lauf, entfällt dieser hier
+          los=true
+          if [[ "$ANLASS" == Zeitplan* ]]; then
+            seit=$(date -u -d '-15 min' +%Y-%m-%dT%H:%M:%SZ)
+            frueher=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/update.yml/runs?created=%3E$seit&per_page=20" \
+              -q "[.workflow_runs[] | select(.id < $GITHUB_RUN_ID)] | length" || echo 0)
+            if [ "${frueher:-0}" -gt 0 ]; then los=false; echo "Doppelstart: $frueher früherer Lauf seit $seit – dieser entfällt"; fi
+          fi
+          echo "los=$los" >> "$GITHUB_OUTPUT"
           echo "qualitaet=${QUALITAET:-false}" >> "$GITHUB_OUTPUT"
           echo "Anlass: $ANLASS | Qualitätsprüfung: ${QUALITAET:-false}"
 
@@ -53,6 +63,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
+          # Neuester Stand statt Stand beim Auslösen: ein wartender Lauf muss die Artikel
+          # des Laufs davor kennen, sonst schreibt er dieselben Meldungen noch einmal
+          ref: main
 
       - name: Python einrichten
         uses: actions/setup-python@v5
