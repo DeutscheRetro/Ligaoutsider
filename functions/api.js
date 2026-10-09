@@ -153,9 +153,79 @@ async function handlesVon(emails) {
   return Object.fromEntries((t || []).map(p => [p.email, p]));
 }
 
+// ─── Community-Stats (öffentlich, ohne E-Mail-Adressen) ─────────────────────
+async function communityStats() {
+  const [komm, votes, profile, threads, posts] = await Promise.all([
+    hole("kommentare?select=id,artikel_id,email,name,autor_handle,inhalt,erstellt_am&geloescht=is.false&limit=20000"),
+    hole("kommentar_votes?select=kommentar_id,vote&limit=50000"),
+    hole("profile?select=email,handle,anzeigename,lieblings,erstellt_am&limit=20000"),
+    hole("forum_threads?select=id&limit=20000").catch(() => []),
+    hole("forum_posts?select=id&limit=50000").catch(() => []),
+  ]);
+  const prof = Object.fromEntries((profile || []).map(p => [String(p.email).toLowerCase(), p]));
+  const person = mail => {
+    const p = prof[String(mail || "").toLowerCase()];
+    return p ? { name: p.anzeigename || p.handle, handle: p.handle } : null;
+  };
+  const proKomm = {};
+  (votes || []).forEach(v => {
+    const z = proKomm[v.kommentar_id] = proKomm[v.kommentar_id] || { up: 0, down: 0 };
+    v.vote === 1 ? z.up++ : z.down++;
+  });
+  const leute = {};
+  const wochentag = [0, 0, 0, 0, 0, 0, 0], stunde = new Array(24).fill(0), artikel = {};
+  (komm || []).forEach(k => {
+    const p = person(k.email) || { name: k.name, handle: k.autor_handle || null };
+    const key = p.handle || p.name;
+    const l = leute[key] = leute[key] || { ...p, kommentare: 0, up: 0, down: 0 };
+    const v = proKomm[k.id] || { up: 0, down: 0 };
+    l.kommentare++; l.up += v.up; l.down += v.down;
+    const d = new Date(k.erstellt_am);
+    const berlin = new Date(d.toLocaleString("en-US", { timeZone: "Europe/Berlin" }));
+    wochentag[(berlin.getDay() + 6) % 7]++; stunde[berlin.getHours()]++;
+    artikel[k.artikel_id] = (artikel[k.artikel_id] || 0) + 1;
+  });
+  const L = Object.values(leute);
+  const top = (arr, f, n = 10) => arr.filter(x => f(x) > 0).sort((a, b) => f(b) - f(a)).slice(0, n);
+  const kommentarListe = (komm || []).map(k => ({
+    id: k.id, artikel_id: k.artikel_id, text: String(k.inhalt || "").slice(0, 160), datum: k.erstellt_am,
+    autor: person(k.email) || { name: k.name, handle: k.autor_handle || null }, ...(proKomm[k.id] || { up: 0, down: 0 }) }));
+  const fans = {};
+  (profile || []).forEach(p => { const v = (p.lieblings || {}).verein; if (v) fans[v] = (fans[v] || 0) + 1; });
+  const mitglieder = (profile || []).filter(p => p.erstellt_am)
+    .sort((a, b) => a.erstellt_am.localeCompare(b.erstellt_am))
+    .map(p => ({ name: p.anzeigename || p.handle, handle: p.handle, seit: p.erstellt_am }));
+  return {
+    stand: new Date().toISOString(),
+    gesamt: { mitglieder: (profile || []).length, kommentare: (komm || []).length, bewertungen: (votes || []).length,
+              themen: (threads || []).length, beitraege: (posts || []).length },
+    meiste_kommentare: top(L, x => x.kommentare).map(x => ({ ...x, wert: x.kommentare })),
+    meiste_upvotes: top(L, x => x.up).map(x => ({ ...x, wert: x.up })),
+    meiste_downvotes: top(L, x => x.down).map(x => ({ ...x, wert: x.down })),
+    bester_saldo: top(L.filter(x => x.up + x.down >= 3), x => x.up - x.down).map(x => ({ ...x, wert: x.up - x.down })),
+    beste_quote: L.filter(x => x.up + x.down >= 5).map(x => ({ ...x, wert: Math.round(100 * x.up / (x.up + x.down)) }))
+      .sort((a, b) => b.wert - a.wert || (b.up + b.down) - (a.up + a.down)).slice(0, 10),
+    top_kommentare: top(kommentarListe, k => k.up, 5),
+    kontrovers: kommentarListe.filter(k => k.up >= 2 && k.down >= 2)
+      .sort((a, b) => Math.min(b.up, b.down) - Math.min(a.up, a.down) || (b.up + b.down) - (a.up + a.down)).slice(0, 5),
+    meistdiskutiert: Object.entries(artikel).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([id, n]) => ({ artikel_id: id, wert: n })),
+    fans: Object.entries(fans).sort((a, b) => b[1] - a[1]).map(([verein, n]) => ({ verein, wert: n })),
+    dienstaelteste: mitglieder.slice(0, 10),
+    neu_dabei: mitglieder.slice(-5).reverse(),
+    wochentag, stunde,
+  };
+}
+
 export async function onRequest({ request, env }) {
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
   // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe
+  if (request.method === "GET" && new URL(request.url).searchParams.has("community")) {
+    if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
+    try {
+      return new Response(JSON.stringify(await communityStats()), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" } });
+    } catch (e) { return json(500, { fehler: "Stats nicht verfügbar" }); }
+  }
   if (request.method === "GET") {
     const roh = new URL(request.url).searchParams.get("avatare") || "";
     const handles = [...new Set(roh.split(",").map(h => h.trim().toLowerCase()).filter(h => HANDLE.test(h)))].slice(0, 60);

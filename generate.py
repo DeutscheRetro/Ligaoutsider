@@ -1733,6 +1733,7 @@ def artikel_html(
       <a href="../comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="../aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="../elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="../community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="../forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>
@@ -3184,6 +3185,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
       <a href="{tiefe}comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="{tiefe}aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="{tiefe}elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="{tiefe}community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="{tiefe}forum.html" class="section-nav-link">💬 Forum</a>
     </div>
   </nav>

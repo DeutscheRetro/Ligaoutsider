@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community-Stats – Ligaoutsider.de</title>
+  <meta name="description" content="Die Ligaoutsider-Community in Zahlen: beliebteste Kommentatoren, Top-Kommentare, meistdiskutierte Artikel und Fan-Verteilung."/>
+  <link rel="canonical" href="https://ligaoutsider.de/community.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Community-Stats – Ligaoutsider.de"/>
+  <meta property="og:description" content="Die Ligaoutsider-Community in Zahlen: beliebteste Kommentatoren, Top-Kommentare, meistdiskutierte Artikel und Fan-Verteilung."/>
+  <meta property="og:url" content="https://ligaoutsider.de/community.html"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="/auth.js"></script>
+  <style>
+    .cs-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+    .cs-wrap h1 { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .cs-sub { font-size: 13px; color: var(--text4); margin-bottom: 20px; }
+    .cs-zahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .cs-zahl { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+    .cs-zahl b { display: block; font-size: 28px; font-weight: 900; color: var(--accent); }
+    .cs-zahl span { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+    .cs-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .cs-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
+    .cs-box h2 { font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
+    .cs-box p.cs-hinweis { font-size: 12px; color: var(--text4); margin-bottom: 10px; }
+    .cs-liste { list-style: none; padding: 0; margin: 0; }
+    .cs-liste li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text2); }
+    .cs-liste li:last-child { border-bottom: 0; }
+    .cs-platz { width: 22px; text-align: right; font-weight: 800; color: var(--text4); flex-shrink: 0; }
+    .cs-ava { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--accent); background: var(--bg4); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--accent); }
+    .cs-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cs-name a { color: var(--text); text-decoration: none; font-weight: 700; }
+    .cs-name a:hover { color: var(--accent); }
+    .cs-wert { font-weight: 800; color: var(--text); flex-shrink: 0; }
+    .cs-komm { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .cs-komm:last-child { border-bottom: 0; }
+    .cs-komm q { display: block; color: var(--text2); margin-bottom: 4px; quotes: "„" "“"; }
+    .cs-komm small { color: var(--text4); font-size: 12px; }
+    .cs-komm small a { color: var(--accent); text-decoration: none; }
+    .cs-balken { display: flex; align-items: flex-end; gap: 4px; height: 110px; margin-top: 8px; }
+    .cs-balken div { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
+    .cs-balken-l { display: flex; gap: 4px; font-size: 10px; color: var(--text4); margin-top: 4px; }
+    .cs-balken-l span { flex: 1; text-align: center; }
+    .cs-leer { font-size: 13px; color: var(--text4); padding: 8px 0; }
+    .cs-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+  </style>
+<script src="/consent.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <a href="nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="aufstellung.html" class="section-nav-link">Aufstellungen</a>
+      <a href="elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="community.html" class="section-nav-link active">📊 Community-Stats</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <main class="cs-wrap">
+    <h1>📊 Community-Stats</h1>
+    <p class="cs-sub" id="cs-stand">Lade…</p>
+    <div class="cs-zahlen" id="cs-zahlen"></div>
+    <div class="cs-raster" id="cs-raster"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+        <a href="nutzungsbedingungen.html">Nutzungsbedingungen</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL  = location.origin + '/sb';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+  </script>
+  <script src="/kommentare.js"></script>
+  <script>
+  (async function () {
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const LOGOS = { 'FC Bayern München': 'bayern', 'Borussia Dortmund': 'dortmund', 'RB Leipzig': 'leipzig', 'Bayer 04 Leverkusen': 'leverkusen',
+      'Eintracht Frankfurt': 'frankfurt', 'VfB Stuttgart': 'stuttgart', 'Borussia Mönchengladbach': 'gladbach', 'SC Freiburg': 'freiburg',
+      '1. FC Union Berlin': 'union', '1. FSV Mainz 05': 'mainz', 'FC Augsburg': 'augsburg', 'SV Werder Bremen': 'werder',
+      'TSG Hoffenheim': 'hoffenheim', 'Hamburger SV': 'hsv', '1. FC Köln': 'koeln', 'FC Schalke 04': 'schalke',
+      'SC Paderborn 07': 'paderborn', 'SV Elversberg': 'elversberg' };
+    let s;
+    try { s = await (await fetch('/api?community=1')).json(); }
+    catch (e) { document.getElementById('cs-stand').textContent = 'Stats konnten nicht geladen werden.'; return; }
+    if (s.fehler) { document.getElementById('cs-stand').textContent = s.fehler; return; }
+
+    // Artikeltitel für Top-Kommentare und meistdiskutierte Artikel
+    let artikel = {};
+    try { (await (await fetch('/feed.json')).json()).forEach(a => { artikel[a.id] = a; }); } catch (e) {}
+    const artikelLink = id => artikel[id] ? `<a href="/${esc(artikel[id].pfad)}">${esc(artikel[id].titel)}</a>` : 'Artikel';
+
+    // Profilbilder
+    const handles = new Set();
+    ['meiste_kommentare', 'meiste_upvotes', 'meiste_downvotes', 'bester_saldo', 'beste_quote', 'dienstaelteste', 'neu_dabei']
+      .forEach(k => (s[k] || []).forEach(x => x.handle && handles.add(x.handle)));
+    ['top_kommentare', 'kontrovers'].forEach(k => (s[k] || []).forEach(x => x.autor.handle && handles.add(x.autor.handle)));
+    let avatare = {};
+    if (handles.size) try { avatare = await (await fetch('/api?avatare=' + encodeURIComponent([...handles].join(',')))).json(); } catch (e) {}
+    const ava = p => p.handle && avatare[p.handle] ? `<img class="cs-ava" src="${avatare[p.handle]}" alt="">`
+                                                    : `<span class="cs-ava">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
+    const nameHtml = p => p.handle ? `<a href="/profil/${encodeURIComponent(p.handle)}">${esc(p.name)}</a>` : esc(p.name);
+
+    const datum = iso => new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.getElementById('cs-stand').textContent = 'Stand: ' + new Date(s.stand).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' }) + ' · aktualisiert alle 5 Minuten';
+
+    const g = s.gesamt;
+    document.getElementById('cs-zahlen').innerHTML = [['Mitglieder', g.mitglieder], ['Kommentare', g.kommentare],
+      ['Bewertungen', g.bewertungen], ['Forenthemen', g.themen], ['Forenbeiträge', g.beitraege]]
+      .map(([l, n]) => `<div class="cs-zahl"><b>${n.toLocaleString('de-DE')}</b><span>${l}</span></div>`).join('');
+
+    const leer = '<p class="cs-leer">Noch keine Daten. Sei der Erste!</p>';
+    const rangliste = (titel, hinweis, liste, einheit) => `<section class="cs-box"><h2>${titel}</h2><p class="cs-hinweis">${hinweis}</p>${
+      liste && liste.length ? `<ol class="cs-liste">${liste.map((x, i) => `<li><span class="cs-platz">${i + 1}.</span>${ava(x)}<span class="cs-name">${nameHtml(x)}</span><span class="cs-wert">${x.wert.toLocaleString('de-DE')}${einheit || ''}</span></li>`).join('')}</ol>` : leer}</section>`;
+    const kommentare = (titel, hinweis, liste) => `<section class="cs-box"><h2>${titel}</h2><p class="cs-hinweis">${hinweis}</p>${
+      liste && liste.length ? liste.map(k => `<div class="cs-komm"><q>${esc(k.text)}</q><small>${nameHtml(k.autor)} · 👍 ${k.up} · 👎 ${k.down} · ${artikelLink(k.artikel_id)}</small></div>`).join('') : leer}</section>`;
+    const balken = (titel, hinweis, werte, labels) => {
+      const max = Math.max(1, ...werte);
+      return `<section class="cs-box"><h2>${titel}</h2><p class="cs-hinweis">${hinweis}</p><div class="cs-balken">${werte.map((w, i) => `<div style="height:${Math.round(100 * w / max)}%" title="${labels[i]}: ${w}"></div>`).join('')}</div><div class="cs-balken-l">${labels.map(l => `<span>${l}</span>`).join('')}</div></section>`;
+    };
+
+    document.getElementById('cs-raster').innerHTML = [
+      rangliste('👍 Meiste Upvotes', 'Summe aller Daumen hoch auf eigene Kommentare', s.meiste_upvotes),
+      rangliste('⚖️ Bester Saldo', 'Upvotes minus Downvotes, ab 3 Bewertungen', s.bester_saldo),
+      rangliste('🎯 Höchste Zustimmung', 'Anteil Daumen hoch, ab 5 Bewertungen', s.beste_quote, ' %'),
+      rangliste('👎 Meiste Downvotes', 'Wer polarisiert am stärksten?', s.meiste_downvotes),
+      rangliste('💬 Meiste Kommentare', 'Die fleißigsten Kommentatoren', s.meiste_kommentare),
+      kommentare('🏆 Top-Kommentare', 'Die Kommentare mit den meisten Daumen hoch', s.top_kommentare),
+      kommentare('🔥 Kontroverseste Kommentare', 'Viel Zustimmung und viel Widerspruch zugleich', s.kontrovers),
+      `<section class="cs-box"><h2>📰 Meistdiskutierte Artikel</h2><p class="cs-hinweis">Artikel mit den meisten Kommentaren</p>${
+        s.meistdiskutiert.length ? `<ol class="cs-liste">${s.meistdiskutiert.map((a, i) => `<li><span class="cs-platz">${i + 1}.</span><span class="cs-name">${artikelLink(a.artikel_id)}</span><span class="cs-wert">${a.wert}</span></li>`).join('')}</ol>` : leer}</section>`,
+      `<section class="cs-box"><h2>🏟️ Fan-Verteilung</h2><p class="cs-hinweis">Lieblingsvereine laut Profil</p>${
+        s.fans.length ? `<ol class="cs-liste">${s.fans.map((f, i) => `<li><span class="cs-platz">${i + 1}.</span>${LOGOS[f.verein] ? `<img class="cs-logo" src="/logos/${LOGOS[f.verein]}.png" alt="">` : ''}<span class="cs-name">${esc(f.verein)}</span><span class="cs-wert">${f.wert}</span></li>`).join('')}</ol>` : leer}</section>`,
+      balken('📅 Aktivste Wochentage', 'Kommentare nach Wochentag', s.wochentag, ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']),
+      balken('🕐 Aktivste Uhrzeiten', 'Kommentare nach Stunde (Berliner Zeit)', s.stunde, s.stunde.map((_, h) => h % 3 === 0 ? String(h) : '')),
+      `<section class="cs-box"><h2>🎖️ Dienstälteste Mitglieder</h2><p class="cs-hinweis">Von Anfang an dabei</p>${
+        s.dienstaelteste.length ? `<ol class="cs-liste">${s.dienstaelteste.map((x, i) => `<li><span class="cs-platz">${i + 1}.</span>${ava(x)}<span class="cs-name">${nameHtml(x)}</span><span class="cs-wert" style="font-weight:600;color:var(--text4)">seit ${datum(x.seit)}</span></li>`).join('')}</ol>` : leer}</section>`,
+      `<section class="cs-box"><h2>👋 Neu dabei</h2><p class="cs-hinweis">Herzlich willkommen!</p>${
+        s.neu_dabei.length ? `<ol class="cs-liste">${s.neu_dabei.map(x => `<li>${ava(x)}<span class="cs-name">${nameHtml(x)}</span><span class="cs-wert" style="font-weight:600;color:var(--text4)">${datum(x.seit)}</span></li>`).join('')}</ol>` : leer}</section>`,
+    ].join('');
+  })();
+  </script>
+
+</body>
+</html>
