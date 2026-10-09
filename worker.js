@@ -80,6 +80,11 @@ async function supabaseLesen(request, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Nur https ausliefern: http-Aufrufe dauerhaft umleiten (sonst gibt es jede Seite doppelt)
+    if (url.protocol === "http:" && url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname === "/api") return api({ request, env });
     if (url.pathname.startsWith("/sb/rest/v1/")) return supabaseLesen(request, url);
     // Ordneradressen ("/", "/spieler/") zeigen ihre index.html – mit html_handling
