@@ -20,9 +20,10 @@
     .cs-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
     .cs-wrap h1 { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
     .cs-sub { font-size: 13px; color: var(--text4); margin-bottom: 20px; }
-    .cs-zahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .cs-zahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
     .cs-zahl { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
     .cs-zahl b { display: block; font-size: 28px; font-weight: 900; color: var(--accent); }
+    .cs-zahl b a { color: var(--accent); text-decoration: none; }
     .cs-zahl span { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
     .cs-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
     .cs-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
@@ -145,10 +146,20 @@
     const datum = iso => new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
     document.getElementById('cs-stand').textContent = 'Stand: ' + new Date(s.stand).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' }) + ' · aktualisiert alle 5 Minuten';
 
-    const g = s.gesamt;
-    document.getElementById('cs-zahlen').innerHTML = [['Mitglieder', g.mitglieder], ['Kommentare', g.kommentare],
-      ['Bewertungen', g.bewertungen], ['Forenthemen', g.themen], ['Forenbeiträge', g.beitraege]]
-      .map(([l, n]) => `<div class="cs-zahl"><b>${n.toLocaleString('de-DE')}</b><span>${l}</span></div>`).join('');
+    // Kennzahlen der Community ohne Mitglieder- oder Kommentarzahlen
+    const TAGE = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+    const maxIdx = arr => arr.reduce((b, w, i) => w > arr[b] ? i : b, 0);
+    const kacheln = [];
+    if (s.fans.length) {
+      const f = s.fans[0];
+      kacheln.push(['🏟️', 'Meiste Fans', (LOGOS[f.verein] ? `<img class="cs-logo" style="width:28px;height:28px;vertical-align:-7px;margin-right:6px" src="/logos/${LOGOS[f.verein]}.png" alt="">` : '') + esc(f.verein)]);
+    }
+    if (s.wochentag.some(n => n > 0)) kacheln.push(['📅', 'Aktivster Tag', TAGE[maxIdx(s.wochentag)]]);
+    if (s.stunde.some(n => n > 0)) { const h = maxIdx(s.stunde); kacheln.push(['🕐', 'Aktivste Zeit', `${h}–${h + 1} Uhr`]); }
+    if (s.meistdiskutiert.length) kacheln.push(['🔥', 'Meistdiskutiert', artikelLink(s.meistdiskutiert[0].artikel_id)]);
+    document.getElementById('cs-zahlen').innerHTML = kacheln.map(([ic, l, w]) =>
+      `<div class="cs-zahl"><span>${ic} ${l}</span><b style="font-size:17px;line-height:1.3;margin-top:6px">${w}</b></div>`).join('');
+    if (!kacheln.length) document.getElementById('cs-zahlen').remove();
 
     const leer = '<p class="cs-leer">Noch keine Daten. Sei der Erste!</p>';
     const rangliste = (titel, hinweis, liste, einheit) => `<section class="cs-box"><h2>${titel}</h2><p class="cs-hinweis">${hinweis}</p>${

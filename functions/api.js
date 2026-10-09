@@ -217,8 +217,6 @@ async function communityStats() {
     .map(p => ({ name: p.anzeigename || p.handle, handle: p.handle, seit: p.erstellt_am }));
   return {
     stand: new Date().toISOString(),
-    gesamt: { mitglieder: (profile || []).length, kommentare: (komm || []).length, bewertungen: (votes || []).length,
-              themen: (threads || []).length, beitraege: (posts || []).length },
     meiste_kommentare: top(L, x => x.kommentare).map(x => ({ ...x, wert: x.kommentare })),
     meiste_upvotes: top(L, x => x.up).map(x => ({ ...x, wert: x.up })),
     meiste_downvotes: top(L, x => x.down).map(x => ({ ...x, wert: x.down })),
