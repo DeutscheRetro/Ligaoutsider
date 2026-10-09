@@ -301,13 +301,13 @@ async function ghGet(path) {
   });
   if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
   const data = await r.json();
-  // Dateien über 1 MB (feed.json) liefert die API ohne Inhalt – dann roh nachladen
+  // Dateien über 1 MB (feed.json) liefert die Contents-API ohne Inhalt – dann über die Blob-API holen (bis 100 MB)
   if (!data.content || data.encoding === 'none') {
-    const roh = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.raw' }
+    const b = await fetch(`https://api.github.com/repos/${REPO}/git/blobs/${data.sha}`, {
+      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github+json' }
     });
-    if (!roh.ok) throw new Error(`GitHub API ${roh.status}: ${await roh.text()}`);
-    data.content = btoa(unescape(encodeURIComponent(await roh.text())));
+    if (!b.ok) throw new Error(`GitHub API ${b.status}: ${await b.text()}`);
+    data.content = (await b.json()).content;
   }
   return data;
 }
