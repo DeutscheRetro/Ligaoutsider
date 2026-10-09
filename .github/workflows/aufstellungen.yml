@@ -1,0 +1,50 @@
+name: Offizielle Aufstellungen
+
+# Gestartet von Cloudflare (worker.js), an Spieltagen alle 15 Minuten im Fenster
+# 75 bis 20 Minuten vor einem Anpfiff. Ohne KI, dauert unter einer Minute.
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Anlass'
+        required: false
+        default: 'manuell'
+
+env:
+  TZ: Europe/Berlin
+
+jobs:
+  posten:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: aufstellungen
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Pakete installieren
+        run: pip install -r requirements.txt
+
+      - name: Aufstellungen prüfen und posten
+        run: python aufstellungen_posten.py
+
+      - name: Veröffentlichen
+        run: |
+          git config user.name "Ligaoutsider Bot"
+          git config user.email "bot@ligaoutsider.de"
+          git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json
+          if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
+          git commit -m "⚽ Aufstellungen $(date +'%d.%m.%Y %H:%M')"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push && break
+            sleep 10
+          done

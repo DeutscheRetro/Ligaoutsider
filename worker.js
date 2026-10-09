@@ -14,6 +14,33 @@ function berlinZeit(datum) {
   return t.replace(/^24/, "00");
 }
 
+async function workflowStarten(env, datei, inputs) {
+  const res = await fetch(
+    `https://api.github.com/repos/DeutscheRetro/Ligaoutsider/actions/workflows/${datei}/dispatches`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GH_DISPATCH_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "ligaoutsider-zeitplan",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      body: JSON.stringify({ ref: "main", inputs }),
+    });
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
+// Steht ein Bundesliga-Anpfiff in 20 bis 75 Minuten an (oder lief er vor höchstens 20)?
+// Dann sind die offiziellen Aufstellungen gleich da bzw. schon raus.
+async function anpfiffNah(jetzt) {
+  const res = await fetch("https://api.openligadb.de/getmatchdata/bl1", { cf: { cacheTtl: 600, cacheEverything: true } });
+  if (!res.ok) return false;
+  const spiele = await res.json();
+  return spiele.some(s => {
+    const min = (new Date(s.matchDateTimeUTC) - jetzt) / 60000;
+    return min >= -20 && min <= 75;
+  });
+}
+
 async function laufStarten(env, zeit) {
   const res = await fetch(
     "https://api.github.com/repos/DeutscheRetro/Ligaoutsider/actions/workflows/update.yml/dispatches", {
@@ -67,14 +94,21 @@ export default {
   // Cron-Trigger alle 30 Minuten (UTC); gestartet wird nur zu den Berliner Planzeiten.
   // So stimmt der Plan auch nach der Zeitumstellung, ohne die Cron-Zeiten anzufassen.
   async scheduled(event, env, ctx) {
-    const zeit = berlinZeit(new Date(event.scheduledTime));
-    if (!LAUFPLAN.includes(zeit)) return;
     if (!env.GH_DISPATCH_TOKEN) {
-      console.error("GH_DISPATCH_TOKEN fehlt – Lauf nicht gestartet");
+      console.error("GH_DISPATCH_TOKEN fehlt – nichts gestartet");
       return;
     }
-    ctx.waitUntil(laufStarten(env, zeit).then(
-      () => console.log(`Lauf ${zeit} gestartet`),
-      (e) => console.error(`Lauf ${zeit} nicht gestartet: ${e.message}`)));
+    const jetzt = new Date(event.scheduledTime);
+    const zeit = berlinZeit(jetzt);
+    // News-Pipeline zu den festen Zeiten (Cron läuft alle 15 Minuten, nur volle/halbe Planzeiten zählen)
+    if (LAUFPLAN.includes(zeit)) {
+      ctx.waitUntil(laufStarten(env, zeit).then(
+        () => console.log(`Lauf ${zeit} gestartet`),
+        (e) => console.error(`Lauf ${zeit} nicht gestartet: ${e.message}`)));
+    }
+    // Offizielle Aufstellungen kurz vor dem Anpfiff
+    ctx.waitUntil(anpfiffNah(jetzt).then(nah => nah && workflowStarten(env, "aufstellungen.yml", { reason: `Anpfiff nah ${zeit}` })
+      .then(() => console.log(`Aufstellungen ${zeit} gestartet`)))
+      .catch(e => console.error(`Aufstellungen ${zeit}: ${e.message}`)));
   },
 };
