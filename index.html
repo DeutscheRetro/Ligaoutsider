@@ -473,8 +473,15 @@
 
         if (teamsRes.ok) {
           const teams = await teamsRes.json();
+          // Eigene Wappen statt fremder Bild-Links (der Leverkusen-Link von OpenLigaDB ist kaputt)
+          const LOKAL = [['bayern','bayern'],['dortmund','dortmund'],['leipzig','leipzig'],['leverkusen','leverkusen'],
+            ['frankfurt','frankfurt'],['stuttgart','stuttgart'],['gladbach','gladbach'],['freiburg','freiburg'],['union','union'],
+            ['mainz','mainz'],['augsburg','augsburg'],['bremen','werder'],['hoffenheim','hoffenheim'],['hamburg','hsv'],
+            ['köln','koeln'],['koeln','koeln'],['schalke','schalke'],['paderborn','paderborn'],['elversberg','elversberg']];
           teams.forEach(t => {
-            teamIcons[t.teamId] = t.teamIconUrl;
+            const n = String(t.teamName || '').toLowerCase();
+            const lokal = LOKAL.find(([k]) => n.includes(k));
+            teamIcons[t.teamId] = lokal ? `logos/${lokal[1]}.png` : t.teamIconUrl;
             teamNames[t.teamId] = t.teamName;
           });
         }
