@@ -78,6 +78,26 @@ async function istGebannt(email) {
   return !bis || new Date(bis) > new Date();
 }
 
+// Wen meint eine Moderationsaktion? Der Browser kennt keine fremden E-Mail-Adressen mehr,
+// sondern nur Kommentar-ID oder Profilnamen; die Adresse wird hier aufgelöst.
+async function zielEmail(body) {
+  if (body.kommentar_id && UUID.test(String(body.kommentar_id))) {
+    const [k] = await hole(`kommentare?id=eq.${body.kommentar_id}&select=email`);
+    if (k) return k.email;
+  }
+  if (body.handle && /^[a-z0-9-]{3,30}$/.test(String(body.handle))) {
+    const [p] = await hole(`profile?handle=eq.${encodeURIComponent(body.handle)}&select=email`);
+    if (p) return p.email;
+  }
+  return sauber(body.email, 200) || null;
+}
+
+async function banVon(mail) {
+  const [b] = await hole(`user_bans?email=eq.${encodeURIComponent(mail)}&select=gebannt_bis,grund`);
+  if (!b || (b.gebannt_bis && new Date(b.gebannt_bis) < new Date())) return null;
+  return { gebannt_bis: b.gebannt_bis, grund: b.grund || null };
+}
+
 // ─── Profile ─────────────────────────────────────────────────────────────────
 // Öffentlich zeigt sich jeder Nutzer nur unter seinem Profilnamen (handle).
 // Die E-Mail verlässt den Server nie in Richtung fremder Nutzer.
@@ -332,8 +352,8 @@ export async function onRequest({ request, env }) {
       // ─── Moderation ────────────────────────────────────────────────────────
       case "ban": {
         if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
-        const ziel = sauber(body.email, 200);
-        if (!ziel) return json(400, { fehler: "E-Mail fehlt" });
+        const ziel = await zielEmail(body);
+        if (!ziel) return json(400, { fehler: "Nutzer nicht gefunden" });
         await db("user_bans", {
           method: "POST",
           headers: { Prefer: "resolution=merge-duplicates" },
@@ -349,8 +369,8 @@ export async function onRequest({ request, env }) {
 
       case "unban": {
         if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
-        const ziel = sauber(body.email, 200);
-        if (!ziel) return json(400, { fehler: "E-Mail fehlt" });
+        const ziel = await zielEmail(body);
+        if (!ziel) return json(400, { fehler: "Nutzer nicht gefunden" });
         await loesche("user_bans", `email=eq.${encodeURIComponent(ziel)}`);
         return json(200, { ok: true });
       }
@@ -889,6 +909,26 @@ export async function onRequest({ request, env }) {
         return json(200, { ok: true, name: neu, handle });
       }
 
+      case "kommentar_meins": {
+        // Welche der angezeigten Kommentare sind meine, und wie habe ich bewertet?
+        const ids = (Array.isArray(body.ids) ? body.ids : []).map(String).filter(i => UUID.test(i)).slice(0, 500);
+        if (!ids.length) return json(200, { eigene: [], votes: {} });
+        const liste = ids.join(",");
+        const E = encodeURIComponent(email);
+        const [eigene, votes] = await Promise.all([
+          hole(`kommentare?id=in.(${liste})&email=eq.${E}&select=id`),
+          hole(`kommentar_votes?kommentar_id=in.(${liste})&voter_email=eq.${E}&select=kommentar_id,vote`),
+        ]);
+        return json(200, { eigene: (eigene || []).map(k => k.id),
+                           votes: Object.fromEntries((votes || []).map(v => [v.kommentar_id, v.vote])) });
+      }
+
+      case "ban_info": {
+        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
+        const ziel = await zielEmail(body);
+        return json(200, { ban: ziel ? await banVon(ziel) : null });
+      }
+
       case "wer_bin_ich": {
         if (nameOffen) return json(200, { email, name: null, name_offen: true, rollen, istAdmin, darfLoeschen, handle: null, anfragen: 0 });
         const profil = await profilSicher(email, name);
@@ -900,7 +940,7 @@ export async function onRequest({ request, env }) {
           } catch (e) { /* ohne Tabelle keine Anfragen */ }
         }
         return json(200, { email, name, rollen, istAdmin, darfLoeschen,
-                           handle: profil ? profil.handle : null, anfragen });
+                           handle: profil ? profil.handle : null, anfragen, ban: await banVon(email) });
       }
 
       default:

@@ -8,6 +8,7 @@
   let aktuellerUser = null;
   let isAdmin = false;
   let darfLoeschen = false;
+  let eigenerBan = null;   // kommt vom Server (wer_bin_ich), die Bann-Tabelle ist nicht öffentlich
   let ignorierteListe = JSON.parse(localStorage.getItem('lo_ignore') || '[]');
 
   // ─── Schreibzugriffe ─────────────────────────────────────────────────────────
@@ -55,6 +56,7 @@
       wer = await api('wer_bin_ich');
       isAdmin = !!wer.istAdmin;
       darfLoeschen = !!wer.darfLoeschen;
+      eigenerBan = wer.ban || null;
     } catch {
       isAdmin = false; darfLoeschen = false;
     }
@@ -67,7 +69,7 @@
       el.style.cursor = 'pointer';
       el.title = 'Mein Profil';
       el.onclick = () => wer.handle ? (location.href = '/profil/' + encodeURIComponent(wer.handle))
-                                    : window._zeigeProfil(name, user.email);
+                                    : window._zeigeProfil(name, null);
       el.querySelector('.post-zahl')?.remove();
       if (wer.anfragen) {
         const b = document.createElement('span');
@@ -134,12 +136,13 @@
   }
 
   // ─── Ban-Check ───────────────────────────────────────────────────────────────
-  async function pruefeBan(email) {
-    const { data } = await sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle();
-    if (!data) return null;
-    if (data.gebannt_bis && new Date(data.gebannt_bis) < new Date()) return null;
-    return data;
+  async function pruefeBan() {
+    if (!eigenerBan) return null;
+    if (eigenerBan.gebannt_bis && new Date(eigenerBan.gebannt_bis) < new Date()) return null;
+    return eigenerBan;
   }
+  // Öffentlicher Schlüssel einer Person: Profilname, bei alten Kommentaren der Anzeigename
+  const personKey = k => k.autor_handle ? k.autor_handle : 'n:' + (k.name || '');
 
   // ─── Bereinigen ──────────────────────────────────────────────────────────────
   function bereinigen(text) {
@@ -174,7 +177,7 @@
   };
 
   // ─── Ban-Modal (Admin) ───────────────────────────────────────────────────────
-  window._zeigeBanModal = function(email, name) {
+  window._zeigeBanModal = function(kommentarId, name) {
     let m = document.getElementById('ban-modal');
     if (m) m.remove();
     m = document.createElement('div');
@@ -183,7 +186,7 @@
     m.innerHTML = `
       <div style="background:var(--bg2);border:1px solid #c62828;border-radius:10px;padding:24px;max-width:320px;width:90%">
         <div style="font-size:15px;font-weight:800;color:#e53935;margin-bottom:16px">🚫 User bannen</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:12px">${name} (${email})</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:12px">${name}</div>
         <select id="ban-dauer" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:8px;font-size:13px;margin-bottom:10px">
           <option value="1">1 Tag</option>
           <option value="7">7 Tage</option>
@@ -192,7 +195,7 @@
         </select>
         <input id="ban-grund" placeholder="Grund (optional)" maxlength="200" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:8px;font-size:13px;margin-bottom:14px;box-sizing:border-box"/>
         <div style="display:flex;gap:8px">
-          <button onclick="window._banUser('${email}','${name}')" style="flex:1;background:#c62828;color:#fff;border:none;border-radius:5px;padding:8px;font-weight:700;font-size:13px;cursor:pointer">Bannen</button>
+          <button onclick="window._banUser('${kommentarId}')" style="flex:1;background:#c62828;color:#fff;border:none;border-radius:5px;padding:8px;font-weight:700;font-size:13px;cursor:pointer">Bannen</button>
           <button onclick="document.getElementById('ban-modal').remove()" style="flex:1;background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:5px;padding:8px;font-size:13px;cursor:pointer">Abbrechen</button>
         </div>
       </div>`;
@@ -200,31 +203,34 @@
     m.addEventListener('click', e => { if (e.target === m) m.remove(); });
   };
 
-  window._banUser = async function(email, name) {
+  window._banUser = async function(kommentarId) {
     const tage = parseInt(document.getElementById('ban-dauer').value);
     const grund = document.getElementById('ban-grund').value.trim();
     const bis = tage === 0 ? null : new Date(Date.now() + tage * 86400000).toISOString();
-    try { await api('ban', { email, grund: grund || null, gebannt_bis: bis }); }
+    try { await api('ban', { kommentar_id: kommentarId, grund: grund || null, gebannt_bis: bis }); }
     catch (e) { alert(e.message); return; }
     document.getElementById('ban-modal')?.remove();
     document.getElementById('profil-modal')?.remove();
     ladeKommentare();
   };
 
-  window._entbanneUser = async function(email) {
-    try { await api('unban', { email }); } catch (e) { alert(e.message); return; }
+  window._entbanneUser = async function(kommentarId) {
+    try { await api('unban', { kommentar_id: kommentarId }); } catch (e) { alert(e.message); return; }
     document.getElementById('profil-modal')?.remove();
     ladeKommentare();
   };
 
   // ─── Profil-Modal ────────────────────────────────────────────────────────────
-  window._zeigeProfil = async function(name, email) {
-    console.log('[Profil] öffne für', name, email);
+  window._zeigeProfil = async function(name, handle, kommentarId) {
+    // Mit Profilnamen gibt es eine richtige Profilseite; Moderatoren sehen das Kurzprofil mit Bann-Knopf
+    if (handle && !darfLoeschen) { location.href = '/profil/' + encodeURIComponent(handle); return; }
     try {
-    const [{ data: komms }, { data: banInfo }] = await Promise.all([
-      sb.from('kommentare').select('id, erstellt_am').eq('email', email).neq('geloescht', true),
-      sb.from('user_bans').select('gebannt_bis, grund').eq('email', email).maybeSingle()
-    ]);
+    let q = sb.from('kommentare').select('id, erstellt_am').neq('geloescht', true);
+    q = handle ? q.eq('autor_handle', handle) : q.eq('name', name).is('autor_handle', null);
+    const { data: komms } = await q;
+    let banInfo = null;
+    if (darfLoeschen && kommentarId) { try { banInfo = (await api('ban_info', { kommentar_id: kommentarId })).ban; } catch (e) {} }
+    const key = handle || 'n:' + name;
 
     const anzahl = komms?.length || 0;
     const dates  = komms?.map(k => new Date(k.erstellt_am)) || [];
@@ -236,8 +242,8 @@
       voten?.forEach(v => v.vote === 1 ? ups++ : downs++);
     }
 
-    const istEigen   = aktuellerUser?.email === email;
-    const istIgn     = ignorierteListe.includes(email);
+    const istEigen   = !!handle && window._loIch?.handle === handle;
+    const istIgn     = ignorierteListe.includes(key);
     const istGebannt = !!banInfo;
     const banText    = istGebannt
       ? (banInfo.gebannt_bis ? `Gebannt bis ${new Date(banInfo.gebannt_bis).toLocaleDateString('de-DE')}` : 'Permanent gebannt')
@@ -269,18 +275,14 @@
         <div style="font-size:12px;color:var(--text4);margin-bottom:16px">Dabei seit: <span style="color:var(--text3)">${dabei}</span></div>
         ${!istEigen && aktuellerUser ? `
           <div style="display:flex;flex-direction:column;gap:8px">
-            <a href="nachrichten.html?an=${encodeURIComponent(email)}"
-              style="padding:8px;background:var(--accent);color:#111;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none">
-              ✉️ Nachricht schreiben
-            </a>
-            <button onclick="window._${istIgn ? 'entIgnoriereUser' : 'ignoriereUser'}('${email}');document.getElementById('profil-modal').remove()"
+            <button onclick="window._${istIgn ? 'entIgnoriereUser' : 'ignoriereUser'}(${JSON.stringify(key).replace(/"/g, '&quot;')});document.getElementById('profil-modal').remove()"
               style="padding:8px;background:${istIgn ? 'var(--bg4)' : 'var(--bg4)'};color:${istIgn ? 'var(--accent)' : 'var(--text)'};border:1px solid var(--border2);border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">
               ${istIgn ? '✓ Nicht mehr ignorieren' : '🙈 Ignorieren'}
             </button>
             ${darfLoeschen ? `
               ${istGebannt
-                ? `<button onclick="window._entbanneUser('${email}')" style="padding:8px;background:var(--bg4);color:#4caf50;border:1px solid #4caf50;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">✓ Entbannen</button>`
-                : `<button onclick="window._zeigeBanModal('${email}','${name}')" style="padding:8px;background:#c62828;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">🚫 Bannen</button>`
+                ? `<button onclick="window._entbanneUser('${kommentarId}')" style="padding:8px;background:var(--bg4);color:#4caf50;border:1px solid #4caf50;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">✓ Entbannen</button>`
+                : `<button onclick="window._zeigeBanModal('${kommentarId}',${JSON.stringify(name).replace(/"/g, '&quot;')})" style="padding:8px;background:#c62828;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">🚫 Bannen</button>`
               }` : ''}
           </div>` : ''}
       </div>`;
@@ -349,7 +351,7 @@
     if (!liste || typeof ARTIKEL_ID === 'undefined') return;
 
     const { data, error } = await sb.from('kommentare')
-      .select('*')
+      .select('id, artikel_id, name, inhalt, erstellt_am, geaendert_am, geloescht, autor_handle')
       .eq('artikel_id', ARTIKEL_ID)
       .neq('geloescht', true)
       .order('erstellt_am', { ascending: true });
@@ -368,19 +370,26 @@
     let votes = null;
     try {
       ({ data: votes } = await sb.from('kommentar_votes')
-        .select('kommentar_id, voter_email, vote').in('kommentar_id', ids));
+        .select('kommentar_id, vote').in('kommentar_id', ids));
     } catch (e) { console.error('[Kommentare] Votes', e); }
+
+    // Eigene Kommentare und eigene Bewertungen kennt nur der Server
+    let eigene = new Set(), meine = {};
+    if (aktuellerUser) {
+      try { const r = await api('kommentar_meins', { ids }); eigene = new Set(r.eigene || []); meine = r.votes || {}; }
+      catch (e) { console.error('[Kommentare] Eigene', e); }
+    }
 
     const voteMap = {};
     votes?.forEach(v => {
       if (!voteMap[v.kommentar_id]) voteMap[v.kommentar_id] = { up: 0, down: 0, mine: 0 };
       v.vote === 1 ? voteMap[v.kommentar_id].up++ : voteMap[v.kommentar_id].down++;
-      if (aktuellerUser?.email === v.voter_email) voteMap[v.kommentar_id].mine = v.vote;
     });
+    Object.entries(meine).forEach(([id, w]) => { if (voteMap[id]) voteMap[id].mine = w; });
 
     // Check ban for current user
     let banStatus = null;
-    if (aktuellerUser) { try { banStatus = await pruefeBan(aktuellerUser.email); } catch (e) { console.error('[Kommentare] Ban-Check', e); } }
+    if (aktuellerUser) banStatus = await pruefeBan();
 
     // Profilbilder der Autoren (öffentlich, nur Profilname → Bild)
     let avatare = {};
@@ -404,25 +413,25 @@
     liste.innerHTML = data.map(k => {
       if (k.geloescht) return `<div class="kommentar-item"><span style="font-size:13px;color:var(--text4);font-style:italic">— Kommentar gelöscht —</span></div>`;
 
-      const ignoriert = ignorierteListe.includes(k.email);
-      if (ignoriert) return `<div class="kommentar-item" data-ignoriert-email="${k.email}">
+      const ignoriert = ignorierteListe.includes(personKey(k));
+      if (ignoriert) return `<div class="kommentar-item">
         <span style="font-size:12px;color:var(--text4);font-style:italic">Kommentar von ignoriertem Nutzer.
-          <button data-action="entignoriere" data-email="${k.email}" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;padding:0">Anzeigen</button>
+          <button data-action="entignoriere" data-key="${bereinigen(personKey(k)).replace(/"/g, '&quot;')}" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;padding:0">Anzeigen</button>
         </span></div>`;
 
-      kommentarMeta[k.id] = { name: k.name, email: k.email };
+      kommentarMeta[k.id] = { name: k.name, handle: k.autor_handle || null };
 
       const datum = new Date(k.erstellt_am).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
       const editTag = k.geaendert_am ? `<em style="font-size:10px;color:var(--text4)"> · editiert ${new Date(k.geaendert_am).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}</em>` : '';
 
       const v = voteMap[k.id] || { up: 0, down: 0, mine: 0 };
-      const istEigenVote = aktuellerUser?.email === k.email;
+      const istEigenVote = eigene.has(k.id);
       const voteKnopf = (wert, zahl, aktiv) => `<button data-action="vote" data-id="${k.id}" data-wert="${wert}"
         class="k-vote${aktiv ? (wert === 1 ? ' k-vote--up' : ' k-vote--down') : ''}"
         ${istEigenVote ? 'disabled title="Eigene Kommentare kannst du nicht bewerten"' : `title="${wert === 1 ? 'Gefällt mir' : 'Gefällt mir nicht'}"`}
         aria-label="${wert === 1 ? 'Daumen hoch' : 'Daumen runter'}, ${zahl}">${wert === 1 ? '👍' : '👎'} <span>${zahl}</span></button>`;
 
-      const istEigen = aktuellerUser?.email === k.email;
+      const istEigen = eigene.has(k.id);
 
       const aktionen = `<div style="display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap">
         ${aktuellerUser ? `
@@ -457,12 +466,12 @@
       const action = el.dataset.action;
       const id     = el.dataset.id;
       const meta   = id ? kommentarMeta[id] : null;
-      if (action === 'profil')      window._zeigeProfil(meta.name, meta.email);
+      if (action === 'profil')      window._zeigeProfil(meta.name, meta.handle, id);
       if (action === 'vote')        vote(id, parseInt(el.dataset.wert));
       if (action === 'login-vote' && window.netlifyIdentity) netlifyIdentity.open('login');
       if (action === 'edit')        window._editKommentar(id);
       if (action === 'loeschen')    window._loescheKommentar(id, el.dataset.hard === 'true');
-      if (action === 'entignoriere') window._entIgnoriereUser(el.dataset.email);
+      if (action === 'entignoriere') window._entIgnoriereUser(el.dataset.key);
     };
 
     // Ban-Hinweis im Formular anzeigen
@@ -482,7 +491,7 @@
     e.preventDefault();
     if (!aktuellerUser) return;
 
-    const ban = await pruefeBan(aktuellerUser.email);
+    const ban = await pruefeBan();
     if (ban) { ladeKommentare(); return; }
 
     const status  = document.getElementById('kommentar-status');

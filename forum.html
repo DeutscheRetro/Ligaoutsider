@@ -247,17 +247,13 @@
     async function setUser(user) {
       // Sperre pruefen. Verbindlich entscheidet der Server bei jedem Schreiben;
       // das hier dient nur einer verstaendlichen Rueckmeldung.
-      try {
-        const { data } = await sb.from('user_bans')
-          .select('gebannt_bis').eq('email', user.email).maybeSingle();
-        const gesperrt = data && (!data.gebannt_bis || new Date(data.gebannt_bis) > new Date());
-        if (gesperrt) {
-          alert('Dein Konto ist gesperrt. Du kannst mitlesen, aber nicht schreiben.');
-        }
-      } catch(e) { /* bei Fehler normal fortfahren */ }
-
       aktuellerUser = user;
-      await rollenLaden();
+      // Rollen und Sperre kommen vom Server (die Bann-Tabelle ist nicht öffentlich lesbar)
+      try {
+        const w = await loApi('wer_bin_ich');
+        _darfLoeschen = !!w.darfLoeschen;
+        if (w.ban) alert('Dein Konto ist gesperrt. Du kannst mitlesen, aber nicht schreiben.');
+      } catch { _darfLoeschen = false; }
       const name = user.user_metadata?.full_name || user.email;
       document.getElementById('user-name').textContent      = name;
       { const un = document.getElementById('user-name'); un.style.cursor = 'pointer'; un.title = 'Mein Profil'; un.onclick = () => { location.href = '/profil.html'; }; }
@@ -299,7 +295,7 @@
 
       const { data, error } = await sb
         .from('forum_threads')
-        .select('*')
+        .select('id, kategorie, titel, autor_name, autor_handle, erstellt_am, letzter_beitrag, antworten')
         .eq('kategorie', aktiveKat)
         .order('letzter_beitrag', { ascending: false });
 
@@ -329,7 +325,7 @@
 
       const { data, error } = await sb
         .from('forum_posts')
-        .select('*')
+        .select('id, thread_id, inhalt, autor_name, autor_handle, erstellt_am')
         .eq('thread_id', thread.id)
         .order('erstellt_am', { ascending: true });
 
