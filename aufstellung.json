@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T17:32:12.356103+00:00",
+ "updated": "2026-10-09T19:02:26.683176+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -509,10 +509,7 @@
   "Borussia Dortmund": {
    "logo": "logos/dortmund.png",
    "formation": "3-4-2-1",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "artikel/bvb-empfaengt-werder-tabellenfuehrer-mit-makelloser-bilanz-1a70ba5b34.html",
    "elf": {
     "tw": [
@@ -524,7 +521,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -536,7 +533,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Joane Gadou",
@@ -546,7 +543,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 96
+      "prozent": 83
      },
      {
       "name": "Nico Schlotterbeck",
@@ -556,7 +553,7 @@
       "news": "artikel/fuellkrug-vor-rueckkehr-nach-dortmund-wollen-marschieren-6453ce41ff.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 60
+      "prozent": 48
      },
      {
       "name": "Daniel Svensson",
@@ -566,7 +563,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 60
+      "prozent": 48
+     },
+     {
+      "name": "Julian Ryerson",
+      "nr": "26",
+      "ampel": "gelb",
+      "grund": "Rippenprobleme, Ausfallzeit unklar",
+      "news": "artikel/bvb-vor-bremen-schlotterbeck-und-ryerson-mit-neuen-verletzungen-6f51312f65.html",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 48
      }
     ],
     "mf": [
@@ -578,7 +585,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 94
+      "prozent": 78
      },
      {
       "name": "Jobe Bellingham",
@@ -588,27 +595,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 93
+      "prozent": 72
      },
      {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
+      "name": "Konstantinos Karetsas",
+      "nr": "19",
       "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
-      "news": "",
+      "grund": "Kreislaufprobleme überstanden, vier Länderspiele absolviert",
+      "news": "artikel/karetsas-kehrt-mit-griechenland-schwung-zum-bvb-zurueck-286cddac32.html",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 86
-     },
-     {
-      "name": "Marcel Sabitzer",
-      "nr": "20",
-      "ampel": "gruen",
-      "grund": "0 von 4 Einsätzen in der Startelf · Ø 22 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 81
+      "prozent": 50
      }
     ],
     "st": [
@@ -620,7 +617,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Maximilian Beier",
@@ -630,21 +627,11 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 94
+      "prozent": 77
      }
     ]
    },
    "bank": [
-    {
-     "name": "Konstantinos Karetsas",
-     "nr": "19",
-     "ampel": "gruen",
-     "grund": "Kreislaufprobleme überstanden, vier Länderspiele absolviert",
-     "news": "artikel/karetsas-kehrt-mit-griechenland-schwung-zum-bvb-zurueck-286cddac32.html",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 15
-    },
     {
      "name": "Joey Veerman",
      "nr": "25",
@@ -653,20 +640,50 @@
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 14
+     "prozent": 48
+    },
+    {
+     "name": "Ethan Nwaneri",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 42
+    },
+    {
+     "name": "Fábio Silva",
+     "nr": "21",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 40 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 24
+    },
+    {
+     "name": "Marcel Sabitzer",
+     "nr": "20",
+     "ampel": "gruen",
+     "grund": "0 von 4 Einsätzen in der Startelf · Ø 22 min",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 23
+    },
+    {
+     "name": "Ramy Bensebaini",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 14 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 17
     }
    ],
    "fraglich": [
-    {
-     "name": "Julian Ryerson",
-     "nr": "26",
-     "ampel": "gelb",
-     "grund": "Rippenprobleme, Ausfallzeit unklar",
-     "news": "artikel/bvb-vor-bremen-schlotterbeck-und-ryerson-mit-neuen-verletzungen-6f51312f65.html",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 14
-    },
     {
      "name": "Carney Chukwuemeka",
      "nr": "17",
@@ -675,7 +692,7 @@
      "news": "artikel/bvb-chukwuemeka-kommt-angeschlagen-aus-oesterreich-zurueck-36e9a38c69.html",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 3
+     "prozent": 4
     }
    ],
    "ausfall": [
@@ -2392,10 +2409,7 @@
   "SV Werder Bremen": {
    "logo": "logos/werder.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2407,7 +2421,7 @@
       "news": "artikel/werder-ohne-agu-und-alvero-in-dortmund-hein-vor-comeback-b66ae81fa0.html",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 60
+      "prozent": 34
      }
     ],
     "abw": [
@@ -2419,7 +2433,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Amos Pieper",
@@ -2429,7 +2443,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 88
      },
      {
       "name": "Olivier Deman",
@@ -2439,7 +2453,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 96
+      "prozent": 82
      },
      {
       "name": "Arthur",
@@ -2449,7 +2463,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 94
+      "prozent": 77
      }
     ],
     "mf": [
@@ -2461,7 +2475,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 94
+      "prozent": 76
      },
      {
       "name": "Ludovit Reis",
@@ -2471,7 +2485,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 93
+      "prozent": 72
      },
      {
       "name": "Youri Regeer",
@@ -2481,7 +2495,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 93
+      "prozent": 71
      }
     ],
     "st": [
@@ -2493,7 +2507,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 97
+      "prozent": 92
      },
      {
       "name": "Niclas Füllkrug",
@@ -2503,7 +2517,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 95
+      "prozent": 80
      },
      {
       "name": "Eren Dinkçi",
@@ -2513,11 +2527,22 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 60
+      "prozent": 34
      }
     ]
    },
-   "bank": [],
+   "bank": [
+    {
+     "name": "Mick Schmetgens",
+     "nr": "33",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 35 min",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 18
+    }
+   ],
    "fraglich": [
     {
      "name": "Cedric Itten",
@@ -2527,7 +2552,7 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 6
+     "prozent": 17
     },
     {
      "name": "Niklas Stark",
@@ -2537,7 +2562,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 3
+     "prozent": 2
     }
    ],
    "ausfall": [
