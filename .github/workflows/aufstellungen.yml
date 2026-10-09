@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
-          git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json
+          git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
           git commit -m "⚽ Aufstellungen $(date +'%d.%m.%Y %H:%M')"
           for i in 1 2 3; do
