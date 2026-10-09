@@ -10,6 +10,7 @@ Starten mit:  python generate.py
 import os
 import json
 import functools
+import glob
 import hashlib
 import datetime
 import re
@@ -2553,7 +2554,49 @@ def facebook_post(titel: str, artikel_url: str):
         print(f"  ⚠️  Facebook-Post fehlgeschlagen: {e}")
 
 
+ARCHIV_PRO_SEITE = 100
+
+
+def archiv_seiten_schreiben(artikel_liste: list):
+    """Statische Archivseiten (archiv-seite-1.html …) mit echten Links auf alle Artikel.
+    archiv.html baut seine Liste per JavaScript; Suchmaschinen finden ohne diese Seiten
+    viele Artikel nur über die Sitemap und indexieren sie nur zögerlich."""
+    from html import escape as _esc
+    aktuell = [a for a in artikel_liste if Path(a["pfad"]).exists()]
+    seiten = max(1, -(-len(aktuell) // ARCHIV_PRO_SEITE))
+    kopf = Path("datenschutz.html").read_text(encoding="utf-8")
+    kopf = kopf[:kopf.index('  <div class="ds-wrap">')]
+    fuss = Path("datenschutz.html").read_text(encoding="utf-8")
+    fuss = fuss[fuss.index("  </div>", fuss.index('<h2 id="m15">')):]
+    alt = {Path(p).name for p in glob.glob("archiv-seite-*.html")}
+    for n in range(1, seiten + 1):
+        teil = aktuell[(n - 1) * ARCHIV_PRO_SEITE:n * ARCHIV_PRO_SEITE]
+        zeilen = "\n".join(
+            f'      <li><a href="{_esc(a["pfad"])}">{_esc(a["titel"])}</a> <small>{_esc((a.get("datum") or "")[:10])}</small></li>'
+            for a in teil)
+        nav = " · ".join(
+            (f"<strong>{i}</strong>" if i == n else f'<a href="archiv-seite-{i}.html">{i}</a>') for i in range(1, seiten + 1))
+        titel = f"Alle Artikel, Seite {n} – Ligaoutsider.de"
+        k = (kopf.replace("Datenschutzerklärung – Ligaoutsider.de", titel)
+                 .replace("Datenschutzerklärung von Ligaoutsider.de.", "Alle Bundesliga-News von Ligaoutsider.de als Liste.")
+                 .replace("datenschutz.html", f"archiv-seite-{n}.html"))
+        seite = (k + f'''  <div class="ds-wrap">
+    <h1>Alle Artikel</h1>
+    <p>Seite {n} von {seiten}. Die neuesten Artikel zuerst. Mit Filtern und Suche: <a href="archiv.html">Newsarchiv</a>.</p>
+    <ul style="list-style:none;padding:0">
+{zeilen}
+    </ul>
+    <p>{nav}</p>
+''' + fuss)
+        Path(f"archiv-seite-{n}.html").write_text(seite, encoding="utf-8")
+        alt.discard(f"archiv-seite-{n}.html")
+    for rest in alt:
+        Path(rest).unlink(missing_ok=True)
+    print(f"✅ {seiten} statische Archivseiten geschrieben")
+
+
 def sitemap_generieren(artikel_liste: list):
+    archiv_seiten_schreiben(artikel_liste)
     base = "https://ligaoutsider.de"
     heute = datetime.date.today().isoformat()
     urls = [
@@ -2564,7 +2607,8 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/aufstellung.html", "0.7", "daily"),
         (f"{base}/elf.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
-    ]
+        (f"{base}/community.html", "0.5", "daily"),
+    ] + [(f"{base}/{Path(p).name}", "0.5", "daily") for p in sorted(glob.glob("archiv-seite-*.html"))]
     def _iso(datum):
         m = re.match(r"(\d{2})\.(\d{2})\.(\d{4})", datum or "")
         return f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else heute
