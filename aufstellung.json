@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T11:31:22.862355+00:00",
+ "updated": "2026-10-09T13:02:55.263891+00:00",
  "spieltag": 5,
  "partien": [
   {
@@ -1069,11 +1069,21 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 76
+      "prozent": 66
      }
     ]
    },
    "bank": [
+    {
+     "name": "Jamie Leweling",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "0 von 4 Einsätzen in der Startelf · Ø 25 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 32
+    },
     {
      "name": "Ermedin Demirovic",
      "nr": "9",
@@ -1083,16 +1093,6 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 28
-    },
-    {
-     "name": "Jamie Leweling",
-     "nr": "18",
-     "ampel": "gruen",
-     "grund": "0 von 4 Einsätzen in der Startelf · Ø 25 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 22
     },
     {
      "name": "Fabian Bredlow",
@@ -1122,7 +1122,7 @@
      "name": "Tiago Tomás",
      "nr": "8",
      "ampel": "rot",
-     "grund": "Nach Muskelverletzung - trainiert individuell mit Ball",
+     "grund": "Nach Muskelverletzung - trainiert teilintegriert, verpasst SCP (A)",
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
@@ -1162,8 +1162,8 @@
      "name": "Justin Diehl",
      "nr": "31",
      "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel - weiterhin nicht im Teamtraining",
-     "news": "",
+     "grund": "Muskelbündelriss",
+     "news": "artikel/vfb-ohne-diehl-und-al-dakhil-in-paderborn-0d23c42778.html",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -1741,16 +1741,6 @@
    ],
    "fraglich": [
     {
-     "name": "Jeremiaha Maluze",
-     "nr": "37",
-     "ampel": "gelb",
-     "grund": "Nach Oberschenkelverletzung - arbeitet wieder mit Ball",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 9
-    },
-    {
      "name": "Malik Pimpong",
      "nr": "35",
      "ampel": "gelb",
@@ -1761,7 +1751,18 @@
      "prozent": 2
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Jeremiaha Maluze",
+     "nr": "37",
+     "ampel": "rot",
+     "grund": "Nach Oberschenkelverletzung - trainiert teilintegriert, verpasst RBL (A)",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 0
+    }
+   ]
   },
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
@@ -3302,6 +3303,16 @@
     ],
     "st": [
      {
+      "name": "Livan Burcu",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "2 von 4 Einsätzen in der Startelf · Ø 48 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Linksaußen",
+      "prozent": 69
+     },
+     {
       "name": "Emmanuel Latte Lath",
       "nr": "29",
       "ampel": "gelb",
@@ -3309,16 +3320,6 @@
       "news": "artikel/union-burke-friedrich-und-imeri-zurueck-sorge-um-latte-lath-5c551c5272.html",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 60
-     },
-     {
-      "name": "Livan Burcu",
-      "nr": "9",
-      "ampel": "gelb",
-      "grund": "angeschlagen",
-      "news": "",
-      "reihe": "st",
-      "pos": "Linksaußen",
       "prozent": 60
      }
     ]
@@ -3469,7 +3470,7 @@
       "news": "artikel/gladbachs-leszczynski-lobt-konkurrent-diks-vor-dem-derby-in-koeln-f69703af1a.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 90
+      "prozent": 97
      },
      {
       "name": "Lukas Ullrich",
@@ -3553,7 +3554,7 @@
       "news": "artikel/gladbach-bangt-vor-dem-derby-um-kapitaen-kleindienst-05bb73d7d0.html",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 60
+      "prozent": 58
      }
     ]
    },
@@ -3567,6 +3568,16 @@
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 36
+    },
+    {
+     "name": "Robin Hack",
+     "nr": "25",
+     "ampel": "gruen",
+     "grund": "2 von 4 Einsätzen in der Startelf · Ø 43 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 34
     },
     {
      "name": "Florian Neuhaus",
@@ -3607,16 +3618,6 @@
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 25
-    },
-    {
-     "name": "Robin Hack",
-     "nr": "25",
-     "ampel": "gruen",
-     "grund": "2 von 4 Einsätzen in der Startelf · Ø 43 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 24
     },
     {
      "name": "Mathieu Nguefack",
