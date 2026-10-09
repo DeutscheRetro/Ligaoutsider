@@ -1191,11 +1191,19 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
             return None, f"fetch_failed_{type(e).__name__}"
 
         # Seitendatum prüfen: alte Archivseiten (z. B. Liveticker) nicht als News verwerten
+        # Maßgeblich ist das Erscheinungsdatum aus den Seitendaten (JSON-LD datePublished,
+        # article:published_time). trafilatura greift sonst gern ein aktuelles Datum aus
+        # der Seite ab: am 09.10. kam so ein tag24-Artikel vom 10.08. als neue Meldung durch.
         try:
+            _quelltext = html_content.decode("utf-8", "ignore") if isinstance(html_content, bytes) else html_content
+            daten = re.findall(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})', _quelltext)
+            daten += re.findall(r'(?:article:published_time|og:published_time|pubdate|date)"\s+content="(\d{4}-\d{2}-\d{2})', _quelltext)
+            daten += re.findall(r'content="(\d{4}-\d{2}-\d{2})[^"]*"\s+(?:property|name)="(?:article:published_time|og:published_time)"', _quelltext)
             _meta = trafilatura.extract_metadata(html_content)
-            _d = getattr(_meta, "date", None) if _meta else None
-            if _d:
-                _dt = datetime.datetime.strptime(_d[:10], "%Y-%m-%d")
+            if _meta and getattr(_meta, "date", None):
+                daten.append(_meta.date[:10])
+            if daten:
+                _dt = datetime.datetime.strptime(min(daten), "%Y-%m-%d")
                 if (datetime.datetime.now() - _dt).days > MAX_ALTER_TAGE:
                     return None, "seite_zu_alt"
         except Exception:
