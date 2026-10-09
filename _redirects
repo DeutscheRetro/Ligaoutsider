@@ -1119,3 +1119,18 @@
 
 # Profilseiten: /profil/<name> zeigt profil.html, die Seite liest den Namen aus der Adresse
 /profil/* /profil.html 200
+
+# Adressen ohne .html (alte Netlify-Adressen, von Google gemeldete Serverfehler)
+/forum /forum.html 301
+/kickbase /kickbase.html 301
+/comunio /comunio.html 301
+/aufstellung /aufstellung.html 301
+/aufstellungen /aufstellung.html 301
+/elf /elf.html 301
+/archiv /archiv.html 301
+/nachrichten /nachrichten.html 301
+/impressum /impressum.html 301
+/datenschutz /datenschutz.html 301
+/community /community.html 301
+/nutzungsbedingungen /nutzungsbedingungen.html 301
+/index.html / 301
