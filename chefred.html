@@ -300,7 +300,16 @@ async function ghGet(path) {
     headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json' }
   });
   if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
-  return r.json();
+  const data = await r.json();
+  // Dateien über 1 MB (feed.json) liefert die API ohne Inhalt – dann roh nachladen
+  if (!data.content || data.encoding === 'none') {
+    const roh = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.raw' }
+    });
+    if (!roh.ok) throw new Error(`GitHub API ${roh.status}: ${await roh.text()}`);
+    data.content = btoa(unescape(encodeURIComponent(await roh.text())));
+  }
+  return data;
 }
 
 async function ghPut(path, content, sha, message) {
