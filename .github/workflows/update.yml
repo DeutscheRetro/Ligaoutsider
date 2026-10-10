@@ -120,7 +120,7 @@ jobs:
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
 
-          git add feed.json artikel/ data/ logs/ sitemap.xml news-sitemap.xml rss.xml og/ || true
+          git add feed.json artikel/ data/ logs/ sitemap.xml news-sitemap.xml rss.xml og/ verein/ archiv-seite-*.html || true
           [ -f kickbase.json ] && git add kickbase.json || true
           [ -f comunio.json ] && git add comunio.json || true
           [ -f aufstellung.json ] && git add aufstellung.json || true
@@ -139,6 +139,7 @@ jobs:
           git stash pop 2>/dev/null || true
           git push
           echo "veroeffentlicht=true" >> "$GITHUB_ENV"
+          echo "NEUER_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       # Prüft nach jedem Lauf, ob die Seite erreichbar ist. Liefert sie Fehler,
       # wird einmal neu gebaut; hilft das nicht, schlägt der Lauf fehl (GitHub
@@ -191,3 +192,9 @@ jobs:
             git commit -m "📣 Social-Warteschlange"
             git pull --rebase -X theirs origin main && git push || true
           fi
+
+      # Neue Seiten sofort bei Bing, DuckDuckGo, Ecosia und Yandex melden (IndexNow, kostenlos).
+      # Erst nach dem Erreichbarkeitstest, damit der neue Deploy schon läuft.
+      - name: IndexNow melden
+        if: always() && env.veroeffentlicht == 'true'
+        run: python indexnow.py "$NEUER_COMMIT" || true

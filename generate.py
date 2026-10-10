@@ -1608,7 +1608,8 @@ def artikel_html(
     vereine_tags_html = ""
     if vereine:
         tags = "".join(
-            f'<a href="../index.html?filter={v}" class="verein-tag">{v}</a>'
+            (f'<a href="../verein/{VEREIN_SLUG[v]}.html" class="verein-tag">{v}</a>' if v in VEREIN_SLUG
+             else f'<a href="../index.html?filter={v}" class="verein-tag">{v}</a>')
             for v in vereine
         )
         vereine_tags_html = f'<div class="verein-tags">{tags}</div>'
@@ -2608,7 +2609,9 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/elf.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
         (f"{base}/community.html", "0.5", "daily"),
-    ] + [(f"{base}/{Path(p).name}", "0.5", "daily") for p in sorted(glob.glob("archiv-seite-*.html"))]
+    ] + [(f"{base}/{Path(p).name}", "0.5", "daily") for p in sorted(glob.glob("archiv-seite-*.html"))] \
+      + [(f"{base}/verein/", "0.8", "daily")] \
+      + [(f"{base}/{p.replace(os.sep, '/')}", "0.8", "daily") for p in sorted(glob.glob("verein/*.html")) if not p.endswith("index.html")]
     def _iso(datum):
         m = re.match(r"(\d{2})\.(\d{2})\.(\d{4})", datum or "")
         return f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else heute
@@ -3267,6 +3270,82 @@ def _html_esc(t):
     return _h.escape(str(t if t is not None else ""), quote=True)
 
 
+# Kurzname im Feed ("Bayern", "Hamburger") -> Logo-/URL-Name
+VEREIN_SLUG = {"Bayern": "bayern", "Dortmund": "dortmund", "Leipzig": "leipzig", "Leverkusen": "leverkusen",
+               "Frankfurt": "frankfurt", "Stuttgart": "stuttgart", "Gladbach": "gladbach", "Freiburg": "freiburg",
+               "Union": "union", "Mainz": "mainz", "Augsburg": "augsburg", "Werder": "werder",
+               "Hoffenheim": "hoffenheim", "Hamburger": "hsv", "Köln": "koeln", "Schalke": "schalke",
+               "Paderborn": "paderborn", "Elversberg": "elversberg"}
+VEREIN_VON_SLUG = {v: k for k, v in VEREIN_SLUG.items()}
+
+
+def verein_seiten():
+    """verein/<name>.html: je Verein News, Kader und Verweise; verein/index.html als Übersicht.
+    Feste Themenseiten für Suchbegriffe wie "Bayern News" und starke interne Verlinkung."""
+    e = _html_esc
+    try:
+        db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+        feed = json.loads(FEED_JSON.read_text(encoding="utf-8"))
+    except Exception as ex:
+        print(f"⚠️  verein_seiten: {ex}")
+        return
+    slugs = spieler_slugs(db)
+    base = "https://ligaoutsider.de"
+    Path("verein").mkdir(exist_ok=True)
+    uebersicht = []
+    for team_name, team in db["teams"].items():
+        stem = Path(team.get("logo", "")).stem
+        kurz = VEREIN_VON_SLUG.get(stem)
+        if not kurz:
+            continue
+        news = [a for a in feed if kurz in (a.get("vereine") or []) and Path(a["pfad"]).exists()][:40]
+        gruppen = {}
+        for sp in team["spieler"]:
+            gruppen.setdefault(sp.get("gruppe") or "Spieler", []).append(sp)
+        reihe = ["Torwart", "Abwehr", "Mittelfeld", "Sturm"]
+        kader = "".join(
+            f'<h3 class="sp-h3">{e(g)}</h3><div class="lo-sp-news sp-news">'
+            + "".join(f'<a href="../spieler/{slugs[sp["tm_id"]]}.html"><span>{e(sp["name"])}</span>'
+                      f'<small>{e(sp.get("nr") or "")}</small></a>' for sp in gruppen[g]) + "</div>"
+            for g in sorted(gruppen, key=lambda x: reihe.index(x) if x in reihe else 9))
+        news_html = "".join(
+            f'<a href="../{e(a["pfad"])}"><span>{e(a["titel"])}</span><small>{e(a["datum"].split(" ")[0])}</small></a>'
+            for a in news) or "<p>Noch keine Meldungen.</p>"
+        titel = f"{team_name}: News, Kader und Aufstellung | Ligaoutsider.de"
+        beschr = (f"Aktuelle News zu {team_name}: Verletzungen, Transfers, Aufstellungen und Kader mit allen Spielern. "
+                  f"Täglich aktualisiert.")
+        url = f"{base}/verein/{stem}.html"
+        ld = json.dumps({"@context": "https://schema.org", "@type": "SportsTeam", "name": team_name,
+                         "sport": "Fußball", "url": url, "logo": f"{base}/{team['logo']}",
+                         "athlete": [{"@type": "Person", "name": sp["name"],
+                                      "url": f"{base}/spieler/{slugs[sp['tm_id']]}.html"} for sp in team["spieler"]]},
+                        ensure_ascii=False)
+        inhalt = f"""
+    <div class="sp-kopf"><img src="../{e(team['logo'])}" alt="{e(team_name)}" width="72" height="72" style="object-fit:contain">
+      <div><h1>{e(team_name)}</h1><p>Aktuelle News, Kader und Aufstellung</p></div></div>
+    <h2 class="sp-h2">Aktuelle News zu {e(team_name)}</h2>
+    <div class="lo-sp-news sp-news">{news_html}</div>
+    <p class="sp-links"><a href="../aufstellung.html?team={e(team_name)}">Voraussichtliche Elf fürs nächste Spiel →</a>
+      <a href="../forum.html">Im Forum diskutieren →</a>
+      <a href="../archiv-seite-1.html">Alle Artikel →</a></p>
+    <h2 class="sp-h2">Kader {e(team_name)}</h2>
+    {kader}"""
+        seite = _seite(titel, beschr, url, inhalt, head_extra=f'<script type="application/ld+json">{ld}</script>\n', tiefe="../")
+        Path(f"verein/{stem}.html").write_text(seite, encoding="utf-8")
+        uebersicht.append((team_name, stem, team["logo"], len(news)))
+    # Übersicht
+    uebersicht.sort()
+    zeilen = "".join(f'<a href="{s}.html" style="display:flex;align-items:center;gap:12px"><img src="../{e(l)}" alt="" width="28" height="28" '
+                     f'style="object-fit:contain"><span>{e(n)}</span></a>' for n, s, l, _ in uebersicht)
+    inhalt = f"""
+    <h1>Alle 18 Bundesliga-Vereine</h1><p>News, Kader und Aufstellungen zu jedem Verein.</p>
+    <div class="lo-sp-news sp-news">{zeilen}</div>"""
+    Path("verein/index.html").write_text(_seite("Bundesliga-Vereine: News, Kader, Aufstellungen | Ligaoutsider.de",
+        "Alle 18 Bundesliga-Vereine mit aktuellen News, Kader und Aufstellung.", f"{base}/verein/", inhalt, tiefe="../"),
+        encoding="utf-8")
+    print(f"✅ {len(uebersicht)} Vereinsseiten geschrieben")
+
+
 def spieler_seiten():
     """spieler/<slug>.html für alle Kaderspieler plus spieler/index.html als Übersicht."""
     e = _html_esc
@@ -3314,7 +3393,11 @@ def spieler_seiten():
                 ("Kickbase", " · ".join(x for x in (kb.get("position"), _mio(kb.get("mw"))) if x)),
                 ("Comunio", " · ".join(x for x in (cm.get("position"), _mio(cm.get("mw"))) if x)),
             ]
-            tabelle = "".join(f"<div><span>{e(k)}</span><span>{e(v)}</span></div>" for k, v in zeilen if v)
+            _stem = Path(team.get("logo", "")).stem
+            tabelle = "".join(
+                f"<div><span>{e(k)}</span><span>"
+                + (f'<a href="../verein/{_stem}.html">{e(v)}</a>' if k == "Verein" and _stem else e(v))
+                + "</span></div>" for k, v in zeilen if v)
             hinweise = "".join(f"<div>{e(h)}</div>" for h in sp.get("tm_hinweise") or [])
             news_html = "".join(
                 f'<a href="../{e(n["pfad"])}"><span>{e(n["titel"])}</span><small>{e(n["datum"].split(" ")[0])}</small></a>'
@@ -4076,3 +4159,7 @@ if __name__ == "__main__":
         spieler_seiten()
     except Exception as e:
         print(f"❌ spieler_seiten Fehler: {e}")
+    try:
+        verein_seiten()
+    except Exception as e:
+        print(f"❌ verein_seiten Fehler: {e}")
