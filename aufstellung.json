@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-10T17:30:50.268882+00:00",
+ "updated": "2026-10-10T19:00:56.191534+00:00",
  "spieltag": 5,
  "partien": [
-  {
-   "heim": "RB Leipzig",
-   "gast": "Eintracht Frankfurt",
-   "anstoss": "2026-10-10T17:30:00",
-   "anstoss_text": "Sa 10.10. 18:30",
-   "spieltag": 5
-  },
   {
    "heim": "1. FC Köln",
    "gast": "Borussia Mönchengladbach",
@@ -22,6 +15,13 @@
    "anstoss": "2026-10-11T16:30:00",
    "anstoss_text": "So 11.10. 17:30",
    "spieltag": 5
+  },
+  {
+   "heim": "Eintracht Frankfurt",
+   "gast": "1. FC Köln",
+   "anstoss": "2026-10-16T19:30:00",
+   "anstoss_text": "Fr 16.10. 20:30",
+   "spieltag": 6
   },
   {
    "heim": "1. FC Union Berlin",
@@ -1834,6 +1834,16 @@
    ],
    "fraglich": [
     {
+     "name": "Jeremiaha Maluze",
+     "nr": "37",
+     "ampel": "gelb",
+     "grund": "Nach Oberschenkelverletzung - trainiert teilintegriert",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 28
+    },
+    {
      "name": "Malik Pimpong",
      "nr": "35",
      "ampel": "gelb",
@@ -1844,18 +1854,7 @@
      "prozent": 0
     }
    ],
-   "ausfall": [
-    {
-     "name": "Jeremiaha Maluze",
-     "nr": "37",
-     "ampel": "rot",
-     "grund": "Nach Oberschenkelverletzung - trainiert teilintegriert, verpasst RBL (A)",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    }
-   ]
+   "ausfall": []
   },
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
@@ -2435,7 +2434,7 @@
      "name": "Juma Bah",
      "nr": "35",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Wadenprobleme - gegen FCB (H) vorzeitig ausgewechselt worden",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
