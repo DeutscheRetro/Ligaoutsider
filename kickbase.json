@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-09T23:01:40.426140+00:00",
+  "updated": "2026-10-10T04:01:28.031756+00:00",
   "teuerste": [
     {
       "name": "Harry Kane",
@@ -59,6 +59,16 @@
       "pts": 1269
     },
     {
+      "name": "Waldemar Anton",
+      "logo": "logos/dortmund.png",
+      "pts": 920
+    },
+    {
+      "name": "Marco Grüll",
+      "logo": "logos/werder.png",
+      "pts": 906
+    },
+    {
       "name": "Joshua Kimmich",
       "logo": "logos/bayern.png",
       "pts": 865
@@ -92,23 +102,13 @@
       "name": "Yuito Suzuki",
       "logo": "logos/freiburg.png",
       "pts": 745
-    },
-    {
-      "name": "Marco Grüll",
-      "logo": "logos/werder.png",
-      "pts": 739
-    },
-    {
-      "name": "Dayot Upamecano",
-      "logo": "logos/bayern.png",
-      "pts": 712
     }
   ],
   "effizienz": [
     {
-      "name": "Paul Okon-Engstler",
-      "logo": "logos/koeln.png",
-      "eff": 110.75
+      "name": "Ludovit Reis",
+      "logo": "logos/werder.png",
+      "eff": 74.85
     },
     {
       "name": "Alessio Castro-Montes",
@@ -131,9 +131,14 @@
       "eff": 67.97
     },
     {
-      "name": "Thijs Dallinga",
-      "logo": "logos/koeln.png",
-      "eff": 65.39
+      "name": "Marco Grüll",
+      "logo": "logos/werder.png",
+      "eff": 66.5
+    },
+    {
+      "name": "Karl Hein",
+      "logo": "logos/werder.png",
+      "eff": 64.79
     },
     {
       "name": "András Schäfer",
@@ -149,11 +154,6 @@
       "name": "Timo Becker",
       "logo": "logos/schalke.png",
       "eff": 60.32
-    },
-    {
-      "name": "Franck Honorat",
-      "logo": "logos/gladbach.png",
-      "eff": 57.74
     }
   ],
   "raketen": [
@@ -317,6 +317,11 @@
       "ap": 191
     },
     {
+      "name": "Nico Schlotterbeck",
+      "logo": "logos/dortmund.png",
+      "ap": 190
+    },
+    {
       "name": "Matthias Ginter",
       "logo": "logos/freiburg.png",
       "ap": 187
@@ -325,11 +330,6 @@
       "name": "Yuito Suzuki",
       "logo": "logos/freiburg.png",
       "ap": 186
-    },
-    {
-      "name": "Marco Grüll",
-      "logo": "logos/werder.png",
-      "ap": 185
     }
   ],
   "woche": [
@@ -458,13 +458,6 @@
   ],
   "schnaeppchen": [
     {
-      "name": "Kim Minjae",
-      "logo": "logos/bayern.png",
-      "mw": 10389254,
-      "fair": 25731415,
-      "faktor": 2.48
-    },
-    {
       "name": "Noahkai Banks",
       "logo": "logos/augsburg.png",
       "mw": 5855392,
@@ -507,13 +500,6 @@
       "faktor": 1.9
     },
     {
-      "name": "Malik Tillman",
-      "logo": "logos/leverkusen.png",
-      "mw": 5363160,
-      "fair": 9980105,
-      "faktor": 1.86
-    },
-    {
       "name": "Marco Grüll",
       "logo": "logos/werder.png",
       "mw": 13623327,
@@ -526,6 +512,20 @@
       "mw": 18790523,
       "fair": 33662117,
       "faktor": 1.79
+    },
+    {
+      "name": "Marvin Schwäbe",
+      "logo": "logos/koeln.png",
+      "mw": 11400112,
+      "fair": 20110924,
+      "faktor": 1.76
+    },
+    {
+      "name": "Fabio Gruber",
+      "logo": "logos/mainz.png",
+      "mw": 10032784,
+      "fair": 16955145,
+      "faktor": 1.69
     }
   ],
   "verletzt": [
@@ -592,18 +592,18 @@
   ],
   "formauf": [
     {
-      "name": "Marco Grüll",
-      "logo": "logos/werder.png",
-      "diff": 135,
-      "ap": 185,
-      "vor": 50
-    },
-    {
       "name": "Igor Matanović",
       "logo": "logos/freiburg.png",
       "diff": 133,
       "ap": 201,
       "vor": 68
+    },
+    {
+      "name": "Marco Grüll",
+      "logo": "logos/werder.png",
+      "diff": 131,
+      "ap": 181,
+      "vor": 50
     },
     {
       "name": "Yuito Suzuki",
@@ -685,32 +685,11 @@
       "vor": 59
     },
     {
-      "name": "Dejan Ljubičić",
-      "logo": "logos/schalke.png",
-      "diff": -62,
-      "ap": 40,
-      "vor": 102
-    },
-    {
-      "name": "Moussa Sylla",
-      "logo": "logos/schalke.png",
-      "diff": -61,
-      "ap": 16,
-      "vor": 77
-    },
-    {
       "name": "Angelo Stiller",
       "logo": "logos/stuttgart.png",
       "diff": -60,
       "ap": 59,
       "vor": 119
-    },
-    {
-      "name": "Kenan Karaman",
-      "logo": "logos/schalke.png",
-      "diff": -59,
-      "ap": 61,
-      "vor": 120
     },
     {
       "name": "Bilal El Khannouss",
@@ -732,6 +711,27 @@
       "diff": -52,
       "ap": 38,
       "vor": 90
+    },
+    {
+      "name": "Rani Khedira",
+      "logo": "logos/union.png",
+      "diff": -47,
+      "ap": 14,
+      "vor": 61
+    },
+    {
+      "name": "Luis Díaz",
+      "logo": "logos/bayern.png",
+      "diff": -44,
+      "ap": 134,
+      "vor": 178
+    },
+    {
+      "name": "Harry Kane",
+      "logo": "logos/bayern.png",
+      "diff": -42,
+      "ap": 174,
+      "vor": 216
     }
   ],
   "torwart": [
@@ -741,19 +741,14 @@
       "ap": 148
     },
     {
-      "name": "Manuel Neuer",
-      "logo": "logos/bayern.png",
-      "ap": 143
+      "name": "Maarten Vandevoordt",
+      "logo": "logos/leipzig.png",
+      "ap": 133
     },
     {
       "name": "Gregor Kobel",
       "logo": "logos/dortmund.png",
-      "ap": 142
-    },
-    {
-      "name": "Maarten Vandevoordt",
-      "logo": "logos/leipzig.png",
-      "ap": 133
+      "ap": 128
     },
     {
       "name": "Nahuel Noll",
@@ -761,14 +756,14 @@
       "ap": 126
     },
     {
+      "name": "Karl Hein",
+      "logo": "logos/werder.png",
+      "ap": 126
+    },
+    {
       "name": "Loris Karius",
       "logo": "logos/schalke.png",
       "ap": 125
-    },
-    {
-      "name": "Karl Hein",
-      "logo": "logos/werder.png",
-      "ap": 115
     },
     {
       "name": "Marvin Schwäbe",
@@ -784,6 +779,11 @@
       "name": "Moritz Nicolas",
       "logo": "logos/gladbach.png",
       "ap": 109
+    },
+    {
+      "name": "Oliver Baumann",
+      "logo": "logos/hoffenheim.png",
+      "ap": 106
     }
   ],
   "abwehr": [
@@ -803,14 +803,14 @@
       "ap": 187
     },
     {
+      "name": "Waldemar Anton",
+      "logo": "logos/dortmund.png",
+      "ap": 184
+    },
+    {
       "name": "Dayot Upamecano",
       "logo": "logos/bayern.png",
       "ap": 178
-    },
-    {
-      "name": "Waldemar Anton",
-      "logo": "logos/dortmund.png",
-      "ap": 177
     },
     {
       "name": "Willi Orban",
@@ -828,14 +828,14 @@
       "ap": 151
     },
     {
-      "name": "Jonathan Tah",
-      "logo": "logos/bayern.png",
-      "ap": 150
+      "name": "Robin Koch",
+      "logo": "logos/frankfurt.png",
+      "ap": 143
     },
     {
-      "name": "Leopold Querfeld",
-      "logo": "logos/union.png",
-      "ap": 144
+      "name": "Ridle  Baku",
+      "logo": "logos/leipzig.png",
+      "ap": 137
     }
   ],
   "mittelfeld": [
@@ -862,7 +862,7 @@
     {
       "name": "Marco Grüll",
       "logo": "logos/werder.png",
-      "ap": 185
+      "ap": 181
     },
     {
       "name": "Ibrahim Maza",
@@ -917,11 +917,6 @@
       "ap": 163
     },
     {
-      "name": "Serhou Guirassy",
-      "logo": "logos/dortmund.png",
-      "ap": 161
-    },
-    {
       "name": "Adam Daghim",
       "logo": "logos/hoffenheim.png",
       "ap": 156
@@ -935,6 +930,11 @@
       "name": "Ismael Saibari",
       "logo": "logos/bayern.png",
       "ap": 145
+    },
+    {
+      "name": "Serhou Guirassy",
+      "logo": "logos/dortmund.png",
+      "ap": 142
     },
     {
       "name": "Jonathan Burkardt",
