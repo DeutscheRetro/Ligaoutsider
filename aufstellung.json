@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T17:32:33.031503+00:00",
+ "updated": "2026-10-11T19:02:38.669919+00:00",
  "spieltag": 6,
  "partien": [
   {
@@ -455,16 +455,6 @@
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 45
-    },
-    {
-     "name": "Nathan Tella",
-     "nr": "23",
-     "ampel": "gelb",
-     "grund": "Nach Muskelproblemen Kaderrückkehr in Mainz möglich",
-     "news": "artikel/tella-nach-comeback-ich-hoffe-dass-es-mein-letztes-comeback-ist-f09a400f0f.html",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 5
     }
    ],
    "ausfall": [
@@ -482,8 +472,8 @@
      "name": "Montrell Culbreath",
      "nr": "42",
      "ampel": "rot",
-     "grund": "trainiert nach Verletzung noch individuell",
-     "news": "artikel/leverkusen-in-mainz-ohne-culbreath-und-doue-2424c9481a.html",
+     "grund": "Nach Fußverletzung - trainiert weiterhin individuell, Rückkehr ins TT in 2 Wochen geplant",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 0
@@ -492,8 +482,8 @@
      "name": "Guéla Doué",
      "nr": "20",
      "ampel": "rot",
-     "grund": "Wadenverletzung",
-     "news": "artikel/leverkusen-in-mainz-ohne-culbreath-und-doue-2424c9481a.html",
+     "grund": "Muskelverletzung Wade - fällt mehrere Wochen aus",
+     "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 0
@@ -1013,6 +1003,16 @@
       "prozent": 89
      },
      {
+      "name": "Ramon Hendriks",
+      "nr": "3",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 73 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 74
+     },
+     {
       "name": "Finn Jeltsch",
       "nr": "29",
       "ampel": "gruen",
@@ -1095,16 +1095,6 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 59
-     },
-     {
-      "name": "Dzenan Pejcinovic",
-      "nr": "17",
-      "ampel": "gruen",
-      "grund": "3 von 5 Einsätzen in der Startelf · Ø 61 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 58
      }
     ]
    },
@@ -1118,6 +1108,16 @@
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 71
+    },
+    {
+     "name": "Dzenan Pejcinovic",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "3 von 5 Einsätzen in der Startelf · Ø 61 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 58
     },
     {
      "name": "Bilal El Khannouss",
@@ -1141,16 +1141,6 @@
     }
    ],
    "fraglich": [
-    {
-     "name": "Ramon Hendriks",
-     "nr": "3",
-     "ampel": "gelb",
-     "grund": "Handverletzung, Diagnose steht aus",
-     "news": "artikel/vfb-hendriks-nach-handverletzung-fraglich-al-dakhil-fehlt-gegen-bdc4500021.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 37
-    },
     {
      "name": "Tiago Tomás",
      "nr": "8",
@@ -1505,6 +1495,16 @@
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 77
+     },
+     {
+      "name": "Lukas Kübler",
+      "nr": "17",
+      "ampel": "gruen",
+      "grund": "1 von 4 Einsätzen in der Startelf · Ø 31 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 38
      }
     ],
     "mf": [
@@ -1531,26 +1531,6 @@
     ],
     "st": [
      {
-      "name": "Niklas Beste",
-      "nr": "19",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 69 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Rechtsaußen",
-      "prozent": 89
-     },
-     {
-      "name": "Yuito Suzuki",
-      "nr": "14",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 81 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Hängende Spitze",
-      "prozent": 87
-     },
-     {
       "name": "Igor Matanovic",
       "nr": "31",
       "ampel": "gruen",
@@ -1569,20 +1549,20 @@
       "reihe": "st",
       "pos": "Linksaußen",
       "prozent": 80
+     },
+     {
+      "name": "Niklas Beste",
+      "nr": "19",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "st",
+      "pos": "Rechtsaußen",
+      "prozent": 44
      }
     ]
    },
    "bank": [
-    {
-     "name": "Lukas Kübler",
-     "nr": "17",
-     "ampel": "gruen",
-     "grund": "1 von 4 Einsätzen in der Startelf · Ø 31 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 38
-    },
     {
      "name": "Lucas Höler",
      "nr": "9",
@@ -1646,7 +1626,18 @@
      "prozent": 2
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Yuito Suzuki",
+     "nr": "14",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "st",
+     "pos": "Hängende Spitze",
+     "prozent": 0
+    }
+   ]
   },
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
@@ -2133,8 +2124,8 @@
       "name": "Alessio Castro-Montes",
       "nr": "17",
       "ampel": "gelb",
-      "grund": "Muskelverletzung, wird teilintegriert",
-      "news": "artikel/koeln-castro-montes-koennte-zum-derby-gegen-gladbach-zurueckkehren-07d1fce958.html",
+      "grund": "Trainingsrückstand nach Muskelverletzung",
+      "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 37
@@ -2698,8 +2689,8 @@
      "name": "Justin Njinmah",
      "nr": "11",
      "ampel": "rot",
-     "grund": "Oberschenkelverletzung",
-     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+     "grund": "Muskelverletzung im Oberschenkel  - fällt monatelang aus",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 0
@@ -2708,8 +2699,8 @@
      "name": "Keke Topp",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Kreuzbandriss",
-     "news": "artikel/werder-vor-bvb-spiel-alvero-und-stark-brechen-training-ab-05abec5932.html",
+     "grund": "Nach Kreuzbandriss - kehrt erst 2027 auf den Platz zurück",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -3855,8 +3846,8 @@
      "name": "Jens Castrop",
      "nr": "17",
      "ampel": "rot",
-     "grund": "Schulterverletzung, Comeback nicht vor November",
-     "news": "artikel/muskelverletzung-gladbach-muss-vorerst-auf-honorat-verzichten-3cf15b0083.html",
+     "grund": "Nach Schulterverletzung - im Lauftraining, verpasst Testspiel",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 0
@@ -3865,8 +3856,8 @@
      "name": "Franck Honorat",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Muskelverletzung aus dem Training",
-     "news": "artikel/muskelverletzung-gladbach-muss-vorerst-auf-honorat-verzichten-3cf15b0083.html",
+     "grund": "Nach Muskelverletzung - dreht erste Laufrunden",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 0
@@ -3875,8 +3866,8 @@
      "name": "Nicolas Kühn",
      "nr": "19",
      "ampel": "rot",
-     "grund": "Muskelbündelriss",
-     "news": "artikel/muskelverletzung-gladbach-muss-vorerst-auf-honorat-verzichten-3cf15b0083.html",
+     "grund": "im Aufbautraining",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 0
@@ -3885,8 +3876,8 @@
      "name": "Enzo Leopold",
      "nr": "8",
      "ampel": "rot",
-     "grund": "Kreuzbandriss",
-     "news": "artikel/muskelverletzung-gladbach-muss-vorerst-auf-honorat-verzichten-3cf15b0083.html",
+     "grund": "Kreuzbandriss - fällt lange aus",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 0
@@ -3946,7 +3937,7 @@
       "name": "Jan Gyamerah",
       "nr": "30",
       "ampel": "gelb",
-      "grund": "angeschlagen",
+      "grund": "Angeschlagen",
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
