@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-11T16:03:24.001557+00:00",
- "spieltag": 5,
+ "updated": "2026-10-11T17:32:33.031503+00:00",
+ "spieltag": 6,
  "partien": [
-  {
-   "heim": "SC Freiburg",
-   "gast": "FC Schalke 04",
-   "anstoss": "2026-10-11T16:30:00",
-   "anstoss_text": "So 11.10. 17:30",
-   "spieltag": 5
-  },
   {
    "heim": "Eintracht Frankfurt",
    "gast": "1. FC Köln",
@@ -706,6 +699,16 @@
    ],
    "fraglich": [
     {
+     "name": "Filippo Mane",
+     "nr": "39",
+     "ampel": "gelb",
+     "grund": "Muskelverletzung - Rückkehr vor LSP unwahrscheinlich",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 8
+    },
+    {
      "name": "Carney Chukwuemeka",
      "nr": "17",
      "ampel": "gelb",
@@ -732,16 +735,6 @@
      "nr": "23",
      "ampel": "rot",
      "grund": "Kreuzbandriss - fällt lange aus",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Filippo Mane",
-     "nr": "39",
-     "ampel": "rot",
-     "grund": "Muskelverletzung - Rückkehr vor LSP unwahrscheinlich",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
@@ -1623,6 +1616,16 @@
    ],
    "fraglich": [
     {
+     "name": "Berkay Yılmaz",
+     "nr": "27",
+     "ampel": "gelb",
+     "grund": "Angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 17
+    },
+    {
      "name": "Bruno Ogbus",
      "nr": "43",
      "ampel": "gelb",
@@ -1643,18 +1646,7 @@
      "prozent": 2
     }
    ],
-   "ausfall": [
-    {
-     "name": "Berkay Yılmaz",
-     "nr": "27",
-     "ampel": "rot",
-     "grund": "Angeschlagen - verpasst S04 (H)",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 0
-    }
-   ]
+   "ausfall": []
   },
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
@@ -2257,17 +2249,27 @@
    ],
    "fraglich": [
     {
-     "name": "Ellyes Skhiri",
-     "nr": "6",
+     "name": "Rav van den Berg",
+     "nr": "33",
      "ampel": "gelb",
      "grund": "angeschlagen",
      "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 26
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 3
     }
    ],
    "ausfall": [
+    {
+     "name": "Ellyes Skhiri",
+     "nr": "6",
+     "ampel": "rot",
+     "grund": "verletzt",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 0
+    },
     {
      "name": "Ragnar Ache",
      "nr": "9",
@@ -2276,16 +2278,6 @@
      "news": "artikel/gladbach-vor-dem-derby-itakura-und-diks-mit-pokal-im-gepaeck-0de893e79e.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
-     "name": "Rav van den Berg",
-     "nr": "33",
-     "ampel": "rot",
-     "grund": "verletzt",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
      "prozent": 0
     },
     {
@@ -3239,16 +3231,6 @@
       "prozent": 95
      },
      {
-      "name": "Laurin Curda",
-      "nr": "17",
-      "ampel": "gruen",
-      "grund": "5 von 5 Einsätzen in der Startelf · Ø 89 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Rechtes Mittelfeld",
-      "prozent": 95
-     },
-     {
       "name": "Raphael Obermair",
       "nr": "23",
       "ampel": "gruen",
@@ -3267,6 +3249,16 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 77
+     },
+     {
+      "name": "Laurin Curda",
+      "nr": "17",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Rechtes Mittelfeld",
+      "prozent": 50
      }
     ],
     "st": [
