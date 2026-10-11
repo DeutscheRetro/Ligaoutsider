@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-11T19:01:56.430072+00:00",
+  "updated": "2026-10-11T21:01:50.937716+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -86,6 +86,18 @@
       "eff": 2.7
     },
     {
+      "name": "Schick",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "mw": 13450000,
+      "spiele": 5,
+      "tore": 5,
+      "pts": 47,
+      "ap": 9.4,
+      "eff": 3.5
+    },
+    {
       "name": "Mittelstädt",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
@@ -108,18 +120,6 @@
       "pts": 47,
       "ap": 9.4,
       "eff": 3.7
-    },
-    {
-      "name": "Schick",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Sturm",
-      "mw": 13450000,
-      "spiele": 5,
-      "tore": 5,
-      "pts": 47,
-      "ap": 9.4,
-      "eff": 3.5
     },
     {
       "name": "Pavlović",
@@ -208,6 +208,18 @@
       "eff": 2.7
     },
     {
+      "name": "Schick",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "mw": 13450000,
+      "spiele": 5,
+      "tore": 5,
+      "pts": 47,
+      "ap": 9.4,
+      "eff": 3.5
+    },
+    {
       "name": "Mittelstädt",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
@@ -230,18 +242,6 @@
       "pts": 47,
       "ap": 9.4,
       "eff": 3.7
-    },
-    {
-      "name": "Schick",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Sturm",
-      "mw": 13450000,
-      "spiele": 5,
-      "tore": 5,
-      "pts": 47,
-      "ap": 9.4,
-      "eff": 3.5
     },
     {
       "name": "Pavlović",
@@ -685,17 +685,6 @@
       "ap": 8.2
     },
     {
-      "name": "W. Orbán",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Abwehr",
-      "mw": 8100000,
-      "spiele": 5,
-      "tore": 1,
-      "pts": 40,
-      "ap": 8.0
-    },
-    {
       "name": "Davies",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -703,6 +692,17 @@
       "mw": 8520000,
       "spiele": 5,
       "tore": 0,
+      "pts": 40,
+      "ap": 8.0
+    },
+    {
+      "name": "W. Orbán",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Abwehr",
+      "mw": 8100000,
+      "spiele": 5,
+      "tore": 1,
       "pts": 40,
       "ap": 8.0
     },
@@ -1294,7 +1294,7 @@
       "klub": "Sport-Club Freiburg",
       "logo": "logos/freiburg.png",
       "pos": "Mittelfeld",
-      "pts": 32,
+      "pts": 42,
       "mw": 6740000
     },
     {
@@ -1302,15 +1302,31 @@
       "klub": "1. FC Köln",
       "logo": "logos/koeln.png",
       "pos": "Sturm",
-      "pts": 8,
+      "pts": 19,
       "mw": 8480000
+    },
+    {
+      "name": "Suzuki",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Mittelfeld",
+      "pts": 42,
+      "mw": 11270000
+    },
+    {
+      "name": "Neuhaus",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Mittelfeld",
+      "pts": 14,
+      "mw": 3060000
     },
     {
       "name": "Nkunku",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
       "pos": "Sturm",
-      "pts": 24,
+      "pts": 45,
       "mw": 20240000
     },
     {
@@ -1318,138 +1334,122 @@
       "klub": "1. FC Köln",
       "logo": "logos/koeln.png",
       "pos": "Mittelfeld",
-      "pts": 29,
+      "pts": 35,
       "mw": 4710000
     },
     {
-      "name": "Kramarić",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Mittelfeld",
-      "pts": 4,
-      "mw": 5420000
-    },
-    {
-      "name": "Suzuki",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Mittelfeld",
-      "pts": 43,
-      "mw": 11270000
-    },
-    {
-      "name": "Scally",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Abwehr",
-      "pts": 15,
-      "mw": 1950000
-    },
-    {
-      "name": "Amiri",
+      "name": "Caci",
       "klub": "1. FSV Mainz 05",
       "logo": "logos/mainz.png",
-      "pos": "Mittelfeld",
-      "pts": 15,
-      "mw": 10700000
-    },
-    {
-      "name": "Neuhaus",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Mittelfeld",
-      "pts": 12,
-      "mw": 3060000
-    },
-    {
-      "name": "Vagnoman",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
       "pos": "Abwehr",
-      "pts": 34,
-      "mw": 6000000
-    }
-  ],
-  "aufsteigend": [
-    {
-      "name": "Götze",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Mittelfeld",
-      "pts": 6,
-      "mw": 1520000
+      "pts": 41,
+      "mw": 4950000
     },
     {
-      "name": "ter Horst",
-      "klub": "SC Paderborn",
-      "logo": "logos/paderborn.png",
-      "pos": "Abwehr",
-      "pts": 15,
-      "mw": 2300000
-    },
-    {
-      "name": "Daghim",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
+      "name": "Poulsen",
+      "klub": "Hamburger SV",
+      "logo": "logos/hsv.png",
       "pos": "Sturm",
-      "pts": 24,
-      "mw": 7330000
-    },
-    {
-      "name": "Bellingham",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 27,
-      "mw": 6930000
-    },
-    {
-      "name": "Jóhannesson",
-      "klub": "1. FC Köln",
-      "logo": "logos/koeln.png",
-      "pos": "Mittelfeld",
-      "pts": 10,
-      "mw": 2020000
-    },
-    {
-      "name": "Treu",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "pts": 18,
-      "mw": 4430000
-    },
-    {
-      "name": "Scherhant",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Sturm",
-      "pts": 22,
-      "mw": 8430000
-    },
-    {
-      "name": "Sosa",
-      "klub": "1. FC Köln",
-      "logo": "logos/koeln.png",
-      "pos": "Abwehr",
-      "pts": 2,
-      "mw": 2830000
-    },
-    {
-      "name": "Lienhart",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "pts": 22,
-      "mw": 4680000
+      "pts": 19,
+      "mw": 3050000
     },
     {
       "name": "Karaman",
       "klub": "FC Schalke 04",
       "logo": "logos/schalke.png",
       "pos": "Mittelfeld",
-      "pts": 16,
+      "pts": 17,
       "mw": 5740000
+    },
+    {
+      "name": "Kramarić",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Mittelfeld",
+      "pts": 6,
+      "mw": 5420000
+    }
+  ],
+  "aufsteigend": [
+    {
+      "name": "Daghim",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Sturm",
+      "pts": 30,
+      "mw": 7330000
+    },
+    {
+      "name": "Jóhannesson",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Mittelfeld",
+      "pts": 21,
+      "mw": 2020000
+    },
+    {
+      "name": "Machida",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Abwehr",
+      "pts": 10,
+      "mw": 3300000
+    },
+    {
+      "name": "Treu",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Abwehr",
+      "pts": 20,
+      "mw": 4430000
+    },
+    {
+      "name": "Honorat",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Sturm",
+      "pts": 20,
+      "mw": 4110000
+    },
+    {
+      "name": "Matanović",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Sturm",
+      "pts": 44,
+      "mw": 12640000
+    },
+    {
+      "name": "Fernández",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Mittelfeld",
+      "pts": 29,
+      "mw": 7760000
+    },
+    {
+      "name": "Beste",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Mittelfeld",
+      "pts": 26,
+      "mw": 6240000
+    },
+    {
+      "name": "Lienhart",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Abwehr",
+      "pts": 23,
+      "mw": 4680000
+    },
+    {
+      "name": "Bellingham",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Mittelfeld",
+      "pts": 31,
+      "mw": 6930000
     }
   ],
   "rekorde": [
