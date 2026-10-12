@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-11T23:02:01.387621+00:00",
+  "updated": "2026-10-12T04:01:49.038631+00:00",
   "teuerste": [
     {
       "name": "Harry Kane",
@@ -94,14 +94,14 @@
       "pts": 906
     },
     {
+      "name": "Igor Matanović",
+      "logo": "logos/freiburg.png",
+      "pts": 891
+    },
+    {
       "name": "Maximilian Mittelstädt",
       "logo": "logos/stuttgart.png",
       "pts": 877
-    },
-    {
-      "name": "Alphonso Davies",
-      "logo": "logos/bayern.png",
-      "pts": 867
     }
   ],
   "effizienz": [
@@ -114,6 +114,11 @@
       "name": "András Schäfer",
       "logo": "logos/union.png",
       "eff": 128.22
+    },
+    {
+      "name": "Ísak Jóhannesson",
+      "logo": "logos/koeln.png",
+      "eff": 98.18
     },
     {
       "name": "Ezechiel Banzuzi",
@@ -149,11 +154,6 @@
       "name": "Mattes Hansen",
       "logo": "logos/paderborn.png",
       "eff": 67.89
-    },
-    {
-      "name": "Ludovit Reis",
-      "logo": "logos/werder.png",
-      "eff": 67.48
     }
   ],
   "raketen": [
@@ -297,11 +297,6 @@
       "ap": 201
     },
     {
-      "name": "Igor Matanović",
-      "logo": "logos/freiburg.png",
-      "ap": 201
-    },
-    {
       "name": "Jeremiaha Maluze",
       "logo": "logos/frankfurt.png",
       "ap": 198
@@ -317,19 +312,24 @@
       "ap": 190
     },
     {
-      "name": "Matthias Ginter",
-      "logo": "logos/freiburg.png",
-      "ap": 187
-    },
-    {
-      "name": "Yuito Suzuki",
-      "logo": "logos/freiburg.png",
-      "ap": 186
-    },
-    {
       "name": "Miguel Gutiérrez",
       "logo": "logos/leverkusen.png",
       "ap": 185
+    },
+    {
+      "name": "Waldemar Anton",
+      "logo": "logos/dortmund.png",
+      "ap": 184
+    },
+    {
+      "name": "Harry Kane",
+      "logo": "logos/bayern.png",
+      "ap": 183
+    },
+    {
+      "name": "Marco Grüll",
+      "logo": "logos/werder.png",
+      "ap": 181
     }
   ],
   "woche": [
@@ -592,13 +592,6 @@
   ],
   "formauf": [
     {
-      "name": "Igor Matanović",
-      "logo": "logos/freiburg.png",
-      "diff": 133,
-      "ap": 201,
-      "vor": 68
-    },
-    {
       "name": "Marco Grüll",
       "logo": "logos/werder.png",
       "diff": 131,
@@ -606,25 +599,11 @@
       "vor": 50
     },
     {
-      "name": "Yuito Suzuki",
-      "logo": "logos/freiburg.png",
-      "diff": 123,
-      "ap": 186,
-      "vor": 63
-    },
-    {
-      "name": "Derry Scherhant",
+      "name": "Igor Matanović",
       "logo": "logos/freiburg.png",
       "diff": 110,
-      "ap": 158,
-      "vor": 48
-    },
-    {
-      "name": "Jordy Makengo",
-      "logo": "logos/freiburg.png",
-      "diff": 109,
-      "ap": 151,
-      "vor": 42
+      "ap": 178,
+      "vor": 68
     },
     {
       "name": "Antonio Nusa",
@@ -641,6 +620,13 @@
       "vor": 41
     },
     {
+      "name": "Jordy Makengo",
+      "logo": "logos/freiburg.png",
+      "diff": 97,
+      "ap": 139,
+      "vor": 42
+    },
+    {
       "name": "Sheraldo Becker",
       "logo": "logos/mainz.png",
       "diff": 96,
@@ -655,11 +641,25 @@
       "vor": 22
     },
     {
+      "name": "Derry Scherhant",
+      "logo": "logos/freiburg.png",
+      "diff": 91,
+      "ap": 139,
+      "vor": 48
+    },
+    {
       "name": "Alphonso Davies",
       "logo": "logos/bayern.png",
       "diff": 87,
       "ap": 173,
       "vor": 86
+    },
+    {
+      "name": "Ezechiel Banzuzi",
+      "logo": "logos/leipzig.png",
+      "diff": 87,
+      "ap": 123,
+      "vor": 36
     }
   ],
   "formab": [
@@ -671,17 +671,38 @@
       "vor": 138
     },
     {
+      "name": "Isac Lidberg",
+      "logo": "logos/gladbach.png",
+      "diff": -72,
+      "ap": 26,
+      "vor": 98
+    },
+    {
       "name": "Kevin Diks",
       "logo": "logos/gladbach.png",
-      "diff": -71,
-      "ap": 24,
+      "diff": -67,
+      "ap": 28,
       "vor": 95
+    },
+    {
+      "name": "Adil Aouchiche",
+      "logo": "logos/schalke.png",
+      "diff": -67,
+      "ap": 82,
+      "vor": 149
+    },
+    {
+      "name": "Moussa Sylla",
+      "logo": "logos/schalke.png",
+      "diff": -62,
+      "ap": 15,
+      "vor": 77
     },
     {
       "name": "Robin Hack",
       "logo": "logos/gladbach.png",
-      "diff": -63,
-      "ap": -4,
+      "diff": -60,
+      "ap": -1,
       "vor": 59
     },
     {
@@ -706,32 +727,11 @@
       "vor": 178
     },
     {
-      "name": "Ermedin Demirović",
-      "logo": "logos/stuttgart.png",
-      "diff": -46,
-      "ap": 44,
-      "vor": 90
-    },
-    {
-      "name": "Adil Aouchiche",
+      "name": "Kenan Karaman",
       "logo": "logos/schalke.png",
-      "diff": -42,
-      "ap": 107,
-      "vor": 149
-    },
-    {
-      "name": "Philipp Sander",
-      "logo": "logos/gladbach.png",
-      "diff": -40,
-      "ap": 40,
-      "vor": 80
-    },
-    {
-      "name": "Albian Hajdari",
-      "logo": "logos/hoffenheim.png",
-      "diff": -39,
-      "ap": 58,
-      "vor": 97
+      "diff": -48,
+      "ap": 72,
+      "vor": 120
     }
   ],
   "torwart": [
@@ -756,13 +756,13 @@
       "ap": 126
     },
     {
-      "name": "Loris Karius",
-      "logo": "logos/schalke.png",
-      "ap": 125
-    },
-    {
       "name": "Manuel Neuer",
       "logo": "logos/bayern.png",
+      "ap": 121
+    },
+    {
+      "name": "Marvin Schwäbe",
+      "logo": "logos/koeln.png",
       "ap": 121
     },
     {
@@ -776,22 +776,17 @@
       "ap": 114
     },
     {
-      "name": "Marvin Schwäbe",
-      "logo": "logos/koeln.png",
-      "ap": 112
+      "name": "Loris Karius",
+      "logo": "logos/schalke.png",
+      "ap": 113
     },
     {
-      "name": "Moritz Nicolas",
-      "logo": "logos/gladbach.png",
-      "ap": 109
+      "name": "Nicolas Kristof",
+      "logo": "logos/elversberg.png",
+      "ap": 100
     }
   ],
   "abwehr": [
-    {
-      "name": "Matthias Ginter",
-      "logo": "logos/freiburg.png",
-      "ap": 187
-    },
     {
       "name": "Miguel Gutiérrez",
       "logo": "logos/leverkusen.png",
@@ -806,6 +801,11 @@
       "name": "Maximilian Mittelstädt",
       "logo": "logos/stuttgart.png",
       "ap": 175
+    },
+    {
+      "name": "Matthias Ginter",
+      "logo": "logos/freiburg.png",
+      "ap": 174
     },
     {
       "name": "Alphonso Davies",
@@ -825,7 +825,7 @@
     {
       "name": "Jordy Makengo",
       "logo": "logos/freiburg.png",
-      "ap": 151
+      "ap": 139
     },
     {
       "name": "Jonathan Tah",
@@ -860,11 +860,6 @@
       "ap": 193
     },
     {
-      "name": "Yuito Suzuki",
-      "logo": "logos/freiburg.png",
-      "ap": 186
-    },
-    {
       "name": "Marco Grüll",
       "logo": "logos/werder.png",
       "ap": 181
@@ -872,12 +867,7 @@
     {
       "name": "Maximilian Eggestein",
       "logo": "logos/freiburg.png",
-      "ap": 160
-    },
-    {
-      "name": "Derry Scherhant",
-      "logo": "logos/freiburg.png",
-      "ap": 158
+      "ap": 166
     },
     {
       "name": "Aleix García",
@@ -888,18 +878,28 @@
       "name": "Ibrahim Maza",
       "logo": "logos/leverkusen.png",
       "ap": 149
+    },
+    {
+      "name": "Felix Nmecha",
+      "logo": "logos/dortmund.png",
+      "ap": 148
+    },
+    {
+      "name": "Yuito Suzuki",
+      "logo": "logos/freiburg.png",
+      "ap": 145
     }
   ],
   "sturm": [
     {
-      "name": "Igor Matanović",
-      "logo": "logos/freiburg.png",
-      "ap": 201
-    },
-    {
       "name": "Harry Kane",
       "logo": "logos/bayern.png",
       "ap": 183
+    },
+    {
+      "name": "Igor Matanović",
+      "logo": "logos/freiburg.png",
+      "ap": 178
     },
     {
       "name": "Patrik Schick",
