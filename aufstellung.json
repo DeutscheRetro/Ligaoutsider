@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T11:32:11.221135+00:00",
+ "updated": "2026-10-15T13:02:04.793576+00:00",
  "spieltag": 6,
  "partien": [
   {
@@ -591,6 +591,16 @@
       "prozent": 95
      },
      {
+      "name": "Ethan Nwaneri",
+      "nr": "18",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 74
+     },
+     {
       "name": "Marcel Sabitzer",
       "nr": "20",
       "ampel": "gruen",
@@ -599,16 +609,6 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 68
-     },
-     {
-      "name": "Konstantinos Karetsas",
-      "nr": "19",
-      "ampel": "gruen",
-      "grund": "2 von 4 Einsätzen in der Startelf · Ø 50 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 60
      },
      {
       "name": "Joey Veerman",
@@ -646,16 +646,6 @@
      "prozent": 44
     },
     {
-     "name": "Ethan Nwaneri",
-     "nr": "18",
-     "ampel": "gruen",
-     "grund": "3 von 4 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 40
-    },
-    {
      "name": "Maximilian Beier",
      "nr": "14",
      "ampel": "gruen",
@@ -664,6 +654,16 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 35
+    },
+    {
+     "name": "Konstantinos Karetsas",
+     "nr": "19",
+     "ampel": "gruen",
+     "grund": "2 von 4 Einsätzen in der Startelf · Ø 50 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 26
     },
     {
      "name": "Fábio Silva",
@@ -1153,8 +1153,8 @@
      "name": "Justin Diehl",
      "nr": "31",
      "ampel": "rot",
-     "grund": "Muskelbündelriss",
-     "news": "artikel/vfb-ohne-diehl-und-al-dakhil-in-paderborn-0d23c42778.html",
+     "grund": "Muskelverletzung im Oberschenkel - weiterhin nicht im Teamtraining",
+     "news": "",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -2243,14 +2243,14 @@
    "elf": {
     "tw": [
      {
-      "name": "Nediljko Labrovic",
-      "nr": "22",
+      "name": "Finn Dahmen",
+      "nr": "1",
       "ampel": "gruen",
-      "grund": "noch ohne Einsatz",
+      "grund": "5 von 5 Einsätzen in der Startelf · Ø 97 min",
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 2
+      "prozent": 97
      }
     ],
     "abw": [
@@ -2285,14 +2285,14 @@
       "prozent": 96
      },
      {
-      "name": "Jeffrey Gouweleeuw",
-      "nr": "6",
+      "name": "Juma Bah",
+      "nr": "35",
       "ampel": "gruen",
-      "grund": "0 von 4 Einsätzen in der Startelf · Ø 10 min · 1 Spiel ohne Einsatz",
+      "grund": "1 von 1 Einsätzen in der Startelf · Ø 85 min · 4 Spiele ohne Einsatz",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 51
+      "prozent": 68
      }
     ],
     "mf": [
@@ -2372,13 +2372,13 @@
      "prozent": 42
     },
     {
-     "name": "Juma Bah",
-     "nr": "35",
+     "name": "Marius Wolf",
+     "nr": "27",
      "ampel": "gruen",
-     "grund": "1 von 1 Einsätzen in der Startelf · Ø 85 min · 4 Spiele ohne Einsatz",
+     "grund": "Krank - soll morgen ins Training einsteigen",
      "news": "",
      "reihe": "abw",
-     "pos": "Innenverteidiger",
+     "pos": "Rechter Verteidiger",
      "prozent": 35
     },
     {
@@ -2390,19 +2390,19 @@
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 19
+    },
+    {
+     "name": "Jeffrey Gouweleeuw",
+     "nr": "6",
+     "ampel": "gruen",
+     "grund": "0 von 4 Einsätzen in der Startelf · Ø 10 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 17
     }
    ],
    "fraglich": [
-    {
-     "name": "Marius Wolf",
-     "nr": "27",
-     "ampel": "gelb",
-     "grund": "Krank - soll morgen ins Training einsteigen",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 25
-    },
     {
      "name": "Alexis Claude-Maurice",
      "nr": "20",
@@ -2415,16 +2415,6 @@
     }
    ],
    "ausfall": [
-    {
-     "name": "Finn Dahmen",
-     "nr": "1",
-     "ampel": "rot",
-     "grund": "Leichte muskuläre Probleme - trainiert individuell, Einsatz nicht in Gefahr",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 0
-    },
     {
      "name": "Noahkai Banks",
      "nr": "40",
@@ -2500,14 +2490,14 @@
       "prozent": 95
      },
      {
-      "name": "Oskar Wójcik",
-      "nr": "3",
+      "name": "Amos Pieper",
+      "nr": "5",
       "ampel": "gruen",
-      "grund": "0 von 2 Einsätzen in der Startelf · Ø 50 min · 3 Spiele ohne Einsatz",
-      "news": "",
+      "grund": "Gesäßprobleme, nichts Strukturelles, Training Dienstag",
+      "news": "artikel/werder-hein-ueberzeugt-pieper-und-regeer-vor-paderborn-fit-133a6d3139.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 50
+      "prozent": 81
      }
     ],
     "mf": [
@@ -2571,29 +2561,19 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 77
+      "prozent": 93
      }
     ]
    },
    "bank": [
     {
-     "name": "Amos Pieper",
-     "nr": "5",
+     "name": "Oskar Wójcik",
+     "nr": "3",
      "ampel": "gruen",
-     "grund": "Gesäßprobleme, nichts Strukturelles, Training Dienstag",
-     "news": "artikel/werder-hein-ueberzeugt-pieper-und-regeer-vor-paderborn-fit-133a6d3139.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 47
-    },
-    {
-     "name": "Mitchell Weiser",
-     "nr": "8",
-     "ampel": "gruen",
-     "grund": "0 von 3 Einsätzen in der Startelf · Ø 25 min · 2 Spiele ohne Einsatz",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 50 min · 3 Spiele ohne Einsatz",
      "news": "",
      "reihe": "abw",
-     "pos": "Rechter Verteidiger",
+     "pos": "Innenverteidiger",
      "prozent": 16
     }
    ],
@@ -2796,7 +2776,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 64
+      "prozent": 80
      }
     ]
    },
@@ -2840,16 +2820,6 @@
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
      "prozent": 23
-    },
-    {
-     "name": "Hee-chan Hwang",
-     "nr": "7",
-     "ampel": "gruen",
-     "grund": "0 von 3 Einsätzen in der Startelf · Ø 20 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 16
     },
     {
      "name": "Vitalie Becker",
@@ -3186,6 +3156,16 @@
       "prozent": 97
      },
      {
+      "name": "Laurin Curda",
+      "nr": "17",
+      "ampel": "gruen",
+      "grund": "Handfraktur, spielt mit Schiene",
+      "news": "artikel/paderborn-curda-trotz-handfraktur-gegen-werder-einsatzbereit-46df65aeb9.html",
+      "reihe": "mf",
+      "pos": "Rechtes Mittelfeld",
+      "prozent": 97
+     },
+     {
       "name": "Raphael Obermair",
       "nr": "23",
       "ampel": "gruen",
@@ -3204,16 +3184,6 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 94
-     },
-     {
-      "name": "Laurin Curda",
-      "nr": "17",
-      "ampel": "gelb",
-      "grund": "Probleme an der Hand - übersteht VfB (H) nicht unbeschadet",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Rechtes Mittelfeld",
-      "prozent": 60
      }
     ],
     "st": [
@@ -3819,6 +3789,16 @@
       "prozent": 97
      },
      {
+      "name": "Michel Aebischer",
+      "nr": "20",
+      "ampel": "gruen",
+      "grund": "5 von 5 Einsätzen in der Startelf · Ø 78 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 94
+     },
+     {
       "name": "András Schäfer",
       "nr": "13",
       "ampel": "gruen",
@@ -3839,16 +3819,6 @@
       "prozent": 89
      },
      {
-      "name": "Michel Aebischer",
-      "nr": "20",
-      "ampel": "gruen",
-      "grund": "5 von 5 Einsätzen in der Startelf · Ø 78 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 78
-     },
-     {
       "name": "Janik Haberer",
       "nr": "19",
       "ampel": "gruen",
@@ -3856,7 +3826,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 71
+      "prozent": 87
      },
      {
       "name": "Kastriot Imeri",
@@ -3894,16 +3864,6 @@
      "prozent": 45
     },
     {
-     "name": "Aljoscha Kemlein",
-     "nr": "6",
-     "ampel": "gruen",
-     "grund": "3 von 5 Einsätzen in der Startelf · Ø 45 min",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 31
-    },
-    {
      "name": "Tim Skarke",
      "nr": "21",
      "ampel": "gruen",
@@ -3924,6 +3884,16 @@
      "prozent": 26
     },
     {
+     "name": "Aljoscha Kemlein",
+     "nr": "6",
+     "ampel": "gruen",
+     "grund": "3 von 5 Einsätzen in der Startelf · Ø 45 min",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 18
+    },
+    {
      "name": "Christopher Trimmel",
      "nr": "28",
      "ampel": "gruen",
@@ -3931,7 +3901,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 24
+     "prozent": 11
     },
     {
      "name": "Matheo Raab",
