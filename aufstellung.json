@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T16:02:08.482806+00:00",
+ "updated": "2026-10-15T17:32:19.149367+00:00",
  "spieltag": 6,
  "partien": [
   {
@@ -81,8 +81,8 @@
       "name": "Manuel Neuer",
       "nr": "1",
       "ampel": "gelb",
-      "grund": "Fußprobleme - verpasst AbschlusZerrunging vor CL-Spiel",
-      "news": "",
+      "grund": "Fußprobleme, Training am Donnerstag verpasst",
+      "news": "artikel/bayern-bangt-vor-leipzig-spiel-um-manuel-neuer-f843eedbfc.html",
       "reihe": "tw",
       "pos": "Torwart",
       "prozent": 60
@@ -3309,12 +3309,12 @@
      {
       "name": "Jan Gyamerah",
       "nr": "30",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 79 min · 1 Spiel ohne Einsatz",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 73
+      "prozent": 60
      }
     ],
     "mf": [
@@ -3404,16 +3404,6 @@
      "prozent": 20
     },
     {
-     "name": "Cole Campbell",
-     "nr": "39",
-     "ampel": "gruen",
-     "grund": "4 von 5 Einsätzen in der Startelf · Ø 58 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 18
-    },
-    {
      "name": "Maurice Krattenmacher",
      "nr": "7",
      "ampel": "gruen",
@@ -3424,13 +3414,24 @@
      "prozent": 16
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Cole Campbell",
+     "nr": "39",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 10
+    }
+   ],
    "ausfall": [
     {
      "name": "Francis Onyeka",
      "nr": "40",
      "ampel": "rot",
-     "grund": "Fußprobleme - fehlt wenige Wochen",
+     "grund": "Fußprobleme - Hoffnung auf Rückkehr gegen RBL (A)",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
@@ -3814,7 +3815,7 @@
       "nr": "29",
       "ampel": "gelb",
       "grund": "Muskuläre Probleme",
-      "news": "artikel/union-ohne-andrej-ilic-gegen-elversberg-latte-lath-wackelt-c17893747f.html",
+      "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 58
@@ -3883,36 +3884,37 @@
      "prozent": 11
     }
    ],
-   "fraglich": [],
-   "ausfall": [
+   "fraglich": [
     {
      "name": "Josip Juranovic",
      "nr": "18",
-     "ampel": "rot",
-     "grund": "Verletzt",
-     "news": "artikel/union-ohne-andrej-ilic-gegen-elversberg-latte-lath-wackelt-c17893747f.html",
+     "ampel": "gelb",
+     "grund": "Nach Krankheit",
+     "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Andrej Ilic",
-     "nr": "23",
-     "ampel": "rot",
-     "grund": "Reha nach Verletzung, Einsatz zu früh",
-     "news": "artikel/union-ohne-andrej-ilic-gegen-elversberg-latte-lath-wackelt-c17893747f.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
+     "prozent": 10
     },
     {
      "name": "Stanley Nsoki",
      "nr": "34",
-     "ampel": "rot",
-     "grund": "Dauerverletzt",
-     "news": "artikel/union-ohne-andrej-ilic-gegen-elversberg-latte-lath-wackelt-c17893747f.html",
+     "ampel": "gelb",
+     "grund": "Muskelverletzung an der Wade - anteiliges Teamtraining",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
+     "prozent": 3
+    }
+   ],
+   "ausfall": [
+    {
+     "name": "Andrej Ilic",
+     "nr": "23",
+     "ampel": "rot",
+     "grund": "Trainingsrückstand - verpasst BVB (H), benötigt \"noch einige Wochen Geduld\"",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     }
    ]
