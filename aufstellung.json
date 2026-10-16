@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-16T11:32:03.399827+00:00",
+ "updated": "2026-10-16T13:02:21.573149+00:00",
  "spieltag": 6,
  "partien": [
   {
@@ -434,16 +434,6 @@
    ],
    "fraglich": [
     {
-     "name": "Martin Terrier",
-     "nr": "11",
-     "ampel": "gelb",
-     "grund": "Angeschlagen - in der EL angeschlagen ausgewechselt",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 3
-    },
-    {
      "name": "Eliesse Ben Seghir",
      "nr": "29",
      "ampel": "gelb",
@@ -494,6 +484,16 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 0
+    },
+    {
+     "name": "Martin Terrier",
+     "nr": "11",
+     "ampel": "rot",
+     "grund": "Ausfall laut Bericht",
+     "news": "artikel/leverkusen-liegt-unter-martinez-voll-im-soll-4ded68b7f6.html",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 0
     }
    ]
   },
@@ -533,8 +533,8 @@
       "name": "Nico Schlotterbeck",
       "nr": "4",
       "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 91 min · 2 Spiele ohne Einsatz",
-      "news": "",
+      "grund": "wieder im Kader, Chancen auf Einsatz",
+      "news": "artikel/kovac-fordert-vom-bvb-bei-union-eine-reaktion-auf-bodoe-9f6d837504.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 97
@@ -1331,18 +1331,7 @@
      "prozent": 11
     }
    ],
-   "fraglich": [
-    {
-     "name": "Johan Bakayoko",
-     "nr": "11",
-     "ampel": "gelb",
-     "grund": "Schlag abbekommen - verpasste B04 (A)",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 5
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Christoph Baumgartner",
@@ -2253,6 +2242,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 85
+     },
+     {
+      "name": "Marius Wolf",
+      "nr": "27",
+      "ampel": "gruen",
+      "grund": "Krank - soll morgen ins Training einsteigen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 79
      }
     ],
     "mf": [
@@ -2299,16 +2298,6 @@
     ],
     "st": [
      {
-      "name": "Arijon Ibrahimovic",
-      "nr": "21",
-      "ampel": "gelb",
-      "grund": "Krank - fehlt im Teamtraining",
-      "news": "",
-      "reihe": "st",
-      "pos": "Linksaußen",
-      "prozent": 60
-     },
-     {
       "name": "Rodrigo Ribeiro",
       "nr": "9",
       "ampel": "gruen",
@@ -2321,16 +2310,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Marius Wolf",
-     "nr": "27",
-     "ampel": "gruen",
-     "grund": "Krank - soll morgen ins Training einsteigen",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 45
-    },
     {
      "name": "Michael Gregoritsch",
      "nr": "11",
@@ -2362,7 +2341,18 @@
      "prozent": 19
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Arijon Ibrahimovic",
+     "nr": "21",
+     "ampel": "gelb",
+     "grund": "Krank - fehlt im Teamtraining",
+     "news": "",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 27
+    }
+   ],
    "ausfall": [
     {
      "name": "Alexis Claude-Maurice",
@@ -2920,16 +2910,6 @@
       "prozent": 85
      },
      {
-      "name": "Albert Sambi Lokonga",
-      "nr": "6",
-      "ampel": "gelb",
-      "grund": "Angeschlagen -Einsatz gegen VfB (H) entscheidet sich kurzfristig",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 60
-     },
-     {
       "name": "Kofi Amoako",
       "nr": "22",
       "ampel": "gruen",
@@ -2937,7 +2917,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 48
+      "prozent": 82
+     },
+     {
+      "name": "Bilal Nadir",
+      "nr": "4",
+      "ampel": "gelb",
+      "grund": "Adduktorenprobleme, Teamtraining ab Mittwoch möglich",
+      "news": "artikel/hsv-hofft-gegen-stuttgart-auf-drei-rueckkehrer-1984add472.html",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 27
      }
     ],
     "st": [
@@ -2987,14 +2977,14 @@
    ],
    "fraglich": [
     {
-     "name": "Bilal Nadir",
-     "nr": "4",
+     "name": "Albert Sambi Lokonga",
+     "nr": "6",
      "ampel": "gelb",
-     "grund": "Adduktorenprobleme, Teamtraining ab Mittwoch möglich",
-     "news": "artikel/hsv-hofft-gegen-stuttgart-auf-drei-rueckkehrer-1984add472.html",
+     "grund": "Angeschlagen -Einsatz gegen VfB (H) entscheidet sich kurzfristig",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 27
+     "prozent": 26
     },
     {
      "name": "Bakery Jatta",
@@ -3532,7 +3522,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 73
+      "prozent": 89
      },
      {
       "name": "Robin Hack",
@@ -3625,7 +3615,7 @@
      "name": "Ko Itakura",
      "nr": "6",
      "ampel": "rot",
-     "grund": "Muskelfaserriss- fällt vorerst aus",
+     "grund": "Nach Muskelfaserriss - trainiert individuell, verpasst TSG (H)",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
