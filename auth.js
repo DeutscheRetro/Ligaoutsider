@@ -336,6 +336,127 @@
   window.netlifyIdentity.on('login', adminLinkPruefen);
   window.netlifyIdentity.on('logout', () => adminLinkPruefen(null));
 
+  // ─── Persönlicher Bereich: Mein Verein, Favoriten, Menüpunkt ────────────────
+  const konto = { daten: null, laufend: null };
+  async function kontoApi(aktion, daten) {
+    const u = nutzer();
+    if (!u) throw new Error('Nicht angemeldet');
+    const t = await u.jwt();
+    const r = await fetch('/api', { method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + t },
+      body: JSON.stringify({ aktion, ...(daten || {}) }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.fehler || 'Fehler ' + r.status);
+    return d;
+  }
+  window.loKonto = {
+    laden() {
+      if (!konto.laufend) konto.laufend = kontoApi('konto_lesen').then(d => (konto.daten = d)).catch(() => (konto.daten = null));
+      return konto.laufend;
+    },
+    async favorit(tmId) {
+      const d = await kontoApi('favorit_umschalten', { tm_id: tmId });
+      konto.daten = { ...(konto.daten || {}), favoriten: d.favoriten };
+      return d;
+    },
+    async verein(slug) {
+      const d = await kontoApi('mein_verein_setzen', { verein: slug });
+      konto.daten = { ...(konto.daten || {}), verein: d.verein };
+      return d;
+    },
+  };
+
+  function menuPunkt(u) {
+    const alt = document.getElementById('mein-bereich-link');
+    if (!u) { if (alt) alt.remove(); return; }
+    const nav = document.querySelector('.section-nav-inner');
+    if (!nav || alt) return;
+    const tiefe = /^\/(artikel|spieler|verein)\//.test(location.pathname) ? '../' : '';
+    const a = document.createElement('a');
+    a.id = 'mein-bereich-link'; a.className = 'section-nav-link';
+    a.href = tiefe + 'mein-bereich.html'; a.textContent = '⭐ Mein Bereich';
+    nav.insertBefore(a, nav.querySelector('a[href$="community.html"]'));
+    if (location.pathname.endsWith('/mein-bereich.html')) a.classList.add('active');
+  }
+
+  // Stern-Knöpfe: <button data-fav-tm="ID"> auf Spielerseiten
+  async function sterneVerdrahten(u) {
+    const knoepfe = document.querySelectorAll('[data-fav-tm]');
+    if (!knoepfe.length) return;
+    const zeigen = () => knoepfe.forEach(b => {
+      const an = ((konto.daten && konto.daten.favoriten) || []).map(String).includes(b.dataset.favTm);
+      b.textContent = an ? '★ Favorit' : '☆ Zu Favoriten';
+      b.classList.toggle('fav-an', an);
+    });
+    knoepfe.forEach(b => {
+      b.hidden = false;
+      b.onclick = async () => {
+        if (!nutzer()) { oeffnen('registrieren'); return; }
+        b.disabled = true;
+        try { await window.loKonto.favorit(b.dataset.favTm); } catch (e) { alert(e.message); }
+        b.disabled = false; zeigen();
+      };
+    });
+    if (u) { await window.loKonto.laden(); }
+    zeigen();
+  }
+
+  // <button data-mein-verein="bayern"> auf Vereinsseiten
+  async function vereinKnopf(u) {
+    const b = document.querySelector('[data-mein-verein]');
+    if (!b) return;
+    const slug = b.dataset.meinVerein;
+    const zeigen = () => {
+      const an = konto.daten && konto.daten.verein === slug;
+      b.textContent = an ? '⭐ Mein Verein' : '☆ Als Mein Verein wählen';
+      b.classList.toggle('fav-an', !!an);
+    };
+    b.hidden = false;
+    b.onclick = async () => {
+      if (!nutzer()) { oeffnen('registrieren'); return; }
+      b.disabled = true;
+      try { await window.loKonto.verein(konto.daten && konto.daten.verein === slug ? '' : slug); } catch (e) { alert(e.message); }
+      b.disabled = false; zeigen();
+    };
+    if (u) await window.loKonto.laden();
+    zeigen();
+  }
+
+  // Startseite: Hinweisleiste mit dem eigenen Verein (nur eingeloggt, nur wenn gewählt)
+  async function meinVereinLeiste(u) {
+    const alt = document.getElementById('mein-verein-leiste');
+    if (alt) alt.remove();
+    const nav = document.querySelector('nav.team-nav');
+    if (!u || !nav || !/^\/(index\.html)?$/.test(location.pathname)) return;
+    await window.loKonto.laden();
+    const slug = konto.daten && konto.daten.verein;
+    const KURZ = { bayern: 'Bayern', dortmund: 'Dortmund', leipzig: 'Leipzig', leverkusen: 'Leverkusen', frankfurt: 'Frankfurt',
+      stuttgart: 'Stuttgart', gladbach: 'Gladbach', freiburg: 'Freiburg', union: 'Union', mainz: 'Mainz', augsburg: 'Augsburg',
+      werder: 'Werder', hoffenheim: 'Hoffenheim', hsv: 'Hamburger', koeln: 'Köln', schalke: 'Schalke', paderborn: 'Paderborn', elversberg: 'Elversberg' };
+    const leiste = document.createElement('div');
+    leiste.id = 'mein-verein-leiste';
+    leiste.style.cssText = 'max-width:1100px;margin:10px auto;padding:10px 14px;background:var(--bg2,#151515);border:1px solid var(--border2,#333);border-radius:10px;font-size:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap';
+    leiste.innerHTML = slug && KURZ[slug]
+      ? `<img src="logos/${slug}.png" alt="" width="24" height="24" style="object-fit:contain"><span>Dein Verein: <strong>${KURZ[slug]}</strong></span>
+         <a href="index.html?filter=${encodeURIComponent(KURZ[slug])}" style="color:var(--accent,#e8c000);font-weight:700">Nur seine News</a>
+         <a href="mein-bereich.html" style="color:var(--text3,#aaa);margin-left:auto">Mein Bereich</a>`
+      : `<span>⭐ Wähle deinen Verein und sieh seine News zuerst.</span>
+         <a href="mein-bereich.html" style="color:var(--accent,#e8c000);font-weight:700">Verein wählen</a>`;
+    nav.insertAdjacentElement('afterend', leiste);
+  }
+
+  function kontoHaken(u) {
+    menuPunkt(u);
+    if (!u) konto.laufend = konto.daten = null;
+    const los = () => { sterneVerdrahten(u); vereinKnopf(u); meinVereinLeiste(u); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', los); else los();
+  }
+  window.netlifyIdentity.on('init', u => kontoHaken(u));
+  window.netlifyIdentity.on('login', u => kontoHaken(u));
+  window.netlifyIdentity.on('logout', () => kontoHaken(null));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { sterneVerdrahten(null); vereinKnopf(null); });
+  else { sterneVerdrahten(null); vereinKnopf(null); }
+
   sitzung = laden();
   (async () => {
     let ausMail = null;

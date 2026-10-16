@@ -3322,7 +3322,8 @@ def verein_seiten():
                         ensure_ascii=False)
         inhalt = f"""
     <div class="sp-kopf"><img src="../{e(team['logo'])}" alt="{e(team_name)}" width="72" height="72" style="object-fit:contain">
-      <div><h1>{e(team_name)}</h1><p>Aktuelle News, Kader und Aufstellung</p></div></div>
+      <div><h1>{e(team_name)}</h1><p>Aktuelle News, Kader und Aufstellung</p>
+        <button class="fav-btn" data-mein-verein="{stem}" hidden>☆ Als Mein Verein wählen</button></div></div>
     <h2 class="sp-h2">Aktuelle News zu {e(team_name)}</h2>
     <div class="lo-sp-news sp-news">{news_html}</div>
     <p class="sp-links"><a href="../aufstellung.html?team={e(team_name)}">Voraussichtliche Elf fürs nächste Spiel →</a>
@@ -3360,6 +3361,13 @@ def spieler_seiten():
         news = {}
     slugs = spieler_slugs(db)
     SPIELER_SEITEN_ORDNER.mkdir(exist_ok=True)
+    # Kurzübersicht für "Mein Bereich" (Favoriten): tm_id -> Name, Verein, Position, Slug
+    Path("spieler_kurz.json").write_text(json.dumps({
+        str(sp["tm_id"]): {"n": sp["name"], "v": team_name, "l": Path(team.get("logo", "")).stem,
+                           "p": sp.get("position") or sp.get("gruppe") or "", "s": slugs[sp["tm_id"]],
+                           "mw": sp.get("tm_marktwert") or "", "nr": sp.get("nr") or ""}
+        for team_name, team in db["teams"].items() for sp in team["spieler"]}, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8")
     base = "https://ligaoutsider.de"
     geschrieben = 0
     heute = datetime.date.today()
@@ -3436,6 +3444,7 @@ def spieler_seiten():
       <div>
         <h1>{e(sp['name'])}{' <span title="Kapitän">(C)</span>' if sp.get('kapitaen') else ''}</h1>
         <p>{e(pos)} · {e(team_name)}</p>
+        <button class="fav-btn" data-fav-tm="{sp['tm_id']}" hidden>☆ Zu Favoriten</button>
       </div>
     </div>
     {bild_html}

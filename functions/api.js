@@ -102,6 +102,8 @@ async function banVon(mail) {
 // Öffentlich zeigt sich jeder Nutzer nur unter seinem Profilnamen (handle).
 // Die E-Mail verlässt den Server nie in Richtung fremder Nutzer.
 const HANDLE = /^[a-z0-9-]{3,30}$/;
+const VEREIN_SLUGS = ["bayern", "dortmund", "leipzig", "leverkusen", "frankfurt", "stuttgart", "gladbach", "freiburg",
+  "union", "mainz", "augsburg", "werder", "hoffenheim", "hsv", "koeln", "schalke", "paderborn", "elversberg"];
 const LIEBLINGS_FELDER = ["verein", "spieler", "stadion", "trainer", "film", "serie", "musik", "song",
   "buch", "game", "essen", "getraenk", "reiseziel", "sport"];
 
@@ -907,6 +909,30 @@ export async function onRequest({ request, env }) {
         return json(200, { ok: true, name: neu, handle });
       }
 
+      // ─── Persönlicher Bereich: Mein Verein und Favoriten (im Konto gespeichert) ───
+      case "konto_lesen": {
+        return json(200, { verein: meta.mein_verein || "", favoriten: meta.favoriten || [] });
+      }
+
+      case "mein_verein_setzen": {
+        const v = sauber(body.verein, 20).toLowerCase();
+        if (v && !VEREIN_SLUGS.includes(v)) return json(400, { fehler: "Unbekannter Verein" });
+        await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+          method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, mein_verein: v } }) });
+        return json(200, { ok: true, verein: v });
+      }
+
+      case "favorit_umschalten": {
+        const id = String(body.tm_id || "").replace(/\D/g, "").slice(0, 10);
+        if (!id) return json(400, { fehler: "Spieler fehlt" });
+        const liste = Array.isArray(meta.favoriten) ? meta.favoriten.map(String) : [];
+        const neu = liste.includes(id) ? liste.filter(x => x !== id) : [...liste, id];
+        if (neu.length > 100) return json(400, { fehler: "Maximal 100 Favoriten" });
+        await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+          method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, favoriten: neu } }) });
+        return json(200, { ok: true, favoriten: neu, gesetzt: neu.includes(id) });
+      }
+
       case "kommentar_meins": {
         // Welche der angezeigten Kommentare sind meine, und wie habe ich bewertet?
         const ids = (Array.isArray(body.ids) ? body.ids : []).map(String).filter(i => UUID.test(i)).slice(0, 500);
@@ -938,7 +964,8 @@ export async function onRequest({ request, env }) {
           } catch (e) { /* ohne Tabelle keine Anfragen */ }
         }
         return json(200, { email, name, rollen, istAdmin, darfLoeschen,
-                           handle: profil ? profil.handle : null, anfragen, ban: await banVon(email) });
+                           handle: profil ? profil.handle : null, anfragen, ban: await banVon(email),
+                           verein: meta.mein_verein || "", favoriten: meta.favoriten || [] });
       }
 
       default:
