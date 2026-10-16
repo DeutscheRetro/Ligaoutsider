@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-16T19:02:17.472422+00:00",
+ "updated": "2026-10-16T21:02:08.134006+00:00",
  "spieltag": 6,
  "partien": [
-  {
-   "heim": "Eintracht Frankfurt",
-   "gast": "1. FC Köln",
-   "anstoss": "2026-10-16T19:30:00",
-   "anstoss_text": "Fr 16.10. 20:30",
-   "spieltag": 6
-  },
   {
    "heim": "1. FC Union Berlin",
    "gast": "Borussia Dortmund",
@@ -64,6 +57,20 @@
    "anstoss": "2026-10-18T16:30:00",
    "anstoss_text": "So 18.10. 17:30",
    "spieltag": 6
+  },
+  {
+   "heim": "1. FC Köln",
+   "gast": "FC Schalke 04",
+   "anstoss": "2026-10-24T14:30:00",
+   "anstoss_text": "Sa 24.10. 15:30",
+   "spieltag": 7
+  },
+  {
+   "heim": "Borussia Dortmund",
+   "gast": "Eintracht Frankfurt",
+   "anstoss": "2026-10-24T17:30:00",
+   "anstoss_text": "Sa 24.10. 18:30",
+   "spieltag": 7
   }
  ],
  "teams": {
@@ -1113,8 +1120,8 @@
      "name": "Maximilian Mittelstädt",
      "nr": "7",
      "ampel": "rot",
-     "grund": "Risswunde an der rechten Ferse",
-     "news": "artikel/vfb-mittelstaedt-zieht-sich-risswunde-an-der-ferse-zu-9f7cd952cf.html",
+     "grund": "Risswunde an der rechten Ferse - verpasst HSV (A)",
+     "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 0
@@ -1707,16 +1714,6 @@
      "prozent": 34
     },
     {
-     "name": "Nnamdi Collins",
-     "nr": "34",
-     "ampel": "gruen",
-     "grund": "1 von 2 Einsätzen in der Startelf · Ø 62 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 30
-    },
-    {
      "name": "Ansgar Knauff",
      "nr": "7",
      "ampel": "gruen",
@@ -1748,6 +1745,16 @@
     }
    ],
    "fraglich": [
+    {
+     "name": "Nnamdi Collins",
+     "nr": "34",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 15
+    },
     {
      "name": "Oscar Højlund",
      "nr": "6",
@@ -1901,6 +1908,16 @@
      "prozent": 31
     },
     {
+     "name": "Bernardo",
+     "nr": "13",
+     "ampel": "gruen",
+     "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 26
+    },
+    {
      "name": "Robin Hranac",
      "nr": "2",
      "ampel": "gruen",
@@ -1931,16 +1948,6 @@
      "news": "artikel/hoffenheim-patrick-wimmer-faellt-wochenlang-aus-45a1b0f914.html",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 0
-    },
-    {
-     "name": "Bernardo",
-     "nr": "13",
-     "ampel": "rot",
-     "grund": "fehlt laut Kickbase",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
      "prozent": 0
     }
    ]
@@ -2110,19 +2117,20 @@
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 17
-    },
+    }
+   ],
+   "fraglich": [
     {
      "name": "Joël Schmied",
      "nr": "2",
-     "ampel": "gruen",
-     "grund": "0 von 2 Einsätzen in der Startelf · Ø 10 min · 3 Spiele ohne Einsatz",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 12
+     "prozent": 6
     }
    ],
-   "fraglich": [],
    "ausfall": [
     {
      "name": "Ellyes Skhiri",
