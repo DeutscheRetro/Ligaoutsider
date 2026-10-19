@@ -90,8 +90,7 @@
   <div id="login-err" style="display:none" class="err"></div>
   <p style="font-size:12px;color:#888;margin-bottom:14px">Anmeldung über dein Ligaoutsider-Konto. Es braucht die Rolle <b>admin</b> oder <b>moderator</b>.</p>
   <button class="btn btn-gold" style="margin-bottom:16px" onclick="netlifyIdentity.open('login')">Mit Konto anmelden</button>
-  <div class="field"><label>GitHub Token (einmalig)</label><input type="text" id="gh-token" placeholder="ghp_..."/><p style="font-size:11px;color:#555;margin-top:4px">Wird nur in diesem Browser gespeichert</p></div>
-  <button class="btn btn-gold" onclick="login()">Einloggen</button>
+  <p id="login-status" style="font-size:12px;color:#888"></p>
 </div>
 
 <!-- HAUPTSEITE -->
@@ -231,7 +230,6 @@
 </div>
 
 <script>
-const REPO     = 'DeutscheRetro/Ligaoutsider';
 
 // Schreibzugriffe auf die Datenbank laufen serverseitig; der anon-Key liest nur.
 async function loApi(aktion, daten = {}) {
@@ -251,7 +249,6 @@ const SUPABASE_URL  = location.origin + '/sb';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let ghToken      = '';
 let feedDaten    = [];
 let feedSha      = '';
 
@@ -266,23 +263,22 @@ if (window.netlifyIdentity) {
 }
 
 async function login() {
-  const tok = document.getElementById('gh-token').value.trim();
   const user = window.netlifyIdentity && netlifyIdentity.currentUser();
   if (!user) { zeigeFehler('login-err', 'Bitte zuerst mit deinem Konto anmelden'); return; }
+  document.getElementById('login-status').textContent = 'Prüfe Rechte …';
   // Rechte vom Server bestaetigen lassen; Rollen stehen in der Datenbank
   try {
     const wer = await loApi('wer_bin_ich');
     if (!wer.darfLoeschen) {
       zeigeFehler('login-err', 'Dieses Konto hat keine Redaktionsrechte');
+      document.getElementById('login-status').textContent = '';
       return;
     }
   } catch (e) {
     zeigeFehler('login-err', 'Rechte konnten nicht geprüft werden: ' + e.message);
     return;
   }
-  if (tok)  localStorage.setItem('gh_token', tok);
-  ghToken      = localStorage.getItem('gh_token') || '';
-  if (!ghToken) { zeigeFehler('login-err', 'GitHub Token fehlt'); return; }
+  try { localStorage.removeItem('gh_token'); } catch (e) {}   // alter Browser-Token wird nicht mehr gebraucht
   sessionStorage.setItem('auth', '1');
   document.getElementById('page-login').style.display = 'none';
   document.getElementById('page-main').style.display = 'block';
@@ -296,41 +292,15 @@ function zeigeFehler(id, txt) {
   el.textContent = txt; el.style.display = 'block';
 }
 
-// ─── GitHub API ───────────────────────────────────────────────────────────────
+// ─── Artikel im Repo (läuft über /api, Rechte prüft der Server) ───────────────
 async function ghGet(path) {
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json' }
-  });
-  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
-  const data = await r.json();
-  // Dateien über 1 MB (feed.json) liefert die Contents-API ohne Inhalt – dann über die Blob-API holen (bis 100 MB)
-  if (!data.content || data.encoding === 'none') {
-    const b = await fetch(`https://api.github.com/repos/${REPO}/git/blobs/${data.sha}`, {
-      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github+json' }
-    });
-    if (!b.ok) throw new Error(`GitHub API ${b.status}: ${await b.text()}`);
-    data.content = (await b.json()).content;
-  }
-  return data;
+  return loApi('gh_get', { path });            // { sha, content (base64) }
 }
-
 async function ghPut(path, content, sha, message) {
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, content: btoa(unescape(encodeURIComponent(content))), sha })
-  });
-  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
-  return r.json();
+  return loApi('gh_put', { path, content, sha, message });
 }
-
 async function ghDelete(path, sha, message) {
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    method: 'DELETE',
-    headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, sha })
-  });
-  if (!r.ok) throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+  return loApi('gh_delete', { path, sha, message });
 }
 
 // ─── Registrierte Konten (Supabase, über die API) ────────────────────────────
@@ -1020,13 +990,10 @@ async function entbanne(email) {
 // Die Hauptseite erst zeigen, wenn wirklich eine Anmeldung vorliegt. Frueher
 // genuegte ein Merker in der Sitzungsablage - dann stand das Panel offen,
 // obwohl jeder Serveraufruf mit "Nicht angemeldet" scheiterte.
+// Wer angemeldet ist, kommt direkt rein (die Rechte prüft login() beim Server)
 function seiteOeffnenWennAngemeldet() {
   const user = window.netlifyIdentity && netlifyIdentity.currentUser();
-  if (!user || sessionStorage.getItem('auth') !== '1') return;
-  ghToken      = localStorage.getItem('gh_token') || '';
-  document.getElementById('page-login').style.display = 'none';
-  document.getElementById('page-main').style.display = 'block';
-  init();
+  if (user) login();
 }
 if (window.netlifyIdentity) netlifyIdentity.on('init', seiteOeffnenWennAngemeldet);
 </script>
