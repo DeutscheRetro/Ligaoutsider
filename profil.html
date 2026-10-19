@@ -39,13 +39,27 @@
 
   <nav class="section-nav">
     <div class="section-nav-inner">
-      <a href="/index.html" class="section-nav-link">Aktuelle News</a>
-      <a href="/archiv.html" class="section-nav-link">Newsarchiv</a>
-      <a href="/kickbase.html" class="section-nav-link">Kickbase-Stats</a>
-      <a href="/comunio.html" class="section-nav-link">Comunio-Stats</a>
-      <a href="/aufstellung.html" class="section-nav-link">Aufstellungen</a>
-      <a href="/elf.html" class="section-nav-link">Meine Elf</a>
-      <a href="/forum.html" class="section-nav-link">💬 Forum</a>
+      <a href="index.html" class="section-nav-link" data-nav="news">News</a>
+      <a href="verein/" class="section-nav-link" data-nav="vereine">Vereine</a>
+      <a href="aufstellung.html" class="section-nav-link" data-nav="aufstellung">Aufstellungen</a>
+      <a href="tippspiel.html" class="section-nav-link" data-nav="tippspiel">Tippspiel</a>
+      <div class="nav-gruppe" data-nav="manager">
+        <button type="button" class="section-nav-link nav-gruppe-knopf" aria-haspopup="true" aria-expanded="false">Manager<span class="nav-pfeil"></span></button>
+        <div class="nav-menue">
+        <a href="kickbase.html">Kickbase-Stats</a>
+        <a href="comunio.html">Comunio-Stats</a>
+        <a href="elf.html">Meine Elf</a>
+        </div>
+      </div>
+      <div class="nav-gruppe" data-nav="community">
+        <button type="button" class="section-nav-link nav-gruppe-knopf" aria-haspopup="true" aria-expanded="false">Community<span class="nav-pfeil"></span></button>
+        <div class="nav-menue">
+        <a href="forum.html">Forum</a>
+        <a href="community.html">Community-Stats</a>
+        <a href="tippspiel.html">Tippspiel</a>
+        </div>
+      </div>
+      <a href="archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
     </div>
   </nav>
 
