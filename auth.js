@@ -381,16 +381,23 @@
     if (knopf) nav.insertBefore(a, knopf); else nav.appendChild(a);
   }
 
-  // Ausklappmenüs in der Navigation: Tipp öffnet und schließt, Klick daneben schließt
-  document.querySelectorAll('.nav-gruppe-knopf').forEach(b => b.addEventListener('click', e => {
-    e.stopPropagation();
-    const g = b.parentElement, offen = !g.classList.contains('offen');
+  // Ausklappmenüs in der Navigation: Tipp öffnet und schließt, Klick daneben oder Escape schließt.
+  // auth.js steht im <head>, die Navigation gibt es erst nach dem Laden des Dokuments.
+  function menueSchliessen() {
     document.querySelectorAll('.nav-gruppe.offen').forEach(x => { x.classList.remove('offen'); x.querySelector('.nav-gruppe-knopf').setAttribute('aria-expanded', 'false'); });
-    g.classList.toggle('offen', offen);
-    b.setAttribute('aria-expanded', String(offen));
-  }));
-  document.addEventListener('click', () => document.querySelectorAll('.nav-gruppe.offen').forEach(x => { x.classList.remove('offen'); x.querySelector('.nav-gruppe-knopf').setAttribute('aria-expanded', 'false'); }));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.nav-gruppe.offen').forEach(x => x.classList.remove('offen')); });
+  }
+  function menuesVerdrahten() {
+    document.querySelectorAll('.nav-gruppe-knopf').forEach(b => b.addEventListener('click', e => {
+      e.stopPropagation();
+      const g = b.parentElement, offen = !g.classList.contains('offen');
+      menueSchliessen();
+      g.classList.toggle('offen', offen);
+      b.setAttribute('aria-expanded', String(offen));
+    }));
+    document.addEventListener('click', menueSchliessen);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') menueSchliessen(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', menuesVerdrahten); else menuesVerdrahten();
 
   // Stern-Knöpfe: <button data-fav-tm="ID"> auf Spielerseiten
   async function sterneVerdrahten(u) {

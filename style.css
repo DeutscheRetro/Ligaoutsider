@@ -23,8 +23,9 @@
 .nav-menue a:hover { background: var(--bg4); color: var(--text); }
 .nav-menue a.active { color: var(--accent); }
 @media (max-width: 720px) {
-  .section-nav-inner { padding: 0 8px; }
-  .section-nav-link { font-size: 11px; letter-spacing: .5px; padding: 10px 9px; }
+  .section-nav-inner { padding: 0 6px; }
+  .section-nav-link { font-size: 10.5px; letter-spacing: .3px; padding: 10px 7px; }
+  .nav-gruppe-knopf { gap: 5px; }
   .section-nav-link.nav-mein { margin-left: 0; }
   .nav-menue { left: 0; }
 }
