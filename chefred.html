@@ -598,15 +598,19 @@ function renderStats() {
   const vor30 = new Date(heute); vor30.setDate(heute.getDate() - 29);
 
   // Artikel pro Tag (letzte 30 Tage)
+  // Tagesschlüssel in Ortszeit (JJJJ-MM-TT); feed.json speichert "TT.MM.JJJJ HH:MM"
+  const isoTag = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const feedTag = s => { const m = /^(\d{2})\.(\d{2})\.(\d{4})/.exec(s || ''); return m ? `${m[3]}-${m[2]}-${m[1]}` : null; };
   const proTag = {};
   for (let i = 29; i >= 0; i--) {
     const d = new Date(heute); d.setDate(heute.getDate() - i);
-    proTag[d.toISOString().slice(0,10)] = 0;
+    proTag[isoTag(d)] = 0;
   }
   feedDaten.forEach(a => {
-    const key = a.datum ? a.datum.slice(0,10) : null;
+    const key = feedTag(a.datum);
     if (key && proTag[key] !== undefined) proTag[key]++;
   });
+  const summe30 = Object.values(proTag).reduce((s, n) => s + n, 0);
 
   // Top-Quellen (badge)
   const quellen = {};
@@ -617,7 +621,7 @@ function renderStats() {
   const topQuellen = Object.entries(quellen).sort((a,b) => b[1]-a[1]).slice(0,10);
 
   // Heute
-  const tagesKey = heute.toISOString().slice(0,10);
+  const tagesKey = isoTag(heute);
   const heute_count = proTag[tagesKey] || 0;
 
   // Max für Balken
@@ -654,7 +658,7 @@ function renderStats() {
       <div class="stat-card"><div class="num">${feedDaten.length}</div><div class="lbl">Artikel gesamt</div></div>
       <div class="stat-card"><div class="num">${heute_count}</div><div class="lbl">Heute</div></div>
       <div class="stat-card"><div class="num">${Object.keys(quellen).length}</div><div class="lbl">Verschiedene Quellen</div></div>
-      <div class="stat-card"><div class="num">${Math.round(feedDaten.length / 30)}</div><div class="lbl">Ø Artikel/Tag (30d)</div></div>
+      <div class="stat-card"><div class="num">${(summe30 / 30).toFixed(1).replace('.', ',')}</div><div class="lbl">Ø Artikel/Tag (30d)</div></div>
     </div>
 
     <div class="section-title">Artikel letzte 14 Tage</div>
