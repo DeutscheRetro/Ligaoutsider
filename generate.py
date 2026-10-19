@@ -1727,10 +1727,32 @@ def artikel_html(
     </div>
   </header>
 
+  <nav class="team-nav" aria-label="Vereine">
+    <ul class="team-list">
+        <li><a href="../verein/bayern.html" class="team-chip" title="FC Bayern München"><img src="../logos/bayern.png" alt="Bayern" /></a></li>
+        <li><a href="../verein/dortmund.html" class="team-chip" title="Borussia Dortmund"><img src="../logos/dortmund.png" alt="Dortmund" /></a></li>
+        <li><a href="../verein/leipzig.html" class="team-chip" title="RB Leipzig"><img src="../logos/leipzig.png" alt="Leipzig" /></a></li>
+        <li><a href="../verein/leverkusen.html" class="team-chip" title="Bayer 04 Leverkusen"><img src="../logos/leverkusen.png" alt="Leverkusen" /></a></li>
+        <li><a href="../verein/frankfurt.html" class="team-chip" title="Eintracht Frankfurt"><img src="../logos/frankfurt.png" alt="Frankfurt" /></a></li>
+        <li><a href="../verein/stuttgart.html" class="team-chip" title="VfB Stuttgart"><img src="../logos/stuttgart.png" alt="Stuttgart" /></a></li>
+        <li><a href="../verein/hoffenheim.html" class="team-chip" title="TSG 1899 Hoffenheim"><img src="../logos/hoffenheim.png" alt="Hoffenheim" /></a></li>
+        <li><a href="../verein/freiburg.html" class="team-chip" title="SC Freiburg"><img src="../logos/freiburg.png" alt="Freiburg" /></a></li>
+        <li><a href="../verein/augsburg.html" class="team-chip" title="FC Augsburg"><img src="../logos/augsburg.png" alt="Augsburg" /></a></li>
+        <li><a href="../verein/mainz.html" class="team-chip" title="1. FSV Mainz 05"><img src="../logos/mainz.png" alt="Mainz" /></a></li>
+        <li><a href="../verein/union.html" class="team-chip" title="1. FC Union Berlin"><img src="../logos/union.png" alt="Union Berlin" /></a></li>
+        <li><a href="../verein/gladbach.html" class="team-chip" title="Borussia Mönchengladbach"><img src="../logos/gladbach.png" alt="Gladbach" /></a></li>
+        <li><a href="../verein/hsv.html" class="team-chip" title="Hamburger SV"><img src="../logos/hsv.png" alt="HSV" /></a></li>
+        <li><a href="../verein/koeln.html" class="team-chip" title="1. FC Köln"><img src="../logos/koeln.png" alt="Köln" /></a></li>
+        <li><a href="../verein/werder.html" class="team-chip" title="SV Werder Bremen"><img src="../logos/werder.png" alt="Werder" /></a></li>
+        <li><a href="../verein/schalke.html" class="team-chip" title="FC Schalke 04"><img src="../logos/schalke.png" alt="Schalke" /></a></li>
+        <li><a href="../verein/paderborn.html" class="team-chip" title="SC Paderborn 07"><img src="../logos/paderborn.png" alt="Paderborn" /></a></li>
+        <li><a href="../verein/elversberg.html" class="team-chip" title="SV Elversberg"><img src="../logos/elversberg.png" alt="Elversberg" /></a></li>
+    </ul>
+  </nav>
+
   <nav class="section-nav">
     <div class="section-nav-inner">
       <a href="../index.html" class="section-nav-link" data-nav="news">News</a>
-      <a href="../verein/" class="section-nav-link" data-nav="vereine">Vereine</a>
       <a href="../aufstellung.html" class="section-nav-link" data-nav="aufstellung">Aufstellungen</a>
       <a href="../tippspiel.html" class="section-nav-link" data-nav="tippspiel">Tippspiel</a>
       <div class="nav-gruppe" data-nav="manager">
@@ -3238,10 +3260,32 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
     </div>
   </header>
 
+  <nav class="team-nav" aria-label="Vereine">
+    <ul class="team-list">
+        <li><a href="{tiefe}verein/bayern.html" class="team-chip" title="FC Bayern München"><img src="{tiefe}logos/bayern.png" alt="Bayern" /></a></li>
+        <li><a href="{tiefe}verein/dortmund.html" class="team-chip" title="Borussia Dortmund"><img src="{tiefe}logos/dortmund.png" alt="Dortmund" /></a></li>
+        <li><a href="{tiefe}verein/leipzig.html" class="team-chip" title="RB Leipzig"><img src="{tiefe}logos/leipzig.png" alt="Leipzig" /></a></li>
+        <li><a href="{tiefe}verein/leverkusen.html" class="team-chip" title="Bayer 04 Leverkusen"><img src="{tiefe}logos/leverkusen.png" alt="Leverkusen" /></a></li>
+        <li><a href="{tiefe}verein/frankfurt.html" class="team-chip" title="Eintracht Frankfurt"><img src="{tiefe}logos/frankfurt.png" alt="Frankfurt" /></a></li>
+        <li><a href="{tiefe}verein/stuttgart.html" class="team-chip" title="VfB Stuttgart"><img src="{tiefe}logos/stuttgart.png" alt="Stuttgart" /></a></li>
+        <li><a href="{tiefe}verein/hoffenheim.html" class="team-chip" title="TSG 1899 Hoffenheim"><img src="{tiefe}logos/hoffenheim.png" alt="Hoffenheim" /></a></li>
+        <li><a href="{tiefe}verein/freiburg.html" class="team-chip" title="SC Freiburg"><img src="{tiefe}logos/freiburg.png" alt="Freiburg" /></a></li>
+        <li><a href="{tiefe}verein/augsburg.html" class="team-chip" title="FC Augsburg"><img src="{tiefe}logos/augsburg.png" alt="Augsburg" /></a></li>
+        <li><a href="{tiefe}verein/mainz.html" class="team-chip" title="1. FSV Mainz 05"><img src="{tiefe}logos/mainz.png" alt="Mainz" /></a></li>
+        <li><a href="{tiefe}verein/union.html" class="team-chip" title="1. FC Union Berlin"><img src="{tiefe}logos/union.png" alt="Union Berlin" /></a></li>
+        <li><a href="{tiefe}verein/gladbach.html" class="team-chip" title="Borussia Mönchengladbach"><img src="{tiefe}logos/gladbach.png" alt="Gladbach" /></a></li>
+        <li><a href="{tiefe}verein/hsv.html" class="team-chip" title="Hamburger SV"><img src="{tiefe}logos/hsv.png" alt="HSV" /></a></li>
+        <li><a href="{tiefe}verein/koeln.html" class="team-chip" title="1. FC Köln"><img src="{tiefe}logos/koeln.png" alt="Köln" /></a></li>
+        <li><a href="{tiefe}verein/werder.html" class="team-chip" title="SV Werder Bremen"><img src="{tiefe}logos/werder.png" alt="Werder" /></a></li>
+        <li><a href="{tiefe}verein/schalke.html" class="team-chip" title="FC Schalke 04"><img src="{tiefe}logos/schalke.png" alt="Schalke" /></a></li>
+        <li><a href="{tiefe}verein/paderborn.html" class="team-chip" title="SC Paderborn 07"><img src="{tiefe}logos/paderborn.png" alt="Paderborn" /></a></li>
+        <li><a href="{tiefe}verein/elversberg.html" class="team-chip" title="SV Elversberg"><img src="{tiefe}logos/elversberg.png" alt="Elversberg" /></a></li>
+    </ul>
+  </nav>
+
   <nav class="section-nav">
     <div class="section-nav-inner">
       <a href="{tiefe}index.html" class="section-nav-link" data-nav="news">News</a>
-      <a href="{tiefe}verein/" class="section-nav-link" data-nav="vereine">Vereine</a>
       <a href="{tiefe}aufstellung.html" class="section-nav-link" data-nav="aufstellung">Aufstellungen</a>
       <a href="{tiefe}tippspiel.html" class="section-nav-link" data-nav="tippspiel">Tippspiel</a>
       <div class="nav-gruppe" data-nav="manager">
@@ -3359,6 +3403,7 @@ def verein_seiten():
     <h2 class="sp-h2">Kader {e(team_name)}</h2>
     {kader}"""
         seite = _seite(titel, beschr, url, inhalt, head_extra=f'<script type="application/ld+json">{ld}</script>\n', tiefe="../")
+        seite = seite.replace(f'href="../verein/{stem}.html" class="team-chip"', f'href="../verein/{stem}.html" class="team-chip active"', 1)
         Path(f"verein/{stem}.html").write_text(seite, encoding="utf-8")
         uebersicht.append((team_name, stem, team["logo"], len(news)))
     # Übersicht
