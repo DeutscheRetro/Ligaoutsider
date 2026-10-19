@@ -118,7 +118,7 @@
         <div class="nav-menue">
         <a href="forum.html">Forum</a>
         <a href="community.html" class="active">Community-Stats</a>
-        <a href="tippspiel.html">Tippspiel</a>
+        <a href="tippspiel.html#rangliste">Tippspiel-Rangliste</a>
         </div>
       </div>
       <a href="archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
@@ -211,7 +211,7 @@
     };
 
     const tippRang = tippRangVor;
-    const tippBox = `<section class="cs-box"><h2>🎯 Tippspiel-Rangliste</h2><p class="cs-hinweis">Die besten Tipper der Saison · <a href="tippspiel.html" style="color:var(--accent)">Mittippen</a></p>${
+    const tippBox = `<section class="cs-box"><h2>🎯 Tippspiel-Rangliste</h2><p class="cs-hinweis">Die besten Tipper der Saison · <a href="tippspiel.html#rangliste" style="color:var(--accent)">Ganze Tabelle</a> · <a href="tippspiel.html" style="color:var(--accent)">Mittippen</a></p>${
       tippRang.length ? `<ol class="cs-liste">${tippRang.map((x, i) => `<li><span class="cs-platz">${['🥇', '🥈', '🥉'][i] || (i + 1) + '.'}</span>${ava(x)}<span class="cs-name">${nameHtml(x)}</span><span class="cs-wert">${x.punkte}</span></li>`).join('')}</ol>` : leer}</section>`;
     document.getElementById('cs-raster').innerHTML = [
       tippBox,

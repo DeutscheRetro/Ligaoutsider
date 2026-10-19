@@ -467,7 +467,7 @@
     try {
       const [r, meine] = await Promise.all([fetch('/api?tipp_rangliste=1').then(x => x.json()), kontoApi('tipp_meine')]);
       const spiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (r.aktueller_spieltag || 1))).json();
-      const offen = spiele.filter(s => new Date(s.matchDateTimeUTC).getTime() > Date.now() && !s.matchIsFinished && !(meine.tipps || {})[s.matchID]).length;
+      const offen = spiele.filter(s => new Date(s.matchDateTimeUTC).getTime() - 5 * 60 * 1000 > Date.now() && !s.matchIsFinished && !(meine.tipps || {})[s.matchID]).length;
       if (offen) {
         const a = document.createElement('a');
         a.href = 'tippspiel.html'; a.style.cssText = 'color:var(--accent,#e8c000);font-weight:700';

@@ -148,7 +148,7 @@
         <div class="nav-menue">
         <a href="forum.html">Forum</a>
         <a href="community.html">Community-Stats</a>
-        <a href="tippspiel.html">Tippspiel</a>
+        <a href="tippspiel.html#rangliste">Tippspiel-Rangliste</a>
         </div>
       </div>
       <a href="archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
@@ -257,7 +257,7 @@
 
     function tippBox() {
       const jetzt = Date.now();
-      const offen = spieltagSpiele.filter(s => new Date(s.matchDateTimeUTC).getTime() > jetzt && !s.matchIsFinished);
+      const offen = spieltagSpiele.filter(s => new Date(s.matchDateTimeUTC).getTime() - 5 * 60 * 1000 > jetzt && !s.matchIsFinished);
       const fehlend = offen.filter(s => !tipp.tipps[s.matchID]);
       const h = window._loIch && window._loIch.handle;
       const i = h ? rang.rangliste.findIndex(x => x.handle === h) : -1;
@@ -276,14 +276,14 @@
       const key = v[1].toLowerCase();
       const s = spieltagSpiele.find(x => !x.matchIsFinished && (x.team1.teamName.toLowerCase().includes(key) || x.team2.teamName.toLowerCase().includes(key)));
       if (!s) return '';
-      const an = new Date(s.matchDateTimeUTC), t = tipp.tipps[s.matchID], live = an.getTime() <= Date.now();
+      const an = new Date(s.matchDateTimeUTC), t = tipp.tipps[s.matchID], live = an.getTime() <= Date.now(), zu = an.getTime() - 5 * 60 * 1000 <= Date.now();
       const lg = n => { const k = LOGO_TEAM(n); return k ? `<img src="logos/${k}.png" alt="" style="width:34px;height:34px;object-fit:contain">` : ''; };
       return `<section class="mb-box"><h2>📅 Nächstes Spiel</h2>
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:15px;font-weight:800;color:var(--text)">
           <span style="display:flex;align-items:center;gap:8px">${lg(s.team1.teamName)}${esc(s.team1.shortName || s.team1.teamName)}</span><span style="color:var(--text4)">vs.</span>
           <span style="display:flex;align-items:center;gap:8px">${lg(s.team2.teamName)}${esc(s.team2.shortName || s.team2.teamName)}</span></div>
         <p class="cs-hinweis" style="margin:8px 0 0">${live ? '<strong style="color:#e53935">● LIVE</strong>' : an.toLocaleString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' Uhr'}
-          · ${t ? `Dein Tipp <strong>${t.h}:${t.g}</strong>` : live ? 'kein Tipp' : '<a href="tippspiel.html" style="color:var(--accent);font-weight:700">Jetzt tippen →</a>'}
+          · ${t ? `Dein Tipp <strong>${t.h}:${t.g}</strong>` : zu ? 'kein Tipp' : '<a href="tippspiel.html" style="color:var(--accent);font-weight:700">Jetzt tippen →</a>'}
           · <a href="aufstellung.html?team=${encodeURIComponent(v[0])}" style="color:var(--accent)">Voraussichtliche Elf</a></p></section>`;
     }
 

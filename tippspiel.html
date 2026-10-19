@@ -202,7 +202,7 @@
         <div class="nav-menue">
         <a href="forum.html">Forum</a>
         <a href="community.html">Community-Stats</a>
-        <a href="tippspiel.html">Tippspiel</a>
+        <a href="tippspiel.html#rangliste">Tippspiel-Rangliste</a>
         </div>
       </div>
       <a href="archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
@@ -211,7 +211,7 @@
 
   <main class="cs-wrap">
     <h1>🎯 Tippspiel</h1>
-    <p class="tp-regeln"><strong>4 Punkte</strong> fürs exakte Ergebnis, <strong>3</strong> für die richtige Tordifferenz, <strong>2</strong> für die richtige Tendenz. Tipps speichern sich von selbst und lassen sich bis zum Anpfiff ändern.</p>
+    <p class="tp-regeln"><strong>4 Punkte</strong> fürs exakte Ergebnis, <strong>3</strong> für die richtige Tordifferenz, <strong>2</strong> für die richtige Tendenz. Tipps speichern sich von selbst und lassen sich bis <strong>5 Minuten vor Anpfiff</strong> ändern.</p>
     <div class="tp-tabs" id="tp-haupttabs"><button class="aktiv" data-t="tippen">Tippen</button><button data-t="rang">Rangliste</button></div>
     <div id="tp-tippen"><p class="cs-leer">Lade Spiele…</p></div>
     <div id="tp-rang" hidden></div>
@@ -250,6 +250,8 @@
     const logo = n => { const k = key(n); return k ? `<img src="logos/${k}.png" alt="">` : ''; };
     const kurzName = t => NAME[key(t.teamName)] || t.shortName || t.teamName;
     const wrapT = document.getElementById('tp-tippen'), wrapR = document.getElementById('tp-rang');
+    const SCHLUSS_MS = 5 * 60 * 1000;   // Tippschluss: 5 Minuten vor Anpfiff
+    const schluss = s => new Date(s.matchDateTimeUTC).getTime() - SCHLUSS_MS;
     let tag = 0, aktuell = 1, tipps = {}, spiele = [], punkteGesamt = 0, meinPlatz = null, gesamtTipper = 0;
     const angemeldet = () => !!(window.netlifyIdentity && netlifyIdentity.currentUser());
     const meinHandle = () => (window._loIch && window._loIch.handle) || null;
@@ -290,7 +292,7 @@
 
     function zeichnen() {
       const jetzt = Date.now(), ich = angemeldet();
-      const offen = spiele.filter(s => new Date(s.matchDateTimeUTC).getTime() > jetzt && !s.matchIsFinished);
+      const offen = spiele.filter(s => schluss(s) > jetzt && !s.matchIsFinished);
       const getippt = offen.filter(s => tipps[s.matchID]).length;
       const naechstes = offen.sort((a, b) => new Date(a.matchDateTimeUTC) - new Date(b.matchDateTimeUTC))[0];
       const fertig = spiele.filter(s => s.matchIsFinished);
@@ -307,10 +309,11 @@
 
       const zeile = s => {
         const res = (s.matchResults || []).find(x => x.resultTypeID === 2) || (s.matchResults || []).slice(-1)[0];
-        const an = new Date(s.matchDateTimeUTC), zu = an.getTime() <= jetzt || s.matchIsFinished;
+        const an = new Date(s.matchDateTimeUTC), zu = schluss(s) <= jetzt || s.matchIsFinished;
         const t = tipps[s.matchID];
         let status;
         if (s.matchIsFinished && res) status = `Endstand <strong style="color:var(--text)">${res.pointsTeam1}:${res.pointsTeam2}</strong>` + (t ? ` · Dein Tipp ${t.h}:${t.g}` : ' · kein Tipp');
+        else if (zu && an.getTime() > jetzt) status = `Tippschluss · Anpfiff ${fmtZeit(an)} Uhr` + (t ? ` · Dein Tipp ${t.h}:${t.g}` : ' · kein Tipp');
         else if (zu) status = `<span class="tp-live">● LIVE</span>${res ? ` ${res.pointsTeam1}:${res.pointsTeam2}` : ''}` + (t ? ` · Dein Tipp ${t.h}:${t.g}` : '');
         else status = `${fmtZeit(an)} Uhr · <span class="tp-status" data-status="${s.matchID}">${t ? 'gespeichert' : ich ? 'noch kein Tipp' : ''}</span>`;
         const pkt = t && t.p != null && s.matchIsFinished ? `<span class="tp-punkte p${t.p}">${t.p} Pkt.</span>` : '';
@@ -328,7 +331,7 @@
         <div class="tp-hero-zeile"><button class="tp-pfeil" id="tp-zu" ${tag <= 1 ? 'disabled' : ''} aria-label="Vorheriger Spieltag">←</button>
           <h2>${tag}. Spieltag</h2><button class="tp-pfeil" id="tp-vor" ${tag >= 34 ? 'disabled' : ''} aria-label="Nächster Spieltag">→</button>
           ${ich ? `<span style="margin-left:auto;font-size:13px;color:var(--text3)">Gesamt <strong style="color:var(--accent);font-size:18px">${punkteGesamt}</strong> Pkt.${meinPlatz ? ` · Platz ${meinPlatz} von ${gesamtTipper}` : ''}</span>` : ''}</div>
-        <div class="tp-hero-meta">${naechstes ? `Nächster Anpfiff <strong>${countdown(new Date(naechstes.matchDateTimeUTC) - jetzt)}</strong> · ${fmtTag(new Date(naechstes.matchDateTimeUTC))}, ${fmtZeit(new Date(naechstes.matchDateTimeUTC))} Uhr` : fertig.length === spiele.length && spiele.length ? `Spieltag beendet${ich ? ` · <strong>${punkteTag}</strong> Punkte für dich` : ''}` : 'Spieltag läuft'}
+        <div class="tp-hero-meta">${naechstes ? `Tippschluss <strong>${countdown(schluss(naechstes) - jetzt)}</strong> · Anpfiff ${fmtTag(new Date(naechstes.matchDateTimeUTC))}, ${fmtZeit(new Date(naechstes.matchDateTimeUTC))} Uhr` : fertig.length === spiele.length && spiele.length ? `Spieltag beendet${ich ? ` · <strong>${punkteTag}</strong> Punkte für dich` : ''}` : 'Spieltag läuft'}
           ${ich && offen.length ? ` · <strong>${getippt}/${offen.length}</strong> getippt` : ''}</div>
         ${ich && offen.length ? `<div class="tp-progress"><i style="width:${Math.round(100 * getippt / offen.length)}%"></i></div>` : ''}</section>`;
 
@@ -394,11 +397,16 @@
       wrapR.querySelectorAll('.tp-tabs button').forEach(b => b.onclick = () => rangliste(+b.dataset.s));
     }
 
-    document.querySelectorAll('#tp-haupttabs button').forEach(b => b.onclick = () => {
-      document.querySelectorAll('#tp-haupttabs button').forEach(x => x.classList.toggle('aktiv', x === b));
-      wrapT.hidden = b.dataset.t !== 'tippen'; wrapR.hidden = b.dataset.t !== 'rang';
-      if (b.dataset.t === 'rang') rangliste(0);
-    });
+    function tab(name) {
+      document.querySelectorAll('#tp-haupttabs button').forEach(x => x.classList.toggle('aktiv', x.dataset.t === name));
+      wrapT.hidden = name !== 'tippen'; wrapR.hidden = name !== 'rang';
+      if (name === 'rang') rangliste(0);
+      if (location.hash !== (name === 'rang' ? '#rangliste' : '')) history.replaceState(null, '', location.pathname + (name === 'rang' ? '#rangliste' : ''));
+    }
+    document.querySelectorAll('#tp-haupttabs button').forEach(b => b.onclick = () => tab(b.dataset.t));
+    // Direktlink auf die Tabelle (Menü "Tippspiel-Rangliste", Community-Stats)
+    if (location.hash === '#rangliste') tab('rang');
+    window.addEventListener('hashchange', () => tab(location.hash === '#rangliste' ? 'rang' : 'tippen'));
 
     let gestartet = false;
     async function start() {

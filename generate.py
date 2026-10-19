@@ -1768,7 +1768,7 @@ def artikel_html(
         <div class="nav-menue">
         <a href="../forum.html">Forum</a>
         <a href="../community.html">Community-Stats</a>
-        <a href="../tippspiel.html">Tippspiel</a>
+        <a href="../tippspiel.html#rangliste">Tippspiel-Rangliste</a>
         </div>
       </div>
       <a href="../archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
@@ -3301,7 +3301,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
         <div class="nav-menue">
         <a href="{tiefe}forum.html">Forum</a>
         <a href="{tiefe}community.html">Community-Stats</a>
-        <a href="{tiefe}tippspiel.html">Tippspiel</a>
+        <a href="{tiefe}tippspiel.html#rangliste">Tippspiel-Rangliste</a>
         </div>
       </div>
       <a href="{tiefe}archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>

@@ -1010,8 +1010,9 @@ export async function onRequest({ request, env }) {
         if (!id || !(h >= 0 && h <= 20) || !(g >= 0 && g <= 20)) return json(400, { fehler: "Ungültiger Tipp" });
         const spiel = (await ligaSpiele()).find(s => s.id === id);
         if (!spiel) return json(404, { fehler: "Spiel nicht gefunden" });
-        if (new Date(spiel.anpfiff).getTime() <= Date.now() || spiel.fertig)
-          return json(409, { fehler: "Das Spiel hat schon begonnen, Tipps sind geschlossen" });
+        // Tippschluss 5 Minuten vor Anpfiff
+        if (new Date(spiel.anpfiff).getTime() - 5 * 60 * 1000 <= Date.now() || spiel.fertig)
+          return json(409, { fehler: "Tippschluss: Tipps sind nur bis 5 Minuten vor Anpfiff möglich" });
         await db("tipps", { method: "POST", headers: { Prefer: "resolution=merge-duplicates" },
           body: JSON.stringify({ email, spiel_id: id, tore_heim: h, tore_gast: g, geaendert_am: new Date().toISOString() }) });
         return json(200, { ok: true });
