@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tippspiel Bundesliga – Ligaoutsider.de</title>
+  <meta name="description" content="Kostenloses Bundesliga-Tippspiel: Ergebnisse tippen, Punkte sammeln, Rangliste erklimmen."/>
+  <link rel="canonical" href="https://ligaoutsider.de/tippspiel.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Tippspiel Bundesliga – Ligaoutsider.de"/>
+  <meta property="og:description" content="Kostenloses Bundesliga-Tippspiel: Ergebnisse tippen, Punkte sammeln, Rangliste erklimmen."/>
+  <meta property="og:url" content="https://ligaoutsider.de/tippspiel.html"/>
+  <meta property="og:site_name" content="Ligaoutsider.de"/>
+  <meta property="og:locale" content="de_DE"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.png" type="image/png"/>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="/auth.js"></script>
+  <style>
+    .cs-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+    .cs-wrap h1 { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .cs-sub { font-size: 13px; color: var(--text4); margin-bottom: 20px; }
+    .cs-zahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .cs-zahl { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+    .cs-zahl b { display: block; font-size: 28px; font-weight: 900; color: var(--accent); }
+    .cs-zahl b a { color: var(--accent); text-decoration: none; }
+    .cs-zahl span { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+    .cs-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .cs-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
+    .cs-box h2 { font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
+    .cs-box p.cs-hinweis { font-size: 12px; color: var(--text4); margin-bottom: 10px; }
+    .cs-liste { list-style: none; padding: 0; margin: 0; }
+    .cs-liste li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text2); }
+    .cs-liste li:last-child { border-bottom: 0; }
+    .cs-platz { width: 22px; text-align: right; font-weight: 800; color: var(--text4); flex-shrink: 0; }
+    .cs-ava { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--accent); background: var(--bg4); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--accent); }
+    .cs-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cs-name a { color: var(--text); text-decoration: none; font-weight: 700; }
+    .cs-name a:hover { color: var(--accent); }
+    .cs-wert { font-weight: 800; color: var(--text); flex-shrink: 0; }
+    .cs-komm { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .cs-komm:last-child { border-bottom: 0; }
+    .cs-komm q { display: block; color: var(--text2); margin-bottom: 4px; quotes: "„" "“"; }
+    .cs-komm small { color: var(--text4); font-size: 12px; }
+    .cs-komm small a { color: var(--accent); text-decoration: none; }
+    .cs-balken { display: flex; align-items: flex-end; gap: 4px; height: 110px; margin-top: 8px; }
+    .cs-balken div { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
+    .cs-balken-l { display: flex; gap: 4px; font-size: 10px; color: var(--text4); margin-top: 4px; }
+    .cs-balken-l span { flex: 1; text-align: center; }
+    .cs-leer { font-size: 13px; color: var(--text4); padding: 8px 0; }
+    .cs-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+  </style>
+
+  <style>
+    .mb-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+    .mb-box h2 { font-size: 15px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .6px; margin: 0 0 6px; }
+    .mb-box p.cs-hinweis { margin-bottom: 12px; }
+    .mb-select { background: var(--bg); color: var(--text); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-size: 14px; min-width: 240px; }
+    .mb-liste a { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); color: var(--text2); text-decoration: none; font-size: 14px; }
+    .mb-liste a:last-child { border-bottom: 0; }
+    .mb-liste a small { color: var(--text4); flex-shrink: 0; }
+    .mb-liste a:hover span { color: var(--accent); }
+    .mb-fav { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .mb-fav:last-child { border-bottom: 0; }
+    .mb-fav img { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; margin-top: 2px; }
+    .mb-fav .mb-name { font-weight: 800; color: var(--text); text-decoration: none; }
+    .mb-fav .mb-sub { font-size: 12px; color: var(--text4); }
+    .mb-fav .mb-news { font-size: 13px; margin-top: 4px; }
+    .mb-fav .mb-news a { color: var(--text2); text-decoration: none; display: block; padding: 2px 0; }
+    .mb-fav .mb-news a:hover { color: var(--accent); }
+    .mb-weg { margin-left: auto; background: none; border: 0; color: var(--text4); cursor: pointer; font-size: 18px; }
+    .mb-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .mb-tools a { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 14px; }
+    .mb-tools a small { display: block; color: var(--text4); font-weight: 500; margin-top: 3px; }
+    .mb-tools a:hover { border-color: var(--accent); }
+    .mb-gast { text-align: center; padding: 28px 18px; }
+    .mb-gast h2 { font-size: 20px; text-transform: none; letter-spacing: 0; color: var(--text); }
+    .mb-gast ul { text-align: left; max-width: 420px; margin: 14px auto 18px; padding-left: 20px; color: var(--text2); font-size: 14px; line-height: 1.8; }
+  </style>
+
+  <style>
+    .tp-regeln { font-size: 13px; color: var(--text3); margin-bottom: 14px; }
+    .tp-kopf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .tp-kopf button { background: var(--bg2); border: 1px solid var(--border2); color: var(--text); border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; }
+    .tp-kopf button:disabled { opacity: .4; cursor: default; }
+    .tp-kopf strong { font-size: 18px; }
+    .tp-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .tp-spiel:last-child { border-bottom: 0; }
+    .tp-team { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--text); }
+    .tp-team.gast { justify-content: flex-end; text-align: right; }
+    .tp-team img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+    .tp-mitte { text-align: center; }
+    .tp-mitte input { width: 44px; text-align: center; background: var(--bg); color: var(--text); border: 1px solid var(--border2); border-radius: 6px; padding: 7px 0; font-size: 16px; font-weight: 800; }
+    .tp-mitte input:disabled { opacity: .6; }
+    .tp-info { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--text4); }
+    .tp-info button { background: var(--accent); color: #000; border: 0; border-radius: 6px; padding: 5px 12px; font-weight: 800; cursor: pointer; font-size: 12px; }
+    .tp-punkte { font-weight: 800; padding: 1px 8px; border-radius: 10px; background: var(--bg4); color: var(--text); }
+    .tp-punkte.p4 { background: #2e7d32; color: #fff; } .tp-punkte.p3 { background: #7cb342; color: #000; } .tp-punkte.p2 { background: #fbc02d; color: #000; }
+    .tp-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+    .tp-tabs button { background: transparent; border: 1px solid var(--border2); color: var(--text3); border-radius: 20px; padding: 7px 16px; font-weight: 700; cursor: pointer; }
+    .tp-tabs button.aktiv { background: var(--accent); color: #000; border-color: var(--accent); }
+    .tp-rang td, .tp-rang th { padding: 8px 6px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .tp-rang th { font-size: 11px; text-transform: uppercase; color: var(--text4); }
+    .tp-rang td:last-child, .tp-rang th:last-child { text-align: right; font-weight: 800; }
+    .tp-rang a { color: var(--text); text-decoration: none; font-weight: 700; }
+    @media (max-width: 520px) { .tp-team span { font-size: 12px; } }
+  </style>
+<script src="/consent.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-liga">Liga</span><span class="logo-outsider">outsider</span><span class="logo-de">.de</span>
+      </a>
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Hell/Dunkel wechseln">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label">Hell</span>
+        </button>
+        <div class="auth-buttons">
+          <a href="#" class="auth-btn" id="login-btn">Anmelden</a>
+          <a href="#" class="auth-btn auth-btn--primary" id="signup-btn">Registrieren</a>
+          <span id="user-info" style="display:none">
+            <a href="nachrichten.html" id="nachrichten-icon" class="post-icon" title="Nachrichten" aria-label="Nachrichten">✉️<span class="post-zahl" id="nachrichten-zahl" hidden></span></a>
+            <span id="user-name" class="auth-username"></span>
+            <a href="#" class="auth-btn" id="logout-btn">Abmelden</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <div class="section-nav-inner">
+      <a href="index.html" class="section-nav-link">Aktuelle News</a>
+      <a href="archiv.html" class="section-nav-link">Newsarchiv</a>
+      <a href="kickbase.html" class="section-nav-link">Kickbase-Stats</a>
+      <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
+      <a href="aufstellung.html" class="section-nav-link">Aufstellungen</a>
+      <a href="elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="tippspiel.html" class="section-nav-link active">🎯 Tippspiel</a>
+      <a href="community.html" class="section-nav-link">📊 Community-Stats</a>
+      <a href="forum.html" class="section-nav-link">💬 Forum</a>
+    </div>
+  </nav>
+
+  <main class="cs-wrap">
+    <h1>🎯 Tippspiel</h1>
+    <p class="tp-regeln">Tippe die Ergebnisse der Bundesliga. <strong>4 Punkte</strong> fürs exakte Ergebnis, <strong>3</strong> für die richtige Tordifferenz, <strong>2</strong> für die richtige Tendenz. Tipps sind bis zum Anpfiff möglich und jederzeit änderbar. Kostenlos mit Konto.</p>
+    <div class="tp-tabs"><button class="aktiv" data-t="tippen">Tippen</button><button data-t="rang">Rangliste</button></div>
+    <div id="tp-tippen"></div>
+    <div id="tp-rang" hidden></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; Ligaoutsider.de, 2026</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+        <a href="nutzungsbedingungen.html">Nutzungsbedingungen</a>
+        <a href="archiv-seite-1.html">Alle Artikel</a>
+        <a href="verein/">Alle Vereine</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL  = location.origin + '/sb';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+  </script>
+  <script src="/kommentare.js"></script>
+  <script>
+  (function () {
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const LOGO = [['bayern','bayern'],['dortmund','dortmund'],['leipzig','leipzig'],['leverkusen','leverkusen'],['frankfurt','frankfurt'],
+      ['stuttgart','stuttgart'],['gladbach','gladbach'],['freiburg','freiburg'],['union','union'],['mainz','mainz'],['augsburg','augsburg'],
+      ['bremen','werder'],['hoffenheim','hoffenheim'],['hamburg','hsv'],['köln','koeln'],['koeln','koeln'],['schalke','schalke'],
+      ['paderborn','paderborn'],['elversberg','elversberg']];
+    const logo = n => { const k = LOGO.find(([t]) => String(n).toLowerCase().includes(t)); return k ? `<img src="logos/${k[1]}.png" alt="">` : ''; };
+    const wrapT = document.getElementById('tp-tippen'), wrapR = document.getElementById('tp-rang');
+    let tag = 0, aktuell = 1, tipps = {}, spiele = [], punkteGesamt = 0;
+    const angemeldet = () => !!(window.netlifyIdentity && netlifyIdentity.currentUser());
+
+    async function tippsLaden() {
+      tipps = {}; punkteGesamt = 0;
+      if (!angemeldet()) return;
+      try { const r = await loKonto.api('tipp_meine'); tipps = r.tipps || {}; punkteGesamt = r.punkte || 0; } catch (e) {}
+    }
+
+    async function spieltag(n) {
+      wrapT.innerHTML = '<p class="cs-leer">Lade Spiele…</p>';
+      try {
+        const r = await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + n);
+        spiele = await r.json();
+      } catch (e) { wrapT.innerHTML = '<p class="cs-leer">Spiele konnten nicht geladen werden.</p>'; return; }
+      tag = n;
+      zeichnen();
+    }
+
+    function zeichnen() {
+      const jetzt = Date.now();
+      const zeilen = spiele.map(s => {
+        const res = (s.matchResults || []).find(x => x.resultTypeID === 2) || (s.matchResults || []).slice(-1)[0];
+        const an = new Date(s.matchDateTimeUTC).getTime();
+        const zu = an <= jetzt || s.matchIsFinished;
+        const t = tipps[s.matchID];
+        const wann = new Date(s.matchDateTimeUTC).toLocaleString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const ergebnis = s.matchIsFinished && res ? `Endstand ${res.pointsTeam1}:${res.pointsTeam2}` : (zu ? 'läuft / angepfiffen' : wann + ' Uhr');
+        const pkt = t && t.p != null ? `<span class="tp-punkte p${t.p}">${t.p} Pkt.</span>` : '';
+        return `<div class="tp-spiel" data-id="${s.matchID}">
+          <div class="tp-team">${logo(s.team1.teamName)}<span>${esc(s.team1.shortName || s.team1.teamName)}</span></div>
+          <div class="tp-mitte"><input type="number" min="0" max="20" inputmode="numeric" class="h" value="${t ? t.h : ''}" ${zu || !angemeldet() ? 'disabled' : ''}> :
+            <input type="number" min="0" max="20" inputmode="numeric" class="g" value="${t ? t.g : ''}" ${zu || !angemeldet() ? 'disabled' : ''}></div>
+          <div class="tp-team gast"><span>${esc(s.team2.shortName || s.team2.teamName)}</span>${logo(s.team2.teamName)}</div>
+          <div class="tp-info"><span>${ergebnis}</span><span>${pkt} ${!zu && angemeldet() ? '<button class="speichern">Tipp speichern</button>' : ''}</span></div></div>`;
+      }).join('');
+      wrapT.innerHTML = `<div class="tp-kopf"><button id="tp-zu" ${tag <= 1 ? 'disabled' : ''}>←</button><strong>${tag}. Spieltag</strong>
+        <button id="tp-vor" ${tag >= 34 ? 'disabled' : ''}>→</button>${angemeldet() ? `<span style="margin-left:auto;color:var(--text3)">Deine Punkte gesamt: <strong style="color:var(--accent)">${punkteGesamt}</strong></span>` : ''}</div>
+        ${angemeldet() ? '' : `<section class="mb-box" style="margin-bottom:14px"><p style="margin:0 0 10px;color:var(--text2)">Zum Tippen brauchst du ein kostenloses Konto.</p><button class="fav-btn" id="tp-reg">Kostenlos registrieren</button> <a href="#" id="tp-login" style="color:var(--accent);margin-left:10px">Anmelden</a></section>`}
+        <section class="cs-box" style="padding:6px 16px">${zeilen || '<p class="cs-leer">Keine Spiele.</p>'}</section>`;
+      document.getElementById('tp-zu').onclick = () => spieltag(tag - 1);
+      document.getElementById('tp-vor').onclick = () => spieltag(tag + 1);
+      const reg = document.getElementById('tp-reg'); if (reg) reg.onclick = () => netlifyIdentity.open('signup');
+      const lg = document.getElementById('tp-login'); if (lg) lg.onclick = e => { e.preventDefault(); netlifyIdentity.open('login'); };
+      wrapT.querySelectorAll('.speichern').forEach(b => b.onclick = async () => {
+        const z = b.closest('.tp-spiel'), h = z.querySelector('.h').value, g = z.querySelector('.g').value;
+        if (h === '' || g === '') return alert('Bitte beide Torzahlen eintragen.');
+        b.disabled = true;
+        try { await loKonto.api('tipp_abgeben', { spiel_id: z.dataset.id, heim: h, gast: g }); tipps[z.dataset.id] = { h: +h, g: +g, p: null }; b.textContent = '✓ Gespeichert'; }
+        catch (e) { alert(e.message); b.disabled = false; }
+      });
+    }
+
+    async function rangliste(st) {
+      wrapR.innerHTML = '<p class="cs-leer">Lade Rangliste…</p>';
+      let d;
+      try { d = await (await fetch('/api?tipp_rangliste=1&spieltag=' + (st || 0))).json(); } catch (e) { wrapR.innerHTML = '<p class="cs-leer">Rangliste nicht verfügbar.</p>'; return; }
+      const tabelle = d.rangliste.length ? `<table class="tp-rang" style="width:100%;border-collapse:collapse"><thead><tr><th>#</th><th>Tipper</th><th>Tipps</th><th>Exakt</th><th>Punkte</th></tr></thead><tbody>${d.rangliste.map((x, i) =>
+        `<tr><td>${i + 1}</td><td>${x.handle ? `<a href="/profil/${encodeURIComponent(x.handle)}">${esc(x.name)}</a>` : esc(x.name)}</td><td>${x.tipps}</td><td>${x.exakt}</td><td>${x.punkte}</td></tr>`).join('')}</tbody></table>`
+        : '<p class="cs-leer">Noch keine ausgewerteten Tipps. Sei der Erste!</p>';
+      wrapR.innerHTML = `<div class="tp-tabs"><button data-s="0" class="${st ? '' : 'aktiv'}">Gesamt</button><button data-s="${tag || d.aktueller_spieltag}" class="${st ? 'aktiv' : ''}">${tag || d.aktueller_spieltag}. Spieltag</button></div>
+        <section class="cs-box">${tabelle}</section>`;
+      wrapR.querySelectorAll('.tp-tabs button').forEach(b => b.onclick = () => rangliste(+b.dataset.s));
+    }
+
+    document.querySelectorAll('.tp-tabs button[data-t]').forEach(b => b.onclick = () => {
+      document.querySelectorAll('.tp-tabs button[data-t]').forEach(x => x.classList.toggle('aktiv', x === b));
+      wrapT.hidden = b.dataset.t !== 'tippen'; wrapR.hidden = b.dataset.t !== 'rang';
+      if (b.dataset.t === 'rang') rangliste(0);
+    });
+
+    async function start() {
+      try {
+        const d = await (await fetch('/api?tipp_rangliste=1')).json();
+        aktuell = d.aktueller_spieltag || 1;
+      } catch (e) {}
+      await tippsLaden();
+      await spieltag(aktuell);
+    }
+    let gestartet = false;
+    const los = async () => { if (gestartet) { await tippsLaden(); zeichnen(); return; } gestartet = true; start(); };
+    if (window.netlifyIdentity) { netlifyIdentity.on('init', los); netlifyIdentity.on('login', los); netlifyIdentity.on('logout', () => { tipps = {}; punkteGesamt = 0; zeichnen(); }); }
+    setTimeout(() => { if (!gestartet) { gestartet = true; start(); } }, 1500);
+  })();
+  </script>
+
+</body>
+</html>

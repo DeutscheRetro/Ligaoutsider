@@ -51,6 +51,7 @@
       <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="elf.html" class="section-nav-link active">Meine Elf</a>
+      <a href="tippspiel.html" class="section-nav-link">🎯 Tippspiel</a>
       <a href="community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="forum.html" class="section-nav-link">💬 Forum</a>
     </div>
@@ -87,6 +88,9 @@
             <span id="me-zaehler">0/11</span>
             <button id="me-bild">🖼 Als Bild</button>
             <button id="me-teilen">🔗 Teilen</button>
+            <button id="me-cloud" title="Elf in deinem Konto speichern">☁ Speichern</button>
+            <select id="me-cloud-liste" hidden aria-label="Gespeicherte Elfen"></select>
+            <button id="me-cloud-weg" hidden title="Ausgewählte gespeicherte Elf löschen">🗑</button>
             <button id="me-leeren">Leeren</button>
           </div>
         </div>
@@ -374,6 +378,40 @@
       try { await navigator.clipboard.writeText(url); hinweis('Link kopiert'); }
       catch (e) { prompt('Link zum Teilen:', url); }
     });
+
+
+    // ─── Elfen im Konto speichern (bis zu 10) ───────────────────────────────
+    (function () {
+      const knopf = document.getElementById('me-cloud'), liste = document.getElementById('me-cloud-liste'), weg = document.getElementById('me-cloud-weg');
+      let elfen = [];
+      const zeigen = () => {
+        liste.hidden = weg.hidden = !elfen.length;
+        liste.innerHTML = '<option value="">Gespeicherte Elfen (' + elfen.length + ')</option>' +
+          elfen.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+      };
+      const holen = async () => {
+        if (!(window.netlifyIdentity && netlifyIdentity.currentUser())) { elfen = []; zeigen(); return; }
+        try { elfen = (await loKonto.api('elf_liste')).elfen || []; zeigen(); } catch (e) {}
+      };
+      knopf.addEventListener('click', async () => {
+        if (!nurMitKonto()) return;
+        const name = prompt('Name für diese Elf:', TITEL());
+        if (!name) return;
+        try { elfen = (await loKonto.api('elf_speichern', { name, code: kodiert() })).elfen; zeigen(); hinweis('Im Konto gespeichert'); }
+        catch (e) { hinweis(e.message); }
+      });
+      liste.addEventListener('change', () => {
+        const x = elfen.find(e => e.id === liste.value);
+        if (x) { location.hash = '#' + encodeURIComponent(x.code); location.reload(); }
+      });
+      weg.addEventListener('click', async () => {
+        const x = elfen.find(e => e.id === liste.value);
+        if (!x) return hinweis('Erst eine gespeicherte Elf auswählen');
+        if (!confirm(`„${x.name}“ löschen?`)) return;
+        try { elfen = (await loKonto.api('elf_loeschen', { id: x.id })).elfen; zeigen(); } catch (e) { hinweis(e.message); }
+      });
+      if (window.netlifyIdentity) { netlifyIdentity.on('init', holen); netlifyIdentity.on('login', holen); netlifyIdentity.on('logout', holen); }
+    })();
 
     // ─── Als Bild (Canvas, 1080×1350 für Instagram/WhatsApp) ────────────────────
     const bildLaden = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; });

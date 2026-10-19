@@ -236,9 +236,64 @@ async function communityStats() {
   };
 }
 
+// ─── Tippspiel ───────────────────────────────────────────────────────────────
+let _ligaCache = { zeit: 0, spiele: null };
+async function ligaSpiele() {
+  if (_ligaCache.spiele && Date.now() - _ligaCache.zeit < 120000) return _ligaCache.spiele;
+  const r = await fetch("https://api.openligadb.de/getmatchdata/bl1/2026");
+  if (!r.ok) throw new Error("OpenLigaDB " + r.status);
+  const roh = await r.json();
+  _ligaCache = { zeit: Date.now(), spiele: roh.map(s => {
+    const res = (s.matchResults || []).find(x => x.resultTypeID === 2) || (s.matchResults || []).slice(-1)[0];
+    return { id: s.matchID, tag: (s.group || {}).groupOrderID || 0, anpfiff: s.matchDateTimeUTC,
+             fertig: !!s.matchIsFinished && !!res, heim: res ? res.pointsTeam1 : null, gast: res ? res.pointsTeam2 : null };
+  }) };
+  return _ligaCache.spiele;
+}
+
+// 4 Punkte exakt, 3 Tordifferenz richtig, 2 Tendenz richtig
+function tippPunkte(t, e) {
+  if (t[0] === e[0] && t[1] === e[1]) return 4;
+  const tt = Math.sign(t[0] - t[1]), te = Math.sign(e[0] - e[1]);
+  if (tt !== te) return 0;
+  return (t[0] - t[1] === e[0] - e[1]) ? 3 : 2;
+}
+
+async function tippRangliste(spieltag) {
+  const [spiele, tipps, profile] = await Promise.all([
+    ligaSpiele(), hole("tipps?select=email,spiel_id,tore_heim,tore_gast&limit=50000"),
+    hole("profile?select=email,handle,anzeigename&limit=20000")]);
+  const sp = Object.fromEntries(spiele.map(s => [s.id, s]));
+  const prof = Object.fromEntries((profile || []).map(p => [String(p.email).toLowerCase(), p]));
+  const lauf = {};
+  (tipps || []).forEach(t => {
+    const s = sp[t.spiel_id];
+    if (!s || !s.fertig) return;
+    if (spieltag && s.tag !== spieltag) return;
+    const e = String(t.email).toLowerCase();
+    const l = lauf[e] = lauf[e] || { punkte: 0, tipps: 0, exakt: 0 };
+    const p = tippPunkte([t.tore_heim, t.tore_gast], [s.heim, s.gast]);
+    l.punkte += p; l.tipps++; if (p === 4) l.exakt++;
+  });
+  const liste = Object.entries(lauf).map(([e, l]) => {
+    const p = prof[e] || {};
+    return { name: p.anzeigename || p.handle || "Tipper", handle: p.handle || null, ...l };
+  }).sort((a, b) => b.punkte - a.punkte || b.exakt - a.exakt || a.tipps - b.tipps).slice(0, 50);
+  const aktuell = (spiele.find(s => !s.fertig) || spiele[spiele.length - 1] || {}).tag || 1;
+  return { spieltag, aktueller_spieltag: aktuell, rangliste: liste, stand: new Date().toISOString() };
+}
+
 export async function onRequest({ request, env }) {
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
   // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe
+  if (request.method === "GET" && new URL(request.url).searchParams.has("tipp_rangliste")) {
+    if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
+    try {
+      const st = parseInt(new URL(request.url).searchParams.get("spieltag") || "0", 10) || 0;
+      return new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } });
+    } catch (e) { return json(500, { fehler: "Rangliste nicht verfügbar" }); }
+  }
   if (request.method === "GET" && new URL(request.url).searchParams.has("community")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
@@ -931,6 +986,59 @@ export async function onRequest({ request, env }) {
         await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
           method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, favoriten: neu } }) });
         return json(200, { ok: true, favoriten: neu, gesetzt: neu.includes(id) });
+      }
+
+      // ─── Tippspiel ────────────────────────────────────────────────────────
+      case "tipp_meine": {
+        const zeilen = await hole(`tipps?email=eq.${encodeURIComponent(email)}&select=spiel_id,tore_heim,tore_gast&limit=1000`);
+        const spiele = await ligaSpiele();
+        const sp = Object.fromEntries(spiele.map(s => [s.id, s]));
+        let gesamt = 0;
+        const tipps = {};
+        (zeilen || []).forEach(t => {
+          const s = sp[t.spiel_id];
+          const p = s && s.fertig ? tippPunkte([t.tore_heim, t.tore_gast], [s.heim, s.gast]) : null;
+          if (p) gesamt += p;
+          tipps[t.spiel_id] = { h: t.tore_heim, g: t.tore_gast, p };
+        });
+        return json(200, { tipps, punkte: gesamt });
+      }
+
+      case "tipp_abgeben": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        const id = parseInt(body.spiel_id, 10), h = parseInt(body.heim, 10), g = parseInt(body.gast, 10);
+        if (!id || !(h >= 0 && h <= 20) || !(g >= 0 && g <= 20)) return json(400, { fehler: "Ungültiger Tipp" });
+        const spiel = (await ligaSpiele()).find(s => s.id === id);
+        if (!spiel) return json(404, { fehler: "Spiel nicht gefunden" });
+        if (new Date(spiel.anpfiff).getTime() <= Date.now() || spiel.fertig)
+          return json(409, { fehler: "Das Spiel hat schon begonnen, Tipps sind geschlossen" });
+        await db("tipps", { method: "POST", headers: { Prefer: "resolution=merge-duplicates" },
+          body: JSON.stringify({ email, spiel_id: id, tore_heim: h, tore_gast: g, geaendert_am: new Date().toISOString() }) });
+        return json(200, { ok: true });
+      }
+
+      // ─── Meine Elf im Konto ───────────────────────────────────────────────
+      case "elf_liste": {
+        return json(200, { elfen: (meta.elfen || []).map(x => ({ id: x.id, name: x.name, code: x.code, zeit: x.zeit })) });
+      }
+      case "elf_speichern": {
+        const name = sauber(body.name, 40) || "Meine Elf";
+        const code = String(body.code || "").slice(0, 3000);
+        if (!code) return json(400, { fehler: "Elf ist leer" });
+        const liste = Array.isArray(meta.elfen) ? meta.elfen : [];
+        const alt = liste.find(x => x.name.toLowerCase() === name.toLowerCase());
+        const neu = alt ? liste.map(x => x === alt ? { ...x, code, zeit: new Date().toISOString() } : x)
+                        : [...liste, { id: crypto.randomUUID().slice(0, 8), name, code, zeit: new Date().toISOString() }];
+        if (neu.length > 10) return json(400, { fehler: "Maximal 10 gespeicherte Elfen. Lösche zuerst eine." });
+        await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+          method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, elfen: neu } }) });
+        return json(200, { ok: true, elfen: neu.map(x => ({ id: x.id, name: x.name, code: x.code, zeit: x.zeit })) });
+      }
+      case "elf_loeschen": {
+        const neu = (meta.elfen || []).filter(x => x.id !== String(body.id));
+        await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
+          method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, elfen: neu } }) });
+        return json(200, { ok: true, elfen: neu.map(x => ({ id: x.id, name: x.name, code: x.code, zeit: x.zeit })) });
       }
 
       case "kommentar_meins": {

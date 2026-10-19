@@ -350,6 +350,7 @@
     return d;
   }
   window.loKonto = {
+    api: kontoApi,
     laden() {
       if (!konto.laufend) konto.laufend = kontoApi('konto_lesen').then(d => (konto.daten = d)).catch(() => (konto.daten = null));
       return konto.laufend;

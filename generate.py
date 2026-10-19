@@ -1735,6 +1735,7 @@ def artikel_html(
       <a href="../comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="../aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="../elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="../tippspiel.html" class="section-nav-link">🎯 Tippspiel</a>
       <a href="../community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="../forum.html" class="section-nav-link">💬 Forum</a>
     </div>
@@ -2609,6 +2610,7 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/elf.html", "0.6", "weekly"),
         (f"{base}/forum.html", "0.6", "weekly"),
         (f"{base}/community.html", "0.5", "daily"),
+        (f"{base}/tippspiel.html", "0.6", "daily"),
     ] + [(f"{base}/{Path(p).name}", "0.5", "daily") for p in sorted(glob.glob("archiv-seite-*.html"))] \
       + [(f"{base}/verein/", "0.8", "daily")] \
       + [(f"{base}/{p.replace(os.sep, '/')}", "0.8", "daily") for p in sorted(glob.glob("verein/*.html")) if not p.endswith("index.html")]
@@ -3232,6 +3234,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
       <a href="{tiefe}comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="{tiefe}aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="{tiefe}elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="{tiefe}tippspiel.html" class="section-nav-link">🎯 Tippspiel</a>
       <a href="{tiefe}community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="{tiefe}forum.html" class="section-nav-link">💬 Forum</a>
     </div>
@@ -3880,6 +3883,14 @@ def kickbase_fetch():
                         for p in top([x for x in players
                                       if x["pos"] == pos and x["stamm"]], "ap")]
     Path("kickbase.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Alle Spieler kompakt für "Mein Bereich" (Favoriten: Marktwert, Trend, Status)
+    import unicodedata as _ud
+    def _nk(t):
+        t = _ud.normalize("NFKD", str(t).replace("ø", "o").replace("ß", "ss")).encode("ascii", "ignore").decode().lower()
+        return re.sub(r"[^a-z0-9]+", " ", t).strip()
+    Path("kickbase_spieler.json").write_text(json.dumps({
+        f"{Path(p['logo']).stem}|{_nk(p['name'])}": {"mw": p["mw"], "d": p["mvt"], "w": p["t7"], "p": p["pts"], "s": p["status"], "i": p["info"]}
+        for p in players if p["logo"]}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"✅ kickbase.json geschrieben ({len(players)} Spieler, via BaseXI)")
 
 

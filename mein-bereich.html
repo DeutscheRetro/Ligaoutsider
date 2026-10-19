@@ -113,6 +113,7 @@
       <a href="comunio.html" class="section-nav-link">Comunio-Stats</a>
       <a href="aufstellung.html" class="section-nav-link">Aufstellungen</a>
       <a href="elf.html" class="section-nav-link">Meine Elf</a>
+      <a href="tippspiel.html" class="section-nav-link">🎯 Tippspiel</a>
       <a href="community.html" class="section-nav-link">📊 Community-Stats</a>
       <a href="forum.html" class="section-nav-link">💬 Forum</a>
     </div>
@@ -153,7 +154,39 @@
       hoffenheim: ['TSG Hoffenheim', 'Hoffenheim'], hsv: ['Hamburger SV', 'Hamburger'], koeln: ['1. FC Köln', 'Köln'],
       schalke: ['FC Schalke 04', 'Schalke'], paderborn: ['SC Paderborn 07', 'Paderborn'], elversberg: ['SV Elversberg', 'Elversberg'] };
     const box = document.getElementById('mb-inhalt'), sub = document.getElementById('mb-sub');
-    let feed = [], news = {}, kurz = {}, daten = { verein: '', favoriten: [] };
+    let feed = [], news = {}, kurz = {}, kb = {}, auf = {}, daten = { verein: '', favoriten: [] };
+    const nk = t => String(t || '').normalize('NFKD').replace(/ø/g, 'o').replace(/ß/g, 'ss').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const mio = n => (n / 1e6).toLocaleString('de-DE', { maximumFractionDigits: n >= 1e7 ? 1 : 2 }) + ' Mio. €';
+    const prozent = (d, mw) => mw ? (100 * d / mw) : 0;
+    const pf = p => (p > 0 ? '+' : '') + p.toLocaleString('de-DE', { maximumFractionDigits: 1 }) + ' %';
+    // Kickbase-Daten und Aufstellungsstatus je Favorit
+    function kbVon(k) {
+      const direkt = kb[k.l + '|' + nk(k.n)];
+      if (direkt) return direkt;
+      const nach = nk(k.n).split(' ').pop();
+      const treffer = Object.entries(kb).filter(([s]) => s.startsWith(k.l + '|') && s.split(' ').pop() === nach);
+      return treffer.length === 1 ? treffer[0][1] : null;
+    }
+    function aufVon(k) {
+      const n = nk(k.n), nach = n.split(' ').pop();
+      for (const t of Object.values(auf.teams || {})) {
+        if (!(t.logo || '').endsWith('/' + k.l + '.png')) continue;
+        const alle = Object.values(t.elf || {}).flat();
+        const x = alle.find(p => nk(p.name) === n) || alle.find(p => nk(p.name).split(' ').pop() === nach);
+        if (x) return x;
+      }
+      return null;
+    }
+    const AMPEL = { gruen: ['🟢', 'Startelf wahrscheinlich'], gelb: ['🟡', 'Fraglich'], rot: ['🔴', 'Fällt wohl aus'] };
+    function auffaellig(i) {
+      const k = kurz[i], d = kbVon(k), a = aufVon(k), g = [];
+      if (d && Math.abs(prozent(d.d, d.mw)) >= 4) g.push(`Marktwert heute ${pf(prozent(d.d, d.mw))}`);
+      if (d && Math.abs(prozent(d.w, d.mw)) >= 8) g.push(`Marktwert 7 Tage ${pf(prozent(d.w, d.mw))}`);
+      if (d && d.s) g.push(d.i || 'Angeschlagen');
+      if (a && a.ampel === 'rot') g.push('Aufstellung: ' + (a.grund || 'fällt wohl aus'));
+      else if (a && a.ampel === 'gelb') g.push('Aufstellung: ' + (a.grund || 'fraglich'));
+      return g;
+    }
 
     function gast() {
       sub.textContent = 'Nur mit Konto';
@@ -181,13 +214,24 @@
         <select class="mb-select" id="mb-verein">${optionen}</select>${liste}</section>`;
     }
 
+    function alarmBox() {
+      const ids = (daten.favoriten || []).map(String).filter(i => kurz[i]);
+      const z = ids.map(i => ({ i, g: auffaellig(i) })).filter(x => x.g.length);
+      if (!ids.length) return '';
+      return `<section class="mb-box"><h2>🔔 Aufgefallen bei deinen Favoriten</h2><p class="cs-hinweis">Marktwert-Sprünge (ab 4 % am Tag oder 8 % in der Woche), Verletzungen und fragliche Einsätze.</p>
+        ${z.length ? `<div class="mb-liste">${z.map(x => `<a href="spieler/${esc(kurz[x.i].s)}.html"><span><strong>${esc(kurz[x.i].n)}</strong><br><small style="color:var(--text3)">${esc(x.g.join(' · '))}</small></span></a>`).join('')}</div>` : '<p class="cs-leer">Alles ruhig, nichts Auffälliges.</p>'}</section>`;
+    }
+
     function favBox() {
       const ids = (daten.favoriten || []).map(String).filter(i => kurz[i]);
       const zeilen = ids.map(i => {
-        const k = kurz[i], n = news[i] || [];
+        const k = kurz[i], n = news[i] || [], d = kbVon(k), a = aufVon(k);
+        const kbText = d ? `Kickbase ${mio(d.mw)} (<span style="color:${d.d >= 0 ? '#4caf50' : '#e53935'}">${pf(prozent(d.d, d.mw))}</span> heute, ${pf(prozent(d.w, d.mw))} Woche) · ${d.p} Pkt.` : '';
+        const aufText = a && AMPEL[a.ampel] ? `${AMPEL[a.ampel][0]} ${AMPEL[a.ampel][1]}${a.prozent ? ' (' + a.prozent + ' %)' : ''}` : '';
         return `<div class="mb-fav"><img src="logos/${esc(k.l)}.png" alt="">
           <div style="flex:1;min-width:0"><a class="mb-name" href="spieler/${esc(k.s)}.html">${esc(k.n)}</a>
           <div class="mb-sub">${esc(k.p)} · ${esc(k.v)}${k.mw ? ' · ' + esc(k.mw) : ''}</div>
+          ${kbText || aufText ? `<div class="mb-sub" style="margin-top:3px">${[kbText, aufText].filter(Boolean).join(' · ')}</div>` : ''}
           <div class="mb-news">${n.slice(0, 3).map(a => `<a href="${esc(a.pfad)}">${esc(a.titel)} <small style="color:var(--text4)">${esc((a.datum || '').split(' ')[0])}</small></a>`).join('') || '<span style="color:var(--text4)">Keine aktuellen Meldungen</span>'}</div></div>
           <button class="mb-weg" data-id="${i}" title="Entfernen">✕</button></div>`;
       }).join('');
@@ -207,7 +251,7 @@
 
     function zeichnen() {
       sub.textContent = 'Willkommen zurück';
-      box.innerHTML = vereinBox() + favBox() + tools;
+      box.innerHTML = vereinBox() + alarmBox() + favBox() + tools;
       document.getElementById('mb-verein').onchange = async e => {
         try { await loKonto.verein(e.target.value); daten.verein = e.target.value; } catch (err) { alert(err.message); }
         zeichnen();
@@ -235,9 +279,9 @@
       const u = netlifyIdentity.currentUser();
       if (!u) return gast();
       try {
-        const [d, f, n, k] = await Promise.all([loKonto.laden(),
-          fetch('feed.json').then(r => r.json()), fetch('spieler_news.json').then(r => r.json()), fetch('spieler_kurz.json').then(r => r.json())]);
-        daten = d || daten; feed = f; news = n; kurz = k;
+        const j = u => fetch(u).then(r => r.json()).catch(() => ({}));
+        const [d, f, n, k, b, a] = await Promise.all([loKonto.laden(), j('feed.json'), j('spieler_news.json'), j('spieler_kurz.json'), j('kickbase_spieler.json'), j('aufstellung.json')]);
+        daten = d || daten; feed = Array.isArray(f) ? f : []; news = n; kurz = k; kb = b; auf = a;
         zeichnen();
       } catch (e) { sub.textContent = 'Konnte nicht geladen werden. Bitte Seite neu laden.'; }
     }
