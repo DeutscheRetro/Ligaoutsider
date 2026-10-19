@@ -1,3 +1,28 @@
+/* ─── Archiv ─── */
+.archiv-wrap { max-width: 860px; margin: 24px auto; padding: 0 16px; }
+
+/* ─── Impressum ─── */
+.impressum-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 32px; max-width: 700px;
+}
+.impressum-box h1 { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 28px; }
+.impressum-box h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text3); margin: 24px 0 8px; }
+.impressum-box p  { font-size: 14px; color: var(--text2); line-height: 1.7; }
+.impressum-box a  { color: var(--accent); }
+
+/* ─── Footer ─── */
+.site-footer { background: var(--header-bg); border-top: 1px solid var(--border); margin-top: 40px; }
+.footer-inner {
+  max-width: 1280px; margin: 0 auto; padding: 18px 16px;
+  display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+}
+.footer-copy { color: var(--text4); }
+.footer-nav  { display: flex; gap: 10px 16px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 640px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 10px; } .footer-nav { justify-content: flex-start; } }
+.footer-nav a { color: var(--text4); }
+.footer-nav a:hover { color: var(--accent); }
+
 /* ─── Section Nav ─── */
 .section-nav { background: var(--bg2); border-bottom: 1px solid var(--border); position: relative; z-index: 20; }
 .section-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; flex-wrap: wrap; }
@@ -333,46 +358,6 @@ ul { list-style: none; }
   transition: background 0.15s, border-color 0.15s; text-decoration: none;
 }
 .mehr-button:hover { border-color: var(--accent); background: var(--bg3); color: var(--accent); }
-
-/* ─── Archiv ─── */
-.archiv-wrap { max-width: 860px; margin: 24px auto; padding: 0 16px; }
-
-/* ─── Impressum ─── */
-.impressum-box {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 6px; padding: 32px; max-width: 700px;
-}
-.impressum-box h1 { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 28px; }
-.impressum-box h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text3); margin: 24px 0 8px; }
-.impressum-box p  { font-size: 14px; color: var(--text2); line-height: 1.7; }
-.impressum-box a  { color: var(--accent); }
-
-/* ─── Footer ─── */
-.site-footer { background: var(--header-bg); border-top: 1px solid var(--border); margin-top: 40px; }
-.footer-inner {
-  max-width: 1280px; margin: 0 auto; padding: 18px 16px;
-  display: flex; justify-content: space-between; align-items: center; font-size: 12px;
-}
-.footer-copy { color: var(--text4); }
-.footer-nav  { display: flex; gap: 10px 16px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 640px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 10px; } .footer-nav { justify-content: flex-start; } }
-.footer-nav a { color: var(--text4); }
-.footer-nav a:hover { color: var(--accent); }
-
-/* ─── Section Nav ─── */
-.section-nav { background: var(--bg2); border-bottom: 1px solid var(--border); }
-.section-nav { overflow-x: auto; scrollbar-width: none; }
-.section-nav::-webkit-scrollbar { display: none; }
-.section-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; }
-.section-nav-link { flex-shrink: 0; white-space: nowrap; }
-#news-einsenden-btn { flex-shrink: 0; white-space: nowrap; }
-.section-nav-link {
-  font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
-  padding: 10px 16px; color: var(--text4);
-  border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
-}
-.section-nav-link:hover { color: var(--text2); }
-.section-nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* ─── Archiv ─── */
 .archiv-list { list-style: none; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
