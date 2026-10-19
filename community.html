@@ -139,6 +139,8 @@
     ['meiste_kommentare', 'meiste_upvotes', 'meiste_downvotes', 'bester_saldo', 'beste_quote', 'dienstaelteste', 'neu_dabei']
       .forEach(k => (s[k] || []).forEach(x => x.handle && handles.add(x.handle)));
     ['top_kommentare', 'kontrovers'].forEach(k => (s[k] || []).forEach(x => x.autor.handle && handles.add(x.autor.handle)));
+    let tippRangVor = [];
+    try { tippRangVor = ((await (await fetch('/api?tipp_rangliste=1')).json()).rangliste || []).slice(0, 10); tippRangVor.forEach(x => x.handle && handles.add(x.handle)); } catch (e) {}
     let avatare = {};
     if (handles.size) try { avatare = await (await fetch('/api?avatare=' + encodeURIComponent([...handles].join(',')))).json(); } catch (e) {}
     const ava = p => p.handle && avatare[p.handle] ? `<img class="cs-ava" src="${avatare[p.handle]}" alt="">`
@@ -173,7 +175,11 @@
       return `<section class="cs-box"><h2>${titel}</h2><p class="cs-hinweis">${hinweis}</p><div class="cs-balken">${werte.map((w, i) => `<div style="height:${Math.round(100 * w / max)}%" title="${labels[i]}: ${w}"></div>`).join('')}</div><div class="cs-balken-l">${labels.map(l => `<span>${l}</span>`).join('')}</div></section>`;
     };
 
+    const tippRang = tippRangVor;
+    const tippBox = `<section class="cs-box"><h2>🎯 Tippspiel-Rangliste</h2><p class="cs-hinweis">Die besten Tipper der Saison · <a href="tippspiel.html" style="color:var(--accent)">Mittippen</a></p>${
+      tippRang.length ? `<ol class="cs-liste">${tippRang.map((x, i) => `<li><span class="cs-platz">${['🥇', '🥈', '🥉'][i] || (i + 1) + '.'}</span>${ava(x)}<span class="cs-name">${nameHtml(x)}</span><span class="cs-wert">${x.punkte}</span></li>`).join('')}</ol>` : leer}</section>`;
     document.getElementById('cs-raster').innerHTML = [
+      tippBox,
       rangliste('👍 Meiste Upvotes', 'Summe aller Daumen hoch auf eigene Kommentare', s.meiste_upvotes),
       rangliste('⚖️ Bester Saldo', 'Upvotes minus Downvotes, ab 3 Bewertungen', s.bester_saldo),
       rangliste('🎯 Höchste Zustimmung', 'Anteil Daumen hoch, ab 5 Bewertungen', s.beste_quote, ' %'),

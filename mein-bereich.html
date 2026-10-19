@@ -154,7 +154,8 @@
       hoffenheim: ['TSG Hoffenheim', 'Hoffenheim'], hsv: ['Hamburger SV', 'Hamburger'], koeln: ['1. FC Köln', 'Köln'],
       schalke: ['FC Schalke 04', 'Schalke'], paderborn: ['SC Paderborn 07', 'Paderborn'], elversberg: ['SV Elversberg', 'Elversberg'] };
     const box = document.getElementById('mb-inhalt'), sub = document.getElementById('mb-sub');
-    let feed = [], news = {}, kurz = {}, kb = {}, auf = {}, daten = { verein: '', favoriten: [] };
+    let feed = [], news = {}, kurz = {}, kb = {}, auf = {}, daten = { verein: '', favoriten: [] }, tipp = { tipps: {}, punkte: 0 }, rang = { rangliste: [], aktueller_spieltag: 1 }, spieltagSpiele = [];
+    const LOGO_TEAM = n => { const l = String(n).toLowerCase(); return Object.entries(VEREINE).find(([, [, kurz]]) => l.includes(kurz.toLowerCase()))?.[0] || ''; };
     const nk = t => String(t || '').normalize('NFKD').replace(/ø/g, 'o').replace(/ß/g, 'ss').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     const mio = n => (n / 1e6).toLocaleString('de-DE', { maximumFractionDigits: n >= 1e7 ? 1 : 2 }) + ' Mio. €';
     const prozent = (d, mw) => mw ? (100 * d / mw) : 0;
@@ -191,8 +192,12 @@
     function gast() {
       sub.textContent = 'Nur mit Konto';
       box.innerHTML = `<section class="mb-box mb-gast"><h2>Dein Bereich für Liga und Manager</h2>
-        <ul><li>Deinen Verein wählen und dessen News zuerst sehen</li><li>Lieblingsspieler als Favoriten merken</li>
-        <li>Neues zu deinen Favoriten auf einen Blick</li><li>Kommentieren, bewerten und diskutieren</li></ul>
+        <ul style="list-style:none;padding:0">
+          <li>🏟️ Deinen Verein wählen, seine News zuerst sehen</li>
+          <li>⭐ Lieblingsspieler merken, Marktwert und Einsatzchance im Blick</li>
+          <li>🎯 Beim Tippspiel Punkte sammeln und in der Rangliste klettern</li>
+          <li>☁️ Deine Elf im Konto speichern, auf jedem Gerät</li>
+          <li>💬 Kommentieren, bewerten, diskutieren</li></ul>
         <button class="fav-btn" id="mb-reg" style="font-size:15px;padding:10px 20px">Kostenlos registrieren</button>
         <p class="cs-hinweis" style="margin-top:12px">Ein Klick mit Google genügt. Schon ein Konto? <a href="#" id="mb-login" style="color:var(--accent)">Anmelden</a></p></section>`;
       document.getElementById('mb-reg').onclick = () => netlifyIdentity.open('signup');
@@ -212,6 +217,39 @@
       }
       return `<section class="mb-box"><h2>🏟️ Mein Verein</h2><p class="cs-hinweis">Deine Lieblingsmannschaft. Ihre News stehen hier zuerst.</p>
         <select class="mb-select" id="mb-verein">${optionen}</select>${liste}</section>`;
+    }
+
+    function tippBox() {
+      const jetzt = Date.now();
+      const offen = spieltagSpiele.filter(s => new Date(s.matchDateTimeUTC).getTime() > jetzt && !s.matchIsFinished);
+      const fehlend = offen.filter(s => !tipp.tipps[s.matchID]);
+      const h = window._loIch && window._loIch.handle;
+      const i = h ? rang.rangliste.findIndex(x => x.handle === h) : -1;
+      const platz = i >= 0 ? `Platz ${i + 1} von ${rang.rangliste.length}` : (rang.rangliste.length ? 'noch nicht in der Rangliste' : 'Rangliste startet nach den ersten Spielen');
+      const naechst = offen.sort((a, b) => new Date(a.matchDateTimeUTC) - new Date(b.matchDateTimeUTC))[0];
+      return `<section class="mb-box"><h2>🎯 Tippspiel</h2>
+        <div class="cs-zahlen" style="margin-bottom:12px">
+          <div class="cs-zahl"><b>${tipp.punkte}</b><span>Punkte</span></div>
+          <div class="cs-zahl"><b style="font-size:17px;line-height:1.3;margin-top:6px">${esc(platz)}</b><span>Rangliste</span></div>
+          <div class="cs-zahl"><b style="color:${fehlend.length ? '#e53935' : '#4caf50'}">${fehlend.length}</b><span>Offene Tipps, ${rang.aktueller_spieltag}. Spieltag</span></div></div>
+        <p class="cs-hinweis" style="margin:0">${naechst ? `Nächster Anpfiff: ${new Date(naechst.matchDateTimeUTC).toLocaleString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} Uhr · ` : ''}<a href="tippspiel.html" style="color:var(--accent);font-weight:700">${fehlend.length ? 'Jetzt tippen →' : 'Zum Tippspiel →'}</a></p></section>`;
+    }
+
+    function naechstesSpielBox() {
+      const v = VEREINE[daten.verein];
+      if (!v) return '';
+      const key = v[1].toLowerCase();
+      const s = spieltagSpiele.find(x => !x.matchIsFinished && (x.team1.teamName.toLowerCase().includes(key) || x.team2.teamName.toLowerCase().includes(key)));
+      if (!s) return '';
+      const an = new Date(s.matchDateTimeUTC), t = tipp.tipps[s.matchID], live = an.getTime() <= Date.now();
+      const lg = n => { const k = LOGO_TEAM(n); return k ? `<img src="logos/${k}.png" alt="" style="width:34px;height:34px;object-fit:contain">` : ''; };
+      return `<section class="mb-box"><h2>📅 Nächstes Spiel</h2>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:15px;font-weight:800;color:var(--text)">
+          <span style="display:flex;align-items:center;gap:8px">${lg(s.team1.teamName)}${esc(s.team1.shortName || s.team1.teamName)}</span><span style="color:var(--text4)">vs.</span>
+          <span style="display:flex;align-items:center;gap:8px">${lg(s.team2.teamName)}${esc(s.team2.shortName || s.team2.teamName)}</span></div>
+        <p class="cs-hinweis" style="margin:8px 0 0">${live ? '<strong style="color:#e53935">● LIVE</strong>' : an.toLocaleString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' Uhr'}
+          · ${t ? `Dein Tipp <strong>${t.h}:${t.g}</strong>` : live ? 'kein Tipp' : '<a href="tippspiel.html" style="color:var(--accent);font-weight:700">Jetzt tippen →</a>'}
+          · <a href="aufstellung.html?team=${encodeURIComponent(v[0])}" style="color:var(--accent)">Voraussichtliche Elf</a></p></section>`;
     }
 
     function alarmBox() {
@@ -242,7 +280,8 @@
     }
 
     const tools = `<section class="mb-box"><h2>🧰 Deine Tools</h2><div class="mb-tools">
-      <a href="elf.html">⚽ Meine Elf<small>Aufstellung bauen und teilen</small></a>
+      <a href="tippspiel.html">🎯 Tippspiel<small>Tippen und Punkte sammeln</small></a>
+      <a href="elf.html">⚽ Meine Elf<small>Aufstellung bauen, speichern, teilen</small></a>
       <a href="kickbase.html">📈 Kickbase-Stats<small>Marktwerte und Trends</small></a>
       <a href="comunio.html">📊 Comunio-Stats<small>Punkte und Preise</small></a>
       <a href="aufstellung.html">📋 Aufstellungen<small>Voraussichtliche Startelf</small></a>
@@ -251,7 +290,7 @@
 
     function zeichnen() {
       sub.textContent = 'Willkommen zurück';
-      box.innerHTML = vereinBox() + alarmBox() + favBox() + tools;
+      box.innerHTML = vereinBox() + naechstesSpielBox() + tippBox() + alarmBox() + favBox() + tools;
       document.getElementById('mb-verein').onchange = async e => {
         try { await loKonto.verein(e.target.value); daten.verein = e.target.value; } catch (err) { alert(err.message); }
         zeichnen();
@@ -280,8 +319,10 @@
       if (!u) return gast();
       try {
         const j = u => fetch(u).then(r => r.json()).catch(() => ({}));
-        const [d, f, n, k, b, a] = await Promise.all([loKonto.laden(), j('feed.json'), j('spieler_news.json'), j('spieler_kurz.json'), j('kickbase_spieler.json'), j('aufstellung.json')]);
-        daten = d || daten; feed = Array.isArray(f) ? f : []; news = n; kurz = k; kb = b; auf = a;
+        const [d, f, n, k, b, a, t, r] = await Promise.all([loKonto.laden(), j('feed.json'), j('spieler_news.json'), j('spieler_kurz.json'), j('kickbase_spieler.json'), j('aufstellung.json'),
+          loKonto.api('tipp_meine').catch(() => ({ tipps: {}, punkte: 0 })), j('/api?tipp_rangliste=1')]);
+        daten = d || daten; feed = Array.isArray(f) ? f : []; news = n; kurz = k; kb = b; auf = a; tipp = t; rang = r.rangliste ? r : rang;
+        try { spieltagSpiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (rang.aktueller_spieltag || 1))).json(); } catch (e) { spieltagSpiele = []; }
         zeichnen();
       } catch (e) { sub.textContent = 'Konnte nicht geladen werden. Bitte Seite neu laden.'; }
     }

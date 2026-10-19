@@ -376,7 +376,7 @@
     const a = document.createElement('a');
     a.id = 'mein-bereich-link'; a.className = 'section-nav-link';
     a.href = tiefe + 'mein-bereich.html'; a.textContent = '⭐ Mein Bereich';
-    nav.insertBefore(a, nav.querySelector('a[href$="community.html"]'));
+    nav.insertBefore(a, nav.querySelector('a[href$="tippspiel.html"]') || nav.querySelector('a[href$="community.html"]'));
     if (location.pathname.endsWith('/mein-bereich.html')) a.classList.add('active');
   }
 
@@ -453,7 +453,7 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', los); else los();
   }
   window.netlifyIdentity.on('init', u => kontoHaken(u));
-  window.netlifyIdentity.on('login', u => kontoHaken(u));
+  window.netlifyIdentity.on('login', u => { konto.laufend = konto.daten = null; kontoHaken(u); });
   window.netlifyIdentity.on('logout', () => kontoHaken(null));
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { sterneVerdrahten(null); vereinKnopf(null); });
   else { sterneVerdrahten(null); vereinKnopf(null); }

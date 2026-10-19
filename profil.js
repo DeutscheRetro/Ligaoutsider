@@ -173,6 +173,18 @@
       ${aus.map(a => `<div class="pr-zeile"><span><a href="${profilUrl(a.handle)}">${esc(a.name)}</a> <small class="pr-grau">wartet auf Antwort</small></span>
         <button class="pr-btn" data-a="entfernen" data-h="${esc(a.handle)}">Zurückziehen</button></div>`).join('')}
     </section>`;
+    tippZeile();
+  }
+
+  // Tippspiel-Platzierung nachladen (öffentliche Rangliste, nur Profilname und Punkte)
+  async function tippZeile() {
+    try {
+      const d = await (await fetch('/api?tipp_rangliste=1')).json();
+      const i = (d.rangliste || []).findIndex(x => x.handle === handle);
+      if (i < 0) return;
+      const el = box.querySelector('.pr-kopf-text p');
+      if (el && !el.querySelector('.pr-tipp')) el.insertAdjacentHTML('beforeend', ` · <a class="pr-tipp" href="/tippspiel.html" style="color:var(--accent)">🎯 Tippspiel: Platz ${i + 1}, ${d.rangliste[i].punkte} Punkte</a>`);
+    } catch (e) {}
   }
 
   // ─── Bearbeiten ──────────────────────────────────────────────────────────────

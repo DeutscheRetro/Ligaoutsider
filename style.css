@@ -322,7 +322,8 @@ ul { list-style: none; }
   display: flex; justify-content: space-between; align-items: center; font-size: 12px;
 }
 .footer-copy { color: var(--text4); }
-.footer-nav  { display: flex; gap: 16px; }
+.footer-nav  { display: flex; gap: 10px 16px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 640px) { .footer-nav { justify-content: flex-start; } }
 .footer-nav a { color: var(--text4); }
 .footer-nav a:hover { color: var(--accent); }
 
