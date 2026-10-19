@@ -444,6 +444,18 @@
       : `<span>⭐ Wähle deinen Verein und sieh seine News zuerst.</span>
          <a href="mein-bereich.html" style="color:var(--accent,#e8c000);font-weight:700">Verein wählen</a>`;
     nav.insertAdjacentElement('afterend', leiste);
+    // Offene Tipps für den aktuellen Spieltag anhängen
+    try {
+      const [r, meine] = await Promise.all([fetch('/api?tipp_rangliste=1').then(x => x.json()), kontoApi('tipp_meine')]);
+      const spiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (r.aktueller_spieltag || 1))).json();
+      const offen = spiele.filter(s => new Date(s.matchDateTimeUTC).getTime() > Date.now() && !s.matchIsFinished && !(meine.tipps || {})[s.matchID]).length;
+      if (offen) {
+        const a = document.createElement('a');
+        a.href = 'tippspiel.html'; a.style.cssText = 'color:var(--accent,#e8c000);font-weight:700';
+        a.textContent = `🎯 ${offen} Tipp${offen > 1 ? 's' : ''} offen`;
+        leiste.insertBefore(a, leiste.lastElementChild);
+      }
+    } catch (e) { /* ohne Erinnerung weiter */ }
   }
 
   function kontoHaken(u) {

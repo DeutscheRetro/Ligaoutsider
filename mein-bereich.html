@@ -74,6 +74,8 @@
     .mb-tools a { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 14px; }
     .mb-tools a small { display: block; color: var(--text4); font-weight: 500; margin-top: 3px; }
     .mb-tools a:hover { border-color: var(--accent); }
+    .mb-kpi { grid-template-columns: repeat(3, 1fr) !important; gap: 8px; }
+    .mb-kpi .cs-zahl { padding: 10px 6px; } .mb-kpi .cs-zahl b { font-size: 24px; } .mb-kpi .cs-zahl span { font-size: 11px; letter-spacing: 0; text-transform: none; }
     .mb-gast { text-align: center; padding: 28px 18px; }
     .mb-gast h2 { font-size: 20px; text-transform: none; letter-spacing: 0; color: var(--text); }
     .mb-gast ul { text-align: left; max-width: 420px; margin: 14px auto 18px; padding-left: 20px; color: var(--text2); font-size: 14px; line-height: 1.8; }
@@ -210,7 +212,7 @@
         `<option value="${k}" ${daten.verein === k ? 'selected' : ''}>${esc(n)}</option>`).join('');
       let liste = '';
       if (v) {
-        const n = feed.filter(a => (a.vereine || []).includes(v[1])).slice(0, 8);
+        const n = feed.filter(a => (a.vereine || []).includes(v[1])).slice(0, 6);
         liste = `<div class="mb-liste" style="margin-top:12px">${n.map(a => `<a href="${esc(a.pfad)}"><span>${esc(a.titel)}</span><small>${esc((a.datum || '').split(' ')[0])}</small></a>`).join('') || '<p class="cs-leer">Noch keine Meldungen.</p>'}</div>
           <p class="cs-hinweis" style="margin-top:10px"><a href="verein/${daten.verein}.html" style="color:var(--accent)">Verein ansehen</a> ·
           <a href="aufstellung.html?team=${encodeURIComponent(v[0])}" style="color:var(--accent)">Voraussichtliche Elf</a></p>`;
@@ -225,13 +227,12 @@
       const fehlend = offen.filter(s => !tipp.tipps[s.matchID]);
       const h = window._loIch && window._loIch.handle;
       const i = h ? rang.rangliste.findIndex(x => x.handle === h) : -1;
-      const platz = i >= 0 ? `Platz ${i + 1} von ${rang.rangliste.length}` : (rang.rangliste.length ? 'noch nicht in der Rangliste' : 'Rangliste startet nach den ersten Spielen');
       const naechst = offen.sort((a, b) => new Date(a.matchDateTimeUTC) - new Date(b.matchDateTimeUTC))[0];
       return `<section class="mb-box"><h2>🎯 Tippspiel</h2>
-        <div class="cs-zahlen" style="margin-bottom:12px">
+        <div class="cs-zahlen mb-kpi" style="margin-bottom:12px">
           <div class="cs-zahl"><b>${tipp.punkte}</b><span>Punkte</span></div>
-          <div class="cs-zahl"><b style="font-size:17px;line-height:1.3;margin-top:6px">${esc(platz)}</b><span>Rangliste</span></div>
-          <div class="cs-zahl"><b style="color:${fehlend.length ? '#e53935' : '#4caf50'}">${fehlend.length}</b><span>Offene Tipps, ${rang.aktueller_spieltag}. Spieltag</span></div></div>
+          <div class="cs-zahl"><b>${i >= 0 ? i + 1 : '–'}</b><span>${i >= 0 ? `Platz von ${rang.rangliste.length}` : 'Rangliste'}</span></div>
+          <div class="cs-zahl"><b style="color:${fehlend.length ? '#e53935' : '#4caf50'}">${fehlend.length}</b><span>offen, ${rang.aktueller_spieltag}. Spieltag</span></div></div>
         <p class="cs-hinweis" style="margin:0">${naechst ? `Nächster Anpfiff: ${new Date(naechst.matchDateTimeUTC).toLocaleString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} Uhr · ` : ''}<a href="tippspiel.html" style="color:var(--accent);font-weight:700">${fehlend.length ? 'Jetzt tippen →' : 'Zum Tippspiel →'}</a></p></section>`;
     }
 
@@ -290,7 +291,7 @@
 
     function zeichnen() {
       sub.textContent = 'Willkommen zurück';
-      box.innerHTML = vereinBox() + naechstesSpielBox() + tippBox() + alarmBox() + favBox() + tools;
+      box.innerHTML = naechstesSpielBox() + tippBox() + alarmBox() + vereinBox() + favBox() + tools;
       document.getElementById('mb-verein').onchange = async e => {
         try { await loKonto.verein(e.target.value); daten.verein = e.target.value; } catch (err) { alert(err.message); }
         zeichnen();
@@ -323,6 +324,11 @@
           loKonto.api('tipp_meine').catch(() => ({ tipps: {}, punkte: 0 })), j('/api?tipp_rangliste=1')]);
         daten = d || daten; feed = Array.isArray(f) ? f : []; news = n; kurz = k; kb = b; auf = a; tipp = t; rang = r.rangliste ? r : rang;
         try { spieltagSpiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (rang.aktueller_spieltag || 1))).json(); } catch (e) { spieltagSpiele = []; }
+        // Hat der eigene Verein am aktuellen Spieltag schon gespielt, zeigt "Nächstes Spiel" den folgenden Spieltag
+        const v0 = VEREINE[daten.verein];
+        if (v0 && spieltagSpiele.length && !spieltagSpiele.some(x => !x.matchIsFinished && (x.team1.teamName + x.team2.teamName).toLowerCase().includes(v0[1].toLowerCase()))) {
+          try { spieltagSpiele = spieltagSpiele.concat(await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + ((rang.aktueller_spieltag || 1) + 1))).json()); } catch (e) {}
+        }
         zeichnen();
       } catch (e) { sub.textContent = 'Konnte nicht geladen werden. Bitte Seite neu laden.'; }
     }

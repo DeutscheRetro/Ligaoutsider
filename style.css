@@ -323,7 +323,7 @@ ul { list-style: none; }
 }
 .footer-copy { color: var(--text4); }
 .footer-nav  { display: flex; gap: 10px 16px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 640px) { .footer-nav { justify-content: flex-start; } }
+@media (max-width: 640px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 10px; } .footer-nav { justify-content: flex-start; } }
 .footer-nav a { color: var(--text4); }
 .footer-nav a:hover { color: var(--accent); }
 
