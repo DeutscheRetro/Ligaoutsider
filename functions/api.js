@@ -13,6 +13,28 @@
 
 const SUPABASE_URL = "https://rsodjlglzwlscamdlwev.supabase.co";
 let SERVICE_KEY = "";   // pro Anfrage aus env gesetzt
+let GH_TOKEN = "";      // GitHub-Token für die Redaktion (Cloudflare-Secret GH_TOKEN oder GH_DISPATCH_TOKEN)
+const GH_REPO = "DeutscheRetro/Ligaoutsider";
+// Nur diese Dateien darf die Redaktion über /api lesen und ändern
+const GH_PFAD = /^(feed\.json|deleted_ids\.json|sitemap\.xml|news-sitemap\.xml|rss\.xml|artikel\/[a-z0-9-]+\.html|og\/[a-z0-9]+\.jpg)$/;
+
+async function github(pfad, options = {}) {
+  const res = await fetch(`https://api.github.com/repos/${GH_REPO}/${pfad}`, {
+    ...options,
+    headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: "application/vnd.github+json",
+               "User-Agent": "ligaoutsider-chefred", "X-GitHub-Api-Version": "2022-11-28",
+               "Content-Type": "application/json", ...(options.headers || {}) } });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${text.slice(0, 200)}`);
+  return text ? JSON.parse(text) : null;
+}
+
+function base64Von(text) {
+  const bytes = new TextEncoder().encode(text);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
 const UUID = /^[0-9a-f-]{36}$/i;
 
 // Konten verwalten (Liste, Löschen) über die Admin-Schnittstelle von Supabase Auth
@@ -285,6 +307,7 @@ async function tippRangliste(spieltag) {
 
 export async function onRequest({ request, env }) {
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
+  GH_TOKEN = env.GH_TOKEN || env.GH_DISPATCH_TOKEN || "";
   // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe
   if (request.method === "GET" && new URL(request.url).searchParams.has("tipp_rangliste")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
@@ -962,6 +985,31 @@ export async function onRequest({ request, env }) {
         await aendere("forum_posts", `autor_email=eq.${E}`, { autor_name: neu, autor_handle: handle });
         await aendere("forum_threads", `autor_email=eq.${E}`, { autor_name: neu, autor_handle: handle });
         return json(200, { ok: true, name: neu, handle });
+      }
+
+      // ─── Redaktion (Chefred): Artikel im GitHub-Repo lesen, ändern, löschen ──
+      case "gh_get": case "gh_put": case "gh_delete": {
+        if (!darfLoeschen) return json(403, { fehler: "Keine Redaktionsrechte" });
+        if (!GH_TOKEN) return json(500, { fehler: "GH_TOKEN fehlt in den Cloudflare-Secrets" });
+        const pfad = String(body.path || "");
+        if (!GH_PFAD.test(pfad)) return json(400, { fehler: "Dieser Pfad ist für die Redaktion nicht freigegeben" });
+        const autor = { name: `Chefred (${name})`, email: "bot@ligaoutsider.de" };
+        if (aktion === "gh_get") {
+          const d = await github(`contents/${pfad}`);
+          // Dateien über 1 MB liefert die Contents-API ohne Inhalt, dann über die Blob-API holen
+          if (!d.content || d.encoding === "none") d.content = (await github(`git/blobs/${d.sha}`)).content;
+          return json(200, { sha: d.sha, content: d.content });
+        }
+        const message = sauber(body.message, 120) || `Chefred: ${pfad}`;
+        if (aktion === "gh_delete") {
+          await github(`contents/${pfad}`, { method: "DELETE", body: JSON.stringify({ message, sha: body.sha, committer: autor }) });
+          return json(200, { ok: true });
+        }
+        const inhalt = String(body.content ?? "");
+        if (inhalt.length > 6_000_000) return json(413, { fehler: "Datei zu groß" });
+        const r = await github(`contents/${pfad}`, { method: "PUT",
+          body: JSON.stringify({ message, content: base64Von(inhalt), sha: body.sha || undefined, committer: autor }) });
+        return json(200, { ok: true, sha: r && r.content ? r.content.sha : null });
       }
 
       // ─── Persönlicher Bereich: Mein Verein und Favoriten (im Konto gespeichert) ───
