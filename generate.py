@@ -4222,7 +4222,17 @@ if __name__ == "__main__":
         print(f"❌ comunio_fetch Fehler: {e}")
     try:
         db_datei = Path("spieler_db.json")
-        if not db_datei.exists() or time.time() - db_datei.stat().st_mtime > 20 * 3600:
+        # Alter aus dem JSON-Feld "updated", nicht aus der Dateizeit: im CI-Checkout ist die immer frisch
+        veraltet = True
+        if db_datei.exists():
+            try:
+                stand = datetime.datetime.fromisoformat(json.loads(db_datei.read_text(encoding="utf-8"))["updated"].replace("Z", "+00:00"))
+                if stand.tzinfo is None:
+                    stand = stand.replace(tzinfo=datetime.timezone.utc)
+                veraltet = (datetime.datetime.now(datetime.timezone.utc) - stand).total_seconds() > 20 * 3600
+            except Exception:
+                veraltet = True
+        if veraltet:
             spieler_db_fetch()
     except Exception as e:
         print(f"❌ spieler_db_fetch Fehler: {e}")
