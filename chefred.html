@@ -485,6 +485,7 @@ async function speichern() {
   const neuesLogo  = document.getElementById('edit-logo').value;
   const neuerText  = document.getElementById('edit-text').value.trim();
 
+  if (!neuerText || neuerText === 'Lade…' || neuerText.startsWith('(Text konnte')) { zeigeMsg('Text nicht geladen, Speichern abgebrochen.', false); return; }
   zeigeMsg('<span class="spinner"></span>Speichere…', false);
   try {
     const a = feedDaten[idx];
@@ -493,7 +494,9 @@ async function speichern() {
     html = html.replace(/<h1 class="artikel-titel">.*?<\/h1>/, `<h1 class="artikel-titel">${neuerTitel}</h1>`);
     const absaetze = neuerText.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
     html = html.replace(/<div class="artikel-text">[\s\S]*?<\/div>/, `<div class="artikel-text">${absaetze}</div>`);
-    if (neuesLogo) html = html.replace(/src="[^"]*" class="artikel-wappen"/, `src="${neuesLogo}" class="artikel-wappen"`);
+    // Artikel liegen in /artikel/, Logos relativ dazu ablegen (Feed speichert den Pfad ohne ../)
+    const logoImArtikel = /^(https?:|\/|\.\.\/)/.test(neuesLogo) ? neuesLogo : '../' + neuesLogo;
+    if (neuesLogo) html = html.replace(/src="[^"]*" class="artikel-wappen"/, `src="${logoImArtikel}" class="artikel-wappen"`);
     await ghPut(a.pfad, html, htmlData.sha, `✏️ Artikel bearbeitet: ${neuerTitel.substring(0,50)}`);
 
     feedDaten[idx].titel      = neuerTitel;
