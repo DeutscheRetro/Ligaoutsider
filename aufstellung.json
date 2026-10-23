@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T13:02:10.400821+00:00",
+ "updated": "2026-10-23T14:32:16.443023+00:00",
  "spieltag": 7,
  "partien": [
   {
@@ -207,16 +207,6 @@
      "prozent": 37
     },
     {
-     "name": "Joshua Kimmich",
-     "nr": "6",
-     "ampel": "gruen",
-     "grund": "Rückkehr nach Trauerfall erwartet",
-     "news": "artikel/bayern-diaz-faellt-mit-muskelbuendelriss-mindestens-einen-monat-aus-30942c178f.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 36
-    },
-    {
      "name": "Jonas Urbig",
      "nr": "40",
      "ampel": "gruen",
@@ -245,18 +235,28 @@
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 31
+    },
+    {
+     "name": "Min-jae Kim",
+     "nr": "3",
+     "ampel": "gruen",
+     "grund": "3 von 4 Einsätzen in der Startelf · Ø 77 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 20
     }
    ],
    "fraglich": [
     {
-     "name": "Min-jae Kim",
-     "nr": "3",
+     "name": "Joshua Kimmich",
+     "nr": "6",
      "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 11
+     "grund": "Todesfall in der Familie",
+     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 25
     }
    ],
    "ausfall": [
@@ -265,7 +265,7 @@
      "nr": "14",
      "ampel": "rot",
      "grund": "Muskelbündelriss im linken Oberschenkel",
-     "news": "artikel/bayern-diaz-faellt-mit-muskelbuendelriss-mindestens-einen-monat-aus-30942c178f.html",
+     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -274,8 +274,8 @@
      "name": "Jamal Musiala",
      "nr": "10",
      "ampel": "rot",
-     "grund": "noch nicht wieder einsatzfähig",
-     "news": "artikel/bayern-diaz-faellt-mit-muskelbuendelriss-mindestens-einen-monat-aus-30942c178f.html",
+     "grund": "Faserriss im rechten Oberschenkel",
+     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -549,16 +549,6 @@
       "prozent": 97
      },
      {
-      "name": "Daniel Svensson",
-      "nr": "24",
-      "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 97
-     },
-     {
       "name": "Julian Ryerson",
       "nr": "26",
       "ampel": "gruen",
@@ -577,6 +567,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 97
+     },
+     {
+      "name": "Daniel Svensson",
+      "nr": "24",
+      "ampel": "gruen",
+      "grund": "6 von 6 Einsätzen in der Startelf · Ø 97 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 83
      }
     ],
     "mf": [
@@ -591,6 +591,16 @@
       "prozent": 79
      },
      {
+      "name": "Ethan Nwaneri",
+      "nr": "18",
+      "ampel": "gruen",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 76
+     },
+     {
       "name": "Felix Nmecha",
       "nr": "8",
       "ampel": "gruen",
@@ -599,16 +609,6 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 70
-     },
-     {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
-      "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 66
      }
     ],
     "st": [
@@ -653,7 +653,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 33
+     "prozent": 22
     },
     {
      "name": "Fábio Silva",
@@ -664,6 +664,16 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 20
+    },
+    {
+     "name": "Ramy Bensebaini",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 14 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 18
     },
     {
      "name": "Carney Chukwuemeka",
@@ -881,16 +891,6 @@
      "prozent": 26
     },
     {
-     "name": "Robin Zentner",
-     "nr": "27",
-     "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 96 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 19
-    },
-    {
      "name": "Eric Martel",
      "nr": "5",
      "ampel": "gruen",
@@ -901,19 +901,18 @@
      "prozent": 12
     }
    ],
-   "fraglich": [
-    {
-     "name": "Silas",
-     "nr": "26",
-     "ampel": "gelb",
-     "grund": "Nach Schien- und Wadenbeinbruch - soll Mitte Oktober ins Training einsteigen",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 2
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
+    {
+     "name": "Robin Zentner",
+     "nr": "27",
+     "ampel": "rot",
+     "grund": "im Aufbautraining",
+     "news": "",
+     "reihe": "tw",
+     "pos": "Torwart",
+     "prozent": 0
+    },
     {
      "name": "Otto Ruoppi",
      "nr": "20",
@@ -922,6 +921,16 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Silas",
+     "nr": "26",
+     "ampel": "rot",
+     "grund": "Nach Schien- und Wadenbeinbruch - soll Mitte Oktober ins Training einsteigen",
+     "news": "",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
      "prozent": 0
     },
     {
@@ -1305,7 +1314,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 75
+      "prozent": 65
      },
      {
       "name": "Rômulo",
@@ -1390,7 +1399,7 @@
      "news": "artikel/baumgartner-feiert-nach-142-tagen-comeback-bei-real-madrid-06352e86b6.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 17
+     "prozent": 4
     }
    ],
    "ausfall": [
@@ -1898,16 +1907,6 @@
       "reihe": "mf",
       "pos": "Linkes Mittelfeld",
       "prozent": 65
-     },
-     {
-      "name": "Bambasé Conté",
-      "nr": "20",
-      "ampel": "gelb",
-      "grund": "Angeschlagen - gegen Lyon frühzeitig ausgewechselt worden",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 60
      }
     ],
     "st": [
@@ -1932,6 +1931,16 @@
       "prozent": 88
      },
      {
+      "name": "Adam Daghim",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "5 von 6 Einsätzen in der Startelf · Ø 78 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Rechtsaußen",
+      "prozent": 77
+     },
+     {
       "name": "Adam Hlozek",
       "nr": "10",
       "ampel": "gruen",
@@ -1944,16 +1953,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Adam Daghim",
-     "nr": "14",
-     "ampel": "gruen",
-     "grund": "5 von 6 Einsätzen in der Startelf · Ø 78 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 43
-    },
     {
      "name": "Wouter Burger",
      "nr": "18",
@@ -1975,6 +1974,16 @@
      "prozent": 38
     },
     {
+     "name": "Andrej Kramaric",
+     "nr": "27",
+     "ampel": "gruen",
+     "grund": "0 von 6 Einsätzen in der Startelf · Ø 17 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Hängende Spitze",
+     "prozent": 30
+    },
+    {
      "name": "Robin Hranac",
      "nr": "2",
      "ampel": "gruen",
@@ -1983,19 +1992,20 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 24
-    },
-    {
-     "name": "Andrej Kramaric",
-     "nr": "27",
-     "ampel": "gruen",
-     "grund": "0 von 6 Einsätzen in der Startelf · Ø 17 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Hängende Spitze",
-     "prozent": 20
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Bambasé Conté",
+     "nr": "20",
+     "ampel": "gelb",
+     "grund": "Angeschlagen - gegen Lyon frühzeitig ausgewechselt worden",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 25
+    }
+   ],
    "ausfall": [
     {
      "name": "Albian Hajdari",
@@ -2365,7 +2375,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 66
+      "prozent": 82
      }
     ],
     "st": [
@@ -2592,7 +2602,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 94
+      "prozent": 78
      }
     ]
    },
@@ -2606,6 +2616,16 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 26
+    },
+    {
+     "name": "Mitchell Weiser",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "0 von 4 Einsätzen in der Startelf · Ø 31 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 16
     }
    ],
    "fraglich": [
@@ -2807,11 +2827,21 @@
       "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 60
+      "prozent": 53
      }
     ]
    },
    "bank": [
+    {
+     "name": "Hee-chan Hwang",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "0 von 4 Einsätzen in der Startelf · Ø 24 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 26
+    },
     {
      "name": "Junior Dina Ebimbe",
      "nr": "29",
@@ -2821,16 +2851,6 @@
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
      "prozent": 22
-    },
-    {
-     "name": "Hee-chan Hwang",
-     "nr": "7",
-     "ampel": "gruen",
-     "grund": "0 von 4 Einsätzen in der Startelf · Ø 24 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 16
     }
    ],
    "fraglich": [
@@ -3389,7 +3409,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 51
+      "prozent": 61
      }
     ],
     "st": [
@@ -3466,7 +3486,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 30
+     "prozent": 20
     }
    ],
    "ausfall": [
@@ -3609,6 +3629,16 @@
     ],
     "st": [
      {
+      "name": "Emmanuel Latte Lath",
+      "nr": "29",
+      "ampel": "gruen",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 61 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 74
+     },
+     {
       "name": "Tim Skarke",
       "nr": "21",
       "ampel": "gruen",
@@ -3617,30 +3647,10 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 66
-     },
-     {
-      "name": "Emmanuel Latte Lath",
-      "nr": "29",
-      "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 61 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 64
      }
     ]
    },
    "bank": [
-    {
-     "name": "Livan Burcu",
-     "nr": "9",
-     "ampel": "gruen",
-     "grund": "Nach Krankheit wieder im Training",
-     "news": "artikel/union-bangt-in-augsburg-um-imeri-und-juranovic-b6c7464d52.html",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 33
-    },
     {
      "name": "Leopold Querfeld",
      "nr": "14",
@@ -3650,6 +3660,16 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 26
+    },
+    {
+     "name": "Livan Burcu",
+     "nr": "9",
+     "ampel": "gruen",
+     "grund": "Nach Krankheit wieder im Training",
+     "news": "artikel/union-bangt-in-augsburg-um-imeri-und-juranovic-b6c7464d52.html",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 22
     },
     {
      "name": "Aljoscha Kemlein",
@@ -3867,6 +3887,16 @@
      "prozent": 24
     },
     {
+     "name": "David Herold",
+     "nr": "20",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 47 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 24
+    },
+    {
      "name": "Mathieu Nguefack",
      "nr": "34",
      "ampel": "gruen",
@@ -3894,16 +3924,6 @@
      "news": "",
      "reihe": "st",
      "pos": "Linksaußen",
-     "prozent": 12
-    },
-    {
-     "name": "David Herold",
-     "nr": "20",
-     "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 47 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
      "prozent": 12
     }
    ],
