@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-23T19:02:10.560087+00:00",
+ "updated": "2026-10-23T21:02:15.663878+00:00",
  "spieltag": 7,
  "partien": [
-  {
-   "heim": "VfB Stuttgart",
-   "gast": "Borussia Mönchengladbach",
-   "anstoss": "2026-10-23T19:30:00",
-   "anstoss_text": "Fr 23.10. 20:30",
-   "spieltag": 7
-  },
   {
    "heim": "1. FSV Mainz 05",
    "gast": "SV Werder Bremen",
@@ -64,6 +57,20 @@
    "anstoss": "2026-10-25T17:30:00",
    "anstoss_text": "So 25.10. 17:30",
    "spieltag": 7
+  },
+  {
+   "heim": "Bayer 04 Leverkusen",
+   "gast": "VfB Stuttgart",
+   "anstoss": "2026-10-31T15:30:00",
+   "anstoss_text": "Sa 31.10. 15:30",
+   "spieltag": 8
+  },
+  {
+   "heim": "Borussia Mönchengladbach",
+   "gast": "SC Paderborn 07",
+   "anstoss": "2026-10-31T15:30:00",
+   "anstoss_text": "Sa 31.10. 15:30",
+   "spieltag": 8
   }
  ],
  "teams": {
@@ -406,7 +413,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 70
+      "prozent": 71
      }
     ]
    },
@@ -1114,6 +1121,16 @@
    ],
    "fraglich": [
     {
+     "name": "Tiago Tomás",
+     "nr": "8",
+     "ampel": "gelb",
+     "grund": "Nach Muskelverletzung - trainiert teilintegriert",
+     "news": "",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 28
+    },
+    {
      "name": "Nikolas Nartey",
      "nr": "28",
      "ampel": "gelb",
@@ -1133,16 +1150,6 @@
      "news": "artikel/vfb-stuttgart-josha-vagnoman-faellt-drei-bis-vier-wochen-aus-e7826216bc.html",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Tiago Tomás",
-     "nr": "8",
-     "ampel": "rot",
-     "grund": "Nach Muskelverletzung - trainiert teilintegriert, verpasst BMG (H)",
-     "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
      "prozent": 0
     },
     {
@@ -3804,16 +3811,6 @@
       "prozent": 75
      },
      {
-      "name": "Wael Mohya",
-      "nr": "36",
-      "ampel": "gruen",
-      "grund": "3 von 6 Einsätzen in der Startelf · Ø 54 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 42
-     },
-     {
       "name": "Kevin Stöger",
       "nr": "7",
       "ampel": "gruen",
@@ -3822,6 +3819,16 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 38
+     },
+     {
+      "name": "Wael Mohya",
+      "nr": "36",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 21
      }
     ],
     "st": [
