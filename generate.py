@@ -2567,6 +2567,9 @@ def reddit_post(titel: str, text: str, artikel_url: str):
         log.warning(f"Reddit-Post fehlgeschlagen: {e}")
 
 
+ARCHIV_PRO_SEITE = 100
+
+
 def archiv_seiten_schreiben(artikel_liste: list):
     """Statische Archivseiten (archiv-seite-1.html …) mit echten Links auf alle Artikel.
     archiv.html baut seine Liste per JavaScript; Suchmaschinen finden ohne diese Seiten
