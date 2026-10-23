@@ -176,7 +176,7 @@ jobs:
           fi
           echo "✅ Seite nach Neu-Deploy wieder erreichbar"
 
-      # Neue Artikel auf Bluesky/Telegram posten – erst wenn ihre Seite live ist
+      # Neue Artikel auf Bluesky/Telegram/Facebook posten – erst wenn ihre Seite live ist
       - name: Social Media
         if: always()
         env:
@@ -184,6 +184,8 @@ jobs:
           BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
           TELEGRAM_BOT_TOKEN:   ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL:     ${{ secrets.TELEGRAM_CHANNEL }}
+          FB_PAGE_ID:           ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN:        ${{ secrets.FB_PAGE_TOKEN }}
         run: |
           python social.py || true
           git config user.name  "Ligaoutsider Bot"

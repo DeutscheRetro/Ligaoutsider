@@ -1,4 +1,4 @@
-"""Postet neue Artikel auf Bluesky und Telegram.
+"""Postet neue Artikel auf Bluesky, Telegram und Facebook.
 
 generate.py legt jeden neuen Artikel in data/social_queue.json ab. Die Seite
 geht aber nur ein paarmal am Tag live (Netlify-Credits), deshalb postet dieses
@@ -8,6 +8,7 @@ bleibt er in der Warteschlange und wird beim nächsten Lauf erneut geprüft.
 Zugangsdaten kommen aus GitHub-Secrets; fehlt eins, wird das Netzwerk übersprungen:
   BLUESKY_HANDLE, BLUESKY_APP_PASSWORD
   TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL   (z. B. "@ligaoutsider")
+  FB_PAGE_ID, FB_PAGE_TOKEN              (Seiten-Token, siehe docs/facebook.md)
 """
 import datetime
 import html
@@ -147,9 +148,22 @@ def telegram_post(e: dict):
     r.raise_for_status()
 
 
+# ─── Facebook-Seite ───────────────────────────────────────────────────────────
+def facebook_post(e: dict):
+    """Link-Post auf der Facebook-Seite; Vorschaubild zieht Facebook aus den OG-Tags der Artikelseite."""
+    seite = os.environ["FB_PAGE_ID"]
+    token = os.environ["FB_PAGE_TOKEN"]
+    text = f"{e['titel']}\n\n{e.get('anriss', '')}".strip() + "\n\n" + " ".join("#" + t for t in hashtags(e))
+    r = requests.post(f"https://graph.facebook.com/v21.0/{seite}/feed",
+                      data={"message": text, "link": e["url"], "access_token": token}, timeout=30)
+    if not r.ok:
+        raise RuntimeError(r.json().get("error", {}).get("message", r.text[:200]))
+
+
 NETZWERKE = {
     "bluesky":  (("BLUESKY_HANDLE", "BLUESKY_APP_PASSWORD"), bluesky_post),
     "telegram": (("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL"), telegram_post),
+    "facebook": (("FB_PAGE_ID", "FB_PAGE_TOKEN"), facebook_post),
 }
 
 
