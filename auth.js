@@ -493,7 +493,7 @@
   const KANAELE = [
     ['Bluesky', 'https://bsky.app/profile/ligaoutsider.bsky.social'],
     ['Telegram', 'https://t.me/ligaoutsider'],
-    ['Facebook', ''],   // URL der Facebook-Seite eintragen, sobald sie live ist
+    ['Facebook', 'https://www.facebook.com/profile.php?id=61595823327711'],
   ].filter(k => k[1]);
   function kanaeleEinbauen() {
     const link = ([name, url]) => { const x = document.createElement('a'); x.href = url; x.textContent = name; x.target = '_blank'; x.rel = 'noopener me'; return x; };
