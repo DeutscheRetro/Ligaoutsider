@@ -322,10 +322,12 @@ export async function onRequest({ request, env }) {
     const soll = env.MONITOR_TOKEN || "", ist = request.headers.get("X-Monitor-Token") || "";
     let gleich = soll.length > 20 && soll.length === ist.length;
     for (let i = 0; i < soll.length; i++) gleich = gleich && soll.charCodeAt(i) === ist.charCodeAt(i);
-    if (!gleich) return json(403, { fehler: "kein Zugriff" });
     try {
       const seit = new URL(request.url).searchParams.get("seit") || "1970-01-01T00:00:00Z";
       const liste = (await authAdmin("/users?page=1&per_page=1000")).users || [];
+      // Ohne Token nur Anzahl und letzter Zeitpunkt, keine Personendaten
+      if (!gleich) return json(200, { gesamt: liste.length,
+        letzte: liste.reduce((m, u) => (u.created_at > m ? u.created_at : m), "") });
       const neu = liste.filter(u => u.created_at > seit)
         .map(u => ({ zeit: u.created_at, name: (u.user_metadata || {}).name || (u.user_metadata || {}).handle || "",
                      email: (u.email || "").replace(/^(.).*(@.*)$/, "$1…$2") }))
