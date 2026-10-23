@@ -190,7 +190,7 @@ jobs:
           python social.py || true
           git config user.name  "Ligaoutsider Bot"
           git config user.email "bot@ligaoutsider.de"
-          git add data/social_queue.json 2>/dev/null || true
+          git add data/social_queue.json data/social_tage.json 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "📣 Social-Warteschlange"
             git pull --rebase -X theirs origin main && git push || true

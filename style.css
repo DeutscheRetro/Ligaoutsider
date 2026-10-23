@@ -22,6 +22,9 @@
 @media (max-width: 640px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 10px; } .footer-nav { justify-content: flex-start; } }
 .footer-nav a { color: var(--text4); }
 .footer-nav a:hover { color: var(--accent); }
+.footer-social { color: var(--text4); }
+.footer-social a { color: var(--accent); }
+.nav-menue .nav-social:first-of-type { border-top: 1px solid var(--border); }
 
 /* ─── Section Nav ─── */
 .section-nav { background: var(--bg2); border-bottom: 1px solid var(--border); position: relative; z-index: 20; }

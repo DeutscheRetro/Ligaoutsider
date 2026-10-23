@@ -23,6 +23,11 @@ QUEUE = Path("data/social_queue.json")
 BASIS = "https://ligaoutsider.de"
 MAX_ALTER_STUNDEN = 48          # ältere Einträge nicht mehr posten
 MAX_POSTS_PRO_LAUF = 15         # nicht die Timeline fluten
+# Bluesky und Facebook bekommen nur die stärksten Themen, Telegram alles
+NUR_TOP = {"bluesky", "facebook"}
+TOP_KATEGORIEN = {"transfer", "verletzung"}
+MAX_PRO_TAG = 10
+ZAEHLER = Path("data/social_tage.json")
 
 
 # Vereinsnamen aus feed.json -> gängige Hashtags
@@ -167,8 +172,18 @@ NETZWERKE = {
 }
 
 
+def kategorie(e: dict) -> str:
+    return (e.get("kategorie") or _aus_feed(e.get("id", "")).get("kategorie") or "").lower()
+
+
 def main():
     queue = lade_queue()
+    heute = datetime.date.today().isoformat()
+    try:
+        zaehler = json.loads(ZAEHLER.read_text(encoding="utf-8"))
+    except Exception:
+        zaehler = {}
+    zaehler = {heute: zaehler.get(heute, {})}
     aktiv = {n: f for n, (env, f) in NETZWERKE.items() if all(os.environ.get(v) for v in env)}
     if not aktiv:
         print("Social: keine Zugangsdaten hinterlegt – nichts zu tun")
@@ -187,8 +202,13 @@ def main():
             behalten.append(e)
             continue
         for n in offen:
+            if n in NUR_TOP and (kategorie(e) not in TOP_KATEGORIEN or zaehler[heute].get(n, 0) >= MAX_PRO_TAG):
+                e.setdefault("erledigt", []).append(n)     # bewusst ausgelassen
+                continue
             try:
                 aktiv[n](e)
+                if n in NUR_TOP:
+                    zaehler[heute][n] = zaehler[heute].get(n, 0) + 1
                 e.setdefault("erledigt", []).append(n)
                 print(f"✅ {n}: {e['titel'][:60]}")
             except Exception as ex:
@@ -199,6 +219,7 @@ def main():
             behalten.append(e)
     QUEUE.parent.mkdir(exist_ok=True)
     QUEUE.write_text(json.dumps(behalten, ensure_ascii=False, indent=1), encoding="utf-8")
+    ZAEHLER.write_text(json.dumps(zaehler), encoding="utf-8")
     print(f"Social: {geposted} Artikel geposted, {len(behalten)} in der Warteschlange")
 
 

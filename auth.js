@@ -489,6 +489,25 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { sterneVerdrahten(null); vereinKnopf(null); });
   else { sterneVerdrahten(null); vereinKnopf(null); }
 
+  // Social-Kanäle in Fußzeile und Community-Menü (zentral hier, statt in jeder statischen Seite)
+  const KANAELE = [
+    ['Bluesky', 'https://bsky.app/profile/ligaoutsider.bsky.social'],
+    ['Telegram', 'https://t.me/ligaoutsider'],
+    ['Facebook', ''],   // URL der Facebook-Seite eintragen, sobald sie live ist
+  ].filter(k => k[1]);
+  function kanaeleEinbauen() {
+    const link = ([name, url]) => { const x = document.createElement('a'); x.href = url; x.textContent = name; x.target = '_blank'; x.rel = 'noopener me'; return x; };
+    const fuss = document.querySelector('.footer-nav');
+    if (fuss && !fuss.querySelector('.footer-social')) {
+      const g = document.createElement('span'); g.className = 'footer-social';
+      g.append('Folge uns: '); KANAELE.forEach((k, i) => { if (i) g.append(' · '); g.append(link(k)); });
+      fuss.appendChild(g);
+    }
+    const menue = document.querySelector('.nav-gruppe[data-nav="community"] .nav-menue');
+    if (menue && !menue.querySelector('.nav-social')) KANAELE.forEach(k => { const x = link(k); x.className = 'nav-social'; x.textContent = k[0] + ' ↗'; menue.appendChild(x); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', kanaeleEinbauen); else kanaeleEinbauen();
+
   sitzung = laden();
   (async () => {
     let ausMail = null;

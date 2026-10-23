@@ -2497,7 +2497,6 @@ def main():
         ergebnis = k["ergebnis"]
         aid = k["aid"]
         artikel_url = f"https://ligaoutsider.de/{artikel_datei(aid).as_posix()}"
-        facebook_post(ergebnis["titel"], artikel_url)
         reddit_post(ergebnis["titel"], ergebnis["text"], artikel_url)
         # Für social.py: gepostet wird erst, wenn die Seite live ist
         try:
@@ -2508,6 +2507,7 @@ def main():
                 "id": aid, "titel": ergebnis["titel"], "url": artikel_url,
                 "anriss": " ".join(_saetze[:2])[:280], "og": f"og/{aid}.jpg",
                 "vereine": list(k.get("vereine") or []), "hauptklub": ergebnis.get("hauptklub", ""),
+                "kategorie": ergebnis.get("kategorie") or k.get("kategorie", ""),
                 "zeit": datetime.datetime.now().isoformat(timespec="seconds"),
             })
             _q.write_text(json.dumps(_queue, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -2565,32 +2565,6 @@ def reddit_post(titel: str, text: str, artikel_url: str):
         log.info(f"Reddit: Gepostet – {titel[:60]}")
     except Exception as e:
         log.warning(f"Reddit-Post fehlgeschlagen: {e}")
-
-
-def facebook_post(titel: str, artikel_url: str):
-    """Postet neuen Artikel auf Facebook-Seite (benötigt FACEBOOK_PAGE_TOKEN + FACEBOOK_PAGE_ID)."""
-    page_token = os.environ.get("FACEBOOK_PAGE_TOKEN", "")
-    page_id    = os.environ.get("FACEBOOK_PAGE_ID", "")
-    if not page_token or not page_id:
-        return
-    import urllib.request as _req
-    import urllib.parse as _parse
-    data = _parse.urlencode({
-        "message":      f"⚽ {titel}\n\n{artikel_url}",
-        "link":         artikel_url,
-        "access_token": page_token,
-    }).encode()
-    try:
-        _req.urlopen(
-            _req.Request(f"https://graph.facebook.com/v19.0/{page_id}/feed", data=data),
-            timeout=10
-        )
-        print(f"  📘 Facebook-Post erstellt")
-    except Exception as e:
-        print(f"  ⚠️  Facebook-Post fehlgeschlagen: {e}")
-
-
-ARCHIV_PRO_SEITE = 100
 
 
 def archiv_seiten_schreiben(artikel_liste: list):
