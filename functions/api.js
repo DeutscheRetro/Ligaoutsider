@@ -317,6 +317,22 @@ export async function onRequest({ request, env }) {
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } });
     } catch (e) { return json(500, { fehler: "Rangliste nicht verfügbar" }); }
   }
+  // Registrierungs-Wächter (lokales Skript, stündlich): neue Konten seit Zeitpunkt, nur mit MONITOR_TOKEN
+  if (request.method === "GET" && new URL(request.url).searchParams.has("neue_nutzer")) {
+    const soll = env.MONITOR_TOKEN || "", ist = request.headers.get("X-Monitor-Token") || "";
+    let gleich = soll.length > 20 && soll.length === ist.length;
+    for (let i = 0; i < soll.length; i++) gleich = gleich && soll.charCodeAt(i) === ist.charCodeAt(i);
+    if (!gleich) return json(403, { fehler: "kein Zugriff" });
+    try {
+      const seit = new URL(request.url).searchParams.get("seit") || "1970-01-01T00:00:00Z";
+      const liste = (await authAdmin("/users?page=1&per_page=1000")).users || [];
+      const neu = liste.filter(u => u.created_at > seit)
+        .map(u => ({ zeit: u.created_at, name: (u.user_metadata || {}).name || (u.user_metadata || {}).handle || "",
+                     email: (u.email || "").replace(/^(.).*(@.*)$/, "$1…$2") }))
+        .sort((a, b) => a.zeit.localeCompare(b.zeit));
+      return json(200, { gesamt: liste.length, neu });
+    } catch (e) { return json(500, { fehler: "Nutzerliste nicht verfügbar" }); }
+  }
   if (request.method === "GET" && new URL(request.url).searchParams.has("community")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
