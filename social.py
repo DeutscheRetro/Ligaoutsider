@@ -28,6 +28,11 @@ NUR_TOP = {"bluesky", "facebook"}
 MAX_PRO_TAG = 30
 MEINUNG = {"interview", "analyse"}
 MAX_MEINUNG_PRO_TAG = 5
+MAX_PRO_VEREIN_PRO_TAG = 6       # sonst flutet Bayern die Timeline
+# Zoff und Experten-Gerede zählt wie ein Meinungsstück, auch wenn es als News einsortiert ist
+GEREDE = re.compile(r"kritisi|kritik|genervt|zoff|wirbel|ärger|drama|machtkampf|attack|seitenhieb|rücktrittsford|"
+                    r"pfiffe|wut|frust|stichel|kontert|schießt gegen|stinksauer|unmut|lästert|giftet|eklat|krach|"
+                    r"streit|vorwürf|spott|matthäus|hamann|effenberg|basler|littbarski|reif |lehmann")
 ZAEHLER = Path("data/social_tage.json")
 
 
@@ -177,6 +182,14 @@ def kategorie(e: dict) -> str:
     return (e.get("kategorie") or _aus_feed(e.get("id", "")).get("kategorie") or "").lower()
 
 
+def ist_gerede(e: dict) -> bool:
+    return kategorie(e) in MEINUNG or bool(GEREDE.search(e.get("titel", "").lower()))
+
+
+def verein(e: dict) -> str:
+    return (e.get("hauptklub") or _aus_feed(e.get("id", "")).get("hauptklub") or "").lower()
+
+
 def main():
     queue = lade_queue()
     heute = datetime.date.today().isoformat()
@@ -203,9 +216,10 @@ def main():
             behalten.append(e)
             continue
         for n in offen:
-            meinung = kategorie(e) in MEINUNG
+            meinung, klub = ist_gerede(e), verein(e)
             if n in NUR_TOP and (zaehler[heute].get(n, 0) >= MAX_PRO_TAG
-                                 or (meinung and zaehler[heute].get(n + "_meinung", 0) >= MAX_MEINUNG_PRO_TAG)):
+                                 or (meinung and zaehler[heute].get(n + "_meinung", 0) >= MAX_MEINUNG_PRO_TAG)
+                                 or (klub and zaehler[heute].get(n + ":" + klub, 0) >= MAX_PRO_VEREIN_PRO_TAG)):
                 e.setdefault("erledigt", []).append(n)     # bewusst ausgelassen
                 continue
             try:
@@ -214,6 +228,8 @@ def main():
                     zaehler[heute][n] = zaehler[heute].get(n, 0) + 1
                     if meinung:
                         zaehler[heute][n + "_meinung"] = zaehler[heute].get(n + "_meinung", 0) + 1
+                    if klub:
+                        zaehler[heute][n + ":" + klub] = zaehler[heute].get(n + ":" + klub, 0) + 1
                 e.setdefault("erledigt", []).append(n)
                 print(f"✅ {n}: {e['titel'][:60]}")
             except Exception as ex:
