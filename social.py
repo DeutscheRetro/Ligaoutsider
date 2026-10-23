@@ -23,10 +23,11 @@ QUEUE = Path("data/social_queue.json")
 BASIS = "https://ligaoutsider.de"
 MAX_ALTER_STUNDEN = 48          # ältere Einträge nicht mehr posten
 MAX_POSTS_PRO_LAUF = 15         # nicht die Timeline fluten
-# Bluesky und Facebook bekommen nur die stärksten Themen, Telegram alles
+# Bluesky und Facebook: höchstens 30 am Tag, Meinungsstücke (Interviews, Analysen) gedrosselt; Telegram alles
 NUR_TOP = {"bluesky", "facebook"}
-TOP_KATEGORIEN = {"transfer", "verletzung"}
-MAX_PRO_TAG = 10
+MAX_PRO_TAG = 30
+MEINUNG = {"interview", "analyse"}
+MAX_MEINUNG_PRO_TAG = 5
 ZAEHLER = Path("data/social_tage.json")
 
 
@@ -202,13 +203,17 @@ def main():
             behalten.append(e)
             continue
         for n in offen:
-            if n in NUR_TOP and (kategorie(e) not in TOP_KATEGORIEN or zaehler[heute].get(n, 0) >= MAX_PRO_TAG):
+            meinung = kategorie(e) in MEINUNG
+            if n in NUR_TOP and (zaehler[heute].get(n, 0) >= MAX_PRO_TAG
+                                 or (meinung and zaehler[heute].get(n + "_meinung", 0) >= MAX_MEINUNG_PRO_TAG)):
                 e.setdefault("erledigt", []).append(n)     # bewusst ausgelassen
                 continue
             try:
                 aktiv[n](e)
                 if n in NUR_TOP:
                     zaehler[heute][n] = zaehler[heute].get(n, 0) + 1
+                    if meinung:
+                        zaehler[heute][n + "_meinung"] = zaehler[heute].get(n + "_meinung", 0) + 1
                 e.setdefault("erledigt", []).append(n)
                 print(f"✅ {n}: {e['titel'][:60]}")
             except Exception as ex:
