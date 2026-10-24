@@ -77,6 +77,28 @@ async function supabaseLesen(request, url) {
   return antwort;
 }
 
+// Alte Adressen aus der Netlify-Zeit (ohne .html, oder nur /artikel/<id>) laufen sonst in 404 und
+// bleiben in der Search Console hängen: auf die echte Seite umleiten, Verschwundenes mit 410 melden.
+async function alteAdresse(request, env, url, res404) {
+  const p = url.pathname;
+  if (!/\.[a-z0-9]{2,5}$/i.test(p)) {
+    const mitHtml = new URL(url); mitHtml.pathname = p + ".html";
+    const probe = await env.ASSETS.fetch(new Request(mitHtml, { method: "HEAD" }));
+    if (probe.ok) return Response.redirect(mitHtml.toString(), 301);
+  }
+  const art = p.match(/^\/artikel\/(?:[a-z0-9-]*-)?([0-9a-f]{10})(?:\.html)?$/);
+  if (art) {
+    try {
+      const feed = await (await env.ASSETS.fetch(new Request(new URL("/feed.json", url)))).json();
+      const treffer = feed.find(a => a.id === art[1] || String(a.pfad || "").endsWith(`-${art[1]}.html`));
+      if (treffer && treffer.pfad) return Response.redirect(new URL("/" + treffer.pfad.replace(/^\//, ""), url).toString(), 301);
+    } catch (e) { /* feed nicht lesbar: unten 410 */ }
+  }
+  if (/^\/(artikel|spieler)\//.test(p))
+    return new Response("Diese Seite gibt es nicht mehr.", { status: 410, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  return res404;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -93,7 +115,9 @@ export default {
       url.pathname += "index.html";
       return env.ASSETS.fetch(new Request(url, request));
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) return alteAdresse(request, env, url, res);
+    return res;
   },
 
   // Cron-Trigger alle 30 Minuten (UTC); gestartet wird nur zu den Berliner Planzeiten.
