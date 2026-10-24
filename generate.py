@@ -13,6 +13,7 @@ import functools
 import glob
 import hashlib
 import datetime
+from zoneinfo import ZoneInfo
 import re
 import time
 import logging
@@ -2622,6 +2623,8 @@ def sitemap_generieren(artikel_liste: list):
         (f"{base}/forum.html", "0.6", "weekly"),
         (f"{base}/community.html", "0.5", "daily"),
         (f"{base}/tippspiel.html", "0.6", "daily"),
+        (f"{base}/bundesliga-heute.html", "0.9", "hourly"),
+        (f"{base}/bundesliga-fragen.html", "0.7", "weekly"),
     ] + [(f"{base}/{Path(p).name}", "0.5", "daily") for p in sorted(glob.glob("archiv-seite-*.html"))] \
       + [(f"{base}/verein/", "0.8", "daily")] \
       + [(f"{base}/{p.replace(os.sep, '/')}", "0.8", "daily") for p in sorted(glob.glob("verein/*.html")) if not p.endswith("index.html")]
@@ -3338,6 +3341,7 @@ def verein_seiten():
         print(f"⚠️  verein_seiten: {ex}")
         return
     slugs = spieler_slugs(db)
+    aufst = _aufstellung_daten()
     base = "https://ligaoutsider.de"
     Path("verein").mkdir(exist_ok=True)
     uebersicht = []
@@ -3359,6 +3363,7 @@ def verein_seiten():
         news_html = "".join(
             f'<a href="../{e(a["pfad"])}"><span>{e(a["titel"])}</span><small>{e(a["datum"].split(" ")[0])}</small></a>'
             for a in news) or "<p>Noch keine Meldungen.</p>"
+        faq_html, faq_ld = _verein_faq(team_name, kurz, feed, aufst)
         titel = f"{team_name}: News, Kader und Aufstellung | Ligaoutsider.de"
         beschr = (f"Aktuelle News zu {team_name}: Verletzungen, Transfers, Aufstellungen und Kader mit allen Spielern. "
                   f"Täglich aktualisiert.")
@@ -3378,8 +3383,10 @@ def verein_seiten():
       <a href="../forum.html">Im Forum diskutieren →</a>
       <a href="../archiv-seite-1.html">Alle Artikel →</a></p>
     <h2 class="sp-h2">Kader {e(team_name)}</h2>
-    {kader}"""
-        seite = _seite(titel, beschr, url, inhalt, head_extra=f'<script type="application/ld+json">{ld}</script>\n', tiefe="../")
+    {kader}
+    {faq_html}
+    <p class="sp-links"><a href="../bundesliga-heute.html">Bundesliga heute: Spiele und TV →</a></p>"""
+        seite = _seite(titel, beschr, url, inhalt, head_extra=f'<script type="application/ld+json">{ld}</script>\n' + faq_ld, tiefe="../")
         seite = seite.replace(f'href="../verein/{stem}.html" class="team-chip"', f'href="../verein/{stem}.html" class="team-chip active"', 1)
         Path(f"verein/{stem}.html").write_text(seite, encoding="utf-8")
         uebersicht.append((team_name, stem, team["logo"], len(news)))
@@ -3394,6 +3401,176 @@ def verein_seiten():
         "Alle 18 Bundesliga-Vereine mit aktuellen News, Kader und Aufstellung.", f"{base}/verein/", inhalt, tiefe="../"),
         encoding="utf-8")
     print(f"✅ {len(uebersicht)} Vereinsseiten geschrieben")
+
+
+# ─── Fragen, die Google zu Bundesliga-Suchen anzeigt ("Weitere Fragen") ───────
+# Antworten nur aus eigenen Daten (aufstellung.json, feed.json, spieler_db.json), ohne KI.
+# Senderverteilung 2025/26 bis 2028/29 laut DFL-Vergabe: Freitag Sky, Samstag Einzelspiele und
+# Topspiel Sky, Samstagskonferenz DAZN, Sonntag DAZN; Sat.1 zeigt ausgewählte Spiele frei.
+
+def _sender(anstoss_text: str) -> str:
+    m = re.match(r"(Mo|Di|Mi|Do|Fr|Sa|So)\s+\S+\s+(\d{1,2}):(\d{2})", anstoss_text or "")
+    if not m:
+        return "Sky oder DAZN"
+    tag, std = m.group(1), int(m.group(2))
+    if tag == "Fr":
+        return "Sky"
+    if tag == "Sa":
+        return "Sky (Topspiel)" if std >= 17 else "Sky (Einzelspiel), DAZN (Konferenz)"
+    if tag == "So":
+        return "DAZN"
+    return "Sky oder DAZN"
+
+
+def _faq(fragen: list) -> tuple:
+    """fragen = [(frage, antwort_html)] → (sichtbarer Block, JSON-LD FAQPage)."""
+    fragen = [(f, a) for f, a in fragen if f and a]
+    if not fragen:
+        return "", ""
+    html_block = '<h2 class="sp-h2">Häufige Fragen</h2><div class="faq">' + "".join(
+        f'<details class="faq-item"><summary>{_html_esc(f)}</summary><div class="faq-a">{a}</div></details>'
+        for f, a in fragen) + "</div>"
+    ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": f, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)}}
+        for f, a in fragen]}, ensure_ascii=False)
+    return html_block, f'<script type="application/ld+json">{ld}</script>\n'
+
+
+def _aufstellung_daten() -> dict:
+    try:
+        return json.loads(Path("aufstellung.json").read_text(encoding="utf-8"))
+    except Exception:
+        return {"partien": [], "teams": {}}
+
+
+def _ausfall_text(team: dict, tiefe: str = "../") -> str:
+    e = _html_esc
+    teile = []
+    for sp in (team.get("ausfall") or [])[:8]:
+        teile.append(f'{e(sp["name"])} ({e(sp.get("grund") or "fehlt")})')
+    fraglich = [e(sp["name"]) for sp in (team.get("fraglich") or [])[:6]]
+    txt = ("Ausfälle: " + "; ".join(teile) + ".") if teile else "Aktuell sind keine Ausfälle gemeldet."
+    if fraglich:
+        txt += " Fraglich: " + ", ".join(fraglich) + "."
+    return txt
+
+
+def _verein_faq(team_name: str, kurz: str, feed: list, aufst: dict, tiefe: str = "../") -> tuple:
+    e = _html_esc
+    fragen = []
+    naechstes = next((p for p in aufst.get("partien", []) if team_name in (p.get("heim"), p.get("gast"))), None)
+    if naechstes:
+        gegner = naechstes["gast"] if naechstes["heim"] == team_name else naechstes["heim"]
+        ort = "zu Hause" if naechstes["heim"] == team_name else "auswärts"
+        fragen.append((f"Wann spielt {team_name} als Nächstes?",
+                       f'{e(naechstes["anstoss_text"])} Uhr {ort} gegen {e(gegner)} (Bundesliga, {e(naechstes.get("spieltag") or "")}. Spieltag).'))
+        fragen.append((f"Wo läuft {team_name} gegen {gegner} im TV?",
+                       f'Live bei {e(_sender(naechstes["anstoss_text"]))}. Highlights zeigen ARD (Sportschau) und ZDF (Sportstudio).'))
+    team = (aufst.get("teams") or {}).get(team_name)
+    if team:
+        fragen.append((f"Wer fällt bei {team_name} aus?",
+                       _ausfall_text(team) + f' <a href="{tiefe}aufstellung.html?team={e(team_name)}">Voraussichtliche Aufstellung →</a>'))
+    transfers = [a for a in feed if kurz in (a.get("vereine") or []) and a.get("kategorie") == "transfer"
+                 and Path(a["pfad"]).exists()][:3]
+    if transfers:
+        fragen.append((f"Wen will {team_name} verpflichten?",
+                       "Die neuesten Transfermeldungen: " + "; ".join(
+                           f'<a href="{tiefe}{e(a["pfad"])}">{e(a["titel"])}</a>' for a in transfers) + "."))
+    return _faq(fragen)
+
+
+def bundesliga_heute_seite():
+    """bundesliga-heute.html: Spiele des Tages (sonst des nächsten Spieltags) mit Anstoß, Sender, Ausfällen."""
+    e = _html_esc
+    aufst = _aufstellung_daten()
+    partien = aufst.get("partien") or []
+    if not partien:
+        print("⚠️  bundesliga_heute: keine Partien")
+        return
+    heute = datetime.datetime.now(ZoneInfo("Europe/Berlin")).strftime("%d.%m.")
+    heutige = [p for p in partien if heute in p.get("anstoss_text", "")]
+    ist_heute = bool(heutige)
+    if not heutige:   # kein Spiel heute: nächster Spieltag
+        st = partien[0].get("spieltag")
+        heutige = [p for p in partien if p.get("spieltag") == st]
+    tag_txt = "heute" if ist_heute else f"am {heutige[0]['anstoss_text'].split(' ')[0]} {heutige[0]['anstoss_text'].split(' ')[1]}"
+    zeilen = "".join(
+        f'<a href="aufstellung.html?team={e(p["heim"])}"><span>{e(p["heim"])} – {e(p["gast"])}</span>'
+        f'<small>{e(p["anstoss_text"])} · {e(_sender(p["anstoss_text"]))}</small></a>' for p in heutige)
+    spiele_txt = "; ".join(f'{e(p["heim"])} gegen {e(p["gast"])} ({e(p["anstoss_text"].split(" ")[-1])} Uhr)' for p in heutige)
+    abend = [p for p in heutige if int((re.search(r"(\d{1,2}):", p["anstoss_text"]) or [0, "0"])[1]) >= 17]
+    teams = aufst.get("teams") or {}
+    fragen = [
+        (f"Welche Bundesliga-Spiele finden {tag_txt} statt?", spiele_txt + "."),
+        (f"Wo laufen die Bundesliga-Spiele {tag_txt} im TV?",
+         "; ".join(f'{e(p["heim"])} – {e(p["gast"])}: {e(_sender(p["anstoss_text"]))}' for p in heutige)
+         + ". Die Rechte 2025/26 bis 2028/29: Freitag Sky, Samstag Einzelspiele und Topspiel Sky, Samstagskonferenz DAZN, Sonntag DAZN."),
+        ("Welche Bundesliga-Spiele laufen im Free-TV?",
+         "Live frei empfangbar zeigt Sat.1 nur ausgewählte Spiele, etwa die Saisoneröffnung. Highlights aller Spiele laufen in der "
+         "Sportschau (ARD, Samstag) und im Aktuellen Sportstudio (ZDF)."),
+    ]
+    if abend:
+        fragen.append((f"Wo kann ich {tag_txt} Abend Bundesliga sehen?" if ist_heute else "Welches Bundesliga-Spiel läuft am Abend?",
+                       "; ".join(f'{e(p["heim"])} – {e(p["gast"])} um {e(p["anstoss_text"].split(" ")[-1])} Uhr bei {e(_sender(p["anstoss_text"]))}' for p in abend) + "."))
+    for p in heutige:
+        for t in (p["heim"], p["gast"]):
+            if t in teams and (teams[t].get("ausfall") or teams[t].get("fraglich")):
+                fragen.append((f"Wer fehlt bei {t}?", _ausfall_text(teams[t], tiefe="")))
+    faq_html, faq_ld = _faq(fragen)
+    titel = f"Bundesliga {'heute' if ist_heute else 'am Spieltag'}: Spiele, Anstoß, TV-Sender | Ligaoutsider.de"
+    beschr = f"Welche Bundesliga-Spiele laufen {tag_txt}? Alle Partien mit Anstoßzeit, TV-Sender (Sky, DAZN) und Ausfällen."
+    inhalt = f"""
+    <h1>Bundesliga {e(tag_txt)}</h1>
+    <p>Alle Spiele mit Anstoß und Sender, dazu die Ausfälle. Stand: {datetime.datetime.now(ZoneInfo("Europe/Berlin")).strftime("%d.%m.%Y, %H:%M")} Uhr.</p>
+    <div class="lo-sp-news sp-news">{zeilen}</div>
+    <p class="sp-links"><a href="aufstellung.html">Voraussichtliche Aufstellungen →</a><a href="tippspiel.html">Jetzt tippen →</a>
+      <a href="bundesliga-fragen.html">Weitere Bundesliga-Fragen →</a></p>
+    {faq_html}"""
+    Path("bundesliga-heute.html").write_text(
+        _seite(titel, beschr, "https://ligaoutsider.de/bundesliga-heute.html", inhalt, head_extra=faq_ld, tiefe=""), encoding="utf-8")
+    print(f"✅ bundesliga-heute.html ({len(heutige)} Spiele, {len(fragen)} Fragen)")
+
+
+def bundesliga_fragen_seite():
+    """bundesliga-fragen.html: dauerhafte Fragen, Marktwerte aus spieler_db.json, Rest geprüfte Fakten."""
+    e = _html_esc
+    try:
+        db = json.loads(Path("spieler_db.json").read_text(encoding="utf-8"))
+    except Exception as ex:
+        print(f"⚠️  bundesliga_fragen: {ex}")
+        return
+    def _mw(sp):
+        m = re.match(r"([\d,]+)\s*(Mio|Tsd)", sp.get("tm_marktwert") or "")
+        return float(m.group(1).replace(",", ".")) * (1 if m.group(2) == "Mio" else 0.001) if m else 0
+    alle = [(sp, tn) for tn, t in db["teams"].items() for sp in t["spieler"]]
+    top = sorted(alle, key=lambda x: -_mw(x[0]))[:5]
+    slugs = spieler_slugs(db)
+    top_txt = "; ".join(f'<a href="spieler/{slugs[sp["tm_id"]]}.html">{e(sp["name"])}</a> ({e(tn)}, {e(sp["tm_marktwert"])})'
+                        for sp, tn in top if sp.get("tm_id") in slugs)
+    fragen = [
+        ("Wer ist der wertvollste Spieler der Bundesliga?",
+         f"Nach Marktwert (Transfermarkt, Stand {e(str(db.get('updated', ''))[:10])}): {top_txt}."),
+        ("Welche Bundesliga-Vereine sind noch nie abgestiegen?",
+         "Unter den aktuellen Erstligisten sind FC Bayern München, Bayer 04 Leverkusen, RB Leipzig, TSG Hoffenheim und "
+         "der 1. FC Union Berlin noch nie aus der Bundesliga abgestiegen. Die SV Elversberg spielt ihre erste Bundesliga-Saison."),
+        ("Welcher Verein spielt am längsten ununterbrochen in der Bundesliga?",
+         "Der FC Bayern München, seit seinem Aufstieg 1965. Der Hamburger SV hielt den Rekord als Gründungsmitglied bis zu seinem Abstieg 2018."),
+        ("Wer ist Rekordmeister der Bundesliga?", "Der FC Bayern München mit den meisten Meistertiteln."),
+        ("Wo laufen die Bundesliga-Spiele im TV?",
+         "Von 2025/26 bis 2028/29: Freitag Sky, Samstag Einzelspiele und Topspiel Sky, Samstagskonferenz DAZN, Sonntag DAZN. "
+         'Sat.1 zeigt ausgewählte Spiele frei. <a href="bundesliga-heute.html">Spiele und Sender heute →</a>'),
+    ]
+    faq_html, faq_ld = _faq(fragen)
+    inhalt = f"""
+    <h1>Bundesliga-Fragen und Antworten</h1>
+    <p>Kurze Antworten auf häufige Fragen zur Bundesliga, mit aktuellen Marktwerten aus unserer Spielerdatenbank.</p>
+    {faq_html}
+    <p class="sp-links"><a href="bundesliga-heute.html">Bundesliga heute →</a><a href="verein/">Alle Vereine →</a></p>"""
+    Path("bundesliga-fragen.html").write_text(
+        _seite("Bundesliga-Fragen: Marktwerte, Rekorde, TV | Ligaoutsider.de",
+               "Wer ist der wertvollste Bundesliga-Spieler, wer ist nie abgestiegen, wo laufen die Spiele? Antworten zur Bundesliga.",
+               "https://ligaoutsider.de/bundesliga-fragen.html", inhalt, head_extra=faq_ld, tiefe=""), encoding="utf-8")
+    print("✅ bundesliga-fragen.html")
 
 
 def spieler_seiten():
@@ -4239,3 +4416,8 @@ if __name__ == "__main__":
         verein_seiten()
     except Exception as e:
         print(f"❌ verein_seiten Fehler: {e}")
+    for _f in (bundesliga_heute_seite, bundesliga_fragen_seite):
+        try:
+            _f()
+        except Exception as e:
+            print(f"❌ {_f.__name__} Fehler: {e}")
