@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T14:31:32.256462+00:00",
+ "updated": "2026-10-24T16:01:42.317352+00:00",
  "spieltag": 7,
  "partien": [
   {
@@ -242,26 +242,6 @@
    ],
    "fraglich": [
     {
-     "name": "Manuel Neuer",
-     "nr": "1",
-     "ampel": "gelb",
-     "grund": "Fußprobleme - verpasst AbschlusZerrunging vor CL-Spiel",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 21
-    },
-    {
-     "name": "Joshua Kimmich",
-     "nr": "6",
-     "ampel": "gelb",
-     "grund": "Todesfall in der Familie",
-     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 19
-    },
-    {
      "name": "Min-jae Kim",
      "nr": "3",
      "ampel": "gelb",
@@ -274,11 +254,21 @@
    ],
    "ausfall": [
     {
+     "name": "Joshua Kimmich",
+     "nr": "6",
+     "ampel": "rot",
+     "grund": "Trauerfall in der Familie",
+     "news": "artikel/bayern-ohne-neuer-in-freiburg-sehnenreizung-im-fuss-4dbc02b099.html",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 0
+    },
+    {
      "name": "Luis Díaz",
      "nr": "14",
      "ampel": "rot",
-     "grund": "Muskelbündelriss im linken Oberschenkel",
-     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
+     "grund": "kleiner Muskelbündelriss",
+     "news": "artikel/bayern-ohne-neuer-in-freiburg-sehnenreizung-im-fuss-4dbc02b099.html",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -287,10 +277,20 @@
      "name": "Jamal Musiala",
      "nr": "10",
      "ampel": "rot",
-     "grund": "Faserriss im rechten Oberschenkel",
-     "news": "artikel/bayern-ohne-kimmich-und-neuer-im-training-freiburg-einsatz-fraglich-70624de8bb.html",
+     "grund": "Muskelverletzung am Oberschenkel",
+     "news": "artikel/bayern-ohne-neuer-in-freiburg-sehnenreizung-im-fuss-4dbc02b099.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Manuel Neuer",
+     "nr": "1",
+     "ampel": "rot",
+     "grund": "Sehnenreizung im Fuß",
+     "news": "artikel/bayern-ohne-neuer-in-freiburg-sehnenreizung-im-fuss-4dbc02b099.html",
+     "reihe": "tw",
+     "pos": "Torwart",
      "prozent": 0
     }
    ]
@@ -580,14 +580,14 @@
       "prozent": 97
      },
      {
-      "name": "Joane Gadou",
-      "nr": "22",
+      "name": "Ramy Bensebaini",
+      "nr": "5",
       "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 92 min",
+      "grund": "0 von 2 Einsätzen in der Startelf · Ø 14 min · 4 Spiele ohne Einsatz",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 95
+      "prozent": 64
      }
     ],
     "mf": [
@@ -602,24 +602,24 @@
       "prozent": 93
      },
      {
-      "name": "Jobe Bellingham",
-      "nr": "7",
+      "name": "Joey Veerman",
+      "nr": "25",
       "ampel": "gruen",
-      "grund": "5 von 6 Einsätzen in der Startelf · Ø 83 min",
+      "grund": "2 von 5 Einsätzen in der Startelf · Ø 45 min · 1 Spiel ohne Einsatz",
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 91
+      "prozent": 72
      },
      {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
+      "name": "Marcel Sabitzer",
+      "nr": "20",
       "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+      "grund": "1 von 5 Einsätzen in der Startelf · Ø 33 min · 1 Spiel ohne Einsatz",
       "news": "",
       "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 86
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 71
      }
     ],
     "st": [
@@ -634,50 +634,60 @@
       "prozent": 97
      },
      {
-      "name": "Maximilian Beier",
-      "nr": "14",
+      "name": "Fábio Silva",
+      "nr": "21",
       "ampel": "gruen",
-      "grund": "5 von 6 Einsätzen in der Startelf · Ø 75 min",
+      "grund": "1 von 5 Einsätzen in der Startelf · Ø 38 min · 1 Spiel ohne Einsatz",
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 93
+      "prozent": 66
      }
     ]
    },
    "bank": [
     {
-     "name": "Joey Veerman",
-     "nr": "25",
+     "name": "Joane Gadou",
+     "nr": "22",
      "ampel": "gruen",
-     "grund": "2 von 5 Einsätzen in der Startelf · Ø 45 min · 1 Spiel ohne Einsatz",
+     "grund": "6 von 6 Einsätzen in der Startelf · Ø 92 min",
      "news": "",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 15
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 38
     },
     {
-     "name": "Marcel Sabitzer",
-     "nr": "20",
+     "name": "Maximilian Beier",
+     "nr": "14",
      "ampel": "gruen",
-     "grund": "1 von 5 Einsätzen in der Startelf · Ø 33 min · 1 Spiel ohne Einsatz",
+     "grund": "5 von 6 Einsätzen in der Startelf · Ø 75 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 36
+    },
+    {
+     "name": "Jobe Bellingham",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "5 von 6 Einsätzen in der Startelf · Ø 83 min",
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 14
+     "prozent": 35
+    },
+    {
+     "name": "Ethan Nwaneri",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "4 von 5 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 30
     }
    ],
    "fraglich": [
-    {
-     "name": "Mathis Albert",
-     "nr": "41",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 2
-    },
     {
      "name": "Kauã Prates",
      "nr": "36",
@@ -708,6 +718,16 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Mathis Albert",
+     "nr": "41",
+     "ampel": "rot",
+     "grund": "leichte muskuläre Probleme",
+     "news": "artikel/bvb-ohne-mathis-albert-gegen-frankfurt-muskulaere-probleme-c7185a0042.html",
+     "reihe": "st",
+     "pos": "Linksaußen",
      "prozent": 0
     },
     {
@@ -1611,7 +1631,7 @@
      "name": "Yannik Engelhardt",
      "nr": "16",
      "ampel": "gelb",
-     "grund": "Schlag auf die Hüfte - gegen Monaco angeschlagen ausgewechselt worden",
+     "grund": "Schlag auf die Hüfte - fraglich für FCB (H)",
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
@@ -1682,14 +1702,14 @@
       "prozent": 93
      },
      {
-      "name": "Keita Kosugi",
-      "nr": "26",
+      "name": "Elias Baum",
+      "nr": "2",
       "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 88 min",
+      "grund": "4 von 6 Einsätzen in der Startelf · Ø 64 min",
       "news": "",
       "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 92
+      "pos": "Rechter Verteidiger",
+      "prozent": 81
      },
      {
       "name": "Nnamdi Collins",
@@ -1779,6 +1799,16 @@
      "prozent": 38
     },
     {
+     "name": "Keita Kosugi",
+     "nr": "26",
+     "ampel": "gruen",
+     "grund": "6 von 6 Einsätzen in der Startelf · Ø 88 min",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 35
+    },
+    {
      "name": "Jeremiaha Maluze",
      "nr": "37",
      "ampel": "gruen",
@@ -1787,16 +1817,6 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 26
-    },
-    {
-     "name": "Elias Baum",
-     "nr": "2",
-     "ampel": "gruen",
-     "grund": "4 von 6 Einsätzen in der Startelf · Ø 64 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 24
     },
     {
      "name": "Mario Götze",
@@ -2338,16 +2358,6 @@
       "prozent": 83
      },
      {
-      "name": "Juma Bah",
-      "nr": "35",
-      "ampel": "gruen",
-      "grund": "2 von 2 Einsätzen in der Startelf · Ø 69 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 58
-     },
-     {
       "name": "Calvin Brackelmann",
       "nr": "2",
       "ampel": "gelb",
@@ -2410,20 +2420,20 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 59
+     },
+     {
+      "name": "Rodrigo Ribeiro",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "2 von 6 Einsätzen in der Startelf · Ø 36 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 30
      }
     ]
    },
    "bank": [
-    {
-     "name": "Rodrigo Ribeiro",
-     "nr": "9",
-     "ampel": "gruen",
-     "grund": "2 von 6 Einsätzen in der Startelf · Ø 36 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 30
-    },
     {
      "name": "Anton Kade",
      "nr": "30",
@@ -2468,6 +2478,16 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Juma Bah",
+     "nr": "35",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 0
+    },
     {
      "name": "Noahkai Banks",
      "nr": "40",
@@ -2770,29 +2790,9 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 82
-     },
-     {
-      "name": "Robin Gosens",
-      "nr": "8",
-      "ampel": "gruen",
-      "grund": "5 von 6 Einsätzen in der Startelf · Ø 71 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 69
      }
     ],
     "mf": [
-     {
-      "name": "Soufiane El-Faouzi",
-      "nr": "23",
-      "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 97 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 95
-     },
      {
       "name": "Satoshi Tanaka",
       "nr": "13",
@@ -2812,6 +2812,16 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 73
+     },
+     {
+      "name": "Soufiane El-Faouzi",
+      "nr": "23",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 50
      },
      {
       "name": "Kenan Karaman",
@@ -2844,6 +2854,16 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 58
+     },
+     {
+      "name": "Moussa Sylla",
+      "nr": "9",
+      "ampel": "gelb",
+      "grund": "Beinverletzung",
+      "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 39
      }
     ]
    },
@@ -2881,14 +2901,14 @@
    ],
    "fraglich": [
     {
-     "name": "Moussa Sylla",
-     "nr": "9",
+     "name": "Robin Gosens",
+     "nr": "8",
      "ampel": "gelb",
-     "grund": "Beinverletzung",
-     "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 39
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 34
     },
     {
      "name": "Ron Schallenberg",
