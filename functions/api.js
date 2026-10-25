@@ -771,13 +771,13 @@ export async function onRequest({ request, env }) {
           if (!gespraeche[partner]) {
             gespraeche[partner] = {
               partner,
-              partner_name: n.von_email === email ? partner : n.von_name,
+              partner_name: "Unbekannt",
               letzte: n.inhalt, letzte_am: n.erstellt_am, ungelesen: 0, nachrichten: [],
             };
           }
           if (n.an_email === email && !n.gelesen) gespraeche[partner].ungelesen++;
           gespraeche[partner].nachrichten.push({
-            id: n.id, ich: n.von_email === email, name: n.von_name,
+            id: n.id, ich: n.von_email === email,
             inhalt: n.inhalt, am: n.erstellt_am, gelesen: n.gelesen,
           });
         }
@@ -789,7 +789,6 @@ export async function onRequest({ request, env }) {
         for (const g of liste) {
           const pr = profile[g.partner];
           if (pr) { g.partner_handle = pr.handle; g.partner_name = pr.anzeigename; }
-          else if (g.partner_name === g.partner) g.partner_name = "Unbekannt";
           g.partner = await partnerSchluessel(g.partner);
         }
         liste.sort((a, b) => (b.letzte_am || "").localeCompare(a.letzte_am || ""));
