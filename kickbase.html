@@ -290,7 +290,7 @@
       el.innerHTML = items.length
         ? items.map((p, i) => `<li class="kb-item">
             <span class="kb-rank">${i+1}.</span>
-            ${p.logo ? `<img src="${p.logo}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">` : ''}
+            ${p.logo ? `<img src="${p.logo}" alt="" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;flex-shrink:0">` : ''}
             <span class="kb-name" title="${p.hinweis ? p.name + ' – ' + p.hinweis : p.name}">${p.name}${
               p.hinweis ? `<span style="display:block;font-size:10px;color:var(--text4);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.hinweis}</span>` : ''
             }</span>

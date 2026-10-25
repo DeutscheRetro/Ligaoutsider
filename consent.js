@@ -31,9 +31,9 @@
     d.innerHTML = '<p style="margin:0 0 12px">Wir nutzen Google Analytics, um zu sehen, welche Artikel gelesen werden. ' +
       'Dafür setzt Google Cookies. Das passiert nur mit deiner Zustimmung. ' +
       '<a href="/datenschutz.html" style="color:var(--accent,#e8c000)">Mehr in der Datenschutzerklärung</a>.</p>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' + // beide Knöpfe gleich auffällig (Vorgabe der Datenschutzbehörden)
       '<button type="button" data-w="ja" style="flex:1;min-width:130px;background:var(--accent,#e8c000);color:#000;border:0;border-radius:8px;padding:10px 14px;font-weight:800;cursor:pointer">Akzeptieren</button>' +
-      '<button type="button" data-w="nein" style="flex:1;min-width:130px;background:transparent;color:inherit;border:1px solid var(--border2,#444);border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer">Ablehnen</button></div>';
+      '<button type="button" data-w="nein" style="flex:1;min-width:130px;background:var(--accent,#e8c000);color:#000;border:0;border-radius:8px;padding:10px 14px;font-weight:800;cursor:pointer">Ablehnen</button></div>';
     d.addEventListener('click', function (e) { var w = e.target.getAttribute && e.target.getAttribute('data-w'); if (w) speichern(w); });
     document.body.appendChild(d);
   }

@@ -320,7 +320,31 @@ async function tippRangliste(spieltag) {
   return { spieltag, aktueller_spieltag: aktuell, rangliste: liste, stand: new Date().toISOString() };
 }
 
+// Kontaktformular aus dem Impressum (ohne Anmeldung): Mail über Resend an die Impressumsadresse
+async function kontakt(request, env) {
+  let b;
+  try { b = JSON.parse((await request.text()) || "{}"); } catch { return json(400, { fehler: "Ungültige Anfrage" }); }
+  const name = sauber(b.name, 100), mail = String(b.email || "").trim().slice(0, 200), text = sauber(b.nachricht, 5000);
+  // Spamschutz: verstecktes Feld muss leer bleiben, Formular mindestens 3 s offen
+  // shortcut: keine Begrenzung pro IP, bei Spamwellen Cloudflare Rate Limiting auf /api?kontakt setzen
+  if (b.website || !(Date.now() - Number(b.t) > 3000)) return json(200, { ok: true });
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) || text.length < 10)
+    return json(400, { fehler: "Bitte Name, gültige E-Mail und eine Nachricht (mind. 10 Zeichen) angeben." });
+  if (!env.RESEND_API_KEY) return json(503, { fehler: "Das Formular ist gerade nicht verfügbar. Bitte schreib an ligaoutsider@proton.me." });
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: "Ligaoutsider Kontakt <noreply@ligaoutsider.de>", to: ["ligaoutsider@proton.me"],
+      reply_to: mail, subject: `Kontaktformular: ${name}`, text: `Von: ${name} <${mail}>\n\n${text}` }) });
+  if (!r.ok) {
+    console.error("Kontakt-Mail fehlgeschlagen:", r.status, (await r.text()).slice(0, 200));
+    return json(502, { fehler: "Senden fehlgeschlagen. Bitte schreib an ligaoutsider@proton.me." });
+  }
+  return json(200, { ok: true });
+}
+
 export async function onRequest({ request, env }) {
+  if (request.method === "POST" && new URL(request.url).searchParams.has("kontakt")) return kontakt(request, env);
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
   GH_TOKEN = env.GH_TOKEN || env.GH_DISPATCH_TOKEN || "";
   // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe

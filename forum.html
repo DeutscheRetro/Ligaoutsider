@@ -222,7 +222,7 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/vendor/supabase.min.js"></script>
   <script>
     const SUPABASE_URL  = location.origin + '/sb';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
@@ -343,7 +343,7 @@
       }
 
       liste.innerHTML = data.map(t => `
-        <div class="thread-item" onclick="oeffneThread('${t.id}', ${JSON.stringify(t.titel).replace(/'/g, "\\'")})">
+        <div class="thread-item" role="link" tabindex="0" data-id="${escHtml(t.id)}" data-titel="${escHtml(t.titel)}">
           <div>
             <div class="thread-titel">${escHtml(t.titel)}</div>
             <div class="thread-meta">von ${escHtml(t.autor_name)} · ${formatDatum(t.erstellt_am)}</div>
@@ -448,6 +448,11 @@
       catch (e) { alert(e.message); return; }
       renderMain();
     }
+
+    // Threads per Klick und Enter öffnen; Titel über data-Attribut statt im onclick (dort brach er das Attribut auf)
+    const threadAus = e => { const el = e.target.closest && e.target.closest('.thread-item[data-id]'); if (el) oeffneThread(el.dataset.id, el.dataset.titel); };
+    document.addEventListener('click', threadAus);
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') threadAus(e); });
 
     function oeffneThread(id, titel) {
       aktiverThread = { id, titel, antworten: 0 };

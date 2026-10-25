@@ -41,7 +41,7 @@
     <div class="impressum-box">
       <h1>Impressum</h1>
 
-      <h2>Angaben gemäß § 5 TMG</h2>
+      <h2>Angaben gemäß § 5 DDG</h2>
       <p>
         Florian Huber<br />
         Markgrafenstraße 24<br />
@@ -50,12 +50,42 @@
 
       <h2>Kontakt</h2>
       <p>E-Mail: <a href="mailto:ligaoutsider@proton.me">ligaoutsider@proton.me</a></p>
+      <p>Oder direkt über das Kontaktformular:</p>
+      <form id="kontakt-form" class="kontakt-form" novalidate>
+        <label for="k-name">Name</label>
+        <input id="k-name" name="name" type="text" maxlength="100" autocomplete="name" required>
+        <label for="k-mail">E-Mail</label>
+        <input id="k-mail" name="email" type="email" maxlength="200" autocomplete="email" required>
+        <label for="k-nachricht">Nachricht</label>
+        <textarea id="k-nachricht" name="nachricht" rows="6" maxlength="5000" required></textarea>
+        <div class="k-falle" aria-hidden="true"><label for="k-website">Website</label><input id="k-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <p class="k-hinweis">Mit dem Absenden verarbeiten wir deine Angaben zur Beantwortung, siehe <a href="datenschutz.html#kontakt">Datenschutzerklärung</a>.</p>
+        <button type="submit">Nachricht senden</button>
+        <p id="k-status" role="status" aria-live="polite"></p>
+      </form>
+      <script>
+      (function () {
+        const f = document.getElementById('kontakt-form'), st = document.getElementById('k-status'), t = Date.now();
+        f.addEventListener('submit', async e => {
+          e.preventDefault();
+          const knopf = f.querySelector('button'); knopf.disabled = true; st.textContent = 'Wird gesendet…';
+          try {
+            const r = await fetch('/api?kontakt', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: f.elements['name'].value, email: f.elements['email'].value, nachricht: f.elements['nachricht'].value, website: f.elements['website'].value, t }) });
+            const d = await r.json().catch(() => ({}));
+            if (!r.ok) throw new Error(d.fehler || 'Senden fehlgeschlagen.');
+            f.reset(); st.textContent = 'Danke, deine Nachricht ist angekommen.';
+          } catch (err) { st.textContent = err.message; }
+          knopf.disabled = false;
+        });
+      })();
+      </script>
 
-      <h2>Redaktionell verantwortlich</h2>
+      <h2>Redaktionell verantwortlich nach § 18 Abs. 2 MStV</h2>
       <p>Florian Huber (Anschrift wie oben)</p>
 
       <h2>Haftung für Inhalte</h2>
-      <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>
+      <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>
 
       <h2>Haftung für Links</h2>
       <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
