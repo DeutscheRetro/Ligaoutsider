@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-25T14:02:06.679848+00:00",
+ "updated": "2026-10-25T15:32:03.507395+00:00",
  "spieltag": 7,
  "partien": [
-  {
-   "heim": "TSG Hoffenheim",
-   "gast": "Bayer 04 Leverkusen",
-   "anstoss": "2026-10-25T15:30:00",
-   "anstoss_text": "So 25.10. 15:30",
-   "spieltag": 7
-  },
   {
    "heim": "SC Freiburg",
    "gast": "FC Bayern München",
@@ -38,15 +31,15 @@
    "spieltag": 8
   },
   {
-   "heim": "FC Augsburg",
-   "gast": "SC Freiburg",
+   "heim": "SV Werder Bremen",
+   "gast": "TSG Hoffenheim",
    "anstoss": "2026-10-31T15:30:00",
    "anstoss_text": "Sa 31.10. 15:30",
    "spieltag": 8
   },
   {
-   "heim": "SV Werder Bremen",
-   "gast": "TSG Hoffenheim",
+   "heim": "FC Augsburg",
+   "gast": "SC Freiburg",
    "anstoss": "2026-10-31T15:30:00",
    "anstoss_text": "Sa 31.10. 15:30",
    "spieltag": 8
@@ -308,10 +301,7 @@
   "Bayer 04 Leverkusen": {
    "logo": "logos/leverkusen.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -323,7 +313,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -335,7 +325,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Miguel Gutiérrez",
@@ -345,7 +335,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 97
+      "prozent": 88
      },
      {
       "name": "Jarell Quansah",
@@ -355,7 +345,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 96
+      "prozent": 83
      },
      {
       "name": "Facundo Medina",
@@ -365,7 +355,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 93
+      "prozent": 72
      }
     ],
     "mf": [
@@ -377,7 +367,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Ibrahim Maza",
@@ -387,7 +377,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 97
+      "prozent": 92
      },
      {
       "name": "Equi Fernández",
@@ -397,10 +387,20 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 93
+      "prozent": 72
      }
     ],
     "st": [
+     {
+      "name": "Afonso Moreira",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "6 von 6 Einsätzen in der Startelf · Ø 82 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Linksaußen",
+      "prozent": 86
+     },
      {
       "name": "Patrik Schick",
       "nr": "14",
@@ -409,7 +409,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 95
+      "prozent": 82
      },
      {
       "name": "Moussa Diaby",
@@ -419,31 +419,11 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 93
-     },
-     {
-      "name": "Nathan Tella",
-      "nr": "23",
-      "ampel": "gruen",
-      "grund": "0 von 2 Einsätzen in der Startelf · Ø 27 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Rechtsaußen",
-      "prozent": 77
+      "prozent": 71
      }
     ]
    },
    "bank": [
-    {
-     "name": "Afonso Moreira",
-     "nr": "9",
-     "ampel": "gruen",
-     "grund": "6 von 6 Einsätzen in der Startelf · Ø 82 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 24
-    },
     {
      "name": "Malik Tillman",
      "nr": "10",
@@ -452,21 +432,41 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 12
+     "prozent": 40
+    },
+    {
+     "name": "Robert Andrich",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 47 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 37
+    },
+    {
+     "name": "Loïc Badé",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 39 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 28
+    },
+    {
+     "name": "Lucas Vázquez",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 20 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 18
     }
    ],
    "fraglich": [],
    "ausfall": [
-    {
-     "name": "Robert Andrich",
-     "nr": "8",
-     "ampel": "rot",
-     "grund": "fehlt laut Kickbase",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 0
-    },
     {
      "name": "Christian Kofane",
      "nr": "35",
@@ -1904,10 +1904,7 @@
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1919,7 +1916,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1931,7 +1928,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 97
+      "prozent": 95
+     },
+     {
+      "name": "Bernardo",
+      "nr": "13",
+      "ampel": "gruen",
+      "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 4 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 93
      },
      {
       "name": "Ozan Kabak",
@@ -1941,7 +1948,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 94
+      "prozent": 78
      },
      {
       "name": "Mats Rots",
@@ -1951,7 +1958,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 91
+      "prozent": 63
      },
      {
       "name": "Koki Machida",
@@ -1961,7 +1968,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 88
+      "prozent": 51
      }
     ],
     "mf": [
@@ -1973,7 +1980,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Leon Avdullahu",
@@ -1983,16 +1990,16 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
-      "name": "Alexander Prass",
-      "nr": "22",
+      "name": "Bambasé Conté",
+      "nr": "20",
       "ampel": "gruen",
-      "grund": "1 von 2 Einsätzen in der Startelf · Ø 59 min · 4 Spiele ohne Einsatz",
+      "grund": "5 von 6 Einsätzen in der Startelf · Ø 77 min",
       "news": "",
       "reihe": "mf",
-      "pos": "Linkes Mittelfeld",
+      "pos": "Offensives Mittelfeld",
       "prozent": 81
      }
     ],
@@ -2005,7 +2012,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 93
+      "prozent": 72
      },
      {
       "name": "Adam Hlozek",
@@ -2015,40 +2022,20 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 92
-     },
-     {
-      "name": "Fisnik Asllani",
-      "nr": "11",
-      "ampel": "gruen",
-      "grund": "2 von 4 Einsätzen in der Startelf · Ø 41 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 88
+      "prozent": 69
      }
     ]
    },
    "bank": [
     {
-     "name": "Bernardo",
-     "nr": "13",
+     "name": "Fisnik Asllani",
+     "nr": "11",
      "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 26
-    },
-    {
-     "name": "Tim Lemperle",
-     "nr": "19",
-     "ampel": "gruen",
-     "grund": "4 von 5 Einsätzen in der Startelf · Ø 71 min · 1 Spiel ohne Einsatz",
+     "grund": "2 von 4 Einsätzen in der Startelf · Ø 41 min · 2 Spiele ohne Einsatz",
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 22
+     "prozent": 50
     },
     {
      "name": "Robin Hranac",
@@ -2058,19 +2045,59 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 11
+     "prozent": 34
+    },
+    {
+     "name": "Alexander Prass",
+     "nr": "22",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 59 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Linkes Mittelfeld",
+     "prozent": 22
+    },
+    {
+     "name": "Andrej Kramaric",
+     "nr": "27",
+     "ampel": "gruen",
+     "grund": "0 von 6 Einsätzen in der Startelf · Ø 17 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Hängende Spitze",
+     "prozent": 22
+    },
+    {
+     "name": "Max Moerstedt",
+     "nr": "9",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 38 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 13
+    },
+    {
+     "name": "Cajetan Lenz",
+     "nr": "32",
+     "ampel": "gruen",
+     "grund": "noch ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 10
     }
    ],
    "fraglich": [
     {
-     "name": "Bambasé Conté",
-     "nr": "20",
+     "name": "Tim Lemperle",
+     "nr": "19",
      "ampel": "gelb",
      "grund": "angeschlagen",
      "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 12
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 40
     }
    ],
    "ausfall": [
@@ -2770,16 +2797,6 @@
      "prozent": 0
     },
     {
-     "name": "Moussa Ndiaye",
-     "nr": "16",
-     "ampel": "rot",
-     "grund": "Leistenbeschwerden, Ruhe verordnet",
-     "news": "artikel/werder-ndiaye-fehlt-weiter-besuch-beim-operateur-in-barcelona-cb89c82e8c.html",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 0
-    },
-    {
      "name": "Salim Musah",
      "nr": "29",
      "ampel": "rot",
@@ -2787,6 +2804,16 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
+     "prozent": 0
+    },
+    {
+     "name": "Moussa Ndiaye",
+     "nr": "16",
+     "ampel": "rot",
+     "grund": "Leistenbeschwerden, Ruhe verordnet",
+     "news": "artikel/werder-ndiaye-fehlt-weiter-besuch-beim-operateur-in-barcelona-cb89c82e8c.html",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
      "prozent": 0
     }
    ]
@@ -2839,6 +2866,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 84
+     },
+     {
+      "name": "Robin Gosens",
+      "nr": "8",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 36
      }
     ],
     "mf": [
@@ -2886,8 +2923,8 @@
       "name": "Dejan Ljubicic",
       "nr": "21",
       "ampel": "gelb",
-      "grund": "Knieverletzung, Einsatz eher unwahrscheinlich",
-      "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
+      "grund": "Nach Knieverletzung - teilintegriert am MannschaftZerrunging teilgenommen",
+      "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 40
@@ -2903,16 +2940,6 @@
       "reihe": "st",
       "pos": "Mittelstürmer",
       "prozent": 64
-     },
-     {
-      "name": "Moussa Sylla",
-      "nr": "9",
-      "ampel": "gelb",
-      "grund": "Beinverletzung",
-      "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 39
      }
     ]
    },
@@ -2926,6 +2953,16 @@
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
      "prozent": 36
+    },
+    {
+     "name": "Edin Dzeko",
+     "nr": "10",
+     "ampel": "gruen",
+     "grund": "2 von 5 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 27
     },
     {
      "name": "Vitalie Becker",
@@ -2960,16 +2997,6 @@
    ],
    "fraglich": [
     {
-     "name": "Robin Gosens",
-     "nr": "8",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 36
-    },
-    {
      "name": "Ron Schallenberg",
      "nr": "6",
      "ampel": "gelb",
@@ -2978,16 +3005,6 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 17
-    },
-    {
-     "name": "Edin Dzeko",
-     "nr": "10",
-     "ampel": "gelb",
-     "grund": "Kopfverletzung",
-     "news": "artikel/schalke-ljubicic-hat-wenig-hoffnung-auf-einsatz-in-koeln-0f12cb9547.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 13
     }
    ],
    "ausfall": [
@@ -3009,6 +3026,16 @@
      "news": "artikel/schalke-woeber-faellt-mit-oberschenkelverletzung-aus-c7cb41acba.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Moussa Sylla",
+     "nr": "9",
+     "ampel": "rot",
+     "grund": "Verletzung am Bein - fällt vorerst aus",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     },
     {
