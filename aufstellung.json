@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-25T17:02:00.924354+00:00",
- "spieltag": 7,
+ "updated": "2026-10-25T18:32:05.843528+00:00",
+ "spieltag": 8,
  "partien": [
-  {
-   "heim": "SC Freiburg",
-   "gast": "FC Bayern München",
-   "anstoss": "2026-10-25T17:30:00",
-   "anstoss_text": "So 25.10. 17:30",
-   "spieltag": 7
-  },
   {
    "heim": "SV Elversberg",
    "gast": "1. FSV Mainz 05",
@@ -31,15 +24,15 @@
    "spieltag": 8
   },
   {
-   "heim": "SV Werder Bremen",
-   "gast": "TSG Hoffenheim",
+   "heim": "FC Augsburg",
+   "gast": "SC Freiburg",
    "anstoss": "2026-10-31T15:30:00",
    "anstoss_text": "Sa 31.10. 15:30",
    "spieltag": 8
   },
   {
-   "heim": "FC Augsburg",
-   "gast": "SC Freiburg",
+   "heim": "SV Werder Bremen",
+   "gast": "TSG Hoffenheim",
    "anstoss": "2026-10-31T15:30:00",
    "anstoss_text": "Sa 31.10. 15:30",
    "spieltag": 8
@@ -221,7 +214,18 @@
      "prozent": 13
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Min-jae Kim",
+     "nr": "3",
+     "ampel": "gelb",
+     "grund": "Probleme im Leistenbereich",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 36
+    }
+   ],
    "ausfall": [
     {
      "name": "Joshua Kimmich",
@@ -264,16 +268,6 @@
      "prozent": 0
     },
     {
-     "name": "Min-jae Kim",
-     "nr": "3",
-     "ampel": "rot",
-     "grund": "Probleme im Leistenbereich - verpasst SCF (A)",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
      "name": "Manuel Neuer",
      "nr": "1",
      "ampel": "rot",
@@ -281,6 +275,16 @@
      "news": "artikel/bayern-ohne-pavlovic-wadenprobleme-verschaerfen-die-personalnot-81dc5d0c53.html",
      "reihe": "tw",
      "pos": "Torwart",
+     "prozent": 0
+    },
+    {
+     "name": "Bara Sapoko Ndiaye",
+     "nr": "39",
+     "ampel": "rot",
+     "grund": "verletzt",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
      "prozent": 0
     }
    ]
@@ -296,8 +300,8 @@
       "name": "Mark Flekken",
       "nr": "1",
       "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 97 min",
-      "news": "",
+      "grund": "Torhüter in bestätigter Startelf",
+      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
       "reihe": "tw",
       "pos": "Torwart",
       "prozent": 95
@@ -389,6 +393,16 @@
     ],
     "st": [
      {
+      "name": "Patrik Schick",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "Sturmspitze in bestätigter Startelf",
+      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 95
+     },
+     {
       "name": "Afonso Moreira",
       "nr": "9",
       "ampel": "gruen",
@@ -397,16 +411,6 @@
       "reihe": "st",
       "pos": "Linksaußen",
       "prozent": 86
-     },
-     {
-      "name": "Patrik Schick",
-      "nr": "14",
-      "ampel": "gruen",
-      "grund": "5 von 6 Einsätzen in der Startelf · Ø 77 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 82
      }
     ]
    },
@@ -420,16 +424,6 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 37
-    },
-    {
-     "name": "Loïc Badé",
-     "nr": "5",
-     "ampel": "gruen",
-     "grund": "1 von 2 Einsätzen in der Startelf · Ø 39 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 28
     },
     {
      "name": "Lucas Vázquez",
@@ -452,6 +446,16 @@
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 36
+    },
+    {
+     "name": "Loïc Badé",
+     "nr": "5",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 14
     }
    ],
    "ausfall": [
@@ -1907,8 +1911,8 @@
       "name": "Oliver Baumann",
       "nr": "1",
       "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 98 min",
-      "news": "",
+      "grund": "Torhüter in bestätigter Startelf",
+      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
       "reihe": "tw",
       "pos": "Torwart",
       "prozent": 95
@@ -2000,6 +2004,16 @@
     ],
     "st": [
      {
+      "name": "Adam Hlozek",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "Sturmspitze in bestätigter Startelf",
+      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 95
+     },
+     {
       "name": "Adam Daghim",
       "nr": "14",
       "ampel": "gruen",
@@ -2008,16 +2022,6 @@
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 72
-     },
-     {
-      "name": "Adam Hlozek",
-      "nr": "10",
-      "ampel": "gruen",
-      "grund": "5 von 6 Einsätzen in der Startelf · Ø 65 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 69
      }
     ]
    },
@@ -2041,16 +2045,6 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 34
-    },
-    {
-     "name": "Alexander Prass",
-     "nr": "22",
-     "ampel": "gruen",
-     "grund": "1 von 2 Einsätzen in der Startelf · Ø 59 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Linkes Mittelfeld",
-     "prozent": 22
     },
     {
      "name": "Andrej Kramaric",
@@ -2096,6 +2090,16 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Alexander Prass",
+     "nr": "22",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Linkes Mittelfeld",
+     "prozent": 0
+    },
     {
      "name": "Albian Hajdari",
      "nr": "21",
@@ -2611,16 +2615,6 @@
       "prozent": 92
      },
      {
-      "name": "Olivier Deman",
-      "nr": "2",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 90 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 88
-     },
-     {
       "name": "Arthur",
       "nr": "13",
       "ampel": "gruen",
@@ -2629,6 +2623,16 @@
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 86
+     },
+     {
+      "name": "Olivier Deman",
+      "nr": "2",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 44
      }
     ],
     "mf": [
