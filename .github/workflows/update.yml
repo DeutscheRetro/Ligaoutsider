@@ -101,10 +101,6 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           KICKBASE_EMAIL:       ${{ secrets.KICKBASE_EMAIL }}
           KICKBASE_PASSWORD:    ${{ secrets.KICKBASE_PASSWORD }}
-          REDDIT_CLIENT_ID:     ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME:      ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD:      ${{ secrets.REDDIT_PASSWORD }}
         run: python generate.py
 
       # Zweimal am Tag prüft Opus alle Artikel seit der letzten Prüfung gegen ihre Quelle

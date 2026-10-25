@@ -7,6 +7,9 @@
 //   on('init' | 'login' | 'logout', callback)
 // Die Sitzung liegt im localStorage, das Zugriffstoken wird vor Ablauf erneuert.
 
+// Bundesliga-Saison für OpenLigaDB: ab Juli die neue (2026 = Saison 2026/27)
+window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() - 1)(new Date());
+
 (function () {
   const SUPA_URL = 'https://rsodjlglzwlscamdlwev.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
@@ -466,7 +469,7 @@
     // Offene Tipps für den aktuellen Spieltag anhängen
     try {
       const [r, meine] = await Promise.all([fetch('/api?tipp_rangliste=1').then(x => x.json()), kontoApi('tipp_meine')]);
-      const spiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (r.aktueller_spieltag || 1))).json();
+      const spiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/' + window.LO_SAISON + '/' + (r.aktueller_spieltag || 1))).json();
       const offen = spiele.filter(s => new Date(s.matchDateTimeUTC).getTime() - 5 * 60 * 1000 > Date.now() && !s.matchIsFinished && !(meine.tipps || {})[s.matchID]).length;
       if (offen) {
         const a = document.createElement('a');

@@ -502,8 +502,17 @@ async function speichern() {
 
     feedDaten[idx].titel      = neuerTitel;
     feedDaten[idx].wappen_url = neuesLogo;
+    // Frische Fassung ändern, nicht die beim Laden gemerkte: sonst fallen inzwischen veröffentlichte Artikel heraus
     const feedData = await ghGet('feed.json');
-    await ghPut('feed.json', JSON.stringify(feedDaten, null, 2), feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
+    const aktuellFeed = JSON.parse(decodeURIComponent(escape(atob(feedData.content))));
+    aktuellFeed.forEach(x => { if (x.id === a.id) { x.titel = neuerTitel; x.wappen_url = neuesLogo; } });
+    await ghPut('feed.json', JSON.stringify(aktuellFeed, null, 2), feedData.sha, `📝 feed.json: ${neuerTitel.substring(0,50)}`);
+    // Korrektur festhalten: die Pipeline wendet sie bei jedem Lauf an, auch wenn ihr Commit feed.json überschreibt
+    let korr = {}, korrSha;
+    try { const k = await ghGet('chefred_titel.json'); korrSha = k.sha; korr = JSON.parse(decodeURIComponent(escape(atob(k.content)))); }
+    catch (e) { if (!e.message.includes('404')) throw e; }
+    korr[a.id] = { titel: neuerTitel, wappen_url: neuesLogo };
+    await ghPut('chefred_titel.json', JSON.stringify(korr, null, 2), korrSha, `📝 chefred_titel: ${a.id}`);
 
     zeigeMsg('✓ Gespeichert! Cloudflare baut in ~1 Minute.', true);
     renderListe();

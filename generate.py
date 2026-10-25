@@ -145,6 +145,8 @@ ABO_MAX_ARTIKEL_PRO_LAUF = int(os.environ.get("ABO_MAX_ARTIKEL_PRO_LAUF", "12"))
 # Wo Artikel gespeichert werden
 ARTIKEL_ORDNER = Path("artikel")
 FEED_JSON      = Path("feed.json")
+# Bundesliga-Saison (Startjahr): ab Juli die neue, sonst läuft Spielplan/Kader nach dem Sommer ins Leere
+SAISON = datetime.date.today().year if datetime.date.today().month >= 7 else datetime.date.today().year - 1
 OG_ORDNER      = Path("og")
 FONT_ORDNER    = Path(__file__).parent / "fonts"
 
@@ -543,6 +545,15 @@ def feed_laden() -> list:
     merged = {a["id"]: a for a in lokal}
     for a in live:
         merged.setdefault(a["id"], a)
+    # Titelkorrekturen aus Chefred gewinnen immer (sonst setzt ein Merge-Konflikt den alten Titel zurück)
+    try:
+        for aid, k in json.loads(Path("chefred_titel.json").read_text(encoding="utf-8")).items():
+            if aid in merged:
+                merged[aid].update({f: v for f, v in k.items() if f in ("titel", "wappen_url") and v})
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        print(f"  chefred_titel.json nicht lesbar: {e}")
     return list(merged.values())
 
 
@@ -763,7 +774,7 @@ def spielplan_kontext(tage: int = 4) -> list[str]:
     _SPIELPLAN = []
     try:
         import requests as _req
-        spiele = _req.get("https://api.openligadb.de/getmatchdata/bl1/2026", timeout=15).json()
+        spiele = _req.get(f"https://api.openligadb.de/getmatchdata/bl1/{SAISON}", timeout=15).json()
     except Exception as e:
         log.warning(f"Spielplan nicht verfügbar: {e}")
         return _SPIELPLAN
@@ -1900,7 +1911,7 @@ def main():
     log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
     # Eingereichte URLs aus Supabase laden
-    _submitted_urls = []
+    _submitted_urls, _submitted_ids = [], []
     try:
         import urllib.request as _ur2, json as _json2
         _supa_url = "https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?status=eq.pending&select=id,url"
@@ -1911,23 +1922,14 @@ def main():
             })
             with _ur2.urlopen(_req2, timeout=10) as _r2:
                 _rows = _json2.loads(_r2.read())
-            _submitted_urls = [r["url"] for r in _rows if r.get("url")]
+            # Nur Domains, die schon auf der eigenen Quellenliste stehen: sonst schleust ein Nutzer eigene Feeds ein
+            from urllib.parse import urlparse as _up
+            _host = lambda u: (_up(u).hostname or "").removeprefix("www.")
+            _erlaubt = {_host(f) for f in RSS_FEEDS if f.startswith("http")}
+            _submitted_urls = [r["url"] for r in _rows if r.get("url") and _host(r["url"]) in _erlaubt]
             _submitted_ids  = [r["id"]  for r in _rows if r.get("id")]
-            if _submitted_urls:
-                log.info(f"📥 {len(_submitted_urls)} eingereichte URLs aus Supabase")
-                # Als 'processed' markieren
-                for _sid in _submitted_ids:
-                    try:
-                        _upd = _ur2.Request(
-                            f"https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?id=eq.{_sid}",
-                            data=b'{"status":"processed"}',
-                            headers={"apikey": _supa_key, "Authorization": f"Bearer {_supa_key}",
-                                     "Content-Type": "application/json", "Prefer": "return=minimal"},
-                            method="PATCH"
-                        )
-                        _ur2.urlopen(_upd, timeout=5)
-                    except Exception:
-                        pass
+            if _submitted_ids:
+                log.info(f"📥 {len(_submitted_ids)} eingereichte URLs, {len(_submitted_urls)} von bekannten Quellen")
     except Exception as _e2:
         log.warning(f"Supabase submitted_urls Fehler: {_e2}")
 
@@ -2493,12 +2495,11 @@ def main():
     sitemap_generieren(bestehende)
     rss_generieren(bestehende)
 
-    # Stage 9: Facebook-Posts & Reddit nach finalem Publish
+    # Stage 9: Social-Warteschlange nach finalem Publish
     for k in approved:
         ergebnis = k["ergebnis"]
         aid = k["aid"]
         artikel_url = f"https://ligaoutsider.de/{artikel_datei(aid).as_posix()}"
-        reddit_post(ergebnis["titel"], ergebnis["text"], artikel_url)
         # Für social.py: gepostet wird erst, wenn die Seite live ist
         try:
             _q = Path("data/social_queue.json")
@@ -2514,6 +2515,19 @@ def main():
             _q.write_text(json.dumps(_queue, ensure_ascii=False, indent=1), encoding="utf-8")
         except Exception as _e:
             log.warning(f"Social-Warteschlange: {_e}")
+
+    # Eingereichte URLs erst nach dem Lauf als erledigt markieren (bricht er vorher ab, kommen sie nächstes Mal dran)
+    _supa_key = os.environ.get("SUPABASE_SERVICE_KEY", "")
+    for _sid in _submitted_ids if _supa_key else []:
+        try:
+            import urllib.request as _ur3
+            _ur3.urlopen(_ur3.Request(
+                f"https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?id=eq.{_sid}",
+                data=b'{"status":"processed"}', method="PATCH",
+                headers={"apikey": _supa_key, "Authorization": f"Bearer {_supa_key}",
+                         "Content-Type": "application/json", "Prefer": "return=minimal"}), timeout=5)
+        except Exception as _e3:
+            log.warning(f"submitted_urls {_sid} nicht markiert: {_e3}")
 
     # Run-Stats speichern, mit den echten KI-Kosten dieses Laufs
     stats["kosten"] = ki_budget.bericht()
@@ -2541,34 +2555,6 @@ def main():
 
     log.info(f"=== Fertig. {neu_generiert} neue Artikel. feed.json: {len(bestehende)} ===")
     log.info(f"Stats: {json.dumps(stats)}")
-
-
-def reddit_post(titel: str, text: str, artikel_url: str):
-    """Postet Artikel als Text-Post auf r/ligaoutsider (benötigt REDDIT_* Secrets)."""
-    client_id     = os.environ.get("REDDIT_CLIENT_ID", "")
-    client_secret = os.environ.get("REDDIT_CLIENT_SECRET", "")
-    username      = os.environ.get("REDDIT_USERNAME", "")
-    password      = os.environ.get("REDDIT_PASSWORD", "")
-    if not all([client_id, client_secret, username, password]):
-        log.info("Reddit: Keine Credentials – übersprungen")
-        return
-    try:
-        import praw
-        reddit = praw.Reddit(
-            client_id=client_id,
-            client_secret=client_secret,
-            username=username,
-            password=password,
-            user_agent="ligaoutsider-bot/1.0",
-        )
-        body = f"{text}\n\n---\n[➡️ Vollständiger Artikel auf Ligaoutsider.de]({artikel_url})"
-        reddit.subreddit("ligaoutsider").submit(titel, selftext=body)
-        log.info(f"Reddit: Gepostet – {titel[:60]}")
-    except Exception as e:
-        log.warning(f"Reddit-Post fehlgeschlagen: {e}")
-
-
-ARCHIV_PRO_SEITE = 100
 
 
 def archiv_seiten_schreiben(artikel_liste: list):
@@ -2863,7 +2849,7 @@ def comunio_fetch():
 
 
 # ─── Spieler-Datenbank (Transfermarkt-Kader, abgeglichen mit Kickbase) ────────
-TM_SAISON = 2026
+TM_SAISON = SAISON
 TM_POS_GRUPPE = {
     "Torwart": "Torwart",
     "Innenverteidiger": "Abwehr", "Linker Verteidiger": "Abwehr", "Rechter Verteidiger": "Abwehr",
@@ -4139,7 +4125,7 @@ def spieler_fetch():
     # 1. Top-Scorer aus OpenLigaDB
     print("📊 Lade Torjäger von OpenLigaDB …")
     try:
-        scorer_data = get_json("https://api.openligadb.de/getgoalgetters/bl1/2026")
+        scorer_data = get_json(f"https://api.openligadb.de/getgoalgetters/bl1/{SAISON}")
     except Exception as e:
         print(f"❌ OpenLigaDB Fehler: {e}")
         return
@@ -4149,7 +4135,7 @@ def spieler_fetch():
     # goalGetterId → teamId via Spieldaten (letzter Spieltag reicht)
     player_team = {}
     try:
-        matches = get_json("https://api.openligadb.de/getmatchdata/bl1/2026")
+        matches = get_json(f"https://api.openligadb.de/getmatchdata/bl1/{SAISON}")
         for m in matches:
             for g in (m.get("goals") or []):
                 if g.get("goalGetterID") and g.get("scoringTeamId") and not g.get("isOwnGoal"):
@@ -4160,7 +4146,7 @@ def spieler_fetch():
     # teamId → Name
     team_names = {}
     try:
-        teams = get_json("https://api.openligadb.de/getavailableteams/bl1/2026")
+        teams = get_json(f"https://api.openligadb.de/getavailableteams/bl1/{SAISON}")
         for t in teams:
             team_names[t["teamId"]] = t["teamName"]
     except Exception:

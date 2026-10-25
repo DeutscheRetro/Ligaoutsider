@@ -16,7 +16,7 @@ let SERVICE_KEY = "";   // pro Anfrage aus env gesetzt
 let GH_TOKEN = "";      // GitHub-Token für die Redaktion (Cloudflare-Secret GH_TOKEN oder GH_DISPATCH_TOKEN)
 const GH_REPO = "DeutscheRetro/Ligaoutsider";
 // Nur diese Dateien darf die Redaktion über /api lesen und ändern
-const GH_PFAD = /^(feed\.json|deleted_ids\.json|sitemap\.xml|news-sitemap\.xml|rss\.xml|artikel\/[a-z0-9-]+\.html|og\/[a-z0-9]+\.jpg)$/;
+const GH_PFAD = /^(feed\.json|deleted_ids\.json|chefred_titel\.json|sitemap\.xml|news-sitemap\.xml|rss\.xml|artikel\/[a-z0-9-]+\.html|og\/[a-z0-9]+\.jpg)$/;
 
 async function github(pfad, options = {}) {
   const res = await fetch(`https://api.github.com/repos/${GH_REPO}/${pfad}`, {
@@ -190,6 +190,20 @@ async function blockiertZwischen(a, b) {
   return (t || []).map(x => x.blocker_email);
 }
 
+// Gesprächspartner nach außen nur als Schlüssel, nie als E-Mail (Hash mit Service-Key, nicht erratbar)
+async function partnerSchluessel(mail) {
+  const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(SERVICE_KEY + String(mail).toLowerCase()));
+  return [...new Uint8Array(h)].slice(0, 12).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function partnerAusSchluessel(email, schluessel) {
+  if (!/^[0-9a-f]{24}$/.test(String(schluessel || ""))) return null;
+  const E = encodeURIComponent(email);
+  const alle = await hole(`nachrichten?or=(von_email.eq.${E},an_email.eq.${E})&select=von_email,an_email&limit=2000`);
+  for (const m of new Set((alle || []).map(n => (n.von_email === email ? n.an_email : n.von_email).toLowerCase())))
+    if (await partnerSchluessel(m) === schluessel) return m;
+  return null;
+}
+
 async function handlesVon(emails) {
   const liste = [...new Set(emails)].filter(Boolean);
   if (!liste.length) return {};
@@ -202,7 +216,7 @@ async function communityStats() {
   const [komm, votes, profile, threads, posts] = await Promise.all([
     hole("kommentare?select=id,artikel_id,email,name,autor_handle,inhalt,erstellt_am&geloescht=is.false&limit=20000"),
     hole("kommentar_votes?select=kommentar_id,vote&limit=50000"),
-    hole("profile?select=email,handle,anzeigename,lieblings,erstellt_am&limit=20000"),
+    hole("profile?select=email,handle,anzeigename,verein:lieblings->>verein,erstellt_am&limit=20000"),
     hole("forum_threads?select=id&limit=20000").catch(() => []),
     hole("forum_posts?select=id&limit=50000").catch(() => []),
   ]);
@@ -235,7 +249,7 @@ async function communityStats() {
     id: k.id, artikel_id: k.artikel_id, text: String(k.inhalt || "").slice(0, 160), datum: k.erstellt_am,
     autor: person(k.email) || { name: k.name, handle: k.autor_handle || null }, ...(proKomm[k.id] || { up: 0, down: 0 }) }));
   const fans = {};
-  (profile || []).forEach(p => { const v = (p.lieblings || {}).verein; if (v) fans[v] = (fans[v] || 0) + 1; });
+  (profile || []).forEach(p => { if (p.verein) fans[p.verein] = (fans[p.verein] || 0) + 1; });
   const mitglieder = (profile || []).filter(p => p.erstellt_am)
     .sort((a, b) => a.erstellt_am.localeCompare(b.erstellt_am))
     .map(p => ({ name: p.anzeigename || p.handle, handle: p.handle, seit: p.erstellt_am }));
@@ -262,7 +276,8 @@ async function communityStats() {
 let _ligaCache = { zeit: 0, spiele: null };
 async function ligaSpiele() {
   if (_ligaCache.spiele && Date.now() - _ligaCache.zeit < 120000) return _ligaCache.spiele;
-  const r = await fetch("https://api.openligadb.de/getmatchdata/bl1/2026");
+  const d = new Date(), saison = d.getUTCMonth() >= 6 ? d.getUTCFullYear() : d.getUTCFullYear() - 1;
+  const r = await fetch(`https://api.openligadb.de/getmatchdata/bl1/${saison}`);
   if (!r.ok) throw new Error("OpenLigaDB " + r.status);
   const roh = await r.json();
   _ligaCache = { zeit: Date.now(), spiele: roh.map(s => {
@@ -274,7 +289,7 @@ async function ligaSpiele() {
 }
 
 // 4 Punkte exakt, 3 Tordifferenz richtig, 2 Tendenz richtig
-function tippPunkte(t, e) {
+export function tippPunkte(t, e) {
   if (t[0] === e[0] && t[1] === e[1]) return 4;
   const tt = Math.sign(t[0] - t[1]), te = Math.sign(e[0] - e[1]);
   if (tt !== te) return 0;
@@ -322,12 +337,10 @@ export async function onRequest({ request, env }) {
     const soll = env.MONITOR_TOKEN || "", ist = request.headers.get("X-Monitor-Token") || "";
     let gleich = soll.length > 20 && soll.length === ist.length;
     for (let i = 0; i < soll.length; i++) gleich = gleich && soll.charCodeAt(i) === ist.charCodeAt(i);
+    if (!gleich) return json(403, { fehler: "kein Zugriff" });
     try {
       const seit = new URL(request.url).searchParams.get("seit") || "1970-01-01T00:00:00Z";
       const liste = (await authAdmin("/users?page=1&per_page=1000")).users || [];
-      // Ohne Token nur Anzahl und letzter Zeitpunkt, keine Personendaten
-      if (!gleich) return json(200, { gesamt: liste.length,
-        letzte: liste.reduce((m, u) => (u.created_at > m ? u.created_at : m), "") });
       const neu = liste.filter(u => u.created_at > seit)
         .map(u => ({ zeit: u.created_at, name: (u.user_metadata || {}).name || (u.user_metadata || {}).handle || "",
                      email: (u.email || "").replace(/^(.).*(@.*)$/, "$1…$2") }))
@@ -371,7 +384,9 @@ export async function onRequest({ request, env }) {
   // Wer nur über Google angemeldet ist, wählt zuerst einen Benutzernamen –
   // der echte Name aus dem Google-Konto wird nie angezeigt
   const nameOffen = nurGoogle(user) && !meta.benutzername;
-  const name = meta.benutzername || (nameOffen ? null : meta.full_name) || email;
+  const metaName = meta.benutzername || (nameOffen ? null : meta.full_name) || email;
+  // user_metadata kann jeder Nutzer selbst setzen: den Namen deshalb aus der Profiltabelle nehmen (eindeutig, nur Server schreibt)
+  const name = (nameOffen ? null : (await profilSicher(email, metaName) || {}).anzeigename) || metaName;
   const rollen = await rollenVon(email, (user.app_metadata || {}).roles);
   const istAdmin = rollen.includes("admin");
   const darfLoeschen = istAdmin || rollen.includes("moderator");
@@ -401,6 +416,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "kommentar_edit": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const inhalt = sauber(body.inhalt, 1000);
         if (!inhalt || !body.id) return json(400, { fehler: "Inhalt oder ID fehlt" });
         const [k] = await hole(`kommentare?id=eq.${body.id}&select=email`);
@@ -720,6 +736,7 @@ export async function onRequest({ request, env }) {
       case "nachricht_senden": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         let an = sauber(body.an, 200).toLowerCase();
+        if (body.an_partner) an = (await partnerAusSchluessel(email, body.an_partner)) || "";
         if (body.an_handle) {
           const ziel = await emailVonHandle(body.an_handle);
           if (!ziel) return json(404, { fehler: "Profil nicht gefunden" });
@@ -760,20 +777,21 @@ export async function onRequest({ request, env }) {
           }
           if (n.an_email === email && !n.gelesen) gespraeche[partner].ungelesen++;
           gespraeche[partner].nachrichten.push({
-            id: n.id, von: n.von_email, name: n.von_name,
+            id: n.id, ich: n.von_email === email, name: n.von_name,
             inhalt: n.inhalt, am: n.erstellt_am, gelesen: n.gelesen,
           });
         }
         const liste = Object.values(gespraeche);
         liste.forEach(g => g.nachrichten.reverse());
         // Profilnamen statt E-Mail-Adressen anzeigen
-        try {
-          const profile = await handlesVon(liste.map(g => g.partner));
-          liste.forEach(g => {
-            const pr = profile[g.partner];
-            if (pr) { g.partner_handle = pr.handle; g.partner_name = pr.anzeigename; }
-          });
-        } catch (e) { /* ohne Profile bleibt es beim Namen aus der Nachricht */ }
+        let profile = {};
+        try { profile = await handlesVon(liste.map(g => g.partner)); } catch (e) { /* ohne Profile bleibt es beim Namen aus der Nachricht */ }
+        for (const g of liste) {
+          const pr = profile[g.partner];
+          if (pr) { g.partner_handle = pr.handle; g.partner_name = pr.anzeigename; }
+          else if (g.partner_name === g.partner) g.partner_name = "Unbekannt";
+          g.partner = await partnerSchluessel(g.partner);
+        }
         liste.sort((a, b) => (b.letzte_am || "").localeCompare(a.letzte_am || ""));
         return json(200, {
           gespraeche: liste,
@@ -782,7 +800,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "nachrichten_gelesen": {
-        const partner = sauber(body.partner, 200).toLowerCase();
+        const partner = await partnerAusSchluessel(email, body.partner);
         if (!partner) return json(400, { fehler: "Partner fehlt" });
         await aendere("nachrichten",
           `an_email=eq.${encodeURIComponent(email)}&von_email=eq.${encodeURIComponent(partner)}&gelesen=is.false`,
@@ -791,7 +809,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "gespraech_loeschen": {
-        const partner = sauber(body.partner, 200).toLowerCase();
+        const partner = await partnerAusSchluessel(email, body.partner);
         if (!partner) return json(400, { fehler: "Partner fehlt" });
         // Nur fuer einen selbst ausblenden, der andere behaelt seinen Verlauf
         const betroffen = await hole(

@@ -6,6 +6,10 @@ permissions:
 jobs:
   posten:
     runs-on: ubuntu-latest
+    # Gleiche Gruppe wie die Pipeline: sonst überschreiben sich beide die Social-Warteschlange
+    concurrency:
+      group: generate-pipeline
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

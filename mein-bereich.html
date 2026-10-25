@@ -357,11 +357,11 @@
         const [d, f, n, k, b, a, t, r] = await Promise.all([loKonto.laden(), j('feed.json'), j('spieler_news.json'), j('spieler_kurz.json'), j('kickbase_spieler.json'), j('aufstellung.json'),
           loKonto.api('tipp_meine').catch(() => ({ tipps: {}, punkte: 0 })), j('/api?tipp_rangliste=1')]);
         daten = d || daten; feed = Array.isArray(f) ? f : []; news = n; kurz = k; kb = b; auf = a; tipp = t; rang = r.rangliste ? r : rang;
-        try { spieltagSpiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + (rang.aktueller_spieltag || 1))).json(); } catch (e) { spieltagSpiele = []; }
+        try { spieltagSpiele = await (await fetch('https://api.openligadb.de/getmatchdata/bl1/' + window.LO_SAISON + '/' + (rang.aktueller_spieltag || 1))).json(); } catch (e) { spieltagSpiele = []; }
         // Hat der eigene Verein am aktuellen Spieltag schon gespielt, zeigt "Nächstes Spiel" den folgenden Spieltag
         const v0 = VEREINE[daten.verein];
         if (v0 && spieltagSpiele.length && !spieltagSpiele.some(x => !x.matchIsFinished && (x.team1.teamName + x.team2.teamName).toLowerCase().includes(v0[1].toLowerCase()))) {
-          try { spieltagSpiele = spieltagSpiele.concat(await (await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + ((rang.aktueller_spieltag || 1) + 1))).json()); } catch (e) {}
+          try { spieltagSpiele = spieltagSpiele.concat(await (await fetch('https://api.openligadb.de/getmatchdata/bl1/' + window.LO_SAISON + '/' + ((rang.aktueller_spieltag || 1) + 1))).json()); } catch (e) {}
         }
         zeichnen();
       } catch (e) { sub.textContent = 'Konnte nicht geladen werden. Bitte Seite neu laden.'; }

@@ -267,7 +267,7 @@
     };
     (async () => {
       try {
-        const tabelle = await fetch('https://api.openligadb.de/getbltable/bl1/2026').then(r=>r.json());
+        const tabelle = await fetch('https://api.openligadb.de/getbltable/bl1/' + window.LO_SAISON).then(r=>r.json());
         document.getElementById('tabelle-body').innerHTML = tabelle.map((t, i) => {
           const pos = i + 1;
           const col = posColor(pos);
@@ -315,8 +315,8 @@
         const gid = grp.groupOrderID;
         // Aktuellen + nächsten Spieltag laden
         const [cur, nxt] = await Promise.all([
-          fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid}`).then(r=>r.json()),
-          fetch(`https://api.openligadb.de/getmatchdata/bl1/2026/${gid+1}`).then(r=>r.json()).catch(()=>[]),
+          fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid}`).then(r=>r.json()),
+          fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid+1}`).then(r=>r.json()).catch(()=>[]),
         ]);
         const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
         const spiele = [...cur, ...nxt]
@@ -483,9 +483,9 @@
       try {
         // Parallel: Torjäger + Teams + letzte Spieltage für Spieler→Team-Mapping
         const [scorerRes, teamsRes, matchRes] = await Promise.all([
-          fetch('https://api.openligadb.de/getgoalgetters/bl1/2026'),
-          fetch('https://api.openligadb.de/getavailableteams/bl1/2026'),
-          fetch('https://api.openligadb.de/getmatchdata/bl1/2026')
+          fetch('https://api.openligadb.de/getgoalgetters/bl1/' + window.LO_SAISON),
+          fetch('https://api.openligadb.de/getavailableteams/bl1/' + window.LO_SAISON),
+          fetch('https://api.openligadb.de/getmatchdata/bl1/' + window.LO_SAISON)
         ]);
         if (!scorerRes.ok) throw new Error();
         const data = await scorerRes.json();

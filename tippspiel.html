@@ -275,7 +275,7 @@
     async function spieltag(n) {
       wrapT.innerHTML = '<p class="cs-leer">Lade Spiele…</p>';
       try {
-        const r = await fetch('https://api.openligadb.de/getmatchdata/bl1/2026/' + n);
+        const r = await fetch('https://api.openligadb.de/getmatchdata/bl1/' + window.LO_SAISON + '/' + n);
         spiele = await r.json();
       } catch (e) { wrapT.innerHTML = '<p class="cs-leer">Spiele konnten nicht geladen werden.</p>'; return; }
       tag = n;
