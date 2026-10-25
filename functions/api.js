@@ -324,9 +324,9 @@ async function tippRangliste(spieltag) {
 async function kontakt(request, env) {
   let b;
   try { b = JSON.parse((await request.text()) || "{}"); } catch { return json(400, { fehler: "Ungültige Anfrage" }); }
-  const name = sauber(b.name, 100), mail = String(b.email || "").trim().slice(0, 200), text = sauber(b.nachricht, 5000);
+  const name = sauber(b.name, 100).replace(/\s+/g, " "), mail = String(b.email || "").trim().slice(0, 200), text = sauber(b.nachricht, 5000);
   // Spamschutz: verstecktes Feld muss leer bleiben, Formular mindestens 3 s offen
-  // shortcut: keine Begrenzung pro IP, bei Spamwellen Cloudflare Rate Limiting auf /api?kontakt setzen
+  // shortcut: keine Begrenzung pro IP; Spam kann das Resend-Kontingent (auch für Login-Mails) aufbrauchen, daher Cloudflare Rate Limiting auf /api?kontakt
   if (b.website || !(Date.now() - Number(b.t) > 3000)) return json(200, { ok: true });
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) || text.length < 10)
     return json(400, { fehler: "Bitte Name, gültige E-Mail und eine Nachricht (mind. 10 Zeichen) angeben." });
