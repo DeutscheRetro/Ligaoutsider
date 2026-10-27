@@ -315,12 +315,17 @@
         const grp = await fetch('https://api.openligadb.de/getcurrentgroup/bl1').then(r=>r.json());
         const gid = grp.groupOrderID;
         // Aktuellen + nächsten Spieltag laden
-        const [cur, nxt] = await Promise.all([
+        const [cur, nxt, pokalAlle] = await Promise.all([
           fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid}`).then(r=>r.json()),
           fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid+1}`).then(r=>r.json()).catch(()=>[]),
+          fetch(`https://api.openligadb.de/getmatchdata/dfb/${window.LO_SAISON}`).then(r=>r.json()).catch(()=>[]),
         ]);
         const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-        const spiele = [...cur, ...nxt]
+        // DFB-Pokal: nur Spiele mit Bundesligisten, im selben Zeitraum wie die geladenen Spieltage
+        const blEnde = Math.max(...[...cur, ...nxt].map(m => new Date(m.matchDateTime).getTime()));
+        const pokal = pokalAlle.filter(m => (KÜRZEL[m.team1.teamName] || KÜRZEL[m.team2.teamName])
+          && new Date(m.matchDateTime).getTime() <= blEnde).map(m => ({ ...m, pokal: true }));
+        const spiele = [...cur, ...nxt, ...pokal]
           .filter(m => !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo))
           .sort((a,b) => new Date(a.matchDateTime) - new Date(b.matchDateTime));
 
@@ -345,7 +350,9 @@
             const score = hasScore
               ? `<span style="font-weight:800;color:#e8c000;min-width:34px;text-align:center">${goals1}:${goals2}</span>`
               : `<span style="color:var(--text4);min-width:34px;text-align:center;font-size:10px">${fmtTime(m.matchDateTime)}</span>`;
-            const badge = `<span style="background:#d32f2f;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0">BL</span>`;
+            const badge = m.pokal
+              ? `<span style="background:#1565c0;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0" title="DFB-Pokal">DFB</span>`
+              : `<span style="background:#d32f2f;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0">BL</span>`;
             return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
               ${badge}
               <span style="font-size:12px;font-weight:600;color:var(--text2);flex:1;text-align:right">${kürzel(m.team1.teamName)}</span>
