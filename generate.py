@@ -145,6 +145,7 @@ ABO_MAX_ARTIKEL_PRO_LAUF = int(os.environ.get("ABO_MAX_ARTIKEL_PRO_LAUF", "12"))
 # Wo Artikel gespeichert werden
 ARTIKEL_ORDNER = Path("artikel")
 FEED_JSON      = Path("feed.json")
+ARCHIV_PRO_SEITE = 100   # Artikel je archiv-seite-N.html
 # Bundesliga-Saison (Startjahr): ab Juli die neue, sonst läuft Spielplan/Kader nach dem Sommer ins Leere
 SAISON = datetime.date.today().year if datetime.date.today().month >= 7 else datetime.date.today().year - 1
 OG_ORDNER      = Path("og")

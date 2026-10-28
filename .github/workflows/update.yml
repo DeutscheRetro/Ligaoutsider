@@ -78,6 +78,10 @@ jobs:
           pip install -r requirements.txt
           pip list | grep -E 'trafilatura|rapidfuzz|feedparser|anthropic|requests'
 
+      # Bricht den Lauf laut ab statt still: fehlende Namen in generate.py, Postgrenzen
+      - name: Tests
+        run: python -m unittest discover tests
+
       # Claude-Code-CLI: damit laufen die KI-Aufrufe über das Claude-Abo
       # (Secret CLAUDE_CODE_OAUTH_TOKEN, erzeugt mit "claude setup-token").
       # Ohne Secret oder bei erschöpftem Kontingent geht es über die API.
