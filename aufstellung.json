@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27T22:02:04.940270+00:00",
+ "updated": "2026-10-28T00:02:08.626477+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -589,14 +589,14 @@
       "prozent": 97
      },
      {
-      "name": "Ramy Bensebaini",
-      "nr": "5",
-      "ampel": "gelb",
-      "grund": "Pferdekuss - beendet SGE (H) leicht angeschlagen",
+      "name": "Joane Gadou",
+      "nr": "22",
+      "ampel": "gruen",
+      "grund": "6 von 7 Einsätzen in der Startelf · Ø 79 min",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 52
+      "prozent": 78
      }
     ],
     "mf": [
@@ -611,24 +611,24 @@
       "prozent": 96
      },
      {
-      "name": "Joey Veerman",
-      "nr": "25",
+      "name": "Marcel Sabitzer",
+      "nr": "20",
       "ampel": "gruen",
-      "grund": "3 von 6 Einsätzen in der Startelf · Ø 53 min · 1 Spiel ohne Einsatz",
+      "grund": "2 von 6 Einsätzen in der Startelf · Ø 38 min · 1 Spiel ohne Einsatz",
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 69
+      "prozent": 68
      },
      {
-      "name": "Ethan Nwaneri",
-      "nr": "18",
+      "name": "Jobe Bellingham",
+      "nr": "7",
       "ampel": "gruen",
-      "grund": "4 von 6 Einsätzen in der Startelf · Ø 59 min · 1 Spiel ohne Einsatz",
+      "grund": "5 von 7 Einsätzen in der Startelf · Ø 73 min",
       "news": "",
       "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 62
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 67
      }
     ],
     "st": [
@@ -656,34 +656,24 @@
    },
    "bank": [
     {
-     "name": "Joane Gadou",
-     "nr": "22",
+     "name": "Joey Veerman",
+     "nr": "25",
      "ampel": "gruen",
-     "grund": "6 von 7 Einsätzen in der Startelf · Ø 79 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 44
-    },
-    {
-     "name": "Marcel Sabitzer",
-     "nr": "20",
-     "ampel": "gruen",
-     "grund": "2 von 6 Einsätzen in der Startelf · Ø 38 min · 1 Spiel ohne Einsatz",
+     "grund": "3 von 6 Einsätzen in der Startelf · Ø 53 min · 1 Spiel ohne Einsatz",
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 34
+     "prozent": 35
     },
     {
-     "name": "Jobe Bellingham",
-     "nr": "7",
+     "name": "Ethan Nwaneri",
+     "nr": "18",
      "ampel": "gruen",
-     "grund": "5 von 7 Einsätzen in der Startelf · Ø 73 min",
+     "grund": "4 von 6 Einsätzen in der Startelf · Ø 59 min · 1 Spiel ohne Einsatz",
      "news": "",
      "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 33
+     "pos": "Offensives Mittelfeld",
+     "prozent": 28
     },
     {
      "name": "Fábio Silva",
@@ -697,6 +687,16 @@
     }
    ],
    "fraglich": [
+    {
+     "name": "Ramy Bensebaini",
+     "nr": "5",
+     "ampel": "gelb",
+     "grund": "Pferdekuss - beendet SGE (H) leicht angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 18
+    },
     {
      "name": "Alexander Meyer",
      "nr": "33",
@@ -1656,29 +1656,29 @@
      "prozent": 16
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Berkay Yılmaz",
      "nr": "27",
-     "ampel": "gelb",
+     "ampel": "rot",
      "grund": "Angeschlagen",
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 5
+     "prozent": 0
     },
     {
      "name": "Bruno Ogbus",
      "nr": "43",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
+     "ampel": "rot",
+     "grund": "im Aufbautraining",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 3
+     "prozent": 0
     }
-   ],
-   "ausfall": []
+   ]
   },
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
@@ -1713,6 +1713,16 @@
       "prozent": 97
      },
      {
+      "name": "Elias Baum",
+      "nr": "2",
+      "ampel": "gruen",
+      "grund": "5 von 7 Einsätzen in der Startelf · Ø 68 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 90
+     },
+     {
       "name": "Nnamdi Collins",
       "nr": "34",
       "ampel": "gruen",
@@ -1721,16 +1731,6 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 76
-     },
-     {
-      "name": "Keita Kosugi",
-      "nr": "26",
-      "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 88 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 69
      },
      {
       "name": "Lilian Brassier",
@@ -1810,14 +1810,14 @@
    },
    "bank": [
     {
-     "name": "Elias Baum",
-     "nr": "2",
+     "name": "Keita Kosugi",
+     "nr": "26",
      "ampel": "gruen",
-     "grund": "5 von 7 Einsätzen in der Startelf · Ø 68 min",
+     "grund": "6 von 6 Einsätzen in der Startelf · Ø 88 min · 1 Spiel ohne Einsatz",
      "news": "",
      "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 56
+     "pos": "Linker Verteidiger",
+     "prozent": 35
     },
     {
      "name": "Can Uzun",
@@ -2581,6 +2581,16 @@
       "prozent": 96
      },
      {
+      "name": "Mitchell Weiser",
+      "nr": "8",
+      "ampel": "gruen",
+      "grund": "1 von 5 Einsätzen in der Startelf · Ø 37 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 79
+     },
+     {
       "name": "Mick Schmetgens",
       "nr": "33",
       "ampel": "gruen",
@@ -2643,29 +2653,19 @@
       "reihe": "st",
       "pos": "Linksaußen",
       "prozent": 97
-     },
-     {
-      "name": "Eren Dinkçi",
-      "nr": "18",
-      "ampel": "gruen",
-      "grund": "5 von 7 Einsätzen in der Startelf · Ø 57 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Rechtsaußen",
-      "prozent": 66
      }
     ]
    },
    "bank": [
     {
-     "name": "Mitchell Weiser",
-     "nr": "8",
+     "name": "Eren Dinkçi",
+     "nr": "18",
      "ampel": "gruen",
-     "grund": "1 von 5 Einsätzen in der Startelf · Ø 37 min · 2 Spiele ohne Einsatz",
+     "grund": "5 von 7 Einsätzen in der Startelf · Ø 57 min",
      "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 45
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 32
     },
     {
      "name": "Senne Lynen",
@@ -3349,28 +3349,18 @@
       "prozent": 78
      },
      {
-      "name": "Cole Campbell",
-      "nr": "39",
-      "ampel": "gelb",
-      "grund": "Nach Bänderverletzung im Aufbau",
-      "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+      "name": "Maurice Krattenmacher",
+      "nr": "7",
+      "ampel": "gruen",
+      "grund": "2 von 7 Einsätzen in der Startelf · Ø 48 min",
+      "news": "",
       "reihe": "st",
-      "pos": "Rechtsaußen",
-      "prozent": 55
+      "pos": "Linksaußen",
+      "prozent": 66
      }
     ]
    },
    "bank": [
-    {
-     "name": "Maurice Krattenmacher",
-     "nr": "7",
-     "ampel": "gruen",
-     "grund": "2 von 7 Einsätzen in der Startelf · Ø 48 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 32
-    },
     {
      "name": "Frederik Schmahl",
      "nr": "17",
@@ -3392,7 +3382,18 @@
      "prozent": 18
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Cole Campbell",
+     "nr": "39",
+     "ampel": "gelb",
+     "grund": "Nach Bänderverletzung im Aufbau",
+     "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 21
+    }
+   ],
    "ausfall": [
     {
      "name": "Noah Darvich",
