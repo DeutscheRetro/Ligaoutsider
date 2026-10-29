@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29T15:32:11.987284+00:00",
+ "updated": "2026-10-29T17:02:16.609257+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -408,27 +408,27 @@
       "prozent": 97
      },
      {
-      "name": "Afonso Moreira",
-      "nr": "9",
+      "name": "Nathan Tella",
+      "nr": "23",
       "ampel": "gruen",
-      "grund": "6 von 7 Einsätzen in der Startelf · Ø 76 min",
+      "grund": "1 von 3 Einsätzen in der Startelf · Ø 40 min · 4 Spiele ohne Einsatz",
       "news": "",
       "reihe": "st",
-      "pos": "Linksaußen",
-      "prozent": 68
+      "pos": "Rechtsaußen",
+      "prozent": 64
      }
     ]
    },
    "bank": [
     {
-     "name": "Nathan Tella",
-     "nr": "23",
+     "name": "Afonso Moreira",
+     "nr": "9",
      "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 40 min · 4 Spiele ohne Einsatz",
+     "grund": "6 von 7 Einsätzen in der Startelf · Ø 76 min",
      "news": "",
      "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 30
+     "pos": "Linksaußen",
+     "prozent": 34
     },
     {
      "name": "Robert Andrich",
@@ -1962,6 +1962,16 @@
     ],
     "st": [
      {
+      "name": "Adam Hlozek",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "Sturmspitze in bestätigter Startelf",
+      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 97
+     },
+     {
       "name": "Adam Daghim",
       "nr": "14",
       "ampel": "gruen",
@@ -1972,16 +1982,6 @@
       "prozent": 94
      },
      {
-      "name": "Adam Hlozek",
-      "nr": "10",
-      "ampel": "gruen",
-      "grund": "Sturmspitze in bestätigter Startelf",
-      "news": "artikel/hoffenheim-gegen-leverkusen-hlozek-und-schick-starten-vorne-d531d7214b.html",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 90
-     },
-     {
       "name": "Fisnik Asllani",
       "nr": "11",
       "ampel": "gruen",
@@ -1989,7 +1989,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 89
+      "prozent": 55
      },
      {
       "name": "Andrej Kramaric",
@@ -2027,16 +2027,6 @@
    ],
    "fraglich": [
     {
-     "name": "Bambasé Conté",
-     "nr": "20",
-     "ampel": "gelb",
-     "grund": "Angeschlagen - im DFB-Pokal angeschlagen ausgewechselt",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 45
-    },
-    {
      "name": "Tim Lemperle",
      "nr": "19",
      "ampel": "gelb",
@@ -2044,7 +2034,17 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 12
+     "prozent": 46
+    },
+    {
+     "name": "Bambasé Conté",
+     "nr": "20",
+     "ampel": "gelb",
+     "grund": "Angeschlagen - im DFB-Pokal angeschlagen ausgewechselt",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 11
     },
     {
      "name": "Max Moerstedt",
@@ -2062,8 +2062,8 @@
      "name": "Alexander Prass",
      "nr": "22",
      "ampel": "rot",
-     "grund": "fehlt laut Kickbase",
-     "news": "",
+     "grund": "Gelb-Rot-Sperre nach Trikotausziehen",
+     "news": "artikel/hoffenheim-ohne-prass-gelb-rot-sperre-vor-spiel-bei-werder-da8cd87232.html",
      "reihe": "mf",
      "pos": "Linkes Mittelfeld",
      "prozent": 0
@@ -3332,12 +3332,12 @@
      {
       "name": "Francis Onyeka",
       "nr": "40",
-      "ampel": "gelb",
-      "grund": "Nach Umknicken im Aufbau",
-      "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+      "ampel": "gruen",
+      "grund": "3 von 5 Einsätzen in der Startelf · Ø 36 min · 2 Spiele ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 60
+      "prozent": 72
      }
     ],
     "st": [
@@ -3420,8 +3420,8 @@
      "name": "Cole Campbell",
      "nr": "39",
      "ampel": "gelb",
-     "grund": "Nach Bänderverletzung im Aufbau",
-     "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+     "grund": "Knöchelprobleme - Hoffnung auf Rückkehr gegen M05 (H)",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 21
@@ -3435,19 +3435,19 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 16
-    }
-   ],
-   "ausfall": [
+    },
     {
      "name": "Noah Darvich",
      "nr": "10",
-     "ampel": "rot",
-     "grund": "Muskelverletzung, ziemlich sicher out",
-     "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+     "ampel": "gelb",
+     "grund": "Oberschenkelprobleme - fehlt auch im DFB-Pokal",
+     "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 0
-    },
+     "prozent": 7
+    }
+   ],
+   "ausfall": [
     {
      "name": "Jan Gyamerah",
      "nr": "30",
@@ -3462,8 +3462,8 @@
      "name": "Tom Zimmerschied",
      "nr": "29",
      "ampel": "rot",
-     "grund": "Bänderverletzung, bis Ende November",
-     "news": "artikel/elversberg-sucht-spielmacher-darvich-fehlt-schmahl-vor-startelfdebuet-945e8acdcf.html",
+     "grund": "Bänderverletzung im Sprunggelenk - fällt wohl bis zur LSP aus",
+     "news": "",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -4003,24 +4003,14 @@
       "prozent": 90
      },
      {
-      "name": "Fabio Chiarodia",
-      "nr": "2",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 59 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 66
-     },
-     {
       "name": "Daiki Hashioka",
       "nr": "14",
-      "ampel": "gelb",
-      "grund": "trainierte nur individuell",
-      "news": "artikel/gladbach-gegen-paderborn-diks-und-neuhaus-vor-rueckkehr-in-die-42503c8499.html",
+      "ampel": "gruen",
+      "grund": "wieder fit",
+      "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 60
+      "prozent": 68
      }
     ],
     "mf": [
@@ -4067,6 +4057,16 @@
     ],
     "st": [
      {
+      "name": "Robin Hack",
+      "nr": "25",
+      "ampel": "gruen",
+      "grund": "3 von 7 Einsätzen in der Startelf · Ø 40 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Linksaußen",
+      "prozent": 84
+     },
+     {
       "name": "Shuto Machino",
       "nr": "18",
       "ampel": "gruen",
@@ -4080,14 +4080,14 @@
    },
    "bank": [
     {
-     "name": "Robin Hack",
-     "nr": "25",
+     "name": "Fabio Chiarodia",
+     "nr": "2",
      "ampel": "gruen",
-     "grund": "3 von 7 Einsätzen in der Startelf · Ø 40 min",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 59 min · 4 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 50
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 66
     },
     {
      "name": "Ko Itakura",
@@ -4103,8 +4103,8 @@
      "name": "Isac Lidberg",
      "nr": "3",
      "ampel": "gruen",
-     "grund": "Einsatz bis Samstag erwartet",
-     "news": "artikel/gladbach-castrop-vor-comeback-blessin-kuendigt-rotation-im-pokal-an-866be9a87d.html",
+     "grund": "wieder fit",
+     "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 16
@@ -4140,25 +4140,14 @@
      "prozent": 11
     }
    ],
-   "fraglich": [
-    {
-     "name": "Nicolas Kühn",
-     "nr": "19",
-     "ampel": "gelb",
-     "grund": "Einsatz könnte Thema sein",
-     "news": "artikel/gladbach-castrop-vor-comeback-blessin-kuendigt-rotation-im-pokal-an-866be9a87d.html",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 2
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Hugo Bolin",
      "nr": "38",
      "ampel": "rot",
-     "grund": "Muskuläre Probleme - verpasst SCP (H)",
-     "news": "",
+     "grund": "muskuläre Probleme",
+     "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 0
@@ -4177,8 +4166,8 @@
      "name": "Franck Honorat",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Trainingsrückstand - verpasst SCP (H), soll gegen HSV (A) zurückkehren",
-     "news": "",
+     "grund": "Comeback kommt noch zu früh",
+     "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 0
