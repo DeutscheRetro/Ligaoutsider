@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T17:01:29.439670+00:00",
+  "updated": "2026-10-30T18:31:27.648484+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -170,18 +170,6 @@
       "eff": 6.4
     },
     {
-      "name": "Mittelstädt",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "mw": 11310000,
-      "spiele": 6,
-      "tore": 1,
-      "pts": 55,
-      "ap": 9.17,
-      "eff": 4.9
-    },
-    {
       "name": "Nusa",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
@@ -192,6 +180,18 @@
       "pts": 55,
       "ap": 7.86,
       "eff": 4.1
+    },
+    {
+      "name": "Mittelstädt",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "mw": 11310000,
+      "spiele": 6,
+      "tore": 1,
+      "pts": 55,
+      "ap": 9.17,
+      "eff": 4.9
     }
   ],
   "schnitt": [
@@ -562,17 +562,6 @@
   ],
   "torwart": [
     {
-      "name": "Vandevoordt",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Torwart",
-      "mw": 3430000,
-      "spiele": 6,
-      "tore": 0,
-      "pts": 42,
-      "ap": 7.0
-    },
-    {
       "name": "Noll",
       "klub": "SC Paderborn",
       "logo": "logos/paderborn.png",
@@ -581,6 +570,17 @@
       "spiele": 7,
       "tore": 0,
       "pts": 49,
+      "ap": 7.0
+    },
+    {
+      "name": "Vandevoordt",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Torwart",
+      "mw": 3430000,
+      "spiele": 6,
+      "tore": 0,
+      "pts": 42,
       "ap": 7.0
     },
     {
@@ -628,22 +628,22 @@
       "ap": 5.43
     },
     {
-      "name": "Atubolu",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
+      "name": "Kobel",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
       "pos": "Torwart",
-      "mw": 2800000,
+      "mw": 2660000,
       "spiele": 7,
       "tore": 0,
       "pts": 34,
       "ap": 4.86
     },
     {
-      "name": "Kobel",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
+      "name": "Atubolu",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
       "pos": "Torwart",
-      "mw": 2660000,
+      "mw": 2800000,
       "spiele": 7,
       "tore": 0,
       "pts": 34,
@@ -843,17 +843,6 @@
       "ap": 11.71
     },
     {
-      "name": "Kane",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "mw": 27030000,
-      "spiele": 7,
-      "tore": 4,
-      "pts": 64,
-      "ap": 9.14
-    },
-    {
       "name": "Füllkrug",
       "klub": "SV Werder Bremen",
       "logo": "logos/werder.png",
@@ -861,6 +850,17 @@
       "mw": 16950000,
       "spiele": 7,
       "tore": 8,
+      "pts": 64,
+      "ap": 9.14
+    },
+    {
+      "name": "Kane",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "mw": 27030000,
+      "spiele": 7,
+      "tore": 4,
       "pts": 64,
       "ap": 9.14
     },
@@ -1298,36 +1298,12 @@
       "mw": 8640000
     },
     {
-      "name": "Gnabry",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 18,
-      "mw": 8200000
-    },
-    {
       "name": "Ryerson",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
       "pos": "Abwehr",
       "pts": 23,
       "mw": 4980000
-    },
-    {
-      "name": "Mohya",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Mittelfeld",
-      "pts": 28,
-      "mw": 5630000
-    },
-    {
-      "name": "Amiri",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Mittelfeld",
-      "pts": 27,
-      "mw": 7980000
     },
     {
       "name": "Kimmich",
@@ -1338,70 +1314,20 @@
       "mw": 19020000
     },
     {
-      "name": "Lukeba",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Abwehr",
-      "pts": 16,
-      "mw": 3300000
-    },
-    {
-      "name": "Caci",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Abwehr",
-      "pts": 61,
+      "name": "Gnabry",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "pts": 18,
       "mw": 8200000
     },
     {
-      "name": "Mittelstädt",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "pts": 55,
-      "mw": 11310000
-    },
-    {
-      "name": "Olise",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 82,
-      "mw": 19620000
-    }
-  ],
-  "aufsteigend": [
-    {
-      "name": "Kane",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 64,
-      "mw": 27030000
-    },
-    {
-      "name": "Baum",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Abwehr",
-      "pts": 21,
-      "mw": 2400000
-    },
-    {
-      "name": "Muheim",
-      "klub": "Hamburger SV",
-      "logo": "logos/hsv.png",
-      "pos": "Abwehr",
-      "pts": 30,
-      "mw": 4930000
-    },
-    {
-      "name": "Bellingham",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
+      "name": "Amiri",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
       "pos": "Mittelfeld",
-      "pts": 37,
-      "mw": 5890000
+      "pts": 27,
+      "mw": 7980000
     },
     {
       "name": "Schäfer",
@@ -1412,20 +1338,94 @@
       "mw": 3800000
     },
     {
-      "name": "Scally",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
+      "name": "Lukeba",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
       "pos": "Abwehr",
-      "pts": 39,
-      "mw": 3880000
+      "pts": 16,
+      "mw": 3300000
     },
     {
-      "name": "Davies",
+      "name": "Makengo",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Abwehr",
+      "pts": 30,
+      "mw": 4360000
+    },
+    {
+      "name": "Olise",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "pts": 82,
+      "mw": 19620000
+    },
+    {
+      "name": "N. Schlotterbeck",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Abwehr",
+      "pts": 33,
+      "mw": 11990000
+    }
+  ],
+  "aufsteigend": [
+    {
+      "name": "Tah",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
       "pos": "Abwehr",
-      "pts": 42,
-      "mw": 9950000
+      "pts": 28,
+      "mw": 5720000
+    },
+    {
+      "name": "Fellhauer",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
+      "pos": "Mittelfeld",
+      "pts": 33,
+      "mw": 4530000
+    },
+    {
+      "name": "Kane",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "pts": 64,
+      "mw": 27030000
+    },
+    {
+      "name": "Arthur",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Abwehr",
+      "pts": 26,
+      "mw": 4020000
+    },
+    {
+      "name": "Musiala",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Mittelfeld",
+      "pts": 15,
+      "mw": 11600000
+    },
+    {
+      "name": "Krauß",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Mittelfeld",
+      "pts": 27,
+      "mw": 3840000
+    },
+    {
+      "name": "Vagnoman",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "pts": 43,
+      "mw": 3840000
     },
     {
       "name": "Hack",
@@ -1436,20 +1436,20 @@
       "mw": 2530000
     },
     {
-      "name": "Grønbæk",
-      "klub": "Hamburger SV",
-      "logo": "logos/hsv.png",
-      "pos": "Mittelfeld",
-      "pts": 19,
-      "mw": 4940000
+      "name": "Gouweleeuw",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
+      "pos": "Abwehr",
+      "pts": 9,
+      "mw": 2550000
     },
     {
-      "name": "García",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Mittelfeld",
-      "pts": 46,
-      "mw": 12310000
+      "name": "Davies",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Abwehr",
+      "pts": 42,
+      "mw": 9950000
     }
   ],
   "rekorde": [
@@ -1461,15 +1461,6 @@
       "pts": 24,
       "tore": 3,
       "gegner": "SV Werder Bremen"
-    },
-    {
-      "name": "Nkunku",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Sturm",
-      "pts": 21,
-      "tore": 3,
-      "gegner": "Eintracht Frankfurt"
     },
     {
       "name": "Luis Díaz",
@@ -1497,6 +1488,15 @@
       "pts": 21,
       "tore": 2,
       "gegner": "Bayer 04 Leverkusen"
+    },
+    {
+      "name": "Nkunku",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "pts": 21,
+      "tore": 3,
+      "gegner": "Eintracht Frankfurt"
     },
     {
       "name": "Y. Engelhardt",
