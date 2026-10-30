@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T20:01:30.233950+00:00",
+  "updated": "2026-10-30T22:01:23.012498+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -98,6 +98,18 @@
       "eff": 2.4
     },
     {
+      "name": "Caci",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Abwehr",
+      "mw": 8200000,
+      "spiele": 8,
+      "tore": 3,
+      "pts": 64,
+      "ap": 8.0,
+      "eff": 7.8
+    },
+    {
       "name": "Füllkrug",
       "klub": "SV Werder Bremen",
       "logo": "logos/werder.png",
@@ -108,18 +120,6 @@
       "pts": 64,
       "ap": 9.14,
       "eff": 3.8
-    },
-    {
-      "name": "Caci",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Abwehr",
-      "mw": 8200000,
-      "spiele": 8,
-      "tore": 3,
-      "pts": 63,
-      "ap": 7.88,
-      "eff": 7.7
     },
     {
       "name": "Schick",
@@ -311,9 +311,9 @@
       "mw": 8200000,
       "spiele": 8,
       "tore": 3,
-      "pts": 63,
-      "ap": 7.88,
-      "eff": 7.7
+      "pts": 64,
+      "ap": 8.0,
+      "eff": 7.8
     }
   ],
   "effizienz": [
@@ -325,9 +325,9 @@
       "mw": 1770000,
       "spiele": 8,
       "tore": 0,
-      "pts": 30,
-      "ap": 3.75,
-      "eff": 16.9
+      "pts": 32,
+      "ap": 4.0,
+      "eff": 18.1
     },
     {
       "name": "Dahmen",
@@ -414,6 +414,18 @@
       "eff": 12.1
     },
     {
+      "name": "Keidel",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Abwehr",
+      "mw": 4020000,
+      "spiele": 8,
+      "tore": 2,
+      "pts": 47,
+      "ap": 5.88,
+      "eff": 11.7
+    },
+    {
       "name": "Vagnoman",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
@@ -424,18 +436,6 @@
       "pts": 43,
       "ap": 7.17,
       "eff": 11.2
-    },
-    {
-      "name": "Keidel",
-      "klub": "SV Elversberg",
-      "logo": "logos/elversberg.png",
-      "pos": "Abwehr",
-      "mw": 4020000,
-      "spiele": 8,
-      "tore": 2,
-      "pts": 44,
-      "ap": 5.5,
-      "eff": 10.9
     }
   ],
   "torjaeger": [
@@ -512,6 +512,18 @@
       "eff": 2.4
     },
     {
+      "name": "Krattenmacher",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Mittelfeld",
+      "mw": 5730000,
+      "spiele": 8,
+      "tore": 4,
+      "pts": 51,
+      "ap": 6.38,
+      "eff": 8.9
+    },
+    {
       "name": "Suzuki",
       "klub": "Sport-Club Freiburg",
       "logo": "logos/freiburg.png",
@@ -546,18 +558,6 @@
       "pts": 45,
       "ap": 6.43,
       "eff": 4.9
-    },
-    {
-      "name": "Luis Díaz",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "mw": 12040000,
-      "spiele": 6,
-      "tore": 4,
-      "pts": 44,
-      "ap": 7.33,
-      "eff": 3.7
     }
   ],
   "torwart": [
@@ -681,8 +681,8 @@
       "mw": 8200000,
       "spiele": 8,
       "tore": 3,
-      "pts": 63,
-      "ap": 7.88
+      "pts": 64,
+      "ap": 8.0
     },
     {
       "name": "Vagnoman",
@@ -1290,12 +1290,44 @@
   ],
   "trend": [
     {
-      "name": "Ryerson",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
+      "name": "Amiri",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Mittelfeld",
+      "pts": 27,
+      "mw": 7980000
+    },
+    {
+      "name": "Tietz",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Sturm",
+      "pts": 51,
+      "mw": 9870000
+    },
+    {
+      "name": "Onyeka",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Mittelfeld",
+      "pts": 11,
+      "mw": 2780000
+    },
+    {
+      "name": "Krattenmacher",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Mittelfeld",
+      "pts": 38,
+      "mw": 5730000
+    },
+    {
+      "name": "Caci",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
       "pos": "Abwehr",
-      "pts": 23,
-      "mw": 4980000
+      "pts": 61,
+      "mw": 8200000
     },
     {
       "name": "Asllani",
@@ -1306,12 +1338,20 @@
       "mw": 9890000
     },
     {
-      "name": "Beier",
+      "name": "Ryerson",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 38,
-      "mw": 7220000
+      "pos": "Abwehr",
+      "pts": 23,
+      "mw": 4980000
+    },
+    {
+      "name": "Keidel",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Abwehr",
+      "pts": 33,
+      "mw": 4020000
     },
     {
       "name": "Kimmich",
@@ -1322,62 +1362,22 @@
       "mw": 19020000
     },
     {
-      "name": "Amiri",
+      "name": "Nebel",
       "klub": "1. FSV Mainz 05",
       "logo": "logos/mainz.png",
       "pos": "Mittelfeld",
-      "pts": 27,
-      "mw": 7980000
-    },
-    {
-      "name": "M. Eggestein",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Mittelfeld",
-      "pts": 46,
-      "mw": 8640000
-    },
-    {
-      "name": "Gnabry",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 18,
-      "mw": 8200000
-    },
-    {
-      "name": "Schäfer",
-      "klub": "1. FC Union Berlin",
-      "logo": "logos/union.png",
-      "pos": "Mittelfeld",
-      "pts": 26,
-      "mw": 3800000
-    },
-    {
-      "name": "Füllkrug",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Sturm",
-      "pts": 64,
-      "mw": 16950000
-    },
-    {
-      "name": "Caci",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Abwehr",
-      "pts": 61,
-      "mw": 8200000
+      "pts": 5,
+      "mw": 5390000
     }
   ],
   "aufsteigend": [
     {
-      "name": "Wolf",
-      "klub": "FC Augsburg",
-      "logo": "logos/augsburg.png",
+      "name": "Henrichs",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
       "pos": "Abwehr",
-      "pts": 26,
-      "mw": 2720000
+      "pts": 23,
+      "mw": 3460000
     },
     {
       "name": "Sambi Lokonga",
@@ -1388,28 +1388,20 @@
       "mw": 2370000
     },
     {
-      "name": "El Khannouss",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Mittelfeld",
-      "pts": 41,
-      "mw": 8010000
-    },
-    {
-      "name": "Quansah",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
+      "name": "Rohr",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
       "pos": "Abwehr",
-      "pts": 32,
-      "mw": 4870000
+      "pts": 34,
+      "mw": 3900000
     },
     {
-      "name": "Fellhauer",
-      "klub": "FC Augsburg",
-      "logo": "logos/augsburg.png",
-      "pos": "Mittelfeld",
-      "pts": 33,
-      "mw": 4530000
+      "name": "Kristof",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Torwart",
+      "pts": 27,
+      "mw": 1770000
     },
     {
       "name": "Svensson",
@@ -1420,12 +1412,20 @@
       "mw": 6370000
     },
     {
-      "name": "Deman",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
+      "name": "Sano",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Mittelfeld",
+      "pts": 43,
+      "mw": 9600000
+    },
+    {
+      "name": "Potulski",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
       "pos": "Abwehr",
-      "pts": 25,
-      "mw": 1990000
+      "pts": 12,
+      "mw": 2050000
     },
     {
       "name": "Arthur",

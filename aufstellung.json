@@ -1,14 +1,7 @@
 {
- "updated": "2026-10-30T20:02:11.458056+00:00",
+ "updated": "2026-10-30T22:02:07.036905+00:00",
  "spieltag": 8,
  "partien": [
-  {
-   "heim": "SV Elversberg",
-   "gast": "1. FSV Mainz 05",
-   "anstoss": "2026-10-30T20:30:00",
-   "anstoss_text": "Fr 30.10. 20:30",
-   "spieltag": 8
-  },
   {
    "heim": "Bayer 04 Leverkusen",
    "gast": "VfB Stuttgart",
@@ -64,6 +57,20 @@
    "anstoss": "2026-11-01T17:30:00",
    "anstoss_text": "So 01.11. 17:30",
    "spieltag": 8
+  },
+  {
+   "heim": "1. FSV Mainz 05",
+   "gast": "FC Bayern München",
+   "anstoss": "2026-11-07T15:30:00",
+   "anstoss_text": "Sa 07.11. 15:30",
+   "spieltag": 9
+  },
+  {
+   "heim": "Borussia Dortmund",
+   "gast": "SV Elversberg",
+   "anstoss": "2026-11-07T15:30:00",
+   "anstoss_text": "Sa 07.11. 15:30",
+   "spieltag": 9
   }
  ],
  "teams": {
@@ -771,16 +778,6 @@
     ],
     "abw": [
      {
-      "name": "Phillipp Mwene",
-      "nr": "2",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 94 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 95
-     },
-     {
       "name": "Fabio Gruber",
       "nr": "3",
       "ampel": "gruen",
@@ -819,9 +816,29 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 73
+     },
+     {
+      "name": "Danny da Costa",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "3 von 7 Einsätzen in der Startelf · Ø 54 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 56
      }
     ],
     "mf": [
+     {
+      "name": "Nadiem Amiri",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 94 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 95
+     },
      {
       "name": "Kaishu Sano",
       "nr": "6",
@@ -841,16 +858,6 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 86
-     },
-     {
-      "name": "Nadiem Amiri",
-      "nr": "10",
-      "ampel": "gelb",
-      "grund": "Knieprobleme - fraglich für ELV (A)",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 48
      }
     ],
     "st": [
@@ -886,16 +893,6 @@
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 67
-    },
-    {
-     "name": "Danny da Costa",
-     "nr": "21",
-     "ampel": "gruen",
-     "grund": "3 von 7 Einsätzen in der Startelf · Ø 54 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 56
     },
     {
      "name": "Eric Martel",
@@ -961,6 +958,16 @@
     }
    ],
    "ausfall": [
+    {
+     "name": "Phillipp Mwene",
+     "nr": "2",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 0
+    },
     {
      "name": "Dominik Kohr",
      "nr": "31",
@@ -3221,12 +3228,12 @@
      {
       "name": "Lukas Pinckert",
       "nr": "19",
-      "ampel": "gelb",
-      "grund": "Oberschenkelprobleme - \"sehr wahrscheinlich\" einsatzfähig",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 97 min",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 49
+      "prozent": 95
      },
      {
       "name": "Lasse Günther",
@@ -3361,7 +3368,7 @@
      "name": "Noah Darvich",
      "nr": "10",
      "ampel": "gelb",
-     "grund": "Oberschenkelprobleme - fehlt auch im DFB-Pokal",
+     "grund": "Oberschenkelprobleme",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
@@ -4074,16 +4081,6 @@
      "prozent": 0
     },
     {
-     "name": "Tim Kleindienst",
-     "nr": "11",
-     "ampel": "rot",
-     "grund": "Muskelfaserriss",
-     "news": "artikel/gladbachs-robin-hack-vor-startelfrueckkehr-gegen-paderborn-2058713894.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
      "name": "Franck Honorat",
      "nr": "9",
      "ampel": "rot",
@@ -4091,6 +4088,16 @@
      "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
      "reihe": "st",
      "pos": "Rechtsaußen",
+     "prozent": 0
+    },
+    {
+     "name": "Tim Kleindienst",
+     "nr": "11",
+     "ampel": "rot",
+     "grund": "Muskelfaserriss",
+     "news": "artikel/gladbachs-robin-hack-vor-startelfrueckkehr-gegen-paderborn-2058713894.html",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     },
     {
