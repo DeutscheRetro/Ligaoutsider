@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30T11:02:14.258143+00:00",
+ "updated": "2026-10-30T12:32:08.488391+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -698,6 +698,16 @@
    ],
    "fraglich": [
     {
+     "name": "Konstantinos Karetsas",
+     "nr": "19",
+     "ampel": "gelb",
+     "grund": "Nach Bänderverletzung - teilintegriertes Teamtraining, Kaderplatz gegen FCB (A) offen",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 6
+    },
+    {
      "name": "Kauã Prates",
      "nr": "36",
      "ampel": "gelb",
@@ -709,16 +719,6 @@
     }
    ],
    "ausfall": [
-    {
-     "name": "Konstantinos Karetsas",
-     "nr": "19",
-     "ampel": "rot",
-     "grund": "Bänderverletzung am rechten Sprunggelenk",
-     "news": "artikel/kovac-hofft-bei-karetsas-auf-rueckkehr-im-pokal-gegen-werder-e3aa12edde.html",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 0
-    },
     {
      "name": "Mathis Albert",
      "nr": "41",
@@ -2814,20 +2814,10 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 55
+      "prozent": 65
      }
     ],
     "mf": [
-     {
-      "name": "Kenan Karaman",
-      "nr": "19",
-      "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 75 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 96
-     },
      {
       "name": "Satoshi Tanaka",
       "nr": "13",
@@ -2859,14 +2849,24 @@
       "prozent": 84
      },
      {
-      "name": "Luca Vozar",
-      "nr": "38",
+      "name": "Kenan Karaman",
+      "nr": "19",
       "ampel": "gruen",
-      "grund": "0 von 1 Einsätzen in der Startelf · Ø 19 min · 6 Spiele ohne Einsatz",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 75 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 80
+     },
+     {
+      "name": "Dejan Ljubicic",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 63 min · 4 Spiele ohne Einsatz",
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 59
+      "prozent": 45
      }
     ],
     "st": [
@@ -2884,27 +2884,37 @@
    },
    "bank": [
     {
-     "name": "Dejan Ljubicic",
-     "nr": "21",
+     "name": "Edin Dzeko",
+     "nr": "10",
      "ampel": "gruen",
-     "grund": "3 von 3 Einsätzen in der Startelf · Ø 63 min · 4 Spiele ohne Einsatz",
+     "grund": "2 von 5 Einsätzen in der Startelf · Ø 38 min · 2 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 35
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 22
+    },
+    {
+     "name": "Mertcan Ayhan",
+     "nr": "43",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 18 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 19
+    },
+    {
+     "name": "Hee-chan Hwang",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "1 von 5 Einsätzen in der Startelf · Ø 39 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 19
     }
    ],
    "fraglich": [
-    {
-     "name": "Robin Gosens",
-     "nr": "8",
-     "ampel": "gelb",
-     "grund": "Platzwunde - fehlte im DFB-Pokal",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 34
-    },
     {
      "name": "Soufiane El-Faouzi",
      "nr": "23",
@@ -2914,6 +2924,16 @@
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 28
+    },
+    {
+     "name": "Robin Gosens",
+     "nr": "8",
+     "ampel": "gelb",
+     "grund": "Platzwunde - fehlte im DFB-Pokal",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 24
     },
     {
      "name": "Ron Schallenberg",
@@ -2975,6 +2995,16 @@
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
+     "prozent": 0
+    },
+    {
+     "name": "Luca Vozar",
+     "nr": "38",
+     "ampel": "rot",
+     "grund": "Krank - verpasst RBL (H)",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
      "prozent": 0
     }
    ]
