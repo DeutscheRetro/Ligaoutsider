@@ -946,6 +946,26 @@ def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
 
     return False
 
+def gleiche_geschichte_im_lauf(titel: str, fp: dict, bisher: list[tuple]) -> bool:
+    """True, wenn ein schon freigegebener Artikel DIESES Laufs dieselbe Geschichte erzählt.
+    bisher = [(titel, fingerprint)]. Gleicher Klub, gemeinsamer Spieler und ähnlicher Titel genügt,
+    auch bei verschiedener event_stage: zwei Stufen derselben Meldung im selben Lauf sind keine
+    neue Entwicklung (Beispiel: 'vertrag' und 'vollzogen' bei Chatzialexiou/Frankfurt)."""
+    from rapidfuzz import fuzz as _fuzz2
+    klub = (fp.get("main_club") or "").lower().strip()
+    spieler = {p.lower() for p in fp.get("main_players", [])}
+    for alt_titel, alt_fp in bisher:
+        alt_klub = (alt_fp.get("main_club") or "").lower().strip()
+        alt_spieler = {p.lower() for p in alt_fp.get("main_players", [])}
+        if klub and alt_klub and klub != alt_klub:
+            continue
+        if not (spieler & alt_spieler):
+            continue
+        if _fuzz2.ratio(titel.lower(), alt_titel.lower()) >= 75:
+            return True
+    return False
+
+
 def speichere_published_stories(stories: list[dict]):
     PUBLISHED_JSON.parent.mkdir(exist_ok=True)
     PUBLISHED_JSON.write_text(
@@ -2367,15 +2387,20 @@ def main():
     archive_summaries = [(e.get("summary", ""), e.get("title", "")) for e in archive_recent]
 
     final_approved = []
+    dieser_lauf = []     # (titel, fingerprint, summary) der Artikel, die in diesem Lauf schon durchgingen
     for k in approved:
         fp = k.get("fingerprint") or {}
         titel_k = k["ergebnis"]["titel"]
         new_summary = fp.get("summary") or fp.get("one_sentence_summary", "")
 
-        # 1) Summary-Vergleich gegen news_archive (letzten 7 Tage) — Inhalt statt Titel
+        # 1) Summary-Vergleich gegen news_archive (letzten 7 Tage) und gegen Artikel dieses Laufs
         dup = False
-        if new_summary:
-            for arch_summary, arch_title in archive_summaries:
+        if gleiche_geschichte_im_lauf(titel_k, fp, [(t, f) for t, f, _ in dieser_lauf]):
+            log.info(f"S9.5 gleiche Geschichte im selben Lauf: {titel_k[:60]}")
+            _log_skip(k["aid"], titel_k, "s9.5", "gleicher_lauf_duplikat")
+            dup = True
+        if new_summary and not dup:
+            for arch_summary, arch_title in [*archive_summaries, *[(sm, t) for t, _, sm in dieser_lauf]]:
                 if not arch_summary:
                     continue
                 sim = _fuzz2.token_set_ratio(new_summary.lower(), arch_summary.lower())
@@ -2408,6 +2433,7 @@ def main():
             stats["s8_qa_rejected"] = stats.get("s8_qa_rejected", 0) + 1
         else:
             final_approved.append(k)
+            dieser_lauf.append((titel_k, fp, new_summary))
     log.info(f"S9.5 FinalCheck: {len(final_approved)}/{len(approved)} durch")
     approved = final_approved
 
