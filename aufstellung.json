@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T18:31:39.597947+00:00",
+ "updated": "2026-10-31T20:02:18.186184+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -101,16 +101,6 @@
     ],
     "abw": [
      {
-      "name": "Konrad Laimer",
-      "nr": "27",
-      "ampel": "gruen",
-      "grund": "spielt im Mittelfeld neben Bischof",
-      "news": "artikel/blinddarm-op-bayern-muss-auch-auf-bara-sapoko-ndiaye-verzichten-b38f69862c.html",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 95
-     },
-     {
       "name": "Dayot Upamecano",
       "nr": "2",
       "ampel": "gruen",
@@ -119,6 +109,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 93
+     },
+     {
+      "name": "Konrad Laimer",
+      "nr": "27",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 88 min · 3 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 91
      },
      {
       "name": "Jonathan Tah",
@@ -153,14 +153,24 @@
     ],
     "mf": [
      {
+      "name": "Aleksandar Pavlovic",
+      "nr": "45",
+      "ampel": "gruen",
+      "grund": "6 von 6 Einsätzen in der Startelf · Ø 79 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 88
+     },
+     {
       "name": "Lennart Karl",
       "nr": "42",
       "ampel": "gruen",
-      "grund": "steht in Freiburg in der Startelf",
-      "news": "artikel/blinddarm-op-bayern-muss-auch-auf-bara-sapoko-ndiaye-verzichten-b38f69862c.html",
+      "grund": "3 von 6 Einsätzen in der Startelf · Ø 45 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 95
+      "prozent": 45
      },
      {
       "name": "Joshua Kimmich",
@@ -171,16 +181,6 @@
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 41
-     },
-     {
-      "name": "Tom Bischof",
-      "nr": "8",
-      "ampel": "gruen",
-      "grund": "2 von 7 Einsätzen in der Startelf · Ø 39 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 33
      }
     ],
     "st": [
@@ -226,9 +226,29 @@
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 49
+    },
+    {
+     "name": "Tom Bischof",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "2 von 7 Einsätzen in der Startelf · Ø 39 min",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 33
     }
    ],
    "fraglich": [
+    {
+     "name": "Manuel Neuer",
+     "nr": "1",
+     "ampel": "gelb",
+     "grund": "Fußprobleme - Einsatz gegen BVB (H) kommt zu früh",
+     "news": "",
+     "reihe": "tw",
+     "pos": "Torwart",
+     "prozent": 46
+    },
     {
      "name": "Ismael Saibari",
      "nr": "34",
@@ -262,16 +282,6 @@
      "prozent": 0
     },
     {
-     "name": "Aleksandar Pavlovic",
-     "nr": "45",
-     "ampel": "rot",
-     "grund": "fehlt in Freiburg",
-     "news": "artikel/blinddarm-op-bayern-muss-auch-auf-bara-sapoko-ndiaye-verzichten-b38f69862c.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 0
-    },
-    {
      "name": "Jamal Musiala",
      "nr": "10",
      "ampel": "rot",
@@ -282,21 +292,11 @@
      "prozent": 0
     },
     {
-     "name": "Manuel Neuer",
-     "nr": "1",
-     "ampel": "rot",
-     "grund": "fehlt in Freiburg",
-     "news": "artikel/blinddarm-op-bayern-muss-auch-auf-bara-sapoko-ndiaye-verzichten-b38f69862c.html",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 0
-    },
-    {
      "name": "Bara Sapoko Ndiaye",
      "nr": "39",
      "ampel": "rot",
-     "grund": "Blinddarm-OP",
-     "news": "artikel/blinddarm-op-bayern-muss-auch-auf-bara-sapoko-ndiaye-verzichten-b38f69862c.html",
+     "grund": "Blinddarm-Operation - fällt vorerst aus",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 0
@@ -1699,6 +1699,7 @@
    "logo": "logos/frankfurt.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -1734,7 +1735,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 92
+      "prozent": 95
      },
      {
       "name": "Elias Baum",
@@ -1744,7 +1745,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 83
+      "prozent": 90
      },
      {
       "name": "Lilian Brassier",
@@ -1759,16 +1760,6 @@
     ],
     "mf": [
      {
-      "name": "Noël Aséko",
-      "nr": "15",
-      "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 58 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 94
-     },
-     {
       "name": "Raphael Onyedika",
       "nr": "25",
       "ampel": "gruen",
@@ -1776,7 +1767,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 93
+      "prozent": 96
      },
      {
       "name": "Farès Chaïbi",
@@ -1786,10 +1777,30 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 79
+      "prozent": 87
+     },
+     {
+      "name": "Noël Aséko",
+      "nr": "15",
+      "ampel": "gruen",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 58 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 80
      }
     ],
     "st": [
+     {
+      "name": "Jonathan Burkardt",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 97
+     },
      {
       "name": "Ritsu Doan",
       "nr": "20",
@@ -1801,16 +1812,6 @@
       "prozent": 97
      },
      {
-      "name": "Jonathan Burkardt",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 95
-     },
-     {
       "name": "Younes Ebnoutalib",
       "nr": "11",
       "ampel": "gruen",
@@ -1818,7 +1819,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 86
+      "prozent": 75
      }
     ]
    },
@@ -1831,27 +1832,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 33
-    },
-    {
-     "name": "Nnamdi Collins",
-     "nr": "34",
-     "ampel": "gruen",
-     "grund": "3 von 4 Einsätzen in der Startelf · Ø 73 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 30
-    },
-    {
-     "name": "Jeremiaha Maluze",
-     "nr": "37",
-     "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 5 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 26
+     "prozent": 34
     },
     {
      "name": "Mario Götze",
@@ -1861,17 +1842,27 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 14
+     "prozent": 22
     },
     {
-     "name": "Ansgar Knauff",
-     "nr": "7",
+     "name": "Nnamdi Collins",
+     "nr": "34",
      "ampel": "gruen",
-     "grund": "1 von 4 Einsätzen in der Startelf · Ø 41 min · 3 Spiele ohne Einsatz",
+     "grund": "3 von 4 Einsätzen in der Startelf · Ø 73 min · 3 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 10
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 19
+    },
+    {
+     "name": "Jeremiaha Maluze",
+     "nr": "37",
+     "ampel": "gruen",
+     "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 17
     }
    ],
    "fraglich": [],
@@ -2304,6 +2295,7 @@
    "logo": "logos/koeln.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -2329,17 +2321,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 94
-     },
-     {
-      "name": "Alessio Castro-Montes",
-      "nr": "17",
-      "ampel": "gruen",
-      "grund": "4 von 5 Einsätzen in der Startelf · Ø 70 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 85
+      "prozent": 96
      },
      {
       "name": "Borna Sosa",
@@ -2349,7 +2331,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 82
+      "prozent": 90
      },
      {
       "name": "Joël Schmied",
@@ -2359,7 +2341,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 67
+      "prozent": 80
+     },
+     {
+      "name": "Alessio Castro-Montes",
+      "nr": "17",
+      "ampel": "gruen",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 70 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 75
      }
     ],
     "mf": [
@@ -2371,7 +2363,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 92
+      "prozent": 95
      },
      {
       "name": "Paul Okon-Engstler",
@@ -2381,7 +2373,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 68
+      "prozent": 65
      }
     ],
     "st": [
@@ -2393,7 +2385,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 91
+      "prozent": 95
      },
      {
       "name": "Linton Maina",
@@ -2403,7 +2395,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 89
+      "prozent": 93
      },
      {
       "name": "Marius Bülter",
@@ -2413,7 +2405,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 82
+      "prozent": 89
      },
      {
       "name": "Mikey Moore",
@@ -2423,7 +2415,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 78
+      "prozent": 71
      }
     ]
    },
@@ -2436,7 +2428,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 41
+     "prozent": 39
     },
     {
      "name": "Sebastian Sebulonsen",
@@ -2446,7 +2438,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 36
+     "prozent": 35
     },
     {
      "name": "Ísak Jóhannesson",
@@ -2456,7 +2448,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 31
+     "prozent": 33
     },
     {
      "name": "Gideon Mensah",
@@ -2466,7 +2458,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 31
+     "prozent": 20
     },
     {
      "name": "Jan Thielmann",
@@ -2476,7 +2468,7 @@
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 17
+     "prozent": 12
     }
    ],
    "fraglich": [],
@@ -3465,6 +3457,7 @@
    "logo": "logos/hsv.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -3490,7 +3483,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 91
+      "prozent": 95
      },
      {
       "name": "Warmed Omari",
@@ -3500,7 +3493,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 89
+      "prozent": 93
      },
      {
       "name": "Zakaria El Ouahdi",
@@ -3510,17 +3503,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 84
-     },
-     {
-      "name": "Miro Muheim",
-      "nr": "28",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 76 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 76
+      "prozent": 90
      },
      {
       "name": "Shafiq Nandja",
@@ -3530,7 +3513,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 68
+      "prozent": 81
+     },
+     {
+      "name": "Miro Muheim",
+      "nr": "28",
+      "ampel": "gruen",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 76 min · 4 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 70
      }
     ],
     "mf": [
@@ -3542,7 +3535,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 90
+      "prozent": 94
      },
      {
       "name": "Martin Adeline",
@@ -3552,7 +3545,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 85
+      "prozent": 91
      },
      {
       "name": "Albert Grønbaek",
@@ -3562,7 +3555,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 79
+      "prozent": 87
      },
      {
       "name": "Kofi Amoako",
@@ -3572,7 +3565,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 11
+      "prozent": 20
      }
     ],
     "st": [
@@ -3584,11 +3577,21 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 68
+      "prozent": 65
      }
     ]
    },
    "bank": [
+    {
+     "name": "Otto Stange",
+     "nr": "19",
+     "ampel": "gruen",
+     "grund": "0 von 6 Einsätzen in der Startelf · Ø 36 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 15
+    },
     {
      "name": "Louis Lemke",
      "nr": "37",
@@ -3597,17 +3600,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 17
-    },
-    {
-     "name": "Bakery Jatta",
-     "nr": "18",
-     "ampel": "gruen",
-     "grund": "1 von 3 Einsätzen in der Startelf · Ø 35 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Rechtes Mittelfeld",
-     "prozent": 10
+     "prozent": 11
     }
    ],
    "fraglich": [
@@ -3629,7 +3622,7 @@
      "news": "artikel/hsv-nandja-und-bissi-mouelle-sammeln-im-pokal-aus-erfahrung-f2e9220732.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 20
+     "prozent": 26
     }
    ],
    "ausfall": [
@@ -3699,6 +3692,7 @@
    "logo": "logos/union.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -3724,17 +3718,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 94
-     },
-     {
-      "name": "Leopold Querfeld",
-      "nr": "14",
-      "ampel": "gruen",
-      "grund": "3 von 4 Einsätzen in der Startelf · Ø 94 min · 3 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 93
+      "prozent": 96
      },
      {
       "name": "Zeno Van Den Bosch",
@@ -3744,7 +3728,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 87
+      "prozent": 92
+     },
+     {
+      "name": "Leopold Querfeld",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 94 min · 3 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 80
      }
     ],
     "mf": [
@@ -3759,16 +3753,6 @@
       "prozent": 97
      },
      {
-      "name": "Michel Aebischer",
-      "nr": "20",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 92
-     },
-     {
       "name": "András Schäfer",
       "nr": "13",
       "ampel": "gruen",
@@ -3776,7 +3760,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 86
+      "prozent": 92
      },
      {
       "name": "Woo-yeong Jeong",
@@ -3786,7 +3770,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 86
+      "prozent": 91
      },
      {
       "name": "Janik Haberer",
@@ -3796,7 +3780,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 83
+      "prozent": 90
+     },
+     {
+      "name": "Michel Aebischer",
+      "nr": "20",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 79
      }
     ],
     "st": [
@@ -3808,7 +3802,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 83
+      "prozent": 74
      },
      {
       "name": "Livan Burcu",
@@ -3818,21 +3812,11 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 74
+      "prozent": 68
      }
     ]
    },
    "bank": [
-    {
-     "name": "Josip Juranovic",
-     "nr": "18",
-     "ampel": "gruen",
-     "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 28
-    },
     {
      "name": "Kastriot Imeri",
      "nr": "30",
@@ -3841,7 +3825,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Linkes Mittelfeld",
-     "prozent": 24
+     "prozent": 29
     },
     {
      "name": "Aljoscha Kemlein",
@@ -3851,7 +3835,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
-     "prozent": 23
+     "prozent": 28
     },
     {
      "name": "Tim Skarke",
@@ -3861,7 +3845,37 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 17
+     "prozent": 24
+    },
+    {
+     "name": "Josip Juranovic",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 18
+    },
+    {
+     "name": "Mekhi Gray",
+     "nr": "32",
+     "ampel": "gruen",
+     "grund": "0 von 3 Einsätzen in der Startelf · Ø 30 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 15
+    },
+    {
+     "name": "Marvin Friedrich",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "noch ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 15
     },
     {
      "name": "Matheo Raab",
@@ -3871,26 +3885,6 @@
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
-     "prozent": 17
-    },
-    {
-     "name": "Christopher Trimmel",
-     "nr": "28",
-     "ampel": "gruen",
-     "grund": "1 von 4 Einsätzen in der Startelf · Ø 32 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 13
-    },
-    {
-     "name": "Marin Ljubicic",
-     "nr": "27",
-     "ampel": "gruen",
-     "grund": "2 von 3 Einsätzen in der Startelf · Ø 80 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
      "prozent": 11
     }
    ],
