@@ -75,7 +75,8 @@ const aendere = (tabelle, filter, daten) =>
   db(`${tabelle}?${filter}`, { method: "PATCH", body: JSON.stringify(daten) });
 const loesche = (tabelle, filter) => db(`${tabelle}?${filter}`, { method: "DELETE" });
 
-const sauber = (s, max) => String(s ?? "").replace(/<[^>]*>/g, "").trim().slice(0, max);
+// Tags und einzelne < > entfernen: ein Tag ohne schließendes ">" würde sonst im Browser mit dem Folge-HTML gültig
+const sauber = (s, max) => String(s ?? "").replace(/<[^>]*>/g, "").replace(/[<>]/g, "").trim().slice(0, max);
 
 // Rollen kommen aus der Datenbank und zusaetzlich aus dem Identity-Token.
 // Die Vereinigung beider Quellen sorgt dafuer, dass niemand ausgesperrt wird,

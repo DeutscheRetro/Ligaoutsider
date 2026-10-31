@@ -145,6 +145,8 @@
   const personKey = k => k.autor_handle ? k.autor_handle : 'n:' + (k.name || '');
 
   // ─── Bereinigen ──────────────────────────────────────────────────────────────
+  const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
   function bereinigen(text) {
     return text
       .replace(/<[^>]*>/g, '')
@@ -186,7 +188,7 @@
     m.innerHTML = `
       <div style="background:var(--bg2);border:1px solid #c62828;border-radius:10px;padding:24px;max-width:320px;width:90%">
         <div style="font-size:15px;font-weight:800;color:#e53935;margin-bottom:16px">🚫 User bannen</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:12px">${name}</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:12px">${esc(name)}</div>
         <select id="ban-dauer" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:8px;font-size:13px;margin-bottom:10px">
           <option value="1">1 Tag</option>
           <option value="7">7 Tage</option>
@@ -256,7 +258,7 @@
       <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:28px;max-width:340px;width:90%;position:relative">
         <button onclick="document.getElementById('profil-modal').remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">✕</button>
         ${istGebannt ? `<div style="background:#c62828;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;margin-bottom:12px;display:inline-block">🚫 ${banText}</div>` : ''}
-        <div style="font-size:17px;font-weight:800;color:var(--accent);margin-bottom:2px">${name}</div>
+        <div style="font-size:17px;font-weight:800;color:var(--accent);margin-bottom:2px">${esc(name)}</div>
         <div style="margin-bottom:16px"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
           <div style="background:var(--bg4);border-radius:6px;padding:10px;text-align:center">
@@ -445,8 +447,8 @@
       return `<div class="kommentar-item" id="k-${k.id}">
         <div class="kommentar-kopf">
           <span style="display:inline-flex;align-items:center;gap:8px">${avatarHtml(k)}${k.autor_handle
-            ? `<a class="kommentar-name" href="/profil/${encodeURIComponent(k.autor_handle)}">${k.name}</a>`
-            : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${k.name}</span>`}</span>
+            ? `<a class="kommentar-name" href="/profil/${encodeURIComponent(k.autor_handle)}">${esc(k.name)}</a>`
+            : `<span class="kommentar-name" style="cursor:pointer" data-action="profil" data-id="${k.id}">${esc(k.name)}</span>`}</span>
           <span class="kommentar-datum">${datum}${editTag}</span>
         </div>
         <div class="kommentar-text" id="kt-${k.id}">${k.inhalt.replace(/</g,'&lt;')}</div>
