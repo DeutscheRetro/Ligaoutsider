@@ -77,7 +77,7 @@ def _per_abo(model: str, messages: list, output_config: dict | None, effort: str
                          else json.dumps(m["content"], ensure_ascii=False) for m in messages)
     befehl = ["claude", "-p", "--model", model, "--tools", "", "--output-format", "json",
               "--no-session-persistence", "--setting-sources", "",
-              "--system-prompt", "Du arbeitest für die Redaktion von ligaoutsider.de. "
+              "--system-prompt", "Du arbeitest für die Redaktion von LO. "
                                  "Halte dich genau an die Anweisungen und das verlangte Antwortformat."]
     effort = effort or ("medium" if "opus" in model else None)
     if effort:

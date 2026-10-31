@@ -45,7 +45,7 @@ def _schema() -> dict:
 def _prompt(titel: str, text: str, quellen: list[str]) -> str:
     q = ("\n\n".join(f"=== QUELLE {i + 1} ===\n{t}" for i, t in enumerate(quellen))
          if quellen else "(Quelle nicht mehr abrufbar – prüfe nur Sprache und Aufbau, ändere keine Fakten)")
-    return f"""Du bist Chefredakteur bei Ligaoutsider.de (Bundesliga-News für Fans und Kickbase-/Comunio-Manager).
+    return f"""Du bist Chefredakteur bei LO (Bundesliga-News für Fans und Kickbase-/Comunio-Manager).
 Prüfe diesen bereits veröffentlichten Artikel gegen seine Quelle und verbessere ihn, wenn nötig.
 
 PRÜFE:

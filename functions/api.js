@@ -22,7 +22,7 @@ async function github(pfad, options = {}) {
   const res = await fetch(`https://api.github.com/repos/${GH_REPO}/${pfad}`, {
     ...options,
     headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: "application/vnd.github+json",
-               "User-Agent": "ligaoutsider-chefred", "X-GitHub-Api-Version": "2022-11-28",
+               "User-Agent": "lo-app", "X-GitHub-Api-Version": "2022-11-28",
                "Content-Type": "application/json", ...(options.headers || {}) } });
   const text = await res.text();
   if (!res.ok) throw new Error(`GitHub ${res.status}: ${text.slice(0, 200)}`);
@@ -1052,7 +1052,7 @@ export async function onRequest({ request, env }) {
         if (!GH_TOKEN) return json(500, { fehler: "GH_TOKEN fehlt in den Cloudflare-Secrets" });
         const pfad = String(body.path || "");
         if (!GH_PFAD.test(pfad)) return json(400, { fehler: "Dieser Pfad ist für die Redaktion nicht freigegeben" });
-        const autor = { name: `Chefred (${name})`, email: "bot@ligaoutsider.de" };
+        const autor = { name: `Chefred (${name})`, email: "lo-bot@users.noreply.github.com" };
         if (aktion === "gh_get") {
           const d = await github(`contents/${pfad}`);
           // Dateien über 1 MB liefert die Contents-API ohne Inhalt, dann über die Blob-API holen

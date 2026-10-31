@@ -27,7 +27,7 @@ jobs:
           FB_PAGE_TOKEN:        ${{ secrets.FB_PAGE_TOKEN }}
         run: |
           python social.py
-          git config user.name  "Ligaoutsider Bot"
-          git config user.email "bot@ligaoutsider.de"
+          git config user.name  "LO Bot"
+          git config user.email "lo-bot@users.noreply.github.com"
           git add data/social_queue.json data/social_tage.json
           git diff --staged --quiet || { git commit -m "📣 Social-Warteschlange"; git pull --rebase -X theirs origin main; git push; }

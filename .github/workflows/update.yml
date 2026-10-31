@@ -117,8 +117,8 @@ jobs:
 
       - name: Änderungen committen & pushen
         run: |
-          git config user.name  "Ligaoutsider Bot"
-          git config user.email "bot@ligaoutsider.de"
+          git config user.name  "LO Bot"
+          git config user.email "lo-bot@users.noreply.github.com"
 
           git add feed.json artikel/ data/ logs/ sitemap.xml news-sitemap.xml rss.xml og/ verein/ archiv-seite-*.html bundesliga-heute.html bundesliga-fragen.html || true
           [ -f kickbase.json ] && git add kickbase.json kickbase_spieler.json || true
@@ -164,14 +164,14 @@ jobs:
           if ! stabil_kaputt; then echo "✅ Seite erreichbar"; exit 0; fi
 
           echo "⚠️ Seite liefert Fehler – stoße neuen Deploy an"
-          git config user.name  "Ligaoutsider Bot"
-          git config user.email "bot@ligaoutsider.de"
+          git config user.name  "LO Bot"
+          git config user.email "lo-bot@users.noreply.github.com"
           git pull --rebase -X theirs origin main
           git commit --allow-empty -m "🔁 Neu-Deploy: Seite lieferte Fehler"
           git push
           sleep 150
           if stabil_kaputt; then
-            echo "::error::ligaoutsider.de liefert auch nach Neu-Deploy Fehler – bitte in Cloudflare (Workers & Pages → ligaoutsider → Deployments) prüfen"
+            echo "::error::Die Seite liefert auch nach Neu-Deploy Fehler – bitte in Cloudflare (Workers & Pages → ligaoutsider → Deployments) prüfen"
             exit 1
           fi
           echo "✅ Seite nach Neu-Deploy wieder erreichbar"
@@ -188,8 +188,8 @@ jobs:
           FB_PAGE_TOKEN:        ${{ secrets.FB_PAGE_TOKEN }}
         run: |
           python social.py || true
-          git config user.name  "Ligaoutsider Bot"
-          git config user.email "bot@ligaoutsider.de"
+          git config user.name  "LO Bot"
+          git config user.email "lo-bot@users.noreply.github.com"
           git add data/social_queue.json data/social_tage.json 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "📣 Social-Warteschlange"

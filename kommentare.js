@@ -1,4 +1,4 @@
-// kommentare.js – Ligaoutsider Kommentarsystem
+// kommentare.js – LO Kommentarsystem
 // Erwartet als Globals: SUPABASE_URL, SUPABASE_ANON
 // Optional: ARTIKEL_ID (nur auf Artikelseiten)
 

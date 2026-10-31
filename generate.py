@@ -1,5 +1,5 @@
 """
-Ligaoutsider – Artikel-Generator
+LO – Artikel-Generator
 Ablauf: Schlagzeilen sammeln → zu Geschichten bündeln und mit dem Archiv abgleichen
 (ohne KI) → Redaktionskonferenz (ein günstiger KI-Aufruf) → wichtigste Geschichten
 schreiben, solange das Budget reicht → prüfen → HTML speichern → feed.json
@@ -42,7 +42,7 @@ logging.basicConfig(
         logging.StreamHandler(),
     ],
 )
-log = logging.getLogger("ligaoutsider")
+log = logging.getLogger("lo")
 
 # Skips als JSONL
 _skips_path = LOG_DIR / f"skips_{_run_ts[:8]}.jsonl"
@@ -151,7 +151,7 @@ SAISON = datetime.date.today().year if datetime.date.today().month >= 7 else dat
 OG_ORDNER      = Path("og")
 FONT_ORDNER    = Path(__file__).parent / "fonts"
 
-DISQUS_SHORTNAME = "ligaoutsider"  # <-- später auf disqus.com eintragen
+DISQUS_SHORTNAME = ""
 
 # ─── 1. Bundesliga Klubs 2026/27 ──────────────────────────────────────────────
 
@@ -518,7 +518,7 @@ def badge_fuer_kategorie(kategorie: str) -> tuple:
 
 
 def feed_laden() -> list:
-    """Lädt feed.json – merged lokale Datei mit live Version von ligaoutsider.de."""
+    """Lädt feed.json – merged lokale Datei mit der Live-Version."""
     lokal = []
     if FEED_JSON.exists():
         try:
@@ -656,7 +656,7 @@ def redaktionskonferenz(geschichten: list[dict], unsere_titel: list[str]) -> Non
             for a in g.get("archiv", [])[:2]:
                 zeilen.append(f"  Archiv {a['datum']}: {a['titel'][:90]}")
         prompt = (
-            f"Du bist Nachrichtenchef von Ligaoutsider.de, einer Seite für Bundesliga-Fans und "
+            f"Du bist Nachrichtenchef von LO, einer Seite für Bundesliga-Fans und "
             f"Kickbase-/Comunio-Manager. Heute ist der {heute}.\n\n"
             "Bewerte jede Geschichte mit einer Priorität:\n"
             "3 = Muss: Verletzung, Ausfall, Sperre, Rückkehr ins Training, Startelf oder Aufstellung, "
@@ -1341,7 +1341,7 @@ def artikel_generieren(g: dict, texte: list[dict], reserve: float = 0.0,
     wie_berichtet = ('Bei einer neuen Entwicklung zu UNSEREN FRÜHEREN BERICHTEN kurz einordnen ("Wie berichtet, ...").'
                      if frueher else
                      'Schreibe NIE "Wie berichtet" oder "wie bereits berichtet" – wir hatten zu diesem Thema noch keinen Artikel.')
-    prompt = f"""Du bist Sportredakteur bei Ligaoutsider.de. Stil: kicker.de – sachlich, präzise, konkret.
+    prompt = f"""Du bist Sportredakteur bei LO. Stil: kicker.de – sachlich, präzise, konkret.
 Heute ist der {datetime.date.today().strftime('%d.%m.%Y')}.
 
 ABSOLUTE REGELN – KEINE HALLUZINATIONEN:
@@ -1856,7 +1856,6 @@ def artikel_html(
     const SUPABASE_URL  = location.origin + '/sb';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
     const ARTIKEL_ID    = '{datei_id}';
-    const ADMIN_EMAIL   = 'twitchpre@gmail.com';
   </script>
   <script src="/vendor/supabase.min.js"></script>
   <script src="../kommentare.js"></script>
@@ -1927,7 +1926,7 @@ def main():
         "ea fc", "fc 26", "fc 27", "beliebtheitsrangliste", "marktwertentwicklung",
     )
 
-    log.info(f"=== Ligaoutsider Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
+    log.info(f"=== LO Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
     # Eingereichte URLs aus Supabase laden
     _submitted_urls, _submitted_ids = [], []
@@ -2807,7 +2806,7 @@ def comunio_fetch():
     """Comunio-Statistiken von Comstats (stats.comunio.de) holen — Quelle wird auf der Seite genannt."""
     import requests as _req
     session = _req.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0 (Ligaoutsider.de)"})
+    session.headers.update({"User-Agent": "Mozilla/5.0 (LO)"})
 
     def spieler(z, **extra):
         klub = z["klubs"][0] if z["klubs"] else ""
@@ -2997,7 +2996,7 @@ def spieler_db_fetch():
     import urllib.parse
     try:
         cs = _req.Session()
-        cs.headers.update({"User-Agent": "Mozilla/5.0 (Ligaoutsider.de)"})
+        cs.headers.update({"User-Agent": "Mozilla/5.0 (LO)"})
         start = cs.get(f"{COMUNIO_BASE}/squad/1-FC+Bayern+M%C3%BCnchen", timeout=20).text
         kader_links = sorted(set(re.findall(r'href="(/squad/\d+-[^"]+)"', start)))
         cs_treffer = 0
