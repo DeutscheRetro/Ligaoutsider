@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30T22:02:07.036905+00:00",
+ "updated": "2026-10-31T00:02:05.502166+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -127,6 +127,16 @@
       "prozent": 87
      },
      {
+      "name": "Nathaniel Brown",
+      "nr": "11",
+      "ampel": "gruen",
+      "grund": "5 von 7 Einsätzen in der Startelf · Ø 56 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 78
+     },
+     {
       "name": "Jonathan Tah",
       "nr": "4",
       "ampel": "gruen",
@@ -189,30 +199,10 @@
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 96
-     },
-     {
-      "name": "Serge Gnabry",
-      "nr": "7",
-      "ampel": "gruen",
-      "grund": "1 von 4 Einsätzen in der Startelf · Ø 36 min · 3 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Hängende Spitze",
-      "prozent": 55
      }
     ]
    },
    "bank": [
-    {
-     "name": "Nathaniel Brown",
-     "nr": "11",
-     "ampel": "gruen",
-     "grund": "5 von 7 Einsätzen in der Startelf · Ø 56 min",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 44
-    },
     {
      "name": "Min-jae Kim",
      "nr": "3",
@@ -222,6 +212,16 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 43
+    },
+    {
+     "name": "Serge Gnabry",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 36 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Hängende Spitze",
+     "prozent": 21
     },
     {
      "name": "Josip Stanisic",
@@ -788,16 +788,6 @@
       "prozent": 95
      },
      {
-      "name": "Stefan Posch",
-      "nr": "4",
-      "ampel": "gruen",
-      "grund": "6 von 6 Einsätzen in der Startelf · Ø 97 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 88
-     },
-     {
       "name": "Anthony Caci",
       "nr": "19",
       "ampel": "gruen",
@@ -858,6 +848,16 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 86
+     },
+     {
+      "name": "Eric Martel",
+      "nr": "5",
+      "ampel": "gruen",
+      "grund": "1 von 4 Einsätzen in der Startelf · Ø 29 min · 3 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 33
      }
     ],
     "st": [
@@ -893,16 +893,6 @@
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 67
-    },
-    {
-     "name": "Eric Martel",
-     "nr": "5",
-     "ampel": "gruen",
-     "grund": "1 von 4 Einsätzen in der Startelf · Ø 29 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 33
     },
     {
      "name": "Ransford Königsdörffer",
@@ -966,6 +956,16 @@
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Stefan Posch",
+     "nr": "4",
+     "ampel": "rot",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
      "prozent": 0
     },
     {
@@ -3390,8 +3390,8 @@
      "name": "Jan Gyamerah",
      "nr": "30",
      "ampel": "rot",
-     "grund": "Verdacht auf Muskelfaserriss, fehlt bis Mitte November",
-     "news": "artikel/elversberg-gyamerah-fehlt-bis-zur-laenderspielpause-mitte-november-4ff8ea0725.html",
+     "grund": "Muskelverletzung - droht bis zur LSP auszufallen",
+     "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 0
@@ -4018,16 +4018,6 @@
    },
    "bank": [
     {
-     "name": "Daiki Hashioka",
-     "nr": "14",
-     "ampel": "gruen",
-     "grund": "wieder fit",
-     "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 58
-    },
-    {
      "name": "Ko Itakura",
      "nr": "6",
      "ampel": "gruen",
@@ -4035,7 +4025,17 @@
      "news": "artikel/gladbach-castrop-vor-comeback-blessin-kuendigt-rotation-im-pokal-an-866be9a87d.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 43
+     "prozent": 77
+    },
+    {
+     "name": "Daiki Hashioka",
+     "nr": "14",
+     "ampel": "gruen",
+     "grund": "wieder fit",
+     "news": "artikel/gladbach-kuehn-lidberg-und-hashioka-zurueck-bolin-faellt-aus-c0a9c52049.html",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 24
     },
     {
      "name": "Isac Lidberg",
