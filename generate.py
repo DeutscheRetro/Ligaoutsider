@@ -1195,6 +1195,36 @@ def _ligainsider_eintraege() -> list[dict]:
     return eintraege
 
 
+def _host_oeffentlich(url: str) -> bool:
+    """Nur http(s) und Hosts, die ausschließlich auf öffentliche Adressen zeigen (kein localhost, kein internes Netz)."""
+    import socket, ipaddress
+    from urllib.parse import urlparse
+    u = urlparse(url)
+    if u.scheme not in ("http", "https") or not u.hostname:
+        return False
+    try:
+        infos = socket.getaddrinfo(u.hostname, None)
+    except OSError:
+        return False
+    return bool(infos) and all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
+
+
+def _sicher_get(url: str, **kw):
+    """requests.get, das Weiterleitungen selbst folgt und jeden Schritt prüft.
+    shortcut: DNS-Rebinding zwischen Prüfung und Abruf bleibt möglich; Runner hat keine internen Dienste, daher akzeptiert."""
+    import requests as _r
+    from urllib.parse import urljoin
+    for _ in range(6):
+        if not _host_oeffentlich(url):
+            raise ValueError(f"URL nicht öffentlich: {url[:80]}")
+        r = _r.get(url, allow_redirects=False, **kw)
+        if r.is_redirect and r.headers.get("location"):
+            url = urljoin(r.url, r.headers["location"])
+            continue
+        return r
+    raise ValueError("zu viele Weiterleitungen")
+
+
 def fetch_fulltext(url: str) -> tuple[str | None, str]:
     """Lädt Volltext via trafilatura. Gibt (text, reason) zurück — reason='ok' oder Fehlergrund."""
     import trafilatura
@@ -1213,7 +1243,7 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
 
         # Redirect folgen
         try:
-            r = _req.get(fetch_url, allow_redirects=True, timeout=12,
+            r = _sicher_get(fetch_url, timeout=12,
                          headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"})
             final_url = r.url
             if "google.com" in final_url:
@@ -1608,7 +1638,12 @@ def artikel_html(
     verwandte: list = None,
     bild: tuple | None = None,
 ) -> str:
-    from html import escape as _esc
+    from html import escape as _esc, unescape as _unesc
+    # Texte aus Feeds und von der KI sind nicht vertrauenswürdig: für HTML escapen, für JSON-LD getrennt behandeln
+    titel_roh = titel
+    titel = _esc(_unesc(titel_roh), quote=False)
+    quelle_url_h = _esc(quelle_url) if re.match(r"https?://", quelle_url or "") else "#"
+    wappen_url = _esc(wappen_url) if wappen_url else wappen_url
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     quelle2_html = (f' · <a href="{_esc(quelle2_url)}" target="_blank" rel="noopener noreferrer">Quelle 2</a>'
                     if quelle2_url else "")
@@ -1618,7 +1653,7 @@ def artikel_html(
         links = "".join(f'<a href="{_esc(pfad)}">{_esc(t)}</a>' for t, pfad in verwandte)
         verwandte_html = ('<div class="artikel-mehr"><div class="artikel-mehr-t">Mehr zum Thema</div>'
                           + links + '</div>')
-    absaetze = "".join(f"<p>{p.strip()}</p>" for p in text.split("\n\n") if p.strip())
+    absaetze = "".join(f"<p>{_esc(_unesc(p.strip()), quote=False)}</p>" for p in text.split("\n\n") if p.strip())
     # Spielerbild aus dem Pool, Namensnennung hochkant am rechten Rand (verlinkt, wie CC verlangt)
     bild_html = ""
     if bild:
@@ -1647,15 +1682,15 @@ def artikel_html(
 
     artikel_url = f"https://ligaoutsider.de/artikel/{dateiname or datei_id + '.html'}"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
-    meta_desc = ersten_absatz[:155].replace('"', '&quot;').replace('\n', ' ')
-    titel_attr = titel.replace('"', '&quot;')
+    meta_desc = _esc(_unesc(ersten_absatz[:155]).replace('\n', ' '))
+    titel_attr = _esc(_unesc(titel_roh))
     # schema.org verlangt ISO 8601, sonst ignoriert Google das Datum
     _dm = re.match(r"(\d{2})\.(\d{2})\.(\d{4})[ T](\d{2}):(\d{2})", datum or "")
     datum_iso = (f"{_dm.group(3)}-{_dm.group(2)}-{_dm.group(1)}"
                  f"T{_dm.group(4)}:{_dm.group(5)}:00{_zeitzone()}") if _dm else datum
     # JSON-LD-Werte muessen JSON-escaped sein, sonst zerlegen Anfuehrungszeichen den Block
-    titel_json = json.dumps(titel, ensure_ascii=False)
-    desc_json = json.dumps(ersten_absatz[:200], ensure_ascii=False)
+    titel_json = json.dumps(titel_roh, ensure_ascii=False).replace("<", "\\u003c")
+    desc_json = json.dumps(ersten_absatz[:200], ensure_ascii=False).replace("<", "\\u003c")
     if og_image_url:
         og_image = og_image_url
         # Masse nur angeben, wenn es wirklich die 1200x630-Karte ist
@@ -1830,7 +1865,7 @@ def artikel_html(
       {vereine_tags_html}
 
       <div class="artikel-quelle">
-        <a href="{quelle_url}" target="_blank" rel="noopener noreferrer">Quelle</a>{quelle2_html}
+        <a href="{quelle_url_h}" target="_blank" rel="noopener noreferrer">Quelle</a>{quelle2_html}
       </div>
 
     </article>

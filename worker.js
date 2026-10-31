@@ -99,8 +99,16 @@ async function alteAdresse(request, env, url, res404) {
   return res404;
 }
 
-export default {
-  async fetch(request, env) {
+// Sicherheits-Kopfzeilen für jede Antwort (Content-Security-Policy folgt, sobald alle Inline-Skripte getestet sind)
+function mitKopf(res) {
+  const r = new Response(res.body, res);
+  r.headers.set("X-Content-Type-Options", "nosniff");
+  r.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  r.headers.set("X-Frame-Options", "SAMEORIGIN");
+  return r;
+}
+
+async function seite(request, env) {
     const url = new URL(request.url);
     // Nur https ausliefern: http-Aufrufe dauerhaft umleiten (sonst gibt es jede Seite doppelt)
     if (url.protocol === "http:" && url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
@@ -118,6 +126,11 @@ export default {
     const res = await env.ASSETS.fetch(request);
     if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) return alteAdresse(request, env, url, res);
     return res;
+}
+
+export default {
+  async fetch(request, env) {
+    return mitKopf(await seite(request, env));
   },
 
   // Cron-Trigger alle 30 Minuten (UTC); gestartet wird nur zu den Berliner Planzeiten.

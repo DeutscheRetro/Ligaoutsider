@@ -171,6 +171,7 @@
   </footer>
 
   <script>
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     // ─── Netlify Identity ─────────────────────────────────────────────────────
     let isAdmin = false;
 
@@ -381,12 +382,12 @@
         ? `<a href="chefred.html#${slug}" class="admin-edit-btn">✏️ News editieren</a>`
         : '';
       return `<li class="feed-item">
-        <a href="${a.pfad}" class="feed-wappen-link">
-          <img src="${a.wappen_url || 'logos/bundesliga.png'}" class="feed-wappen" alt="Wappen" />
+        <a href="${esc(a.pfad)}" class="feed-wappen-link">
+          <img src="${esc(a.wappen_url || 'logos/bundesliga.png')}" class="feed-wappen" alt="Wappen" />
         </a>
         <div class="feed-body">
-          <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
-          <a href="${a.pfad}" class="feed-title">${a.titel}</a>
+          <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
+          <a href="${esc(a.pfad)}" class="feed-title">${esc(a.titel)}</a>
           <div class="feed-meta"><span class="feed-time">${a.datum.split(' ')[0]}</span>${kommentarChip(a.id)}${adminBtn}</div>
         </div>
       </li>`;
@@ -428,13 +429,13 @@
       return `<article class="auf-karte">
         <div class="auf-kopf">
           <img src="${bild}" class="auf-wappen" alt="" onerror="this.style.display='none'">
-          <span class="feed-badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span>
+          <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
         </div>
-        <a href="${a.pfad}" class="auf-titel">${a.titel}</a>
-        <p class="auf-text">${a.anriss ? a.anriss + '…' : ''}</p>
+        <a href="${esc(a.pfad)}" class="auf-titel">${esc(a.titel)}</a>
+        <p class="auf-text">${a.anriss ? esc(a.anriss) + '…' : ''}</p>
         <div class="auf-fuss">
           <span class="feed-time">${a.datum.split(' ')[0]}</span>${kommentarChip(a.id)}
-          <a href="${a.pfad}" class="auf-mehr">Weiterlesen</a>
+          <a href="${esc(a.pfad)}" class="auf-mehr">Weiterlesen</a>
         </div>
       </article>`;
     }

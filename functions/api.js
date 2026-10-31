@@ -94,6 +94,17 @@ async function rollenVon(email, tokenRollen) {
   return [...new Set([...(tokenRollen || []), ...ausDb])];
 }
 
+// Einfache Bremse pro Konto: höchstens n neue Zeilen in sek Sekunden
+async function zuViele(tabelle, spalte, mail, n = 5, sek = 60) {
+  const seit = new Date(Date.now() - sek * 1000).toISOString();
+  const t = await hole(`${tabelle}?${spalte}=eq.${encodeURIComponent(mail)}&erstellt_am=gt.${encodeURIComponent(seit)}&select=id&limit=${n}`);
+  return (t || []).length >= n;
+}
+
+const RESERVIERT = /^(admin|administrator|moderator|redaktion|ligaoutsider|lo|team|support|system|kicker)$/i;
+// Steuer- und Richtungszeichen entfernen, Look-alikes vereinheitlichen
+const nameNormal = t => String(t || "").normalize("NFKC").replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
+
 async function istGebannt(email) {
   const treffer = await hole(`user_bans?email=eq.${encodeURIComponent(email)}&select=gebannt_bis`);
   if (!treffer || !treffer.length) return false;
@@ -409,10 +420,12 @@ export async function onRequest({ request, env }) {
   // Wer nur über Google angemeldet ist, wählt zuerst einen Benutzernamen –
   // der echte Name aus dem Google-Konto wird nie angezeigt
   const nameOffen = nurGoogle(user) && !meta.benutzername;
-  const metaName = meta.benutzername || (nameOffen ? null : meta.full_name) || email;
+  const metaName = sauber(meta.benutzername || (nameOffen ? null : meta.full_name) || email, 60) || email;
   // user_metadata kann jeder Nutzer selbst setzen: den Namen deshalb aus der Profiltabelle nehmen (eindeutig, nur Server schreibt)
   const name = (nameOffen ? null : (await profilSicher(email, metaName) || {}).anzeigename) || metaName;
-  const rollen = await rollenVon(email, (user.app_metadata || {}).roles);
+  // Rollen nur für bestätigte Adressen: sonst könnte sich jemand mit der Adresse eines Admins registrieren
+  const bestaetigt = !!(user.email_confirmed_at || user.confirmed_at);
+  const rollen = bestaetigt ? await rollenVon(email, (user.app_metadata || {}).roles) : [];
   const istAdmin = rollen.includes("admin");
   const darfLoeschen = istAdmin || rollen.includes("moderator");
 
@@ -423,6 +436,9 @@ export async function onRequest({ request, env }) {
     return json(400, { fehler: "Ungueltiges JSON" });
   }
   const { aktion } = body;
+  // IDs gehen unverändert in Datenbankfilter: nur harmlose Zeichen zulassen
+  for (const k of ["id", "thread_id", "kommentar_id", "artikel_id"])
+    if (body[k] != null && !/^[0-9A-Za-z_-]{1,64}$/.test(String(body[k]))) return json(400, { fehler: "Ungültige ID" });
   if (nameOffen && !["wer_bin_ich", "name_waehlen"].includes(aktion))
     return json(403, { fehler: "Bitte wähle zuerst deinen Benutzernamen" });
 
@@ -431,6 +447,7 @@ export async function onRequest({ request, env }) {
       // ─── Kommentare ────────────────────────────────────────────────────────
       case "kommentar_neu": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        if (await zuViele("kommentare", "email", email)) return json(429, { fehler: "Bitte warte kurz, du schreibst zu schnell" });
         const inhalt = sauber(body.inhalt, 1000);
         const artikel_id = sauber(body.artikel_id, 64);
         if (!inhalt || !artikel_id) return json(400, { fehler: "Inhalt oder Artikel fehlt" });
@@ -491,6 +508,7 @@ export async function onRequest({ request, env }) {
         if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
         const ziel = await zielEmail(body);
         if (!ziel) return json(400, { fehler: "Nutzer nicht gefunden" });
+        if (!istAdmin && (await rollenVon(ziel, [])).length) return json(403, { fehler: "Admins und Moderatoren kann nur ein Admin ändern" });
         await db("user_bans", {
           method: "POST",
           headers: { Prefer: "resolution=merge-duplicates" },
@@ -508,6 +526,7 @@ export async function onRequest({ request, env }) {
         if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
         const ziel = await zielEmail(body);
         if (!ziel) return json(400, { fehler: "Nutzer nicht gefunden" });
+        if (!istAdmin && (await rollenVon(ziel, [])).length) return json(403, { fehler: "Admins und Moderatoren kann nur ein Admin ändern" });
         await loesche("user_bans", `email=eq.${encodeURIComponent(ziel)}`);
         return json(200, { ok: true });
       }
@@ -515,6 +534,7 @@ export async function onRequest({ request, env }) {
       // ─── Forum ─────────────────────────────────────────────────────────────
       case "forum_thread_neu": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        if (await zuViele("forum_threads", "autor_email", email, 3)) return json(429, { fehler: "Bitte warte kurz, du schreibst zu schnell" });
         const titel = sauber(body.titel, 200);
         const inhalt = sauber(body.inhalt, 5000);
         const kategorie = sauber(body.kategorie, 64);
@@ -532,6 +552,7 @@ export async function onRequest({ request, env }) {
 
       case "forum_post_neu": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        if (await zuViele("forum_posts", "autor_email", email)) return json(429, { fehler: "Bitte warte kurz, du schreibst zu schnell" });
         const inhalt = sauber(body.inhalt, 5000);
         if (!inhalt || !body.thread_id) return json(400, { fehler: "Felder fehlen" });
         const profil = await profilSicher(email, name);
@@ -637,7 +658,7 @@ export async function onRequest({ request, env }) {
 
       // ─── Nutzerverwaltung ──────────────────────────────────────────────────
       case "nutzer_liste": {
-        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
+        if (!istAdmin) return json(403, { fehler: "Nur Admin" });
         // Die Konten selbst liegen bei Netlify Identity. Ohne Netlify-Token
         // stellen wir die Liste aus dem zusammen, was wir selbst kennen:
         // Kommentatoren, Forenautoren, vergebene Rollen und Sperren.
@@ -703,7 +724,7 @@ export async function onRequest({ request, env }) {
             p.registriert = k.created_at;
             p.bestaetigt = !!(k.email_confirmed_at || k.confirmed_at);
             p.letzter_login = k.last_sign_in_at || null;
-            const anzeige = (k.user_metadata || {}).full_name;
+            const anzeige = sauber((k.user_metadata || {}).full_name, 60);
             if (anzeige && p.name === p.email) p.name = anzeige;
           });
         } catch (e) {
@@ -891,7 +912,8 @@ export async function onRequest({ request, env }) {
           const belegt = await hole(`profile?handle=eq.${encodeURIComponent(handle)}&select=email`);
           if (belegt && belegt.length) return json(409, { fehler: "Dieser Profilname ist schon vergeben" });
         }
-        const anzeigename = sauber(body.anzeigename, 60) || handle;
+        const anzeigename = sauber(nameNormal(body.anzeigename), 60) || handle;
+        if (RESERVIERT.test(anzeigename) && !istAdmin) return json(400, { fehler: "Dieser Anzeigename ist reserviert" });
         if (await nameVergeben(anzeigename, email))
           return json(409, { fehler: "Dieser Anzeigename ist schon vergeben" });
         const lieblings = {};
@@ -1021,9 +1043,10 @@ export async function onRequest({ request, env }) {
       }
 
       case "name_waehlen": {
-        const neu = sauber(body.name, 30).replace(/\s+/g, " ");
+        const neu = sauber(nameNormal(body.name), 30).replace(/\s+/g, " ");
         if (!BENUTZERNAME.test(neu))
           return json(400, { fehler: "Benutzername: 3–30 Zeichen, nur Buchstaben, Zahlen, Leerzeichen, Punkt, Binde- und Unterstrich" });
+        if (RESERVIERT.test(neu) && !istAdmin) return json(400, { fehler: "Dieser Benutzername ist reserviert" });
         if (await nameVergeben(neu, email)) return json(409, { fehler: "Dieser Benutzername ist schon vergeben" });
         // Profilname (Adresse /profil/<handle>) aus dem Benutzernamen ableiten
         const basis = handleAus(neu);
@@ -1049,7 +1072,7 @@ export async function onRequest({ request, env }) {
 
       // ─── Redaktion (Chefred): Artikel im GitHub-Repo lesen, ändern, löschen ──
       case "gh_get": case "gh_put": case "gh_delete": {
-        if (!darfLoeschen) return json(403, { fehler: "Keine Redaktionsrechte" });
+        if (!istAdmin) return json(403, { fehler: "Keine Redaktionsrechte" });
         if (!GH_TOKEN) return json(500, { fehler: "GH_TOKEN fehlt in den Cloudflare-Secrets" });
         const pfad = String(body.path || "");
         if (!GH_PFAD.test(pfad)) return json(400, { fehler: "Dieser Pfad ist für die Redaktion nicht freigegeben" });

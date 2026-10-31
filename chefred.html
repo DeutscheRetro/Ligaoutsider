@@ -409,7 +409,7 @@ async function ladeArtikel() {
     document.getElementById('artikel-count').textContent = feedDaten.length + ' Artikel';
     renderListe();
   } catch(e) {
-    liste.innerHTML = `<div class="err">${e.message}</div>`;
+    liste.innerHTML = `<div class="err">${kommEscape(e.message)}</div>`;
   }
 }
 
@@ -418,10 +418,10 @@ function renderListe() {
   if (!feedDaten.length) { liste.innerHTML = '<p style="color:#555">Keine Artikel</p>'; return; }
   liste.innerHTML = feedDaten.map((a, i) => `
     <div class="artikel-card">
-      <img src="${a.wappen_url || ''}" onerror="this.style.display='none'" />
+      <img src="${kommEscape(a.wappen_url || '')}" onerror="this.style.display='none'" />
       <div class="artikel-card-body">
-        <div class="artikel-card-titel">${a.titel}</div>
-        <div class="artikel-card-meta">${a.datum} · <span class="badge" style="background:${a.badge_bg};color:${a.badge_fg}">${a.badge}</span></div>
+        <div class="artikel-card-titel">${kommEscape(a.titel)}</div>
+        <div class="artikel-card-meta">${kommEscape(a.datum)} · <span class="badge" style="background:${kommEscape(a.badge_bg)};color:${kommEscape(a.badge_fg)}">${kommEscape(a.badge)}</span></div>
       </div>
       <div class="artikel-card-actions">
         <button class="btn btn-gold" onclick="bearbeiten(${i})">Bearbeiten</button>
@@ -517,7 +517,7 @@ async function speichern() {
     zeigeMsg('✓ Gespeichert! Cloudflare baut in ~1 Minute.', true);
     renderListe();
   } catch(e) {
-    zeigeMsg('Fehler: ' + e.message, false);
+    zeigeMsg('Fehler: ' + kommEscape(e.message), false);
   }
 }
 
@@ -588,7 +588,7 @@ async function doLoeschen(idx) {
     zeigeMsg('✓ Gelöscht!', true);
     renderListe();
   } catch(e) {
-    zeigeMsg('Fehler: ' + e.message, false);
+    zeigeMsg('Fehler: ' + kommEscape(e.message), false);
   }
 }
 
@@ -775,12 +775,12 @@ function renderKommentare() {
             : kommEscape((k.inhalt || '').slice(0, 140)) + ((k.inhalt || '').length > 140 ? '…' : '');
           const artikel = kommEscape(titelZuArtikel(k.artikel_id).slice(0, 44));
           return `<tr class="${k.geloescht ? 'banned-row' : ''}">
-            <td><input type="checkbox" class="komm-box" value="${k.id}" style="width:auto" onchange="zaehleAuswahl()"/></td>
+            <td><input type="checkbox" class="komm-box" value="${kommEscape(k.id)}" style="width:auto" onchange="zaehleAuswahl()"/></td>
             <td style="max-width:360px">${text}</td>
             <td style="font-size:12px">${kommEscape(k.name || '–')}<br><span style="color:#555;font-size:11px">${kommEscape(k.email || '')}</span></td>
             <td style="font-size:12px;color:#888">${artikel}</td>
             <td style="color:#555;font-size:12px;white-space:nowrap">${datum}</td>
-            <td><button class="btn btn-red btn-sm" onclick="einzelnLoeschen('${k.id}')">Löschen</button></td>
+            <td><button class="btn btn-red btn-sm" data-k="${kommEscape(k.id)}" onclick="einzelnLoeschen(this.dataset.k)">Löschen</button></td>
           </tr>`;
         }).join('')}
       </tbody>
@@ -852,7 +852,7 @@ async function ladeModerationsdaten() {
     kontenQuelle = r.quelle || '';
     renderNutzer();
   } catch(e) {
-    el.innerHTML = `<div class="err">${e.message}</div>`;
+    el.innerHTML = `<div class="err">${kommEscape(e.message)}</div>`;
   }
 }
 
@@ -867,7 +867,7 @@ function renderNutzer() {
     return;
   }
   if (!liste.length) {
-    el.innerHTML = `<p style="color:#555">Kein Treffer für „${q}".</p>`;
+    el.innerHTML = `<p style="color:#555">Kein Treffer für „${kommEscape(q)}".</p>`;
     return;
   }
 
@@ -891,21 +891,21 @@ function renderNutzer() {
             ? new Date(u.letzte_aktivitaet).toLocaleDateString('de-DE') : '–';
           const reg = u.registriert
             ? new Date(u.registriert).toLocaleDateString('de-DE') : '–';
-          const e = u.email.replace(/'/g, "\\'");
+          const e = kommEscape(u.email);
           return `<tr class="${u.gebannt ? 'banned-row' : ''}">
-            <td>${u.name || '–'}${u.gebannt ? '<span class="banned-badge">GEBANNT</span>' : ''}</td>
-            <td style="color:#555;font-size:12px">${u.email}</td>
+            <td>${kommEscape(u.name || '–')}${u.gebannt ? '<span class="banned-badge">GEBANNT</span>' : ''}</td>
+            <td style="color:#555;font-size:12px">${kommEscape(u.email)}</td>
             <td>${(u.rollen || []).map(rollenChip).join(' ') || '<span style="color:#444">–</span>'}</td>
             <td>${u.kommentare}</td>
             <td>${u.threads + u.posts}</td>
             <td style="color:#555;font-size:12px">${reg}${u.bestaetigt === false ? ' <span style="color:#e8a000">unbestätigt</span>' : ''}</td>
             <td style="color:#555;font-size:12px">${datum}</td>
             <td style="white-space:nowrap">
-              <button class="btn btn-gray btn-sm" onclick="rollenDialog('${e}')">Rollen</button>
+              <button class="btn btn-gray btn-sm" data-e="${e}" onclick="rollenDialog(this.dataset.e)">Rollen</button>
               ${u.gebannt
-                ? `<button class="btn btn-gray btn-sm" onclick="entbanne('${e}')">Entbannen</button>`
-                : `<button class="btn btn-red btn-sm" onclick="banne('${e}')">Bannen</button>`}
-              ${u.konto_id ? `<button class="btn btn-red btn-sm" onclick="kontoLoeschen('${e}','${u.konto_id}')">Konto löschen</button>` : ''}
+                ? `<button class="btn btn-gray btn-sm" data-e="${e}" onclick="entbanne(this.dataset.e)">Entbannen</button>`
+                : `<button class="btn btn-red btn-sm" data-e="${e}" onclick="banne(this.dataset.e)">Bannen</button>`}
+              ${u.konto_id ? `<button class="btn btn-red btn-sm" data-e="${e}" data-k="${kommEscape(u.konto_id)}" onclick="kontoLoeschen(this.dataset.e,this.dataset.k)">Konto löschen</button>` : ''}
             </td>
           </tr>`;
         }).join('')}
@@ -922,7 +922,7 @@ function rollenDialog(email) {
   m.innerHTML = `
     <div style="background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:24px;max-width:360px;width:90%">
       <div style="font-size:15px;font-weight:800;color:#e8c000;margin-bottom:6px">Rollen vergeben</div>
-      <div style="font-size:12px;color:#888;margin-bottom:16px">${email}</div>
+      <div style="font-size:12px;color:#888;margin-bottom:16px">${kommEscape(email)}</div>
       <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;text-transform:none;font-size:13px;color:#ddd">
         <input type="checkbox" id="r-admin" ${hat.has('admin') ? 'checked' : ''} style="width:auto"/>
         <span><b>admin</b> – darf alles, auch Rollen vergeben</span>
@@ -932,7 +932,7 @@ function rollenDialog(email) {
         <span><b>moderator</b> – darf löschen, bannen, ausblenden</span>
       </label>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-gold" style="flex:1" onclick="rollenSpeichern('${email.replace(/'/g, "\\'")}')">Speichern</button>
+        <button class="btn btn-gold" style="flex:1" data-e="${kommEscape(email)}" onclick="rollenSpeichern(this.dataset.e)">Speichern</button>
         <button class="btn btn-gray" onclick="document.getElementById('rollen-modal').remove()">Abbrechen</button>
       </div>
       <div id="rollen-status" style="font-size:12px;margin-top:10px"></div>
@@ -950,7 +950,7 @@ async function rollenSpeichern(email) {
   try {
     await loApi('rolle_setzen', { email, rollen });
     document.getElementById('rollen-modal').remove();
-    zeigeMsgMod(`✓ Rollen für ${email} gespeichert: ${rollen.join(', ') || 'keine'}`, true);
+    zeigeMsgMod(`✓ Rollen für ${kommEscape(email)} gespeichert: ${kommEscape(rollen.join(', ') || 'keine')}`, true);
     ladeModerationsdaten();
   } catch(e) {
     st.style.color = '#e53935'; st.textContent = e.message;
@@ -971,10 +971,10 @@ async function kontoLoeschen(email, kontoId) {
   zeigeMsgMod('<span class="spinner"></span>Lösche Konto…', false);
   try {
     await loApi('konto_loeschen', { email, konto_id: kontoId });
-    zeigeMsgMod(`✓ Konto ${email} gelöscht.`, true);
+    zeigeMsgMod(`✓ Konto ${kommEscape(email)} gelöscht.`, true);
     ladeModerationsdaten();
   } catch(e) {
-    zeigeMsgMod('Fehler: ' + e.message, false);
+    zeigeMsgMod('Fehler: ' + kommEscape(e.message), false);
   }
 }
 
@@ -984,10 +984,10 @@ async function banne(email) {
   try {
     await loApi('user_purge', { email });
     await loApi('ban', { email });
-    zeigeMsgMod(`✓ ${email} gesperrt, Beiträge gelöscht.`, true);
+    zeigeMsgMod(`✓ ${kommEscape(email)} gesperrt, Beiträge gelöscht.`, true);
     ladeModerationsdaten();
   } catch(e) {
-    zeigeMsgMod('Fehler: ' + e.message, false);
+    zeigeMsgMod('Fehler: ' + kommEscape(e.message), false);
   }
 }
 
@@ -996,10 +996,10 @@ async function entbanne(email) {
   zeigeMsgMod('<span class="spinner"></span>Entsperre…', false);
   try {
     await loApi('unban', { email });
-    zeigeMsgMod(`✓ ${email} entsperrt.`, true);
+    zeigeMsgMod(`✓ ${kommEscape(email)} entsperrt.`, true);
     ladeModerationsdaten();
   } catch(e) {
-    zeigeMsgMod('Fehler: ' + e.message, false);
+    zeigeMsgMod('Fehler: ' + kommEscape(e.message), false);
   }
 }
 
