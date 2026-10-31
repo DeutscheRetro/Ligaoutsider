@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-31T00:01:24.895991+00:00",
+  "updated": "2026-10-31T05:01:29.941013+00:00",
   "teuerste": [
     {
       "name": "Harry Kane",
@@ -106,9 +106,9 @@
   ],
   "effizienz": [
     {
-      "name": "Ellyes Skhiri",
-      "logo": "logos/koeln.png",
-      "eff": 97.53
+      "name": "Felix Keidel",
+      "logo": "logos/elversberg.png",
+      "eff": 90.94
     },
     {
       "name": "Timo Becker",
@@ -116,9 +116,9 @@
       "eff": 90.69
     },
     {
-      "name": "Paul Okon-Engstler",
-      "logo": "logos/koeln.png",
-      "eff": 85.46
+      "name": "Cole Campbell",
+      "logo": "logos/elversberg.png",
+      "eff": 86.13
     },
     {
       "name": "Jan Gyamerah",
@@ -126,9 +126,9 @@
       "eff": 84.7
     },
     {
-      "name": "Nicolai Remberg",
-      "logo": "logos/hsv.png",
-      "eff": 80.55
+      "name": "David Mokwa",
+      "logo": "logos/elversberg.png",
+      "eff": 84.63
     },
     {
       "name": "Josha Vagnoman",
@@ -141,9 +141,9 @@
       "eff": 78.76
     },
     {
-      "name": "Alexander Schwolow",
-      "logo": "logos/mainz.png",
-      "eff": 78.49
+      "name": "Lasse Günther",
+      "logo": "logos/elversberg.png",
+      "eff": 78.55
     },
     {
       "name": "Tim Skarke",
@@ -465,25 +465,11 @@
       "faktor": 2.7
     },
     {
-      "name": "Fabio Gruber",
-      "logo": "logos/mainz.png",
-      "mw": 6616902,
-      "fair": 16557040,
-      "faktor": 2.5
-    },
-    {
       "name": "Marvin Schwäbe",
       "logo": "logos/koeln.png",
       "mw": 13079386,
       "fair": 32287752,
       "faktor": 2.47
-    },
-    {
-      "name": "Nicolai Remberg",
-      "logo": "logos/hsv.png",
-      "mw": 2656793,
-      "fair": 6544765,
-      "faktor": 2.46
     },
     {
       "name": "Gregor Kobel",
@@ -526,6 +512,20 @@
       "mw": 30326365,
       "fair": 62465996,
       "faktor": 2.06
+    },
+    {
+      "name": "Oliver Baumann",
+      "logo": "logos/hoffenheim.png",
+      "mw": 11251335,
+      "fair": 22990459,
+      "faktor": 2.04
+    },
+    {
+      "name": "Michael Olise",
+      "logo": "logos/bayern.png",
+      "mw": 65214077,
+      "fair": 130846112,
+      "faktor": 2.01
     }
   ],
   "verletzt": [
@@ -545,7 +545,7 @@
       "name": "Vladimír Coufal",
       "logo": "logos/hoffenheim.png",
       "mw": 22397893,
-      "info": "Angeschlagen - im DFB-Pokal angeschlagen weitergespielt"
+      "info": "Oberschenkelprobleme - fraglich für SVW (A)"
     },
     {
       "name": "Jamal Musiala",
@@ -575,13 +575,13 @@
       "name": "Bambasé Conté",
       "logo": "logos/hoffenheim.png",
       "mw": 14858054,
-      "info": "Angeschlagen - im DFB-Pokal angeschlagen ausgewechselt"
+      "info": "Muskuläre Probleme - droht kein längerer Ausfall, \"müssen aber sehr vorsichtig sein\""
     },
     {
       "name": "Philipp Treu",
       "logo": "logos/freiburg.png",
       "mw": 13566841,
-      "info": "Angeschlagen - musste frühzeitig ausgewechselt werden"
+      "info": "Kapselverletzung am rechten Sprunggelenk - fehlt gegen FCA (A)"
     },
     {
       "name": "Philipp Mwene",
@@ -597,13 +597,6 @@
       "diff": 110,
       "ap": 160,
       "vor": 50
-    },
-    {
-      "name": "Anthony Caci",
-      "logo": "logos/mainz.png",
-      "diff": 91,
-      "ap": 145,
-      "vor": 54
     },
     {
       "name": "Tidiam Gomis",
@@ -634,20 +627,6 @@
       "vor": 118
     },
     {
-      "name": "Sheraldo Becker",
-      "logo": "logos/mainz.png",
-      "diff": 82,
-      "ap": 128,
-      "vor": 46
-    },
-    {
-      "name": "Phillip Tietz",
-      "logo": "logos/mainz.png",
-      "diff": 80,
-      "ap": 136,
-      "vor": 56
-    },
-    {
       "name": "Derry Scherhant",
       "logo": "logos/freiburg.png",
       "diff": 80,
@@ -655,21 +634,35 @@
       "vor": 48
     },
     {
+      "name": "Anthony Caci",
+      "logo": "logos/mainz.png",
+      "diff": 79,
+      "ap": 133,
+      "vor": 54
+    },
+    {
       "name": "Jordy Makengo",
       "logo": "logos/freiburg.png",
       "diff": 77,
       "ap": 119,
       "vor": 42
+    },
+    {
+      "name": "Antonio Nusa",
+      "logo": "logos/leipzig.png",
+      "diff": 74,
+      "ap": 165,
+      "vor": 91
+    },
+    {
+      "name": "Fabian Rieder",
+      "logo": "logos/augsburg.png",
+      "diff": 74,
+      "ap": 145,
+      "vor": 71
     }
   ],
   "formab": [
-    {
-      "name": "Edin Džeko",
-      "logo": "logos/schalke.png",
-      "diff": -116,
-      "ap": 11,
-      "vor": 127
-    },
     {
       "name": "Deniz Undav",
       "logo": "logos/stuttgart.png",
@@ -692,13 +685,6 @@
       "vor": 103
     },
     {
-      "name": "Kenan Karaman",
-      "logo": "logos/schalke.png",
-      "diff": -73,
-      "ap": 47,
-      "vor": 120
-    },
-    {
       "name": "Isac Lidberg",
       "logo": "logos/gladbach.png",
       "diff": -72,
@@ -711,6 +697,13 @@
       "diff": -57,
       "ap": 2,
       "vor": 59
+    },
+    {
+      "name": "Luca Sirch",
+      "logo": "logos/elversberg.png",
+      "diff": -57,
+      "ap": 36,
+      "vor": 93
     },
     {
       "name": "Kevin Diks",
@@ -732,6 +725,13 @@
       "diff": -45,
       "ap": 64,
       "vor": 109
+    },
+    {
+      "name": "Tom Bischof",
+      "logo": "logos/bayern.png",
+      "diff": -43,
+      "ap": 75,
+      "vor": 118
     }
   ],
   "torwart": [
@@ -771,11 +771,6 @@
       "ap": 123
     },
     {
-      "name": "Alexander Schwolow",
-      "logo": "logos/mainz.png",
-      "ap": 116
-    },
-    {
       "name": "Frederik Rönnow",
       "logo": "logos/union.png",
       "ap": 105
@@ -784,6 +779,11 @@
       "name": "Noah Atubolu",
       "logo": "logos/frankfurt.png",
       "ap": 103
+    },
+    {
+      "name": "Nicolas Kristof",
+      "logo": "logos/elversberg.png",
+      "ap": 102
     }
   ],
   "abwehr": [
@@ -791,11 +791,6 @@
       "name": "Dayot Upamecano",
       "logo": "logos/bayern.png",
       "ap": 176
-    },
-    {
-      "name": "Nico Schlotterbeck",
-      "logo": "logos/dortmund.png",
-      "ap": 173
     },
     {
       "name": "Waldemar Anton",
@@ -823,19 +818,24 @@
       "ap": 147
     },
     {
-      "name": "Anthony Caci",
-      "logo": "logos/mainz.png",
-      "ap": 145
-    },
-    {
       "name": "Matthias Ginter",
       "logo": "logos/freiburg.png",
       "ap": 141
     },
     {
-      "name": "Jonathan Tah",
-      "logo": "logos/bayern.png",
-      "ap": 130
+      "name": "Anthony Caci",
+      "logo": "logos/mainz.png",
+      "ap": 133
+    },
+    {
+      "name": "Josha Vagnoman",
+      "logo": "logos/stuttgart.png",
+      "ap": 120
+    },
+    {
+      "name": "Jordy Makengo",
+      "logo": "logos/freiburg.png",
+      "ap": 119
     }
   ],
   "mittelfeld": [
@@ -912,11 +912,6 @@
       "ap": 140
     },
     {
-      "name": "Phillip Tietz",
-      "logo": "logos/mainz.png",
-      "ap": 136
-    },
-    {
       "name": "Christopher Nkunku",
       "logo": "logos/leipzig.png",
       "ap": 135
@@ -927,11 +922,6 @@
       "ap": 133
     },
     {
-      "name": "Sheraldo Becker",
-      "logo": "logos/mainz.png",
-      "ap": 128
-    },
-    {
       "name": "Serhou Guirassy",
       "logo": "logos/dortmund.png",
       "ap": 124
@@ -940,6 +930,16 @@
       "name": "Ismael Saibari",
       "logo": "logos/bayern.png",
       "ap": 123
+    },
+    {
+      "name": "Phillip Tietz",
+      "logo": "logos/mainz.png",
+      "ap": 120
+    },
+    {
+      "name": "Sheraldo Becker",
+      "logo": "logos/mainz.png",
+      "ap": 118
     }
   ]
 }
