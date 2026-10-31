@@ -89,7 +89,7 @@
   <a href="/" class="logo" title="Zur Startseite" style="display:inline-block;margin-bottom:14px;text-decoration:none;font-size:22px;font-weight:900"><span class="logo-liga" style="color:#e8c000">Liga</span><span class="logo-outsider" style="color:#fff">outsider</span><span class="logo-de" style="color:#9fb3c8">.de</span></a>
   <h2>⚽ Chefred</h2>
   <div id="login-err" style="display:none" class="err"></div>
-  <p style="font-size:12px;color:#888;margin-bottom:14px">Anmeldung über dein Ligaoutsider-Konto. Es braucht die Rolle <b>admin</b> oder <b>moderator</b>.</p>
+  <p style="font-size:12px;color:#888;margin-bottom:14px">Anmeldung über dein Ligaoutsider-Konto. Artikel bearbeiten und die Nutzerliste brauchen die Rolle <b>admin</b>. Moderatoren dürfen Kommentare moderieren.</p>
   <button class="btn btn-gold" style="margin-bottom:16px" onclick="netlifyIdentity.open('login')">Mit Konto anmelden</button>
   <p id="login-status" style="font-size:12px;color:#888"></p>
 </div>
@@ -692,7 +692,7 @@ function renderStats() {
       ${topQuellen.map(([quelle, n]) => {
         const w = Math.round((n / maxQ) * 100);
         return `<div class="bar-row">
-          <span class="bar-label">${quelle}</span>
+          <span class="bar-label">${kommEscape(quelle)}</span>
           <div class="bar-wrap"><div class="bar-fill" style="width:${w}%">${n > 3 ? `<span class="bar-val">${n}</span>` : ''}</div></div>
           ${n <= 3 ? `<span class="bar-val-out">${n}</span>` : ''}
         </div>`;

@@ -1204,7 +1204,11 @@ def _host_oeffentlich(url: str) -> bool:
         return False
     try:
         infos = socket.getaddrinfo(u.hostname, None)
-    except OSError:
+    except (OSError, UnicodeError):
+        return False
+    try:
+        return bool(infos) and all(ipaddress.ip_address(i[4][0].split('%')[0]).is_global for i in infos)
+    except ValueError:
         return False
     return bool(infos) and all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
 
@@ -1646,7 +1650,7 @@ def artikel_html(
     wappen_url = _esc(wappen_url) if wappen_url else wappen_url
     badge_label, badge_bg, badge_fg = badge_fuer_kategorie(kategorie)
     quelle2_html = (f' · <a href="{_esc(quelle2_url)}" target="_blank" rel="noopener noreferrer">Quelle 2</a>'
-                    if quelle2_url else "")
+                    if re.match(r"https?://", quelle2_url or "") else "")
     # Frühere Artikel zum selben Thema: hilft Lesern und Google (interne Verlinkung)
     verwandte_html = ""
     if verwandte:

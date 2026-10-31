@@ -160,7 +160,8 @@ async function profilSicher(email, name) {
       const belegt = await hole(`profile?handle=eq.${encodeURIComponent(versuch)}&select=handle`);
       if (belegt && belegt.length) continue;
       // Anzeigename muss einmalig sein: bei Gleichstand eine Zahl anhängen
-      let anzeige = sauber(name && name !== email ? name : versuch, 56) || versuch;
+      let anzeige = sauber(nameNormal(name && name !== email ? name : versuch), 56) || versuch;
+      if (RESERVIERT.test(anzeige)) anzeige = versuch;
       for (let n = 2; await nameVergeben(anzeige, email) && n < 50; n++) anzeige = `${sauber(name, 52) || versuch} ${n}`;
       const [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: anzeige });
       return { handle: neu.handle, anzeigename: neu.anzeigename };

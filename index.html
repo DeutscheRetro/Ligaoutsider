@@ -428,7 +428,7 @@
       const bild = a.wappen_url || 'logos/bundesliga.png';
       return `<article class="auf-karte">
         <div class="auf-kopf">
-          <img src="${bild}" class="auf-wappen" alt="" onerror="this.style.display='none'">
+          <img src="${esc(bild)}" class="auf-wappen" alt="" onerror="this.style.display='none'">
           <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
         </div>
         <a href="${esc(a.pfad)}" class="auf-titel">${esc(a.titel)}</a>
