@@ -8,6 +8,7 @@ Starten mit:  python generate.py
 """
 
 import os
+import sys
 import json
 import functools
 import glob
@@ -517,14 +518,22 @@ def badge_fuer_kategorie(kategorie: str) -> tuple:
     return BADGE_KATEGORIEN.get(kategorie.lower(), ("News", "#e8c000", "#000"))
 
 
+def _atomar_schreiben(pfad: Path, text: str):
+    """Erst in eine Nebendatei, dann umbenennen: ein Absturz mitten im Schreiben lässt keine halbe Datei zurück."""
+    tmp = pfad.with_name(pfad.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, pfad)
+
+
 def feed_laden() -> list:
     """Lädt feed.json – merged lokale Datei mit der Live-Version."""
     lokal = []
     if FEED_JSON.exists():
         try:
             lokal = json.loads(FEED_JSON.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except Exception as ex:
+            # Nicht mit leerer Liste weitermachen: feed_speichern würde das ganze Archiv überschreiben
+            raise RuntimeError(f"feed.json nicht lesbar, Lauf abgebrochen: {ex}")
 
     # Live-Version holen um parallele GitHub-Actions-Runs abzusichern
     live = []
@@ -560,10 +569,7 @@ def feed_speichern(artikel_liste: list):
     # Neueste zuerst
     from datetime import datetime
     artikel_liste.sort(key=lambda x: datetime.strptime(x["datum"], "%d.%m.%Y %H:%M"), reverse=True)
-    FEED_JSON.write_text(
-        json.dumps(artikel_liste[:100_000], ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
+    _atomar_schreiben(FEED_JSON, json.dumps(artikel_liste[:100_000], ensure_ascii=False, indent=2))
 
 
 # ─── KI-Funktionen ────────────────────────────────────────────────────────────
@@ -898,12 +904,13 @@ def lade_news_archive() -> list[dict]:
     if NEWS_ARCHIVE_JSON.exists():
         try:
             return json.loads(NEWS_ARCHIVE_JSON.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except Exception as ex:
+            # Ein leeres Archiv würde das Dublettengedächtnis löschen
+            raise RuntimeError(f"news_archive.json nicht lesbar, Lauf abgebrochen: {ex}")
     return []
 
 def speichere_news_archive(archive: list[dict]):
-    NEWS_ARCHIVE_JSON.write_text(json.dumps(archive, ensure_ascii=False, indent=2), encoding="utf-8")
+    _atomar_schreiben(NEWS_ARCHIVE_JSON, json.dumps(archive, ensure_ascii=False, indent=2))
 
 def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
     """True = Duplikat (skip), False = neu publizieren.
@@ -4414,7 +4421,14 @@ def spieler_fetch():
 
 
 if __name__ == "__main__":
-    import urllib.parse
+    import urllib.parse, traceback
+    # Fehler im News-Teil oder beim Seitenbau dürfen die anderen Schritte nicht blockieren,
+    # lassen den Lauf am Ende aber rot werden (sonst meldet ein Absturz "grün" und niemand merkt es).
+    _fehler = []
+    def _laut(name, e):
+        print(f"❌ {name} Fehler: {e}")
+        traceback.print_exc()
+        _fehler.append(name)
     try:
         kickbase_fetch()
     except Exception as e:
@@ -4452,21 +4466,24 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"❌ main (News) Fehler: {e}")
+        _laut("main (News)", e)
     try:
         spieler_news_index()
     except Exception as e:
-        print(f"❌ spieler_news_index Fehler: {e}")
+        _laut("spieler_news_index", e)
     try:
         spieler_seiten()
     except Exception as e:
-        print(f"❌ spieler_seiten Fehler: {e}")
+        _laut("spieler_seiten", e)
     try:
         verein_seiten()
     except Exception as e:
-        print(f"❌ verein_seiten Fehler: {e}")
+        _laut("verein_seiten", e)
     for _f in (bundesliga_heute_seite, bundesliga_fragen_seite):
         try:
             _f()
         except Exception as e:
-            print(f"❌ {_f.__name__} Fehler: {e}")
+            _laut(_f.__name__, e)
+    if _fehler:
+        print(f"❌ Fehlgeschlagen: {', '.join(_fehler)}")
+        sys.exit(1)

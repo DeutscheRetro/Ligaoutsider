@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict
@@ -24,10 +25,12 @@ class URLCache:
 
     def _prune(self):
         cutoff = datetime.now() - timedelta(days=self.max_age_days)
-        self.seen_urls = {
-            url: ts for url, ts in self.seen_urls.items()
-            if datetime.fromisoformat(ts) > cutoff
-        }
+        def frisch(ts):
+            try:
+                return datetime.fromisoformat(ts) > cutoff
+            except (TypeError, ValueError):
+                return False   # kaputter Eintrag: verwerfen statt den ganzen Lauf abzubrechen
+        self.seen_urls = {url: ts for url, ts in self.seen_urls.items() if frisch(ts)}
 
     def is_seen(self, url: str) -> bool:
         return url in self.seen_urls
@@ -41,8 +44,10 @@ class URLCache:
 
     def save(self):
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.cache_path, "w", encoding="utf-8") as f:
+        tmp = self.cache_path.with_name(self.cache_path.name + ".tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
             json.dump(self.seen_urls, f, ensure_ascii=False)
+        os.replace(tmp, self.cache_path)
 
     def cleanup_and_save(self):
         self._prune()

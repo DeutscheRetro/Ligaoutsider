@@ -95,7 +95,10 @@ jobs:
           echo "Abo-Token: ${#T} Zeichen, Präfix ${T:0:13}, Leerzeichen/Umbrüche: $(printf %s "$T" | tr -cd ' \n\r\t' | wc -c)"
           echo "Antworte nur mit OK" | env -u ANTHROPIC_API_KEY claude -p --model haiku --tools "" --setting-sources "" || true
 
+      # Ein Fehler hier stoppt den Lauf erst am Ende: erst Stand sichern, dann laut fehlschlagen
       - name: Artikel generieren
+        id: gen
+        continue-on-error: true
         env:
           # Fester Deckel für Claude-Kosten pro Kalendermonat (siehe ki_budget.py).
           # Die Lauf-Zeiten oben stehen auch in ki_budget.LAUFPLAN_BERLIN.
@@ -201,3 +204,9 @@ jobs:
       - name: IndexNow melden
         if: always() && env.veroeffentlicht == 'true'
         run: python indexnow.py "$NEUER_COMMIT" || true
+
+      - name: Fehler melden
+        if: always() && steps.gen.outcome == 'failure'
+        run: |
+          echo "::error::generate.py ist fehlgeschlagen, siehe Schritt 'Artikel generieren'"
+          exit 1

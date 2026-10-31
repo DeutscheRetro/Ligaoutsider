@@ -1,0 +1,42 @@
+"""Kaputte Zustandsdateien dürfen den Lauf nicht mit leeren Daten weiterlaufen lassen oder abstürzen."""
+import os, sys, tempfile, unittest
+from datetime import datetime
+from pathlib import Path
+
+os.environ.setdefault("ANTHROPIC_API_KEY", "test")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import generate as g
+from url_cache import URLCache
+
+
+class Robust(unittest.TestCase):
+    def test_kaputter_url_cache_eintrag(self):
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "seen.json"
+            p.write_text('{"a": "kaputt", "b": 5, "c": "%s"}' % datetime.now().isoformat(), encoding="utf-8")
+            c = URLCache(str(p))
+            self.assertEqual(list(c.seen_urls), ["c"])
+            c.save()
+            self.assertFalse((Path(t) / "seen.json.tmp").exists())
+
+    def test_kaputter_feed_bricht_ab(self):
+        with tempfile.TemporaryDirectory() as t:
+            alt = g.FEED_JSON
+            g.FEED_JSON = Path(t) / "feed.json"
+            g.FEED_JSON.write_text("{kaputt", encoding="utf-8")
+            try:
+                with self.assertRaises(RuntimeError):
+                    g.feed_laden()
+            finally:
+                g.FEED_JSON = alt
+
+    def test_atomar_schreiben(self):
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "x.json"
+            g._atomar_schreiben(p, "[]")
+            self.assertEqual(p.read_text(encoding="utf-8"), "[]")
+            self.assertFalse((Path(t) / "x.json.tmp").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
