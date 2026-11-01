@@ -892,10 +892,13 @@ def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 900) -> list
         _ERSATZ_GESUCHT.add(g.get("id"))
         ersatz = ergaenzende_quellen(g)
         log.info(f"S7 Ersatzquellen für \"{g['titel'][:50]}\": {len(ersatz)} passende Treffer")
+        vorher = len(texte)
         for q in ersatz:
             if len(texte) >= max_texte or woerter() >= genug_woerter:
                 break
             laden(q)
+        if len(texte) > vorher:
+            log.info(f"S7 Ersatzquelle liefert Text ({woerter()} Wörter, {len(texte) - vorher} Quellen): {g['titel'][:60]}")
     return texte
 
 
