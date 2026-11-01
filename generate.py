@@ -808,36 +808,94 @@ _GOOGLE_FEHLER_IN_FOLGE = 0
 MIN_QUELL_WOERTER = 80           # weniger Stoff ergibt keine runde Meldung
 
 
+# Hosts, die Bots sperren (403 "Please enable JS" / leere Seite): ihr Volltext ist nie abrufbar.
+# Ihre Schlagzeilen bleiben als Themenhinweis, aber sie belegen keinen der fünf Abrufplätze.
+NICHT_ABRUFBAR = ("kicker.de", "reddit.com")
+_ERSATZ_GESUCHT: set = set()
+
+
+def ergaenzende_quellen(g: dict, max_neu: int = 4) -> list[dict]:
+    """Sucht dieselbe Meldung bei anderen Medien (Google News), wenn die eigenen Quellen keinen Volltext liefern
+    (z. B. Thema nur von kicker). Nur Treffer, die zur Geschichte passen: ähnlicher Titel und, wenn bekannt,
+    ein Nachname der beteiligten Spieler im Titel."""
+    from urllib.parse import quote
+    from rapidfuzz import fuzz
+    titel = re.sub(r"\s+[-–|]\s+[^-–|]{2,30}$", "", g["titel"]).strip()
+    url = f"https://news.google.com/rss/search?q={quote(titel[:90] + ' when:2d')}&hl=de&gl=DE&ceid=DE:de"
+    try:
+        eintraege = feedparser.parse(url).entries[:15]
+    except Exception as e:
+        log.info(f"S7 Ersatzsuche fehlgeschlagen: {e}")
+        return []
+    namen = [str(n).split()[-1].lower() for n in (g.get("spieler") or []) if str(n).strip()]
+    bekannt = {q["url"] for q in g["quellen"]}
+    treffer = []
+    for e in eintraege:
+        quelle = e.get("source") or {}
+        host = (quelle.get("href") or "").lower()
+        if any(d in host for d in NICHT_ABRUFBAR) or "ligainsider" in host or e.get("link") in bekannt:
+            continue
+        t = re.sub(r"\s+-\s+[^-]{2,40}$", "", e.get("title", "")).strip()
+        if SAMMELARTIKEL.search(t.lower()) or fuzz.token_set_ratio(titel.lower(), t.lower()) < (65 if namen else 75):
+            continue
+        if namen and not any(n in t.lower() for n in namen):
+            continue
+        treffer.append({"url": e["link"], "titel": t, "quelle": quelle.get("title") or host, "beschr": ""})
+        if len(treffer) >= max_neu:
+            break
+    return treffer
+
+
 def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 900) -> list[dict]:
     """Volltexte der besten Quellen einer Geschichte (höchstens fünf Abrufe), bis
-    genug Stoff für einen vollwertigen Artikel beisammen ist."""
+    genug Stoff für einen vollwertigen Artikel beisammen ist. Reicht der Stoff nicht
+    (z. B. nur kicker-Schlagzeilen), wird einmal je Geschichte nach derselben Meldung bei anderen Medien gesucht."""
     global _GOOGLE_FEHLER_IN_FOLGE
     texte = []
-    for q in g["quellen"][:5]:
-        if len(texte) >= max_texte or sum(len(t["text"].split()) for t in texte) >= genug_woerter:
-            break
+
+    def woerter():
+        return sum(len(t["text"].split()) for t in texte)
+
+    def laden(q):
+        global _GOOGLE_FEHLER_IN_FOLGE
         # Google-Links auflösen: verlinkt wird das Original, LigaInsider nie.
         # Sperrt Google die Auflösung (kommt auf GitHub-Servern vor), nach drei
         # Fehlschlägen in Folge für den Rest des Laufs keine Google-Links mehr.
         original = q["url"]
         if "news.google.com" in original:
             if _GOOGLE_FEHLER_IN_FOLGE >= 3:
-                continue
+                return
             aufgeloest = _decode_google_news_url(original)
             if not aufgeloest:
                 _GOOGLE_FEHLER_IN_FOLGE += 1
                 if _GOOGLE_FEHLER_IN_FOLGE == 3:
                     log.warning("Google-News-Links in diesem Lauf nicht auflösbar – nur direkte Quellen")
-                continue
+                return
             _GOOGLE_FEHLER_IN_FOLGE = 0
             original = aufgeloest
-        if "ligainsider" in original.lower() or SAMMELARTIKEL.search(q["titel"].lower()):
-            continue
+        if "ligainsider" in original.lower() or any(d in original.lower() for d in NICHT_ABRUFBAR) \
+                or SAMMELARTIKEL.search(q["titel"].lower()):
+            return
         text, grund = fetch_fulltext(original)
         if grund != "ok":
             log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
-            continue
+            return
         texte.append({**q, "text": text[:3500], "link": original})
+
+    abrufbar = [q for q in g["quellen"] if not any(d in q["url"].lower() for d in NICHT_ABRUFBAR)]
+    for q in abrufbar[:5]:
+        if len(texte) >= max_texte or woerter() >= genug_woerter:
+            break
+        laden(q)
+
+    if woerter() < MIN_QUELL_WOERTER and g.get("id") not in _ERSATZ_GESUCHT and _GOOGLE_FEHLER_IN_FOLGE < 3:
+        _ERSATZ_GESUCHT.add(g.get("id"))
+        ersatz = ergaenzende_quellen(g)
+        log.info(f"S7 Ersatzquellen für \"{g['titel'][:50]}\": {len(ersatz)} passende Treffer")
+        for q in ersatz:
+            if len(texte) >= max_texte or woerter() >= genug_woerter:
+                break
+            laden(q)
     return texte
 
 
