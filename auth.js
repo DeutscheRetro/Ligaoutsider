@@ -5,7 +5,7 @@
 //   open('login' | 'signup'), close(), logout(), init(),
 //   currentUser() -> { email, user_metadata, app_metadata, jwt() },
 //   on('init' | 'login' | 'logout', callback)
-// Die Sitzung liegt im localStorage, das Zugriffstoken wird vor Ablauf erneuert.
+// Die Sitzung liegt im localStorage und in einem Cookie für .ligaoutsider.de (gemeinsam mit 2liga.ligaoutsider.de), das Zugriffstoken wird vor Ablauf erneuert.
 
 // Bundesliga-Saison für OpenLigaDB: ab Juli die neue (2026 = Saison 2026/27)
 window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() - 1)(new Date());
@@ -19,12 +19,48 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
   let initFertig = false;
 
   // ─── Sitzung ────────────────────────────────────────────────────────────────
+  // Die Anmeldung gilt für ligaoutsider.de und 2liga.ligaoutsider.de zugleich: Neben dem localStorage
+  // (je Adresse getrennt) liegt ein Cookie für .ligaoutsider.de mit den Tokens. Das Cookie ist die gemeinsame
+  // Quelle, der localStorage der schnelle Zwischenspeicher.
+  const COOKIE_DOMAIN = /(^|\.)ligaoutsider\.de$/.test(location.hostname) ? '.ligaoutsider.de' : null;
+  function cookieLesen() {
+    try {
+      const m = document.cookie.match(/(?:^|;\s*)lo-sitzung=([^;]*)/);
+      return m ? JSON.parse(decodeURIComponent(m[1])) : null;
+    } catch (e) { return null; }
+  }
+  function cookieSchreiben(s) {
+    if (!COOKIE_DOMAIN) return;
+    const basis = '; domain=' + COOKIE_DOMAIN + '; path=/; SameSite=Lax; Secure';
+    try {
+      document.cookie = s
+        ? 'lo-sitzung=' + encodeURIComponent(JSON.stringify({ a: s.access, r: s.refresh, e: s.ablauf })) + basis + '; Max-Age=5184000'
+        : 'lo-sitzung=' + basis + '; Max-Age=0';
+    } catch (e) {}
+  }
+  function jwtSub(t) {
+    try { return JSON.parse(atob(String(t).split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub; } catch (e) { return null; }
+  }
   function laden() {
-    try { return JSON.parse(localStorage.getItem(SPEICHER)); } catch (e) { return null; }
+    let lokal = null;
+    try { lokal = JSON.parse(localStorage.getItem(SPEICHER)); } catch (e) {}
+    if (!COOKIE_DOMAIN) return lokal;
+    const c = cookieLesen();
+    if (!c || !c.a || !c.r) {
+      // Auf der anderen Adresse abgemeldet: auch hier abmelden. Alte Sitzungen ohne Markierung bleiben bestehen.
+      if (lokal && lokal.viaCookie) { try { localStorage.removeItem(SPEICHER); } catch (e) {} return null; }
+      return lokal;
+    }
+    if (lokal && lokal.refresh && c.e <= lokal.ablauf) return lokal;
+    // Cookie ist neuer (Anmeldung oder Token-Erneuerung auf der anderen Adresse): Konto nur behalten, wenn es dasselbe ist
+    const gleich = lokal && lokal.user && lokal.user.id === jwtSub(c.a);
+    return { access: c.a, refresh: c.r, ablauf: c.e, user: gleich ? lokal.user : null, viaCookie: true };
   }
   function speichern(s) {
+    if (s && COOKIE_DOMAIN) s = { ...s, viaCookie: true };
     sitzung = s;
     try { s ? localStorage.setItem(SPEICHER, JSON.stringify(s)) : localStorage.removeItem(SPEICHER); } catch (e) {}
+    cookieSchreiben(s);
   }
   function ausAntwort(d) {
     return {
@@ -499,6 +535,10 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
     let ausMail = null;
     try { ausMail = await linkAusMail(); } catch (e) { ausMail = { fehler: e.message }; }
     if (sitzung) await frischesToken();
+    // Sitzung aus dem Cookie hat noch kein Konto: nachladen. Alte Sitzung ohne Cookie: Cookie nachziehen.
+    if (sitzung && !sitzung.user) {
+      try { speichern({ ...sitzung, user: await auth('user', null, sitzung.access, 'GET') }); } catch (e) { speichern(null); }
+    } else if (sitzung && COOKIE_DOMAIN && !cookieLesen()) speichern(sitzung);
     initFertig = true;
     const start = () => {
       feuern('init', nutzer());
