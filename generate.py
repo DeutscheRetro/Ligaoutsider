@@ -927,7 +927,7 @@ def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
         return False
     new_club = (fp.get("main_club") or "").lower().strip()
     new_stage = fp.get("event_stage", "sonstiges")
-    new_players = {p.lower() for p in fp.get("main_players", [])}
+    new_players = {p.lower() for p in storys._liste(fp.get("main_players"))}
 
     cutoff = datetime.datetime.now() - datetime.timedelta(days=7)
     for entry in archive:
@@ -967,10 +967,10 @@ def gleiche_geschichte_im_lauf(titel: str, fp: dict, bisher: list[tuple]) -> boo
     neue Entwicklung (Beispiel: 'vertrag' und 'vollzogen' bei Chatzialexiou/Frankfurt)."""
     from rapidfuzz import fuzz as _fuzz2
     klub = (fp.get("main_club") or "").lower().strip()
-    spieler = {p.lower() for p in fp.get("main_players", [])}
+    spieler = {p.lower() for p in storys._liste(fp.get("main_players"))}
     for alt_titel, alt_fp in bisher:
         alt_klub = (alt_fp.get("main_club") or "").lower().strip()
-        alt_spieler = {p.lower() for p in alt_fp.get("main_players", [])}
+        alt_spieler = {p.lower() for p in storys._liste(alt_fp.get("main_players"))}
         if klub and alt_klub and klub != alt_klub:
             continue
         if not (spieler & alt_spieler):
@@ -982,10 +982,7 @@ def gleiche_geschichte_im_lauf(titel: str, fp: dict, bisher: list[tuple]) -> boo
 
 def speichere_published_stories(stories: list[dict]):
     PUBLISHED_JSON.parent.mkdir(exist_ok=True)
-    PUBLISHED_JSON.write_text(
-        json.dumps(stories[-1000:], ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
+    _atomar_schreiben(PUBLISHED_JSON, json.dumps(stories[-1000:], ensure_ascii=False, indent=2))
 
 
 
@@ -1112,8 +1109,8 @@ def _decode_google_news_url(google_url: str) -> str | None:
                 ziel = treffer.group(0).rstrip("\x00").rstrip("=")
                 if "google.com" not in ziel:
                     return ziel
-        except Exception:
-            pass
+        except Exception as _ex:
+            log.debug(f"Google-News-Link nicht lesbar: {_ex}")
 
     # Aktuelles Format: Signatur von der Artikelseite holen, dann aufloesen
     try:
@@ -1706,7 +1703,7 @@ def artikel_html(
 
     artikel_url = f"https://ligaoutsider.de/artikel/{dateiname or datei_id + '.html'}"
     ersten_absatz = text.split("\n\n")[0].strip() if text else titel
-    meta_desc = _esc(_unesc(ersten_absatz[:155]).replace('\n', ' '))
+    meta_desc = _esc(_unesc(ersten_absatz).replace('\n', ' ')[:155])
     titel_attr = _esc(_unesc(titel_roh))
     # schema.org verlangt ISO 8601, sonst ignoriert Google das Datum
     _dm = re.match(r"(\d{2})\.(\d{2})\.(\d{4})[ T](\d{2}):(\d{2})", datum or "")
@@ -1714,7 +1711,7 @@ def artikel_html(
                  f"T{_dm.group(4)}:{_dm.group(5)}:00{_zeitzone()}") if _dm else datum
     # JSON-LD-Werte muessen JSON-escaped sein, sonst zerlegen Anfuehrungszeichen den Block
     titel_json = json.dumps(titel_roh, ensure_ascii=False).replace("<", "\\u003c")
-    desc_json = json.dumps(ersten_absatz[:200], ensure_ascii=False).replace("<", "\\u003c")
+    desc_json = json.dumps(_unesc(ersten_absatz)[:200], ensure_ascii=False).replace("<", "\\u003c")
     if og_image_url:
         og_image = og_image_url
         # Masse nur angeben, wenn es wirklich die 1200x630-Karte ist
@@ -1761,7 +1758,7 @@ def artikel_html(
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "headline": {titel_json},
-    "image": ["{og_image}"],
+    "image": [{json.dumps(_unesc(og_image))}],
     "datePublished": "{datum_iso}",
     "dateModified": "{datum_iso}",
     "author": {{
@@ -2204,7 +2201,7 @@ def main():
             _zeit = _pub_lokal(veroeffentlicht) if veroeffentlicht else datetime.datetime.now()
             gesammelt.append({
                 "url": url, "aid": aid, "titel": titel, "quelle": quelle_name,
-                "beschr": re.sub(r"<[^>]+>", " ", beschr or "")[:600],
+                "beschr": re.sub(r"<[^>]+>", " ", (beschr or "")[:2000])[:600],
                 "zeit": _zeit.isoformat(timespec="minutes"),
             })
 
@@ -2563,7 +2560,7 @@ def main():
             "main_club":    fp.get("main_club", ""),
             "event_stage":  fp.get("event_stage", "sonstiges"),
             "summary":      fp.get("summary") or fp.get("one_sentence_summary", ""),
-            "main_players": fp.get("main_players", []),
+            "main_players": storys._liste(fp.get("main_players")),
             "schluessel":   fp.get("schluessel", ""),
             "source_url":   k["url"],
         }
@@ -2594,7 +2591,7 @@ def main():
                 "kategorie": ergebnis.get("kategorie") or k.get("kategorie", ""),
                 "zeit": datetime.datetime.now().isoformat(timespec="seconds"),
             })
-            _q.write_text(json.dumps(_queue, ensure_ascii=False, indent=1), encoding="utf-8")
+            _atomar_schreiben(_q, json.dumps(_queue, ensure_ascii=False, indent=1))
         except Exception as _e:
             log.warning(f"Social-Warteschlange: {_e}")
 
@@ -2631,7 +2628,7 @@ def main():
     url_cache.cleanup_and_save()
     # Nächster Lauf startet beim zuletzt begonnenen Feed (der evtl. nicht fertig wurde)
     _naechste = (_start_pos + max(0, _feeds_fertig - 1)) % len(RSS_FEEDS) if _feeds_fertig < len(RSS_FEEDS) else 0
-    _pos_datei.write_text(json.dumps({"naechste": _naechste, "stand": datetime.datetime.now().isoformat()}), encoding="utf-8")
+    _atomar_schreiben(_pos_datei, json.dumps({"naechste": _naechste, "stand": datetime.datetime.now().isoformat()}))
     log.info(f"Feeds: {_feeds_fertig}/{len(RSS_FEEDS)} begonnen, nächster Lauf startet bei Nr. {_naechste}")
     log.info(f"URL-Cache gespeichert: {url_cache.get_seen_count()} URLs")
 
@@ -2707,8 +2704,8 @@ def sitemap_generieren(artikel_liste: list):
         urls.append((f"{base}/spieler/index.html", "0.7", "weekly"))
         for _slug in spieler_slugs(_db).values():
             urls.append((f"{base}/spieler/{_slug}.html", "0.7", "weekly"))
-    except Exception:
-        pass
+    except Exception as _ex:
+        log.warning(f"Sitemap ohne Spielerseiten: {_ex}")
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
@@ -3075,10 +3072,10 @@ def spieler_db_fetch():
     except Exception as ex:
         print(f"  ⚠️ Comunio-Kader nicht verfügbar: {ex}")
 
-    Path("spieler_db.json").write_text(json.dumps({
+    _atomar_schreiben(Path("spieler_db.json"), json.dumps({
         "updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "saison": TM_SAISON, "teams": teams,
-    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    }, ensure_ascii=False, indent=1))
     n = sum(len(t["spieler"]) for t in teams.values())
     ok = sum(1 for t in teams.values() for s_ in t["spieler"] if s_["kickbase"])
     print(f"✅ spieler_db.json geschrieben ({n} Spieler, {ok} mit Kickbase verknüpft)")
@@ -4231,8 +4228,8 @@ def spieler_fetch():
         teams = get_json(f"https://api.openligadb.de/getavailableteams/bl1/{SAISON}")
         for t in teams:
             team_names[t["teamId"]] = t["teamName"]
-    except Exception:
-        pass
+    except Exception as _ex:
+        print(f"⚠️  Teamnamen nicht ladbar: {_ex}")
 
     for scorer in top_scorer:
         gid = scorer["goalGetterId"]

@@ -82,6 +82,9 @@ jobs:
       - name: Tests
         run: python -m unittest discover tests
 
+      - name: JS-Tests
+        run: node --test tests/*.mjs
+
       # Claude-Code-CLI: damit laufen die KI-Aufrufe über das Claude-Abo
       # (Secret CLAUDE_CODE_OAUTH_TOKEN, erzeugt mit "claude setup-token").
       # Ohne Secret oder bei erschöpftem Kontingent geht es über die API.

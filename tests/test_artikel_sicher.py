@@ -20,6 +20,15 @@ class ArtikelSicher(unittest.TestCase):
         for u in ("http://127.0.0.1/", "http://169.254.169.254/x", "http://localhost", "file:///etc/passwd"):
             self.assertFalse(g._host_oeffentlich(u), u)
 
+    def test_json_ld_bleibt_gueltig(self):
+        import json, re
+        h = g.artikel_html("abc1234567", 'Müller & Co </script> "x"', "Text &amp; mehr <b>x</b>\n\nZwei", "transfer", "Q",
+                           "https://a.de/x?a=1&b=2", "01.11.2026 10:00", "logos/x.png")
+        blöcke = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
+        self.assertTrue(blöcke)
+        for b in blöcke:
+            json.loads(b)
+
 
 if __name__ == "__main__":
     unittest.main()

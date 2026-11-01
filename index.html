@@ -409,13 +409,9 @@
     let kommentarZahlen = {};
     async function ladeKommentarZahlen() {
       try {
-        const r = await fetch(
-          `${SUPABASE_URL}/rest/v1/kommentare?select=artikel_id&geloescht=is.false`,
-          { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } });
+        const r = await fetch('/api?kommentar_zaehler');
         if (!r.ok) return;
-        const zaehler = {};
-        (await r.json()).forEach(k => { zaehler[k.artikel_id] = (zaehler[k.artikel_id] || 0) + 1; });
-        kommentarZahlen = zaehler;
+        kommentarZahlen = await r.json();
         renderFeed();
       } catch {}
     }

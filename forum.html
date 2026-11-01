@@ -334,7 +334,8 @@
         .from('forum_threads')
         .select('id, kategorie, titel, autor_name, autor_handle, erstellt_am, letzter_beitrag, antworten')
         .eq('kategorie', aktiveKat)
-        .order('letzter_beitrag', { ascending: false });
+        .order('letzter_beitrag', { ascending: false })
+        .limit(200);
 
       const liste = document.getElementById('thread-liste');
       if (error || !data?.length) {
@@ -364,7 +365,8 @@
         .from('forum_posts')
         .select('id, thread_id, inhalt, autor_name, autor_handle, erstellt_am')
         .eq('thread_id', thread.id)
-        .order('erstellt_am', { ascending: true });
+        .order('erstellt_am', { ascending: true })
+        .limit(500);
 
       const isAdmin = darfLoeschen();
       document.getElementById('post-liste').innerHTML = (!error && data?.length)

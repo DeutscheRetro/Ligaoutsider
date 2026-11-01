@@ -62,9 +62,15 @@ async function laufStarten(env, zeit) {
 // Lesezugriffe der Seiten laufen über die eigene Domain. Werbe- und Tracking-Blocker sperren
 // sonst die Anfragen an supabase.co (fremde Domain), und Kommentare, Forum, Profile bleiben leer.
 // Nur GET/HEAD auf die REST-Schnittstelle; Schreiben geht weiterhin über /api.
+const PROXY_ERLAUBT = new Set(["kommentare", "kommentar_votes", "hidden_articles", "forum_threads", "forum_posts",
+  "profile_oeffentlich", "gaestebuch_oeffentlich", "freunde_oeffentlich"]);
+
 async function supabaseLesen(request, url) {
   if (request.method !== "GET" && request.method !== "HEAD")
     return new Response("Nur lesen", { status: 405 });
+  // Nur die Tabellen und Ansichten, die der Browser wirklich liest; sonst kann jeder beliebige Abfragen über uns auslösen
+  const tabelle = url.pathname.slice("/sb/rest/v1/".length).split("/")[0];
+  if (!PROXY_ERLAUBT.has(tabelle)) return new Response("Nicht freigegeben", { status: 404 });
   const ziel = "https://rsodjlglzwlscamdlwev.supabase.co" + url.pathname.slice(3) + url.search;
   const kopf = new Headers();
   for (const k of ["apikey", "authorization", "accept", "range", "accept-profile", "prefer"]) {

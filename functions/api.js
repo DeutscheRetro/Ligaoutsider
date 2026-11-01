@@ -69,6 +69,28 @@ async function db(pfad, options = {}) {
 }
 
 const hole = (pfad) => db(pfad);
+// PostgREST liefert höchstens max-rows (Standard 1000) Zeilen je Antwort: seitenweise holen, sonst fehlt der Rest still.
+// pfad braucht eine feste Sortierung (&order=…), sonst verschieben sich die Seiten.
+export async function holeAlle(pfad, max = 50000) {
+  const alle = [];
+  for (let von = 0; von < max; von += 1000) {
+    const t = await hole(`${pfad}${pfad.includes("?") ? "&" : "?"}limit=1000&offset=${von}`);
+    alle.push(...(t || []));
+    if (!t || t.length < 1000) break;
+  }
+  return alle;
+}
+
+// Teure öffentliche Auswertungen kurz zwischenspeichern, damit nicht jeder Aufruf die Datenbank leert
+async function gecached(request, erzeuge) {
+  if (typeof caches === "undefined") return erzeuge();
+  const schluessel = new Request(request.url, { method: "GET" });
+  const treffer = await caches.default.match(schluessel);
+  if (treffer) return treffer;
+  const antwort = await erzeuge();
+  if (antwort.status === 200) await caches.default.put(schluessel, antwort.clone());
+  return antwort;
+}
 const lege_an = (tabelle, daten) =>
   db(tabelle, { method: "POST", body: JSON.stringify(daten), headers: { Prefer: "return=representation" } });
 const aendere = (tabelle, filter, daten) =>
@@ -163,7 +185,16 @@ async function profilSicher(email, name) {
       let anzeige = sauber(nameNormal(name && name !== email ? name : versuch), 56) || versuch;
       if (RESERVIERT.test(anzeige)) anzeige = versuch;
       for (let n = 2; await nameVergeben(anzeige, email) && n < 50; n++) anzeige = `${sauber(name, 52) || versuch} ${n}`;
-      const [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: anzeige });
+      let neu;
+      try {
+        [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: anzeige });
+      } catch (e) {
+        if (!/DB 409|23505/.test(e.message)) throw e;
+        // Gleichzeitige Anfrage war schneller: ihr Profil nehmen oder mit dem nächsten Namen weitermachen
+        const schon = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=handle,anzeigename`);
+        if (schon && schon.length) return schon[0];
+        continue;
+      }
       return { handle: neu.handle, anzeigename: neu.anzeigename };
     }
   } catch (e) {
@@ -227,11 +258,11 @@ async function handlesVon(emails) {
 // ─── Community-Stats (öffentlich, ohne E-Mail-Adressen) ─────────────────────
 async function communityStats() {
   const [komm, votes, profile, threads, posts] = await Promise.all([
-    hole("kommentare?select=id,artikel_id,email,name,autor_handle,inhalt,erstellt_am&geloescht=is.false&limit=20000"),
-    hole("kommentar_votes?select=kommentar_id,vote&limit=50000"),
-    hole("profile?select=email,handle,anzeigename,verein:lieblings->>verein,erstellt_am&limit=20000"),
-    hole("forum_threads?select=id&limit=20000").catch(() => []),
-    hole("forum_posts?select=id&limit=50000").catch(() => []),
+    holeAlle("kommentare?select=id,artikel_id,email,name,autor_handle,inhalt,erstellt_am&geloescht=is.false&order=id"),
+    holeAlle("kommentar_votes?select=kommentar_id,vote&order=id"),
+    holeAlle("profile?select=email,handle,anzeigename,verein:lieblings->>verein,erstellt_am&order=email"),
+    holeAlle("forum_threads?select=id&order=id").catch(() => []),
+    holeAlle("forum_posts?select=id&order=id").catch(() => []),
   ]);
   const prof = Object.fromEntries((profile || []).map(p => [String(p.email).toLowerCase(), p]));
   const person = mail => {
@@ -311,8 +342,8 @@ export function tippPunkte(t, e) {
 
 async function tippRangliste(spieltag) {
   const [spiele, tipps, profile] = await Promise.all([
-    ligaSpiele(), hole("tipps?select=email,spiel_id,tore_heim,tore_gast&limit=50000"),
-    hole("profile?select=email,handle,anzeigename&limit=20000")]);
+    ligaSpiele(), holeAlle("tipps?select=email,spiel_id,tore_heim,tore_gast&order=email,spiel_id"),
+    holeAlle("profile?select=email,handle,anzeigename&order=email")]);
   const sp = Object.fromEntries(spiele.map(s => [s.id, s]));
   const prof = Object.fromEntries((profile || []).map(p => [String(p.email).toLowerCase(), p]));
   const lauf = {};
@@ -365,8 +396,8 @@ export async function onRequest({ request, env }) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
       const st = parseInt(new URL(request.url).searchParams.get("spieltag") || "0", 10) || 0;
-      return new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
-        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } });
+      return await gecached(request, async () => new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } }));
     } catch (e) { return json(500, { fehler: "Rangliste nicht verfügbar" }); }
   }
   // Registrierungs-Wächter (lokales Skript, stündlich): neue Konten seit Zeitpunkt, nur mit MONITOR_TOKEN
@@ -388,9 +419,22 @@ export async function onRequest({ request, env }) {
   if (request.method === "GET" && new URL(request.url).searchParams.has("community")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
-      return new Response(JSON.stringify(await communityStats()), { status: 200,
-        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" } });
+      return await gecached(request, async () => new Response(JSON.stringify(await communityStats()), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" } }));
     } catch (e) { return json(500, { fehler: "Stats nicht verfügbar" }); }
+  }
+  // Kommentarzahlen je Artikel für Startseite und Archiv (der Browser sieht höchstens 1000 Zeilen, hier zählt der Server alle)
+  if (request.method === "GET" && new URL(request.url).searchParams.has("kommentar_zaehler")) {
+    if (!SERVICE_KEY) return json(200, {});
+    try {
+      return await gecached(request, async () => {
+        const zeilen = await holeAlle("kommentare?select=artikel_id&geloescht=is.false&order=id");
+        const zaehler = {};
+        zeilen.forEach(k => { zaehler[k.artikel_id] = (zaehler[k.artikel_id] || 0) + 1; });
+        return new Response(JSON.stringify(zaehler), { status: 200,
+          headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } });
+      });
+    } catch (e) { return json(200, {}); }
   }
   if (request.method === "GET") {
     const roh = new URL(request.url).searchParams.get("avatare") || "";
@@ -499,7 +543,8 @@ export async function onRequest({ request, env }) {
           if (vorhanden[0].vote === wert) await loesche("kommentar_votes", `id=eq.${vorhanden[0].id}`);
           else await aendere("kommentar_votes", `id=eq.${vorhanden[0].id}`, { vote: wert });
         } else {
-          await lege_an("kommentar_votes", { kommentar_id: body.kommentar_id, voter_email: email, vote: wert });
+          await db("kommentar_votes", { method: "POST", headers: { Prefer: "resolution=ignore-duplicates" },
+            body: JSON.stringify({ kommentar_id: body.kommentar_id, voter_email: email, vote: wert }) });
         }
         return json(200, { ok: true });
       }
@@ -924,30 +969,37 @@ export async function onRequest({ request, env }) {
         }
         const [vorher] = await hole(`profile?email=eq.${encodeURIComponent(email)}&select=lieblings`);
         if (vorher && vorher.lieblings && vorher.lieblings.avatar) lieblings.avatar = vorher.lieblings.avatar;
-        await aendere("profile", `email=eq.${encodeURIComponent(email)}`, {
-          handle,
-          anzeigename,
-          ueber_mich: sauber(body.ueber_mich, 1500),
-          wohnort: sauber(body.wohnort, 80),
-          lieblings,
-          gaestebuch_offen: body.gaestebuch_offen !== false,
-          aktualisiert_am: new Date().toISOString(),
-        });
+        try {
+          await aendere("profile", `email=eq.${encodeURIComponent(email)}`, {
+            handle,
+            anzeigename,
+            ueber_mich: sauber(body.ueber_mich, 1500),
+            wohnort: sauber(body.wohnort, 80),
+            lieblings,
+            gaestebuch_offen: body.gaestebuch_offen !== false,
+            aktualisiert_am: new Date().toISOString(),
+          });
+        } catch (e) {
+          if (/DB 409|23505/.test(e.message)) return json(409, { fehler: "Dieser Profil- oder Anzeigename ist gerade vergeben worden" });
+          throw e;
+        }
         // Anzeigename ist zugleich der Benutzername bei Kommentaren und im Forum
         if (anzeigename !== name) {
           await authAdmin(`/users/${encodeURIComponent(user.id)}`, {
             method: "PUT", body: JSON.stringify({ user_metadata: { ...meta, benutzername: anzeigename } }) });
           const E = encodeURIComponent(email);
-          await aendere("kommentare", `email=eq.${E}`, { name: anzeigename });
-          await aendere("forum_posts", `autor_email=eq.${E}`, { autor_name: anzeigename });
-          await aendere("forum_threads", `autor_email=eq.${E}`, { autor_name: anzeigename });
+          await Promise.all([
+            aendere("kommentare", `email=eq.${E}`, { name: anzeigename }),
+            aendere("forum_posts", `autor_email=eq.${E}`, { autor_name: anzeigename }),
+            aendere("forum_threads", `autor_email=eq.${E}`, { autor_name: anzeigename })]);
         }
         // Profilnamen in eigenen Beiträgen mitziehen
         if (handle !== profil.handle) {
           const E = encodeURIComponent(email);
-          await aendere("kommentare", `email=eq.${E}`, { autor_handle: handle });
-          await aendere("forum_posts", `autor_email=eq.${E}`, { autor_handle: handle });
-          await aendere("forum_threads", `autor_email=eq.${E}`, { autor_handle: handle });
+          await Promise.all([
+            aendere("kommentare", `email=eq.${E}`, { autor_handle: handle }),
+            aendere("forum_posts", `autor_email=eq.${E}`, { autor_handle: handle }),
+            aendere("forum_threads", `autor_email=eq.${E}`, { autor_handle: handle })]);
         }
         return json(200, { ok: true, handle });
       }
