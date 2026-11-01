@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01T15:32:23.669219+00:00",
+ "updated": "2026-11-01T17:02:09.752465+00:00",
  "spieltag": 8,
  "partien": [
   {
@@ -258,7 +258,7 @@
      "name": "Ismael Saibari",
      "nr": "34",
      "ampel": "rot",
-     "grund": "Knöchelprobleme - gegen BVB (H) vorzeitig ausgewechselt worden",
+     "grund": "Verletzung am Syndesmoseband - fällt mehrere Monate aus",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
@@ -278,7 +278,7 @@
      "name": "Serge Gnabry",
      "nr": "7",
      "ampel": "rot",
-     "grund": "Muskuläre Probleme im Oberschenkel - gegen BVB (H) vorzeitig ausgewechselt worden",
+     "grund": "Muskelverletzung Oberschenkel - fällt mehrere Wochen aus",
      "news": "",
      "reihe": "st",
      "pos": "Hängende Spitze",
@@ -1701,10 +1701,7 @@
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1716,7 +1713,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1728,7 +1725,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Keita Kosugi",
@@ -1738,7 +1735,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 95
+      "prozent": 81
+     },
+     {
+      "name": "Nnamdi Collins",
+      "nr": "34",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 73 min · 3 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 68
      },
      {
       "name": "Elias Baum",
@@ -1748,40 +1755,10 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 90
-     },
-     {
-      "name": "Lilian Brassier",
-      "nr": "3",
-      "ampel": "gelb",
-      "grund": "Knieprobleme",
-      "news": "artikel/frankfurt-gegen-hsv-brassier-fraglich-ngankam-fehlt-451a26ca8a.html",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
       "prozent": 60
      }
     ],
     "mf": [
-     {
-      "name": "Raphael Onyedika",
-      "nr": "25",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 96 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 96
-     },
-     {
-      "name": "Farès Chaïbi",
-      "nr": "8",
-      "ampel": "gruen",
-      "grund": "3 von 5 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 87
-     },
      {
       "name": "Noël Aséko",
       "nr": "15",
@@ -1790,20 +1767,30 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 80
+      "prozent": 86
+     },
+     {
+      "name": "Raphael Onyedika",
+      "nr": "25",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 96 min",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 83
+     },
+     {
+      "name": "Can Uzun",
+      "nr": "42",
+      "ampel": "gruen",
+      "grund": "5 von 6 Einsätzen in der Startelf · Ø 74 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 75
      }
     ],
     "st": [
-     {
-      "name": "Jonathan Burkardt",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 97
-     },
      {
       "name": "Ritsu Doan",
       "nr": "20",
@@ -1812,7 +1799,17 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 97
+      "prozent": 95
+     },
+     {
+      "name": "Jonathan Burkardt",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 84 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 89
      },
      {
       "name": "Younes Ebnoutalib",
@@ -1822,20 +1819,30 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 75
+      "prozent": 65
      }
     ]
    },
    "bank": [
     {
-     "name": "Can Uzun",
-     "nr": "42",
+     "name": "Jeremiaha Maluze",
+     "nr": "37",
      "ampel": "gruen",
-     "grund": "5 von 6 Einsätzen in der Startelf · Ø 74 min · 1 Spiel ohne Einsatz",
+     "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 58
+    },
+    {
+     "name": "Farès Chaïbi",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "3 von 5 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 34
+     "prozent": 49
     },
     {
      "name": "Mario Götze",
@@ -1845,30 +1852,41 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 22
+     "prozent": 28
     },
     {
-     "name": "Nnamdi Collins",
-     "nr": "34",
+     "name": "Ansgar Knauff",
+     "nr": "7",
      "ampel": "gruen",
-     "grund": "3 von 4 Einsätzen in der Startelf · Ø 73 min · 3 Spiele ohne Einsatz",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 41 min · 3 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 19
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 20
     },
     {
-     "name": "Jeremiaha Maluze",
-     "nr": "37",
+     "name": "Ayoube Amaimouni-Echghouyab",
+     "nr": "29",
      "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 5 Spiele ohne Einsatz",
+     "grund": "1 von 5 Einsätzen in der Startelf · Ø 25 min · 2 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 17
+     "reihe": "st",
+     "pos": "Rechtsaußen",
+     "prozent": 16
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Lilian Brassier",
+     "nr": "3",
+     "ampel": "gelb",
+     "grund": "Knieprobleme",
+     "news": "artikel/frankfurt-gegen-hsv-brassier-fraglich-ngankam-fehlt-451a26ca8a.html",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 43
+    }
+   ],
    "ausfall": []
   },
   "FC Augsburg": {
@@ -2064,8 +2082,8 @@
      "name": "Juma Bah",
      "nr": "35",
      "ampel": "rot",
-     "grund": "Zwei Spiele Sperre nach Roter Karte",
-     "news": "artikel/augsburgs-bah-nach-roter-karte-fuer-zwei-spiele-gesperrt-b7531e09aa.html",
+     "grund": "fehlt laut Kickbase",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 0
@@ -2254,7 +2272,7 @@
      "name": "Robin Hranac",
      "nr": "2",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Knieprobleme - verpasste SVW (A), weitere Untersuchungen folgen",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
@@ -3496,10 +3514,7 @@
   "Hamburger SV": {
    "logo": "logos/hsv.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -3511,10 +3526,20 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
+     {
+      "name": "Jordan Torunarigha",
+      "nr": "23",
+      "ampel": "gruen",
+      "grund": "wieder fit nach muskulären Problemen",
+      "news": "artikel/hsv-in-frankfurt-ohne-abwehrchef-bornauw-a544231fe1.html",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 90
+     },
      {
       "name": "David Møller Wolfe",
       "nr": "3",
@@ -3523,7 +3548,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 95
+      "prozent": 79
      },
      {
       "name": "Warmed Omari",
@@ -3533,7 +3558,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 93
+      "prozent": 73
      },
      {
       "name": "Zakaria El Ouahdi",
@@ -3543,17 +3568,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 90
-     },
-     {
-      "name": "Shafiq Nandja",
-      "nr": "43",
-      "ampel": "gruen",
-      "grund": "2 von 3 Einsätzen in der Startelf · Ø 73 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 81
+      "prozent": 61
      },
      {
       "name": "Miro Muheim",
@@ -3563,7 +3578,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 70
+      "prozent": 42
      }
     ],
     "mf": [
@@ -3575,7 +3590,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 94
+      "prozent": 76
      },
      {
       "name": "Martin Adeline",
@@ -3585,7 +3600,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 91
+      "prozent": 65
      },
      {
       "name": "Albert Grønbaek",
@@ -3595,7 +3610,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 87
+      "prozent": 49
      },
      {
       "name": "Kofi Amoako",
@@ -3605,7 +3620,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 20
+      "prozent": 22
      }
     ],
     "st": [
@@ -3617,31 +3632,11 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 65
+      "prozent": 24
      }
     ]
    },
    "bank": [
-    {
-     "name": "Jordan Torunarigha",
-     "nr": "23",
-     "ampel": "gruen",
-     "grund": "wieder fit nach muskulären Problemen",
-     "news": "artikel/hsv-in-frankfurt-ohne-abwehrchef-bornauw-a544231fe1.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 64
-    },
-    {
-     "name": "Otto Stange",
-     "nr": "19",
-     "ampel": "gruen",
-     "grund": "0 von 6 Einsätzen in der Startelf · Ø 36 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 15
-    },
     {
      "name": "Louis Lemke",
      "nr": "37",
@@ -3650,7 +3645,27 @@
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 11
+     "prozent": 36
+    },
+    {
+     "name": "Shafiq Nandja",
+     "nr": "43",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 73 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 23
+    },
+    {
+     "name": "Bakery Jatta",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 35 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Rechtes Mittelfeld",
+     "prozent": 20
     }
    ],
    "fraglich": [],
