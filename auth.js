@@ -10,6 +10,35 @@
 // Bundesliga-Saison für OpenLigaDB: ab Juli die neue (2026 = Saison 2026/27)
 window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() - 1)(new Date());
 
+// OpenLigaDB fällt gelegentlich kurz aus oder antwortet langsam: Abrufe zweimal wiederholen und die letzte
+// gute Antwort je Adresse im Browser behalten. Fällt die API aus, zeigt die Seite den letzten Stand statt
+// "Spielplan nicht verfügbar". Betrifft nur api.openligadb.de, sonst bleibt fetch unverändert.
+(function () {
+  const echt = window.fetch.bind(window);
+  const warte = ms => new Promise(r => setTimeout(r, ms));
+  window.fetch = async function (ziel, opt) {
+    const url = typeof ziel === 'string' ? ziel : (ziel && ziel.url) || '';
+    if (!url.startsWith('https://api.openligadb.de/')) return echt(ziel, opt);
+    const schluessel = 'oldb:' + url;
+    for (let versuch = 0; versuch < 3; versuch++) {
+      try {
+        const r = await echt(ziel, opt);
+        if (r.ok) {
+          const text = await r.clone().text();
+          try { localStorage.setItem(schluessel, text); } catch (e) {}
+          return r;
+        }
+        if (r.status < 500) return r;
+      } catch (e) {}
+      await warte(1500 * (versuch + 1));
+    }
+    let alt = null;
+    try { alt = localStorage.getItem(schluessel); } catch (e) {}
+    if (alt !== null) return new Response(alt, { status: 200, headers: { 'Content-Type': 'application/json' } });
+    throw new Error('OpenLigaDB nicht erreichbar');
+  };
+})();
+
 (function () {
   const SUPA_URL = 'https://rsodjlglzwlscamdlwev.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
