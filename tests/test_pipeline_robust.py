@@ -38,5 +38,17 @@ class Robust(unittest.TestCase):
             self.assertFalse((Path(t) / "x.json.tmp").exists())
 
 
+class Auswahl(unittest.TestCase):
+    def test_feedzeit_in_ortszeit(self):
+        import time
+        t = time.gmtime(1_700_000_000)
+        self.assertEqual(g._pub_lokal(t), datetime.fromtimestamp(1_700_000_000))
+
+    def test_paywall_nur_ganze_woerter(self):
+        regel = g.PAYWALL_RE
+        self.assertIsNone(regel.search("kaboré trifft im labor"))
+        self.assertTrue(regel.search("lesen sie weiter im abo"))
+
+
 if __name__ == "__main__":
     unittest.main()

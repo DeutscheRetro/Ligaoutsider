@@ -9,6 +9,8 @@ Starten mit:  python generate.py
 
 import os
 import sys
+import calendar
+from urllib.parse import urlparse
 import json
 import functools
 import glob
@@ -525,6 +527,11 @@ def _atomar_schreiben(pfad: Path, text: str):
     os.replace(tmp, pfad)
 
 
+def _pub_lokal(t) -> datetime.datetime:
+    """feedparser-Zeit (UTC, struct_time) als lokale Zeit, damit Vergleiche mit datetime.now() stimmen."""
+    return datetime.datetime.fromtimestamp(calendar.timegm(t))
+
+
 def feed_laden() -> list:
     """Lädt feed.json – merged lokale Datei mit der Live-Version."""
     lokal = []
@@ -826,7 +833,7 @@ def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 900) -> list
             original = aufgeloest
         if "ligainsider" in original.lower() or SAMMELARTIKEL.search(q["titel"].lower()):
             continue
-        text, grund = fetch_fulltext(q["url"])
+        text, grund = fetch_fulltext(original)
         if grund != "ok":
             log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
             continue
@@ -1228,21 +1235,31 @@ def _sicher_get(url: str, **kw):
     for _ in range(6):
         if not _host_oeffentlich(url):
             raise ValueError(f"URL nicht öffentlich: {url[:80]}")
-        r = _r.get(url, allow_redirects=False, **kw)
+        r = _r.get(url, allow_redirects=False, stream=True, **kw)
         if r.is_redirect and r.headers.get("location"):
             url = urljoin(r.url, r.headers["location"])
+            r.close()
             continue
+        # timeout= begrenzt nur die Pause zwischen Bytes: Größe und Gesamtdauer selbst deckeln
+        daten, t0 = bytearray(), time.time()
+        for teil in r.iter_content(65536):
+            daten += teil
+            if len(daten) > 3_000_000 or time.time() - t0 > 30:
+                break
+        r.close()
+        r._content, r._content_consumed = bytes(daten), True
         return r
     raise ValueError("zu viele Weiterleitungen")
+
+
+# ganze Wörter: "abo" soll "Kaboré" oder "Labor" nicht treffen
+PAYWALL_RE = re.compile(r"\b(?:paywall|abo|abonnenten|premium)\b|login erforderlich|nur für abonnenten|artikelende")
 
 
 def fetch_fulltext(url: str) -> tuple[str | None, str]:
     """Lädt Volltext via trafilatura. Gibt (text, reason) zurück — reason='ok' oder Fehlergrund."""
     import trafilatura
     import requests as _req
-    MIN_WORDS = 250
-    PAYWALL_MARKERS = ["paywall", "abo", "abonnenten", "premium",
-                       "login erforderlich", "nur für abonnenten", "artikelende"]
     try:
         # Google News Redirect vorab dekodieren
         fetch_url = url
@@ -1269,9 +1286,14 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
         # der Seite ab: am 09.10. kam so ein tag24-Artikel vom 10.08. als neue Meldung durch.
         try:
             _quelltext = html_content.decode("utf-8", "ignore") if isinstance(html_content, bytes) else html_content
-            daten = re.findall(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})', _quelltext)
-            daten += re.findall(r'(?:article:published_time|og:published_time|pubdate|date)"\s+content="(\d{4}-\d{2}-\d{2})', _quelltext)
-            daten += re.findall(r'content="(\d{4}-\d{2}-\d{2})[^"]*"\s+(?:property|name)="(?:article:published_time|og:published_time)"', _quelltext)
+            # je Quelle nur der erste Treffer: weiter unten stehen oft Teaser verwandter, älterer Artikel
+            daten = []
+            for _muster in (r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})',
+                            r'(?:article:published_time|og:published_time|pubdate|date)"\s+content="(\d{4}-\d{2}-\d{2})',
+                            r'content="(\d{4}-\d{2}-\d{2})[^"]*"\s+(?:property|name)="(?:article:published_time|og:published_time)"'):
+                _t = re.search(_muster, _quelltext)
+                if _t:
+                    daten.append(_t.group(1))
             _meta = trafilatura.extract_metadata(html_content)
             if _meta and getattr(_meta, "date", None):
                 daten.append(_meta.date[:10])
@@ -1279,8 +1301,8 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
                 _dt = datetime.datetime.strptime(min(daten), "%Y-%m-%d")
                 if (datetime.datetime.now() - _dt).days > MAX_ALTER_TAGE:
                     return None, "seite_zu_alt"
-        except Exception:
-            pass
+        except Exception as _ex:
+            log.debug(f"Seitendatum nicht prüfbar: {_ex}")
 
         text = trafilatura.extract(
             html_content,
@@ -1294,20 +1316,11 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
 
         words = text.split()
         word_count = len(words)
-        MIN_WORDS = 80                  # darunter meist Teaser oder Bezahlschranke
-        if word_count < MIN_WORDS:
-            # Kurze Transfermeldungen erlauben wenn Key-Indicators vorhanden
-            _KEY = ["wechselt", "transfer", "verpflichtet", "verletzt",
-                    "verlängert", "ablöse", "testspiel", "trainiert", "abgang", "zugang"]
-            if word_count >= 110 and any(k in text.lower() for k in _KEY):
-                pass  # short but relevant
-            else:
-                return None, f"too_short_{word_count}_words"
+        if word_count < 80:             # darunter meist Teaser oder Bezahlschranke
+            return None, f"too_short_{word_count}_words"
 
-        text_lower = text.lower()
-        for marker in PAYWALL_MARKERS:
-            if marker in text_lower:
-                return None, "likely_paywall"
+        if PAYWALL_RE.search(text.lower()):
+            return None, "likely_paywall"
 
         unique_ratio = len(set(words)) / len(words)
         if unique_ratio < 0.4:
@@ -1990,7 +2003,7 @@ def main():
             from urllib.parse import urlparse as _up
             _host = lambda u: (_up(u).hostname or "").removeprefix("www.")
             _erlaubt = {_host(f) for f in RSS_FEEDS if f.startswith("http")}
-            _submitted_urls = [r["url"] for r in _rows if r.get("url") and _host(r["url"]) in _erlaubt]
+            _submitted_urls = [r["url"] for r in _rows if r.get("url") and _host(r["url"]) in _erlaubt and _host_oeffentlich(r["url"])]
             _submitted_ids  = [r["id"]  for r in _rows if r.get("id")]
             if _submitted_ids:
                 log.info(f"📥 {len(_submitted_ids)} eingereichte URLs, {len(_submitted_urls)} von bekannten Quellen")
@@ -2096,13 +2109,12 @@ def main():
             # LigaInsider dient nur zum Finden von Themen. Verarbeitet und als Quelle
             # genannt wird ausschließlich der dort verlinkte Originalartikel.
             # Ohne echten Link (z. B. nur "Pressekonferenz") wird die Meldung übersprungen.
-            if "ligainsider.de" in url:
+            if (urlparse(url).hostname or "").endswith("ligainsider.de"):
                 url_cache.mark_seen(url)
                 try:
                     import urllib.request as _ureq
                     from urllib.parse import urlparse as _up
-                    _rq = _ureq.Request(url, headers={"User-Agent": _GN_UA})
-                    _html = _ureq.urlopen(_rq, timeout=8).read().decode("utf-8", errors="ignore")
+                    _html = _sicher_get(url, headers={"User-Agent": _GN_UA}, timeout=8).content.decode("utf-8", errors="ignore")
                     _m = re.search(r'<strong>Quelle:</strong>\s*<a[^>]+href="(https?://[^"]+)"', _html)
                     _ziel = _m.group(1) if _m else ""
                     _host = _up(_ziel).netloc.lower() if _ziel else ""
@@ -2135,7 +2147,7 @@ def main():
             # Alters-Check
             veroeffentlicht = eintrag.get("published_parsed") or eintrag.get("updated_parsed")
             if veroeffentlicht:
-                alter = datetime.datetime.now() - datetime.datetime(*veroeffentlicht[:6])
+                alter = datetime.datetime.now() - _pub_lokal(veroeffentlicht)
                 if alter.days > MAX_ALTER_TAGE:
                     (ARTIKEL_ORDNER / f"{aid}.skip").touch()
                     continue
@@ -2189,7 +2201,7 @@ def main():
 
             # Gesammelt – gebündelt, bewertet und geschrieben wird nach dem Einlesen
             batch_titles.append(titel)
-            _zeit = datetime.datetime(*veroeffentlicht[:6]) if veroeffentlicht else datetime.datetime.now()
+            _zeit = _pub_lokal(veroeffentlicht) if veroeffentlicht else datetime.datetime.now()
             gesammelt.append({
                 "url": url, "aid": aid, "titel": titel, "quelle": quelle_name,
                 "beschr": re.sub(r"<[^>]+>", " ", beschr or "")[:600],
