@@ -31,7 +31,7 @@ class ArtikelSicher(unittest.TestCase):
 
     def test_liga_schalter_in_vorlagen(self):
         h = g.artikel_html("abc1234567", "Titel", "Text eins\n\nZwei", "transfer", "Q", "https://a.de/x", "01.11.2026 10:00", "logos/x.png")
-        self.assertIn('class="liga-schalter"', h)
+        self.assertIn('class="liga-zeile"', h)
         self.assertIn("https://2liga.ligaoutsider.de/", h)
 
 
