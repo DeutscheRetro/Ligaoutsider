@@ -456,11 +456,13 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
     const KURZ = { bayern: 'Bayern', dortmund: 'Dortmund', leipzig: 'Leipzig', leverkusen: 'Leverkusen', frankfurt: 'Frankfurt',
       stuttgart: 'Stuttgart', gladbach: 'Gladbach', freiburg: 'Freiburg', union: 'Union', mainz: 'Mainz', augsburg: 'Augsburg',
       werder: 'Werder', hoffenheim: 'Hoffenheim', hsv: 'Hamburger', koeln: 'Köln', schalke: 'Schalke', paderborn: 'Paderborn', elversberg: 'Elversberg' };
+    // KURZ ist zugleich der Filtername der Artikel (HSV heißt dort "Hamburger"); angezeigt wird der geläufige Name
+    const ANZEIGE = { hsv: 'HSV' };
     const leiste = document.createElement('div');
     leiste.id = 'mein-verein-leiste';
     leiste.style.cssText = 'max-width:1100px;margin:10px auto;padding:10px 14px;background:var(--bg2,#151515);border:1px solid var(--border2,#333);border-radius:10px;font-size:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap';
     leiste.innerHTML = slug && KURZ[slug]
-      ? `<img src="logos/${slug}.png" alt="" width="24" height="24" style="object-fit:contain"><span>Dein Verein: <strong>${KURZ[slug]}</strong></span>
+      ? `<img src="logos/${slug}.png" alt="" width="24" height="24" style="object-fit:contain"><span>Dein Verein: <strong>${ANZEIGE[slug] || KURZ[slug]}</strong></span>
          <a href="index.html?filter=${encodeURIComponent(KURZ[slug])}" style="color:var(--accent,#e8c000);font-weight:700">Nur seine News</a>
          <a href="mein-bereich.html" style="color:var(--text3,#aaa);margin-left:auto">Mein Bereich</a>`
       : `<span>⭐ Wähle deinen Verein und sieh seine News zuerst.</span>
