@@ -741,3 +741,10 @@ a.team-chip { text-decoration: none; }
 /* Sichtbarer Tastaturfokus auf allen Bedienelementen */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Schalter 1. Liga / 2. Liga im Kopf */
+.liga-schalter { display: inline-flex; margin-left: 14px; border: 1px solid var(--border2); border-radius: 999px; overflow: hidden; font-size: 12px; font-weight: 800; }
+.liga-schalter a { padding: 5px 12px; color: var(--text3); text-decoration: none; }
+.liga-schalter a:hover { color: var(--text); }
+.liga-schalter a.aktiv { background: var(--accent); color: #111; }
+@media (max-width: 640px) { .liga-schalter { margin-left: 8px; } .liga-schalter a { padding: 4px 9px; } }
