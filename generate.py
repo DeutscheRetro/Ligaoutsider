@@ -880,7 +880,11 @@ def quellen_laden(g: dict, max_texte: int = 3, genug_woerter: int = 900) -> list
         if grund != "ok":
             log.info(f"S7 kein Volltext ({grund}): {q['titel'][:60]}")
             return
-        texte.append({**q, "text": text[:3500], "link": original})
+        eintrag = {**q, "text": text[:3500], "link": original}
+        if "aid" not in q:   # Ersatzquelle aus der Google-Suche: kennt nur den Google-Link, braucht aber Artikel-ID und echte URL
+            eintrag["aid"] = artikel_id(original)
+            eintrag["url"] = original
+        texte.append(eintrag)
 
     abrufbar = [q for q in g["quellen"] if not any(d in q["url"].lower() for d in NICHT_ABRUFBAR)]
     for q in abrufbar[:5]:

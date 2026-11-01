@@ -46,6 +46,10 @@ class Ersatz(unittest.TestCase):
         self.assertEqual(abgerufen, ["https://www.bild.de/kimmich-ort.html"])   # kicker wurde nicht abgerufen
         self.assertEqual(len(texte), 1)
         self.assertEqual(texte[0]["link"], "https://www.bild.de/kimmich-ort.html")
+        # alles, was der Schreibpfad aus texte[0] liest (Lauf vom 01.11. brach hier mit KeyError "aid" ab)
+        for feld in ("aid", "url", "quelle", "link", "text"):
+            self.assertTrue(texte[0].get(feld), feld)
+        self.assertEqual(texte[0]["url"], "https://www.bild.de/kimmich-ort.html")
 
     def test_suche_nur_einmal_je_geschichte(self):
         aufrufe = []
