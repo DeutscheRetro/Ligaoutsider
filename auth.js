@@ -41,7 +41,7 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
 
 (function () {
   const SUPA_URL = 'https://rsodjlglzwlscamdlwev.supabase.co';
-  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzb2RqbGdsendsc2NhbWRsd2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNjk1MzIsImV4cCI6MjA5Njk0NTUzMn0.ETR6sL-b-ZmjuqWFmj3jgP2vzq70J0Yb4JgATOCekns';
+  const SUPA_KEY = 'sb_publishable_FQH-uSDHZkVrVBtYfUYQQQ_atmsR-wF';
   const SPEICHER = 'lo-sitzung';
   const handler = { init: [], login: [], logout: [] };
   let sitzung = null;
