@@ -786,7 +786,11 @@ a.team-chip { text-decoration: none; }
 @media (max-width: 720px) {
   .header-inner { gap: 8px 10px; }
   .header-right { width: auto; margin-left: auto; gap: 8px; }
-  .theme-toggle, #signup-btn { display: none; }
+  #signup-btn { display: none; }
+  /* Modus-Knopf nur als Symbol, damit alles in eine Zeile passt */
+  .theme-toggle { display: flex; width: 32px; min-width: 0; height: 32px; padding: 0; justify-content: center; order: 0; }
+  #theme-label { display: none; }
+  .logo { font-size: 20px; }
   .search-form { flex: 0 0 auto; order: 0; }
   .search-input { width: 36px; height: 32px; padding: 0 0 0 34px; border-radius: 999px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 10px center; background-size: 15px; transition: width .3s cubic-bezier(.22,1,.36,1); }
   .search-input::placeholder { color: transparent; }
