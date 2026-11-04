@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T17:02:21.450555+00:00",
+ "updated": "2026-11-04T18:32:24.534154+00:00",
  "spieltag": 9,
  "partien": [
   {
@@ -142,6 +142,16 @@
     ],
     "mf": [
      {
+      "name": "Joshua Kimmich",
+      "nr": "6",
+      "ampel": "gruen",
+      "grund": "6 von 7 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 96
+     },
+     {
       "name": "Lennart Karl",
       "nr": "42",
       "ampel": "gruen",
@@ -150,16 +160,6 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 85
-     },
-     {
-      "name": "Joshua Kimmich",
-      "nr": "6",
-      "ampel": "gelb",
-      "grund": "Rückkehr nach Tod des Vaters, Abschlusstraining entscheidet",
-      "news": "artikel/kimmich-nach-tod-des-vaters-zurueck-an-der-saebener-strasse-6fb83ea5ea.html",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 60
      },
      {
       "name": "Aleksandar Pavlovic",
@@ -473,6 +473,16 @@
      "prozent": 5
     },
     {
+     "name": "Christian Kofane",
+     "nr": "35",
+     "ampel": "gelb",
+     "grund": "Nach Muskelverletzung im Oberschenkel - trainiert mit dem Ball am Fuß",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 4
+    },
+    {
      "name": "Nathan Tella",
      "nr": "23",
      "ampel": "gelb",
@@ -492,16 +502,6 @@
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 0
-    },
-    {
-     "name": "Christian Kofane",
-     "nr": "35",
-     "ampel": "rot",
-     "grund": "Nach Muskelverletzung im Oberschenkel - trainiert mit dem Ball am Fuß",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
      "prozent": 0
     },
     {
@@ -696,16 +696,6 @@
      "prozent": 26
     },
     {
-     "name": "Marcel Sabitzer",
-     "nr": "20",
-     "ampel": "gruen",
-     "grund": "2 von 7 Einsätzen in der Startelf · Ø 37 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 24
-    },
-    {
      "name": "Konstantinos Karetsas",
      "nr": "19",
      "ampel": "gruen",
@@ -726,7 +716,18 @@
      "prozent": 21
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Marcel Sabitzer",
+     "nr": "20",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 19
+    }
+   ],
    "ausfall": [
     {
      "name": "Giannis Konstantelias",
@@ -2079,16 +2080,6 @@
       "prozent": 91
      },
      {
-      "name": "Joël Schmied",
-      "nr": "2",
-      "ampel": "gruen",
-      "grund": "2 von 5 Einsätzen in der Startelf · Ø 37 min · 3 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 66
-     },
-     {
       "name": "Alessio Castro-Montes",
       "nr": "17",
       "ampel": "gruen",
@@ -2096,6 +2087,16 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
+      "prozent": 60
+     },
+     {
+      "name": "Joël Schmied",
+      "nr": "2",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
       "prozent": 60
      }
     ],
@@ -3397,16 +3398,6 @@
       "prozent": 95
      },
      {
-      "name": "Miro Muheim",
-      "nr": "28",
-      "ampel": "gruen",
-      "grund": "3 von 4 Einsätzen in der Startelf · Ø 82 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 95
-     },
-     {
       "name": "Warmed Omari",
       "nr": "17",
       "ampel": "gruen",
@@ -3415,6 +3406,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 94
+     },
+     {
+      "name": "Miro Muheim",
+      "nr": "28",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 82 min · 4 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 79
      },
      {
       "name": "Jordan Torunarigha",
@@ -3488,7 +3489,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 8
+      "prozent": 20
      }
     ]
    },
