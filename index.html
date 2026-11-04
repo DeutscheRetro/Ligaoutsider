@@ -125,8 +125,8 @@
           <li style="padding:12px;color:#555">Lädt…</li>
         </ul>
         <p style="margin:8px 12px 4px;font-size:12px;display:flex;flex-direction:column;gap:4px">
-          <a href="bundesliga-heute.html" style="color:var(--accent)">Bundesliga heute: Spiele und TV-Sender →</a>
-          <a href="bundesliga-fragen.html" style="color:var(--accent)">Bundesliga-Fragen und Antworten →</a>
+          <a href="bundesliga-heute.html" style="color:var(--accent-text)">Bundesliga heute: Spiele und TV-Sender →</a>
+          <a href="bundesliga-fragen.html" style="color:var(--accent-text)">Bundesliga-Fragen und Antworten →</a>
         </p>
       </div>
 
@@ -343,7 +343,7 @@
           const isHeute = datum === 'HEUTE';
           const headerStyle = isHeute
             ? 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;background:#2e7d32;border-bottom:1px solid var(--item-border)'
-            : 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)';
+            : 'padding:6px 12px 4px;font-size:10px;font-weight:800;color:var(--accent-text);text-transform:uppercase;letter-spacing:.8px;background:var(--bg3);border-bottom:1px solid var(--item-border)';
           const rows = matches.map(m => {
             const finished = m.matchIsFinished;
             const goals1 = m.matchResults?.find(r=>r.resultTypeID===2)?.pointsTeam1 ?? m.matchResults?.[0]?.pointsTeam1;

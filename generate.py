@@ -1962,10 +1962,10 @@ def artikel_html(
       <h2>Kommentare</h2>
       <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
       <p id="k-gasthinweis" style="font-size:13px;color:var(--text4);margin-top:16px">
-        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent)">anmelden</a>, um Kommentare zu schreiben.
+        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent-text)">anmelden</a>, um Kommentare zu schreiben.
       </p>
       <form id="kommentar-form" style="display:none">
-        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent)"></strong></p>
+        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent-text)"></strong></p>
         <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
         <button type="submit" class="kommentar-btn">Kommentar absenden</button>
         <p id="kommentar-status"></p>
@@ -3317,10 +3317,10 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
       <h2>Kommentare</h2>
       <div id="kommentar-liste"><p class="kommentar-laden">Lade Kommentare…</p></div>
       <p id="k-gasthinweis" style="font-size:13px;color:var(--text4);margin-top:16px">
-        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent)">anmelden</a>, um Kommentare zu schreiben.
+        Bitte <a href="#" onclick="netlifyIdentity.open('login');return false;" style="color:var(--accent-text)">anmelden</a>, um Kommentare zu schreiben.
       </p>
       <form id="kommentar-form" style="display:none">
-        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent)"></strong></p>
+        <p id="k-eingeloggt" style="font-size:12px;color:var(--text4);margin-bottom:8px">Kommentieren als <strong id="k-username" style="color:var(--accent-text)"></strong></p>
         <textarea id="k-text" placeholder="Dein Kommentar…" maxlength="1000" required></textarea>
         <button type="submit" class="kommentar-btn">Kommentar absenden</button>
         <p id="kommentar-status"></p>
