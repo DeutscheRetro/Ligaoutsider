@@ -14,7 +14,7 @@
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
 <script src="/consent.js"></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Tidiam Gomis", "url": "https://ligaoutsider.de/spieler/tidiam-gomis.html", "jobTitle": "Fußballspieler", "memberOf": {"@type": "SportsTeam", "name": "RB Leipzig", "sport": "Fußball"}, "birthDate": "2006-08-08", "nationality": [{"@type": "Country", "name": "Frankreich"}, {"@type": "Country", "name": "Senegal"}]}</script>
 </head>

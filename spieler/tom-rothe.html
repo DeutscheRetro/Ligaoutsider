@@ -14,7 +14,7 @@
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
 <script src="/consent.js"></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Tom Rothe", "url": "https://ligaoutsider.de/spieler/tom-rothe.html", "jobTitle": "Fußballspieler", "memberOf": {"@type": "SportsTeam", "name": "1. FC Union Berlin", "sport": "Fußball"}, "birthDate": "2004-10-29", "nationality": [{"@type": "Country", "name": "Deutschland"}]}</script>
 </head>

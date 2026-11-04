@@ -14,7 +14,7 @@
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
 <script src="/consent.js"></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Nathan Tella", "url": "https://ligaoutsider.de/spieler/nathan-tella.html", "jobTitle": "Fußballspieler", "memberOf": {"@type": "SportsTeam", "name": "Bayer 04 Leverkusen", "sport": "Fußball"}, "birthDate": "1999-07-05", "nationality": [{"@type": "Country", "name": "Nigeria"}, {"@type": "Country", "name": "England"}]}</script>
 </head>

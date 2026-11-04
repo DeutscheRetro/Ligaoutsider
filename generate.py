@@ -1816,7 +1816,7 @@ def artikel_html(
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="../artikel.css"/>
   <link rel="icon" href="../favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
 <script src="/consent.js"></script>
   <script type="application/ld+json">
   {{
@@ -3342,7 +3342,7 @@ def _seite(titel, beschreibung, url, inhalt, head_extra="", tiefe="../", komment
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="{tiefe}style.css"/>
   <link rel="icon" href="{tiefe}favicon.png" type="image/png"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
 <script src="/consent.js"></script>
 {head_extra}</head>
 <body>

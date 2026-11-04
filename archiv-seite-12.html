@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Ligaoutsider.de"/>
   <meta property="og:locale" content="de_DE"/>
   <link rel="stylesheet" href="style.css"/>
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
   <link rel="icon" href="favicon.png" type="image/png"/>
   <style>
     .ds-wrap { max-width: 780px; margin: 40px auto; padding: 0 16px 60px; }

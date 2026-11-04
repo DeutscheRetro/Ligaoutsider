@@ -16,7 +16,7 @@
   <link rel="alternate" type="application/rss+xml" title="Ligaoutsider.de News" href="/rss.xml" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="favicon.png" type="image/png" />
-  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script>if((localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))==='light')document.documentElement.classList.add('light');</script>
   <script src="/auth.js"></script>
 <script src="/consent.js"></script>
 </head>
@@ -246,7 +246,7 @@
     }
 
     // Gespeicherte Präferenz laden
-    setTheme(localStorage.getItem('theme') === 'light');
+    setTheme((localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')) === 'light');
     btn.addEventListener('click', () => setTheme(!document.body.classList.contains('light')));
   </script>
 
