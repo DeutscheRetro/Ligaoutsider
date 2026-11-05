@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T15:32:25.360139+00:00",
+ "updated": "2026-11-05T17:02:12.836357+00:00",
  "spieltag": 9,
  "partien": [
   {
@@ -257,7 +257,18 @@
      "prozent": 16
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Jamal Musiala",
+     "nr": "10",
+     "ampel": "gelb",
+     "grund": "Nach Muskelfaserriss - absolviert Teile des Teamtrainings",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 4
+    }
+   ],
    "ausfall": [
     {
      "name": "Luis Díaz",
@@ -280,16 +291,6 @@
      "prozent": 0
     },
     {
-     "name": "Jamal Musiala",
-     "nr": "10",
-     "ampel": "rot",
-     "grund": "Nach Muskelfaserriss - trainiert individuell mit Ball, verpasst CL",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 0
-    },
-    {
      "name": "Serge Gnabry",
      "nr": "7",
      "ampel": "rot",
@@ -303,7 +304,7 @@
      "name": "Bara Sapoko Ndiaye",
      "nr": "39",
      "ampel": "rot",
-     "grund": "Blinddarm-Operation - fällt vorerst aus",
+     "grund": "Nach Blinddarm-Operation - dreht erste Laufrunden",
      "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
@@ -1298,7 +1299,7 @@
       "name": "Grischa Prömel",
       "nr": "21",
       "ampel": "gelb",
-      "grund": "angeschlagen",
+      "grund": "Kleinere Probleme - soll gegen SVW (H) zur Verfügung stehen",
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
@@ -1650,7 +1651,7 @@
      "name": "Patrick Osterhage",
      "nr": "6",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Muskuläre Probleme - verpasst ECL-Duell gegen Trabzonspor (A)",
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
@@ -1845,24 +1846,25 @@
      "name": "Robin Koch",
      "nr": "4",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Knieprobleme - fraglich für SCP (A)",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 38
-    },
+    }
+   ],
+   "ausfall": [
     {
      "name": "Mario Götze",
      "nr": "27",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
+     "ampel": "rot",
+     "grund": "Ohrenentzündung - fehlt im Teamtraining, verpasst ziemlich sicher SCP (A)",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 5
+     "prozent": 0
     }
-   ],
-   "ausfall": []
+   ]
   },
   "FC Augsburg": {
    "logo": "logos/augsburg.png",
@@ -2442,18 +2444,7 @@
      "prozent": 23
     }
    ],
-   "fraglich": [
-    {
-     "name": "Markus Kolke",
-     "nr": "25",
-     "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 2
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Mitchell Weiser",
@@ -2469,7 +2460,7 @@
      "name": "Paul Erevbenagie",
      "nr": "38",
      "ampel": "rot",
-     "grund": "verletzt",
+     "grund": "Sprunggelenksverletzung - zeitnahe Rückkehr auf den Platz geplant",
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
@@ -2496,16 +2487,6 @@
      "prozent": 0
     },
     {
-     "name": "Niklas Stark",
-     "nr": "4",
-     "ampel": "rot",
-     "grund": "Oberschenkelprobleme - trainiert individuell auf dem Platz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
      "name": "Keke Topp",
      "nr": "9",
      "ampel": "rot",
@@ -2513,6 +2494,16 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
+     "prozent": 0
+    },
+    {
+     "name": "Markus Kolke",
+     "nr": "25",
+     "ampel": "rot",
+     "grund": "Angeschlagen - verpasst VFB (A)",
+     "news": "",
+     "reihe": "tw",
+     "pos": "Torwart",
      "prozent": 0
     },
     {
@@ -3330,20 +3321,20 @@
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 34
+    },
+    {
+     "name": "Marvin Pieringer",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "6 von 8 Einsätzen in der Startelf · Ø 61 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 30
     }
    ],
    "fraglich": [],
    "ausfall": [
-    {
-     "name": "Marvin Pieringer",
-     "nr": "18",
-     "ampel": "rot",
-     "grund": "Umgeknickt - Rückkehr ins Teamtraining steht bevor",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
     {
      "name": "Oliver Batista Meier",
      "nr": "7",
@@ -4010,7 +4001,7 @@
      "name": "Daiki Hashioka",
      "nr": "14",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Muskuläre Probleme - fraglich für HSV (A)",
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
