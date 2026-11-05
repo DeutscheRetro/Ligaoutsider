@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T14:02:15.823921+00:00",
+ "updated": "2026-11-05T15:32:25.360139+00:00",
  "spieltag": 9,
  "partien": [
   {
@@ -1285,16 +1285,6 @@
     ],
     "mf": [
      {
-      "name": "Grischa Prömel",
-      "nr": "21",
-      "ampel": "gruen",
-      "grund": "5 von 8 Einsätzen in der Startelf · Ø 67 min",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 74
-     },
-     {
       "name": "Bilal El Khannouss",
       "nr": "11",
       "ampel": "gruen",
@@ -1303,6 +1293,16 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 72
+     },
+     {
+      "name": "Grischa Prömel",
+      "nr": "21",
+      "ampel": "gelb",
+      "grund": "angeschlagen",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 60
      },
      {
       "name": "Yanik Spalt",
@@ -1645,7 +1645,18 @@
      "prozent": 11
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Patrick Osterhage",
+     "nr": "6",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 5
+    }
+   ],
    "ausfall": [
     {
      "name": "Bruno Ogbus",
@@ -1712,14 +1723,14 @@
       "prozent": 91
      },
      {
-      "name": "Robin Koch",
-      "nr": "4",
+      "name": "Jeremiaha Maluze",
+      "nr": "37",
       "ampel": "gruen",
-      "grund": "8 von 8 Einsätzen in der Startelf · Ø 91 min",
+      "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 6 Spiele ohne Einsatz",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 83
+      "prozent": 63
      },
      {
       "name": "Keita Kosugi",
@@ -1827,19 +1838,30 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 32
-    },
+    }
+   ],
+   "fraglich": [
     {
-     "name": "Jeremiaha Maluze",
-     "nr": "37",
-     "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 99 min · 6 Spiele ohne Einsatz",
+     "name": "Robin Koch",
+     "nr": "4",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 29
+     "prozent": 38
+    },
+    {
+     "name": "Mario Götze",
+     "nr": "27",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 5
     }
    ],
-   "fraglich": [],
    "ausfall": []
   },
   "FC Augsburg": {
@@ -1956,7 +1978,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 97
+      "prozent": 83
      },
      {
       "name": "Michael Gregoritsch",
@@ -1990,6 +2012,16 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 21
+    },
+    {
+     "name": "Alexis Claude-Maurice",
+     "nr": "20",
+     "ampel": "gruen",
+     "grund": "Verletzung auskuriert, Startelf möglich",
+     "news": "artikel/augsburg-brackelmann-fehlt-in-leipzig-claude-maurice-vor-startelf-9092764ed9.html",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 19
     }
    ],
    "fraglich": [],
@@ -2204,26 +2236,26 @@
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 11
+    },
+    {
+     "name": "Ragnar Ache",
+     "nr": "9",
+     "ampel": "gruen",
+     "grund": "2 von 4 Einsätzen in der Startelf · Ø 50 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 10
     }
    ],
    "fraglich": [],
    "ausfall": [
     {
-     "name": "Ragnar Ache",
-     "nr": "9",
-     "ampel": "rot",
-     "grund": "Muskelverletzung, Einsatz noch zu früh",
-     "news": "artikel/koeln-ohne-ache-bei-union-wagner-plant-kleine-anpassungen-1e3f205db5.html",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
      "name": "Ellyes Skhiri",
      "nr": "6",
      "ampel": "rot",
-     "grund": "Fußverletzung",
-     "news": "artikel/koeln-ohne-ache-bei-union-wagner-plant-kleine-anpassungen-1e3f205db5.html",
+     "grund": "Syndesmoseriss - fällt rund 3 Monate aus",
+     "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 0
@@ -2232,8 +2264,8 @@
      "name": "Rav van den Berg",
      "nr": "33",
      "ampel": "rot",
-     "grund": "Muskelverletzung",
-     "news": "artikel/koeln-ohne-ache-bei-union-wagner-plant-kleine-anpassungen-1e3f205db5.html",
+     "grund": "Muskelfaserriss - fällt vorerst aus",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 0
@@ -2252,8 +2284,8 @@
      "name": "Timo Hübers",
      "nr": "4",
      "ampel": "rot",
-     "grund": "Reha nach zweiter Knieoperation",
-     "news": "artikel/koeln-ohne-ache-bei-union-wagner-plant-kleine-anpassungen-1e3f205db5.html",
+     "grund": "Nach schwerer Knieverletzung - im Reha-Training",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 0
@@ -2262,8 +2294,8 @@
      "name": "Imad Rondic",
      "nr": "15",
      "ampel": "rot",
-     "grund": "Muskelverletzung",
-     "news": "artikel/koeln-ohne-ache-bei-union-wagner-plant-kleine-anpassungen-1e3f205db5.html",
+     "grund": "Muskelverletzung im Oberschenkel - fällt vorerst aus",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -2410,7 +2442,18 @@
      "prozent": 23
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Markus Kolke",
+     "nr": "25",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "tw",
+     "pos": "Torwart",
+     "prozent": 2
+    }
+   ],
    "ausfall": [
     {
      "name": "Mitchell Weiser",
@@ -2420,6 +2463,16 @@
      "news": "artikel/werder-weiser-faellt-mit-oberschenkelverletzung-bis-auf-weiteres-aus-116b13241d.html",
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Paul Erevbenagie",
+     "nr": "38",
+     "ampel": "rot",
+     "grund": "verletzt",
+     "news": "",
+     "reihe": "st",
+     "pos": "Rechtsaußen",
      "prozent": 0
     },
     {
@@ -2540,21 +2593,11 @@
       "name": "Vladimír Coufal",
       "nr": "34",
       "ampel": "gelb",
-      "grund": "Oberschenkelschmerzen",
-      "news": "artikel/hoffenheim-vor-bremen-conte-fraglich-coufal-angeschlagen-1bb9852be2.html",
+      "grund": "Angeschlagen - verpasst Europa League",
+      "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
       "prozent": 60
-     },
-     {
-      "name": "Bernardo",
-      "nr": "13",
-      "ampel": "gruen",
-      "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 6 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 48
      }
     ],
     "mf": [
@@ -2567,6 +2610,16 @@
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 97
+     },
+     {
+      "name": "Alexander Prass",
+      "nr": "22",
+      "ampel": "gruen",
+      "grund": "2 von 3 Einsätzen in der Startelf · Ø 69 min · 5 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Linkes Mittelfeld",
+      "prozent": 82
      }
     ],
     "st": [
@@ -2614,6 +2667,16 @@
    },
    "bank": [
     {
+     "name": "Bernardo",
+     "nr": "13",
+     "ampel": "gruen",
+     "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 6 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 48
+    },
+    {
      "name": "Tim Lemperle",
      "nr": "19",
      "ampel": "gruen",
@@ -2649,8 +2712,8 @@
      "name": "Bambasé Conté",
      "nr": "20",
      "ampel": "gelb",
-     "grund": "Muskuläre Probleme in den Adduktoren",
-     "news": "artikel/hoffenheim-vor-bremen-conte-fraglich-coufal-angeschlagen-1bb9852be2.html",
+     "grund": "Muskuläre Probleme - verpasst auch Europa League",
+     "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 10
@@ -2667,16 +2730,6 @@
     }
    ],
    "ausfall": [
-    {
-     "name": "Alexander Prass",
-     "nr": "22",
-     "ampel": "rot",
-     "grund": "Gesperrt",
-     "news": "artikel/hoffenheim-vor-bremen-conte-fraglich-coufal-angeschlagen-1bb9852be2.html",
-     "reihe": "mf",
-     "pos": "Linkes Mittelfeld",
-     "prozent": 0
-    },
     {
      "name": "Robin Hranac",
      "nr": "2",
@@ -2794,6 +2847,16 @@
     ],
     "mf": [
      {
+      "name": "Kenan Karaman",
+      "nr": "19",
+      "ampel": "gruen",
+      "grund": "5 von 6 Einsätzen in der Startelf · Ø 79 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 97
+     },
+     {
       "name": "Satoshi Tanaka",
       "nr": "13",
       "ampel": "gruen",
@@ -2831,16 +2894,6 @@
       "news": "artikel/schalke-bangt-vor-hoffenheim-um-ebimbe-el-faouzi-und-gosens-zurueck-ec2fe9a4f2.html",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 60
-     },
-     {
-      "name": "Kenan Karaman",
-      "nr": "19",
-      "ampel": "gelb",
-      "grund": "Startelfeinsatz offen, Abschlusstraining entscheidet",
-      "news": "artikel/schalke-vor-leipzig-bachmann-und-vozar-fallen-aus-muslic-fordert-ebff9957cb.html",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
       "prozent": 60
      }
     ],
@@ -2960,16 +3013,6 @@
      "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 0
-    },
-    {
-     "name": "Luca Vozar",
-     "nr": "38",
-     "ampel": "rot",
-     "grund": "krankheitsbedingt",
-     "news": "artikel/schalke-vor-leipzig-bachmann-und-vozar-fallen-aus-muslic-fordert-ebff9957cb.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
      "prozent": 0
     }
    ]
@@ -3855,14 +3898,14 @@
       "prozent": 90
      },
      {
-      "name": "Daiki Hashioka",
-      "nr": "14",
+      "name": "Kevin Diks",
+      "nr": "4",
       "ampel": "gruen",
-      "grund": "4 von 6 Einsätzen in der Startelf · Ø 68 min · 2 Spiele ohne Einsatz",
+      "grund": "6 von 6 Einsätzen in der Startelf · Ø 98 min · 2 Spiele ohne Einsatz",
       "news": "",
       "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 47
+      "pos": "Innenverteidiger",
+      "prozent": 73
      }
     ],
     "mf": [
@@ -3942,16 +3985,6 @@
      "prozent": 40
     },
     {
-     "name": "Kevin Diks",
-     "nr": "4",
-     "ampel": "gruen",
-     "grund": "6 von 6 Einsätzen in der Startelf · Ø 98 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 39
-    },
-    {
      "name": "Franck Honorat",
      "nr": "9",
      "ampel": "gruen",
@@ -3973,6 +4006,16 @@
     }
    ],
    "fraglich": [
+    {
+     "name": "Daiki Hashioka",
+     "nr": "14",
+     "ampel": "gelb",
+     "grund": "angeschlagen",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 8
+    },
     {
      "name": "Jan Leszczyński",
      "nr": "5",
