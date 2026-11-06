@@ -133,9 +133,10 @@ def init(client) -> None:
     jetzt = datetime.datetime.now()                       # Workflow läuft mit TZ=Europe/Berlin
     monat, _tag = jetzt.strftime("%Y-%m"), jetzt.strftime("%Y-%m-%d")
     try:
-        _stand = json.loads(DATEI.read_text(encoding="utf-8"))
-    except Exception:
-        _stand = {}
+        _stand = json.loads(DATEI.read_text(encoding="utf-8")) if DATEI.exists() else {}
+    except Exception as ex:
+        # Leerer Stand hieße Monatsbudget wieder bei 0: lieber den Lauf anhalten
+        raise RuntimeError(f"{DATEI} nicht lesbar, Lauf abgebrochen: {ex}")
     if _stand.get("monat") != monat:
         _stand = {"monat": monat, "monat_usd": 0.0, "tage": {}}
     heute = _stand["tage"].setdefault(_tag, {"usd": 0.0, "laeufe": 0})
@@ -151,7 +152,9 @@ def init(client) -> None:
 
 def _speichern() -> None:
     DATEI.parent.mkdir(exist_ok=True)
-    DATEI.write_text(json.dumps(_stand, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp = DATEI.with_name(DATEI.name + ".tmp")
+    tmp.write_text(json.dumps(_stand, ensure_ascii=False, indent=1), encoding="utf-8")
+    os.replace(tmp, DATEI)
 
 
 def _laenge(messages: list) -> int:

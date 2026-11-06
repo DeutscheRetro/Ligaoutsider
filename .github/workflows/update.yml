@@ -143,6 +143,8 @@ jobs:
 
           git stash -u 2>/dev/null || true
           git pull --rebase -X theirs origin main
+          # "-X theirs" kann Feed-Einträge anderer Workflows (Aufstellungen) verwerfen: zurückholen
+          python feed_nachziehen.py || { git add feed.json && git commit --amend --no-edit; }
           git stash pop 2>/dev/null || true
           git push
           echo "veroeffentlicht=true" >> "$GITHUB_ENV"

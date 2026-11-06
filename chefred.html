@@ -78,6 +78,9 @@
     .user-table th{text-align:left;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;border-bottom:1px solid #222}
     .user-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;font-size:13px;vertical-align:middle}
     .user-table tr:hover td{background:#161616}
+    .user-table th.sortierbar button{all:unset;cursor:pointer;color:inherit;font:inherit;text-transform:inherit;letter-spacing:inherit}
+    .user-table th.sortierbar button:hover,.user-table th[aria-sort="ascending"] button,.user-table th[aria-sort="descending"] button{color:#e8c000}
+    .user-table th.sortierbar button:focus-visible{outline:2px solid #e8c000;outline-offset:2px}
     .banned-row td{opacity:.4}
     .banned-badge{display:inline-block;font-size:10px;background:#c62828;color:#fff;padding:2px 6px;border-radius:3px;font-weight:700;margin-left:6px}
   </style>
@@ -856,11 +859,36 @@ async function ladeModerationsdaten() {
   }
 }
 
+// Spalte -> Sortierwert; Klick auf den Kopf sortiert, zweiter Klick dreht die Richtung
+const NUTZER_SPALTEN = [
+  ['name', 'Name', u => (u.name || '').toLowerCase()],
+  ['email', 'E-Mail', u => u.email],
+  ['rollen', 'Rollen', u => (u.rollen || []).length],
+  ['kommentare', 'Komm.', u => u.kommentare || 0],
+  ['forum', 'Forum', u => (u.threads || 0) + (u.posts || 0)],
+  ['registriert', 'Registriert', u => u.registriert || ''],
+  ['aktiv', 'Letzte Aktivität', u => u.letzte_aktivitaet || ''],
+];
+let nutzerSort = { key: 'registriert', ab: true };
+
+function nutzerSortieren(key) {
+  nutzerSort = { key, ab: nutzerSort.key === key ? !nutzerSort.ab : key !== 'name' && key !== 'email' };
+  renderNutzer();
+}
+
 function renderNutzer() {
   const el = document.getElementById('mod-inhalt');
   const q = (document.getElementById('mod-suche')?.value || '').trim().toLowerCase();
+  const wert = NUTZER_SPALTEN.find(s => s[0] === nutzerSort.key)[2];
   const liste = nutzerListe.filter(u =>
-    !q || u.email.includes(q) || (u.name || '').toLowerCase().includes(q));
+    !q || u.email.includes(q) || (u.name || '').toLowerCase().includes(q))
+    .sort((a, b) => {
+      const x = wert(a), y = wert(b);
+      // leere Werte immer ans Ende, egal in welche Richtung
+      if (x === '' || y === '') return (x === '') - (y === '');
+      const c = typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'de');
+      return nutzerSort.ab ? -c : c;
+    });
 
   if (!nutzerListe.length) {
     el.innerHTML = '<p style="color:#555">Noch keine Nutzer mit Aktivität, Rolle oder Sperre.</p>';
@@ -881,8 +909,10 @@ function renderNutzer() {
     <table class="user-table">
       <thead>
         <tr>
-          <th>Name</th><th>E-Mail</th><th>Rollen</th>
-          <th>Komm.</th><th>Forum</th><th>Registriert</th><th>Letzte Aktivität</th><th></th>
+          ${NUTZER_SPALTEN.map(([key, titel]) => {
+            const an = nutzerSort.key === key;
+            return `<th class="sortierbar" aria-sort="${an ? (nutzerSort.ab ? 'descending' : 'ascending') : 'none'}"><button type="button" onclick="nutzerSortieren('${key}')">${titel}${an ? (nutzerSort.ab ? ' ▼' : ' ▲') : ''}</button></th>`;
+          }).join('')}<th></th>
         </tr>
       </thead>
       <tbody>

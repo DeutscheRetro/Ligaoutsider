@@ -324,6 +324,15 @@
       <a href="forum.html">💬 Forum<small>Mitdiskutieren</small></a>
       <a href="community.html">🏆 Community-Stats<small>Ranglisten und Top-Kommentare</small></a></div></section>`;
 
+    let favLaeuft = false;   // Doppelklick: der zweite Klick nähme den Favoriten sofort wieder raus
+    async function favUmschalten(id) {
+      if (favLaeuft) return;
+      favLaeuft = true;
+      try { const d = await loKonto.favorit(id); daten.favoriten = d.favoriten; } catch (err) { alert(err.message); }
+      finally { favLaeuft = false; }
+      zeichnen();
+    }
+
     function zeichnen() {
       sub.textContent = 'Willkommen zurück';
       box.innerHTML = naechstesSpielBox() + tippBox() + alarmBox() + vereinBox() + favBox() + tools;
@@ -331,10 +340,7 @@
         try { await loKonto.verein(e.target.value); daten.verein = e.target.value; } catch (err) { alert(err.message); }
         zeichnen();
       };
-      box.querySelectorAll('.mb-weg').forEach(b => b.onclick = async () => {
-        try { const d = await loKonto.favorit(b.dataset.id); daten.favoriten = d.favoriten; } catch (err) { alert(err.message); }
-        zeichnen();
-      });
+      box.querySelectorAll('.mb-weg').forEach(b => b.onclick = () => favUmschalten(b.dataset.id));
       const s = document.getElementById('mb-suche');
       s.oninput = () => {
         const q = s.value.trim().toLowerCase();
@@ -342,10 +348,9 @@
         if (q.length < 2) { t.innerHTML = ''; return; }
         const hit = Object.entries(kurz).filter(([, k]) => k.n.toLowerCase().includes(q)).slice(0, 8);
         t.innerHTML = hit.map(([i, k]) => `<a href="#" data-id="${i}"><span>${esc(k.n)} <small>${esc(k.v)}</small></span><small>${(daten.favoriten || []).map(String).includes(i) ? '★ Favorit' : '+ hinzufügen'}</small></a>`).join('');
-        t.querySelectorAll('a').forEach(a => a.onclick = async ev => {
+        t.querySelectorAll('a').forEach(a => a.onclick = ev => {
           ev.preventDefault();
-          try { const d = await loKonto.favorit(a.dataset.id); daten.favoriten = d.favoriten; } catch (err) { alert(err.message); }
-          zeichnen();
+          favUmschalten(a.dataset.id);
         });
       };
     }

@@ -385,23 +385,34 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
     async logout() {
       const t = sitzung && sitzung.access;
       speichern(null);
-      if (t) auth('logout', null, t).catch(() => {});
+      if (t) auth('logout?scope=local', null, t).catch(() => {});   // nur dieses Gerät abmelden
       feuern('logout');
     },
   };
 
   // ─── Admin-Link für Redaktion (auf jeder Seite mit Anmeldung) ───────────────
+  // Eine Server-Abfrage "wer bin ich" pro Seite statt zwei bis drei (Kopfzeile, Startseite, Kommentare)
+  let werCache = null;
+  window.loWerBinIch = u => {
+    if (!werCache || werCache.email !== u.email) {
+      const p = u.jwt().then(t => fetch('/api', { method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + t },
+        body: JSON.stringify({ aktion: 'wer_bin_ich' }) }))
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('Fehler ' + r.status)));
+      werCache = { email: u.email, p };
+      p.catch(() => { if (werCache && werCache.p === p) werCache = null; });
+    }
+    return werCache.p;
+  };
+  window.netlifyIdentity.on('logout', () => { werCache = null; });
+
   async function adminLinkPruefen(u) {
     const alt = document.getElementById('admin-link');
     if (!u) { if (alt) alt.remove(); return; }
     const ui = document.getElementById('user-info');
     if (!ui || alt) return;
     try {
-      const t = await u.jwt();
-      const r = await fetch('/api', { method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + t },
-        body: JSON.stringify({ aktion: 'wer_bin_ich' }) });
-      const w = await r.json();
+      const w = await window.loWerBinIch(u);
       if (!w.darfLoeschen || document.getElementById('admin-link')) return;
       const a = document.createElement('a');
       a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';

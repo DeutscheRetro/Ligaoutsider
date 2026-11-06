@@ -82,9 +82,10 @@ export async function holeAlle(pfad, max = 50000) {
 }
 
 // Teure öffentliche Auswertungen kurz zwischenspeichern, damit nicht jeder Aufruf die Datenbank leert
-async function gecached(request, erzeuge) {
+// Schlüssel nur aus den bekannten Parametern: angehängte Zufallsparameter treffen sonst nie den Cache
+async function gecached(request, teil, erzeuge) {
   if (typeof caches === "undefined") return erzeuge();
-  const schluessel = new Request(request.url, { method: "GET" });
+  const schluessel = new Request(`${new URL(request.url).origin}/api?${teil}`, { method: "GET" });
   const treffer = await caches.default.match(schluessel);
   if (treffer) return treffer;
   const antwort = await erzeuge();
@@ -402,7 +403,7 @@ async function umfrage(request) {
     const aid = new URL(request.url).searchParams.get("umfrage") || "";
     if (!UMFRAGE_ID.test(aid)) return json(400, { fehler: "Ungültige ID" });
     try {
-      return await gecached(request, async () => new Response(JSON.stringify({ zaehler: await umfrageZaehler(aid) }), {
+      return await gecached(request, `umfrage=${aid}`, async () => new Response(JSON.stringify({ zaehler: await umfrageZaehler(aid) }), {
         status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=30" } }));
     } catch (e) { return json(503, { fehler: "nicht verfügbar" }); }
   }
@@ -460,7 +461,7 @@ export async function onRequest({ request, env }) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
       const st = parseInt(new URL(request.url).searchParams.get("spieltag") || "0", 10) || 0;
-      return await gecached(request, async () => new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
+      return await gecached(request, `tipp_rangliste&spieltag=${st}`, async () => new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } }));
     } catch (e) { return json(500, { fehler: "Rangliste nicht verfügbar" }); }
   }
@@ -483,7 +484,7 @@ export async function onRequest({ request, env }) {
   if (request.method === "GET" && new URL(request.url).searchParams.has("community")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
-      return await gecached(request, async () => new Response(JSON.stringify(await communityStats()), { status: 200,
+      return await gecached(request, "community", async () => new Response(JSON.stringify(await communityStats()), { status: 200,
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" } }));
     } catch (e) { return json(500, { fehler: "Stats nicht verfügbar" }); }
   }
@@ -491,7 +492,7 @@ export async function onRequest({ request, env }) {
   if (request.method === "GET" && new URL(request.url).searchParams.has("kommentar_zaehler")) {
     if (!SERVICE_KEY) return json(200, {});
     try {
-      return await gecached(request, async () => {
+      return await gecached(request, "kommentar_zaehler", async () => {
         const zeilen = await holeAlle("kommentare?select=artikel_id&geloescht=is.false&order=id");
         const zaehler = {};
         zeilen.forEach(k => { zaehler[k.artikel_id] = (zaehler[k.artikel_id] || 0) + 1; });
@@ -506,7 +507,7 @@ export async function onRequest({ request, env }) {
       .map(x => parseInt(x, 10)).filter(x => x > 0 && x < 1e7))].slice(0, 40);
     if (!SERVICE_KEY || !ids.length) return json(200, {});
     try {
-      return await gecached(request, async () => new Response(JSON.stringify(await spielTendenz(ids)), { status: 200,
+      return await gecached(request, `spiel_tendenz=${[...ids].sort((a, b) => a - b).join(",")}`, async () => new Response(JSON.stringify(await spielTendenz(ids)), { status: 200,
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } }));
     } catch (e) { return json(200, {}); }
   }
@@ -986,11 +987,16 @@ export async function onRequest({ request, env }) {
         const betroffen = await hole(
           `nachrichten?or=(and(von_email.eq.${encodeURIComponent(email)},an_email.eq.${encodeURIComponent(partner)}),` +
           `and(von_email.eq.${encodeURIComponent(partner)},an_email.eq.${encodeURIComponent(email)}))&select=id,geloescht_von`);
+        // Ein PATCH je neuem Wert statt je Nachricht: Cloudflare erlaubt nur 50 Unteranfragen pro Aufruf
+        const gruppen = new Map();
         for (const n of betroffen || []) {
-          const markiert = new Set(n.geloescht_von || []);
-          markiert.add(email);
-          await aendere("nachrichten", `id=eq.${n.id}`, { geloescht_von: [...markiert] });
+          if ((n.geloescht_von || []).includes(email)) continue;
+          const neu = JSON.stringify([...(n.geloescht_von || []), email].sort());
+          gruppen.set(neu, [...(gruppen.get(neu) || []), n.id]);
         }
+        for (const [neu, ids] of gruppen)
+          for (let i = 0; i < ids.length; i += 200)
+            await aendere("nachrichten", `id=in.(${ids.slice(i, i + 200).join(",")})`, { geloescht_von: JSON.parse(neu) });
         return json(200, { ok: true, betroffen: (betroffen || []).length });
       }
 

@@ -53,7 +53,7 @@
     // dient nur noch dem Nachweis, wer man ist.
     let wer = {};
     try {
-      wer = await api('wer_bin_ich');
+      wer = window.loWerBinIch ? await window.loWerBinIch(user) : await api('wer_bin_ich');
       isAdmin = !!wer.istAdmin;
       darfLoeschen = !!wer.darfLoeschen;
       eigenerBan = wer.ban || null;
@@ -492,6 +492,16 @@
   document.getElementById('kommentar-form')?.addEventListener('submit', async e => {
     e.preventDefault();
     if (!aktuellerUser) return;
+    // Doppelklick: zweites Absenden ignorieren, solange das erste läuft
+    const form = e.currentTarget, knopf = form.querySelector('[type=submit]');
+    if (form.dataset.sendet) return;
+    form.dataset.sendet = '1';
+    if (knopf) knopf.disabled = true;
+    try { await kommentarSenden(); }
+    finally { delete form.dataset.sendet; if (knopf) knopf.disabled = false; }
+  });
+
+  async function kommentarSenden() {
 
     const ban = await pruefeBan();
     if (ban) { ladeKommentare(); return; }
@@ -518,7 +528,7 @@
       setTimeout(() => { status.textContent = ''; }, 3000);
       ladeKommentare();
     }
-  });
+  }
 
   // ─── Einladung für Gäste: Google-Button oder E-Mail-Registrierung ────────────
   (function gastBox() {

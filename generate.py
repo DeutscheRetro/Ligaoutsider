@@ -41,6 +41,12 @@ load_dotenv()
 
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
+# Logs älter als 14 Tage löschen (Datum aus dem Dateinamen, im Checkout ist jede Datei "neu"); die Git-Historie behält sie
+_log_grenze = (datetime.datetime.now() - datetime.timedelta(days=14)).strftime("%Y%m%d")
+for _f in LOG_DIR.iterdir():
+    _m = re.search(r"_(\d{8})", _f.name)
+    if _m and _m.group(1) < _log_grenze:
+        _f.unlink()
 _run_ts = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 logging.basicConfig(
     level=logging.INFO,
@@ -974,8 +980,9 @@ def lade_published_stories() -> list[dict]:
         return []
     try:
         return json.loads(PUBLISHED_JSON.read_text(encoding="utf-8"))
-    except Exception:
-        return []
+    except Exception as ex:
+        # Leere Liste hieße: alle veröffentlichten Artikel vergessen, Dubletten folgen
+        raise RuntimeError(f"published_stories.json nicht lesbar, Lauf abgebrochen: {ex}")
 
 NEWS_ARCHIVE_JSON = Path("data/news_archive.json")
 
@@ -989,6 +996,8 @@ def lade_news_archive() -> list[dict]:
     return []
 
 def speichere_news_archive(archive: list[dict]):
+    # Gelesen werden höchstens 14 Tage (storys.ARCHIV_TAGE), 30 behalten reicht
+    archive = [e for e in archive if _ist_innerhalb_tage(e.get("published_at", ""), days=30)]
     _atomar_schreiben(NEWS_ARCHIVE_JSON, json.dumps(archive, ensure_ascii=False, indent=2))
 
 def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
@@ -1018,9 +1027,14 @@ def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
         if new_club and old_club and new_club != old_club:
             continue
 
-        # Spieler-Überschneidung?
+        # Spieler-Überschneidung? Fehlt auf einer Seite die Liste, reichen Klub und Stufe nicht:
+        # dann muss auch der Titel ähnlich sein (sonst fiel z. B. jedes zweite Gladbach-Transferthema raus)
         if new_players and old_players and not (new_players & old_players):
             continue
+        if not (new_players and old_players):
+            from rapidfuzz import fuzz
+            if fuzz.token_set_ratio(titel.lower(), (entry.get("title") or "").lower()) < 70:
+                continue
 
         # Gleiche event_stage → echtes Duplikat
         if new_stage == old_stage and new_stage not in ("sonstiges", ""):
@@ -2268,8 +2282,7 @@ def main():
                 continue
 
             # ── Stage 3: Keyword Pre-Filter (kein Haiku-Call) ────────────────
-            _ist_kicker_team = "rss.kicker.de/news/" in feed_url
-            if not _ist_kicker_team and not keyword_pre_filter(titel, beschr):
+            if not keyword_pre_filter(titel, beschr):
                 log.info(f"S3 keyword miss: {titel[:60]}")
                 _log_skip(aid, titel, "stage3", "keyword_pre_filter")
                 (ARTIKEL_ORDNER / f"{aid}.skip").touch()
@@ -2582,88 +2595,95 @@ def main():
     approved = final_approved
 
     # ── Stage 9/10: Publish & Persist ────────────────────────────────────────
+    fehlgeschlagen = set()
     for k in approved:
-        ergebnis = k["ergebnis"]
-        aid = k["aid"]
-        _wu = k["wappen_url"]
-        _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
-        _bild = spielerbild(ergebnis.get("spieler") or [])
-        _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu, _bild[0] if _bild else None)
-        _umfrage = umfrage.waehlen(ergebnis.get("ereignis", ""), ergebnis["kategorie"], ergebnis["text"],
-                                   ergebnis.get("umfrage"))
-        html = artikel_html(
-            datei_id    = aid,
-            titel       = ergebnis["titel"],
-            text        = ergebnis["text"],
-            kategorie   = ergebnis["kategorie"],
-            quelle_name = k["quelle_name"],
-            quelle_url  = k.get("quelle_link") or k["url"],
-            datum       = k["datum"],
-            wappen_url  = _artikel_wu,
-            vereine     = k["vereine"],
-            og_image_url = _og_url,
-            dateiname   = f"{artikel_slug(ergebnis['titel'])}-{aid}.html",
-            quelle2_url = k.get("quelle2_url", ""),
-            verwandte   = k.get("verwandte") or [],
-            bild        = _bild,
-            umfrage_daten = _umfrage,
-        )
-        _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
-        _datei.write_text(html, encoding="utf-8")
-        _ARTIKEL_DATEIEN[aid] = _datei
-        badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
-        feed_entry = {
-            "id":         aid,
-            "titel":      ergebnis["titel"],
-            "kategorie":  ergebnis["kategorie"],
-            "badge":      badge_label,
-            "badge_bg":   badge_bg,
-            "badge_fg":   badge_fg,
-            "datum":      k["datum"],
-            "wappen_url": k["wappen_url"],
-            "vereine":    k["vereine"],
-            "anriss":     " ".join(ergebnis["text"].split()[:30]),
-            "spielerstatus": [x for x in (ergebnis.get("spielerstatus") or [])
-                              if isinstance(x, dict) and x.get("spieler") and x.get("status")],
-            "formation":  (ergebnis.get("formation") or "").strip(),
-            "hauptklub":  ergebnis.get("hauptklub", ""),
-            "pfad":       f"artikel/{_datei.name}",
-            "bild_tm":    _bild[0] if _bild else "",
-            "umfrage":    _umfrage,
-        }
-        bestehende.append(feed_entry)
-        feed_speichern(bestehende)
+        # Ein kaputter Datensatz soll nicht die folgenden Artikel mitreißen
+        try:
+            ergebnis = k["ergebnis"]
+            aid = k["aid"]
+            _wu = k["wappen_url"]
+            _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
+            _bild = spielerbild(ergebnis.get("spieler") or [])
+            _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu, _bild[0] if _bild else None)
+            _umfrage = umfrage.waehlen(ergebnis.get("ereignis", ""), ergebnis["kategorie"], ergebnis["text"],
+                                       ergebnis.get("umfrage"))
+            html = artikel_html(
+                datei_id    = aid,
+                titel       = ergebnis["titel"],
+                text        = ergebnis["text"],
+                kategorie   = ergebnis["kategorie"],
+                quelle_name = k["quelle_name"],
+                quelle_url  = k.get("quelle_link") or k["url"],
+                datum       = k["datum"],
+                wappen_url  = _artikel_wu,
+                vereine     = k["vereine"],
+                og_image_url = _og_url,
+                dateiname   = f"{artikel_slug(ergebnis['titel'])}-{aid}.html",
+                quelle2_url = k.get("quelle2_url", ""),
+                verwandte   = k.get("verwandte") or [],
+                bild        = _bild,
+                umfrage_daten = _umfrage,
+            )
+            _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
+            _datei.write_text(html, encoding="utf-8")
+            _ARTIKEL_DATEIEN[aid] = _datei
+            badge_label, badge_bg, badge_fg = badge_fuer_kategorie(ergebnis["kategorie"])
+            feed_entry = {
+                "id":         aid,
+                "titel":      ergebnis["titel"],
+                "kategorie":  ergebnis["kategorie"],
+                "badge":      badge_label,
+                "badge_bg":   badge_bg,
+                "badge_fg":   badge_fg,
+                "datum":      k["datum"],
+                "wappen_url": k["wappen_url"],
+                "vereine":    k["vereine"],
+                "anriss":     " ".join(ergebnis["text"].split()[:30]),
+                "spielerstatus": [x for x in (ergebnis.get("spielerstatus") or [])
+                                  if isinstance(x, dict) and x.get("spieler") and x.get("status")],
+                "formation":  (ergebnis.get("formation") or "").strip(),
+                "hauptklub":  ergebnis.get("hauptklub", ""),
+                "pfad":       f"artikel/{_datei.name}",
+                "bild_tm":    _bild[0] if _bild else "",
+                "umfrage":    _umfrage,
+            }
+            bestehende.append(feed_entry)
+            feed_speichern(bestehende)
 
-        # Persistenter State updaten
-        published_stories.append({
-            "id":             aid,
-            "generated_title": ergebnis["titel"],
-            "original_url":   k["url"],
-            "fingerprint":    k.get("fingerprint"),
-            "published_at":   datetime.datetime.now().isoformat(),
-            "source":         k["quelle_name"],
-        })
-        speichere_published_stories(published_stories)
+            # Persistenter State updaten
+            published_stories.append({
+                "id":             aid,
+                "generated_title": ergebnis["titel"],
+                "original_url":   k["url"],
+                "fingerprint":    k.get("fingerprint"),
+                "published_at":   datetime.datetime.now().isoformat(),
+                "source":         k["quelle_name"],
+            })
+            speichere_published_stories(published_stories)
 
-        # news_archive.json Eintrag
-        fp = k.get("fingerprint") or {}
-        archive_entry = {
-            "id":           aid,
-            "title":        ergebnis["titel"],
-            "published_at": datetime.datetime.now().isoformat(),
-            "main_club":    fp.get("main_club", ""),
-            "event_stage":  fp.get("event_stage", "sonstiges"),
-            "summary":      fp.get("summary") or fp.get("one_sentence_summary", ""),
-            "main_players": storys._liste(fp.get("main_players")),
-            "schluessel":   fp.get("schluessel", ""),
-            "source_url":   k["url"],
-        }
-        news_archive.append(archive_entry)
-        speichere_news_archive(news_archive)
+            # news_archive.json Eintrag
+            fp = k.get("fingerprint") or {}
+            archive_entry = {
+                "id":           aid,
+                "title":        ergebnis["titel"],
+                "published_at": datetime.datetime.now().isoformat(),
+                "main_club":    fp.get("main_club", ""),
+                "event_stage":  fp.get("event_stage", "sonstiges"),
+                "summary":      fp.get("summary") or fp.get("one_sentence_summary", ""),
+                "main_players": storys._liste(fp.get("main_players")),
+                "schluessel":   fp.get("schluessel", ""),
+                "source_url":   k["url"],
+            }
+            news_archive.append(archive_entry)
+            speichere_news_archive(news_archive)
 
-        neu_generiert += 1
-        stats["published"] += 1
-        log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
+            neu_generiert += 1
+            stats["published"] += 1
+            log.info(f"Veröffentlicht: {ergebnis['titel'][:60]}")
+        except Exception as e:
+            log.error(f"Veröffentlichen fehlgeschlagen ({k['aid']}): {e}", exc_info=True)
+            fehlgeschlagen.add(k["aid"])
+    approved = [k for k in approved if k["aid"] not in fehlgeschlagen]
 
     sitemap_generieren(bestehende)
     rss_generieren(bestehende)

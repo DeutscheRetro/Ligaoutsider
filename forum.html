@@ -406,8 +406,9 @@
       document.getElementById('modal-status').textContent = '';
     }
 
+    let sendetGerade = false;   // Doppelklick: zweites Absenden ignorieren, solange das erste läuft
     async function erstelleThread() {
-      if (!aktuellerUser) return;
+      if (!aktuellerUser || sendetGerade) return;
       const titel  = document.getElementById('neu-titel').value.trim();
       const inhalt = document.getElementById('neu-text').value.trim();
       const status = document.getElementById('modal-status');
@@ -417,10 +418,12 @@
       const email = aktuellerUser.email;
 
       let thread;
+      sendetGerade = true;
       try {
         const r = await loApi('forum_thread_neu', { kategorie: aktiveKat, titel, inhalt });
         thread = { id: r.thread_id, titel, antworten: 0 };
       } catch (e) { status.textContent = 'Fehler: ' + e.message; return; }
+      finally { sendetGerade = false; }
 
       schliesseModal();
       aktiverThread = thread;
@@ -428,7 +431,7 @@
     }
 
     async function sendeAntwort() {
-      if (!aktuellerUser || !aktiverThread) return;
+      if (!aktuellerUser || !aktiverThread || sendetGerade) return;
       const inhalt = document.getElementById('antwort-text').value.trim();
       const status = document.getElementById('antwort-status');
       if (!inhalt) return;
@@ -437,8 +440,10 @@
       const email = aktuellerUser.email;
 
       let r;
+      sendetGerade = true;
       try { r = await loApi('forum_post_neu', { thread_id: aktiverThread.id, inhalt }); }
       catch (e) { status.textContent = 'Fehler: ' + e.message; return; }
+      finally { sendetGerade = false; }
 
       aktiverThread.antworten = r.antworten ?? (aktiverThread.antworten || 0) + 1;
       status.textContent = '✓ Gesendet!';

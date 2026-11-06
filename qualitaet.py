@@ -211,9 +211,9 @@ def main():
     zeit = {x["id"]: _datum(x.get("datum", "")) or datetime.datetime.min for x in feed}
     stand["geprueft"] = sorted(geprueft, key=lambda i: zeit.get(i, datetime.datetime.min))[-1000:]
     stand["letzte_pruefung"] = datetime.datetime.now().strftime(FORMAT)
-    gen.FEED_JSON.write_text(json.dumps(feed, ensure_ascii=False, indent=2), encoding="utf-8")
-    STAND.write_text(json.dumps(stand, ensure_ascii=False, indent=1), encoding="utf-8")
-    LOG.write_text(json.dumps(log[-2000:], ensure_ascii=False, indent=1), encoding="utf-8")
+    gen._atomar_schreiben(gen.FEED_JSON, json.dumps(feed, ensure_ascii=False, indent=2))
+    gen._atomar_schreiben(STAND, json.dumps(stand, ensure_ascii=False, indent=1))
+    gen._atomar_schreiben(LOG, json.dumps(log[-2000:], ensure_ascii=False, indent=1))
     print(f"Fertig: {geaendert} von {len(offen)} Artikeln verbessert | {ki_budget.bericht().get('abo_tokens', {}).get('qualitaet')}")
 
 

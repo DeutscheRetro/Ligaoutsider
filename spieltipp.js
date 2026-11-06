@@ -151,6 +151,7 @@
     info('');
     try {
       const st = await api('spiel_tipp_status', { spiel_id: Number(z.dataset.spiel) });
+      if (aktuell !== z) return;   // inzwischen ein anderes Spiel geöffnet
       if (st.genau) {
         wahlZeigen(false);
         info(`Dein Tipp im Tippspiel: ${st.genau.h}:${st.genau.g}.`, { href: '/tippspiel.html', text: 'Im Tippspiel ändern →' });
@@ -165,15 +166,18 @@
   }
 
   async function tippen(i) {
+    const z = aktuell;
     pop.querySelectorAll('.sp-wahl button').forEach(b => { b.disabled = true; });
     try {
-      const a = await api('spiel_tipp', { spiel_id: Number(aktuell.dataset.spiel), antwort: i });
-      tendenz[aktuell.dataset.spiel] = a.zaehler;
+      const a = await api('spiel_tipp', { spiel_id: Number(z.dataset.spiel), antwort: i });
+      tendenz[z.dataset.spiel] = a.zaehler;
+      zeichnen(z);
+      if (aktuell !== z) return;   // Pop-up zeigt schon ein anderes Spiel
       wahlZeigen(true, i);
       ergebnis(a.zaehler, i);
-      zeichnen(aktuell);
       pop.querySelector('.sp-fuss').textContent = 'Danke für deinen Tipp. Ändern geht bis 5 Minuten vor Anpfiff.';
     } catch (e) {
+      if (aktuell !== z) return;
       wahlZeigen(true, -1);
       info(e.message);
     }
