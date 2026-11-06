@@ -28,6 +28,7 @@ from slugify import slugify
 from url_cache import URLCache
 import ki_budget
 import storys
+import umfrage
 from ki_budget import BudgetErschoepft
 
 load_dotenv()
@@ -1431,9 +1432,13 @@ def _schema_artikel() -> dict:
                 "additionalProperties": False,
             }},
             "formation": {"type": "string"},
+            "umfrage": {"type": "object", "properties": {
+                "typ": {"type": "string", "enum": ["keine", "deal", "recht"]},
+                "frage": {"type": "string"},
+            }, "required": ["typ", "frage"], "additionalProperties": False},
         },
         "required": ["relevant", "genug_stoff", "titel", "text", "kategorie", "hauptklub", "ereignis",
-                     "spieler", "kurzfassung", "spielerstatus", "formation"],
+                     "spieler", "kurzfassung", "spielerstatus", "formation", "umfrage"],
         "additionalProperties": False,
     }
 
@@ -1529,7 +1534,16 @@ Fülle diese Felder:
   Text), klub, status (faellt_aus | fraglich | spielt = wieder fit | startelf = Startelfeinsatz angekündigt),
   grund (max. 8 Wörter). Keine Transfers, keine Gerüchte, keine Vermutungen. Sonst leere Liste.
 - formation: nur wenn die Quellen die Grundordnung für das nächste Spiel des Hauptklubs mit Zahlen nennen
-  (z. B. "4-2-3-1"). Sonst ""."""
+  (z. B. "4-2-3-1"). Sonst "".
+- umfrage: eine Ein-Klick-Frage an die Leser, nur wenn sie wirklich passt. Sonst typ "keine" und frage "".
+  typ "deal": bei Transfer, Gerücht, Angebot oder Vertrag. Eine Frage, die man mit „Guter Deal“ oder „Fehler“
+  beantwortet, mit Spieler und Klub: „Wäre Zubimendi ein guter Deal für Bayern?“, „Ist Kobels Verlängerung ein
+  guter Deal für den BVB?“
+  typ "recht": wenn eine Person im Artikel eine klare Meinung, Forderung oder Kritik äußert (mit Zitat).
+  Die Frage beginnt mit „Hat <Nachname> recht“, gern mit kurzem Bezug: „Hat Hoeneß recht mit seiner Kritik
+  an der Länderspielpause?“
+  Regeln: höchstens 90 Zeichen, nur Namen und Fakten aus dem Text, keine Unterstellung, nichts zu Gesundheit,
+  Privatleben, Tod, Ermittlungen oder Vorwürfen. Bei Verletzungen und Spielberichten immer "keine"."""
 
     antwort = ki_budget.aufruf(
         "schreiben", model=model, max_tokens=SCHREIB_MAX_TOKENS, reserve=reserve, effort=effort,
@@ -1723,6 +1737,7 @@ def artikel_html(
     quelle2_url: str = "",
     verwandte: list = None,
     bild: tuple | None = None,
+    umfrage_daten: dict | None = None,
 ) -> str:
     from html import escape as _esc, unescape as _unesc
     # Texte aus Feeds und von der KI sind nicht vertrauenswürdig: für HTML escapen, für JSON-LD getrennt behandeln
@@ -1947,6 +1962,8 @@ def artikel_html(
         {absaetze}
       </div>
 
+      {umfrage.box_html(datei_id, umfrage_daten)}
+
       {verwandte_html}
 
       {vereine_tags_html}
@@ -1981,6 +1998,7 @@ def artikel_html(
   </script>
   <script src="/vendor/supabase.min.js"></script>
   <script src="../kommentare.js"></script>
+  <script src="../umfrage.js" defer></script>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -2565,6 +2583,8 @@ def main():
         _artikel_wu = ("../" + _wu) if _wu and _wu.startswith("logos/") else _wu
         _bild = spielerbild(ergebnis.get("spieler") or [])
         _og_url = og_karte(aid, ergebnis["titel"], ergebnis["kategorie"], _wu, _bild[0] if _bild else None)
+        _umfrage = umfrage.waehlen(ergebnis.get("ereignis", ""), ergebnis["kategorie"], ergebnis["text"],
+                                   ergebnis.get("umfrage"))
         html = artikel_html(
             datei_id    = aid,
             titel       = ergebnis["titel"],
@@ -2580,6 +2600,7 @@ def main():
             quelle2_url = k.get("quelle2_url", ""),
             verwandte   = k.get("verwandte") or [],
             bild        = _bild,
+            umfrage_daten = _umfrage,
         )
         _datei = ARTIKEL_ORDNER / f"{artikel_slug(ergebnis['titel'])}-{aid}.html"
         _datei.write_text(html, encoding="utf-8")
@@ -2602,6 +2623,7 @@ def main():
             "hauptklub":  ergebnis.get("hauptklub", ""),
             "pfad":       f"artikel/{_datei.name}",
             "bild_tm":    _bild[0] if _bild else "",
+            "umfrage":    _umfrage,
         }
         bestehende.append(feed_entry)
         feed_speichern(bestehende)

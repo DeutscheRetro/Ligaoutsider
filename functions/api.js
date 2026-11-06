@@ -387,10 +387,51 @@ async function kontakt(request, env) {
   return json(200, { ok: true });
 }
 
+// Ein-Klick-Umfrage unter Artikeln (ohne Anmeldung): eine Stimme pro Gerät, Bremse pro IP.
+// Die IP wird nie gespeichert, nur ein Hash mit dem Service-Key (nicht umkehrbar, nicht erratbar).
+const UMFRAGE_ID = /^[0-9a-f]{10}$/;
+async function umfrageZaehler(aid) {
+  const zeilen = await holeAlle(`umfrage_stimmen?artikel_id=eq.${aid}&select=antwort&order=id`, 20000);
+  const z = [0, 0, 0];
+  zeilen.forEach(r => { if (r.antwort >= 0 && r.antwort <= 2) z[r.antwort]++; });
+  return z;
+}
+async function umfrage(request) {
+  if (!SERVICE_KEY) return json(503, { fehler: "nicht verfügbar" });
+  if (request.method === "GET") {
+    const aid = new URL(request.url).searchParams.get("umfrage") || "";
+    if (!UMFRAGE_ID.test(aid)) return json(400, { fehler: "Ungültige ID" });
+    try {
+      return await gecached(request, async () => new Response(JSON.stringify({ zaehler: await umfrageZaehler(aid) }), {
+        status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=30" } }));
+    } catch (e) { return json(503, { fehler: "nicht verfügbar" }); }
+  }
+  let b;
+  try { b = JSON.parse((await request.text()) || "{}"); } catch { return json(400, { fehler: "Ungültige Anfrage" }); }
+  const aid = String(b.id || ""), antwort = Number(b.antwort), geraet = String(b.geraet || "");
+  if (!UMFRAGE_ID.test(aid) || !Number.isInteger(antwort) || antwort < 0 || antwort > 2 || !UUID.test(geraet))
+    return json(400, { fehler: "Ungültige Stimme" });
+  try {
+    const ip = request.headers.get("CF-Connecting-IP") || "";
+    const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(SERVICE_KEY + "|umfrage|" + ip));
+    const ip_hash = [...new Uint8Array(h)].slice(0, 8).map(x => x.toString(16).padStart(2, "0")).join("");
+    if (await zuViele("umfrage_stimmen", "ip_hash", ip_hash, 30, 600)) return json(429, { fehler: "Zu viele Stimmen" });
+    await db("umfrage_stimmen?on_conflict=artikel_id,geraet", { method: "POST",
+      body: JSON.stringify({ artikel_id: aid, antwort, geraet: geraet.toLowerCase(), ip_hash }),
+      headers: { Prefer: "resolution=ignore-duplicates,return=minimal" } });
+    return json(200, { zaehler: await umfrageZaehler(aid) });
+  } catch (e) {
+    console.error("Umfrage:", e.message);
+    return json(503, { fehler: "nicht verfügbar" });
+  }
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === "POST" && new URL(request.url).searchParams.has("kontakt")) return kontakt(request, env);
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
   GH_TOKEN = env.GH_TOKEN || env.GH_DISPATCH_TOKEN || "";
+  if (new URL(request.url).searchParams.has("umfrage") && (request.method === "GET" || request.method === "POST"))
+    return umfrage(request);
   // Öffentlich lesbar: Profilbilder zu Profilnamen (für Kommentare), nur diese eine Angabe
   if (request.method === "GET" && new URL(request.url).searchParams.has("tipp_rangliste")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });

@@ -36,13 +36,14 @@ def _schema() -> dict:
             "gruende": {"type": "array", "items": {"type": "string"}},
             "titel": {"type": "string"},
             "text": {"type": "string"},
+            "umfrage_passt": {"type": "boolean"},
         },
-        "required": ["urteil", "gruende", "titel", "text"],
+        "required": ["urteil", "gruende", "titel", "text", "umfrage_passt"],
         "additionalProperties": False,
     }
 
 
-def _prompt(titel: str, text: str, quellen: list[str]) -> str:
+def _prompt(titel: str, text: str, quellen: list[str], umfrage: dict | None = None) -> str:
     q = ("\n\n".join(f"=== QUELLE {i + 1} ===\n{t}" for i, t in enumerate(quellen))
          if quellen else "(Quelle nicht mehr abrufbar – prüfe nur Sprache und Aufbau, ändere keine Fakten)")
     return f"""Du bist Chefredakteur bei LO (Bundesliga-News für Fans und Kickbase-/Comunio-Manager).
@@ -67,6 +68,10 @@ Antwort:
   sonst "verbessert".
 - gruende: kurze Stichpunkte, was du geändert hast (bei "ok" leer).
 - titel, text: die (verbesserte) Fassung.
+- umfrage_passt: false, wenn die UMFRAGE unten nicht zum (verbesserten) Text passt, Fakten nennt, die nicht
+  im Text stehen, jemandem etwas unterstellt oder bei diesem Thema geschmacklos ist. Sonst true (auch ohne Umfrage).
+
+UMFRAGE unter dem Artikel: {_umfrage_text(umfrage)}
 
 ARTIKEL
 Titel: {titel}
@@ -75,6 +80,17 @@ Titel: {titel}
 
 QUELLEN
 {q}"""
+
+
+def _umfrage_text(u: dict | None) -> str:
+    if not u:
+        return "(keine)"
+    return f"„{u.get('frage') or 'Reaktion'}“ mit den Knöpfen " + " / ".join(u.get("antworten") or [])
+
+
+def _umfrage_entfernen(pfad: Path) -> None:
+    roh = pfad.read_text(encoding="utf-8")
+    pfad.write_text(re.sub(r'\s*<aside class="umfrage".*?</aside>', "", roh, count=1, flags=re.S), encoding="utf-8")
 
 
 def _datum(s: str) -> datetime.datetime | None:
@@ -148,7 +164,7 @@ def main():
         try:
             antwort = ki_budget.aufruf(
                 "qualitaet", model=PRUEFER, effort=PRUEFER_EFFORT, max_tokens=2500,
-                messages=[{"role": "user", "content": _prompt(html.unescape(titel), html.unescape(text), quellen)}],
+                messages=[{"role": "user", "content": _prompt(html.unescape(titel), html.unescape(text), quellen, e.get("umfrage"))}],
                 output_config={"format": {"type": "json_schema", "schema": _schema()}})
             r = json.loads(gen._text_aus(antwort))
         except ki_budget.BudgetErschoepft as ex:
@@ -172,6 +188,10 @@ def main():
             if neu_titel != html.unescape(titel):
                 gen.og_karte(e["id"], neu_titel, e.get("kategorie", "news"), e.get("wappen_url", ""), e.get("bild_tm") or None)
             geaendert += 1
+        if e.get("umfrage") and r.get("umfrage_passt") is False:
+            _umfrage_entfernen(pfad)
+            print(f"  🗳️  Umfrage entfernt: {_umfrage_text(e['umfrage'])[:80]}")
+            e["umfrage"] = None
         print(f"  {'✏️ ' if ok else '✅'} {neu_titel[:70]}" + (f" | {'; '.join(r.get('gruende', []))[:200]}" if ok else ""))
         log.append({"zeit": datetime.datetime.now().strftime(FORMAT), "id": e["id"], "pfad": e["pfad"],
                     "urteil": "verbessert" if ok else "ok", "gruende": r.get("gruende", []) if ok else [],
