@@ -460,7 +460,8 @@ export async function onRequest({ request, env }) {
   if (request.method === "GET" && new URL(request.url).searchParams.has("tipp_rangliste")) {
     if (!SERVICE_KEY) return json(500, { fehler: "SUPABASE_SERVICE_KEY fehlt" });
     try {
-      const st = parseInt(new URL(request.url).searchParams.get("spieltag") || "0", 10) || 0;
+      // auf echte Spieltage begrenzen, sonst erzeugt jede Zahl einen eigenen Cache-Eintrag
+      const st = Math.min(Math.max(parseInt(new URL(request.url).searchParams.get("spieltag") || "0", 10) || 0, 0), 38);
       return await gecached(request, `tipp_rangliste&spieltag=${st}`, async () => new Response(JSON.stringify(await tippRangliste(st)), { status: 200,
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } }));
     } catch (e) { return json(500, { fehler: "Rangliste nicht verfügbar" }); }

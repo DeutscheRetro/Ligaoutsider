@@ -41,12 +41,6 @@ load_dotenv()
 
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
-# Logs älter als 14 Tage löschen (Datum aus dem Dateinamen, im Checkout ist jede Datei "neu"); die Git-Historie behält sie
-_log_grenze = (datetime.datetime.now() - datetime.timedelta(days=14)).strftime("%Y%m%d")
-for _f in LOG_DIR.iterdir():
-    _m = re.search(r"_(\d{8})", _f.name)
-    if _m and _m.group(1) < _log_grenze:
-        _f.unlink()
 _run_ts = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 logging.basicConfig(
     level=logging.INFO,
@@ -2039,7 +2033,18 @@ def artikel_html(
 
 # ─── Hauptprogramm ────────────────────────────────────────────────────────────
 
+def logs_aufraeumen():
+    """Logs älter als 14 Tage löschen (Datum aus dem Dateinamen, im Checkout ist jede Datei "neu").
+    Nur im Hauptlauf: andere Skripte importieren generate, ihre Workflows committen logs/ nicht."""
+    grenze = (datetime.datetime.now() - datetime.timedelta(days=14)).strftime("%Y%m%d")
+    for f in LOG_DIR.iterdir():
+        m = re.search(r"_(\d{8})", f.name)
+        if m and m.group(1) < grenze:
+            f.unlink()
+
+
 def main():
+    logs_aufraeumen()
     global DELETED_IDS
     DELETED_IDS = lade_deleted_ids()
     ARTIKEL_ORDNER.mkdir(exist_ok=True)
