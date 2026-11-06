@@ -44,11 +44,17 @@ jobs:
           git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json verein 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
           git commit -m "⚽ Aufstellungen $(date +'%d.%m.%Y %H:%M')"
-          echo "neu=true" >> "$GITHUB_ENV"
           for i in 1 2 3; do
-            git pull --rebase -X theirs origin main && git push && break
+            if git pull --rebase -X theirs origin main; then
+              # "-X theirs" verwirft sonst Feed-Einträge, die der Hauptlauf gerade gepusht hat
+              python feed_nachziehen.py || { git add feed.json && git commit --amend --no-edit; }
+              git push && { echo "neu=true" >> "$GITHUB_ENV"; exit 0; }
+            else
+              git rebase --abort || true
+            fi
             sleep 10
           done
+          echo "::error::Push nach 3 Versuchen gescheitert"; exit 1
 
       - name: IndexNow melden
         if: env.neu == 'true'

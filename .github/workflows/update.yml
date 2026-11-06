@@ -37,7 +37,8 @@ jobs:
           # Doppelstart abfangen (Cloudflare hat am 08.10. um 15:00 zweimal ausgelöst): gibt es
           # in den letzten 15 Minuten schon einen früheren Lauf, entfällt dieser hier
           los=true
-          if [[ "$ANLASS" == Zeitplan* ]]; then
+          # Läufe mit Opus-Prüfung (12 und 18 Uhr) entfallen nie, sonst streicht ein manueller Lauf kurz davor die Prüfung
+          if [[ "$ANLASS" == Zeitplan* && "$QUALITAET" != "true" ]]; then
             seit=$(date -u -d '-15 min' +%Y-%m-%dT%H:%M:%SZ)
             frueher=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/update.yml/runs?created=%3E$seit&per_page=20" \
               -q "[.workflow_runs[] | select(.id < $GITHUB_RUN_ID)] | length" || echo 0)
@@ -126,7 +127,8 @@ jobs:
           git config user.name  "LO Bot"
           git config user.email "lo-bot@users.noreply.github.com"
 
-          git add feed.json artikel/ data/ logs/ sitemap.xml news-sitemap.xml rss.xml og/ verein/ archiv-seite-*.html bundesliga-heute.html bundesliga-fragen.html || true
+          # -A und gequoteter Glob: auch gelöschte Archivseiten; ohne || true fällt ein Fehler auf
+          git add -A -- feed.json artikel data logs sitemap.xml news-sitemap.xml rss.xml og verein 'archiv-seite-*.html' bundesliga-heute.html bundesliga-fragen.html
           [ -f kickbase.json ] && git add kickbase.json kickbase_spieler.json || true
           [ -f comunio.json ] && git add comunio.json || true
           [ -f aufstellung.json ] && git add aufstellung.json || true
@@ -142,11 +144,19 @@ jobs:
           git commit -m "🤖 Update $(date +'%d.%m.%Y %H:%M')"
 
           git stash -u 2>/dev/null || true
-          git pull --rebase -X theirs origin main
-          # "-X theirs" kann Feed-Einträge anderer Workflows (Aufstellungen) verwerfen: zurückholen
-          python feed_nachziehen.py || { git add feed.json && git commit --amend --no-edit; }
+          # Bis zu 3 Versuche: ein anderer Workflow kann zwischen Abgleich und Push pushen
+          for i in 1 2 3; do
+            if git pull --rebase -X theirs origin main; then
+              # "-X theirs" kann Feed-Einträge anderer Workflows (Aufstellungen) verwerfen: zurückholen
+              python feed_nachziehen.py || { git add feed.json && git commit --amend --no-edit; }
+              git push && { gepusht=1; break; }
+            else
+              git rebase --abort || true
+            fi
+            sleep 15
+          done
           git stash pop 2>/dev/null || true
-          git push
+          [ -n "${gepusht:-}" ] || { echo "::error::Push nach 3 Versuchen gescheitert"; exit 1; }
           echo "veroeffentlicht=true" >> "$GITHUB_ENV"
           echo "NEUER_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
@@ -201,7 +211,13 @@ jobs:
           git add data/social_queue.json data/social_tage.json 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "📣 Social-Warteschlange"
-            git pull --rebase -X theirs origin main && git push || true
+            # Geht der Push verloren, postet der nächste Lauf dieselben Artikel noch einmal: laut scheitern
+            for i in 1 2 3; do
+              if git pull --rebase -X theirs origin main; then git push && { gepusht=1; break; }
+              else git rebase --abort || true; fi
+              sleep 15
+            done
+            [ -n "${gepusht:-}" ] || { echo "::error::Social-Warteschlange nicht gepusht, nächster Lauf postet doppelt"; exit 1; }
           fi
 
       # Neue Seiten sofort bei Bing, DuckDuckGo, Ecosia und Yandex melden (IndexNow, kostenlos).
