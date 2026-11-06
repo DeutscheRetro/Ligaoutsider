@@ -426,6 +426,29 @@ async function umfrage(request) {
   }
 }
 
+// Schnelltipp "Wer gewinnt?" aus der Spielleiste. Pro Person und Spiel zählt genau eine Meinung:
+// ein genauer Tipp aus dem Tippspiel schlägt den Schnelltipp (0 = Heimsieg, 1 = Remis, 2 = Auswärtssieg).
+const tendenzVon = (h, g) => (h > g ? 0 : h === g ? 1 : 2);
+async function spielTendenz(ids) {
+  const liste = ids.join(",");
+  const [schnell, genau] = await Promise.all([
+    holeAlle(`spiel_tipps?spiel_id=in.(${liste})&select=email,spiel_id,antwort&order=id`, 20000),
+    holeAlle(`tipps?spiel_id=in.(${liste})&select=email,spiel_id,tore_heim,tore_gast&order=email,spiel_id`, 20000),
+  ]);
+  const je = {};
+  schnell.forEach(t => { je[`${t.spiel_id}|${t.email}`] = [t.spiel_id, t.antwort]; });
+  genau.forEach(t => { je[`${t.spiel_id}|${t.email}`] = [t.spiel_id, tendenzVon(t.tore_heim, t.tore_gast)]; });
+  const z = Object.fromEntries(ids.map(i => [i, [0, 0, 0]]));
+  Object.values(je).forEach(([id, a]) => { if (z[id] && a >= 0 && a <= 2) z[id][a]++; });
+  return z;
+}
+async function spielInfo(id) {
+  const r = await fetch(`https://api.openligadb.de/getmatchdata/${id}`, { cf: { cacheTtl: 300, cacheEverything: true } });
+  if (!r.ok) return null;
+  const m = await r.json();
+  return m && m.matchID === id ? { anpfiff: m.matchDateTimeUTC, fertig: !!m.matchIsFinished } : null;
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === "POST" && new URL(request.url).searchParams.has("kontakt")) return kontakt(request, env);
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
@@ -475,6 +498,16 @@ export async function onRequest({ request, env }) {
         return new Response(JSON.stringify(zaehler), { status: 200,
           headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=120" } });
       });
+    } catch (e) { return json(200, {}); }
+  }
+  // Tendenz der Community für die Spielleiste (nur Zahlen, keine Namen)
+  if (request.method === "GET" && new URL(request.url).searchParams.has("spiel_tendenz")) {
+    const ids = [...new Set((new URL(request.url).searchParams.get("spiel_tendenz") || "").split(",")
+      .map(x => parseInt(x, 10)).filter(x => x > 0 && x < 1e7))].slice(0, 40);
+    if (!SERVICE_KEY || !ids.length) return json(200, {});
+    try {
+      return await gecached(request, async () => new Response(JSON.stringify(await spielTendenz(ids)), { status: 200,
+        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } }));
     } catch (e) { return json(200, {}); }
   }
   if (request.method === "GET") {
@@ -1229,6 +1262,30 @@ export async function onRequest({ request, env }) {
         return json(200, { tipps, punkte: gesamt });
       }
 
+      case "spiel_tipp_status": {
+        const id = parseInt(body.spiel_id, 10);
+        if (!(id > 0)) return json(400, { fehler: "Ungültiges Spiel" });
+        const E = encodeURIComponent(email);
+        const [g, s] = await Promise.all([
+          hole(`tipps?email=eq.${E}&spiel_id=eq.${id}&select=tore_heim,tore_gast`),
+          hole(`spiel_tipps?email=eq.${E}&spiel_id=eq.${id}&select=antwort`)]);
+        return json(200, { genau: g && g[0] ? { h: g[0].tore_heim, g: g[0].tore_gast } : null,
+          schnell: s && s[0] ? s[0].antwort : null, zaehler: (await spielTendenz([id]))[id] });
+      }
+      case "spiel_tipp": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
+        const id = parseInt(body.spiel_id, 10), antwort = Number(body.antwort);
+        if (!(id > 0) || !Number.isInteger(antwort) || antwort < 0 || antwort > 2) return json(400, { fehler: "Ungültiger Tipp" });
+        const genau = await hole(`tipps?email=eq.${encodeURIComponent(email)}&spiel_id=eq.${id}&select=tore_heim,tore_gast`);
+        if (genau && genau[0]) return json(409, { fehler: `Du hast im Tippspiel schon ${genau[0].tore_heim}:${genau[0].tore_gast} getippt` });
+        const info = await spielInfo(id);
+        if (!info) return json(404, { fehler: "Spiel nicht gefunden" });
+        if (info.fertig || new Date(info.anpfiff).getTime() - 5 * 60 * 1000 <= Date.now())
+          return json(409, { fehler: "Tippschluss: nur bis 5 Minuten vor Anpfiff" });
+        await db("spiel_tipps?on_conflict=spiel_id,email", { method: "POST", headers: { Prefer: "resolution=merge-duplicates" },
+          body: JSON.stringify({ spiel_id: id, email, antwort, geaendert_am: new Date().toISOString() }) });
+        return json(200, { zaehler: (await spielTendenz([id]))[id] });
+      }
       case "tipp_abgeben": {
         if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const id = parseInt(body.spiel_id, 10), h = parseInt(body.heim, 10), g = parseInt(body.gast, 10);

@@ -18,6 +18,7 @@
   <link rel="icon" href="favicon.png" type="image/png" />
   <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
   <script src="/auth.js"></script>
+  <script src="/spieltipp.js" defer></script>
 <script src="/consent.js"></script>
 </head>
 <body>
@@ -355,11 +356,11 @@
             const badge = m.pokal
               ? `<span style="background:#1565c0;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0" title="DFB-Pokal">DFB</span>`
               : `<span style="background:#d32f2f;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0">BL</span>`;
-            return `<div style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
+            return `<div class="sp-zeile" data-spiel="${m.matchID}" data-anpfiff="${m.matchDateTimeUTC || ''}" data-fertig="${finished ? 1 : 0}" data-wettbewerb="${m.pokal ? 'DFB-Pokal' : 'Bundesliga'}" style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
               ${badge}
-              <span style="font-size:12px;font-weight:600;color:var(--text2);flex:1;text-align:right">${kürzel(m.team1.teamName)}</span>
+              <span class="sp-t sp-h" style="font-size:12px;font-weight:600;color:var(--text2);flex:1;text-align:right">${kürzel(m.team1.teamName)}</span>
               ${score}
-              <span style="font-size:12px;font-weight:600;color:var(--text2);flex:1">${kürzel(m.team2.teamName)}</span>
+              <span class="sp-t sp-g" style="font-size:12px;font-weight:600;color:var(--text2);flex:1">${kürzel(m.team2.teamName)}</span>
             </div>`;
           }).join('');
           return `<li>
@@ -367,6 +368,7 @@
             ${rows}
           </li>`;
         }).join('');
+        if (window.loSpieltipp) window.loSpieltipp(el);
       } catch(e) {
         el.innerHTML = '<li style="padding:12px;color:var(--text4);font-size:12px">Spielplan nicht verfügbar</li>';
       }
