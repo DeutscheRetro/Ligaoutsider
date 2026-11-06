@@ -693,10 +693,13 @@ export async function onRequest({ request, env }) {
 
       case "forum_post_loeschen": {
         if (!body.id) return json(400, { fehler: "ID fehlt" });
-        const [p] = await hole(`forum_posts?id=eq.${body.id}&select=autor_email`);
+        const [p] = await hole(`forum_posts?id=eq.${body.id}&select=autor_email,thread_id`);
         if (!p) return json(404, { fehler: "Beitrag nicht gefunden" });
         if (p.autor_email !== email && !darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
         await loesche("forum_posts", `id=eq.${body.id}`);
+        // Zähler der Antworten neu zählen, sonst zeigt die Übersicht weiter die alte Zahl
+        const rest = await hole(`forum_posts?thread_id=eq.${p.thread_id}&select=id`);
+        await aendere("forum_threads", `id=eq.${p.thread_id}`, { antworten: Math.max(0, (rest || []).length - 1) });
         return json(200, { ok: true });
       }
 
@@ -785,9 +788,10 @@ export async function onRequest({ request, env }) {
         // stellen wir die Liste aus dem zusammen, was wir selbst kennen:
         // Kommentatoren, Forenautoren, vergebene Rollen und Sperren.
         const [kommentare, threads, posts, rollenZeilen, bans] = await Promise.all([
-          hole("kommentare?select=name,email,erstellt_am"),
-          hole("forum_threads?select=autor_name,autor_email,erstellt_am"),
-          hole("forum_posts?select=autor_name,autor_email,erstellt_am"),
+          // holeAlle: Supabase liefert pro Abfrage höchstens 1000 Zeilen, die Zähler wären sonst zu klein
+          holeAlle("kommentare?select=name,email,erstellt_am&order=id"),
+          holeAlle("forum_threads?select=autor_name,autor_email,erstellt_am&order=id"),
+          holeAlle("forum_posts?select=autor_name,autor_email,erstellt_am&order=id"),
           hole("benutzer_rollen?select=email,rollen,notiz,geaendert_am"),
           hole("user_bans?select=email,grund,gebannt_bis"),
         ]);
