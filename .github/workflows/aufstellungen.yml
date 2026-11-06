@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "LO Bot"
           git config user.email "lo-bot@users.noreply.github.com"
-          git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json verein 2>/dev/null || true
+          git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json aufstellung.json verein 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
           git commit -m "⚽ Aufstellungen $(date +'%d.%m.%Y %H:%M')"
           for i in 1 2 3; do

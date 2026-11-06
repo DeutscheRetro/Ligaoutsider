@@ -97,7 +97,7 @@
       <h2 class="au-h">Aufstellungs-Check</h2>
       <span id="au-stand" class="au-stand"></span>
     </div>
-    <p class="au-intro">Voraussichtliche Startelf für jedes Spiel mit Einsatzwahrscheinlichkeit. Keine offiziellen Aufstellungen.</p>
+    <p class="au-intro">Voraussichtliche Startelf für jedes Spiel mit Einsatzwahrscheinlichkeit. Rund eine Stunde vor Anpfiff steht hier die offizielle Startelf.</p>
     <div class="au-filter">
       <select id="au-team" aria-label="Verein wählen"><option value="">Alle Spiele</option></select>
       <label><input type="checkbox" id="au-nurprobleme"> Nur Spiele mit Ausfällen oder Fragezeichen</label>
@@ -197,14 +197,21 @@
         : `<div class="au-zeile au-leer">${leer}</div>`}</div>`;
     }
 
-    function teamSpalte(name) {
+    // Offizielle Startelf (rund eine Stunde vor Anpfiff), nur für genau diese Partie
+    const offiziell = (t, anstoss) => t && t.offiziell && t.offiziell.anstoss === anstoss ? t.offiziell : null;
+    function offizielleElf(o) {
+      return `<div class="au-elf"><div class="au-gruppe">✅ Offizielle Startelf</div>${o.elf.map(p =>
+        `<div class="au-zeile"><span class="au-name"><span class="au-nm"><span>${esc(p.name)}</span><small>${esc(p.pos)}</small></span></span></div>`).join('')}</div>`;
+    }
+
+    function teamSpalte(name, anstoss) {
       const t = AU.teams[name];
       if (!t) return `<div class="au-team"><p class="kb-loading">Keine Daten für ${esc(name)}</p></div>`;
       const form = t.formation
         ? `<span class="au-form"><a href="${esc(t.formation_quelle)}" title="System laut unseren News">${esc(t.formation)} 📰</a></span>` : '';
       return `<div class="au-team">
         <div class="au-team-kopf"><img src="${esc(t.logo)}" alt="" onerror="this.style.display='none'"><span>${esc(name)}</span>${form}</div>
-        ${elf(t)}
+        ${offiziell(t, anstoss) ? offizielleElf(offiziell(t, anstoss)) : elf(t)}
         ${liste('🚑 Fällt aus', t.ausfall, 'Keine Ausfälle gemeldet')}
         ${liste('❓ Fraglich', t.fraglich)}
         ${t.bank.length ? `<div class="au-liste"><div class="au-liste-t">🪑 Weitere Kandidaten</div>${t.bank.map(p => `<div class="au-zeile">${spieler(p, 'au-name')}${prozent(p)}</div>`).join('')}</div>` : ''}
@@ -226,9 +233,9 @@
         <details class="au-partie" ${i === 0 || team ? 'open' : ''}>
           <summary>
             <span class="au-paarung">${esc(s.heim)} – ${esc(s.gast)}</span>
-            <span class="au-meta">${probleme(s.heim) + probleme(s.gast) ? `<span class="au-prob" title="Ausfälle und fragliche Spieler"><i class="au-dot rot"></i>${probleme(s.heim) + probleme(s.gast)} Personalsorgen</span>` : ''}<span>${esc(s.anstoss_text || '')}</span></span>
+            <span class="au-meta">${probleme(s.heim) + probleme(s.gast) ? `<span class="au-prob" title="Ausfälle und fragliche Spieler"><i class="au-dot rot"></i>${probleme(s.heim) + probleme(s.gast)} Personalsorgen</span>` : ''}${offiziell(AU.teams[s.heim], s.anstoss) && offiziell(AU.teams[s.gast], s.anstoss) ? '<span>✅ Startelf offiziell</span>' : ''}<span>${esc(s.anstoss_text || '')}</span></span>
           </summary>
-          <div class="au-teams">${teamSpalte(s.heim)}${teamSpalte(s.gast)}</div>
+          <div class="au-teams">${teamSpalte(s.heim, s.anstoss)}${teamSpalte(s.gast, s.anstoss)}</div>
         </details>`).join('') : '<p class="kb-loading">Keine passenden Spiele</p>';
     }
 

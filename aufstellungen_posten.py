@@ -99,13 +99,41 @@ def artikel(p: dict, heim: dict, gast: dict) -> dict:
     return {"titel": titel, "text": text}
 
 
+def offiziell_eintragen(partien: list, roto: dict, pfad: Path = Path("aufstellung.json")) -> int:
+    """Bestätigte Startelfen in aufstellung.json: die Aufstellungsseite zeigt sie sofort statt der Prognose.
+    Gibt die Zahl der neu eingetragenen Teams zurück."""
+    if not pfad.exists():
+        return 0
+    au = json.loads(pfad.read_text(encoding="utf-8"))
+    nach_logo = {t.get("logo"): t for t in au.get("teams", {}).values()}
+    neu = 0
+    for p in partien:
+        for verein in (p["heim"], p["gast"]):
+            logo = gen._comunio_logo(verein)
+            r, t = roto.get(logo), nach_logo.get(logo)
+            if not (r and r["bestaetigt"] and t):
+                continue
+            eintrag = {"anstoss": p["anpfiff"].isoformat(timespec="seconds"),
+                       "elf": [{"pos": pos, "name": richtiger_name(n, logo)} for pos, n in r["elf"]]}
+            if t.get("offiziell") != eintrag:
+                t["offiziell"] = eintrag
+                neu += 1
+    if neu:
+        tmp = pfad.with_suffix(".tmp")
+        tmp.write_text(json.dumps(au, ensure_ascii=False, indent=1), encoding="utf-8")
+        tmp.replace(pfad)
+    return neu
+
+
 def main():
     gepostet = json.loads(GEPOSTET.read_text(encoding="utf-8")) if GEPOSTET.exists() else {}
-    partien = [p for p in partien_jetzt() if str(p["id"]) not in gepostet]
-    if not partien:
-        print("Keine anstehende Partie ohne Aufstellungsartikel")
+    alle = partien_jetzt()
+    if not alle:
+        print("Keine anstehende Partie")
         return
     roto = rotowire()
+    print(f"Offizielle Startelfen auf der Aufstellungsseite: {offiziell_eintragen(alle, roto)} neu")
+    partien = [p for p in alle if str(p["id"]) not in gepostet]
     feed = gen.feed_laden()
     neu = 0
     for p in partien:

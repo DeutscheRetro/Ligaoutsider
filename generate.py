@@ -4182,6 +4182,16 @@ def aufstellung_fetch():
         "partien": partien,
         "teams": ergebnis_teams,
     }
+    # Offizielle Startelfen (aufstellungen_posten.py) bis 3 Stunden nach Anpfiff behalten
+    try:
+        alt = json.loads(Path("aufstellung.json").read_text(encoding="utf-8")).get("teams", {})
+        grenze = (datetime.datetime.now() - datetime.timedelta(hours=3)).isoformat()
+        for name, t in ergebnis_teams.items():
+            o = (alt.get(name) or {}).get("offiziell")
+            if o and o.get("anstoss", "") >= grenze:
+                t["offiziell"] = o
+    except (OSError, ValueError) as ex:
+        print(f"  ⚠️ alte aufstellung.json nicht lesbar: {ex}")
     Path("aufstellung.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"✅ aufstellung.json geschrieben ({len(partien)} Partien, {len(ergebnis_teams)} Teams)")
 
