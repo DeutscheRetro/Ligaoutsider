@@ -9,7 +9,8 @@
   let isAdmin = false;
   let darfLoeschen = false;
   let eigenerBan = null;   // kommt vom Server (wer_bin_ich), die Bann-Tabelle ist nicht öffentlich
-  let ignorierteListe = JSON.parse(localStorage.getItem('lo_ignore') || '[]');
+  let ignorierteListe = [];   // localStorage wirft bei blockierten Cookies
+  try { ignorierteListe = JSON.parse(localStorage.getItem('lo_ignore') || '[]'); } catch (e) {}
 
   // ─── Schreibzugriffe ─────────────────────────────────────────────────────────
   // Der anon-Key darf nur noch lesen. Jede Aenderung geht an die Netlify
@@ -38,10 +39,13 @@
     if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
     if (label) label.textContent = t === 'light' ? 'Dunkel' : 'Hell';
   }
-  applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
+  let gespeichert = null;
+  try { gespeichert = localStorage.getItem('theme'); } catch (e) {}
+  applyTheme(gespeichert || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const t = document.body.classList.contains('light') ? 'dark' : 'light';
-    localStorage.setItem('theme', t); applyTheme(t);
+    try { localStorage.setItem('theme', t); } catch (e) {}
+    applyTheme(t);
   });
 
   // ─── Auth ────────────────────────────────────────────────────────────────────
@@ -168,13 +172,13 @@
   window._ignoriereUser = function(email) {
     if (!ignorierteListe.includes(email)) {
       ignorierteListe.push(email);
-      localStorage.setItem('lo_ignore', JSON.stringify(ignorierteListe));
+      try { localStorage.setItem('lo_ignore', JSON.stringify(ignorierteListe)); } catch (e) {}
     }
     ladeKommentare();
   };
   window._entIgnoriereUser = function(email) {
     ignorierteListe = ignorierteListe.filter(e => e !== email);
-    localStorage.setItem('lo_ignore', JSON.stringify(ignorierteListe));
+    try { localStorage.setItem('lo_ignore', JSON.stringify(ignorierteListe)); } catch (e) {}
     ladeKommentare();
   };
 

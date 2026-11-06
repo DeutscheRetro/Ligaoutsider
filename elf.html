@@ -571,7 +571,8 @@
       .then(d => {
         DB = d;
         for (const [tn, t] of Object.entries(d.teams)) for (const s of t.spieler) alle.push({ ...s, verein: tn, logo: t.logo });
-        let code = decodeURIComponent(location.hash.slice(1));
+        let code = '';
+        try { code = decodeURIComponent(location.hash.slice(1)); } catch (e) {}   // kaputter Link: wie ohne Code
         if (!code) { try { code = localStorage.getItem('meine-elf') || ''; } catch (e) {} }
         if (!laden(code)) slotsBauen(false);
         renderAlles();

@@ -97,7 +97,6 @@
         </div>
       </div>
       <a href="archiv.html" class="section-nav-link" data-nav="archiv">Archiv</a>
-      <button id="news-einsenden-btn" onclick="document.getElementById('news-einsenden-modal').style.display='flex'" style="background:var(--accent);color:#111;border:none;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-left:8px">+ News einsenden</button>
     </div>
   </nav>
 
@@ -766,51 +765,5 @@
       });
   </script>
 
-  <!-- News einsenden Modal -->
-  <div id="news-einsenden-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
-    <div style="background:var(--bg2);border-radius:8px;padding:24px;width:90%;max-width:480px;position:relative">
-      <button onclick="document.getElementById('news-einsenden-modal').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer">×</button>
-      <h3 style="margin:0 0 8px;font-size:16px">News einsenden</h3>
-      <p style="font-size:12px;color:var(--text3);margin:0 0 16px">Artikel-URL einsenden — wird beim nächsten Update geprüft und ggf. veröffentlicht.</p>
-      <input id="news-url-input" type="url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px;border-radius:4px;border:1px solid var(--item-border);background:var(--bg3);color:var(--text1);font-size:14px;margin-bottom:12px"/>
-      <button onclick="newEinsenden()" style="background:var(--accent);color:#111;border:none;border-radius:4px;padding:10px 20px;font-size:14px;font-weight:800;cursor:pointer;width:100%">Einsenden</button>
-      <div id="news-einsenden-status" style="margin-top:10px;font-size:12px;text-align:center"></div>
-    </div>
-  </div>
-
-  <script>
-  let einsendenLaeuft = false;   // Doppelklick oder Enter-Taste doppelt: nur eine Einsendung
-  async function newEinsenden() {
-    if (einsendenLaeuft) return;
-    einsendenLaeuft = true;
-    try { await einsenden(); } finally { einsendenLaeuft = false; }
-  }
-  async function einsenden() {
-    const url = document.getElementById('news-url-input').value.trim();
-    const status = document.getElementById('news-einsenden-status');
-    const _nu = netlifyIdentity.currentUser();
-    if (!_nu) { status.style.color='#e8c000'; status.textContent='Diese Funktion steht nur registrierten Nutzern offen. Bitte melde dich an oder erstelle ein Konto.'; return; }
-    if (!url || !url.startsWith('http')) { status.style.color='#e53935'; status.textContent='Bitte gültige URL eingeben.'; return; }
-    status.style.color='var(--text3)'; status.textContent='Wird eingereicht…';
-    try {
-      const token = await _nu.jwt();
-      const res = await fetch('/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ aktion: 'news_einsenden', url })
-      });
-      if (res.ok) {
-        status.style.color='#2e7d32'; status.textContent='✅ Vielen Dank! Deine Einsendung wird in Kürze geprüft.';
-        document.getElementById('news-url-input').value='';
-      } else {
-        const a = await res.json().catch(() => ({}));
-        status.style.color='#e53935'; status.textContent = a.fehler || 'Fehler beim Einsenden. Bitte später nochmal versuchen.';
-      }
-    } catch(e) {
-      status.style.color='#e53935'; status.textContent='Netzwerkfehler. Bitte später nochmal versuchen.';
-    }
-  }
-  document.getElementById('news-url-input').addEventListener('keydown', e => { if(e.key==='Enter') newEinsenden(); });
-  </script>
 </body>
 </html>

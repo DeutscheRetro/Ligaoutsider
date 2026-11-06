@@ -388,6 +388,7 @@
       wrapR.innerHTML = '<p class="cs-leer">Lade Rangliste…</p>';
       let d;
       try { d = await (await fetch('/api?tipp_rangliste=1&spieltag=' + (st || 0))).json(); } catch (e) { wrapR.innerHTML = '<p class="cs-leer">Rangliste nicht verfügbar.</p>'; return; }
+      if (!Array.isArray(d.rangliste)) { wrapR.innerHTML = '<p class="cs-leer">Rangliste nicht verfügbar.</p>'; return; }
       const h = meinHandle(), medaille = ['🥇', '🥈', '🥉'];
       const tabelle = d.rangliste.length ? `<table class="tp-rang"><thead><tr><th>#</th><th>Tipper</th><th>Tipps</th><th>Exakt</th><th>Punkte</th></tr></thead><tbody>${d.rangliste.map((x, i) =>
         `<tr class="${h && x.handle === h ? 'ich' : ''}"><td>${medaille[i] || i + 1}</td><td>${x.handle ? `<a href="/profil/${encodeURIComponent(x.handle)}">${esc(x.name)}</a>` : esc(x.name)}${h && x.handle === h ? ' <small style="color:var(--accent)">du</small>' : ''}</td><td>${x.tipps}</td><td>${x.exakt}</td><td>${x.punkte}</td></tr>`).join('')}</tbody></table>`

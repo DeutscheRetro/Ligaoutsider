@@ -465,8 +465,7 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
     a.id = 'mein-bereich-link'; a.className = 'section-nav-link nav-mein';
     a.href = tiefe + 'mein-bereich.html'; a.textContent = 'Mein Bereich';
     if (location.pathname.endsWith('/mein-bereich.html')) a.classList.add('active');
-    const knopf = document.getElementById('news-einsenden-btn');
-    if (knopf) nav.insertBefore(a, knopf); else nav.appendChild(a);
+    nav.appendChild(a);
   }
 
   // Ausklappmenüs in der Navigation: Tipp öffnet und schließt, Klick daneben oder Escape schließt.
@@ -552,6 +551,8 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
          <a href="mein-bereich.html" style="color:var(--text3,#aaa);margin-left:auto">Mein Bereich</a>`
       : `<span>⭐ Wähle deinen Verein und sieh seine News zuerst.</span>
          <a href="mein-bereich.html" style="color:var(--accent,#e8c000);font-weight:700">Verein wählen</a>`;
+    // 'init' und 'login' laufen nach dem Bestätigungslink gleichzeitig: nur eine Leiste
+    document.getElementById('mein-verein-leiste')?.remove();
     nav.insertAdjacentElement('afterend', leiste);
     // Offene Tipps für den aktuellen Spieltag anhängen
     try {
@@ -583,10 +584,13 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
   (async () => {
     let ausMail = null;
     try { ausMail = await linkAusMail(); } catch (e) { ausMail = { fehler: e.message }; }
-    if (sitzung) await frischesToken();
+    // Netzfehler beim Erneuern: weiter, sonst feuert 'init' nie und die Seite bleibt abgemeldet
+    if (sitzung) await frischesToken().catch(() => {});
     // Sitzung aus dem Cookie hat noch kein Konto: nachladen. Alte Sitzung ohne Cookie: Cookie nachziehen.
     if (sitzung && !sitzung.user) {
-      try { speichern({ ...sitzung, user: await auth('user', null, sitzung.access, 'GET') }); } catch (e) { speichern(null); }
+      // Nur abmelden, wenn Supabase ablehnt; ein Netzfehler darf nicht beide Ligen abmelden
+      try { speichern({ ...sitzung, user: await auth('user', null, sitzung.access, 'GET') }); }
+      catch (e) { if (e.status === 400 || e.status === 401) speichern(null); }
     } else if (sitzung && COOKIE_DOMAIN && !cookieLesen()) speichern(sitzung);
     initFertig = true;
     const start = () => {

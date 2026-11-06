@@ -161,6 +161,7 @@
       const ta = document.getElementById('pr-gb-text');
       await aktion('gaestebuch_neu', { handle, inhalt: ta.value }, 'Eingetragen');
     });
+    tippZeile();
   }
 
   function anfragenHtml() {
@@ -173,7 +174,6 @@
       ${aus.map(a => `<div class="pr-zeile"><span><a href="${profilUrl(a.handle)}">${esc(a.name)}</a> <small class="pr-grau">wartet auf Antwort</small></span>
         <button class="pr-btn" data-a="entfernen" data-h="${esc(a.handle)}">Zurückziehen</button></div>`).join('')}
     </section>`;
-    tippZeile();
   }
 
   // Tippspiel-Platzierung nachladen (öffentliche Rangliste, nur Profilname und Punkte)

@@ -247,10 +247,6 @@
 
     // Rollen kommen vom Server, nicht aus dem Token
     let _darfLoeschen = false;
-    async function rollenLaden() {
-      try { const w = await loApi('wer_bin_ich'); _darfLoeschen = !!w.darfLoeschen; }
-      catch { _darfLoeschen = false; }
-    }
     const darfLoeschen = () => _darfLoeschen;
 
     let aktuellerUser = null;
@@ -264,10 +260,14 @@
       document.getElementById('theme-icon').textContent = t === 'light' ? '🌙' : '☀️';
       document.getElementById('theme-label').textContent = t === 'light' ? 'Dunkel' : 'Hell';
     }
-    applyTheme(localStorage.getItem('theme') || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
+    // localStorage wirft bei blockierten Cookies: dann ohne gespeichertes Theme
+    let gespeichert = null;
+    try { gespeichert = localStorage.getItem('theme'); } catch (e) {}
+    applyTheme(gespeichert || (document.documentElement.classList.contains('light') ? 'light' : 'dark'));
     document.getElementById('theme-toggle').addEventListener('click', () => {
       const t = document.body.classList.contains('light') ? 'dark' : 'light';
-      localStorage.setItem('theme', t); applyTheme(t);
+      try { localStorage.setItem('theme', t); } catch (e) {}
+      applyTheme(t);
     });
 
     // ─── Auth ─────────────────────────────────────────────────────────────────
@@ -288,7 +288,7 @@
       aktuellerUser = user;
       // Rollen und Sperre kommen vom Server (die Bann-Tabelle ist nicht öffentlich lesbar)
       try {
-        const w = await loApi('wer_bin_ich');
+        const w = window.loWerBinIch ? await window.loWerBinIch(user) : await loApi('wer_bin_ich');
         _darfLoeschen = !!w.darfLoeschen;
         if (w.ban) alert('Dein Konto ist gesperrt. Du kannst mitlesen, aber nicht schreiben.');
       } catch { _darfLoeschen = false; }
@@ -331,12 +331,14 @@
         <button class="forum-neu-btn" onclick="oeffneModal()" ${!aktuellerUser ? 'disabled title="Bitte anmelden"' : ''}>+ Neues Thema</button>
       </div><div class="thread-liste" id="thread-liste"><p style="color:var(--text4);font-size:13px">Lädt…</p></div>`;
 
+      const kat = aktiveKat;
       const { data, error } = await sb
         .from('forum_threads')
         .select('id, kategorie, titel, autor_name, autor_handle, erstellt_am, letzter_beitrag, antworten')
         .eq('kategorie', aktiveKat)
         .order('letzter_beitrag', { ascending: false })
         .limit(200);
+      if (kat !== aktiveKat) return;   // inzwischen andere Kategorie gewählt
 
       const liste = document.getElementById('thread-liste');
       if (error || !data?.length) {

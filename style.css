@@ -27,7 +27,6 @@
 .section-nav { background: var(--bg2); border-bottom: 1px solid var(--border); position: relative; z-index: 20; }
 .section-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; flex-wrap: wrap; }
 .section-nav-link { flex-shrink: 0; white-space: nowrap; }
-#news-einsenden-btn { flex-shrink: 0; white-space: nowrap; }
 .section-nav-link {
   font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
   padding: 11px 14px; color: var(--text4);
@@ -445,8 +444,8 @@ a.team-chip { text-decoration: none; }
   .theme-toggle { order: 1; }
   .auth-buttons { order: 2; margin-left: auto; }
   .auth-btn { padding: 0 10px; font-size: 11px; min-height: 32px; }
-  .theme-toggle, #news-einsenden-btn { min-height: 32px; }
   .auth-username { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .theme-toggle { min-height: 32px; }
 }
 
 @media (max-width: 480px) {
@@ -773,9 +772,6 @@ a.team-chip { text-decoration: none; }
 .auf-mehr { color: var(--text2); }
 .auf-mehr::after { content: " →"; }
 .auf-mehr:hover { color: var(--accent-text); }
-/* "News einsenden" ist eine Aktion, kein Reiter: rechts außen, ohne Goldfläche */
-#news-einsenden-btn { margin-left: auto !important; background: none !important; color: var(--text3) !important; border: 1px solid var(--border2) !important; }
-#news-einsenden-btn:hover { color: var(--text) !important; border-color: var(--accent) !important; }
 /* Kein Beta-Schild mehr */
 .logo::after { content: none; }
 /* Fußzeile: Trefffläche 34 px */

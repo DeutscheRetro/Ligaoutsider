@@ -128,6 +128,15 @@ const RESERVIERT = /^(admin|administrator|moderator|redaktion|ligaoutsider|lo|te
 // Steuer- und Richtungszeichen entfernen, Look-alikes vereinheitlichen
 const nameNormal = t => String(t || "").normalize("NFKC").replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
 
+// Antworten-Zähler der Themen neu zählen, nachdem Beiträge gelöscht wurden.
+// shortcut: höchstens 10 Themen (2 Unteranfragen je Thema, Cloudflare erlaubt 50), reicht für einzelne Nutzer
+async function antwortenNeuZaehlen(threadIds) {
+  for (const id of [...new Set(threadIds)].slice(0, 10)) {
+    const rest = await hole(`forum_posts?thread_id=eq.${id}&select=id`);
+    await aendere("forum_threads", `id=eq.${id}`, { antworten: Math.max(0, (rest || []).length - 1) });
+  }
+}
+
 async function istGebannt(email) {
   const treffer = await hole(`user_bans?email=eq.${encodeURIComponent(email)}&select=gebannt_bis`);
   if (!treffer || !treffer.length) return false;
@@ -167,7 +176,7 @@ const LIEBLINGS_FELDER = ["verein", "spieler", "stadion", "trainer", "film", "se
 function handleAus(text) {
   let h = String(text || "").normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase()
     .replace(/ß/g, "ss").replace(/@.*$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 26);
-  if (h.length < 3) h = ("fan-" + h).replace(/-+$/, "") || "fan";
+  if (h.length < 3 || RESERVIERT.test(h)) h = ("fan-" + h).replace(/-+$/, "") || "fan";
   return h.length < 3 ? "fan-" + Math.random().toString(36).slice(2, 6) : h;
 }
 
@@ -185,7 +194,8 @@ async function profilSicher(email, name) {
       // Anzeigename muss einmalig sein: bei Gleichstand eine Zahl anhängen
       let anzeige = sauber(nameNormal(name && name !== email ? name : versuch), 56) || versuch;
       if (RESERVIERT.test(anzeige)) anzeige = versuch;
-      for (let n = 2; await nameVergeben(anzeige, email) && n < 50; n++) anzeige = `${sauber(name, 52) || versuch} ${n}`;
+      const anzBasis = anzeige.slice(0, 52);
+      for (let n = 2; await nameVergeben(anzeige, email) && n < 50; n++) anzeige = `${anzBasis} ${n}`;
       let neu;
       try {
         [neu] = await lege_an("profile", { email, handle: versuch, anzeigename: anzeige });
@@ -361,7 +371,10 @@ async function tippRangliste(spieltag) {
     const p = prof[e] || {};
     return { name: p.anzeigename || p.handle || "Tipper", handle: p.handle || null, ...l };
   }).sort((a, b) => b.punkte - a.punkte || b.exakt - a.exakt || a.tipps - b.tipps).slice(0, 50);
-  const aktuell = (spiele.find(s => !s.fertig) || spiele[spiele.length - 1] || {}).tag || 1;
+  // Kleinster Spieltag mit Spielen ab vor 3 Stunden: ein verlegtes Nachholspiel hält den Spieltag nicht fest
+  const ab = Date.now() - 3 * 3600 * 1000;
+  const kommend = spiele.filter(s => !s.fertig && new Date(s.anpfiff).getTime() > ab).map(s => s.tag);
+  const aktuell = (kommend.length ? Math.min(...kommend) : (spiele[spiele.length - 1] || {}).tag) || 1;
   return { spieltag, aktueller_spieltag: aktuell, rangliste: liste, stand: new Date().toISOString() };
 }
 
@@ -607,6 +620,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "vote": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const wert = Number(body.wert);
         if (![1, -1].includes(wert) || !body.kommentar_id || !UUID.test(String(body.kommentar_id))) return json(400, { fehler: "Ungueltiger Vote" });
         const ziel = await hole(`kommentare?id=eq.${body.kommentar_id}&select=email`);
@@ -631,13 +645,15 @@ export async function onRequest({ request, env }) {
         const ziel = await zielEmail(body);
         if (!ziel) return json(400, { fehler: "Nutzer nicht gefunden" });
         if (!istAdmin && (await rollenVon(ziel, [])).length) return json(403, { fehler: "Admins und Moderatoren kann nur ein Admin ändern" });
+        const bis = body.gebannt_bis ? new Date(body.gebannt_bis) : null;
+        if (bis && isNaN(bis)) return json(400, { fehler: "Ungültiges Datum" });
         await db("user_bans", {
           method: "POST",
           headers: { Prefer: "resolution=merge-duplicates" },
           body: JSON.stringify({
             email: ziel,
             grund: sauber(body.grund, 300) || null,
-            gebannt_bis: body.gebannt_bis || null,
+            gebannt_bis: bis ? bis.toISOString() : null,
             gebannt_von: email,
           }),
         });
@@ -698,16 +714,7 @@ export async function onRequest({ request, env }) {
         if (p.autor_email !== email && !darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
         await loesche("forum_posts", `id=eq.${body.id}`);
         // Zähler der Antworten neu zählen, sonst zeigt die Übersicht weiter die alte Zahl
-        const rest = await hole(`forum_posts?thread_id=eq.${p.thread_id}&select=id`);
-        await aendere("forum_threads", `id=eq.${p.thread_id}`, { antworten: Math.max(0, (rest || []).length - 1) });
-        return json(200, { ok: true });
-      }
-
-      case "forum_thread_loeschen": {
-        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
-        if (!body.id) return json(400, { fehler: "ID fehlt" });
-        await loesche("forum_posts", `thread_id=eq.${body.id}`);
-        await loesche("forum_threads", `id=eq.${body.id}`);
+        await antwortenNeuZaehlen([p.thread_id]);
         return json(200, { ok: true });
       }
 
@@ -716,9 +723,11 @@ export async function onRequest({ request, env }) {
         const ziel = sauber(body.email, 200);
         if (!ziel) return json(400, { fehler: "E-Mail fehlt" });
         const e = encodeURIComponent(ziel);
+        const fremd = await hole(`forum_posts?autor_email=eq.${e}&select=thread_id`);
         await loesche("forum_posts", `autor_email=eq.${e}`);
         await loesche("forum_threads", `autor_email=eq.${e}`);
         await loesche("kommentare", `email=eq.${e}`);
+        await antwortenNeuZaehlen((fremd || []).map(p => p.thread_id));
         return json(200, { ok: true });
       }
 
@@ -734,23 +743,6 @@ export async function onRequest({ request, env }) {
           headers: { Prefer: "resolution=merge-duplicates" },
           body: JSON.stringify({ artikel_id: aid, versteckt_von: email }),
         });
-        return json(200, { ok: true });
-      }
-
-      case "artikel_einblenden": {
-        if (!darfLoeschen) return json(403, { fehler: "Keine Berechtigung" });
-        const aid = sauber(body.artikel_id, 64);
-        if (!aid) return json(400, { fehler: "Artikel-ID fehlt" });
-        await loesche("hidden_articles", `artikel_id=eq.${encodeURIComponent(aid)}`);
-        return json(200, { ok: true });
-      }
-
-      // ─── Leser-Einsendungen ────────────────────────────────────────────────
-      case "news_einsenden": {
-        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
-        const url = String(body.url ?? "").trim().slice(0, 500);
-        if (!/^https?:\/\/\S+$/i.test(url)) return json(400, { fehler: "Bitte gueltige URL eingeben" });
-        await lege_an("submitted_urls", { url, eingereicht_von: email });
         return json(200, { ok: true });
       }
 
@@ -874,6 +866,7 @@ export async function onRequest({ request, env }) {
         if (!body.konto_id) return json(400, { fehler: "Konto-ID fehlt" });
         // Erst Inhalte, dann das Konto - sonst bleiben verwaiste Beitraege
         const e2 = encodeURIComponent(ziel);
+        const fremd = await hole(`forum_posts?autor_email=eq.${e2}&select=thread_id`);
         await loesche("forum_posts", `autor_email=eq.${e2}`);
         await loesche("forum_threads", `autor_email=eq.${e2}`);
         await loesche("kommentare", `email=eq.${e2}`);
@@ -882,8 +875,9 @@ export async function onRequest({ request, env }) {
         for (const [tabelle, spalte] of [["profile", "email"], ["gaestebuch", "profil_email"], ["gaestebuch", "autor_email"],
             ["nachrichten", "von_email"], ["nachrichten", "an_email"], ["freundschaften", "von_email"], ["freundschaften", "an_email"],
             ["blockierungen", "blocker_email"], ["blockierungen", "blockiert_email"], ["kommentar_votes", "voter_email"],
-            ["tipps", "email"], ["spiel_tipps", "email"]])
+            ["tipps", "email"], ["spiel_tipps", "email"], ["submitted_urls", "eingereicht_von"]])
           await loesche(tabelle, `${spalte}=eq.${e2}`).catch(x => console.error(`Konto löschen ${tabelle}:`, x.message));
+        await antwortenNeuZaehlen((fremd || []).map(p => p.thread_id)).catch(x => console.error("Konto löschen Zähler:", x.message));
         await authAdmin(`/users/${encodeURIComponent(body.konto_id)}`, { method: "DELETE" });
         return json(200, { ok: true });
       }
@@ -985,26 +979,6 @@ export async function onRequest({ request, env }) {
         return json(200, { ok: true });
       }
 
-      case "gespraech_loeschen": {
-        const partner = await partnerAusSchluessel(email, body.partner);
-        if (!partner) return json(400, { fehler: "Partner fehlt" });
-        // Nur fuer einen selbst ausblenden, der andere behaelt seinen Verlauf
-        const betroffen = await hole(
-          `nachrichten?or=(and(von_email.eq.${encodeURIComponent(email)},an_email.eq.${encodeURIComponent(partner)}),` +
-          `and(von_email.eq.${encodeURIComponent(partner)},an_email.eq.${encodeURIComponent(email)}))&select=id,geloescht_von`);
-        // Ein PATCH je neuem Wert statt je Nachricht: Cloudflare erlaubt nur 50 Unteranfragen pro Aufruf
-        const gruppen = new Map();
-        for (const n of betroffen || []) {
-          if ((n.geloescht_von || []).includes(email)) continue;
-          const neu = JSON.stringify([...(n.geloescht_von || []), email].sort());
-          gruppen.set(neu, [...(gruppen.get(neu) || []), n.id]);
-        }
-        for (const [neu, ids] of gruppen)
-          for (let i = 0; i < ids.length; i += 200)
-            await aendere("nachrichten", `id=in.(${ids.slice(i, i + 200).join(",")})`, { geloescht_von: JSON.parse(neu) });
-        return json(200, { ok: true, betroffen: (betroffen || []).length });
-      }
-
 
       // ─── Profile, Gästebuch, Freunde, Blockieren ──────────────────────────────
       case "profil_meins": {
@@ -1047,6 +1021,7 @@ export async function onRequest({ request, env }) {
         if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
         const handle = sauber(body.handle, 30).toLowerCase();
         if (!HANDLE.test(handle)) return json(400, { fehler: "Profilname: 3–30 Zeichen, nur a–z, 0–9 und Bindestrich" });
+        if (RESERVIERT.test(handle) && !istAdmin) return json(400, { fehler: "Dieser Profilname ist reserviert" });
         if (handle !== profil.handle) {
           const belegt = await hole(`profile?handle=eq.${encodeURIComponent(handle)}&select=email`);
           if (belegt && belegt.length) return json(409, { fehler: "Dieser Profilname ist schon vergeben" });
