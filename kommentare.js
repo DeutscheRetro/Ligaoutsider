@@ -277,14 +277,14 @@
         <div style="font-size:12px;color:var(--text4);margin-bottom:16px">Dabei seit: <span style="color:var(--text3)">${dabei}</span></div>
         ${!istEigen && aktuellerUser ? `
           <div style="display:flex;flex-direction:column;gap:8px">
-            <button onclick="window._${istIgn ? 'entIgnoriereUser' : 'ignoriereUser'}(${JSON.stringify(key).replace(/"/g, '&quot;')});document.getElementById('profil-modal').remove()"
+            <button onclick="window._${istIgn ? 'entIgnoriereUser' : 'ignoriereUser'}(${esc(JSON.stringify(key))});document.getElementById('profil-modal').remove()"
               style="padding:8px;background:${istIgn ? 'var(--bg4)' : 'var(--bg4)'};color:${istIgn ? 'var(--accent)' : 'var(--text)'};border:1px solid var(--border2);border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">
               ${istIgn ? '✓ Nicht mehr ignorieren' : '🙈 Ignorieren'}
             </button>
             ${darfLoeschen ? `
               ${istGebannt
                 ? `<button onclick="window._entbanneUser('${kommentarId}')" style="padding:8px;background:var(--bg4);color:#4caf50;border:1px solid #4caf50;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">✓ Entbannen</button>`
-                : `<button onclick="window._zeigeBanModal('${kommentarId}',${JSON.stringify(name).replace(/"/g, '&quot;')})" style="padding:8px;background:#c62828;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">🚫 Bannen</button>`
+                : `<button onclick="window._zeigeBanModal('${kommentarId}',${esc(JSON.stringify(name))})" style="padding:8px;background:#c62828;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer">🚫 Bannen</button>`
               }` : ''}
           </div>` : ''}
       </div>`;

@@ -114,6 +114,9 @@ def _artikel_lesen(pfad: Path) -> tuple[str, str, list[str]] | None:
 
 def _html_anpassen(pfad: Path, alt_titel: str, alt_text: str, neu_titel: str, neu_text: str) -> None:
     roh = pfad.read_text(encoding="utf-8")
+    # alt_* stammen escaped aus der Seite, neu_* kommen roh von Opus: gleiche Form herstellen, sonst landet "<" als HTML
+    neu_text = "\n\n".join(html.escape(p.strip(), quote=False) for p in neu_text.split("\n\n"))
+    neu_titel = html.escape(neu_titel, quote=False)
     neu_abs = "".join(f"<p>{p.strip()}</p>" for p in neu_text.split("\n\n") if p.strip())
     roh = re.sub(r'(<div class="artikel-text">\s*).*?(\s*</div>)',
                  lambda m: m.group(1) + neu_abs + m.group(2), roh, count=1, flags=re.S)
@@ -146,6 +149,7 @@ def main():
     print(f"Qualitätsprüfung: {len(offen)} Artikel seit {seit.strftime(FORMAT)}")
     log = json.loads(LOG.read_text(encoding="utf-8")) if LOG.exists() else []
     geaendert = 0
+    fehler_folge = 0
     for e in offen:
         if time.time() - start > ZEITBUDGET_SEK:
             print("Zeitbudget erreicht – Rest beim nächsten Termin")
@@ -171,9 +175,15 @@ def main():
             print(f"Abbruch: {ex}")
             break
         except Exception as ex:
+            # Nicht als geprüft abhaken: sonst rutscht bei leerem Kontingent alles ungeprüft durch.
+            # Der Artikel kommt beim nächsten Termin wieder dran (48-Stunden-Fenster).
             print(f"  ⚠️ {e['titel'][:60]}: {ex}")
-            geprueft.add(e["id"])
+            fehler_folge += 1
+            if fehler_folge >= 3:
+                print("Drei Fehler in Folge – Abbruch, Rest beim nächsten Termin")
+                break
             continue
+        fehler_folge = 0
         neu_text = gen.floskeln_entfernen(str(r.get("text", "")).strip())
         neu_titel = gen.anfuehrungszeichen(str(r.get("titel", "")).strip())[:120]
         # Maßgeblich ist, ob sich Titel oder Text tatsächlich geändert haben (das Urteil allein

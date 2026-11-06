@@ -122,22 +122,31 @@ window.LO_SAISON = (d => d.getMonth() >= 6 ? d.getFullYear() : d.getFullYear() -
       body: body ? JSON.stringify(body) : undefined,
     });
     const d = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(fehlertext(d));
+    if (!r.ok) { const f = new Error(fehlertext(d)); f.status = r.status; throw f; }
     return d;
   }
 
   // Gültiges Zugriffstoken, notfalls erneuert
+  let erneuerung = null;   // eine laufende Erneuerung teilen: ein Refresh-Token gilt nur einmal
   async function frischesToken() {
+    // Ein anderer Tab oder die andere Liga kann das Token schon erneuert haben (gemeinsames Cookie)
+    sitzung = laden() || sitzung;
     if (!sitzung) return null;
     if (Date.now() < sitzung.ablauf - 60000) return sitzung.access;
-    try {
-      speichern(ausAntwort(await auth('token?grant_type=refresh_token', { refresh_token: sitzung.refresh })));
-      return sitzung.access;
-    } catch (e) {
-      speichern(null);
-      feuern('logout');
-      return null;
-    }
+    if (!erneuerung) erneuerung = (async () => {
+      try {
+        const neu = ausAntwort(await auth('token?grant_type=refresh_token', { refresh_token: sitzung.refresh }));
+        speichern({ ...neu, user: neu.user || sitzung.user });
+        return sitzung.access;
+      } catch (e) {
+        // Nur abmelden, wenn Supabase die Sitzung ablehnt; Netzfehler (offline) behalten die Anmeldung
+        if (e.status === 400 || e.status === 401) { speichern(null); feuern('logout'); return null; }
+        throw e;
+      } finally {
+        erneuerung = null;
+      }
+    })();
+    return erneuerung;
   }
 
   // Nur über Google angemeldet und noch kein eigener Benutzername gewählt?

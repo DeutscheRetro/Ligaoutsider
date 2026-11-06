@@ -872,6 +872,12 @@ export async function onRequest({ request, env }) {
         await loesche("forum_threads", `autor_email=eq.${e2}`);
         await loesche("kommentare", `email=eq.${e2}`);
         await loesche("benutzer_rollen", `email=eq.${e2}`);
+        // Alles, was am Konto hängt: sonst bleibt das Profil öffentlich und ein neues Konto mit derselben Adresse erbt es
+        for (const [tabelle, spalte] of [["profile", "email"], ["gaestebuch", "profil_email"], ["gaestebuch", "autor_email"],
+            ["nachrichten", "von_email"], ["nachrichten", "an_email"], ["freundschaften", "von_email"], ["freundschaften", "an_email"],
+            ["blockierungen", "blocker_email"], ["blockierungen", "blockiert_email"], ["kommentar_votes", "voter_email"],
+            ["tipps", "email"], ["spiel_tipps", "email"]])
+          await loesche(tabelle, `${spalte}=eq.${e2}`).catch(x => console.error(`Konto löschen ${tabelle}:`, x.message));
         await authAdmin(`/users/${encodeURIComponent(body.konto_id)}`, { method: "DELETE" });
         return json(200, { ok: true });
       }
@@ -1010,6 +1016,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "avatar_speichern": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const profil = await profilSicher(email, name);
         if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
         const bild = body.bild == null ? null : String(body.bild);
@@ -1024,6 +1031,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "profil_speichern": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const profil = await profilSicher(email, name);
         if (!profil) return json(503, { fehler: "Profile sind noch nicht eingerichtet" });
         const handle = sauber(body.handle, 30).toLowerCase();
@@ -1117,6 +1125,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "freund_anfrage": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         await profilSicher(email, name);
         const ziel = await emailVonHandle(body.handle);
         if (!ziel || ziel.email === email) return json(400, { fehler: "Ungültiges Profil" });
@@ -1170,6 +1179,7 @@ export async function onRequest({ request, env }) {
       }
 
       case "name_waehlen": {
+        if (await istGebannt(email)) return json(403, { fehler: "Du bist gesperrt" });
         const neu = sauber(nameNormal(body.name), 30).replace(/\s+/g, " ");
         if (!BENUTZERNAME.test(neu))
           return json(400, { fehler: "Benutzername: 3–30 Zeichen, nur Buchstaben, Zahlen, Leerzeichen, Punkt, Binde- und Unterstrich" });

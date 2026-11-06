@@ -23,6 +23,10 @@ import logging
 from pathlib import Path
 from dotenv import load_dotenv
 import feedparser
+import socket
+
+# feedparser kennt keinen Timeout: ein Feed, der nie antwortet, hielt sonst den ganzen Lauf bis zum Job-Limit fest
+socket.setdefaulttimeout(20)
 import anthropic
 from slugify import slugify
 from url_cache import URLCache
@@ -570,7 +574,9 @@ def feed_laden() -> list:
         pass
     except Exception as e:
         print(f"  chefred_titel.json nicht lesbar: {e}")
-    return list(merged.values())
+    # Gelöschte Artikel und Einträge ohne Seite verwerfen: sonst holt der Live-Merge sie zurück (Startseite zeigt 404)
+    weg = lade_deleted_ids()
+    return [a for a in merged.values() if a["id"] not in weg and Path(a.get("pfad") or "-").exists()]
 
 
 def feed_speichern(artikel_liste: list):
