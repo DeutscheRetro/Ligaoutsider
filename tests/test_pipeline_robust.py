@@ -19,6 +19,18 @@ class Robust(unittest.TestCase):
             c.save()
             self.assertFalse((Path(t) / "seen.json.tmp").exists())
 
+    def test_url_cache_alte_url_schluessel_bleiben_gesehen(self):
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "seen.json"
+            url = "https://news.google.com/rss/articles/abc"
+            p.write_text('{"%s": "%s"}' % (url, datetime.now().isoformat()), encoding="utf-8")
+            c = URLCache(str(p))
+            self.assertTrue(c.is_seen(url))
+            c.mark_seen("https://example.org/x")
+            c.save()
+            self.assertTrue(URLCache(str(p)).is_seen("https://example.org/x"))
+            self.assertNotIn("http", p.read_text(encoding="utf-8"))
+
     def test_kaputter_feed_bricht_ab(self):
         with tempfile.TemporaryDirectory() as t:
             alt = g.FEED_JSON

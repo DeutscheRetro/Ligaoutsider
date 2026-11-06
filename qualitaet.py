@@ -135,6 +135,15 @@ def _html_anpassen(pfad: Path, alt_titel: str, alt_text: str, neu_titel: str, ne
     pfad.write_text(roh, encoding="utf-8")
 
 
+def _queue_anpassen(korrigiert: dict, q: Path = Path("data/social_queue.json")) -> None:
+    """Social postet erst nach diesem Schritt: korrigierte Titel auch in die Warteschlange."""
+    if not korrigiert or not q.exists():
+        return
+    queue = [{**e, "titel": korrigiert[e["id"]][0], "anriss": korrigiert[e["id"]][1]} if e.get("id") in korrigiert else e
+             for e in json.loads(q.read_text(encoding="utf-8"))]
+    gen._atomar_schreiben(q, json.dumps(queue, ensure_ascii=False, indent=1))
+
+
 def main():
     start = time.time()
     ki_budget.init(anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"]))
@@ -149,6 +158,7 @@ def main():
     print(f"Qualitätsprüfung: {len(offen)} Artikel seit {seit.strftime(FORMAT)}")
     log = json.loads(LOG.read_text(encoding="utf-8")) if LOG.exists() else []
     geaendert = 0
+    korrigiert = {}   # id -> (titel, anriss) für die Social-Warteschlange
     fehler_folge = 0
     for e in offen:
         if time.time() - start > ZEITBUDGET_SEK:
@@ -195,6 +205,8 @@ def main():
             _html_anpassen(pfad, titel, text, neu_titel, neu_text)
             e["titel"] = neu_titel
             e["anriss"] = " ".join(neu_text.split()[:30])
+            saetze = re.split(r"(?<=[.!?])\s+", neu_text.split("\n\n")[0].strip())
+            korrigiert[e["id"]] = (neu_titel, " ".join(saetze[:2])[:280])
             if neu_titel != html.unescape(titel):
                 gen.og_karte(e["id"], neu_titel, e.get("kategorie", "news"), e.get("wappen_url", ""), e.get("bild_tm") or None)
             geaendert += 1
@@ -214,6 +226,7 @@ def main():
     gen._atomar_schreiben(gen.FEED_JSON, json.dumps(feed, ensure_ascii=False, indent=2))
     gen._atomar_schreiben(STAND, json.dumps(stand, ensure_ascii=False, indent=1))
     gen._atomar_schreiben(LOG, json.dumps(log[-2000:], ensure_ascii=False, indent=1))
+    _queue_anpassen(korrigiert)
     print(f"Fertig: {geaendert} von {len(offen)} Artikeln verbessert | {ki_budget.bericht().get('abo_tokens', {}).get('qualitaet')}")
 
 

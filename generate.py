@@ -190,7 +190,6 @@ BL1_KLUBS = [
 
 # ─── Wappen-URLs für die Feed-Anzeige ─────────────────────────────────────────
 
-BL_LOGO = "logos/bundesliga.png"
 
 VEREIN_WAPPEN = {
     # Bayern
@@ -447,78 +446,6 @@ def schon_verarbeitet(url: str) -> bool:
     return (ARTIKEL_ORDNER / f"{aid}.skip").exists()
 
 
-def verein_wappen_url(text: str, title: str = "") -> str:
-    """Findet das relevanteste Vereinslogo per Scoring aggregiert pro Logo-URL."""
-    _context_kw = ("wechselt", "transfer", "verletzung", "verpflichtet", "spielt",
-                   "trainer", "vertrag", "ablöse", "siegt", "verliert")
-    # "gegen X" / "bei X" markiert den Gegner, nicht das Thema des Artikels
-    _gegner_kw = ("gegen", "bei", "auswärts bei", "zu gast bei", "empfängt")
-    full_lower = (title + " " + text).lower()
-    title_lower = title.lower()
-    # Gleichnamige Klubs ausserhalb der Liga ausblenden, bevor gezaehlt wird
-    for fremd in ("philadelphia union", "union saint-gilloise", "union berlin ii"):
-        full_lower = full_lower.replace(fremd, " ")
-        title_lower = title_lower.replace(fremd, " ")
-    text_len = len(full_lower) or 1
-
-    # Erst pro Logo aggregieren. Mehrere Keys zeigen auf denselben Klub
-    # ("stuttgart", "vfb stuttgart"); ohne Aggregation kassiert der Klub
-    # jeden Bonus mehrfach und ueberholt den eigentlich gemeinten.
-    agg: dict[str, dict] = {}
-    for key, logo_url in VEREIN_WAPPEN.items():
-        count = _count_key(key, full_lower)
-        if count == 0:
-            continue
-        m_full = re.search(r'(?<!\w)' + re.escape(key), full_lower)
-        m_titel = re.search(r'(?<!\w)' + re.escape(key), title_lower)
-        a = agg.setdefault(logo_url, {"count": 0, "pos": text_len, "titel_pos": None,
-                                      "kontext": False, "gegner": False})
-        # max statt sum: der kuerzere Key zaehlt die Treffer des laengeren mit
-        a["count"] = max(a["count"], count)
-        if m_full:
-            a["pos"] = min(a["pos"], m_full.start())
-        if m_titel:
-            a["titel_pos"] = (m_titel.start() if a["titel_pos"] is None
-                              else min(a["titel_pos"], m_titel.start()))
-        if any(f"{key} {kw}" in full_lower or f"{kw} {key}" in full_lower
-               for kw in _context_kw):
-            a["kontext"] = True
-        if any(f"{kw} {key}" in title_lower for kw in _gegner_kw):
-            a["gegner"] = True
-
-    if not agg:
-        return BL_LOGO
-
-    # Wer im Titel zuerst steht, ist fast immer das Thema – Bonus nur einmal
-    im_titel = [(v["titel_pos"], k) for k, v in agg.items() if v["titel_pos"] is not None]
-    erster_im_titel = min(im_titel)[1] if im_titel else None
-
-    logo_scores: dict[str, int] = {}
-    for logo_url, a in agg.items():
-        score = a["count"] * 10
-        if a["titel_pos"] is not None:
-            score += 100
-        if logo_url == erster_im_titel:
-            score += 45
-        if a["pos"] < text_len * 0.25:
-            score += 15
-        elif a["pos"] < text_len * 0.5:
-            score += 8
-        if a["kontext"]:
-            score += 20
-        if a["gegner"]:
-            score -= 60
-        logo_scores[logo_url] = score
-
-    bestes = max(logo_scores, key=logo_scores.get)  # type: ignore[arg-type]
-    # Ligaweite Artikel (Spielplan, Testspiel-Uebersichten) nennen viele Klubs,
-    # keinen im Titel und haben keinen klaren Schwerpunkt – da ist das neutrale
-    # Bundesliga-Logo ehrlicher als ein willkuerlich gewaehltes Wappen.
-    if not im_titel and len(agg) >= 5:
-        rest = sorted((s for k, s in logo_scores.items() if k != bestes), reverse=True)
-        if rest and logo_scores[bestes] < rest[0] * 1.5:
-            return BL_LOGO
-    return bestes
 
 
 def badge_fuer_kategorie(kategorie: str) -> tuple:
@@ -604,9 +531,10 @@ def _text_aus(antwort) -> str:
     return next((b.text for b in antwort.content if getattr(b, "type", "") == "text"), "").strip()
 
 
-def _qa_reserve(anzahl: int) -> float:
-    """Geld, das für die Doppel-Gegenproben nach dem Schreiben frei bleiben muss."""
-    return 0.002
+
+
+# Geld, das für die Doppel-Gegenproben nach dem Schreiben frei bleiben muss
+QA_RESERVE = 0.002
 
 
 # Sätze, die nur Lücken füllen oder auf fehlende Infos verweisen – fliegen raus
@@ -1301,7 +1229,6 @@ def _host_oeffentlich(url: str) -> bool:
         return bool(infos) and all(ipaddress.ip_address(i[4][0].split('%')[0]).is_global for i in infos)
     except ValueError:
         return False
-    return bool(infos) and all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
 
 
 def _sicher_get(url: str, **kw):
@@ -1409,10 +1336,6 @@ def fetch_fulltext(url: str) -> tuple[str | None, str]:
         return None, f"exception_{type(e).__name__}"
 
 
-# Legacy-Wrapper für Abwärtskompatibilität (intern nicht mehr genutzt)
-def quellartikel_laden(url: str) -> str:
-    text, reason = fetch_fulltext(url)
-    return text or ""
 
 
 KATEGORIEN = ["transfer", "verletzung", "aufstellung", "interview", "analyse", "news"]
@@ -2093,29 +2016,6 @@ def main():
 
     log.info(f"=== LO Generator startet – max. {MAX_ARTIKEL_PRO_LAUF} Artikel ===")
 
-    # Eingereichte URLs aus Supabase laden
-    _submitted_urls, _submitted_ids = [], []
-    try:
-        import urllib.request as _ur2, json as _json2
-        _supa_url = "https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?status=eq.pending&select=id,url"
-        _supa_key = os.environ.get("SUPABASE_SERVICE_KEY", "")
-        if _supa_key:
-            _req2 = _ur2.Request(_supa_url, headers={
-                "apikey": _supa_key, "Authorization": f"Bearer {_supa_key}"
-            })
-            with _ur2.urlopen(_req2, timeout=10) as _r2:
-                _rows = _json2.loads(_r2.read())
-            # Nur Domains, die schon auf der eigenen Quellenliste stehen: sonst schleust ein Nutzer eigene Feeds ein
-            from urllib.parse import urlparse as _up
-            _host = lambda u: (_up(u).hostname or "").removeprefix("www.")
-            _erlaubt = {_host(f) for f in RSS_FEEDS if f.startswith("http")}
-            _submitted_urls = [r["url"] for r in _rows if r.get("url") and _host(r["url"]) in _erlaubt and _host_oeffentlich(r["url"])]
-            _submitted_ids  = [r["id"]  for r in _rows if r.get("id")]
-            if _submitted_ids:
-                log.info(f"📥 {len(_submitted_ids)} eingereichte URLs, {len(_submitted_urls)} von bekannten Quellen")
-    except Exception as _e2:
-        log.warning(f"Supabase submitted_urls Fehler: {_e2}")
-
     # Reihum: jeder Lauf beginnt dort, wo der letzte wegen des Zeitbudgets aufgehört hat.
     # Sonst kämen die hinteren Quellen (14 Vereinssuchen, kicker-Vereinsfeeds) nie dran.
     _pos_datei = Path("data/feed_position.json")
@@ -2124,7 +2024,7 @@ def main():
     except Exception:
         _start_pos = 0
     _rotiert = RSS_FEEDS[_start_pos:] + RSS_FEEDS[:_start_pos]
-    _all_feeds = _submitted_urls + _rotiert
+    _all_feeds = _rotiert
     _feeds_fertig = 0
     # Zeitbudget: GitHub bricht den Lauf nach 35 Minuten ab. Einlesen bekommt
     # höchstens 9 Minuten, der Rest bleibt fürs Schreiben. Was nicht mehr gelesen
@@ -2413,7 +2313,7 @@ def main():
             _geschichte_verwerfen(g, "stage7", "sammelartikel")
             schlange.remove(g)
             continue
-        reserve = _qa_reserve(len(kandidaten) + 1)
+        reserve = QA_RESERVE
         if ki_budget.rest() < ki_budget.schaetzung(SCHREIBER, SCHREIB_MAX_TOKENS, SCHREIB_ZEICHEN) + reserve:
             log.info(f"S7 Budget dieses Laufs reicht für keinen weiteren Artikel – "
                      f"{len(reihenfolge) - reihenfolge.index(g)} Geschichten warten auf den nächsten Lauf")
@@ -2541,7 +2441,6 @@ def main():
     from rapidfuzz import fuzz as _fuzz2
 
     # Archiv-Summaries + Titel für Content-Vergleich (letzte 7 Tage)
-    cutoff_95 = datetime.datetime.now() - datetime.timedelta(days=7)
     archive_recent = [
         e for e in news_archive
         if _ist_innerhalb_tage(e.get("published_at", ""), days=7)
@@ -2714,19 +2613,6 @@ def main():
         except Exception as _e:
             log.warning(f"Social-Warteschlange: {_e}")
 
-    # Eingereichte URLs erst nach dem Lauf als erledigt markieren (bricht er vorher ab, kommen sie nächstes Mal dran)
-    _supa_key = os.environ.get("SUPABASE_SERVICE_KEY", "")
-    for _sid in _submitted_ids if _supa_key else []:
-        try:
-            import urllib.request as _ur3
-            _ur3.urlopen(_ur3.Request(
-                f"https://rsodjlglzwlscamdlwev.supabase.co/rest/v1/submitted_urls?id=eq.{_sid}",
-                data=b'{"status":"processed"}', method="PATCH",
-                headers={"apikey": _supa_key, "Authorization": f"Bearer {_supa_key}",
-                         "Content-Type": "application/json", "Prefer": "return=minimal"}), timeout=5)
-        except Exception as _e3:
-            log.warning(f"submitted_urls {_sid} nicht markiert: {_e3}")
-
     # Run-Stats speichern, mit den echten KI-Kosten dieses Laufs
     stats["kosten"] = ki_budget.bericht()
     _k = stats["kosten"]
@@ -2864,7 +2750,7 @@ def news_sitemap_generieren(artikel_liste: list):
             f"    <loc>https://ligaoutsider.de/{a['pfad']}</loc>",
             "    <news:news>",
             "      <news:publication><news:name>Ligaoutsider</news:name><news:language>de</news:language></news:publication>",
-            f"      <news:publication_date>{dt.strftime('%Y-%m-%dT%H:%M:00')}{_zeitzone()}</news:publication_date>",
+            f"      <news:publication_date>{dt.replace(second=0, microsecond=0, tzinfo=ZoneInfo('Europe/Berlin')).isoformat()}</news:publication_date>",
             f"      <news:title>{escape(a['titel'])}</news:title>",
             "    </news:news>",
             "  </url>",

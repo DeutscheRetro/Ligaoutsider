@@ -1,8 +1,14 @@
+import hashlib
 import json
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict
+
+
+def _schluessel(url: str) -> str:
+    # Hash statt URL: Google-News-Links sind ~280 Zeichen lang, die Datei wäre sonst 20 MB groß
+    return hashlib.md5(url.encode()).hexdigest()[:12]
 
 
 class URLCache:
@@ -18,7 +24,8 @@ class URLCache:
                 with open(self.cache_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 if isinstance(data, dict):
-                    self.seen_urls = data
+                    # Alte Einträge mit voller URL umschlüsseln, sonst gälten sie als neu
+                    self.seen_urls = {_schluessel(k) if k.startswith("http") else k: v for k, v in data.items()}
             except Exception:
                 self.seen_urls = {}
         self._prune()
@@ -33,14 +40,10 @@ class URLCache:
         self.seen_urls = {url: ts for url, ts in self.seen_urls.items() if frisch(ts)}
 
     def is_seen(self, url: str) -> bool:
-        return url in self.seen_urls
+        return _schluessel(url) in self.seen_urls
 
     def mark_seen(self, url: str):
-        self.seen_urls[url] = datetime.now().isoformat()
-
-    def forget(self, url: str):
-        """Gibt eine URL für den nächsten Lauf frei (vorübergehender Abruffehler)."""
-        self.seen_urls.pop(url, None)
+        self.seen_urls[_schluessel(url)] = datetime.now().isoformat(timespec="seconds")
 
     def save(self):
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)

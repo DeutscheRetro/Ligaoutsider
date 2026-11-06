@@ -48,6 +48,11 @@ class Umfrage(unittest.TestCase):
         ki = {"typ": "recht", "frage": "Hat Hoeneß recht, dass 12 Spiele zu viel sind?"}
         self.assertIsNone(umfrage.waehlen("sonstiges", "interview", HOENESS, ki))
 
+    def test_zahl_als_teil_einer_groesseren_fliegt(self):
+        text = "Uli Hoeneß kritisiert die 30 Millionen Ablöse: „Ein Desaster“, sagte Hoeneß."
+        ki = {"typ": "recht", "frage": "Hat Hoeneß recht, dass 3 Millionen zu viel sind?"}
+        self.assertIsNone(umfrage.waehlen("sonstiges", "interview", text, ki))
+
     def test_sensibles_thema_gibt_nichts(self):
         text = WEISER + " Die Staatsanwaltschaft ermittelt."
         self.assertIsNone(umfrage.waehlen("verletzung", "verletzung", text, None))

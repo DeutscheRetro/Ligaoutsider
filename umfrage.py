@@ -37,7 +37,7 @@ def _frage_ok(frage: str, text: str) -> bool:
     if not any(re.search(r"\b" + re.escape(w), text) for w in namen):
         return False
     # Keine Zahl, die nicht im Text steht
-    return all(z in text for z in re.findall(r"\d+", frage))
+    return all(re.search(rf"(?<!\d){z}(?!\d)", text) for z in re.findall(r"\d+", frage))
 
 
 def waehlen(ereignis: str, kategorie: str, text: str, ki: dict | None) -> dict | None:

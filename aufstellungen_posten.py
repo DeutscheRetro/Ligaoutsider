@@ -171,6 +171,9 @@ def main():
         gen.feed_speichern(feed)
         gen.sitemap_generieren(feed)
         gen.rss_generieren(feed)
+    # Nur die letzten 50 Partien merken: ältere sind vorbei, ein Doppelpost fiele zudem über die Feed-ID auf
+    ids = list(gepostet)
+    gepostet = {k: gepostet[k] for k in ids[-50:]}
     GEPOSTET.write_text(json.dumps(gepostet, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Fertig: {neu} Aufstellungsartikel")
 
