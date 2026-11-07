@@ -293,7 +293,8 @@
         'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','SV 07 Elversberg':'Elversberg',
       };
       // Gegner aus Pokal und Europapokal: geläufige Kurznamen, damit die Zeile einzeilig bleibt
-      Object.assign(KÜRZEL, {
+      // Eigene Liste: KÜRZEL bleibt die Liste der Bundesligisten, nach ihr filtert der Pokal-Teil
+      const KURZ = Object.assign({}, KÜRZEL, {
         'AEK Athen':'AEK','AS Monaco':'Monaco','Aston Villa':'Villa','Atletico Madrid':'Atlético','Besiktas Istanbul':'Beşiktaş',
         'Como 1907':'Como','Crystal Palace FC':'C. Palace','Dinamo Zagreb':'D. Zagreb','FC Arsenal':'Arsenal','FC Brügge':'Brügge',
         'FC Twente Enschede':'Twente','FK Bodö/Glimt':'Bodø/Glimt','FK Jablonec':'Jablonec','FK Kauno Žalgiris':'Žalgiris',
@@ -314,7 +315,7 @@
       });
       // Unbekannte Namen: Vereinskürzel vorn und hinten weg, notfalls nach 12 Zeichen kürzen
       const kürzel = n => {
-        if (KÜRZEL[String(n).trim()]) return KÜRZEL[String(n).trim()];
+        if (KURZ[String(n).trim()]) return KURZ[String(n).trim()];
         const k = String(n).trim().replace(/ \d{4}\b/, '').replace(/^(\d\. )?(FC|FK|NK|SC|SV|AS|RC|VfL|VfB|TSV|SK|SG) /, '').replace(/ (FC|CF|SC|\d{2,4})$/, '');
         return k.length > 12 ? k.slice(0, 11) + '.' : k;
       };
