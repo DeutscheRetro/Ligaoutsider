@@ -463,7 +463,33 @@ async function spielInfo(id) {
   return m && m.matchID === id ? { anpfiff: m.matchDateTimeUTC, fertig: !!m.matchIsFinished } : null;
 }
 
+// Spielplan-Ticker: OpenLigaDB über den Cloudflare-Cache. Frisch für 60 s, danach neu holen;
+// hängt OpenLigaDB, liefert der Cache bis zu 1 h alte Daten statt nichts.
+const OLDB_PFAD = /^(getcurrentgroup\/bl[12]|getmatchdata\/(bl1|bl2|dfb|ucl|uel\d{4}|uecl\d{4})\/\d{4}(\/\d{1,2})?)$/;
+async function oldb(request) {
+  const pfad = new URL(request.url).searchParams.get("oldb") || "";
+  if (!OLDB_PFAD.test(pfad)) return json(400, { fehler: "unbekannter Pfad" });
+  const aus = (text, alter) => new Response(text, { status: 200, headers: {
+    "Content-Type": "application/json", "Cache-Control": `public, max-age=${alter}` } });
+  const cache = typeof caches === "undefined" ? null : caches.default;
+  const schluessel = new Request(`${new URL(request.url).origin}/api?oldb=${pfad}`, { method: "GET" });
+  const alt = cache ? await cache.match(schluessel) : null;
+  if (alt && Date.now() - Number(alt.headers.get("X-Geholt") || 0) < 60000) return aus(await alt.text(), 60);
+  try {
+    const r = await fetch(`https://api.openligadb.de/${pfad}`, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) throw new Error("OpenLigaDB " + r.status);
+    const text = await r.text();
+    if (cache) await cache.put(schluessel, new Response(text, { headers: {
+      "Content-Type": "application/json", "Cache-Control": "public, max-age=3600", "X-Geholt": String(Date.now()) } }));
+    return aus(text, 60);
+  } catch (e) {
+    if (alt) return aus(await alt.text(), 30);
+    return json(502, { fehler: "OpenLigaDB nicht erreichbar" });
+  }
+}
+
 export async function onRequest({ request, env }) {
+  if (request.method === "GET" && new URL(request.url).searchParams.has("oldb")) return oldb(request);
   if (request.method === "POST" && new URL(request.url).searchParams.has("kontakt")) return kontakt(request, env);
   SERVICE_KEY = env.SUPABASE_SERVICE_KEY || "";
   GH_TOKEN = env.GH_TOKEN || env.GH_DISPATCH_TOKEN || "";
