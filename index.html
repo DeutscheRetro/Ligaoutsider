@@ -292,7 +292,32 @@
         'TSG Hoffenheim':'Hoffenheim','Hamburger SV':'HSV','1. FC Köln':'Köln',
         'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','SV 07 Elversberg':'Elversberg',
       };
-      const kürzel = n => KÜRZEL[n] || n;
+      // Gegner aus Pokal und Europapokal: geläufige Kurznamen, damit die Zeile einzeilig bleibt
+      Object.assign(KÜRZEL, {
+        'AEK Athen':'AEK','AS Monaco':'Monaco','Aston Villa':'Villa','Atletico Madrid':'Atlético','Besiktas Istanbul':'Beşiktaş',
+        'Como 1907':'Como','Crystal Palace FC':'C. Palace','Dinamo Zagreb':'D. Zagreb','FC Arsenal':'Arsenal','FC Brügge':'Brügge',
+        'FC Twente Enschede':'Twente','FK Bodö/Glimt':'Bodø/Glimt','FK Jablonec':'Jablonec','FK Kauno Žalgiris':'Žalgiris',
+        'Ferencváros Budapest':'Ferencváros','Feyenoord Rotterdam':'Feyenoord','Galatasaray Istanbul':'Galatasaray',
+        'Inter Mailand':'Inter','Lech Poznan':'Lech Posen','Lille OSC':'Lille','Manchester City':'Man City',
+        'Manchester United FC':'Man United','NK Celje':'Celje','OFI Kreta':'OFI Kreta','Olympiakos Piräus':'Olympiakos',
+        'Olympique Lyon':'Lyon','Olympique Marseille':'Marseille','PSV Eindhoven':'PSV','Panathinaikos FC':'Panathinaikos',
+        'RB Salzburg':'Salzburg','RC Lens':'Lens','RSC Anderlecht':'Anderlecht','Real Betis':'Betis','Real Madrid':'Real',
+        'Shakhtar Donetsk':'Schachtar','Slavia Prag':'Slavia Prag','Slovan Bratislava':'Bratislava','Sturm Graz':'Sturm Graz',
+        'Villarreal CF':'Villarreal','1. FC Kaiserslautern':'Lautern','1. FC Nürnberg':'Nürnberg','1. FC Magdeburg':'Magdeburg',
+        'Fortuna Düsseldorf':'Düsseldorf','Eintracht Braunschweig':'Braunschweig','SV Darmstadt 98':'Darmstadt',
+        'SV Wehen Wiesbaden':'Wiesbaden','Würzburger Kickers':'Würzburg','Rot-Weiss Essen':'RW Essen','VfL Wolfsburg':'Wolfsburg',
+        'VfL Bochum':'Bochum','VfL Osnabrück':'Osnabrück','Hertha BSC':'Hertha','Holstein Kiel':'Kiel','Hansa Rostock':'Rostock',
+        'Dynamo Dresden':'Dresden','Energie Cottbus':'Cottbus','Erzgebirge Aue':'Aue','Karlsruher SC':'KSC',
+        'SG Sonnenhof Großaspach':'Großaspach','VfB 1921 Krieschow':'Krieschow','Eintracht Trier':'Trier',
+        'Paris Saint-Germain':'PSG','Sporting Lissabon':'Sporting','Benfica Lissabon':'Benfica','Tottenham Hotspur':'Tottenham',
+        'Newcastle United':'Newcastle','Atalanta Bergamo':'Atalanta','Juventus Turin':'Juventus','AC Mailand':'Milan','Hamburg Eimsbütteler BC':'Eimsbüttel','Lüneburger SK Hansa':'Lüneburg',
+      });
+      // Unbekannte Namen: Vereinskürzel vorn und hinten weg, notfalls nach 12 Zeichen kürzen
+      const kürzel = n => {
+        if (KÜRZEL[String(n).trim()]) return KÜRZEL[String(n).trim()];
+        const k = String(n).trim().replace(/ \d{4}\b/, '').replace(/^(\d\. )?(FC|FK|NK|SC|SV|AS|RC|VfL|VfB|TSV|SK|SG) /, '').replace(/ (FC|CF|SC|\d{2,4})$/, '');
+        return k.length > 12 ? k.slice(0, 11) + '.' : k;
+      };
       // Pokale mit deutscher Beteiligung (OpenLigaDB-Kürzel, Saison wird angehängt).
       // shortcut: uel2026/uecl2026 heißen bei OpenLigaDB je Saison anders, zum Saisonwechsel anpassen
       const POKALE = [
