@@ -111,26 +111,13 @@
     muster.sort((a, b) => b[0].length - a[0].length);
     if (!muster.length) return;
 
-    // Akzentunabhängig: "Pavlovic" (Datenbank) trifft auch "Pavlović" (Artikel)
+    // Akzentunabhängig: "Pavlovic" (Datenbank) trifft auch "Pavlović" (Artikel), "ae" auch "æ".
+    // Wortweise Suche in einer Map statt eines Riesen-Regex: der fror Handys mehrere Sekunden ein.
     const falte = t => t.normalize('NFD').replace(/\p{M}/gu, '').replace(/ø/g, 'o').replace(/Ø/g, 'O')
       .replace(/ł/g, 'l').replace(/đ/g, 'd').replace(/æ/g, 'ae').replace(/Æ/g, 'Ae').toLowerCase();
-    // Groß-/Kleinschreibung bleibt erhalten: "Neuer" ja, "neuer Trainer" nein
-    const ohneAkzent = t => t.normalize('NFD').replace(/\p{M}/gu, '');
-    const buchstabe = c => {
-      if (c === 'o' || c === 'ø') return '(?:[oø]\\p{M}*)';
-      if (c === 'O' || c === 'Ø') return '(?:[OØ]\\p{M}*)';
-      if (c === 'l' || c === 'ł') return '(?:[lł]\\p{M}*)';
-      if (c === 'L' || c === 'Ł') return '(?:[LŁ]\\p{M}*)';
-      if (/\p{L}/u.test(c)) return `(?:${c}\\p{M}*)`;
-      return c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    };
-    // "ae" und "æ" gelten als gleich (Grønbaek / Grønbæk)
-    const muster1 = n => ohneAkzent(n).replace(/æ/g, 'ae').replace(/Æ/g, 'Ae');
-    const suchmuster = muster.map(([n]) => [...muster1(n)].map(buchstabe).join('')
-      .replace(/\(\?:a\\p\{M\}\*\)\(\?:e\\p\{M\}\*\)/g, '(?:ae|æ)')
-      .replace(/\(\?:A\\p\{M\}\*\)\(\?:e\\p\{M\}\*\)/g, '(?:Ae|Æ)'));
-    const re = new RegExp(`(?<![\\p{L}\\p{N}-])(${suchmuster.join('|')})(?![\\p{L}\\p{N}-])`, 'gu');
-    const nachText = new Map(muster.map(([n, sp]) => [falte(n), sp]));
+    const nachText = new Map();
+    muster.forEach(([n, sp]) => { const k = falte(n); if (!nachText.has(k)) nachText.set(k, sp); });
+    const maxWoerter = Math.max(...muster.map(([n]) => n.split(' ').length));
 
     const walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT);
     const knoten = [];
@@ -138,25 +125,35 @@
 
     const verlinkt = new Set();  // jeder Spieler nur beim ersten Vorkommen
     knoten.forEach(k => {
-      const inhalt = k.nodeValue.normalize('NFD');
-      re.lastIndex = 0;
-      if (!re.test(inhalt)) return;
-      re.lastIndex = 0;
+      const inhalt = k.nodeValue;
+      const woerter = [...inhalt.matchAll(/[\p{L}\p{M}\p{N}'’-]+/gu)];
+      const treffer = [];
+      for (let i = 0; i < woerter.length; i++) {
+        // Groß-/Kleinschreibung zählt: "Neuer" ja, "neuer Trainer" nein
+        if (!/\p{Lu}/u.test(woerter[i][0][0])) continue;
+        for (let w = Math.min(maxWoerter, woerter.length - i); w >= 1; w--) {
+          const start = woerter[i].index, ende = woerter[i + w - 1].index + woerter[i + w - 1][0].length;
+          const stueck = inhalt.slice(start, ende);
+          const s = nachText.get(falte(stueck));
+          if (!s) continue;
+          if (!verlinkt.has(s.tm_id)) { verlinkt.add(s.tm_id); treffer.push([start, ende, stueck, s]); }
+          i += w - 1;
+          break;
+        }
+      }
+      if (!treffer.length) return;
       const frag = document.createDocumentFragment();
-      let pos = 0, m;
-      while ((m = re.exec(inhalt))) {
-        const s = nachText.get(falte(m[1]));
-        if (!s || verlinkt.has(s.tm_id)) continue;
-        verlinkt.add(s.tm_id);
-        frag.appendChild(document.createTextNode(inhalt.slice(pos, m.index)));
+      let pos = 0;
+      treffer.forEach(([start, ende, stueck, s]) => {
+        frag.appendChild(document.createTextNode(inhalt.slice(pos, start)));
         const a = document.createElement('a');
         a.href = s.seite;
         a.className = 'spieler-link';
-        a.textContent = m[1];
+        a.textContent = stueck;
         a.addEventListener('click', e => { e.preventDefault(); zeige(s); });
         frag.appendChild(a);
-        pos = m.index + m[1].length;
-      }
+        pos = ende;
+      });
       frag.appendChild(document.createTextNode(inhalt.slice(pos)));
       k.parentNode.replaceChild(frag, k);
     });

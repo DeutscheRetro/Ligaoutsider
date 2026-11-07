@@ -463,11 +463,19 @@
       return n ? `<span class="feed-komm" title="${n} Kommentare">💬 ${n}</span>` : '';
     }
 
-    // Vorschau endet am letzten ganzen Satz; "7." (Zahl) zaehlt nicht als Satzende.
+    // Vorschau endet am letzten ganzen Satz. "7.", "St.", "Mio." usw. sind kein Satzende.
+    const KEIN_ENDE = /(^|\s)(\d+|[A-Za-zÄÖÜäöüß]{1,3}|bzw|ca|Mio|Mrd|Nr|Dr|Prof|vgl|evtl|inkl|u\.a|z\.B|d\.h)$/;
     function anrissSatz(s) {
       if (!s) return '';
-      const m = s.match(/^.*[^\d\s][.!?][“"]?(?=\s|$)/);
-      return m && m[0].length >= 40 ? m[0] : s + '…';
+      const enden = [...s.matchAll(/[.!?][“"]?(?=\s|$)/g)];
+      for (let i = enden.length - 1; i >= 0; i--) {
+        const pos = enden[i].index;
+        if (s[pos] === '.' && KEIN_ENDE.test(s.slice(0, pos))) continue;
+        const satz = s.slice(0, pos + enden[i][0].length);
+        if (satz.length >= 40) return satz;
+        break;
+      }
+      return s + '…';
     }
 
     function aufmacherKarte(a) {
