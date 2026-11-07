@@ -204,7 +204,7 @@ def main():
         if ok:
             _html_anpassen(pfad, titel, text, neu_titel, neu_text)
             e["titel"] = neu_titel
-            e["anriss"] = " ".join(neu_text.split()[:30])
+            e["anriss"] = " ".join(neu_text.split()[:45])
             saetze = re.split(r"(?<=[.!?])\s+", neu_text.split("\n\n")[0].strip())
             korrigiert[e["id"]] = (neu_titel, " ".join(saetze[:2])[:280])
             if neu_titel != html.unescape(titel):

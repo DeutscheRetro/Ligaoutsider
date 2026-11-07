@@ -463,6 +463,13 @@
       return n ? `<span class="feed-komm" title="${n} Kommentare">💬 ${n}</span>` : '';
     }
 
+    // Vorschau endet am letzten ganzen Satz; "7." (Zahl) zaehlt nicht als Satzende.
+    function anrissSatz(s) {
+      if (!s) return '';
+      const m = s.match(/^.*[^\d\s][.!?][“"]?(?=\s|$)/);
+      return m && m[0].length >= 40 ? m[0] : s + '…';
+    }
+
     function aufmacherKarte(a) {
       const bild = a.wappen_url || 'logos/bundesliga.png';
       return `<article class="auf-karte">
@@ -471,7 +478,7 @@
           <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
         </div>
         <a href="${esc(a.pfad)}" class="auf-titel">${esc(a.titel)}</a>
-        <p class="auf-text">${a.anriss ? esc(a.anriss) + '…' : ''}</p>
+        <p class="auf-text">${esc(anrissSatz(a.anriss))}</p>
         <div class="auf-fuss">
           <span class="feed-time">${a.datum.split(' ')[0]}</span>${kommentarChip(a.id)}
           <a href="${esc(a.pfad)}" class="auf-mehr">Weiterlesen</a>

@@ -2543,7 +2543,7 @@ def main():
                 "datum":      k["datum"],
                 "wappen_url": k["wappen_url"],
                 "vereine":    k["vereine"],
-                "anriss":     " ".join(ergebnis["text"].split()[:30]),
+                "anriss":     " ".join(ergebnis["text"].split()[:45]),
                 "spielerstatus": [x for x in (ergebnis.get("spielerstatus") or [])
                                   if isinstance(x, dict) and x.get("spieler") and x.get("status")],
                 "formation":  (ergebnis.get("formation") or "").strip(),
