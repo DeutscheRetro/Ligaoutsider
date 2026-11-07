@@ -464,7 +464,7 @@
     }
 
     // Vorschau endet am letzten ganzen Satz. "7.", "St.", "Mio." usw. sind kein Satzende.
-    const KEIN_ENDE = /(^|\s)(\d+|[A-Za-zÄÖÜäöüß]{1,3}|bzw|ca|Mio|Mrd|Nr|Dr|Prof|vgl|evtl|inkl|u\.a|z\.B|d\.h)$/;
+    const KEIN_ENDE = /(^|\s)(\d+|[A-Za-zÄÖÜäöüß]{1,2}|bzw|ca|Mio|Mrd|Nr|Dr|Prof|vgl|evtl|inkl|u\.a|z\.B|d\.h)$/;
     function anrissSatz(s) {
       if (!s) return '';
       const enden = [...s.matchAll(/[.!?][“"]?(?=\s|$)/g)];
