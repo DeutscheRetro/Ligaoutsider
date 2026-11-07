@@ -293,6 +293,14 @@
         'FC Schalke 04':'Schalke','SC Paderborn 07':'Paderborn','SV Elversberg':'Elversberg','SV 07 Elversberg':'Elversberg',
       };
       const kürzel = n => KÜRZEL[n] || n;
+      // Pokale mit deutscher Beteiligung (OpenLigaDB-Kürzel, Saison wird angehängt).
+      // shortcut: uel2026/uecl2026 heißen bei OpenLigaDB je Saison anders, zum Saisonwechsel anpassen
+      const POKALE = [
+        { liga: 'dfb', kurz: 'DFB', name: 'DFB-Pokal', farbe: '#1565c0' },
+        { liga: 'ucl', kurz: 'CL', name: 'Champions League', farbe: '#0d2a6b' },
+        { liga: 'uel2026', kurz: 'EL', name: 'Europa League', farbe: '#e86100' },
+        { liga: 'uecl2026', kurz: 'ECL', name: 'Conference League', farbe: '#00873e' },
+      ];
       const todayStr = () => {
         const d = new Date();
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -314,16 +322,18 @@
         const grp = await fetch('https://api.openligadb.de/getcurrentgroup/bl1').then(r=>r.json());
         const gid = grp.groupOrderID;
         // Aktuellen + nächsten Spieltag laden
-        const [cur, nxt, pokalAlle] = await Promise.all([
+        const [cur, nxt, ...pokalListen] = await Promise.all([
           fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid}`).then(r=>r.json()),
           fetch(`https://api.openligadb.de/getmatchdata/bl1/${window.LO_SAISON}/${gid+1}`).then(r=>r.json()).catch(()=>[]),
-          fetch(`https://api.openligadb.de/getmatchdata/dfb/${window.LO_SAISON}`).then(r=>r.json()).catch(()=>[]),
+          ...POKALE.map(p => fetch(`https://api.openligadb.de/getmatchdata/${p.liga}/${window.LO_SAISON}`).then(r=>r.json()).catch(()=>[])),
         ]);
         const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-        // DFB-Pokal: nur Spiele mit Bundesligisten, im selben Zeitraum wie die geladenen Spieltage
+        // Pokale: nur Spiele mit Bundesligisten, im selben Zeitraum wie die geladenen Spieltage
         const blEnde = Math.max(...[...cur, ...nxt].map(m => new Date(m.matchDateTime).getTime()));
-        const pokal = pokalAlle.filter(m => (KÜRZEL[m.team1.teamName] || KÜRZEL[m.team2.teamName])
-          && new Date(m.matchDateTime).getTime() <= blEnde).map(m => ({ ...m, pokal: true }));
+        const pokal = pokalListen.flatMap((liste, i) => (Array.isArray(liste) ? liste : [])
+          .filter(m => (KÜRZEL[m.team1.teamName] || KÜRZEL[m.team2.teamName])
+            && new Date(m.matchDateTime).getTime() <= blEnde)
+          .map(m => ({ ...m, pokal: POKALE[i] })));
         const spiele = [...cur, ...nxt, ...pokal]
           .filter(m => !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo))
           .sort((a,b) => new Date(a.matchDateTime) - new Date(b.matchDateTime));
@@ -350,9 +360,9 @@
               ? `<span style="font-weight:800;color:#e8c000;min-width:34px;text-align:center">${goals1}:${goals2}</span>`
               : `<span style="color:var(--text4);min-width:34px;text-align:center;font-size:10px">${fmtTime(m.matchDateTime)}</span>`;
             const badge = m.pokal
-              ? `<span style="background:#1565c0;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0" title="DFB-Pokal">DFB</span>`
+              ? `<span style="background:${m.pokal.farbe};color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0" title="${m.pokal.name}">${m.pokal.kurz}</span>`
               : `<span style="background:#d32f2f;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;flex-shrink:0">BL</span>`;
-            return `<div class="sp-zeile" data-spiel="${m.matchID}" data-anpfiff="${m.matchDateTimeUTC || ''}" data-fertig="${finished ? 1 : 0}" data-wettbewerb="${m.pokal ? 'DFB-Pokal' : 'Bundesliga'}" style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
+            return `<div class="sp-zeile" data-spiel="${m.matchID}" data-anpfiff="${m.matchDateTimeUTC || ''}" data-fertig="${finished ? 1 : 0}" data-wettbewerb="${m.pokal ? m.pokal.name : 'Bundesliga'}" style="display:flex;align-items:center;gap:7px;padding:5px 12px;border-bottom:1px solid var(--item-border)">
               ${badge}
               <span class="sp-t sp-h" style="font-size:12px;font-weight:600;color:var(--text2);flex:1;text-align:right">${esc(kürzel(m.team1.teamName))}</span>
               ${score}
