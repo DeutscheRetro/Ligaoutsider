@@ -1999,7 +1999,8 @@ def main():
 
     _SKIP_KEYWORDS = (
         "nagelsmann", "nationalmannschaft", "dfb-team", "em 2026", "wm 2026",
-        "nations league", "länderspiel", "u21-em", "olympia",
+        # kein "länderspiel": träfe jede Meldung mit "Länderspielpause"; Länderspiele bewertet die Konferenz
+        "nations league", "u21-em", "olympia",
         "frauen", "frauenfußball", "frauenbundesliga", "-frauen",
         "2. bundesliga", "2. liga", "zweite bundesliga", "zweitliga",
         # Rueckblicke: kicker spielt Archivmaterial in die Team-Feeds.
