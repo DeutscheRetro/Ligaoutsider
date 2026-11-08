@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-08T17:01:23.347527+00:00",
+  "updated": "2026-11-08T17:24:10.394569+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -146,18 +146,6 @@
       "eff": 6.2
     },
     {
-      "name": "Nusa",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Sturm",
-      "mw": 16440000,
-      "spiele": 9,
-      "tore": 4,
-      "pts": 73,
-      "ap": 8.11,
-      "eff": 4.4
-    },
-    {
       "name": "Kimmich",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -168,6 +156,18 @@
       "pts": 73,
       "ap": 9.13,
       "eff": 3.7
+    },
+    {
+      "name": "Nusa",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "mw": 16440000,
+      "spiele": 9,
+      "tore": 4,
+      "pts": 73,
+      "ap": 8.11,
+      "eff": 4.4
     },
     {
       "name": "F. Nmecha",
@@ -325,9 +325,9 @@
       "mw": 1790000,
       "spiele": 8,
       "tore": 0,
-      "pts": 37,
-      "ap": 4.63,
-      "eff": 20.7
+      "pts": 41,
+      "ap": 5.13,
+      "eff": 22.9
     },
     {
       "name": "Kristof",
@@ -617,6 +617,17 @@
       "ap": 5.22
     },
     {
+      "name": "Rönnow",
+      "klub": "1. FC Union Berlin",
+      "logo": "logos/union.png",
+      "pos": "Torwart",
+      "mw": 1790000,
+      "spiele": 8,
+      "tore": 0,
+      "pts": 41,
+      "ap": 5.13
+    },
+    {
       "name": "Kobel",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
@@ -637,17 +648,6 @@
       "tore": 0,
       "pts": 43,
       "ap": 4.78
-    },
-    {
-      "name": "Rönnow",
-      "klub": "1. FC Union Berlin",
-      "logo": "logos/union.png",
-      "pos": "Torwart",
-      "mw": 1790000,
-      "spiele": 8,
-      "tore": 0,
-      "pts": 37,
-      "ap": 4.63
     }
   ],
   "abwehr": [
@@ -696,6 +696,17 @@
       "ap": 6.57
     },
     {
+      "name": "Ginter",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
+      "pos": "Abwehr",
+      "mw": 7680000,
+      "spiele": 9,
+      "tore": 0,
+      "pts": 57,
+      "ap": 6.33
+    },
+    {
       "name": "Chabot",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
@@ -705,17 +716,6 @@
       "tore": 1,
       "pts": 49,
       "ap": 6.13
-    },
-    {
-      "name": "Ginter",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "mw": 7680000,
-      "spiele": 9,
-      "tore": 0,
-      "pts": 55,
-      "ap": 6.11
     },
     {
       "name": "Keidel",
@@ -1306,20 +1306,20 @@
       "mw": 9430000
     },
     {
-      "name": "Kimmich",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "pts": 58,
-      "mw": 19590000
-    },
-    {
       "name": "Nkunku",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
       "pos": "Sturm",
       "pts": 45,
       "mw": 17320000
+    },
+    {
+      "name": "Kimmich",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Mittelfeld",
+      "pts": 58,
+      "mw": 19590000
     },
     {
       "name": "Gruda",
@@ -1346,20 +1346,20 @@
       "mw": 10230000
     },
     {
-      "name": "Hack",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Sturm",
-      "pts": 15,
-      "mw": 3870000
-    },
-    {
       "name": "Füllkrug",
       "klub": "SV Werder Bremen",
       "logo": "logos/werder.png",
       "pos": "Sturm",
       "pts": 76,
       "mw": 20560000
+    },
+    {
+      "name": "Hack",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Sturm",
+      "pts": 15,
+      "mw": 3870000
     },
     {
       "name": "Maza",
@@ -1378,6 +1378,14 @@
       "pos": "Mittelfeld",
       "pts": 50,
       "mw": 7510000
+    },
+    {
+      "name": "Culbreath",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "pts": 0,
+      "mw": 1570000
     },
     {
       "name": "Fábio Vieira",
@@ -1428,14 +1436,6 @@
       "mw": 5730000
     },
     {
-      "name": "Chukwuemeka",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 13,
-      "mw": 4290000
-    },
-    {
       "name": "Makengo",
       "klub": "Sport-Club Freiburg",
       "logo": "logos/freiburg.png",
@@ -1461,6 +1461,15 @@
       "pts": 24,
       "tore": 3,
       "gegner": "SV Werder Bremen"
+    },
+    {
+      "name": "Nkunku",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "pts": 21,
+      "tore": 3,
+      "gegner": "Eintracht Frankfurt"
     },
     {
       "name": "Luis Díaz",
@@ -1490,15 +1499,6 @@
       "gegner": "Bayer 04 Leverkusen"
     },
     {
-      "name": "Nkunku",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Sturm",
-      "pts": 21,
-      "tore": 3,
-      "gegner": "Eintracht Frankfurt"
-    },
-    {
       "name": "Y. Engelhardt",
       "klub": "Sport-Club Freiburg",
       "logo": "logos/freiburg.png",
@@ -1506,6 +1506,15 @@
       "pts": 20,
       "tore": 2,
       "gegner": "Borussia M'gladbach"
+    },
+    {
+      "name": "Bolin",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Mittelfeld",
+      "pts": 19,
+      "tore": 2,
+      "gegner": "SV Elversberg"
     },
     {
       "name": "Uzun",
@@ -1529,15 +1538,6 @@
       "name": "F. Nmecha",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 19,
-      "tore": 2,
-      "gegner": "SV Elversberg"
-    },
-    {
-      "name": "Bolin",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
       "pos": "Mittelfeld",
       "pts": 19,
       "tore": 2,
