@@ -958,6 +958,10 @@ def final_pre_publish_check(titel: str, fp: dict, archive: list[dict]) -> bool:
             continue
         if entry_ts < cutoff:
             continue
+        # Spielberichte: derselbe Klub spielt alle 3-7 Tage, nur ein Bericht der letzten 2 Tage ist dasselbe Spiel
+        # (sonst fiel Köln-Leverkusen am 08.11. wegen des Köln-Berichts vom Spieltag davor raus)
+        if new_stage == "spielbericht" and entry_ts < datetime.datetime.now() - datetime.timedelta(days=2):
+            continue
 
         old_club = (entry.get("main_club") or "").lower().strip()
         old_stage = entry.get("event_stage", "sonstiges")
@@ -2292,7 +2296,7 @@ def main():
         log.warning(f"S6 Redaktionskonferenz ausgesetzt: {e}")
     except Exception as e:
         log.warning(f"S6 Redaktionskonferenz fehlgeschlagen: {e}")
-    _doppelte_quellen_uebergeben(zu_bewerten)
+    _doppelte_quellen_uebergeben(zu_bewerten + [w for w in schlange if not any(w is g for g in zu_bewerten)])
     for g in zu_bewerten:
         im_warten = any(w is g for w in schlange)
         if g.get("prio") is None:
