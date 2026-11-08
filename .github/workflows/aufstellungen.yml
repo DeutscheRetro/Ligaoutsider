@@ -44,8 +44,9 @@ jobs:
           git add -A artikel og feed.json sitemap.xml news-sitemap.xml rss.xml data/aufstellungen_gepostet.json aufstellung.json verein 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
           git commit -m "⚽ Aufstellungen $(date +'%d.%m.%Y %H:%M')"
+          git status --short   # Reste ausserhalb der add-Liste blockierten seit 06.11. jeden Pull
           for i in 1 2 3; do
-            if git pull --rebase -X theirs origin main; then
+            if git pull --rebase --autostash -X theirs origin main; then
               # "-X theirs" verwirft sonst Feed-Einträge, die der Hauptlauf gerade gepusht hat
               python feed_nachziehen.py || { git add feed.json && git commit --amend --no-edit; }
               git push && { echo "neu=true" >> "$GITHUB_ENV"; exit 0; }
