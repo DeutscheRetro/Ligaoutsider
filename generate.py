@@ -884,6 +884,24 @@ def nachpruefung(eintrag: dict, archiv: list[dict]) -> str | None:
     return None
 
 
+def _doppelte_quellen_uebergeben(gruppe: list[dict]) -> None:
+    """Als doppelt aussortierte Meldungen geben ihre Quellen an die behaltene Geschichte zum selben Thema ab.
+    Sonst scheitert z. B. ein Spielbericht, wenn nur seine eigene Quelle keinen Volltext liefert (Köln-Leverkusen 08.11.)."""
+    behalten = [g for g in gruppe if g.get("prio") is not None and g.get("status") != "d" and g["prio"] >= 2]
+    for d in gruppe:
+        if d.get("status") != "d":
+            continue
+        def naehe(g):
+            klubs = len(set(g.get("klubs") or ()) & set(d.get("klubs") or ()))
+            spieler = bool(set(g.get("spieler") or ()) & set(d.get("spieler") or ()))
+            return klubs + spieler if klubs >= 2 or (klubs and spieler) else 0
+        ziel = max(behalten, key=naehe, default=None)
+        if not ziel or not naehe(ziel):
+            continue
+        bekannt = {q["url"] for q in ziel["quellen"]}
+        ziel["quellen"] += [q for q in d["quellen"] if q["url"] not in bekannt]
+
+
 def _geschichte_verwerfen(g: dict, stufe: str, grund: str, ausser: str = "") -> None:
     """Alle Quellen einer Geschichte als erledigt markieren (kommen nicht wieder)."""
     for q in g["quellen"]:
@@ -2274,6 +2292,7 @@ def main():
         log.warning(f"S6 Redaktionskonferenz ausgesetzt: {e}")
     except Exception as e:
         log.warning(f"S6 Redaktionskonferenz fehlgeschlagen: {e}")
+    _doppelte_quellen_uebergeben(zu_bewerten)
     for g in zu_bewerten:
         im_warten = any(w is g for w in schlange)
         if g.get("prio") is None:
