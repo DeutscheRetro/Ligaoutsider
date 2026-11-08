@@ -1,14 +1,7 @@
 {
- "updated": "2026-11-08T18:32:13.476905+00:00",
- "spieltag": 9,
+ "updated": "2026-11-08T20:02:06.890588+00:00",
+ "spieltag": 10,
  "partien": [
-  {
-   "heim": "TSG Hoffenheim",
-   "gast": "FC Schalke 04",
-   "anstoss": "2026-11-08T19:30:00",
-   "anstoss_text": "So 08.11. 19:30",
-   "spieltag": 9
-  },
   {
    "heim": "FC Bayern München",
    "gast": "1. FC Köln",
@@ -590,7 +583,7 @@
       "name": "Waldemar Anton",
       "nr": "3",
       "ampel": "gelb",
-      "grund": "angeschlagen",
+      "grund": "Muskuläre Probleme - muss Reise zur Nationalmannschaft absagen",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
@@ -1210,16 +1203,6 @@
      "prozent": 33
     },
     {
-     "name": "Dan-Axel Zagadou",
-     "nr": "23",
-     "ampel": "gelb",
-     "grund": "Nach Muskelverletzung - verpasst auch CL-Spiel",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
      "name": "Leonidas Stergiou",
      "nr": "20",
      "ampel": "gelb",
@@ -1641,6 +1624,16 @@
      "prozent": 20
     },
     {
+     "name": "Patrick Osterhage",
+     "nr": "6",
+     "ampel": "gruen",
+     "grund": "1 von 2 Einsätzen in der Startelf · Ø 39 min · 6 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 19
+    },
+    {
      "name": "Vincenzo Grifo",
      "nr": "32",
      "ampel": "gruen",
@@ -1661,28 +1654,7 @@
      "prozent": 12
     }
    ],
-   "fraglich": [
-    {
-     "name": "Patrick Osterhage",
-     "nr": "6",
-     "ampel": "gelb",
-     "grund": "Muskuläre Probleme - verpasst ECL-Duell gegen Trabzonspor (A)",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 9
-    },
-    {
-     "name": "Florian Müller",
-     "nr": "21",
-     "ampel": "gelb",
-     "grund": "Vaterfreuden - reist nicht mit zum ECL-Spiel",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 0
-    }
-   ],
+   "fraglich": [],
    "ausfall": []
   },
   "Eintracht Frankfurt": {
@@ -2574,10 +2546,7 @@
   "TSG Hoffenheim": {
    "logo": "logos/hoffenheim.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2589,10 +2558,30 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
+     {
+      "name": "Vladimír Coufal",
+      "nr": "34",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 94 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 95
+     },
+     {
+      "name": "Bernardo",
+      "nr": "13",
+      "ampel": "gruen",
+      "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 6 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 93
+     },
      {
       "name": "Ozan Kabak",
       "nr": "5",
@@ -2601,7 +2590,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 96
+      "prozent": 82
      },
      {
       "name": "Mats Rots",
@@ -2611,7 +2600,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 93
+      "prozent": 71
      },
      {
       "name": "Koki Machida",
@@ -2621,17 +2610,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 91
-     },
-     {
-      "name": "Vladimír Coufal",
-      "nr": "34",
-      "ampel": "gelb",
-      "grund": "Angeschlagen - verpasst Europa League",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 60
+      "prozent": 63
      }
     ],
     "mf": [
@@ -2643,7 +2622,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Leon Avdullahu",
@@ -2653,20 +2632,30 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
-     },
-     {
-      "name": "Alexander Prass",
-      "nr": "22",
-      "ampel": "gelb",
-      "grund": "Leichte muskuläre Beschwerden - als Vorsichtsmaßnahme vorzeitig ausgewechselt in EL",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Linkes Mittelfeld",
-      "prozent": 60
+      "prozent": 95
      }
     ],
     "st": [
+     {
+      "name": "Adam Daghim",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "7 von 8 Einsätzen in der Startelf · Ø 81 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Rechtsaußen",
+      "prozent": 78
+     },
+     {
+      "name": "Adam Hlozek",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "7 von 8 Einsätzen in der Startelf · Ø 65 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 75
+     },
      {
       "name": "Fisnik Asllani",
       "nr": "11",
@@ -2675,50 +2664,20 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 90
-     },
-     {
-      "name": "Tim Lemperle",
-      "nr": "19",
-      "ampel": "gruen",
-      "grund": "4 von 6 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 89
-     },
-     {
-      "name": "Andrej Kramaric",
-      "nr": "27",
-      "ampel": "gruen",
-      "grund": "1 von 8 Einsätzen in der Startelf · Ø 28 min",
-      "news": "",
-      "reihe": "st",
-      "pos": "Hängende Spitze",
-      "prozent": 82
+      "prozent": 60
      }
     ]
    },
    "bank": [
     {
-     "name": "Bernardo",
-     "nr": "13",
+     "name": "Tim Lemperle",
+     "nr": "19",
      "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 63 min · 6 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 26
-    },
-    {
-     "name": "Adam Daghim",
-     "nr": "14",
-     "ampel": "gruen",
-     "grund": "7 von 8 Einsätzen in der Startelf · Ø 81 min",
+     "grund": "4 von 6 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
      "news": "",
      "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 22
+     "pos": "Mittelstürmer",
+     "prozent": 56
     },
     {
      "name": "Natnael Abraha",
@@ -2728,20 +2687,50 @@
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 12
-    }
-   ],
-   "fraglich": [
+     "prozent": 37
+    },
     {
-     "name": "Adam Hlozek",
-     "nr": "10",
-     "ampel": "gelb",
-     "grund": "Angeschlagen - verpasst Europa League",
+     "name": "Alexander Prass",
+     "nr": "22",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 69 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Linkes Mittelfeld",
+     "prozent": 28
+    },
+    {
+     "name": "Andrej Kramaric",
+     "nr": "27",
+     "ampel": "gruen",
+     "grund": "1 von 8 Einsätzen in der Startelf · Ø 28 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Hängende Spitze",
+     "prozent": 27
+    },
+    {
+     "name": "Cajetan Lenz",
+     "nr": "32",
+     "ampel": "gruen",
+     "grund": "0 von 1 Einsätzen in der Startelf · Ø 7 min · 7 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 17
+    },
+    {
+     "name": "Max Moerstedt",
+     "nr": "9",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 33 min · 4 Spiele ohne Einsatz",
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 12
-    },
+     "prozent": 11
+    }
+   ],
+   "fraglich": [
     {
      "name": "Bambasé Conté",
      "nr": "20",
@@ -2750,17 +2739,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 10
-    },
-    {
-     "name": "Max Moerstedt",
-     "nr": "9",
-     "ampel": "gelb",
-     "grund": "Nach Zusammenprall - verpasst Europa League",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 4
+     "prozent": 32
     }
    ],
    "ausfall": [
@@ -2778,7 +2757,7 @@
      "name": "Albian Hajdari",
      "nr": "21",
      "ampel": "rot",
-     "grund": "Fußverletzung - Rückkehr vsl. am 10.11.2026",
+     "grund": "Verletzung am Meniskus - fehlt bis Ende des Jahres",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
@@ -2868,10 +2847,7 @@
   "FC Schalke 04": {
    "logo": "logos/schalke.png",
    "formation": "4-4-2",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
    "elf": {
     "tw": [
@@ -2883,7 +2859,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2895,7 +2871,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Hasan Kuruçay",
@@ -2905,17 +2881,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
-     },
-     {
-      "name": "Mertcan Ayhan",
-      "nr": "43",
-      "ampel": "gruen",
-      "grund": "1 von 3 Einsätzen in der Startelf · Ø 35 min · 5 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 81
+      "prozent": 95
      },
      {
       "name": "Robin Gosens",
@@ -2925,7 +2891,7 @@
       "news": "artikel/schalke-bangt-vor-hoffenheim-um-ebimbe-el-faouzi-und-gosens-zurueck-ec2fe9a4f2.html",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 45
+      "prozent": 35
      }
     ],
     "mf": [
@@ -2937,7 +2903,7 @@
       "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Kenan Karaman",
@@ -2947,7 +2913,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 97
+      "prozent": 88
      },
      {
       "name": "Satoshi Tanaka",
@@ -2957,7 +2923,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 87
      },
      {
       "name": "Adil Aouchiche",
@@ -2967,7 +2933,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 95
+      "prozent": 79
      },
      {
       "name": "Soufiane El-Faouzi",
@@ -2977,32 +2943,52 @@
       "news": "artikel/schalke-bangt-vor-hoffenheim-um-ebimbe-el-faouzi-und-gosens-zurueck-ec2fe9a4f2.html",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 60
+      "prozent": 50
      }
     ],
     "st": [
      {
-      "name": "Hee-chan Hwang",
-      "nr": "7",
+      "name": "Junior Adamu",
+      "nr": "20",
       "ampel": "gruen",
-      "grund": "2 von 6 Einsätzen in der Startelf · Ø 47 min · 2 Spiele ohne Einsatz",
+      "grund": "5 von 6 Einsätzen in der Startelf · Ø 66 min · 2 Spiele ohne Einsatz",
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 80
+      "prozent": 68
+     },
+     {
+      "name": "Edin Dzeko",
+      "nr": "10",
+      "ampel": "gruen",
+      "grund": "2 von 6 Einsätzen in der Startelf · Ø 36 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 24
      }
     ]
    },
    "bank": [
     {
-     "name": "Junior Adamu",
-     "nr": "20",
+     "name": "Mertcan Ayhan",
+     "nr": "43",
      "ampel": "gruen",
-     "grund": "5 von 6 Einsätzen in der Startelf · Ø 66 min · 2 Spiele ohne Einsatz",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 35 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 23
+    },
+    {
+     "name": "Hee-chan Hwang",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "2 von 6 Einsätzen in der Startelf · Ø 47 min · 2 Spiele ohne Einsatz",
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 19
+     "prozent": 22
     }
    ],
    "fraglich": [
@@ -3014,7 +3000,17 @@
      "news": "artikel/schalke-bangt-vor-hoffenheim-um-ebimbe-el-faouzi-und-gosens-zurueck-ec2fe9a4f2.html",
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
-     "prozent": 6
+     "prozent": 16
+    },
+    {
+     "name": "Ron Schallenberg",
+     "nr": "6",
+     "ampel": "gelb",
+     "grund": "Angeschlagen - absolviert Laufeinheit",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 15
     }
    ],
    "ausfall": [
@@ -3076,16 +3072,6 @@
      "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
-     "prozent": 0
-    },
-    {
-     "name": "Ron Schallenberg",
-     "nr": "6",
-     "ampel": "rot",
-     "grund": "Angeschlagen - absolviert Laufeinheit, verpasst TSG (A)",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
      "prozent": 0
     }
    ],
@@ -3766,8 +3752,8 @@
      "name": "Fábio Vieira",
      "nr": "20",
      "ampel": "rot",
-     "grund": "Muskelfaserriss, mehrere Wochen",
-     "news": "artikel/hsv-sechs-stammspieler-fehlen-remberg-monatelang-out-0eff2b41ea.html",
+     "grund": "Muskelfaserriss - Rückkehr vsl. am 24.11.2026",
+     "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -3776,8 +3762,8 @@
      "name": "Bilal Nadir",
      "nr": "4",
      "ampel": "rot",
-     "grund": "Muskelverletzung mit Sehnenbeteiligung",
-     "news": "artikel/hsv-sechs-stammspieler-fehlen-remberg-monatelang-out-0eff2b41ea.html",
+     "grund": "Sehnenanriss - Rückkehr vsl. am 31.12.2026",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 0
@@ -3786,8 +3772,8 @@
      "name": "Nicolai Remberg",
      "nr": "21",
      "ampel": "rot",
-     "grund": "Kreuzbandriss, mehrere Monate",
-     "news": "artikel/hsv-sechs-stammspieler-fehlen-remberg-monatelang-out-0eff2b41ea.html",
+     "grund": "Kreuzbandriss - Rückkehr vsl. am 30.06.2027",
+     "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 0
