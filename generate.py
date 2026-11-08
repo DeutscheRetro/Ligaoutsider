@@ -866,7 +866,7 @@ def nachpruefung(eintrag: dict, archiv: list[dict]) -> str | None:
     Gibt den Titel der Doppelmeldung zurück oder None."""
     g = {"titel": eintrag["titel"], "person": eintrag["person_name"], "spieler": eintrag["spieler_namen"],
          "klub": eintrag["klub"], "klubs": list(eintrag["klubs"]), "stufe": eintrag["stufe"],
-         "klasse": eintrag["klasse"]}
+         "klasse": eintrag["klasse"], "summary": eintrag["summary"]}
     status, treffer = storys.archiv_abgleich(g, archiv)
     if status == "doppelt":
         return treffer[0]["titel"]
@@ -875,6 +875,10 @@ def nachpruefung(eintrag: dict, archiv: list[dict]) -> str | None:
     for e in treffer:
         if (e["klasse"] == g["klasse"] != "sonstiges" and e["stufe"] == g["stufe"]
                 and datetime.datetime.now() - e["zeit"] <= fenster):
+            eg = storys.ergebnisse(g["titel"] + " " + eintrag["summary"])
+            ee = storys.ergebnisse(e["titel"] + " " + e.get("summary", ""))
+            if eg and ee and not eg & ee:
+                continue   # anderes Ergebnis = andere Partie, kein KI-Vergleich nötig
             try:
                 if gleiches_ereignis(g["titel"], eintrag["summary"], e["titel"], e.get("summary", "")):
                     return e["titel"]
