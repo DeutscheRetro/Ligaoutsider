@@ -357,7 +357,7 @@ def archiv_vorbereiten(archiv: list[dict], jetzt: datetime.datetime | None = Non
 
 def ergebnisse(text: str) -> set[tuple[int, int]]:
     """Spielstände wie 1:2 im Text, ohne Seite (1:2 == 2:1). Uhrzeiten (18:30) zählen nicht."""
-    return {tuple(sorted((int(a), int(b)))) for a, b in re.findall(r"(?<![\d:.])(\d):(\d)(?![\d:])", text)}
+    return {tuple(sorted((int(a), int(b)))) for a, b in re.findall(r"(?<![\d:.])(\d):(\d)(?!\d)", text)}
 
 
 

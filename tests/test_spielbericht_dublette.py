@@ -50,6 +50,7 @@ class SpielberichtDublette(unittest.TestCase):
     def test_ergebnisse_ohne_uhrzeit_und_seite(self):
         self.assertEqual(storys.ergebnisse("Anpfiff 18:30, Endstand 1:2, Pause 0:1"), {(1, 2), (0, 1)})
         self.assertEqual(storys.ergebnisse("2:1"), storys.ergebnisse("1:2"))
+        self.assertEqual(storys.ergebnisse("Leipzig schlägt Augsburg 5:2: Gruda glänzt"), {(2, 5)})
 
 
 if __name__ == "__main__":
