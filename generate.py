@@ -875,10 +875,8 @@ def nachpruefung(eintrag: dict, archiv: list[dict]) -> str | None:
     for e in treffer:
         if (e["klasse"] == g["klasse"] != "sonstiges" and e["stufe"] == g["stufe"]
                 and datetime.datetime.now() - e["zeit"] <= fenster):
-            eg = storys.ergebnisse(g["titel"] + " " + eintrag["summary"])
-            ee = storys.ergebnisse(e["titel"] + " " + e.get("summary", ""))
-            if eg and ee and not eg & ee:
-                continue   # anderes Ergebnis = andere Partie, kein KI-Vergleich nötig
+            if g["klasse"] == "spiel" and storys.andere_partie(g, e, datetime.datetime.now()):
+                continue   # andere Partie desselben Klubs, kein KI-Vergleich nötig
             try:
                 if gleiches_ereignis(g["titel"], eintrag["summary"], e["titel"], e.get("summary", "")):
                     return e["titel"]

@@ -360,6 +360,22 @@ def ergebnisse(text: str) -> set[tuple[int, int]]:
     return {tuple(sorted((int(a), int(b)))) for a, b in re.findall(r"(?<![\d:.])(\d):(\d)(?![\d:])", text)}
 
 
+
+# Ein Klub spielt höchstens alle ~60 Stunden; Berichte zur selben Partie erscheinen binnen eines Tages
+ABSTAND_PARTIEN = datetime.timedelta(hours=36)
+
+
+def andere_partie(g: dict, e: dict, jetzt: datetime.datetime) -> bool:
+    """True, wenn zwei Spielberichte sicher verschiedene Partien betreffen."""
+    eg = ergebnisse(g["titel"] + " " + g.get("summary", ""))
+    ee = ergebnisse(e["titel"] + " " + e.get("summary", ""))
+    if eg and ee:
+        return not eg & ee          # Köln-Leverkusen 1:2 ist nicht Leverkusen-Marseille 0:1
+    if len(set(g["klubs"])) >= 2 and len(set(e["klubs"])) >= 2:
+        return len(set(g["klubs"]) & set(e["klubs"])) < 2   # anderer Gegner
+    return jetzt - e["zeit"] > ABSTAND_PARTIEN   # ohne Spielstand und Gegner entscheidet der Abstand
+
+
 def archiv_abgleich(g: dict, archiv: list[dict], jetzt: datetime.datetime | None = None) -> tuple[str, list[dict]]:
     """('doppelt' | 'update' | 'aehnlich' | 'neu', passende Archiv-Einträge, neueste zuerst)."""
     jetzt = jetzt or datetime.datetime.now()
@@ -393,9 +409,7 @@ def archiv_abgleich(g: dict, archiv: list[dict], jetzt: datetime.datetime | None
             aehnlich = fuzz.token_sort_ratio(falten(g["titel"]), falten(e["titel"]))
             if g["klasse"] == "spiel":
                 gemeinsam = len(set(g["klubs"]) & e["klubs"])
-                eg, ee = ergebnisse(g["titel"] + " " + g.get("summary", "")), ergebnisse(e["titel"] + " " + e.get("summary", ""))
-                andere_partie = bool(eg and ee and not eg & ee)   # Köln-Leverkusen 1:2 ist nicht Leverkusen-Marseille 0:1
-                sicher = not andere_partie and (gemeinsam >= 2 or (gemeinsam == 1 and aehnlich >= 50))
+                sicher = not andere_partie(g, e, jetzt) and (gemeinsam >= 2 or (gemeinsam == 1 and aehnlich >= 50))
             else:
                 hauptperson = bool(g["person"]) and e["person"] == falten(g["person"])
                 endgueltig = g["stufe"] in ("vollzogen", "geplatzt", "entlassung", "trainer_neu")
