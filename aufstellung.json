@@ -1,14 +1,7 @@
 {
- "updated": "2026-11-08T15:32:08.840335+00:00",
+ "updated": "2026-11-08T17:02:09.648615+00:00",
  "spieltag": 9,
  "partien": [
-  {
-   "heim": "1. FC Köln",
-   "gast": "Bayer 04 Leverkusen",
-   "anstoss": "2026-11-08T15:30:00",
-   "anstoss_text": "So 08.11. 15:30",
-   "spieltag": 9
-  },
   {
    "heim": "SC Freiburg",
    "gast": "1. FC Union Berlin",
@@ -28,6 +21,13 @@
    "gast": "1. FC Köln",
    "anstoss": "2026-11-20T20:30:00",
    "anstoss_text": "Fr 20.11. 20:30",
+   "spieltag": 10
+  },
+  {
+   "heim": "Bayer 04 Leverkusen",
+   "gast": "SC Paderborn 07",
+   "anstoss": "2026-11-21T15:30:00",
+   "anstoss_text": "Sa 21.11. 15:30",
    "spieltag": 10
   },
   {
@@ -54,13 +54,6 @@
   {
    "heim": "SV Elversberg",
    "gast": "SC Freiburg",
-   "anstoss": "2026-11-21T15:30:00",
-   "anstoss_text": "Sa 21.11. 15:30",
-   "spieltag": 10
-  },
-  {
-   "heim": "Bayer 04 Leverkusen",
-   "gast": "SC Paderborn 07",
    "anstoss": "2026-11-21T15:30:00",
    "anstoss_text": "Sa 21.11. 15:30",
    "spieltag": 10
@@ -292,7 +285,7 @@
      "name": "Manuel Neuer",
      "nr": "1",
      "ampel": "rot",
-     "grund": "Fußprobleme - angeschlagen ausgewechselt worden",
+     "grund": "Sehnenteilriss im rechten Fuß - fällt rund 2 Monate aus",
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
@@ -483,7 +476,7 @@
      "name": "Christian Kofane",
      "nr": "35",
      "ampel": "rot",
-     "grund": "im Aufbautraining",
+     "grund": "Trainingsrückstand",
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
@@ -1217,7 +1210,7 @@
      "name": "Luca Jaquez",
      "nr": "14",
      "ampel": "gelb",
-     "grund": "angeschlagen",
+     "grund": "Rippenanbruch - kann in den nächsten Tagen nur \"reduziert trainieren\"",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
@@ -1501,10 +1494,7 @@
   "SC Freiburg": {
    "logo": "logos/freiburg.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1516,7 +1506,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -1528,7 +1518,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Philipp Lienhart",
@@ -1538,7 +1528,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 89
      },
      {
       "name": "Jordy Makengo",
@@ -1548,7 +1538,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 97
+      "prozent": 88
      },
      {
       "name": "Philipp Treu",
@@ -1558,7 +1548,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 96
+      "prozent": 84
      }
     ],
     "mf": [
@@ -1570,7 +1560,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Yannik Engelhardt",
@@ -1580,19 +1570,19 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "st": [
      {
-      "name": "Derry Scherhant",
-      "nr": "7",
+      "name": "Niklas Beste",
+      "nr": "19",
       "ampel": "gruen",
-      "grund": "8 von 8 Einsätzen in der Startelf · Ø 79 min",
+      "grund": "8 von 8 Einsätzen in der Startelf · Ø 72 min",
       "news": "",
       "reihe": "st",
-      "pos": "Linksaußen",
-      "prozent": 97
+      "pos": "Rechtsaußen",
+      "prozent": 93
      },
      {
       "name": "Yuito Suzuki",
@@ -1602,17 +1592,17 @@
       "news": "",
       "reihe": "st",
       "pos": "Hängende Spitze",
-      "prozent": 97
+      "prozent": 91
      },
      {
-      "name": "Niklas Beste",
-      "nr": "19",
+      "name": "Derry Scherhant",
+      "nr": "7",
       "ampel": "gruen",
-      "grund": "8 von 8 Einsätzen in der Startelf · Ø 72 min",
+      "grund": "8 von 8 Einsätzen in der Startelf · Ø 79 min",
       "news": "",
       "reihe": "st",
-      "pos": "Rechtsaußen",
-      "prozent": 97
+      "pos": "Linksaußen",
+      "prozent": 88
      },
      {
       "name": "Igor Matanovic",
@@ -1622,7 +1612,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 92
+      "prozent": 69
      }
     ]
    },
@@ -1635,7 +1625,7 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 11
+     "prozent": 37
     },
     {
      "name": "Lukas Kübler",
@@ -1645,7 +1635,37 @@
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 10
+     "prozent": 33
+    },
+    {
+     "name": "Berkay Yılmaz",
+     "nr": "27",
+     "ampel": "gruen",
+     "grund": "0 von 1 Einsätzen in der Startelf · Ø 13 min · 7 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 20
+    },
+    {
+     "name": "Vincenzo Grifo",
+     "nr": "32",
+     "ampel": "gruen",
+     "grund": "0 von 7 Einsätzen in der Startelf · Ø 19 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 14
+    },
+    {
+     "name": "Keisuke Goto",
+     "nr": "42",
+     "ampel": "gruen",
+     "grund": "1 von 7 Einsätzen in der Startelf · Ø 25 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 12
     }
    ],
    "fraglich": [
@@ -1657,7 +1677,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
-     "prozent": 5
+     "prozent": 9
     }
    ],
    "ausfall": [
@@ -1675,9 +1695,9 @@
   },
   "Eintracht Frankfurt": {
    "logo": "logos/frankfurt.png",
-   "formation": "4-2-3-1",
+   "formation": "",
    "quellen": [],
-   "formation_quelle": "artikel/baum-blueht-auf-frankfurts-eigengewaechs-wird-zum-abwehr-allrounder-cde1069ab5.html",
+   "formation_quelle": "",
    "elf": {
     "tw": [
      {
@@ -3958,10 +3978,7 @@
   "1. FC Union Berlin": {
    "logo": "logos/union.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -3973,10 +3990,30 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
+     {
+      "name": "Tom Rothe",
+      "nr": "15",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 98 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Linker Verteidiger",
+      "prozent": 85
+     },
+     {
+      "name": "Leopold Querfeld",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "3 von 4 Einsätzen in der Startelf · Ø 94 min · 4 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 83
+     },
      {
       "name": "Zeno Van Den Bosch",
       "nr": "4",
@@ -3985,27 +4022,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 93
+      "prozent": 70
      },
      {
-      "name": "Marvin Friedrich",
-      "nr": "5",
+      "name": "Josip Juranovic",
+      "nr": "18",
       "ampel": "gruen",
-      "grund": "1 von 1 Einsätzen in der Startelf · Ø 94 min · 7 Spiele ohne Einsatz",
+      "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 5 Spiele ohne Einsatz",
       "news": "",
       "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 84
-     },
-     {
-      "name": "Derrick Köhn",
-      "nr": "17",
-      "ampel": "gruen",
-      "grund": "1 von 3 Einsätzen in der Startelf · Ø 39 min · 5 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 81
+      "pos": "Rechter Verteidiger",
+      "prozent": 64
      }
     ],
     "mf": [
@@ -4017,7 +4044,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Michel Aebischer",
@@ -4027,7 +4054,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 96
+      "prozent": 83
      },
      {
       "name": "András Schäfer",
@@ -4037,7 +4064,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 93
+      "prozent": 71
      },
      {
       "name": "Janik Haberer",
@@ -4047,7 +4074,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 91
+      "prozent": 63
      },
      {
       "name": "Kastriot Imeri",
@@ -4057,72 +4084,41 @@
       "news": "",
       "reihe": "mf",
       "pos": "Linkes Mittelfeld",
-      "prozent": 91
-     }
-    ],
-    "st": [
-     {
-      "name": "Livan Burcu",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "4 von 7 Einsätzen in der Startelf · Ø 47 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "st",
-      "pos": "Linksaußen",
-      "prozent": 86
+      "prozent": 63
      },
      {
-      "name": "Tim Skarke",
-      "nr": "21",
+      "name": "Woo-yeong Jeong",
+      "nr": "11",
       "ampel": "gruen",
-      "grund": "4 von 8 Einsätzen in der Startelf · Ø 50 min",
+      "grund": "5 von 8 Einsätzen in der Startelf · Ø 61 min",
       "news": "",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 86
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 59
      }
-    ]
+    ],
+    "st": []
    },
    "bank": [
     {
-     "name": "Tom Rothe",
-     "nr": "15",
+     "name": "Livan Burcu",
+     "nr": "9",
      "ampel": "gruen",
-     "grund": "7 von 7 Einsätzen in der Startelf · Ø 98 min · 1 Spiel ohne Einsatz",
+     "grund": "4 von 7 Einsätzen in der Startelf · Ø 47 min · 1 Spiel ohne Einsatz",
      "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 24
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 44
     },
     {
-     "name": "Leopold Querfeld",
-     "nr": "14",
+     "name": "Tim Skarke",
+     "nr": "21",
      "ampel": "gruen",
-     "grund": "3 von 4 Einsätzen in der Startelf · Ø 94 min · 4 Spiele ohne Einsatz",
+     "grund": "4 von 8 Einsätzen in der Startelf · Ø 50 min",
      "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 23
-    },
-    {
-     "name": "Josip Juranovic",
-     "nr": "18",
-     "ampel": "gruen",
-     "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 5 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 18
-    },
-    {
-     "name": "Woo-yeong Jeong",
-     "nr": "11",
-     "ampel": "gruen",
-     "grund": "5 von 8 Einsätzen in der Startelf · Ø 61 min",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Offensives Mittelfeld",
-     "prozent": 17
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 43
     },
     {
      "name": "Emmanuel Latte Lath",
@@ -4132,7 +4128,17 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 13
+     "prozent": 42
+    },
+    {
+     "name": "Marvin Friedrich",
+     "nr": "5",
+     "ampel": "gruen",
+     "grund": "1 von 1 Einsätzen in der Startelf · Ø 94 min · 7 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 36
     },
     {
      "name": "Matheo Raab",
@@ -4142,7 +4148,47 @@
      "news": "",
      "reihe": "tw",
      "pos": "Torwart",
-     "prozent": 11
+     "prozent": 36
+    },
+    {
+     "name": "Christopher Trimmel",
+     "nr": "28",
+     "ampel": "gruen",
+     "grund": "1 von 5 Einsätzen in der Startelf · Ø 29 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 25
+    },
+    {
+     "name": "Derrick Köhn",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "1 von 3 Einsätzen in der Startelf · Ø 39 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 24
+    },
+    {
+     "name": "Marin Ljubicic",
+     "nr": "27",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 80 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 20
+    },
+    {
+     "name": "Oliver Burke",
+     "nr": "7",
+     "ampel": "gruen",
+     "grund": "0 von 3 Einsätzen in der Startelf · Ø 22 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 14
     }
    ],
    "fraglich": [
@@ -4154,7 +4200,7 @@
      "news": "artikel/freiburg-gegen-union-schuster-duerfte-nach-trabzon-rotieren-44b2a24c65.html",
      "reihe": "mf",
      "pos": "Linkes Mittelfeld",
-     "prozent": 2
+     "prozent": 1
     }
    ],
    "ausfall": [
