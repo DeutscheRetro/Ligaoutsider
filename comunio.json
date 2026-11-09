@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-09T18:31:32.580767+00:00",
+  "updated": "2026-11-09T20:01:34.641102+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -330,6 +330,18 @@
       "eff": 23.2
     },
     {
+      "name": "Kristof",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Torwart",
+      "mw": 1830000,
+      "spiele": 9,
+      "tore": 0,
+      "pts": 37,
+      "ap": 4.11,
+      "eff": 20.2
+    },
+    {
       "name": "Heuer Fernandes",
       "klub": "Hamburger SV",
       "logo": "logos/hsv.png",
@@ -424,18 +436,6 @@
       "pts": 50,
       "ap": 5.56,
       "eff": 14.0
-    },
-    {
-      "name": "Katić",
-      "klub": "FC Schalke 04",
-      "logo": "logos/schalke.png",
-      "pos": "Abwehr",
-      "mw": 2880000,
-      "spiele": 9,
-      "tore": 0,
-      "pts": 37,
-      "ap": 4.11,
-      "eff": 12.8
     }
   ],
   "torjaeger": [
@@ -786,17 +786,6 @@
       "ap": 7.5
     },
     {
-      "name": "García",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Mittelfeld",
-      "mw": 11510000,
-      "spiele": 9,
-      "tore": 1,
-      "pts": 65,
-      "ap": 7.22
-    },
-    {
       "name": "Maza",
       "klub": "Bayer 04 Leverkusen",
       "logo": "logos/leverkusen.png",
@@ -804,6 +793,17 @@
       "mw": 13200000,
       "spiele": 9,
       "tore": 3,
+      "pts": 65,
+      "ap": 7.22
+    },
+    {
+      "name": "García",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Mittelfeld",
+      "mw": 11510000,
+      "spiele": 9,
+      "tore": 1,
       "pts": 65,
       "ap": 7.22
     },
@@ -1306,46 +1306,6 @@
       "mw": 6950000
     },
     {
-      "name": "N. Schlotterbeck",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Abwehr",
-      "pts": 46,
-      "mw": 13460000
-    },
-    {
-      "name": "Burkardt",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Sturm",
-      "pts": 60,
-      "mw": 13300000
-    },
-    {
-      "name": "Asllani",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Sturm",
-      "pts": 39,
-      "mw": 10160000
-    },
-    {
-      "name": "Füllkrug",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Sturm",
-      "pts": 81,
-      "mw": 20310000
-    },
-    {
-      "name": "Führich",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Mittelfeld",
-      "pts": 50,
-      "mw": 10520000
-    },
-    {
       "name": "F. Nmecha",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
@@ -1360,6 +1320,46 @@
       "pos": "Sturm",
       "pts": 31,
       "mw": 12440000
+    },
+    {
+      "name": "Kleindienst",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Sturm",
+      "pts": 0,
+      "mw": 4610000
+    },
+    {
+      "name": "N. Schlotterbeck",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Abwehr",
+      "pts": 46,
+      "mw": 13460000
+    },
+    {
+      "name": "Füllkrug",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Sturm",
+      "pts": 81,
+      "mw": 20310000
+    },
+    {
+      "name": "Asllani",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Sturm",
+      "pts": 39,
+      "mw": 10160000
+    },
+    {
+      "name": "Burkardt",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
+      "pos": "Sturm",
+      "pts": 60,
+      "mw": 13300000
     },
     {
       "name": "S. Becker",
@@ -1380,20 +1380,12 @@
       "mw": 12020000
     },
     {
-      "name": "Castañeda",
-      "klub": "SC Paderborn",
-      "logo": "logos/paderborn.png",
+      "name": "Mohya",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
       "pos": "Mittelfeld",
-      "pts": 54,
-      "mw": 6780000
-    },
-    {
-      "name": "Grønbæk",
-      "klub": "Hamburger SV",
-      "logo": "logos/hsv.png",
-      "pos": "Mittelfeld",
-      "pts": 37,
-      "mw": 5610000
+      "pts": 35,
+      "mw": 7290000
     },
     {
       "name": "Luis Díaz",
@@ -1404,12 +1396,12 @@
       "mw": 16610000
     },
     {
-      "name": "El Aynaoui",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Mittelfeld",
-      "pts": 45,
-      "mw": 9450000
+      "name": "Matsima",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
+      "pos": "Abwehr",
+      "pts": 40,
+      "mw": 4730000
     },
     {
       "name": "Conté",
@@ -1420,6 +1412,30 @@
       "mw": 8050000
     },
     {
+      "name": "Njinmah",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Sturm",
+      "pts": 6,
+      "mw": 2070000
+    },
+    {
+      "name": "El Aynaoui",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Mittelfeld",
+      "pts": 45,
+      "mw": 9450000
+    },
+    {
+      "name": "Urbig",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Torwart",
+      "pts": 20,
+      "mw": 1610000
+    },
+    {
       "name": "Doan",
       "klub": "Eintracht Frankfurt",
       "logo": "logos/frankfurt.png",
@@ -1428,28 +1444,12 @@
       "mw": 5060000
     },
     {
-      "name": "Krattenmacher",
-      "klub": "SV Elversberg",
-      "logo": "logos/elversberg.png",
+      "name": "Fellhauer",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
       "pos": "Mittelfeld",
-      "pts": 52,
-      "mw": 6960000
-    },
-    {
-      "name": "Kane",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 78,
-      "mw": 25850000
-    },
-    {
-      "name": "Mohya",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Mittelfeld",
-      "pts": 35,
-      "mw": 7290000
+      "pts": 38,
+      "mw": 4130000
     }
   ],
   "rekorde": [
