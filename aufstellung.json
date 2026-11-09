@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T14:02:12.527582+00:00",
+ "updated": "2026-11-09T15:32:12.250936+00:00",
  "spieltag": 10,
  "partien": [
   {
@@ -2700,11 +2700,11 @@
   },
   "FC Schalke 04": {
    "logo": "logos/schalke.png",
-   "formation": "4-4-2",
+   "formation": "",
    "quellen": [
     "ligainsider"
    ],
-   "formation_quelle": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
+   "formation_quelle": "",
    "elf": {
     "tw": [
      {
@@ -2785,11 +2785,11 @@
       "name": "Dejan Ljubicic",
       "nr": "21",
       "ampel": "gruen",
-      "grund": "Rückkehr in Startelf erwartet",
-      "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
+      "grund": "4 von 5 Einsätzen in der Startelf · Ø 60 min · 4 Spiele ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 90
+      "prozent": 64
      },
      {
       "name": "Soufiane El-Faouzi",
@@ -2877,6 +2877,16 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 7
+    },
+    {
+     "name": "Janik Bachmann",
+     "nr": "14",
+     "ampel": "gelb",
+     "grund": "Hüftprobleme",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 2
     }
    ],
    "ausfall": [
@@ -2914,8 +2924,8 @@
      "name": "Maximilian Wöber",
      "nr": "39",
      "ampel": "rot",
-     "grund": "Oberschenkelverletzung",
-     "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
+     "grund": "Oberschenkelverletzung - Rückkehr vsl. am 31.12.2026",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 0
@@ -2924,20 +2934,10 @@
      "name": "Moussa Sylla",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Beinverletzung",
-     "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
+     "grund": "Nach Verletzung am Bein - trainiert individuell, Rückkehr nach LSP geplant",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
-     "name": "Janik Bachmann",
-     "nr": "14",
-     "ampel": "rot",
-     "grund": "Hüftverletzung",
-     "news": "artikel/schalke-el-faouzi-trainiert-mit-schutzmaske-hoffenheim-moeglich-db532005a1.html",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
      "prozent": 0
     }
    ]
@@ -3848,6 +3848,16 @@
       "prozent": 90
      },
      {
+      "name": "Marvin Friedrich",
+      "nr": "5",
+      "ampel": "gruen",
+      "grund": "2 von 2 Einsätzen in der Startelf · Ø 94 min · 7 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 81
+     },
+     {
       "name": "Leopold Querfeld",
       "nr": "14",
       "ampel": "gruen",
@@ -3876,16 +3886,6 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 49
-     },
-     {
-      "name": "Josip Juranovic",
-      "nr": "18",
-      "ampel": "gruen",
-      "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 6 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 46
      }
     ],
     "mf": [
@@ -3920,16 +3920,6 @@
       "prozent": 74
      },
      {
-      "name": "Kastriot Imeri",
-      "nr": "30",
-      "ampel": "gruen",
-      "grund": "4 von 4 Einsätzen in der Startelf · Ø 54 min · 5 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Linkes Mittelfeld",
-      "prozent": 63
-     },
-     {
       "name": "Janik Haberer",
       "nr": "19",
       "ampel": "gruen",
@@ -3938,11 +3928,31 @@
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 63
+     },
+     {
+      "name": "Kastriot Imeri",
+      "nr": "30",
+      "ampel": "gruen",
+      "grund": "4 von 4 Einsätzen in der Startelf · Ø 54 min · 5 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Linkes Mittelfeld",
+      "prozent": 48
      }
     ],
     "st": []
    },
    "bank": [
+    {
+     "name": "Josip Juranovic",
+     "nr": "18",
+     "ampel": "gruen",
+     "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 6 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 46
+    },
     {
      "name": "Andrej Ilic",
      "nr": "23",
@@ -3972,16 +3982,6 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 42
-    },
-    {
-     "name": "Marvin Friedrich",
-     "nr": "5",
-     "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 94 min · 7 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 41
     },
     {
      "name": "Livan Burcu",
