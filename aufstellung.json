@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T18:32:14.955137+00:00",
+ "updated": "2026-11-10T20:02:07.206656+00:00",
  "spieltag": 10,
  "partien": [
   {
@@ -451,7 +451,18 @@
      "prozent": 20
     }
    ],
-   "fraglich": [],
+   "fraglich": [
+    {
+     "name": "Kennet Eichhorn",
+     "nr": "18",
+     "ampel": "gelb",
+     "grund": "Nach Stoffwechselerkrankung – Teile des Teamtrainings absolviert",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 3
+    }
+   ],
    "ausfall": [
     {
      "name": "Moussa Diaby",
@@ -481,16 +492,6 @@
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Kennet Eichhorn",
-     "nr": "18",
-     "ampel": "rot",
-     "grund": "Stoffwechselerkrankung - startet mit dem individuellen Aufbautraining",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
      "prozent": 0
     },
     {
@@ -3531,12 +3532,12 @@
      {
       "name": "Moritz Nicolas",
       "nr": "1",
-      "ampel": "gelb",
-      "grund": "Muskuläre Probleme",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 98 min · 2 Spiele ohne Einsatz",
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 60
+      "prozent": 83
      }
     ],
     "abw": [
@@ -3698,6 +3699,16 @@
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 12
+    },
+    {
+     "name": "Iaia Manco Danfa",
+     "nr": "39",
+     "ampel": "gelb",
+     "grund": "Angeschlagen - fehlt im Teamtraining",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 2
     }
    ],
    "ausfall": [
@@ -3816,14 +3827,14 @@
       "prozent": 67
      },
      {
-      "name": "Tom Rothe",
-      "nr": "15",
-      "ampel": "gruen",
-      "grund": "7 von 8 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
+      "name": "Felix Uduokhai",
+      "nr": "2",
+      "ampel": "gelb",
+      "grund": "Muskuläre Probleme - verpasste DFB-Pokal",
       "news": "",
       "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 34
+      "pos": "Innenverteidiger",
+      "prozent": 60
      }
     ],
     "mf": [
@@ -3892,6 +3903,16 @@
     ]
    },
    "bank": [
+    {
+     "name": "Tom Rothe",
+     "nr": "15",
+     "ampel": "gruen",
+     "grund": "7 von 8 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 34
+    },
     {
      "name": "Kastriot Imeri",
      "nr": "30",
@@ -3971,16 +3992,6 @@
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
      "prozent": 21
-    },
-    {
-     "name": "Matheo Raab",
-     "nr": "31",
-     "ampel": "gruen",
-     "grund": "1 von 1 Einsätzen in der Startelf · Ø 102 min · 8 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 11
     }
    ],
    "fraglich": [
@@ -3995,38 +4006,27 @@
      "prozent": 7
     },
     {
+     "name": "Stanley Nsoki",
+     "nr": "34",
+     "ampel": "gelb",
+     "grund": "Nach Muskelverletzung an der Wade",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 3
+    },
+    {
      "name": "Robert Skov",
      "nr": "24",
      "ampel": "gelb",
-     "grund": "angeschlagen",
-     "news": "artikel/freiburg-gegen-union-schuster-duerfte-nach-trabzon-rotieren-44b2a24c65.html",
+     "grund": "Angeschlagen",
+     "news": "",
      "reihe": "mf",
      "pos": "Linkes Mittelfeld",
      "prozent": 2
     }
    ],
-   "ausfall": [
-    {
-     "name": "Felix Uduokhai",
-     "nr": "2",
-     "ampel": "rot",
-     "grund": "Rotsperre",
-     "news": "artikel/freiburg-gegen-union-schuster-duerfte-nach-trabzon-rotieren-44b2a24c65.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Stanley Nsoki",
-     "nr": "34",
-     "ampel": "rot",
-     "grund": "Wadenverletzung",
-     "news": "artikel/freiburg-gegen-union-schuster-duerfte-nach-trabzon-rotieren-44b2a24c65.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 0
-    }
-   ]
+   "ausfall": []
   }
  }
 }
