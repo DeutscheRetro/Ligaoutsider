@@ -419,6 +419,14 @@
     const _urlFilter = new URLSearchParams(location.search).get('filter');
     let aktiverFilter = _urlFilter || null; // null = alle
 
+    // Nationalmannschaft: Bundesflagge, Vereinswappen klein unten rechts
+    function wappenBild(a, cls) {
+      const w = esc(a.wappen_url || 'logos/bundesliga.png');
+      if (!a.n11) return `<img src="${w}" class="${cls}" alt="Wappen" />`;
+      return `<span class="${cls} wappen-n11"><img src="logos/deutschland.svg" alt="Nationalmannschaft" />`
+        + (a.wappen_url ? `<img src="${w}" class="wappen-n11-klub" alt="" />` : '') + '</span>';
+    }
+
     function feedItem(a) {
       const slug = a.pfad.replace('artikel/', '').replace('.html', '');
       const adminBtn = isAdmin
@@ -426,7 +434,7 @@
         : '';
       return `<li class="feed-item">
         <a href="${esc(a.pfad)}" class="feed-wappen-link">
-          <img src="${esc(a.wappen_url || 'logos/bundesliga.png')}" class="feed-wappen" alt="Wappen" />
+          ${wappenBild(a, 'feed-wappen')}
         </a>
         <div class="feed-body">
           <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
@@ -482,7 +490,7 @@
       const bild = a.wappen_url || 'logos/bundesliga.png';
       return `<article class="auf-karte">
         <div class="auf-kopf">
-          <img src="${esc(bild)}" class="auf-wappen" alt="" onerror="this.style.display='none'">
+          ${a.n11 ? wappenBild(a, 'auf-wappen') : `<img src="${esc(bild)}" class="auf-wappen" alt="" onerror="this.style.display='none'">`}
           <span class="feed-badge" style="background:${esc(a.badge_bg)};color:${esc(a.badge_fg)}">${esc(a.badge)}</span>
         </div>
         <a href="${esc(a.pfad)}" class="auf-titel">${esc(a.titel)}</a>

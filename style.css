@@ -863,3 +863,8 @@ a.team-chip { text-decoration: none; }
 .sp-fuss { font-size: 12px; color: var(--text4); margin: 12px 0 0; }
 .sp-fuss:empty { display: none; }
 @media (prefers-reduced-motion: reduce) { .sp-balk i, .sp-bar, .sp-hint { transition: none; } }
+
+/* Nationalmannschaft in Karten: Bundesflagge, Vereinswappen klein unten rechts */
+.wappen-n11 { position: relative; display: flex; align-items: center; filter: none; }
+.wappen-n11 > img:first-child { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 2px; }
+.wappen-n11-klub { position: absolute; right: -4px; bottom: 0; width: 50%; height: 50%; object-fit: contain; }

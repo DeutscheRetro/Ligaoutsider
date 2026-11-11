@@ -527,6 +527,8 @@ def feed_speichern(artikel_liste: list):
     # Neueste zuerst
     from datetime import datetime
     artikel_liste.sort(key=lambda x: datetime.strptime(x["datum"], "%d.%m.%Y %H:%M"), reverse=True)
+    # n11: Karten auf der Startseite zeigen dann die Bundesflagge (gleiche Regel wie die Artikelseite)
+    artikel_liste = [{**a, "n11": ist_nationalteam(a.get("titel", ""))} for a in artikel_liste]
     _atomar_schreiben(FEED_JSON, json.dumps(artikel_liste[:100_000], ensure_ascii=False, indent=2))
 
 
