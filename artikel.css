@@ -189,3 +189,8 @@
   color: var(--text4); cursor: pointer; padding: 0; margin-top: 4px;
 }
 .admin-delete-btn:hover { color: #c62828; }
+
+/* Nationalmannschaft: Bundesflagge, Vereinswappen klein unten rechts */
+.artikel-n11 { position: relative; display: flex; align-items: center; }
+.artikel-n11 > img:first-child { width: 56px; height: auto; border: 1px solid var(--border); border-radius: 3px; }
+.artikel-n11-klub { position: absolute; right: -6px; bottom: 2px; width: 24px; height: 24px; object-fit: contain; }

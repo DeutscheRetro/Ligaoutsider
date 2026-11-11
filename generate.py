@@ -319,6 +319,23 @@ VEREIN_FILTER = {
 
 # Kanonische Klubnamen, die das Modell in "hauptklub" zurueckgeben darf,
 # plus das zugehoerige Wappen. Reihenfolge = Reihenfolge im Prompt.
+# Artikel über die Nationalmannschaft bekommen die Bundesflagge statt Vereinswappen (DFB-Logo ist geschützte Marke).
+# "Länderspiel" allein zählt nicht: Länderspielpause, Reiselisten und fremde Teams sind Vereinsthemen.
+DFB_TEAM = re.compile(r"DFB-(?:Team|Elf|Training|Kader|Aufgebot|Auswahl|Lehrgang)", re.I)
+NATIONALTEAM = re.compile(r"Nationalmannschaft|Nationalelf|Nationalteam", re.I)
+FREMDES_TEAM = re.compile(r"\bU\s?\d\d\b|england|türk|schweiz|österreich|frankreich|französ|niederl|spani|belgi|dän|poln|polen|"
+                          r"kroat|japan|brasil|portug|ital|schwed|norw|marokk|ungar|tschech|ghana|kosov|albani|serbi|ukrain|"
+                          r"schott|irland|kamerun|senegal|nigeria|korea|austral|kanad|mexik|argentin|kolumbi|urugu|alger|"
+                          r"tunes|georgi|griech|rumän|slowak|sloweni|bosni|finn|island|israel|ägypt|luxemb|kongo|\bus\b|\busa\b|amerik|"
+                          r"guinea|\bmali\b|gabun|burkina|kap verde|sambia|angola|südafrik|togo|benin|jamaik|paragu|chile|"
+                          r"\bperu\b|venezuel|haiti|katar|saudi|china|usbek|\birak|curaçao|curacao|surinam|armeni|aserbai|"
+                          r"mazedon|montenegr|lettl|litau|estl|zypern|malta|nordirl|wales|liechtenst|\bfär|russ", re.I)
+
+
+def ist_nationalteam(titel: str) -> bool:
+    """DFB-Team immer; "Nationalmannschaft" & Co. nur ohne Hinweis auf ein anderes Land oder eine Junioren-Auswahl."""
+    return bool(DFB_TEAM.search(titel) or (NATIONALTEAM.search(titel) and not FREMDES_TEAM.search(titel)))
+
 KLUB_LOGO = {
     "Bayern":      "logos/bayern.png",
     "Dortmund":    "logos/dortmund.png",
@@ -1733,6 +1750,10 @@ def artikel_html(
         if wappen_url else
         '<div class="artikel-wappen-placeholder">BL</div>'
     )
+    if ist_nationalteam(titel_roh):   # Fahne, das Vereinswappen bleibt klein daneben
+        wappen_html = ('<span class="artikel-wappen artikel-n11"><img src="../logos/deutschland.svg" alt="Nationalmannschaft"/>'
+                       + (f'<img src="{wappen_url}" class="artikel-n11-klub" alt="Wappen"/>' if wappen_url else '')
+                       + '</span>')
     vereine_tags_html = ""
     if vereine:
         tags = "".join(
