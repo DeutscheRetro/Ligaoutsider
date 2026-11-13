@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13T09:02:06.130567+00:00",
+ "updated": "2026-11-13T11:02:14.160104+00:00",
  "spieltag": 10,
  "partien": [
   {
@@ -90,16 +90,6 @@
     ],
     "abw": [
      {
-      "name": "Dayot Upamecano",
-      "nr": "2",
-      "ampel": "gruen",
-      "grund": "9 von 9 Einsätzen in der Startelf · Ø 93 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 97
-     },
-     {
       "name": "Konrad Laimer",
       "nr": "27",
       "ampel": "gruen",
@@ -138,6 +128,16 @@
       "reihe": "abw",
       "pos": "Linker Verteidiger",
       "prozent": 60
+     },
+     {
+      "name": "Josip Stanisic",
+      "nr": "44",
+      "ampel": "gruen",
+      "grund": "5 von 8 Einsätzen in der Startelf · Ø 66 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 55
      }
     ],
     "mf": [
@@ -197,16 +197,6 @@
    },
    "bank": [
     {
-     "name": "Josip Stanisic",
-     "nr": "44",
-     "ampel": "gruen",
-     "grund": "5 von 8 Einsätzen in der Startelf · Ø 66 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 55
-    },
-    {
      "name": "Tom Bischof",
      "nr": "8",
      "ampel": "gruen",
@@ -237,6 +227,16 @@
      "news": "artikel/bayern-bei-mainz-personalsorgen-und-neuer-vor-rekord-93aca41287.html",
      "reihe": "st",
      "pos": "Linksaußen",
+     "prozent": 0
+    },
+    {
+     "name": "Dayot Upamecano",
+     "nr": "2",
+     "ampel": "rot",
+     "grund": "Persönliche Gründe - reist vorzeitig von der Nationalmannschaft ab",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
      "prozent": 0
     },
     {
@@ -639,8 +639,8 @@
      "name": "Marcel Sabitzer",
      "nr": "20",
      "ampel": "gruen",
-     "grund": "nach Erkrankung wieder im Training",
-     "news": "artikel/bvb-gegen-elversberg-ohne-guirassy-sabitzer-wieder-eine-option-4806bbd6bd.html",
+     "grund": "2 von 8 Einsätzen in der Startelf · Ø 33 min · 1 Spiel ohne Einsatz",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
      "prozent": 23
@@ -683,8 +683,8 @@
      "name": "Serhou Guirassy",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Zerrung",
-     "news": "artikel/bvb-gegen-elversberg-ohne-guirassy-sabitzer-wieder-eine-option-4806bbd6bd.html",
+     "grund": "Zerrung, Hoffnung auf Rückkehr nach der LSP",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -3517,7 +3517,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 83
+      "prozent": 97
      }
     ],
     "abw": [
@@ -3549,7 +3549,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 75
+      "prozent": 91
      },
      {
       "name": "David Herold",
@@ -3629,16 +3629,6 @@
    },
    "bank": [
     {
-     "name": "Daniel Batz",
-     "nr": "33",
-     "ampel": "gruen",
-     "grund": "2 von 2 Einsätzen in der Startelf · Ø 95 min · 7 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "tw",
-     "pos": "Torwart",
-     "prozent": 36
-    },
-    {
      "name": "Isac Lidberg",
      "nr": "3",
      "ampel": "gruen",
@@ -3649,14 +3639,24 @@
      "prozent": 26
     },
     {
-     "name": "Yukhym Konoplya",
-     "nr": "22",
+     "name": "Daniel Batz",
+     "nr": "33",
      "ampel": "gruen",
-     "grund": "0 von 1 Einsätzen in der Startelf · Ø 24 min · 8 Spiele ohne Einsatz",
+     "grund": "2 von 2 Einsätzen in der Startelf · Ø 95 min · 7 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 15
+     "reihe": "tw",
+     "pos": "Torwart",
+     "prozent": 24
+    },
+    {
+     "name": "Jens Castrop",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 15 min · 7 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 18
     },
     {
      "name": "Franck Honorat",
@@ -3681,16 +3681,6 @@
      "prozent": 25
     },
     {
-     "name": "Daiki Hashioka",
-     "nr": "14",
-     "ampel": "gelb",
-     "grund": "Muskuläre Probleme - verpasst das Testspiel",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 20
-    },
-    {
      "name": "Tim Kleindienst",
      "nr": "11",
      "ampel": "gelb",
@@ -3699,6 +3689,16 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 10
+    },
+    {
+     "name": "Daiki Hashioka",
+     "nr": "14",
+     "ampel": "gelb",
+     "grund": "Muskuläre Probleme - verpasst das Testspiel",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 7
     },
     {
      "name": "Iaia Manco Danfa",
