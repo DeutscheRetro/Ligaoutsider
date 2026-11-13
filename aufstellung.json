@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13T00:02:11.248532+00:00",
+ "updated": "2026-11-13T05:02:21.562324+00:00",
  "spieltag": 10,
  "partien": [
   {
@@ -809,7 +809,7 @@
       "name": "Neil El Aynaoui",
       "nr": "21",
       "ampel": "gelb",
-      "grund": "Angeschlagen - muss von der Nationalmannschaft abreisen",
+      "grund": "Leichte Unterschenkelprobleme - muss von der Nationalmannschaft abreisen",
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
@@ -926,7 +926,7 @@
      "name": "Max Finkgräfe",
      "nr": "35",
      "ampel": "gelb",
-     "grund": "Oberschenkelprobleme",
+     "grund": "Oberschenkelprobleme - fehlt im Testspiel",
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
@@ -948,7 +948,7 @@
      "name": "Marc Guiu",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Nach Muskelverletzung - absolvierte eine individuelle Einheit auf dem Trainingsplatz",
+     "grund": "Nach Muskelverletzung - trainiert individuell, soll nächste Woche ins TT zurückkehren",
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
@@ -1153,7 +1153,7 @@
      "name": "Angelo Stiller",
      "nr": "6",
      "ampel": "rot",
-     "grund": "Verletzung im Adduktorenbereich - fällt vorerst aus, weitere Untersuchungen folgen",
+     "grund": "Verletzung im Adduktorenbereich - droht auch S04 (A) zu verpassen",
      "news": "",
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
@@ -1946,16 +1946,6 @@
      "prozent": 0
     },
     {
-     "name": "Salim Musah",
-     "nr": "29",
-     "ampel": "rot",
-     "grund": "Schwere Oberschenkelverletzung - muss operiert werden, fällt monatelang aus",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 0
-    },
-    {
      "name": "Moussa Ndiaye",
      "nr": "16",
      "ampel": "rot",
@@ -1963,6 +1953,16 @@
      "news": "",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Salim Musah",
+     "nr": "29",
+     "ampel": "rot",
+     "grund": "Schwere Oberschenkelverletzung - muss operiert werden, fällt monatelang aus",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
      "prozent": 0
     }
    ]
@@ -2023,11 +2023,21 @@
       "name": "Calvin Brackelmann",
       "nr": "2",
       "ampel": "gelb",
-      "grund": "Nach Zusammenprall",
+      "grund": "Nach Gehirnerschütterung - absolviert Teile des Teamtrainings",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 60
+     },
+     {
+      "name": "Marius Wolf",
+      "nr": "27",
+      "ampel": "gruen",
+      "grund": "6 von 7 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 34
      }
     ],
     "mf": [
@@ -2070,16 +2080,6 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 87
-     },
-     {
-      "name": "Arijon Ibrahimovic",
-      "nr": "21",
-      "ampel": "gelb",
-      "grund": "Wadenprobleme - sagt Reise zur U21-Nationalmannschaft ab",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 60
      }
     ],
     "st": [
@@ -2096,16 +2096,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Marius Wolf",
-     "nr": "27",
-     "ampel": "gruen",
-     "grund": "6 von 7 Einsätzen in der Startelf · Ø 65 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 34
-    },
     {
      "name": "Alexis Claude-Maurice",
      "nr": "20",
@@ -2147,6 +2137,16 @@
      "news": "artikel/augsburg-matsima-fehlt-mit-muskelfaserriss-gegen-mainz-1ae27941f5.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
+     "prozent": 0
+    },
+    {
+     "name": "Arijon Ibrahimovic",
+     "nr": "21",
+     "ampel": "rot",
+     "grund": "Nach Wadenproblemen - soll nächste Woche wieder ins Training einsteigen",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
      "prozent": 0
     },
     {
@@ -2695,16 +2695,6 @@
     ],
     "mf": [
      {
-      "name": "Satoshi Tanaka",
-      "nr": "13",
-      "ampel": "gruen",
-      "grund": "8 von 8 Einsätzen in der Startelf · Ø 89 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 97
-     },
-     {
       "name": "Kenan Karaman",
       "nr": "19",
       "ampel": "gruen",
@@ -2712,6 +2702,16 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
+      "prozent": 97
+     },
+     {
+      "name": "Satoshi Tanaka",
+      "nr": "13",
+      "ampel": "gruen",
+      "grund": "8 von 8 Einsätzen in der Startelf · Ø 89 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
       "prozent": 97
      },
      {
@@ -2921,7 +2921,7 @@
       "name": "Lukas Pinckert",
       "nr": "19",
       "ampel": "gelb",
-      "grund": "Sprunggelenksprobleme - angeschlagen ausgewechselt worden",
+      "grund": "Sprunggelenksprobleme - keine strukturelle Verletzung, Hoffnung auf SCF (H)",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
@@ -3674,7 +3674,7 @@
      "name": "Daiki Hashioka",
      "nr": "14",
      "ampel": "gelb",
-     "grund": "Muskuläre Probleme - fehlt im Teamtraining",
+     "grund": "Muskuläre Probleme - verpasst das Testspiel",
      "news": "",
      "reihe": "abw",
      "pos": "Rechter Verteidiger",
@@ -3684,7 +3684,7 @@
      "name": "Hugo Bolin",
      "nr": "38",
      "ampel": "gelb",
-     "grund": "Muskuläre Probleme - absolviert Laufeinheit",
+     "grund": "Muskuläre Probleme - absolviert Laufeinheit, fehlt im Testspiel",
      "news": "",
      "reihe": "st",
      "pos": "Linksaußen",
@@ -3989,7 +3989,7 @@
      "name": "Stanley Nsoki",
      "nr": "34",
      "ampel": "gelb",
-     "grund": "Nach Muskelverletzung an der Wade",
+     "grund": "Nach Muskelverletzung an der Wade - verpasst Testspiel",
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
@@ -3999,7 +3999,7 @@
      "name": "Robert Skov",
      "nr": "24",
      "ampel": "gelb",
-     "grund": "Angeschlagen",
+     "grund": "Angeschlagen - verpasst Testspiel",
      "news": "",
      "reihe": "mf",
      "pos": "Linkes Mittelfeld",
