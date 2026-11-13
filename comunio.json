@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-13T14:01:29.325613+00:00",
+  "updated": "2026-11-13T15:31:36.592913+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -146,18 +146,6 @@
       "eff": 5.8
     },
     {
-      "name": "Nusa",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Sturm",
-      "mw": 16680000,
-      "spiele": 9,
-      "tore": 4,
-      "pts": 73,
-      "ap": 8.11,
-      "eff": 4.4
-    },
-    {
       "name": "Kimmich",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -168,6 +156,18 @@
       "pts": 73,
       "ap": 9.13,
       "eff": 3.6
+    },
+    {
+      "name": "Nusa",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "mw": 16680000,
+      "spiele": 9,
+      "tore": 4,
+      "pts": 73,
+      "ap": 8.11,
+      "eff": 4.4
     },
     {
       "name": "F. Nmecha",
@@ -786,17 +786,6 @@
       "ap": 7.5
     },
     {
-      "name": "Maza",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Mittelfeld",
-      "mw": 14280000,
-      "spiele": 9,
-      "tore": 3,
-      "pts": 65,
-      "ap": 7.22
-    },
-    {
       "name": "García",
       "klub": "Bayer 04 Leverkusen",
       "logo": "logos/leverkusen.png",
@@ -804,6 +793,17 @@
       "mw": 12090000,
       "spiele": 9,
       "tore": 1,
+      "pts": 65,
+      "ap": 7.22
+    },
+    {
+      "name": "Maza",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Mittelfeld",
+      "mw": 14280000,
+      "spiele": 9,
+      "tore": 3,
       "pts": 65,
       "ap": 7.22
     },
@@ -1346,6 +1346,14 @@
       "mw": 10780000
     },
     {
+      "name": "Prömel",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Mittelfeld",
+      "pts": 31,
+      "mw": 5780000
+    },
+    {
       "name": "Muheim",
       "klub": "Hamburger SV",
       "logo": "logos/hsv.png",
@@ -1360,14 +1368,6 @@
       "pos": "Abwehr",
       "pts": 0,
       "mw": 4560000
-    },
-    {
-      "name": "Sano",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Mittelfeld",
-      "pts": 47,
-      "mw": 7250000
     }
   ],
   "aufsteigend": [
@@ -1388,12 +1388,28 @@
       "mw": 6910000
     },
     {
+      "name": "Karl",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Mittelfeld",
+      "pts": 38,
+      "mw": 12380000
+    },
+    {
       "name": "Grüll",
       "klub": "SV Werder Bremen",
       "logo": "logos/werder.png",
       "pos": "Sturm",
       "pts": 63,
       "mw": 8540000
+    },
+    {
+      "name": "Undav",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Sturm",
+      "pts": 31,
+      "mw": 12380000
     },
     {
       "name": "Hložek",
@@ -1410,14 +1426,6 @@
       "pos": "Sturm",
       "pts": 39,
       "mw": 10980000
-    },
-    {
-      "name": "Brackelmann",
-      "klub": "FC Augsburg",
-      "logo": "logos/augsburg.png",
-      "pos": "Abwehr",
-      "pts": 31,
-      "mw": 3520000
     },
     {
       "name": "Nebel",
@@ -1442,14 +1450,6 @@
       "pos": "Abwehr",
       "pts": 31,
       "mw": 5740000
-    },
-    {
-      "name": "Kleindienst",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Sturm",
-      "pts": 0,
-      "mw": 5610000
     }
   ],
   "rekorde": [
@@ -1461,24 +1461,6 @@
       "pts": 24,
       "tore": 3,
       "gegner": "SV Werder Bremen"
-    },
-    {
-      "name": "Luis Díaz",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 21,
-      "tore": 3,
-      "gegner": "RB Leipzig"
-    },
-    {
-      "name": "Olise",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Sturm",
-      "pts": 21,
-      "tore": 3,
-      "gegner": "1. FC Union Berlin"
     },
     {
       "name": "Caci",
@@ -1499,6 +1481,24 @@
       "gegner": "Eintracht Frankfurt"
     },
     {
+      "name": "Luis Díaz",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "pts": 21,
+      "tore": 3,
+      "gegner": "RB Leipzig"
+    },
+    {
+      "name": "Olise",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Sturm",
+      "pts": 21,
+      "tore": 3,
+      "gegner": "1. FC Union Berlin"
+    },
+    {
       "name": "Y. Engelhardt",
       "klub": "Sport-Club Freiburg",
       "logo": "logos/freiburg.png",
@@ -1506,15 +1506,6 @@
       "pts": 20,
       "tore": 2,
       "gegner": "Borussia M'gladbach"
-    },
-    {
-      "name": "Uzun",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Mittelfeld",
-      "pts": 19,
-      "tore": 2,
-      "gegner": "1. FSV Mainz 05"
     },
     {
       "name": "Ebnoutalib",
@@ -1542,6 +1533,15 @@
       "pts": 19,
       "tore": 2,
       "gegner": "SV Elversberg"
+    },
+    {
+      "name": "Uzun",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
+      "pos": "Mittelfeld",
+      "pts": 19,
+      "tore": 2,
+      "gegner": "1. FSV Mainz 05"
     }
   ]
 }
