@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-15T20:01:37.364051+00:00",
+  "updated": "2026-11-15T22:01:27.392457+00:00",
   "teuerste": [
     {
       "name": "Olise",
@@ -318,6 +318,18 @@
   ],
   "effizienz": [
     {
+      "name": "Kristof",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Torwart",
+      "mw": 1720000,
+      "spiele": 9,
+      "tore": 0,
+      "pts": 37,
+      "ap": 4.11,
+      "eff": 21.5
+    },
+    {
       "name": "Schwäbe",
       "klub": "1. FC Köln",
       "logo": "logos/koeln.png",
@@ -424,18 +436,6 @@
       "pts": 55,
       "ap": 6.11,
       "eff": 14.6
-    },
-    {
-      "name": "Noll",
-      "klub": "SC Paderborn",
-      "logo": "logos/paderborn.png",
-      "pos": "Torwart",
-      "mw": 4160000,
-      "spiele": 9,
-      "tore": 0,
-      "pts": 59,
-      "ap": 6.56,
-      "eff": 14.2
     }
   ],
   "torjaeger": [
@@ -786,17 +786,6 @@
       "ap": 7.5
     },
     {
-      "name": "García",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Mittelfeld",
-      "mw": 12560000,
-      "spiele": 9,
-      "tore": 1,
-      "pts": 65,
-      "ap": 7.22
-    },
-    {
       "name": "Maza",
       "klub": "Bayer 04 Leverkusen",
       "logo": "logos/leverkusen.png",
@@ -804,6 +793,17 @@
       "mw": 14020000,
       "spiele": 9,
       "tore": 3,
+      "pts": 65,
+      "ap": 7.22
+    },
+    {
+      "name": "García",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Mittelfeld",
+      "mw": 12560000,
+      "spiele": 9,
+      "tore": 1,
       "pts": 65,
       "ap": 7.22
     },
@@ -1298,28 +1298,20 @@
       "mw": 13090000
     },
     {
-      "name": "Rieder",
-      "klub": "FC Augsburg",
-      "logo": "logos/augsburg.png",
-      "pos": "Mittelfeld",
-      "pts": 60,
-      "mw": 7610000
-    },
-    {
-      "name": "Kramarić",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Mittelfeld",
-      "pts": 21,
-      "mw": 5870000
-    },
-    {
       "name": "Vušković",
       "klub": "Hamburger SV",
       "logo": "logos/hsv.png",
       "pos": "Abwehr",
       "pts": 0,
       "mw": 4820000
+    },
+    {
+      "name": "Burkardt",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
+      "pos": "Sturm",
+      "pts": 60,
+      "mw": 14120000
     },
     {
       "name": "Grønbæk",
@@ -1330,20 +1322,12 @@
       "mw": 7100000
     },
     {
-      "name": "S. El Mala",
-      "klub": "1. FC Köln",
-      "logo": "logos/koeln.png",
+      "name": "Ben Seghir",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
       "pos": "Sturm",
-      "pts": 24,
-      "mw": 8180000
-    },
-    {
-      "name": "S. Becker",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Sturm",
-      "pts": 47,
-      "mw": 5930000
+      "pts": 0,
+      "mw": 1130000
     },
     {
       "name": "W. Orbán",
@@ -1354,30 +1338,78 @@
       "mw": 7200000
     },
     {
-      "name": "El Khannouss",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
+      "name": "Schäfer",
+      "klub": "1. FC Union Berlin",
+      "logo": "logos/union.png",
       "pos": "Mittelfeld",
-      "pts": 58,
-      "mw": 11910000
+      "pts": 37,
+      "mw": 4230000
     },
     {
-      "name": "Gruda",
+      "name": "Nkunku",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "pts": 58,
+      "mw": 18250000
+    },
+    {
+      "name": "Rieder",
+      "klub": "FC Augsburg",
+      "logo": "logos/augsburg.png",
       "pos": "Mittelfeld",
-      "pts": 49,
-      "mw": 13740000
+      "pts": 60,
+      "mw": 7610000
+    },
+    {
+      "name": "S. El Mala",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Sturm",
+      "pts": 24,
+      "mw": 8180000
     }
   ],
   "aufsteigend": [
     {
-      "name": "Grifo",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Mittelfeld",
-      "pts": 28,
-      "mw": 4110000
+      "name": "Zentner",
+      "klub": "1. FSV Mainz 05",
+      "logo": "logos/mainz.png",
+      "pos": "Torwart",
+      "pts": 17,
+      "mw": 1830000
+    },
+    {
+      "name": "Hein",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Torwart",
+      "pts": 55,
+      "mw": 3760000
+    },
+    {
+      "name": "Coufal",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Abwehr",
+      "pts": 36,
+      "mw": 7150000
+    },
+    {
+      "name": "Sebulonsen",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Abwehr",
+      "pts": 16,
+      "mw": 1780000
+    },
+    {
+      "name": "Capaldo",
+      "klub": "Hamburger SV",
+      "logo": "logos/hsv.png",
+      "pos": "Abwehr",
+      "pts": 10,
+      "mw": 2080000
     },
     {
       "name": "Machida",
@@ -1388,36 +1420,20 @@
       "mw": 4500000
     },
     {
-      "name": "Suzuki",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Mittelfeld",
-      "pts": 60,
-      "mw": 9470000
-    },
-    {
-      "name": "Reis",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Mittelfeld",
-      "pts": 47,
-      "mw": 7610000
-    },
-    {
-      "name": "Nusa",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Sturm",
-      "pts": 73,
-      "mw": 16180000
-    },
-    {
       "name": "Kane",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
       "pos": "Sturm",
       "pts": 78,
       "mw": 23860000
+    },
+    {
+      "name": "Lynen",
+      "klub": "SV Werder Bremen",
+      "logo": "logos/werder.png",
+      "pos": "Mittelfeld",
+      "pts": 6,
+      "mw": 2540000
     },
     {
       "name": "Dina Ebimbe",
@@ -1428,28 +1444,12 @@
       "mw": 1770000
     },
     {
-      "name": "Schäfer",
-      "klub": "1. FC Union Berlin",
-      "logo": "logos/union.png",
+      "name": "Tillman",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
       "pos": "Mittelfeld",
-      "pts": 37,
-      "mw": 4230000
-    },
-    {
-      "name": "Asllani",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Sturm",
-      "pts": 39,
-      "mw": 10920000
-    },
-    {
-      "name": "Raum",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Abwehr",
-      "pts": 47,
-      "mw": 10010000
+      "pts": 21,
+      "mw": 3940000
     }
   ],
   "rekorde": [
