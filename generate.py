@@ -333,8 +333,13 @@ FREMDES_TEAM = re.compile(r"\bU\s?\d\d\b|england|türk|schweiz|österreich|frank
 
 
 def ist_nationalteam(titel: str) -> bool:
-    """DFB-Team immer; "Nationalmannschaft" & Co. nur ohne Hinweis auf ein anderes Land oder eine Junioren-Auswahl."""
-    return bool(DFB_TEAM.search(titel) or (NATIONALTEAM.search(titel) and not FREMDES_TEAM.search(titel)))
+    """DFB-Team immer; "Nationalmannschaft" & Co. nur ohne Hinweis auf ein anderes Land und ohne ausländische Spieler."""
+    if DFB_TEAM.search(titel):
+        return True
+    if not NATIONALTEAM.search(titel) or FREMDES_TEAM.search(titel):
+        return False
+    # "Nationalelf-Berufung" bei Fernández meint Argentinien: Spieler im Titel müssen für Deutschland spielen
+    return storys.nationalteam_deutsch(titel) is not False
 
 KLUB_LOGO = {
     "Bayern":      "logos/bayern.png",

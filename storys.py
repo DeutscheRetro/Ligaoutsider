@@ -120,6 +120,15 @@ def _wort(muster: str, kurz: bool) -> re.Pattern:
     return re.compile(r"(?<![a-z0-9])" + re.escape(muster) + rechts)
 
 
+_nation: dict[str, set[str]] = {}     # Spielername -> Nationalitäten aus spieler_db.json
+
+
+def nationalteam_deutsch(text: str) -> bool | None:
+    """Spielen die im Text genannten Spieler für Deutschland? None, wenn keiner mit Nationalität bekannt ist."""
+    bekannt = [_nation[n] for n, _ in spieler_in(text) if _nation.get(n)]
+    return any("Deutschland" in nat for nat in bekannt) if bekannt else None
+
+
 def init(spieler_db: Path, verein_filter: dict) -> None:
     """verein_filter: VEREIN_FILTER aus generate.py (Nennung -> kanonischer Klub)."""
     global _klub_muster, _voll_muster, _nachnamen
@@ -128,6 +137,7 @@ def init(spieler_db: Path, verein_filter: dict) -> None:
     _klub_muster = [(_wort(k, len(k) <= 3), v) for k, v in sorted(alle.items(), key=lambda x: -len(x[0]))]
 
     _voll_muster, _nachnamen = [], {}
+    _nation.clear()
     try:
         db = json.loads(Path(spieler_db).read_text(encoding="utf-8"))
     except Exception:
@@ -140,6 +150,8 @@ def init(spieler_db: Path, verein_filter: dict) -> None:
             name = sp.get("name") or ""
             if not name:
                 continue
+            n = sp.get("nation") or []
+            _nation[name] = {n} if isinstance(n, str) else set(n)
             for variante in {name, (sp.get("kickbase") or {}).get("name") or ""}:
                 if len(variante.split()) > 1:
                     voll[falten(variante)] = (name, klub)
