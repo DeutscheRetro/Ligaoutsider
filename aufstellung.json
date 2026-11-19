@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-19T15:33:34.839363+00:00",
+ "updated": "2026-11-19T17:02:07.945294+00:00",
  "spieltag": 10,
  "partien": [
   {
@@ -90,6 +90,16 @@
     ],
     "abw": [
      {
+      "name": "Dayot Upamecano",
+      "nr": "2",
+      "ampel": "gruen",
+      "grund": "9 von 9 Einsätzen in der Startelf · Ø 93 min",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 97
+     },
+     {
       "name": "Konrad Laimer",
       "nr": "27",
       "ampel": "gruen",
@@ -160,16 +170,6 @@
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
       "prozent": 82
-     },
-     {
-      "name": "Tom Bischof",
-      "nr": "8",
-      "ampel": "gruen",
-      "grund": "2 von 8 Einsätzen in der Startelf · Ø 38 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Zentrales Mittelfeld",
-      "prozent": 22
      }
     ],
     "st": [
@@ -197,6 +197,16 @@
    },
    "bank": [
     {
+     "name": "Tom Bischof",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "2 von 8 Einsätzen in der Startelf · Ø 38 min · 1 Spiel ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 22
+    },
+    {
      "name": "Min-jae Kim",
      "nr": "3",
      "ampel": "gruen",
@@ -217,16 +227,6 @@
      "news": "artikel/bayern-diaz-fehlt-gegen-koeln-rueckkehr-gegen-lille-im-blick-75edecdf00.html",
      "reihe": "st",
      "pos": "Linksaußen",
-     "prozent": 0
-    },
-    {
-     "name": "Dayot Upamecano",
-     "nr": "2",
-     "ampel": "rot",
-     "grund": "Persönliche Gründe - reist vorzeitig von der Nationalmannschaft ab",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
      "prozent": 0
     },
     {
@@ -529,16 +529,6 @@
       "prozent": 96
      },
      {
-      "name": "Julian Ryerson",
-      "nr": "26",
-      "ampel": "gruen",
-      "grund": "6 von 8 Einsätzen in der Startelf · Ø 70 min · 1 Spiel ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Rechter Verteidiger",
-      "prozent": 68
-     },
-     {
       "name": "Waldemar Anton",
       "nr": "3",
       "ampel": "gelb",
@@ -547,6 +537,16 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 60
+     },
+     {
+      "name": "Julian Ryerson",
+      "nr": "26",
+      "ampel": "gruen",
+      "grund": "6 von 8 Einsätzen in der Startelf · Ø 70 min · 1 Spiel ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Rechter Verteidiger",
+      "prozent": 34
      }
     ],
     "mf": [
@@ -590,7 +590,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 58
+      "prozent": 92
      },
      {
       "name": "Fábio Silva",
@@ -911,18 +911,7 @@
      "prozent": 11
     }
    ],
-   "fraglich": [
-    {
-     "name": "Max Finkgräfe",
-     "nr": "35",
-     "ampel": "gelb",
-     "grund": "Oberschenkelprobleme - fehlt im Testspiel",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 4
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Assan Ouédraogo",
@@ -1146,16 +1135,6 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 11
-    },
-    {
-     "name": "Leonidas Stergiou",
-     "nr": "20",
-     "ampel": "gelb",
-     "grund": "Angeschlagen - bei der U23 vorzeitig ausgewechselt worden",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 2
     }
    ],
    "ausfall": [
@@ -1168,26 +1147,6 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 0
-    },
-    {
-     "name": "Leo Sauer",
-     "nr": "44",
-     "ampel": "rot",
-     "grund": "Verletzung im Gesäßmuskel - trainiert individuell, Trainingseinstieg am Montag geplant",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 0
-    },
-    {
-     "name": "Justin Diehl",
-     "nr": "31",
-     "ampel": "rot",
-     "grund": "Muskelverletzung im Oberschenkel - weiterhin nicht im Teamtraining",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 0
     }
    ]
   },
@@ -1195,6 +1154,7 @@
    "logo": "logos/freiburg.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -1230,7 +1190,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 96
+      "prozent": 97
      },
      {
       "name": "Jordy Makengo",
@@ -1240,7 +1200,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 96
+      "prozent": 97
      },
      {
       "name": "Philipp Treu",
@@ -1250,7 +1210,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 94
+      "prozent": 96
      }
     ],
     "mf": [
@@ -1277,13 +1237,13 @@
     ],
     "st": [
      {
-      "name": "Niklas Beste",
-      "nr": "19",
+      "name": "Derry Scherhant",
+      "nr": "7",
       "ampel": "gruen",
-      "grund": "9 von 9 Einsätzen in der Startelf · Ø 75 min",
+      "grund": "9 von 9 Einsätzen in der Startelf · Ø 77 min",
       "news": "",
       "reihe": "st",
-      "pos": "Rechtsaußen",
+      "pos": "Linksaußen",
       "prozent": 97
      },
      {
@@ -1297,14 +1257,14 @@
       "prozent": 97
      },
      {
-      "name": "Derry Scherhant",
-      "nr": "7",
+      "name": "Niklas Beste",
+      "nr": "19",
       "ampel": "gruen",
-      "grund": "9 von 9 Einsätzen in der Startelf · Ø 77 min",
+      "grund": "9 von 9 Einsätzen in der Startelf · Ø 75 min",
       "news": "",
       "reihe": "st",
-      "pos": "Linksaußen",
-      "prozent": 96
+      "pos": "Rechtsaußen",
+      "prozent": 97
      },
      {
       "name": "Igor Matanovic",
@@ -1314,7 +1274,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 88
+      "prozent": 93
      }
     ]
    },
@@ -1327,17 +1287,7 @@
      "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
-     "prozent": 16
-    },
-    {
-     "name": "Lukas Kübler",
-     "nr": "17",
-     "ampel": "gruen",
-     "grund": "2 von 8 Einsätzen in der Startelf · Ø 31 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 14
+     "prozent": 11
     }
    ],
    "fraglich": [],
@@ -1358,6 +1308,7 @@
    "logo": "logos/frankfurt.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -1383,7 +1334,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 95
+      "prozent": 97
      },
      {
       "name": "Keita Kosugi",
@@ -1393,7 +1344,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 92
+      "prozent": 79
      },
      {
       "name": "Robin Koch",
@@ -1408,16 +1359,6 @@
     ],
     "mf": [
      {
-      "name": "Noël Aséko",
-      "nr": "15",
-      "ampel": "gruen",
-      "grund": "6 von 7 Einsätzen in der Startelf · Ø 61 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 95
-     },
-     {
       "name": "Raphael Onyedika",
       "nr": "25",
       "ampel": "gruen",
@@ -1425,7 +1366,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 94
+      "prozent": 97
      },
      {
       "name": "Farès Chaïbi",
@@ -1435,7 +1376,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 83
+      "prozent": 90
+     },
+     {
+      "name": "Noël Aséko",
+      "nr": "15",
+      "ampel": "gruen",
+      "grund": "6 von 7 Einsätzen in der Startelf · Ø 61 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Defensives Mittelfeld",
+      "prozent": 81
      }
     ],
     "st": [
@@ -1457,7 +1408,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 92
+      "prozent": 96
      },
      {
       "name": "Younes Ebnoutalib",
@@ -1467,7 +1418,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 84
+      "prozent": 75
      },
      {
       "name": "Ansgar Knauff",
@@ -1477,7 +1428,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 69
+      "prozent": 65
      }
     ]
    },
@@ -1490,7 +1441,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 26
+     "prozent": 30
     },
     {
      "name": "Nnamdi Collins",
@@ -1500,7 +1451,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 17
+     "prozent": 24
     },
     {
      "name": "Mario Götze",
@@ -1510,7 +1461,17 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 11
+     "prozent": 21
+    },
+    {
+     "name": "Oscar Højlund",
+     "nr": "6",
+     "ampel": "gruen",
+     "grund": "0 von 3 Einsätzen in der Startelf · Ø 37 min · 6 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Zentrales Mittelfeld",
+     "prozent": 17
     }
    ],
    "fraglich": [
@@ -1522,7 +1483,7 @@
      "news": "artikel/frankfurt-bangt-vor-hoffenheim-um-robin-koch-und-can-uzun-8189abf491.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 18
+     "prozent": 25
     }
    ],
    "ausfall": [
@@ -1542,6 +1503,7 @@
    "logo": "logos/mainz.png",
    "formation": "",
    "quellen": [
+    "ligainsider",
     "rotowire"
    ],
    "formation_quelle": "",
@@ -1555,10 +1517,20 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 91
+      "prozent": 94
      }
     ],
     "abw": [
+     {
+      "name": "Stefan Posch",
+      "nr": "4",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 97 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 97
+     },
      {
       "name": "Phillipp Mwene",
       "nr": "2",
@@ -1570,16 +1542,6 @@
       "prozent": 97
      },
      {
-      "name": "Stefan Posch",
-      "nr": "4",
-      "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 97 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 96
-     },
-     {
       "name": "Anthony Caci",
       "nr": "19",
       "ampel": "gruen",
@@ -1587,7 +1549,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 94
+      "prozent": 96
      },
      {
       "name": "Kacper Potulski",
@@ -1597,7 +1559,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 91
+      "prozent": 94
      },
      {
       "name": "Danny da Costa",
@@ -1607,7 +1569,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 85
+      "prozent": 75
      }
     ],
     "mf": [
@@ -1639,7 +1601,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 68
+      "prozent": 65
      }
     ],
     "st": [
@@ -1651,7 +1613,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 95
+      "prozent": 97
      },
      {
       "name": "Phillip Tietz",
@@ -1661,7 +1623,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 93
+      "prozent": 96
      }
     ]
    },
@@ -1674,7 +1636,7 @@
      "news": "artikel/mainz-schwolow-fehlt-wegen-magen-darm-grippe-gruber-schon-zurueck-f7dc4a6774.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 41
+     "prozent": 39
     },
     {
      "name": "Jae-sung Lee",
@@ -1684,37 +1646,7 @@
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 38
-    },
-    {
-     "name": "Eric Martel",
-     "nr": "5",
-     "ampel": "gruen",
-     "grund": "1 von 6 Einsätzen in der Startelf · Ø 23 min · 3 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 13
-    },
-    {
-     "name": "Ransford Königsdörffer",
-     "nr": "11",
-     "ampel": "gruen",
-     "grund": "1 von 9 Einsätzen in der Startelf · Ø 32 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 13
-    },
-    {
-     "name": "Silvan Widmer",
-     "nr": "30",
-     "ampel": "gruen",
-     "grund": "1 von 5 Einsätzen in der Startelf · Ø 30 min · 4 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 11
+     "prozent": 37
     }
    ],
    "fraglich": [
@@ -1726,7 +1658,7 @@
      "news": "artikel/mainz-schwolow-fehlt-wegen-magen-darm-grippe-gruber-schon-zurueck-f7dc4a6774.html",
      "reihe": "tw",
      "pos": "Torwart",
-     "prozent": 17
+     "prozent": 12
     }
    ],
    "ausfall": [
@@ -2545,6 +2477,16 @@
      "prozent": 27
     },
     {
+     "name": "Alessio Castro-Montes",
+     "nr": "17",
+     "ampel": "gruen",
+     "grund": "4 von 7 Einsätzen in der Startelf · Ø 56 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 25
+    },
+    {
      "name": "Gideon Mensah",
      "nr": "14",
      "ampel": "gruen",
@@ -2553,16 +2495,6 @@
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 19
-    },
-    {
-     "name": "Alessio Castro-Montes",
-     "nr": "17",
-     "ampel": "gruen",
-     "grund": "4 von 7 Einsätzen in der Startelf · Ø 56 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 12
     }
    ],
    "fraglich": [
@@ -2822,7 +2754,18 @@
      "prozent": 15
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Nicholas Mickelson",
+     "nr": "2",
+     "ampel": "rot",
+     "grund": "Innenbandverletzung - fällt vorerst aus",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 0
+    }
+   ]
   },
   "SC Paderborn 07": {
    "logo": "logos/paderborn.png",
@@ -2869,12 +2812,12 @@
      {
       "name": "Tjark Scheller",
       "nr": "25",
-      "ampel": "gelb",
-      "grund": "Angeschlagen - bricht Training vorzeitig ab, optimistisch für B04 (A)",
+      "ampel": "gruen",
+      "grund": "9 von 9 Einsätzen in der Startelf · Ø 94 min",
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 60
+      "prozent": 83
      }
     ],
     "mf": [
@@ -3599,16 +3542,6 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 91
-     },
-     {
-      "name": "David Herold",
-      "nr": "20",
-      "ampel": "gruen",
-      "grund": "1 von 4 Einsätzen in der Startelf · Ø 40 min · 5 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Linker Verteidiger",
-      "prozent": 56
      }
     ],
     "mf": [
@@ -3651,6 +3584,16 @@
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
       "prozent": 90
+     },
+     {
+      "name": "Jens Castrop",
+      "nr": "17",
+      "ampel": "gruen",
+      "grund": "0 von 2 Einsätzen in der Startelf · Ø 15 min · 7 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Zentrales Mittelfeld",
+      "prozent": 62
      }
     ],
     "st": [
@@ -3677,16 +3620,6 @@
     ]
    },
    "bank": [
-    {
-     "name": "Jens Castrop",
-     "nr": "17",
-     "ampel": "gruen",
-     "grund": "0 von 2 Einsätzen in der Startelf · Ø 15 min · 7 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Zentrales Mittelfeld",
-     "prozent": 28
-    },
     {
      "name": "Isac Lidberg",
      "nr": "3",
@@ -3716,6 +3649,16 @@
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 24
+    },
+    {
+     "name": "David Herold",
+     "nr": "20",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 40 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 22
     }
    ],
    "fraglich": [
@@ -3890,12 +3833,12 @@
      {
       "name": "Janik Haberer",
       "nr": "19",
-      "ampel": "gelb",
-      "grund": "Krankheit - fehlt im Teamtraining",
+      "ampel": "gruen",
+      "grund": "6 von 9 Einsätzen in der Startelf · Ø 63 min",
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 60
+      "prozent": 76
      }
     ],
     "st": [
@@ -3943,16 +3886,6 @@
      "prozent": 28
     },
     {
-     "name": "Livan Burcu",
-     "nr": "9",
-     "ampel": "gruen",
-     "grund": "5 von 8 Einsätzen in der Startelf · Ø 49 min · 1 Spiel ohne Einsatz",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 27
-    },
-    {
      "name": "Tim Skarke",
      "nr": "21",
      "ampel": "gruen",
@@ -3993,14 +3926,14 @@
      "prozent": 21
     },
     {
-     "name": "Josip Juranovic",
-     "nr": "18",
+     "name": "Aljoscha Kemlein",
+     "nr": "6",
      "ampel": "gruen",
-     "grund": "3 von 3 Einsätzen in der Startelf · Ø 94 min · 6 Spiele ohne Einsatz",
+     "grund": "3 von 8 Einsätzen in der Startelf · Ø 35 min · 1 Spiel ohne Einsatz",
      "news": "",
-     "reihe": "abw",
-     "pos": "Rechter Verteidiger",
-     "prozent": 18
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 13
     },
     {
      "name": "Matheo Raab",
@@ -4015,6 +3948,16 @@
    ],
    "fraglich": [
     {
+     "name": "Livan Burcu",
+     "nr": "9",
+     "ampel": "gelb",
+     "grund": "Angeschlagen - fraglich für RBL (H)",
+     "news": "",
+     "reihe": "st",
+     "pos": "Linksaußen",
+     "prozent": 21
+    },
+    {
      "name": "Felix Uduokhai",
      "nr": "2",
      "ampel": "gelb",
@@ -4023,16 +3966,6 @@
      "reihe": "abw",
      "pos": "Innenverteidiger",
      "prozent": 12
-    },
-    {
-     "name": "Aljoscha Kemlein",
-     "nr": "6",
-     "ampel": "gelb",
-     "grund": "Schulterprobleme - reist nicht mit zum Nationalteam",
-     "news": "",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 7
     },
     {
      "name": "Stanley Nsoki",
@@ -4055,7 +3988,18 @@
      "prozent": 2
     }
    ],
-   "ausfall": []
+   "ausfall": [
+    {
+     "name": "Josip Juranovic",
+     "nr": "18",
+     "ampel": "rot",
+     "grund": "Krankheit - verpasst RBL (H)",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 0
+    }
+   ]
   }
  }
 }
