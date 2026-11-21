@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T17:01:26.258372+00:00",
+  "updated": "2026-11-21T18:31:23.567415+00:00",
   "teuerste": [
     {
       "name": "Kane",
@@ -134,6 +134,18 @@
       "eff": 6.2
     },
     {
+      "name": "Mittelstädt",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "mw": 12120000,
+      "spiele": 9,
+      "tore": 2,
+      "pts": 82,
+      "ap": 9.11,
+      "eff": 6.8
+    },
+    {
       "name": "Kimmich",
       "klub": "FC Bayern München",
       "logo": "logos/bayern.png",
@@ -180,18 +192,6 @@
       "pts": 76,
       "ap": 7.6,
       "eff": 5.5
-    },
-    {
-      "name": "Pavlović",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "mw": 16210000,
-      "spiele": 9,
-      "tore": 2,
-      "pts": 76,
-      "ap": 8.44,
-      "eff": 4.7
     }
   ],
   "schnitt": [
@@ -213,11 +213,11 @@
       "logo": "logos/stuttgart.png",
       "pos": "Abwehr",
       "mw": 12120000,
-      "spiele": 8,
+      "spiele": 9,
       "tore": 2,
-      "pts": 74,
-      "ap": 9.25,
-      "eff": 6.1
+      "pts": 82,
+      "ap": 9.11,
+      "eff": 6.8
     },
     {
       "name": "Kimmich",
@@ -330,18 +330,6 @@
       "eff": 24.2
     },
     {
-      "name": "Heuer Fernandes",
-      "klub": "Hamburger SV",
-      "logo": "logos/hsv.png",
-      "pos": "Torwart",
-      "mw": 1870000,
-      "spiele": 9,
-      "tore": 0,
-      "pts": 40,
-      "ap": 4.44,
-      "eff": 21.4
-    },
-    {
       "name": "Schwäbe",
       "klub": "1. FC Köln",
       "logo": "logos/koeln.png",
@@ -378,6 +366,18 @@
       "eff": 19.7
     },
     {
+      "name": "Karius",
+      "klub": "FC Schalke 04",
+      "logo": "logos/schalke.png",
+      "pos": "Torwart",
+      "mw": 3050000,
+      "spiele": 10,
+      "tore": 0,
+      "pts": 53,
+      "ap": 5.3,
+      "eff": 17.4
+    },
+    {
       "name": "Noll",
       "klub": "SC Paderborn",
       "logo": "logos/paderborn.png",
@@ -402,18 +402,6 @@
       "eff": 16.9
     },
     {
-      "name": "Karius",
-      "klub": "FC Schalke 04",
-      "logo": "logos/schalke.png",
-      "pos": "Torwart",
-      "mw": 3050000,
-      "spiele": 9,
-      "tore": 0,
-      "pts": 50,
-      "ap": 5.56,
-      "eff": 16.4
-    },
-    {
       "name": "Vandevoordt",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
@@ -436,6 +424,18 @@
       "pts": 55,
       "ap": 6.11,
       "eff": 15.9
+    },
+    {
+      "name": "Rohr",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Abwehr",
+      "mw": 3270000,
+      "spiele": 10,
+      "tore": 1,
+      "pts": 48,
+      "ap": 4.8,
+      "eff": 14.7
     }
   ],
   "torjaeger": [
@@ -600,10 +600,10 @@
       "logo": "logos/schalke.png",
       "pos": "Torwart",
       "mw": 3050000,
-      "spiele": 9,
+      "spiele": 10,
       "tore": 0,
-      "pts": 50,
-      "ap": 5.56
+      "pts": 53,
+      "ap": 5.3
     },
     {
       "name": "Atubolu",
@@ -657,10 +657,10 @@
       "logo": "logos/stuttgart.png",
       "pos": "Abwehr",
       "mw": 12120000,
-      "spiele": 8,
+      "spiele": 9,
       "tore": 2,
-      "pts": 74,
-      "ap": 9.25
+      "pts": 82,
+      "ap": 9.11
     },
     {
       "name": "Upamecano",
@@ -1314,28 +1314,12 @@
       "mw": 4590000
     },
     {
-      "name": "Baumgartner",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
-      "pos": "Mittelfeld",
-      "pts": 23,
-      "mw": 16840000
-    },
-    {
-      "name": "Kimmich",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "pts": 73,
-      "mw": 22640000
-    },
-    {
-      "name": "Musiala",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "pts": 15,
-      "mw": 13560000
+      "name": "Moreira",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "pts": 13,
+      "mw": 4370000
     },
     {
       "name": "M. Friedrich",
@@ -1346,6 +1330,30 @@
       "mw": 2040000
     },
     {
+      "name": "Schick",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "pts": 79,
+      "mw": 16510000
+    },
+    {
+      "name": "Baumgartner",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Mittelfeld",
+      "pts": 23,
+      "mw": 16840000
+    },
+    {
+      "name": "Musiala",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Mittelfeld",
+      "pts": 15,
+      "mw": 13560000
+    },
+    {
       "name": "Burkardt",
       "klub": "Eintracht Frankfurt",
       "logo": "logos/frankfurt.png",
@@ -1354,30 +1362,22 @@
       "mw": 14080000
     },
     {
-      "name": "Olise",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
+      "name": "Matanović",
+      "klub": "Sport-Club Freiburg",
+      "logo": "logos/freiburg.png",
       "pos": "Sturm",
-      "pts": 94,
-      "mw": 24030000
-    },
-    {
-      "name": "Schick",
-      "klub": "Bayer 04 Leverkusen",
-      "logo": "logos/leverkusen.png",
-      "pos": "Sturm",
-      "pts": 79,
-      "mw": 16510000
+      "pts": 62,
+      "mw": 12090000
     }
   ],
   "aufsteigend": [
     {
-      "name": "Hložek",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Sturm",
-      "pts": 45,
-      "mw": 6610000
+      "name": "W. Orbán",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Abwehr",
+      "pts": 53,
+      "mw": 6990000
     },
     {
       "name": "García",
@@ -1396,12 +1396,36 @@
       "mw": 5260000
     },
     {
-      "name": "Mohya",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
+      "name": "Rômulo",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Sturm",
+      "pts": 52,
+      "mw": 13350000
+    },
+    {
+      "name": "Curda",
+      "klub": "SC Paderborn",
+      "logo": "logos/paderborn.png",
       "pos": "Mittelfeld",
-      "pts": 35,
-      "mw": 8250000
+      "pts": 39,
+      "mw": 3370000
+    },
+    {
+      "name": "Onyeka",
+      "klub": "SV Elversberg",
+      "logo": "logos/elversberg.png",
+      "pos": "Mittelfeld",
+      "pts": 22,
+      "mw": 3410000
+    },
+    {
+      "name": "Hložek",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
+      "pos": "Sturm",
+      "pts": 45,
+      "mw": 6610000
     },
     {
       "name": "Asllani",
@@ -1412,22 +1436,6 @@
       "mw": 12000000
     },
     {
-      "name": "F. Nmecha",
-      "klub": "Borussia Dortmund",
-      "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 71,
-      "mw": 12140000
-    },
-    {
-      "name": "Demirović",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Sturm",
-      "pts": 45,
-      "mw": 10720000
-    },
-    {
       "name": "Scally",
       "klub": "Borussia M'gladbach",
       "logo": "logos/gladbach.png",
@@ -1436,20 +1444,12 @@
       "mw": 5400000
     },
     {
-      "name": "Kleindienst",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Sturm",
-      "pts": 0,
-      "mw": 6280000
-    },
-    {
-      "name": "W. Orbán",
-      "klub": "RB Leipzig",
-      "logo": "logos/leipzig.png",
+      "name": "Kabak",
+      "klub": "TSG Hoffenheim",
+      "logo": "logos/hoffenheim.png",
       "pos": "Abwehr",
-      "pts": 53,
-      "mw": 6990000
+      "pts": 41,
+      "mw": 4850000
     }
   ],
   "rekorde": [
