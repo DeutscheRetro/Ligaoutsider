@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22T00:01:26.712339+00:00",
+  "updated": "2026-11-22T05:01:23.110052+00:00",
   "teuerste": [
     {
       "name": "Michael Olise",
@@ -64,6 +64,11 @@
       "pts": 1956
     },
     {
+      "name": "Antonio Nusa",
+      "logo": "logos/leipzig.png",
+      "pts": 1865
+    },
+    {
       "name": "Harry Kane",
       "logo": "logos/bayern.png",
       "pts": 1685
@@ -79,29 +84,24 @@
       "pts": 1604
     },
     {
-      "name": "Antonio Nusa",
-      "logo": "logos/leipzig.png",
-      "pts": 1599
-    },
-    {
       "name": "Patrik Schick",
       "logo": "logos/leverkusen.png",
-      "pts": 1423
+      "pts": 1597
     },
     {
-      "name": "Ibrahim Maza",
+      "name": "Aleix García",
       "logo": "logos/leverkusen.png",
-      "pts": 1383
-    },
-    {
-      "name": "Waldemar Anton",
-      "logo": "logos/dortmund.png",
-      "pts": 1373
+      "pts": 1586
     },
     {
       "name": "Maximilian Mittelstädt",
       "logo": "logos/stuttgart.png",
-      "pts": 1351
+      "pts": 1561
+    },
+    {
+      "name": "Felix Nmecha",
+      "logo": "logos/dortmund.png",
+      "pts": 1509
     }
   ],
   "effizienz": [
@@ -111,9 +111,19 @@
       "eff": 230.41
     },
     {
+      "name": "Éric Dina Ebimbe",
+      "logo": "logos/schalke.png",
+      "eff": 183.56
+    },
+    {
+      "name": "Edin Džeko",
+      "logo": "logos/schalke.png",
+      "eff": 176.39
+    },
+    {
       "name": "Tim Skarke",
       "logo": "logos/union.png",
-      "eff": 164.82
+      "eff": 156.78
     },
     {
       "name": "Lukas Ullrich",
@@ -126,11 +136,6 @@
       "eff": 149.16
     },
     {
-      "name": "Éric Dina Ebimbe",
-      "logo": "logos/schalke.png",
-      "eff": 142.19
-    },
-    {
       "name": "Robin Gosens",
       "logo": "logos/schalke.png",
       "eff": 140.76
@@ -139,11 +144,6 @@
       "name": "Luka Lochoshvili",
       "logo": "logos/koeln.png",
       "eff": 139.59
-    },
-    {
-      "name": "Woo-Yeong Jeong",
-      "logo": "logos/union.png",
-      "eff": 136.39
     },
     {
       "name": "Steffen Tigges",
@@ -472,6 +472,13 @@
       "faktor": 2.94
     },
     {
+      "name": "Nicolas Seiwald",
+      "logo": "logos/leipzig.png",
+      "mw": 2449236,
+      "fair": 5740268,
+      "faktor": 2.34
+    },
+    {
       "name": "Oliver Baumann",
       "logo": "logos/hoffenheim.png",
       "mw": 11125330,
@@ -519,13 +526,6 @@
       "mw": 32971086,
       "fair": 68912435,
       "faktor": 2.09
-    },
-    {
-      "name": "Finn Dahmen",
-      "logo": "logos/augsburg.png",
-      "mw": 12804553,
-      "fair": 26438773,
-      "faktor": 2.06
     }
   ],
   "verletzt": [
@@ -533,7 +533,7 @@
       "name": "Michael Olise",
       "logo": "logos/bayern.png",
       "mw": 66055350,
-      "info": "Schlag abbekommen - gegen KOE (H) ausgewechselt, leichte Entwarnung"
+      "info": "Fußprellung -  droht kein längerer Ausfall"
     },
     {
       "name": "Harry Kane",
@@ -551,13 +551,13 @@
       "name": "Serhou Guirassy",
       "logo": "logos/dortmund.png",
       "mw": 33590125,
-      "info": "Zerrung im Oberschenkel - reist nicht mit dem Team, Ausfall gegen BMG (A) wahrscheinlich"
+      "info": "Nach Zerrung - verpasst BMG (A)"
     },
     {
       "name": "Can Uzun",
       "logo": "logos/frankfurt.png",
       "mw": 23808454,
-      "info": "Erkältung - \"Wettlauf mit der Zeit\", fraglich für TSG (H)"
+      "info": "Erkältung - verpasst TSG (H)"
     },
     {
       "name": "Ozan Kabak",
@@ -575,7 +575,7 @@
       "name": "Marco Grüll",
       "logo": "logos/werder.png",
       "mw": 19047082,
-      "info": "Wadenprobleme - Einsatz gegen HSV (H) unwahrscheinlich"
+      "info": "Wadenprobleme - verpasst HSV (H)"
     },
     {
       "name": "Alphonso Davies",
@@ -641,6 +641,13 @@
       "vor": 54
     },
     {
+      "name": "Koki Machida",
+      "logo": "logos/hoffenheim.png",
+      "diff": 65,
+      "ap": 107,
+      "vor": 42
+    },
+    {
       "name": "Fabian Rieder",
       "logo": "logos/augsburg.png",
       "diff": 64,
@@ -653,16 +660,16 @@
       "diff": 64,
       "ap": 100,
       "vor": 36
-    },
-    {
-      "name": "Igor Matanović",
-      "logo": "logos/freiburg.png",
-      "diff": 63,
-      "ap": 131,
-      "vor": 68
     }
   ],
   "formab": [
+    {
+      "name": "Edin Džeko",
+      "logo": "logos/schalke.png",
+      "diff": -115,
+      "ap": 12,
+      "vor": 127
+    },
     {
       "name": "Andrej Kramarić",
       "logo": "logos/hoffenheim.png",
@@ -692,6 +699,20 @@
       "vor": 149
     },
     {
+      "name": "Kenan Karaman",
+      "logo": "logos/schalke.png",
+      "diff": -66,
+      "ap": 54,
+      "vor": 120
+    },
+    {
+      "name": "Kevin Diks",
+      "logo": "logos/gladbach.png",
+      "diff": -65,
+      "ap": 30,
+      "vor": 95
+    },
+    {
       "name": "Luca Sirch",
       "logo": "logos/elversberg.png",
       "diff": -57,
@@ -711,27 +732,6 @@
       "diff": -47,
       "ap": 89,
       "vor": 136
-    },
-    {
-      "name": "Jamie Leweling",
-      "logo": "logos/stuttgart.png",
-      "diff": -46,
-      "ap": 57,
-      "vor": 103
-    },
-    {
-      "name": "Josip Stanišić",
-      "logo": "logos/bayern.png",
-      "diff": -45,
-      "ap": 83,
-      "vor": 128
-    },
-    {
-      "name": "Lukas Kübler",
-      "logo": "logos/freiburg.png",
-      "diff": -45,
-      "ap": 37,
-      "vor": 82
     }
   ],
   "torwart": [
@@ -803,6 +803,11 @@
       "ap": 155
     },
     {
+      "name": "Nico Schlotterbeck",
+      "logo": "logos/dortmund.png",
+      "ap": 154
+    },
+    {
       "name": "Willi Orban",
       "logo": "logos/leipzig.png",
       "ap": 151
@@ -823,19 +828,14 @@
       "ap": 138
     },
     {
+      "name": "Ridle  Baku",
+      "logo": "logos/leipzig.png",
+      "ap": 136
+    },
+    {
       "name": "Alphonso Davies",
       "logo": "logos/bayern.png",
       "ap": 126
-    },
-    {
-      "name": "Anthony Caci",
-      "logo": "logos/mainz.png",
-      "ap": 126
-    },
-    {
-      "name": "Robin Koch",
-      "logo": "logos/frankfurt.png",
-      "ap": 118
     }
   ],
   "mittelfeld": [
@@ -880,14 +880,14 @@
       "ap": 148
     },
     {
+      "name": "Brajan Gruda",
+      "logo": "logos/leipzig.png",
+      "ap": 139
+    },
+    {
       "name": "Fabian Rieder",
       "logo": "logos/augsburg.png",
       "ap": 135
-    },
-    {
-      "name": "Derry Scherhant",
-      "logo": "logos/freiburg.png",
-      "ap": 124
     }
   ],
   "sturm": [
@@ -902,9 +902,19 @@
       "ap": 160
     },
     {
+      "name": "Christopher Nkunku",
+      "logo": "logos/leipzig.png",
+      "ap": 154
+    },
+    {
       "name": "Niclas Füllkrug",
       "logo": "logos/werder.png",
       "ap": 144
+    },
+    {
+      "name": "Rômulo",
+      "logo": "logos/leipzig.png",
+      "ap": 134
     },
     {
       "name": "Igor Matanović",
@@ -930,16 +940,6 @@
       "name": "Tidiam Gomis",
       "logo": "logos/leipzig.png",
       "ap": 112
-    },
-    {
-      "name": "Michael Gregoritsch",
-      "logo": "logos/augsburg.png",
-      "ap": 108
-    },
-    {
-      "name": "Sheraldo Becker",
-      "logo": "logos/mainz.png",
-      "ap": 108
     }
   ]
 }
