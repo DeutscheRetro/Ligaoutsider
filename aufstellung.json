@@ -1,14 +1,7 @@
 {
- "updated": "2026-11-22T14:02:05.389723+00:00",
+ "updated": "2026-11-22T15:33:11.151545+00:00",
  "spieltag": 10,
  "partien": [
-  {
-   "heim": "FC Augsburg",
-   "gast": "1. FSV Mainz 05",
-   "anstoss": "2026-11-22T15:30:00",
-   "anstoss_text": "So 22.11. 15:30",
-   "spieltag": 10
-  },
   {
    "heim": "SV Werder Bremen",
    "gast": "Hamburger SV",
@@ -31,6 +24,13 @@
    "spieltag": 11
   },
   {
+   "heim": "1. FSV Mainz 05",
+   "gast": "1. FC Union Berlin",
+   "anstoss": "2026-11-28T15:30:00",
+   "anstoss_text": "Sa 28.11. 15:30",
+   "spieltag": 11
+  },
+  {
    "heim": "1. FC Köln",
    "gast": "SV Elversberg",
    "anstoss": "2026-11-28T15:30:00",
@@ -40,13 +40,6 @@
   {
    "heim": "SC Paderborn 07",
    "gast": "FC Schalke 04",
-   "anstoss": "2026-11-28T15:30:00",
-   "anstoss_text": "Sa 28.11. 15:30",
-   "spieltag": 11
-  },
-  {
-   "heim": "1. FSV Mainz 05",
-   "gast": "1. FC Union Berlin",
    "anstoss": "2026-11-28T15:30:00",
    "anstoss_text": "Sa 28.11. 15:30",
    "spieltag": 11
@@ -263,8 +256,8 @@
      "name": "Ismael Saibari",
      "nr": "34",
      "ampel": "rot",
-     "grund": "Syndesmoseriss im Sprunggelenk",
-     "news": "artikel/bayern-ohne-davies-muskelfaserriss-im-linken-oberschenkel-8802be95b8.html",
+     "grund": "Syndesmosebandriss - Rückkehr vsl. am 31.01.2027",
+     "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -273,8 +266,8 @@
      "name": "Serge Gnabry",
      "nr": "7",
      "ampel": "rot",
-     "grund": "Muskelverletzung",
-     "news": "artikel/bayern-ohne-davies-muskelfaserriss-im-linken-oberschenkel-8802be95b8.html",
+     "grund": "Oberschenkelverletzung - Rückkehr vsl. am 31.12.2026",
+     "news": "",
      "reihe": "st",
      "pos": "Hängende Spitze",
      "prozent": 0
@@ -809,8 +802,8 @@
       "name": "Neil El Aynaoui",
       "nr": "21",
       "ampel": "gruen",
-      "grund": "Knöchelprobleme überwunden, dürfte einsatzbereit sein",
-      "news": "artikel/leipzig-hofft-vor-acht-spiele-phase-auf-el-aynaoui-und-guiu-64b186f3e0.html",
+      "grund": "9 von 9 Einsätzen in der Startelf · Ø 87 min · 1 Spiel ohne Einsatz",
+      "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
       "prozent": 90
@@ -1604,10 +1597,7 @@
   "1. FSV Mainz 05": {
    "logo": "logos/mainz.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -1619,19 +1609,19 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 94
+      "prozent": 78
      }
     ],
     "abw": [
      {
-      "name": "Stefan Posch",
-      "nr": "4",
+      "name": "Fabio Gruber",
+      "nr": "3",
       "ampel": "gruen",
-      "grund": "7 von 7 Einsätzen in der Startelf · Ø 97 min · 2 Spiele ohne Einsatz",
-      "news": "",
+      "grund": "voll im Training zurück",
+      "news": "artikel/mainz-schwolow-fehlt-wegen-magen-darm-grippe-gruber-schon-zurueck-f7dc4a6774.html",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Phillipp Mwene",
@@ -1641,7 +1631,17 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 97
+      "prozent": 95
+     },
+     {
+      "name": "Stefan Posch",
+      "nr": "4",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 97 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "abw",
+      "pos": "Innenverteidiger",
+      "prozent": 90
      },
      {
       "name": "Anthony Caci",
@@ -1651,7 +1651,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 96
+      "prozent": 86
      },
      {
       "name": "Kacper Potulski",
@@ -1661,17 +1661,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 94
-     },
-     {
-      "name": "Danny da Costa",
-      "nr": "21",
-      "ampel": "gruen",
-      "grund": "5 von 9 Einsätzen in der Startelf · Ø 64 min",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 91
+      "prozent": 78
      }
     ],
     "mf": [
@@ -1683,7 +1673,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
       "name": "Kaishu Sano",
@@ -1693,17 +1683,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 97
+      "prozent": 95
      },
      {
-      "name": "Paul Nebel",
-      "nr": "8",
+      "name": "Jae-sung Lee",
+      "nr": "7",
       "ampel": "gruen",
-      "grund": "1 von 4 Einsätzen in der Startelf · Ø 31 min · 5 Spiele ohne Einsatz",
+      "grund": "7 von 8 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 81
+      "prozent": 87
      }
     ],
     "st": [
@@ -1715,7 +1705,7 @@
       "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
-      "prozent": 97
+      "prozent": 88
      },
      {
       "name": "Phillip Tietz",
@@ -1725,30 +1715,60 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 96
+      "prozent": 84
      }
     ]
    },
    "bank": [
     {
-     "name": "Fabio Gruber",
-     "nr": "3",
+     "name": "Danny da Costa",
+     "nr": "21",
      "ampel": "gruen",
-     "grund": "voll im Training zurück",
-     "news": "artikel/mainz-schwolow-fehlt-wegen-magen-darm-grippe-gruber-schon-zurueck-f7dc4a6774.html",
+     "grund": "5 von 9 Einsätzen in der Startelf · Ø 64 min",
+     "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 26
+     "prozent": 64
     },
     {
-     "name": "Jae-sung Lee",
-     "nr": "7",
+     "name": "Eric Martel",
+     "nr": "5",
      "ampel": "gruen",
-     "grund": "7 von 8 Einsätzen in der Startelf · Ø 65 min · 1 Spiel ohne Einsatz",
+     "grund": "1 von 6 Einsätzen in der Startelf · Ø 23 min · 3 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 27
+    },
+    {
+     "name": "Ransford Königsdörffer",
+     "nr": "11",
+     "ampel": "gruen",
+     "grund": "1 von 9 Einsätzen in der Startelf · Ø 32 min",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 27
+    },
+    {
+     "name": "Paul Nebel",
+     "nr": "8",
+     "ampel": "gruen",
+     "grund": "1 von 4 Einsätzen in der Startelf · Ø 31 min · 5 Spiele ohne Einsatz",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 24
+    },
+    {
+     "name": "Silvan Widmer",
+     "nr": "30",
+     "ampel": "gruen",
+     "grund": "1 von 5 Einsätzen in der Startelf · Ø 30 min · 4 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Rechter Verteidiger",
+     "prozent": 22
     }
    ],
    "fraglich": [
@@ -1760,20 +1780,20 @@
      "news": "artikel/mainz-schwolow-fehlt-wegen-magen-darm-grippe-gruber-schon-zurueck-f7dc4a6774.html",
      "reihe": "tw",
      "pos": "Torwart",
-     "prozent": 12
-    }
-   ],
-   "ausfall": [
+     "prozent": 37
+    },
     {
      "name": "Silas",
      "nr": "26",
-     "ampel": "rot",
-     "grund": "Trainingsrückstand - verpasst FCA (A)",
+     "ampel": "gelb",
+     "grund": "Trainingsrückstand",
      "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 0
-    },
+     "prozent": 1
+    }
+   ],
+   "ausfall": [
     {
      "name": "Dominik Kohr",
      "nr": "31",
@@ -2062,10 +2082,7 @@
   "FC Augsburg": {
    "logo": "logos/augsburg.png",
    "formation": "",
-   "quellen": [
-    "ligainsider",
-    "rotowire"
-   ],
+   "quellen": [],
    "formation_quelle": "",
    "elf": {
     "tw": [
@@ -2077,7 +2094,7 @@
       "news": "",
       "reihe": "tw",
       "pos": "Torwart",
-      "prozent": 97
+      "prozent": 95
      }
     ],
     "abw": [
@@ -2089,7 +2106,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 97
+      "prozent": 91
      },
      {
       "name": "Marius Wolf",
@@ -2099,7 +2116,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Rechter Verteidiger",
-      "prozent": 94
+      "prozent": 76
      },
      {
       "name": "Juma Bah",
@@ -2109,7 +2126,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Innenverteidiger",
-      "prozent": 92
+      "prozent": 67
      }
     ],
     "mf": [
@@ -2121,7 +2138,17 @@
       "news": "",
       "reihe": "mf",
       "pos": "Zentrales Mittelfeld",
-      "prozent": 97
+      "prozent": 95
+     },
+     {
+      "name": "Arijon Ibrahimovic",
+      "nr": "21",
+      "ampel": "gruen",
+      "grund": "7 von 7 Einsätzen in der Startelf · Ø 70 min · 2 Spiele ohne Einsatz",
+      "news": "",
+      "reihe": "mf",
+      "pos": "Offensives Mittelfeld",
+      "prozent": 95
      },
      {
       "name": "Robin Fellhauer",
@@ -2131,7 +2158,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Rechtes Mittelfeld",
-      "prozent": 97
+      "prozent": 91
      },
      {
       "name": "Anton Kade",
@@ -2141,7 +2168,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Offensives Mittelfeld",
-      "prozent": 87
+      "prozent": 47
      },
      {
       "name": "Yannik Keitel",
@@ -2151,27 +2178,7 @@
       "news": "",
       "reihe": "mf",
       "pos": "Defensives Mittelfeld",
-      "prozent": 80
-     },
-     {
-      "name": "Alexis Claude-Maurice",
-      "nr": "20",
-      "ampel": "gruen",
-      "grund": "0 von 5 Einsätzen in der Startelf · Ø 34 min · 4 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Offensives Mittelfeld",
-      "prozent": 79
-     },
-     {
-      "name": "Tim Schnitzer",
-      "nr": "37",
-      "ampel": "gruen",
-      "grund": "0 von 1 Einsätzen in der Startelf · Ø 20 min · 8 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "mf",
-      "pos": "Defensives Mittelfeld",
-      "prozent": 75
+      "prozent": 19
      }
     ],
     "st": [
@@ -2183,30 +2190,40 @@
       "news": "",
       "reihe": "st",
       "pos": "Mittelstürmer",
-      "prozent": 92
+      "prozent": 67
+     },
+     {
+      "name": "Rodrigo Ribeiro",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "3 von 9 Einsätzen in der Startelf · Ø 35 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 31
      }
     ]
    },
    "bank": [
     {
-     "name": "Arijon Ibrahimovic",
-     "nr": "21",
+     "name": "Mert Kömür",
+     "nr": "10",
      "ampel": "gruen",
-     "grund": "7 von 7 Einsätzen in der Startelf · Ø 70 min · 2 Spiele ohne Einsatz",
+     "grund": "1 von 9 Einsätzen in der Startelf · Ø 24 min",
      "news": "",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
-     "prozent": 26
+     "prozent": 19
     },
     {
-     "name": "Rodrigo Ribeiro",
-     "nr": "9",
+     "name": "Alexis Claude-Maurice",
+     "nr": "20",
      "ampel": "gruen",
-     "grund": "3 von 9 Einsätzen in der Startelf · Ø 35 min",
+     "grund": "0 von 5 Einsätzen in der Startelf · Ø 34 min · 4 Spiele ohne Einsatz",
      "news": "",
-     "reihe": "st",
-     "pos": "Mittelstürmer",
-     "prozent": 10
+     "reihe": "mf",
+     "pos": "Offensives Mittelfeld",
+     "prozent": 15
     }
    ],
    "fraglich": [
@@ -2218,7 +2235,7 @@
      "news": "",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 5
+     "prozent": 12
     }
    ],
    "ausfall": [
