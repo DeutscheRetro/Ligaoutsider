@@ -1,26 +1,26 @@
 {
-  "ts": "20261107_0801",
-  "ingested": 99,
-  "s2_pre_filter": 23,
-  "s3_relevance": 13,
+  "ts": "20261122_0101",
+  "ingested": 86,
+  "s2_pre_filter": 17,
+  "s3_relevance": 5,
   "s4_dedup_early": 0,
-  "gesammelt": 59,
-  "geschichten_neu": 52,
-  "s5_archiv_doppelt": 2,
+  "gesammelt": 57,
+  "geschichten_neu": 43,
+  "s5_archiv_doppelt": 8,
   "s5_zusammengefuehrt": 0,
-  "s6_aussortiert": 39,
+  "s6_aussortiert": 32,
   "s7_geschrieben": 3,
-  "s7_verworfen": 5,
-  "s5_fulltext_fail": 12,
-  "s8_qa_rejected": 0,
-  "published": 3,
-  "s5_ohne_bezug": 3,
-  "s5_randthema": 1,
+  "s7_verworfen": 7,
+  "s5_fulltext_fail": 15,
+  "s8_qa_rejected": 1,
+  "published": 1,
+  "s5_ohne_bezug": 2,
+  "s5_randthema": 2,
   "kosten": {
     "lauf_usd": 0.0,
-    "lauf_budget_usd": 0.0983,
+    "lauf_budget_usd": 0.2447,
     "heute_usd": 0.0,
-    "monat_usd": 0.0,
+    "monat_usd": 1.4642,
     "monatsbudget_usd": 23.0,
     "aufrufe": {
       "konferenz (abo)": {
@@ -28,7 +28,7 @@
         "usd": 0.0
       },
       "dublette (abo)": {
-        "anzahl": 10,
+        "anzahl": 20,
         "usd": 0.0
       },
       "schreiben (abo)": {
@@ -42,26 +42,26 @@
       "konferenz": {
         "aufrufe": 1,
         "ein": 10,
-        "cache_schreiben": 5806,
+        "cache_schreiben": 5504,
         "cache_lesen": 0,
-        "aus": 9365,
-        "api_wert_usd": 0.0584
+        "aus": 12959,
+        "api_wert_usd": 0.0758
       },
       "dublette": {
-        "aufrufe": 10,
-        "ein": 20,
-        "cache_schreiben": 13317,
+        "aufrufe": 20,
+        "ein": 40,
+        "cache_schreiben": 25621,
         "cache_lesen": 0,
-        "aus": 955,
-        "api_wert_usd": 0.0629
+        "aus": 828,
+        "api_wert_usd": 0.1106
       },
       "schreiben": {
         "aufrufe": 3,
         "ein": 6,
-        "cache_schreiben": 18903,
+        "cache_schreiben": 18492,
         "cache_lesen": 2724,
-        "aus": 3338,
-        "api_wert_usd": 0.1093
+        "aus": 2776,
+        "api_wert_usd": 0.1021
       }
     }
   }
