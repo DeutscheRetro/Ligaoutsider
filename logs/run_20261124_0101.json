@@ -1,26 +1,26 @@
 {
-  "ts": "20261109_0601",
-  "ingested": 85,
-  "s2_pre_filter": 16,
-  "s3_relevance": 15,
+  "ts": "20261124_0101",
+  "ingested": 55,
+  "s2_pre_filter": 9,
+  "s3_relevance": 4,
   "s4_dedup_early": 0,
-  "gesammelt": 54,
-  "geschichten_neu": 35,
-  "s5_archiv_doppelt": 5,
-  "s5_zusammengefuehrt": 0,
-  "s6_aussortiert": 20,
+  "gesammelt": 40,
+  "geschichten_neu": 33,
+  "s5_archiv_doppelt": 0,
+  "s5_zusammengefuehrt": 1,
+  "s6_aussortiert": 24,
   "s7_geschrieben": 4,
-  "s7_verworfen": 8,
-  "s5_fulltext_fail": 20,
+  "s7_verworfen": 6,
+  "s5_fulltext_fail": 28,
   "s8_qa_rejected": 0,
-  "published": 2,
+  "published": 1,
   "s5_ohne_bezug": 2,
-  "s5_randthema": 6,
+  "s5_randthema": 1,
   "kosten": {
     "lauf_usd": 0.0,
-    "lauf_budget_usd": 0.0726,
+    "lauf_budget_usd": 0.2111,
     "heute_usd": 0.0,
-    "monat_usd": 0.0,
+    "monat_usd": 1.4642,
     "monatsbudget_usd": 23.0,
     "aufrufe": {
       "konferenz (abo)": {
@@ -28,7 +28,7 @@
         "usd": 0.0
       },
       "dublette (abo)": {
-        "anzahl": 15,
+        "anzahl": 9,
         "usd": 0.0
       },
       "schreiben (abo)": {
@@ -42,26 +42,26 @@
       "konferenz": {
         "aufrufe": 1,
         "ein": 10,
-        "cache_schreiben": 5090,
+        "cache_schreiben": 5186,
         "cache_lesen": 0,
-        "aus": 12341,
-        "api_wert_usd": 0.0719
+        "aus": 12183,
+        "api_wert_usd": 0.0713
       },
       "dublette": {
-        "aufrufe": 15,
-        "ein": 30,
-        "cache_schreiben": 17203,
+        "aufrufe": 9,
+        "ein": 18,
+        "cache_schreiben": 10997,
         "cache_lesen": 0,
-        "aus": 1793,
-        "api_wert_usd": 0.0867
+        "aus": 409,
+        "api_wert_usd": 0.048
       },
       "schreiben": {
         "aufrufe": 4,
         "ein": 8,
-        "cache_schreiben": 25470,
+        "cache_schreiben": 24360,
         "cache_lesen": 4086,
-        "aus": 3630,
-        "api_wert_usd": 0.1385
+        "aus": 2776,
+        "api_wert_usd": 0.1256
       }
     }
   }
