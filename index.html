@@ -202,7 +202,7 @@
           isAdmin = !!w.darfLoeschen;
           if (isAdmin && !document.getElementById('admin-link')) {
             const a = document.createElement('a');
-            a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';
+            a.id = 'admin-link'; a.href = '/andreas.html'; a.textContent = '⚙ Admin';
             a.style.cssText = 'margin-right:8px;text-decoration:none;font-weight:700;color:var(--accent,#e8c000)';
             document.getElementById('user-info').prepend(a);
           }
@@ -430,7 +430,7 @@
     function feedItem(a) {
       const slug = a.pfad.replace('artikel/', '').replace('.html', '');
       const adminBtn = isAdmin
-        ? `<a href="chefred.html#${slug}" class="admin-edit-btn">✏️ News editieren</a>`
+        ? `<a href="andreas.html#${slug}" class="admin-edit-btn">✏️ News editieren</a>`
         : '';
       return `<li class="feed-item">
         <a href="${esc(a.pfad)}" class="feed-wappen-link">

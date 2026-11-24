@@ -122,6 +122,8 @@ async function seite(request, env) {
       return Response.redirect(url.toString(), 301);
     }
     if (url.pathname === "/api") return api({ request, env });
+    // Admin-Seite auch ohne .html aufrufbar
+    if (url.pathname === "/andreas") { url.pathname = "/andreas.html"; return env.ASSETS.fetch(new Request(url, request)); }
     if (url.pathname.startsWith("/sb/rest/v1/")) return supabaseLesen(request, url);
     // Ordneradressen ("/", "/spieler/") zeigen ihre index.html – mit html_handling
     // "none" macht Cloudflare das nicht von selbst

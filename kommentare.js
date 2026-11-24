@@ -88,7 +88,7 @@
       ui.querySelector('#admin-link')?.remove();
       if (darfLoeschen) {
         const a = document.createElement('a');
-        a.id = 'admin-link'; a.href = '/chefred.html'; a.textContent = '⚙ Admin';
+        a.id = 'admin-link'; a.href = '/andreas.html'; a.textContent = '⚙ Admin';
         a.className = 'btn-nav'; a.style.cssText = 'margin-right:8px;text-decoration:none;font-weight:700;color:var(--accent,#e8c000)';
         ui.prepend(a);
       }
