@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T20:01:36.221115+00:00",
+  "updated": "2026-11-25T22:01:33.925396+00:00",
   "teuerste": [
     {
       "name": "Olise",
@@ -110,18 +110,6 @@
       "eff": 5.1
     },
     {
-      "name": "Mittelstädt",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "mw": 12920000,
-      "spiele": 9,
-      "tore": 2,
-      "pts": 86,
-      "ap": 9.56,
-      "eff": 6.7
-    },
-    {
       "name": "F. Nmecha",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
@@ -132,6 +120,18 @@
       "pts": 86,
       "ap": 8.6,
       "eff": 6.1
+    },
+    {
+      "name": "Mittelstädt",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "mw": 12920000,
+      "spiele": 9,
+      "tore": 2,
+      "pts": 86,
+      "ap": 9.56,
+      "eff": 6.7
     },
     {
       "name": "Nusa",
@@ -512,18 +512,6 @@
       "eff": 8.7
     },
     {
-      "name": "Ebnoutalib",
-      "klub": "Eintracht Frankfurt",
-      "logo": "logos/frankfurt.png",
-      "pos": "Sturm",
-      "mw": 11000000,
-      "spiele": 10,
-      "tore": 6,
-      "pts": 61,
-      "ap": 6.1,
-      "eff": 5.5
-    },
-    {
       "name": "Rômulo",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
@@ -534,6 +522,18 @@
       "pts": 61,
       "ap": 7.63,
       "eff": 4.1
+    },
+    {
+      "name": "Ebnoutalib",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
+      "pos": "Sturm",
+      "mw": 11000000,
+      "spiele": 10,
+      "tore": 6,
+      "pts": 61,
+      "ap": 6.1,
+      "eff": 5.5
     },
     {
       "name": "F. Nmecha",
@@ -628,17 +628,6 @@
       "ap": 5.1
     },
     {
-      "name": "Schwäbe",
-      "klub": "1. FC Köln",
-      "logo": "logos/koeln.png",
-      "pos": "Torwart",
-      "mw": 1930000,
-      "spiele": 10,
-      "tore": 0,
-      "pts": 50,
-      "ap": 5.0
-    },
-    {
       "name": "Rönnow",
       "klub": "1. FC Union Berlin",
       "logo": "logos/union.png",
@@ -647,6 +636,17 @@
       "spiele": 9,
       "tore": 0,
       "pts": 45,
+      "ap": 5.0
+    },
+    {
+      "name": "Schwäbe",
+      "klub": "1. FC Köln",
+      "logo": "logos/koeln.png",
+      "pos": "Torwart",
+      "mw": 1930000,
+      "spiele": 10,
+      "tore": 0,
+      "pts": 50,
       "ap": 5.0
     }
   ],
@@ -1290,20 +1290,20 @@
   ],
   "trend": [
     {
-      "name": "Undav",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Sturm",
-      "pts": 31,
-      "mw": 12440000
-    },
-    {
       "name": "Niederlechner",
       "klub": "Hertha BSC",
       "logo": "",
       "pos": "Sturm",
       "pts": 74,
       "mw": 2200000
+    },
+    {
+      "name": "Undav",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Sturm",
+      "pts": 31,
+      "mw": 12440000
     },
     {
       "name": "Laimer",
@@ -1314,14 +1314,6 @@
       "mw": 6560000
     },
     {
-      "name": "Kimmich",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Mittelfeld",
-      "pts": 82,
-      "mw": 25790000
-    },
-    {
       "name": "Amiri",
       "klub": "1. FSV Mainz 05",
       "logo": "logos/mainz.png",
@@ -1330,28 +1322,12 @@
       "mw": 9960000
     },
     {
-      "name": "Mittelstädt",
-      "klub": "VfB Stuttgart",
-      "logo": "logos/stuttgart.png",
-      "pos": "Abwehr",
-      "pts": 86,
-      "mw": 12920000
-    },
-    {
-      "name": "Asllani",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
-      "pos": "Sturm",
-      "pts": 42,
-      "mw": 11700000
-    },
-    {
-      "name": "Bischof",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
+      "name": "Uzun",
+      "klub": "Eintracht Frankfurt",
+      "logo": "logos/frankfurt.png",
       "pos": "Mittelfeld",
-      "pts": 35,
-      "mw": 6240000
+      "pts": 44,
+      "mw": 7520000
     },
     {
       "name": "Caci",
@@ -1362,46 +1338,70 @@
       "mw": 9000000
     },
     {
-      "name": "Stiller",
+      "name": "Mittelstädt",
       "klub": "VfB Stuttgart",
       "logo": "logos/stuttgart.png",
+      "pos": "Abwehr",
+      "pts": 86,
+      "mw": 12920000
+    },
+    {
+      "name": "Kimmich",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
       "pos": "Mittelfeld",
-      "pts": 25,
-      "mw": 7250000
+      "pts": 82,
+      "mw": 25790000
+    },
+    {
+      "name": "Bischof",
+      "klub": "FC Bayern München",
+      "logo": "logos/bayern.png",
+      "pos": "Mittelfeld",
+      "pts": 35,
+      "mw": 6240000
+    },
+    {
+      "name": "Baumgartner",
+      "klub": "RB Leipzig",
+      "logo": "logos/leipzig.png",
+      "pos": "Mittelfeld",
+      "pts": 28,
+      "mw": 16770000
     }
   ],
   "aufsteigend": [
     {
-      "name": "Tietz",
-      "klub": "1. FSV Mainz 05",
-      "logo": "logos/mainz.png",
-      "pos": "Sturm",
-      "pts": 62,
-      "mw": 7160000
-    },
-    {
-      "name": "Kramarić",
-      "klub": "TSG Hoffenheim",
-      "logo": "logos/hoffenheim.png",
+      "name": "Khedira",
+      "klub": "1. FC Union Berlin",
+      "logo": "logos/union.png",
       "pos": "Mittelfeld",
-      "pts": 22,
-      "mw": 5080000
+      "pts": 16,
+      "mw": 1450000
     },
     {
-      "name": "Upamecano",
-      "klub": "FC Bayern München",
-      "logo": "logos/bayern.png",
-      "pos": "Abwehr",
-      "pts": 83,
-      "mw": 13590000
-    },
-    {
-      "name": "Tillman",
+      "name": "García",
       "klub": "Bayer 04 Leverkusen",
       "logo": "logos/leverkusen.png",
       "pos": "Mittelfeld",
-      "pts": 29,
-      "mw": 4960000
+      "pts": 76,
+      "mw": 15090000
+    },
+    {
+      "name": "Chiarodia",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Abwehr",
+      "pts": 14,
+      "mw": 1420000
+    },
+    {
+      "name": "Tiago Tomás",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Sturm",
+      "pts": 7,
+      "mw": 2530000
     },
     {
       "name": "Nebel",
@@ -1412,44 +1412,44 @@
       "mw": 3830000
     },
     {
-      "name": "Scally",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
-      "pos": "Abwehr",
-      "pts": 55,
-      "mw": 5110000
+      "name": "Schick",
+      "klub": "Bayer 04 Leverkusen",
+      "logo": "logos/leverkusen.png",
+      "pos": "Sturm",
+      "pts": 87,
+      "mw": 16950000
     },
     {
-      "name": "Rômulo",
+      "name": "N. Schlotterbeck",
+      "klub": "Borussia Dortmund",
+      "logo": "logos/dortmund.png",
+      "pos": "Abwehr",
+      "pts": 51,
+      "mw": 13370000
+    },
+    {
+      "name": "Burke",
+      "klub": "1. FC Union Berlin",
+      "logo": "logos/union.png",
+      "pos": "Sturm",
+      "pts": 9,
+      "mw": 1130000
+    },
+    {
+      "name": "Henrichs",
       "klub": "RB Leipzig",
       "logo": "logos/leipzig.png",
-      "pos": "Sturm",
+      "pos": "Abwehr",
+      "pts": 27,
+      "mw": 2570000
+    },
+    {
+      "name": "El Khannouss",
+      "klub": "VfB Stuttgart",
+      "logo": "logos/stuttgart.png",
+      "pos": "Mittelfeld",
       "pts": 61,
-      "mw": 14760000
-    },
-    {
-      "name": "Grüll",
-      "klub": "SV Werder Bremen",
-      "logo": "logos/werder.png",
-      "pos": "Sturm",
-      "pts": 63,
-      "mw": 7020000
-    },
-    {
-      "name": "Makengo",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "pts": 40,
-      "mw": 3910000
-    },
-    {
-      "name": "Ginter",
-      "klub": "Sport-Club Freiburg",
-      "logo": "logos/freiburg.png",
-      "pos": "Abwehr",
-      "pts": 64,
-      "mw": 8490000
+      "mw": 12120000
     }
   ],
   "rekorde": [
@@ -1508,6 +1508,15 @@
       "gegner": "Borussia M'gladbach"
     },
     {
+      "name": "Bolin",
+      "klub": "Borussia M'gladbach",
+      "logo": "logos/gladbach.png",
+      "pos": "Mittelfeld",
+      "pts": 19,
+      "tore": 2,
+      "gegner": "SV Elversberg"
+    },
+    {
       "name": "Uzun",
       "klub": "Eintracht Frankfurt",
       "logo": "logos/frankfurt.png",
@@ -1529,15 +1538,6 @@
       "name": "F. Nmecha",
       "klub": "Borussia Dortmund",
       "logo": "logos/dortmund.png",
-      "pos": "Mittelfeld",
-      "pts": 19,
-      "tore": 2,
-      "gegner": "SV Elversberg"
-    },
-    {
-      "name": "Bolin",
-      "klub": "Borussia M'gladbach",
-      "logo": "logos/gladbach.png",
       "pos": "Mittelfeld",
       "pts": 19,
       "tore": 2,
