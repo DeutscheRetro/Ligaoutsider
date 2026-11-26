@@ -83,6 +83,26 @@ async function supabaseLesen(request, url) {
   return antwort;
 }
 
+// Zweite Ergebnisquelle für die Spielleiste: OpenLigaDB (Freiwillige) hat Europapokal-Spiele oft stundenlang ohne
+// Ergebnis. Über den Worker, damit ESPN keine IP-Adressen der Leser sieht.
+const ESPN_LIGEN = { ucl: "uefa.champions", uel2026: "uefa.europa", uecl2026: "uefa.europa.conf" };
+
+async function espnErgebnisse(url) {
+  const liga = ESPN_LIGEN[url.searchParams.get("liga")], datum = url.searchParams.get("datum") || "";
+  if (!liga || !/^\d{8}$/.test(datum)) return new Response("Ungültige Anfrage", { status: 400 });
+  const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${liga}/scoreboard?dates=${datum}`,
+    { cf: { cacheTtl: 120, cacheEverything: true } });
+  if (!res.ok) return new Response("Quelle nicht erreichbar", { status: 502 });
+  // Nur beendete Spiele und nur die Felder, die die Leiste braucht
+  const spiele = ((await res.json()).events || []).filter(e => e.status?.type?.completed).map(e => {
+    const teams = e.competitions?.[0]?.competitors || [];
+    const heim = teams.find(t => t.homeAway === "home"), gast = teams.find(t => t.homeAway === "away");
+    return heim && gast && { anstoss: e.date, heim: heim.team.displayName, gast: gast.team.displayName,
+      toreHeim: Number(heim.score), toreGast: Number(gast.score) };
+  }).filter(Boolean);
+  return Response.json(spiele, { headers: { "Cache-Control": "public, max-age=120" } });
+}
+
 // Alte Adressen aus der Netlify-Zeit (ohne .html, oder nur /artikel/<id>) laufen sonst in 404 und
 // bleiben in der Search Console hängen: auf die echte Seite umleiten, Verschwundenes mit 410 melden.
 async function alteAdresse(request, env, url, res404) {
@@ -122,6 +142,7 @@ async function seite(request, env) {
       return Response.redirect(url.toString(), 301);
     }
     if (url.pathname === "/api") return api({ request, env });
+    if (url.pathname === "/ergebnisse") return espnErgebnisse(url);
     // Admin-Seite auch ohne .html aufrufbar
     if (url.pathname === "/andreas") { url.pathname = "/andreas.html"; return env.ASSETS.fetch(new Request(url, request)); }
     if (url.pathname.startsWith("/sb/rest/v1/")) return supabaseLesen(request, url);

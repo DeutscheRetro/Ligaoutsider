@@ -295,7 +295,7 @@
       // Gegner aus Pokal und Europapokal: geläufige Kurznamen, damit die Zeile einzeilig bleibt
       // Eigene Liste: KÜRZEL bleibt die Liste der Bundesligisten, nach ihr filtert der Pokal-Teil
       const KURZ = Object.assign({}, KÜRZEL, {
-        'AEK Athen':'AEK','AS Monaco':'Monaco','Aston Villa':'Villa','Atletico Madrid':'Atlético','Besiktas Istanbul':'Beşiktaş',
+        'AEK Athen':'AEK','SK Puntigamer Sturm Graz':'Sturm Graz','AS Monaco':'Monaco','Aston Villa':'Villa','Atletico Madrid':'Atlético','Besiktas Istanbul':'Beşiktaş',
         'Como 1907':'Como','Crystal Palace FC':'C. Palace','Dinamo Zagreb':'D. Zagreb','FC Arsenal':'Arsenal','FC Brügge':'Brügge',
         'FC Twente Enschede':'Twente','FK Bodö/Glimt':'Bodø/Glimt','FK Jablonec':'Jablonec','FK Kauno Žalgiris':'Žalgiris',
         'Ferencváros Budapest':'Ferencváros','Feyenoord Rotterdam':'Feyenoord','Galatasaray Istanbul':'Galatasaray',
@@ -327,6 +327,33 @@
         { liga: 'uel2026', kurz: 'EL', name: 'Europa League', farbe: '#e86100' },
         { liga: 'uecl2026', kurz: 'ECL', name: 'Conference League', farbe: '#00873e' },
       ];
+      // Fehlt bei OpenLigaDB das Ergebnis eines längst beendeten Europapokal-Spiels, kommt es aus der zweiten Quelle.
+      // Zuordnung über Anstoßzeit und den deutschen Klub, weil die Gegner dort anders heißen.
+      const ESPN_NAME = { 'BVB': /dortmund/i, 'HSV': /hamburg/i, 'Köln': /colog|k[öo]ln/i };
+      const ergebnisseNachtragen = async liste => {
+        const offen = m => !m.matchIsFinished && m.pokal.liga !== 'dfb' && m.matchDateTimeUTC
+          && Date.now() - new Date(m.matchDateTimeUTC).getTime() > 105 * 60 * 1000;
+        const schluessel = m => `liga=${m.pokal.liga}&datum=${m.matchDateTimeUTC.slice(0, 10).replace(/-/g, '')}`;
+        const quellen = {};
+        await Promise.all([...new Set(liste.filter(offen).map(schluessel))].map(async q => {
+          try {
+            const r = await fetch('/ergebnisse?' + q, { signal: AbortSignal.timeout(5000) });
+            if (r.ok) quellen[q] = await r.json();
+          } catch (e) { /* ohne zweite Quelle bleibt die Anstoßzeit stehen */ }
+        }));
+        return liste.map(m => {
+          if (!offen(m)) return m;
+          const deutschIstTeam1 = !!KÜRZEL[m.team1.teamName];
+          const kurz = KÜRZEL[deutschIstTeam1 ? m.team1.teamName : m.team2.teamName];
+          const name = ESPN_NAME[kurz] || new RegExp(kurz, 'i');
+          const e = (quellen[schluessel(m)] || []).find(x =>
+            new Date(x.anstoss).getTime() === new Date(m.matchDateTimeUTC).getTime() && (name.test(x.heim) || name.test(x.gast)));
+          if (!e) return m;
+          const deutschIstHeim = name.test(e.heim);
+          const [t1, t2] = deutschIstHeim === deutschIstTeam1 ? [e.toreHeim, e.toreGast] : [e.toreGast, e.toreHeim];
+          return { ...m, matchIsFinished: true, matchResults: [{ resultTypeID: 2, pointsTeam1: t1, pointsTeam2: t2 }] };
+        });
+      };
       const todayStr = () => {
         const d = new Date();
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -368,7 +395,7 @@
           .filter(m => (KÜRZEL[m.team1.teamName] || KÜRZEL[m.team2.teamName])
             && new Date(m.matchDateTime).getTime() <= blEnde)
           .map(m => ({ ...m, pokal: POKALE[i] })));
-        const spiele = [...cur, ...nxt, ...pokal]
+        const spiele = [...cur, ...nxt, ...await ergebnisseNachtragen(pokal)]
           .filter(m => !(m.matchIsFinished && new Date(m.matchDateTime).getTime() < oneWeekAgo))
           .sort((a,b) => new Date(a.matchDateTime) - new Date(b.matchDateTime));
 
