@@ -1,0 +1,68 @@
+{
+  "ts": "20261126_1801",
+  "ingested": 158,
+  "s2_pre_filter": 21,
+  "s3_relevance": 29,
+  "s4_dedup_early": 0,
+  "gesammelt": 106,
+  "geschichten_neu": 94,
+  "s5_archiv_doppelt": 1,
+  "s5_zusammengefuehrt": 3,
+  "s6_aussortiert": 44,
+  "s7_geschrieben": 11,
+  "s7_verworfen": 27,
+  "s5_fulltext_fail": 41,
+  "s8_qa_rejected": 2,
+  "published": 4,
+  "s5_ohne_bezug": 2,
+  "s5_randthema": 3,
+  "kosten": {
+    "lauf_usd": 0.0,
+    "lauf_budget_usd": 0.2971,
+    "heute_usd": 0.7365,
+    "monat_usd": 2.2007,
+    "monatsbudget_usd": 23.0,
+    "aufrufe": {
+      "konferenz (abo)": {
+        "anzahl": 2,
+        "usd": 0.0
+      },
+      "dublette (abo)": {
+        "anzahl": 55,
+        "usd": 0.0
+      },
+      "schreiben (abo)": {
+        "anzahl": 11,
+        "usd": 0.0
+      }
+    },
+    "guthaben_leer": false,
+    "abo": true,
+    "abo_tokens": {
+      "konferenz": {
+        "aufrufe": 2,
+        "ein": 3504,
+        "cache_schreiben": 8938,
+        "cache_lesen": 0,
+        "aus": 23377,
+        "api_wert_usd": 0.1383
+      },
+      "dublette": {
+        "aufrufe": 55,
+        "ein": 110,
+        "cache_schreiben": 74165,
+        "cache_lesen": 0,
+        "aus": 4617,
+        "api_wert_usd": 0.3432
+      },
+      "schreiben": {
+        "aufrufe": 11,
+        "ein": 22,
+        "cache_schreiben": 64039,
+        "cache_lesen": 13620,
+        "aus": 10014,
+        "api_wert_usd": 0.3579
+      }
+    }
+  }
+}
