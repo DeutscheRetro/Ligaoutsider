@@ -1,14 +1,7 @@
 {
- "updated": "2026-11-27T20:02:17.045195+00:00",
+ "updated": "2026-11-27T22:02:19.411129+00:00",
  "spieltag": 11,
  "partien": [
-  {
-   "heim": "SV Werder Bremen",
-   "gast": "Borussia Mönchengladbach",
-   "anstoss": "2026-11-27T20:30:00",
-   "anstoss_text": "Fr 27.11. 20:30",
-   "spieltag": 11
-  },
   {
    "heim": "Hamburger SV",
    "gast": "FC Bayern München",
@@ -64,6 +57,20 @@
    "anstoss": "2026-11-29T19:30:00",
    "anstoss_text": "So 29.11. 19:30",
    "spieltag": 11
+  },
+  {
+   "heim": "Bayer 04 Leverkusen",
+   "gast": "Borussia Mönchengladbach",
+   "anstoss": "2026-12-05T15:30:00",
+   "anstoss_text": "Sa 05.12. 15:30",
+   "spieltag": 12
+  },
+  {
+   "heim": "Eintracht Frankfurt",
+   "gast": "SV Werder Bremen",
+   "anstoss": "2026-12-05T18:30:00",
+   "anstoss_text": "Sa 05.12. 18:30",
+   "spieltag": 12
   }
  ],
  "teams": {
@@ -1845,8 +1852,8 @@
       "name": "Marco Grüll",
       "nr": "17",
       "ampel": "gelb",
-      "grund": "Wadenverletzung",
-      "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
+      "grund": "Wadenprobleme",
+      "news": "",
       "reihe": "st",
       "pos": "Linksaußen",
       "prozent": 48
@@ -1854,6 +1861,16 @@
     ]
    },
    "bank": [
+    {
+     "name": "Senne Lynen",
+     "nr": "14",
+     "ampel": "gruen",
+     "grund": "2 von 3 Einsätzen in der Startelf · Ø 45 min · 7 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "mf",
+     "pos": "Defensives Mittelfeld",
+     "prozent": 33
+    },
     {
      "name": "Cedric Itten",
      "nr": "26",
@@ -1866,16 +1883,6 @@
     }
    ],
    "fraglich": [
-    {
-     "name": "Senne Lynen",
-     "nr": "14",
-     "ampel": "gelb",
-     "grund": "Erkrankung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
-     "reihe": "mf",
-     "pos": "Defensives Mittelfeld",
-     "prozent": 17
-    },
     {
      "name": "Justin Njinmah",
      "nr": "11",
@@ -1895,16 +1902,6 @@
      "reihe": "mf",
      "pos": "Rechtes Mittelfeld",
      "prozent": 10
-    },
-    {
-     "name": "Felix Agu",
-     "nr": "27",
-     "ampel": "gelb",
-     "grund": "Wadenverletzung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 1
     }
    ],
    "ausfall": [
@@ -1912,18 +1909,28 @@
      "name": "Jens Stage",
      "nr": "6",
      "ampel": "rot",
-     "grund": "Muskelverletzung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
+     "grund": "Nach schwerer Muskelverletzung - im Aufbau, Rückkehr im Januar möglich",
+     "news": "",
      "reihe": "mf",
      "pos": "Zentrales Mittelfeld",
+     "prozent": 0
+    },
+    {
+     "name": "Felix Agu",
+     "nr": "27",
+     "ampel": "rot",
+     "grund": "Nach Wadenverletzung - anteiliges Teamtraining, soll behutsam aufgebaut werden",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
      "prozent": 0
     },
     {
      "name": "Keke Topp",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Knieverletzung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
+     "grund": "Nach Kreuzbandriss – absolvierte das Aufwärmprogramm sowie Laufeinheiten",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -1932,8 +1939,8 @@
      "name": "Salim Musah",
      "nr": "29",
      "ampel": "rot",
-     "grund": "Muskelverletzung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
+     "grund": "Schwere Oberschenkelverletzung - muss operiert werden, fällt monatelang aus",
+     "news": "",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -3405,6 +3412,16 @@
    },
    "bank": [
     {
+     "name": "Mario Vuskovic",
+     "nr": "44",
+     "ampel": "gruen",
+     "grund": "noch ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 59
+    },
+    {
      "name": "Louis Lemke",
      "nr": "37",
      "ampel": "gruen",
@@ -3425,6 +3442,16 @@
      "prozent": 30
     },
     {
+     "name": "Jordan Torunarigha",
+     "nr": "23",
+     "ampel": "gruen",
+     "grund": "5 von 5 Einsätzen in der Startelf · Ø 84 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 25
+    },
+    {
      "name": "Fábio Vieira",
      "nr": "20",
      "ampel": "gruen",
@@ -3435,18 +3462,7 @@
      "prozent": 12
     }
    ],
-   "fraglich": [
-    {
-     "name": "Mario Vuskovic",
-     "nr": "44",
-     "ampel": "gelb",
-     "grund": "Rückenprobleme",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 59
-    }
-   ],
+   "fraglich": [],
    "ausfall": [
     {
      "name": "Miro Muheim",
@@ -3456,16 +3472,6 @@
      "news": "artikel/hsv-poulsen-sambi-lokonga-und-muheim-wohl-erst-2027-zurueck-91054ba3b0.html",
      "reihe": "abw",
      "pos": "Linker Verteidiger",
-     "prozent": 0
-    },
-    {
-     "name": "Jordan Torunarigha",
-     "nr": "23",
-     "ampel": "rot",
-     "grund": "Hüftverletzung",
-     "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
      "prozent": 0
     },
     {
