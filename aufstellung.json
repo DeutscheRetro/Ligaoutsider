@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T15:32:21.612444+00:00",
+ "updated": "2026-11-27T17:02:18.258013+00:00",
  "spieltag": 11,
  "partien": [
   {
@@ -191,21 +191,11 @@
       "news": "",
       "reihe": "st",
       "pos": "Rechtsaußen",
-      "prozent": 25
+      "prozent": 59
      }
     ]
    },
    "bank": [
-    {
-     "name": "Hiroki Ito",
-     "nr": "21",
-     "ampel": "gruen",
-     "grund": "0 von 2 Einsätzen in der Startelf · Ø 9 min · 8 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 50
-    },
     {
      "name": "Min-jae Kim",
      "nr": "3",
@@ -225,6 +215,16 @@
      "reihe": "st",
      "pos": "Linksaußen",
      "prozent": 24
+    },
+    {
+     "name": "Hiroki Ito",
+     "nr": "21",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 9 min · 8 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 16
     },
     {
      "name": "Sacha Boey",
@@ -247,25 +247,24 @@
      "prozent": 15
     }
    ],
-   "fraglich": [
+   "fraglich": [],
+   "ausfall": [
     {
      "name": "Michael Olise",
      "nr": "17",
-     "ampel": "gelb",
-     "grund": "Schmerzen nach Vorfußprellung, HSV-Einsatz nicht ausgeschlossen",
-     "news": "artikel/olise-fehlt-in-lille-kompany-aussage-laesst-aufhorchen-2403ad6e69.html",
+     "ampel": "rot",
+     "grund": "fehlt in Hamburg",
+     "news": "artikel/musiala-erneut-verletzt-muskelfaserriss-ausfall-bis-mindestens-b4f0c247e6.html",
      "reihe": "st",
      "pos": "Rechtsaußen",
-     "prozent": 13
-    }
-   ],
-   "ausfall": [
+     "prozent": 0
+    },
     {
      "name": "Harry Kane",
      "nr": "9",
      "ampel": "rot",
-     "grund": "Syndesmoseriss im linken Sprunggelenk",
-     "news": "artikel/olise-fehlt-in-lille-kompany-aussage-laesst-aufhorchen-2403ad6e69.html",
+     "grund": "fehlt in Hamburg",
+     "news": "artikel/musiala-erneut-verletzt-muskelfaserriss-ausfall-bis-mindestens-b4f0c247e6.html",
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 0
@@ -274,8 +273,8 @@
      "name": "Jamal Musiala",
      "nr": "10",
      "ampel": "rot",
-     "grund": "Muskelfaserriss im Oberschenkel - fällt 4-6 Wochen aus",
-     "news": "",
+     "grund": "Muskelverletzung im rechten Oberschenkel",
+     "news": "artikel/musiala-erneut-verletzt-muskelfaserriss-ausfall-bis-mindestens-b4f0c247e6.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -294,8 +293,8 @@
      "name": "Ismael Saibari",
      "nr": "34",
      "ampel": "rot",
-     "grund": "Syndesmosebandriss - Rückkehr vsl. am 31.01.2027",
-     "news": "",
+     "grund": "fehlt in Hamburg",
+     "news": "artikel/musiala-erneut-verletzt-muskelfaserriss-ausfall-bis-mindestens-b4f0c247e6.html",
      "reihe": "mf",
      "pos": "Offensives Mittelfeld",
      "prozent": 0
@@ -314,8 +313,8 @@
      "name": "Manuel Neuer",
      "nr": "1",
      "ampel": "rot",
-     "grund": "Fußverletzung - Rückkehr vsl. am 02.01.2027",
-     "news": "",
+     "grund": "fehlt in Hamburg",
+     "news": "artikel/musiala-erneut-verletzt-muskelfaserriss-ausfall-bis-mindestens-b4f0c247e6.html",
      "reihe": "tw",
      "pos": "Torwart",
      "prozent": 0
@@ -1409,16 +1408,6 @@
     ],
     "st": [
      {
-      "name": "Jonathan Burkardt",
-      "nr": "9",
-      "ampel": "gruen",
-      "grund": "Bestätigte Startelf gegen Hoffenheim",
-      "news": "artikel/tonanlage-faellt-aus-panne-vor-frankfurts-heimspiel-gegen-hoffenheim-0f089c84d6.html",
-      "reihe": "st",
-      "pos": "Mittelstürmer",
-      "prozent": 97
-     },
-     {
       "name": "Ritsu Doan",
       "nr": "20",
       "ampel": "gruen",
@@ -1427,6 +1416,16 @@
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 97
+     },
+     {
+      "name": "Jonathan Burkardt",
+      "nr": "9",
+      "ampel": "gruen",
+      "grund": "9 von 10 Einsätzen in der Startelf · Ø 79 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Mittelstürmer",
+      "prozent": 96
      },
      {
       "name": "Ansgar Knauff",
@@ -1877,19 +1876,19 @@
      "reihe": "mf",
      "pos": "Defensives Mittelfeld",
      "prozent": 16
-    }
-   ],
-   "fraglich": [
+    },
     {
      "name": "Paul Erevbenagie",
      "nr": "38",
-     "ampel": "gelb",
-     "grund": "nach Krankheit nicht bei hundert Prozent",
-     "news": "artikel/werder-ohne-gruell-und-weiser-im-nordderby-gegen-den-hsv-8626415e06.html",
+     "ampel": "gruen",
+     "grund": "0 von 5 Einsätzen in der Startelf · Ø 16 min · 5 Spiele ohne Einsatz",
+     "news": "",
      "reihe": "st",
      "pos": "Rechtsaußen",
      "prozent": 15
-    },
+    }
+   ],
+   "fraglich": [
     {
      "name": "Marco Grüll",
      "nr": "17",
@@ -2275,37 +2274,37 @@
       "prozent": 94
      },
      {
+      "name": "Adam Daghim",
+      "nr": "14",
+      "ampel": "gruen",
+      "grund": "7 von 10 Einsätzen in der Startelf · Ø 71 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Rechtsaußen",
+      "prozent": 75
+     },
+     {
       "name": "Andrej Kramaric",
       "nr": "27",
       "ampel": "gruen",
-      "grund": "Bestätigte Startelf in Frankfurt",
-      "news": "artikel/tonanlage-faellt-aus-panne-vor-frankfurts-heimspiel-gegen-hoffenheim-0f089c84d6.html",
-      "reihe": "st",
-      "pos": "Hängende Spitze",
-      "prozent": 90
-     },
-     {
-      "name": "Fisnik Asllani",
-      "nr": "11",
-      "ampel": "gruen",
-      "grund": "6 von 8 Einsätzen in der Startelf · Ø 61 min · 2 Spiele ohne Einsatz",
+      "grund": "3 von 10 Einsätzen in der Startelf · Ø 36 min",
       "news": "",
       "reihe": "st",
-      "pos": "Mittelstürmer",
+      "pos": "Hängende Spitze",
       "prozent": 69
      }
     ]
    },
    "bank": [
     {
-     "name": "Adam Daghim",
-     "nr": "14",
+     "name": "Fisnik Asllani",
+     "nr": "11",
      "ampel": "gruen",
-     "grund": "7 von 10 Einsätzen in der Startelf · Ø 71 min",
+     "grund": "6 von 8 Einsätzen in der Startelf · Ø 61 min · 2 Spiele ohne Einsatz",
      "news": "",
      "reihe": "st",
-     "pos": "Rechtsaußen",
-     "prozent": 41
+     "pos": "Mittelstürmer",
+     "prozent": 35
     },
     {
      "name": "Adam Hlozek",
@@ -2474,16 +2473,6 @@
       "reihe": "abw",
       "pos": "Innenverteidiger",
       "prozent": 85
-     },
-     {
-      "name": "Luka Lochoshvili",
-      "nr": "24",
-      "ampel": "gruen",
-      "grund": "8 von 8 Einsätzen in der Startelf · Ø 94 min · 2 Spiele ohne Einsatz",
-      "news": "",
-      "reihe": "abw",
-      "pos": "Innenverteidiger",
-      "prozent": 60
      }
     ],
     "mf": [
@@ -2538,20 +2527,20 @@
       "reihe": "st",
       "pos": "Rechtsaußen",
       "prozent": 88
+     },
+     {
+      "name": "Marius Bülter",
+      "nr": "30",
+      "ampel": "gruen",
+      "grund": "6 von 10 Einsätzen in der Startelf · Ø 60 min",
+      "news": "",
+      "reihe": "st",
+      "pos": "Linksaußen",
+      "prozent": 74
      }
     ]
    },
    "bank": [
-    {
-     "name": "Marius Bülter",
-     "nr": "30",
-     "ampel": "gruen",
-     "grund": "6 von 10 Einsätzen in der Startelf · Ø 60 min",
-     "news": "",
-     "reihe": "st",
-     "pos": "Linksaußen",
-     "prozent": 40
-    },
     {
      "name": "Isak Jóhannesson",
      "nr": "8",
@@ -2563,6 +2552,16 @@
      "prozent": 30
     },
     {
+     "name": "Luka Lochoshvili",
+     "nr": "24",
+     "ampel": "gruen",
+     "grund": "8 von 8 Einsätzen in der Startelf · Ø 94 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 26
+    },
+    {
      "name": "Gideon Mensah",
      "nr": "14",
      "ampel": "gruen",
@@ -2571,6 +2570,16 @@
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 19
+    },
+    {
+     "name": "Malek El Mala",
+     "nr": "19",
+     "ampel": "gruen",
+     "grund": "0 von 2 Einsätzen in der Startelf · Ø 21 min · 8 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 16
     },
     {
      "name": "Ron-Robert Zieler",
@@ -3165,6 +3174,16 @@
      "prozent": 22
     },
     {
+     "name": "Edin Dzeko",
+     "nr": "10",
+     "ampel": "gruen",
+     "grund": "2 von 8 Einsätzen in der Startelf · Ø 30 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "st",
+     "pos": "Mittelstürmer",
+     "prozent": 20
+    },
+    {
      "name": "Adrian Gantenbein",
      "nr": "17",
      "ampel": "gruen",
@@ -3359,16 +3378,6 @@
    },
    "bank": [
     {
-     "name": "Shafiq Nandja",
-     "nr": "43",
-     "ampel": "gruen",
-     "grund": "4 von 5 Einsätzen in der Startelf · Ø 77 min · 5 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Innenverteidiger",
-     "prozent": 64
-    },
-    {
      "name": "Louis Lemke",
      "nr": "37",
      "ampel": "gruen",
@@ -3377,6 +3386,16 @@
      "reihe": "abw",
      "pos": "Linker Verteidiger",
      "prozent": 34
+    },
+    {
+     "name": "Shafiq Nandja",
+     "nr": "43",
+     "ampel": "gruen",
+     "grund": "4 von 5 Einsätzen in der Startelf · Ø 77 min · 5 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Innenverteidiger",
+     "prozent": 30
     },
     {
      "name": "Fábio Vieira",
@@ -3398,7 +3417,7 @@
      "news": "artikel/werder-vor-dem-nordderby-musah-stage-und-topp-fehlen-gegen-den-hsv-2ee8ea168c.html",
      "reihe": "abw",
      "pos": "Innenverteidiger",
-     "prozent": 25
+     "prozent": 59
     }
    ],
    "ausfall": [
@@ -3504,7 +3523,7 @@
       "news": "",
       "reihe": "abw",
       "pos": "Linker Verteidiger",
-      "prozent": 84
+      "prozent": 68
      },
      {
       "name": "Christopher Trimmel",
@@ -3594,6 +3613,16 @@
      "prozent": 58
     },
     {
+     "name": "Tom Rothe",
+     "nr": "15",
+     "ampel": "gruen",
+     "grund": "7 von 8 Einsätzen in der Startelf · Ø 87 min · 2 Spiele ohne Einsatz",
+     "news": "",
+     "reihe": "abw",
+     "pos": "Linker Verteidiger",
+     "prozent": 34
+    },
+    {
      "name": "Woo-yeong Jeong",
      "nr": "11",
      "ampel": "gruen",
@@ -3612,16 +3641,6 @@
      "reihe": "st",
      "pos": "Mittelstürmer",
      "prozent": 26
-    },
-    {
-     "name": "Tom Rothe",
-     "nr": "15",
-     "ampel": "gruen",
-     "grund": "7 von 8 Einsätzen in der Startelf · Ø 87 min · 2 Spiele ohne Einsatz",
-     "news": "",
-     "reihe": "abw",
-     "pos": "Linker Verteidiger",
-     "prozent": 21
     },
     {
      "name": "Mekhi Gray",
